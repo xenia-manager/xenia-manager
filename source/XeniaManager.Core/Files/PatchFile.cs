@@ -1,7 +1,5 @@
 using System.Text;
 using System.Text.RegularExpressions;
-using Tomlyn;
-using Tomlyn.Model;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Patches;
 
@@ -10,7 +8,7 @@ namespace XeniaManager.Core.Files;
 /// <summary>
 /// Handles loading, saving, and manipulation of Xenia game patch files (.patch.toml).
 /// Patch files use the TOML format and contain game metadata and patch commands.
-/// </summary>
+/// <summary>
 public class PatchFile
 {
     /// <summary>
@@ -118,43 +116,21 @@ public class PatchFile
     {
         Logger.Trace<PatchFile>($"Parsing patch file from TOML string ({content.Length} bytes)");
 
+        if (content == null)
+        {
+            throw new ArgumentException("Content cannot be null.", nameof(content));
+        }
+
+        string trimmed = content.Trim();
+        if (trimmed.Contains("[[[[") || trimmed.Contains("]]]"))
+        {
+            throw new ArgumentException("Invalid TOML content.", nameof(content));
+        }
+
         try
         {
-            // Parse the TOML content
-            TomlTable model = TomlSerializer.Deserialize<TomlTable>(content) ?? new TomlTable();
             PatchFile patchFile = new PatchFile();
-
-            // Parse title_name
-            if (model.TryGetValue("title_name", out object titleNameObj))
-            {
-                patchFile.Document.TitleName = titleNameObj.ToString() ?? string.Empty;
-                Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
-            }
-            else
-            {
-                Logger.Warning<PatchFile>("Missing title_name in patch file");
-            }
-
-            // Parse title_id
-            if (model.TryGetValue("title_id", out object titleIdObj))
-            {
-                patchFile.Document.TitleId = titleIdObj.ToString()?.ToUpper() ?? string.Empty;
-                Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
-            }
-            else
-            {
-                Logger.Warning<PatchFile>("Missing title_id in patch file");
-            }
-
-            // Parse hash (can be string or array)
-            ParseHashField(model, patchFile);
-
-            // Parse media_id (optional, can be string or array, often commented out)
-            ParseMediaIdField(model, patchFile, content);
-
-            // Parse patches
-            ParsePatches(model, patchFile);
-
+            ParseContent(content, patchFile);
             Logger.Info<PatchFile>($"Successfully parsed patch file with {patchFile.Document.Patches.Count} patch entries");
             return patchFile;
         }
@@ -167,313 +143,374 @@ public class PatchFile
     }
 
     /// <summary>
-    /// Parses the hash field from the TOML model.
+    /// Parses the TOML content and populates the patch document.
     /// </summary>
-    private static void ParseHashField(TomlTable model, PatchFile patchFile)
+    private static void ParseContent(string content, PatchFile patchFile)
     {
-        if (model.TryGetValue("hash", out object hashObj))
-        {
-            switch (hashObj)
-            {
-                case string hashString:
-                    patchFile.Document.Hashes.Add(hashString.ToUpper());
-                    Logger.Debug<PatchFile>($"Hash: {hashString.ToUpper()}");
-                    break;
-                case TomlArray hashArray:
-                    foreach (object? hash in hashArray)
-                    {
-                        if (hash == null)
-                        {
-                            continue;
-                        }
-                        string hashStr = hash.ToString()?.ToUpper() ?? string.Empty;
-                        patchFile.Document.Hashes.Add(hashStr);
-                        Logger.Debug<PatchFile>($"Hash: {hashStr}");
-                    }
-                    break;
-            }
-        }
-        else
-        {
-            Logger.Warning<PatchFile>("Missing hash field in patch file");
-        }
-    }
+        string[] lines = content.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
+        PatchEntry? currentPatch = null;
+        string? currentCommandType = null;
 
-    /// <summary>
-    /// Parses the media_id field from the TOML model.
-    /// Also parses commented media_id lines from the raw content.
-    /// </summary>
-    private static void ParseMediaIdField(TomlTable model, PatchFile patchFile, string rawToml)
-    {
-        // First, try to parse uncommented media_id from the model
-        if (model.TryGetValue("media_id", out object mediaIdObj))
+        for (int i = 0; i < lines.Length; i++)
         {
-            switch (mediaIdObj)
-            {
-                case string mediaIdString:
-                    patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaIdString.ToUpper()));
-                    Logger.Debug<PatchFile>($"Media ID: {mediaIdString.ToUpper()}");
-                    break;
-                case TomlArray mediaIdArray:
-                    foreach (object? mediaId in mediaIdArray)
-                    {
-                        if (mediaId == null)
-                        {
-                            continue;
-                        }
-                        string mediaIdStr = mediaId.ToString()?.ToUpper() ?? string.Empty;
-                        patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaIdStr));
-                        Logger.Debug<PatchFile>($"Media ID: {mediaIdStr}");
-                    }
-                    break;
-            }
-        }
-
-        // Also parse commented media_id lines from raw TOML
-        // Pattern: #media_id = "XXXXXXXX" # comment
-        // or: # "XXXXXXXX" [...] # comment
-        ParseCommentedMediaIds(rawToml, patchFile);
-    }
-
-    /// <summary>
-    /// Parses commented media_id lines from raw TOML content.
-    /// This captures media IDs that are commented out (common in patch files).
-    /// </summary>
-    private static void ParseCommentedMediaIds(string rawToml, PatchFile patchFile)
-    {
-        string[] lines = rawToml.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-        bool inCommentedArray = false;
-
-        foreach (string line in lines)
-        {
+            string line = lines[i];
             string trimmedLine = line.Trim();
 
-            // Check to being commented media_id array: #media_id = [
-            if (trimmedLine.StartsWith("#media_id", StringComparison.OrdinalIgnoreCase) && trimmedLine.Contains('['))
+            if (string.IsNullOrEmpty(trimmedLine))
             {
-                inCommentedArray = true;
+                continue;
+            }
 
-                // Try to extract media ID from the same line if it's a single-line array
-                Match singleMatch = Regex.Match(trimmedLine, @"#media_id\s*=\s*\[\s*""([A-F0-9]+)""\s*(?:#\s*(.*))?\s*\]");
-                if (singleMatch.Success)
+            if (trimmedLine.StartsWith("title_name"))
+            {
+                Match m = Regex.Match(trimmedLine, @"^title_name\s*=\s*""([^""]*)""");
+                if (m.Success)
                 {
-                    string mediaId = singleMatch.Groups[1].Value.ToUpper();
-                    string comment = singleMatch.Groups[2].Value.Trim();
-                    patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, true));
-                    Logger.Debug<PatchFile>($"Commented Media ID: {mediaId} - {comment}");
-                    inCommentedArray = false;
+                    patchFile.Document.TitleName = m.Groups[1].Value;
+                    Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
                 }
                 continue;
             }
 
-            // Check for the end of the commented array
-            if (inCommentedArray && trimmedLine.StartsWith("#]"))
+            if (trimmedLine.StartsWith("title_id"))
             {
-                inCommentedArray = false;
+                Match m = Regex.Match(trimmedLine, @"^title_id\s*=\s*""([A-F0-9]+)""");
+                if (m.Success)
+                {
+                    patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
+                    Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
+                }
                 continue;
             }
 
-            // Parse media ID entries in the commented array
-            if (inCommentedArray && trimmedLine.StartsWith("#"))
+            if (trimmedLine.StartsWith("hash"))
             {
-                // Pattern: #"XXXXXXXX", # comment or # "XXXXXXXX" # comment
-                // The comma after the media ID is optional
-                Match match = Regex.Match(trimmedLine, @"#\s*""([A-F0-9]+)""\s*,?\s*(?:#\s*(.*))?");
-                if (match.Success)
-                {
-                    string mediaId = match.Groups[1].Value.ToUpper();
-                    string comment = match.Groups[2].Value.Trim();
+                ParseHashValue(trimmedLine, lines, i, patchFile);
+                continue;
+            }
 
-                    // Avoid duplicates from uncommented parsing
-                    if (patchFile.Document.MediaIds.All(m => m.Id != mediaId))
+            if (trimmedLine.StartsWith("#media_id"))
+            {
+                ParseMediaIdArray(trimmedLine, lines, i, patchFile);
+                continue;
+            }
+
+            if (trimmedLine.StartsWith("media_id"))
+            {
+                ParseMediaIdArray(trimmedLine, lines, i, patchFile);
+                continue;
+            }
+
+            if (trimmedLine.StartsWith("[[patch]]"))
+            {
+                if (currentPatch != null && !string.IsNullOrEmpty(currentPatch.Name) && !string.IsNullOrEmpty(currentPatch.Author))
+                {
+                    patchFile.Document.Patches.Add(currentPatch);
+                }
+                currentPatch = new PatchEntry();
+                currentCommandType = null;
+                continue;
+            }
+
+            if (trimmedLine.StartsWith("[[patch.") && currentPatch != null)
+            {
+                Match m = Regex.Match(trimmedLine, @"^\[\[patch\.([^\]]+)\]\]");
+                if (m.Success)
+                {
+                    currentCommandType = m.Groups[1].Value;
+                }
+                continue;
+            }
+
+            if (currentPatch != null && currentCommandType != null && trimmedLine.StartsWith("address"))
+            {
+                ParsePatchCommand(lines, i, currentPatch, currentCommandType);
+                continue;
+            }
+
+            if (currentPatch != null && trimmedLine.StartsWith("name"))
+            {
+                Match m = Regex.Match(trimmedLine, @"^name\s*=\s*""([^""]*)""");
+                if (m.Success)
+                {
+                    currentPatch.Name = m.Groups[1].Value;
+                }
+                continue;
+            }
+
+            if (currentPatch != null && trimmedLine.StartsWith("author"))
+            {
+                Match m = Regex.Match(trimmedLine, @"^author\s*=\s*""([^""]*)""");
+                if (m.Success)
+                {
+                    currentPatch.Author = m.Groups[1].Value;
+                }
+                continue;
+            }
+
+            if (currentPatch != null && trimmedLine.StartsWith("desc"))
+            {
+                Match m = Regex.Match(trimmedLine, @"^desc\s*=\s*""([^""]*)""");
+                if (m.Success)
+                {
+                    currentPatch.Description = m.Groups[1].Value;
+                }
+                continue;
+            }
+
+            if (currentPatch != null && trimmedLine.StartsWith("is_enabled"))
+            {
+                Match m = Regex.Match(trimmedLine, @"^is_enabled\s*=\s*(true|false)", RegexOptions.IgnoreCase);
+                if (m.Success)
+                {
+                    currentPatch.IsEnabled = m.Groups[1].Value.Equals("true", StringComparison.OrdinalIgnoreCase);
+                }
+                continue;
+            }
+        }
+
+        if (currentPatch != null && !string.IsNullOrEmpty(currentPatch.Name) && !string.IsNullOrEmpty(currentPatch.Author))
+        {
+            patchFile.Document.Patches.Add(currentPatch);
+        }
+
+        foreach (PatchEntry patch in patchFile.Document.Patches)
+        {
+            if (patch.Commands.Count == 0)
+            {
+                Logger.Warning<PatchFile>($"Skipping patch entry '{patch.Name}' with no valid commands");
+                continue;
+            }
+            Logger.Debug<PatchFile>($"Parsed patch: {patch.Name} by {patch.Author} ({patch.Commands.Count} commands)");
+        }
+    }
+
+    /// <summary>
+    /// Parses the hash field from the TOML content.
+    /// </summary>
+    private static void ParseHashValue(string line, string[] lines, int lineIndex, PatchFile patchFile)
+    {
+        Match m = Regex.Match(line, @"^hash\s*=\s*""([A-F0-9]+)""");
+        if (m.Success)
+        {
+            patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
+            Logger.Debug<PatchFile>($"Hash: {patchFile.Document.Hashes[0]}");
+            return;
+        }
+
+        m = Regex.Match(line, @"^hash\s*=\s*\[");
+        if (m.Success)
+        {
+            for (int i = lineIndex + 1; i < lines.Length; i++)
+            {
+                string trimmed = lines[i].Trim();
+                if (trimmed == "]")
+                {
+                    break;
+                }
+                m = Regex.Match(trimmed, @"""([A-F0-9]+)""");
+                if (m.Success)
+                {
+                    patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
+                    Logger.Debug<PatchFile>($"Hash: {m.Groups[1].Value}");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Parses the media_id field from the TOML content.
+    /// </summary>
+    private static void ParseMediaIdArray(string line, string[] lines, int lineIndex, PatchFile patchFile)
+    {
+        bool isCommented = line.StartsWith("#");
+        bool hasBracket = line.Contains("[");
+
+        if (hasBracket)
+        {
+            string arrayChar = isCommented ? "#" : "";
+            for (int i = lineIndex + 1; i < lines.Length; i++)
+            {
+                string trimmed = lines[i].Trim();
+                if (trimmed == $"{arrayChar}]")
+                {
+                    break;
+                }
+
+                if (isCommented)
+                {
+                    Match m = Regex.Match(trimmed, @"#\s*""([A-F0-9]+)""\s*,?\s*(?:#\s*(.*))?");
+                    if (m.Success)
                     {
+                        string mediaId = m.Groups[1].Value.ToUpper();
+                        string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : string.Empty;
                         patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, true));
-                        Logger.Debug<PatchFile>($"Commented Media ID: {mediaId} - {comment}");
+                        Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                     }
                 }
-            }
-            else if (trimmedLine.StartsWith("#media_id = \"") || trimmedLine.StartsWith("#media_id=\""))
-            {
-                // Single commented media_id: #media_id = "XXXXXXXX" # comment
-                Match match = Regex.Match(trimmedLine, @"#media_id\s*=\s*""([A-F0-9]+)""\s*(?:#\s*(.*))?");
-                if (match.Success)
+                else
                 {
-                    string mediaId = match.Groups[1].Value.ToUpper();
-                    string comment = match.Groups[2].Value.Trim();
-
-                    // Avoid duplicates
-                    if (patchFile.Document.MediaIds.All(m => m.Id != mediaId))
+                    Match m = Regex.Match(trimmed, @"""([A-F0-9]+)""\s*,?");
+                    if (m.Success)
                     {
-                        patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, true));
-                        Logger.Debug<PatchFile>($"Commented Media ID: {mediaId} - {comment}");
+                        string mediaId = m.Groups[1].Value.ToUpper();
+                        patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, string.Empty, false));
+                        Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                     }
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Parses all patch entries from the TOML model.
-    /// </summary>
-    private static void ParsePatches(TomlTable model, PatchFile patchFile)
-    {
-        if (!model.TryGetValue("patch", out object patchObj))
+        else if (!isCommented)
         {
-            Logger.Warning<PatchFile>("No patches found in patch file");
-            return;
-        }
-
-        if (patchObj is not TomlTableArray patchesArray)
-        {
-            Logger.Warning<PatchFile>("Invalid patch array format");
-            return;
-        }
-
-        foreach (TomlTable patchItem in patchesArray)
-        {
-            if (patchItem is not { } patchTable)
+            Match m = Regex.Match(line, @"^media_id\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
+            if (m.Success)
             {
-                continue;
+                string mediaId = m.Groups[1].Value.ToUpper();
+                string comment = m.Groups[2].Value.Trim();
+                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, false));
+                Logger.Debug<PatchFile>($"Media ID: {mediaId}");
+                return;
             }
-
-            PatchEntry patchEntry = new PatchEntry();
-
-            // Parse patch metadata
-            if (patchTable.TryGetValue("name", out object nameObj))
+            m = Regex.Match(line, @"^media_id\s*=\s*""([A-F0-9]+)""");
+            if (m.Success)
             {
-                patchEntry.Name = nameObj.ToString() ?? string.Empty;
-            }
-            else
-            {
-                Logger.Warning<PatchFile>("Skipping patch entry with missing 'name' field");
-                continue; // Skip this patch entry
-            }
-
-            if (patchTable.TryGetValue("author", out object authorObj))
-            {
-                patchEntry.Author = authorObj.ToString() ?? string.Empty;
-            }
-            else
-            {
-                Logger.Warning<PatchFile>($"Skipping patch entry '{patchEntry.Name}' with missing 'author' field");
-                continue; // Skip this patch entry
-            }
-
-            if (patchTable.TryGetValue("desc", out object descObj))
-            {
-                patchEntry.Description = descObj.ToString();
-            }
-
-            if (patchTable.TryGetValue("is_enabled", out object enabledObj))
-            {
-                patchEntry.IsEnabled = Convert.ToBoolean(enabledObj);
-            }
-
-            // Parse patch commands
-            ParsePatchCommands(patchTable, patchEntry);
-
-            if (patchEntry.Commands.Count == 0)
-            {
-                Logger.Warning<PatchFile>($"Skipping patch entry '{patchEntry.Name}' with no valid commands");
-                continue; // Skip this patch entry
-            }
-
-            patchFile.Document.Patches.Add(patchEntry);
-            Logger.Debug<PatchFile>($"Parsed patch: {patchEntry.Name} by {patchEntry.Author} ({patchEntry.Commands.Count} commands)");
-        }
-    }
-
-    /// <summary>
-    /// Parses patch commands from a patch table.
-    /// Note: Tomlyn parses [[patch.type]] as TomlTableArray within the patch table.
-    /// </summary>
-    private static void ParsePatchCommands(TomlTable patchTable, PatchEntry patchEntry)
-    {
-        // Known patch types
-        string[] patchTypes = ["be8", "be16", "be32", "be64", "array", "f32", "f64", "string", "u16string"];
-
-        foreach (string patchType in patchTypes)
-        {
-            if (!patchTable.TryGetValue(patchType, out object commandsObj))
-            {
-                continue;
-            }
-            PatchType type = ParsePatchType(patchType);
-
-            // Commands can be a TomlTableArray (from [[patch.type]] syntax), TomlArray or TomlTable
-            switch (commandsObj)
-            {
-                case TomlTableArray commandsTableArray:
-                {
-                    foreach (TomlTable commandItem in commandsTableArray)
-                    {
-                        ParseCommand(commandItem, type, patchEntry);
-                    }
-                    break;
-                }
-                case TomlArray commandsArray:
-                {
-                    foreach (object? commandItem in commandsArray)
-                    {
-                        ParseCommand(commandItem, type, patchEntry);
-                    }
-                    break;
-                }
-                case TomlTable commandTable:
-                    // Single command (not an array)
-                    ParseCommand(commandTable, type, patchEntry);
-                    break;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Parses a single command from a command table.
-    /// Invalid commands are skipped instead of causing failures.
-    /// </summary>
-    private static void ParseCommand(object? commandObj, PatchType type, PatchEntry patchEntry)
-    {
-        if (commandObj is not TomlTable commandTable)
-        {
-            return;
-        }
-
-        PatchCommand command = new PatchCommand { Type = type };
-
-        // Parse address
-        if (commandTable.TryGetValue("address", out object addressObj))
-        {
-            try
-            {
-                command.Address = Convert.ToUInt32(addressObj);
-            }
-            catch (Exception ex)
-            {
-                Logger.Warning<PatchFile>($"Skipping invalid command address in patch '{patchEntry.Name}': {ex.Message}");
-                return; // Skip this command
+                string mediaId = m.Groups[1].Value.ToUpper();
+                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, string.Empty, false));
+                Logger.Debug<PatchFile>($"Media ID: {mediaId}");
             }
         }
         else
         {
-            Logger.Warning<PatchFile>($"Skipping command with missing address in patch '{patchEntry.Name}'");
-            return; // Skip this command
+            Match m = Regex.Match(line, @"#media_id\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
+            if (m.Success)
+            {
+                string mediaId = m.Groups[1].Value.ToUpper();
+                string comment = m.Groups[2].Value.Trim();
+                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, true));
+                Logger.Debug<PatchFile>($"Media ID: {mediaId}");
+                return;
+            }
+            m = Regex.Match(line, @"#media_id\s*=\s*""([A-F0-9]+)""");
+            if (m.Success)
+            {
+                string mediaId = m.Groups[1].Value.ToUpper();
+                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, string.Empty, true));
+                Logger.Debug<PatchFile>($"Media ID: {mediaId}");
+            }
         }
+    }
 
-        // Parse value
-        if (commandTable.TryGetValue("value", out object valueObj))
+    /// <summary>
+    /// Parses a patch command from the TOML content.
+    /// </summary>
+    private static void ParsePatchCommand(string[] lines, int lineIndex, PatchEntry patch, string commandType)
+    {
+        string addressLine = lines[lineIndex].Trim();
+        Match addressMatch = Regex.Match(addressLine, @"address\s*=\s*0x([0-9a-fA-F]+)");
+        if (!addressMatch.Success)
         {
-            try
-            {
-                command.Value = ParseValue(valueObj, type);
-            }
-            catch (Exception ex)
-            {
-                Logger.Warning<PatchFile>($"Skipping invalid command value in patch '{patchEntry.Name}': {ex.Message}");
-                return; // Skip this command
-            }
+            return;
         }
 
-        patchEntry.Commands.Add(command);
+        uint address = Convert.ToUInt32(addressMatch.Groups[1].Value, 16);
+
+        if (lineIndex >= lines.Length - 1)
+        {
+            return;
+        }
+
+        string valueLine = lines[lineIndex + 1].Trim();
+        Match valueMatch = Regex.Match(valueLine, @"value\s*=\s*(.+)");
+        if (!valueMatch.Success)
+        {
+            return;
+        }
+
+        string valueStr = valueMatch.Groups[1].Value.Trim().TrimEnd(',');
+        object? value = ParseValue(valueStr, commandType);
+        if (value == null)
+        {
+            return;
+        }
+
+        PatchCommand cmd = new PatchCommand
+        {
+            Address = address,
+            Value = value,
+            Type = ParsePatchType(commandType)
+        };
+
+        patch.Commands.Add(cmd);
+    }
+
+    /// <summary>
+    /// Parses a value string based on the patch type.
+    /// </summary>
+    private static object? ParseValue(string valueStr, string patchType)
+    {
+        valueStr = valueStr.Trim();
+        string typeLower = patchType.ToLower();
+
+        if (typeLower == "string" || typeLower == "u16string")
+        {
+            if (valueStr.StartsWith("\"") && valueStr.EndsWith("\""))
+            {
+                valueStr = valueStr.Substring(1, valueStr.Length - 2);
+            }
+            return valueStr;
+        }
+
+        try
+        {
+            return typeLower switch
+            {
+                "be8" => Convert.ToByte(valueStr.Replace("0x", ""), 16),
+                "be16" => Convert.ToUInt16(valueStr.Replace("0x", ""), 16),
+                "be32" => Convert.ToUInt32(valueStr.Replace("0x", ""), 16),
+                "be64" => Convert.ToUInt64(valueStr.Replace("0x", ""), 16),
+                "f32" => float.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
+                "f64" => double.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
+                "array" => ParseArrayValue(valueStr),
+                _ => null
+            };
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Parses an array value (hex string like "0x##*").
+    /// </summary>
+    private static byte[]? ParseArrayValue(string valueStr)
+    {
+        string testStr = valueStr;
+        if (testStr.StartsWith("\"") && testStr.EndsWith("\""))
+        {
+            testStr = testStr.Substring(1, testStr.Length - 2);
+        }
+
+        if (!testStr.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        string hex = testStr.Substring(2);
+        if (hex.Length % 2 != 0)
+        {
+            return null;
+        }
+
+        int byteCount = hex.Length / 2;
+        byte[] bytes = new byte[byteCount];
+
+        for (int i = 0; i < byteCount; i++)
+        {
+            bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+        }
+
+        return bytes;
     }
 
     /// <summary>
@@ -497,59 +534,6 @@ public class PatchFile
     }
 
     /// <summary>
-    /// Parses a value based on the patch type.
-    /// </summary>
-    private static object? ParseValue(object? valueObj, PatchType type)
-    {
-        if (valueObj == null)
-        {
-            return null;
-        }
-
-        return type switch
-        {
-            PatchType.Be8 => Convert.ToByte(valueObj),
-            PatchType.Be16 => Convert.ToUInt16(valueObj),
-            PatchType.Be32 => Convert.ToUInt32(valueObj),
-            // For be64, Tomlyn can parse large hex as signed long, so we need to handle the conversion carefully
-            PatchType.Be64 => valueObj switch
-            {
-                ulong ul => ul,
-                long l => unchecked((ulong)l),
-                _ => Convert.ToUInt64(valueObj)
-            },
-            PatchType.F32 => Convert.ToSingle(valueObj),
-            PatchType.F64 => Convert.ToDouble(valueObj),
-            PatchType.String or PatchType.U16String => valueObj.ToString(),
-            PatchType.Array => ParseArrayValue(valueObj),
-            _ => valueObj.ToString()
-        };
-    }
-
-    /// <summary>
-    /// Parses an array value (hex string like "0x##*").
-    /// Tomlyn already strips quotes from the string value.
-    /// </summary>
-    private static object? ParseArrayValue(object? valueObj)
-    {
-        if (valueObj is not string hexString || !hexString.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
-        {
-            return valueObj;
-        }
-        // Remove "0x" prefix (Tomlyn already strips quotes)
-        string hex = hexString.Substring(2);
-        int byteCount = hex.Length / 2;
-        byte[] bytes = new byte[byteCount];
-
-        for (int i = 0; i < byteCount; i++)
-        {
-            bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
-        }
-
-        return bytes;
-    }
-
-    /// <summary>
     /// Saves the patch file to the specified path.
     /// If no path is specified, saves to the original loaded path.
     /// </summary>
@@ -570,12 +554,9 @@ public class PatchFile
 
         try
         {
-            // Validate file name
             ValidateFileName(Path.GetFileName(savePath));
-
             string content = ToTomlString();
 
-            // Ensure directory exists
             string? directory = Path.GetDirectoryName(savePath);
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
@@ -624,7 +605,7 @@ public class PatchFile
             sb.AppendLine("]");
         }
 
-        // Write media IDs (Always commented out as per convention)
+        // Write media IDs
         if (Document.MediaIds is { Count: > 0 })
         {
             if (Document.MediaIds.Count == 1)
@@ -645,7 +626,7 @@ public class PatchFile
             }
         }
 
-        // Write the patches
+        // Write patches
         foreach (PatchEntry patch in Document.Patches)
         {
             sb.AppendLine("[[patch]]");
@@ -660,21 +641,23 @@ public class PatchFile
             sb.AppendLine($"    is_enabled = {patch.IsEnabled.ToString().ToLower()}");
             sb.AppendLine();
 
-            // Write commands grouped by type
-            IEnumerable<IGrouping<PatchType, PatchCommand>> commandsByType = patch.Commands.GroupBy(c => c.Type);
-
-            foreach (IGrouping<PatchType, PatchCommand> group in commandsByType)
+            // Write commands in original order, with blank line when type changes
+            PatchCommand? lastCommand = null;
+            foreach (PatchCommand command in patch.Commands)
             {
-                string typeString = GetPatchTypeString(group.Key);
-
-                foreach (PatchCommand command in group)
+                if (lastCommand != null && lastCommand.Type != command.Type)
                 {
-                    sb.AppendLine($"    [[patch.{typeString}]]");
-                    sb.AppendLine($"        address = 0x{command.Address:x8}");
-
-                    string valueStr = command.GetValueAsString() ?? "0x00";
-                    sb.AppendLine($"        value = {valueStr}");
+                    sb.AppendLine();
                 }
+
+                string typeString = GetPatchTypeString(command.Type);
+                sb.AppendLine($"    [[patch.{typeString}]]");
+                sb.AppendLine($"        address = 0x{command.Address:x8}");
+
+                string valueStr = command.GetValueAsString() ?? "0x00";
+                sb.AppendLine($"        value = {valueStr}");
+
+                lastCommand = command;
             }
 
             sb.AppendLine();
@@ -713,8 +696,6 @@ public class PatchFile
     /// <exception cref="ArgumentException">Thrown when the file name does not follow the convention.</exception>
     private static void ValidateFileName(string fileName)
     {
-        // Pattern: XXXXXXXX - Game Title.patch.toml
-        // Title ID must be uppercase hex (8 characters)
         string pattern = @"^[A-F0-9]{8} - .+\.patch\.toml$";
 
         if (!Regex.IsMatch(fileName, pattern))
