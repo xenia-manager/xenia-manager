@@ -31,6 +31,10 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 
     [ObservableProperty] private string _titleId;
     [ObservableProperty] private string _mediaId;
+    [ObservableProperty] private List<string> _alternativeIds = [];
+    [ObservableProperty] private string _newAlternativeId = string.Empty;
+    [ObservableProperty] private bool _canAddAlternativeId;
+
     [ObservableProperty] private string _gameTitle;
     [ObservableProperty] private string _gamePath;
     [ObservableProperty] private string _compatibilityPageUrl;
@@ -68,6 +72,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 
         TitleId = game.GameId;
         MediaId = game.MediaId;
+        AlternativeIds = [.. game.AlternativeIDs];
         GameTitle = game.Title;
         GamePath = game.FileLocations.Game;
         CompatibilityPageUrl = game.Compatibility.Url;
@@ -108,6 +113,39 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 
         // Load cached images
         LoadCachedImages();
+    }
+
+    /// <summary>
+    /// Adds a new alternative ID to the list.
+    /// </summary>
+    [RelayCommand]
+    private void AddAlternativeId()
+    {
+        if (!CanAddAlternativeId)
+        {
+            return;
+        }
+
+        string id = NewAlternativeId.Trim().ToUpperInvariant();
+        AlternativeIds = [.. AlternativeIds, id];
+        HasChanges = true;
+        NewAlternativeId = string.Empty;
+        Logger.Info<GameDetailsEditorViewModel>($"Added alternative ID '{id}' to game '{_game.Title}'");
+    }
+
+    /// <summary>
+    /// Removes an alternative ID from the list.
+    /// </summary>
+    /// <param name="id">The ID to remove.</param>
+    [RelayCommand]
+    private void RemoveAlternativeId(string id)
+    {
+        if (AlternativeIds.Contains(id))
+        {
+            AlternativeIds = AlternativeIds.Where(x => x != id).ToList();
+            HasChanges = true;
+            Logger.Info<GameDetailsEditorViewModel>($"Removed alternative ID '{id}' from game '{_game.Title}'");
+        }
     }
 
     /// <summary>
@@ -209,6 +247,51 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     partial void OnCustomExecutablePathChanged(string value)
     {
         HasChanges = true;
+    }
+
+    partial void OnNewAlternativeIdChanged(string value)
+    {
+        UpdateCanAddAlternativeId();
+    }
+
+    partial void OnAlternativeIdsChanged(List<string> value)
+    {
+        UpdateCanAddAlternativeId();
+    }
+
+    private void UpdateCanAddAlternativeId()
+    {
+        string id = NewAlternativeId?.Trim().ToUpperInvariant() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            CanAddAlternativeId = false;
+            Logger.Debug<GameDetailsEditorViewModel>("Cannot add alternative ID: input is empty");
+            return;
+        }
+
+        if (id.Length != 8)
+        {
+            CanAddAlternativeId = false;
+            Logger.Debug<GameDetailsEditorViewModel>($"Cannot add alternative ID '{id}': length is {id.Length}, expected 8");
+            return;
+        }
+
+        if (id == TitleId)
+        {
+            CanAddAlternativeId = false;
+            Logger.Debug<GameDetailsEditorViewModel>($"Cannot add alternative ID '{id}': matches Title ID");
+            return;
+        }
+
+        if (AlternativeIds.Contains(id, StringComparer.OrdinalIgnoreCase))
+        {
+            CanAddAlternativeId = false;
+            Logger.Debug<GameDetailsEditorViewModel>($"Cannot add alternative ID '{id}': already exists in AlternativeIDs");
+            return;
+        }
+
+        CanAddAlternativeId = true;
     }
 
     /// <summary>
@@ -660,6 +743,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             _game.FileLocations.Game = GamePath;
             _game.XeniaVersion = SelectedXeniaVersion.Version;
             _game.FileLocations.CustomEmulatorExecutable = SelectedXeniaVersion.Version == XeniaVersion.Custom ? CustomExecutablePath : null;
+            _game.AlternativeIDs = [.. AlternativeIds];
 
             // Clear cached images so they reload with new paths/files
             _game.Artwork.ClearCachedImages();

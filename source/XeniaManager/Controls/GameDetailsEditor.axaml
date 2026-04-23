@@ -280,6 +280,92 @@
                                      Classes="readOnly"
                                      IsReadOnly="True"
                                      FontFamily="Cascadia Code, Consolas, monospace" />
+
+                            <!-- Alternative IDs -->
+                            <cards:CustomCard Margin="0,12,0,0">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <icons:SymbolIcon Grid.Column="0"
+                                                          Margin="0,0,8,0"
+                                                          VerticalAlignment="Center"
+                                                          Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                          Symbol="Add" />
+                                        <TextBlock Grid.Column="1"
+                                                   VerticalAlignment="Center"
+                                                   FontWeight="Medium"
+                                                   Text="{DynamicResource GameDetailsEditor.AlternativeIds}" />
+                                        <TextBlock Grid.Column="2"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Text="{Binding AlternativeIds.Count, StringFormat='({0})'}" />
+                                    </Grid>
+
+                                    <!-- Add new ID input -->
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0"
+                                                 Text="{Binding NewAlternativeId}"
+                                                 Watermark="{DynamicResource GameDetailsEditor.AlternativeIdsWatermark}"
+                                                 MaxLength="8"
+                                                 FontFamily="Cascadia Code, Consolas, monospace"
+                                                 Margin="0,0,8,0" />
+                                        <Button Grid.Column="1"
+                                                Command="{Binding AddAlternativeIdCommand}"
+                                                IsEnabled="{Binding CanAddAlternativeId}"
+                                                Padding="12,6">
+                                            <Button.Content>
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <icons:SymbolIcon Symbol="Add" />
+                                                    <TextBlock Text="{DynamicResource GameDetailsEditor.Add}" />
+                                                </StackPanel>
+                                            </Button.Content>
+                                        </Button>
+                                    </Grid>
+
+                                    <!-- ID List -->
+                                    <ItemsControl ItemsSource="{Binding AlternativeIds}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="4"
+                                                        Padding="8,4"
+                                                        Margin="0,0,0,4">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Grid.Column="0"
+                                                                   Text="{Binding}"
+                                                                   FontFamily="Cascadia Code, Consolas, monospace"
+                                                                   VerticalAlignment="Center" />
+                                                        <Button Grid.Column="1"
+                                                                Command="{Binding $parent[UserControl].((vm:GameDetailsEditorViewModel)DataContext).RemoveAlternativeIdCommand}"
+                                                                CommandParameter="{Binding}"
+                                                                Padding="4"
+                                                                VerticalAlignment="Center">
+                                                            <Button.Content>
+                                                                <icons:SymbolIcon Symbol="Delete" />
+                                                            </Button.Content>
+                                                        </Button>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </cards:CustomCard>
                         </StackPanel>
 
                         <!-- Separator -->

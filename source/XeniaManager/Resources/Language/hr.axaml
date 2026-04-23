@@ -488,6 +488,9 @@
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID naslova i medijski ID automatski se prepoznaju i ne mogu se mijenjati.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">ID naslova</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Medijski ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIds">Alternativni ID-evi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Unesite alternativni ID...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Add">Dodaj</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Naziv igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Unesite naziv igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Putanja igre</sys:String>

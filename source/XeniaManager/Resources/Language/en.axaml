@@ -488,6 +488,9 @@
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID and Media ID are automatically detected and cannot be changed.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIds">Alternative IDs</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Enter alternative ID...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Add">Add</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Game Title</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Enter game title</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Game Path</sys:String>
