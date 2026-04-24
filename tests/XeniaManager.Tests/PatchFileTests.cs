@@ -865,6 +865,10 @@ hash = ""AAAAAAAAAAAAAAAA""
         // Verify initial state - all patches should be disabled
         Assert.That(patchFile.Patches.All(p => !p.IsEnabled), Is.True, "All patches should be disabled initially");
 
+        // Capture original state for comparison
+        int originalPatchCount = patchFile.Patches.Count;
+        var originalPatchStates = patchFile.Patches.Select(p => new { p.Name, p.IsEnabled, p.Commands.Count }).ToList();
+
         try
         {
             // Act - Enable a patch
@@ -882,6 +886,26 @@ hash = ""AAAAAAAAAAAAAAAA""
             // Assert
             Assert.That(reloadedPatch, Is.Not.Null);
             Assert.That(reloadedPatch.IsEnabled, Is.True, "Patch should be enabled after reload");
+
+            // Verify everything else remained unchanged
+            Assert.That(reloaded.Patches.Count, Is.EqualTo(originalPatchCount), "Patch count should remain the same");
+            Assert.That(reloaded.TitleName, Is.EqualTo(patchFile.TitleName), "Title name should remain the same");
+            Assert.That(reloaded.TitleId, Is.EqualTo(patchFile.TitleId), "Title ID should remain the same");
+            Assert.That(reloaded.Hashes.Count, Is.EqualTo(patchFile.Hashes.Count), "Hash count should remain the same");
+
+            // Verify all other patches remained disabled
+            foreach (PatchEntry patch in reloaded.Patches.Where(p => p.Name != "Disable Motion Blur"))
+            {
+                Assert.That(patch.IsEnabled, Is.False, $"Patch '{patch.Name}' should remain disabled");
+            }
+
+            // Verify command counts remained the same for all patches
+            foreach (PatchEntry patch in reloaded.Patches)
+            {
+                PatchEntry originalPatch = patchFile.Patches.First(p => p.Name == patch.Name);
+                Assert.That(patch.Commands.Count, Is.EqualTo(originalPatch.Commands.Count),
+                    $"Command count for patch '{patch.Name}' should remain the same");
+            }
         }
         finally
         {
@@ -921,6 +945,27 @@ hash = ""AAAAAAAAAAAAAAAA""
             // Assert
             Assert.That(finalPatch, Is.Not.Null);
             Assert.That(finalPatch.IsEnabled, Is.False, "Patch should be disabled after reload");
+
+            // Verify everything else remained unchanged
+            Assert.That(finalReload.Patches.Count, Is.EqualTo(reloaded.Patches.Count), "Patch count should remain the same");
+            Assert.That(finalReload.TitleName, Is.EqualTo(reloaded.TitleName), "Title name should remain the same");
+            Assert.That(finalReload.TitleId, Is.EqualTo(reloaded.TitleId), "Title ID should remain the same");
+
+            // Verify only the targeted patch changed
+            foreach (PatchEntry patch in finalReload.Patches)
+            {
+                if (patch.Name == "Disable Depth of Field")
+                {
+                    Assert.That(patch.IsEnabled, Is.False, "Targeted patch should be disabled");
+                }
+                else
+                {
+                    // All other patches should maintain their state from the reloaded version
+                    PatchEntry originalState = reloaded.Patches.First(p => p.Name == patch.Name);
+                    Assert.That(patch.IsEnabled, Is.EqualTo(originalState.IsEnabled),
+                        $"Patch '{patch.Name}' should maintain its state");
+                }
+            }
         }
         finally
         {
@@ -942,10 +987,15 @@ hash = ""AAAAAAAAAAAAAAAA""
         int initialPatchCount = patchFile.Patches.Count;
         Assert.That(initialPatchCount, Is.GreaterThan(0), "Should have patches to remove");
 
+        // Capture original patch names for comparison
+        List<string> originalPatchNames = patchFile.Patches.Select(p => p.Name).ToList();
+        string patchToRemove = "Disable Shadows";
+        Assert.That(originalPatchNames.Contains(patchToRemove), Is.True, "Patch to remove should exist");
+
         try
         {
             // Act - Remove a patch
-            bool removed = patchFile.RemovePatch("Disable Shadows");
+            bool removed = patchFile.RemovePatch(patchToRemove);
             Assert.That(removed, Is.True, "Remove should succeed");
             patchFile.Save(tempPath);
 
@@ -954,7 +1004,25 @@ hash = ""AAAAAAAAAAAAAAAA""
 
             // Assert
             Assert.That(reloaded.Patches.Count, Is.EqualTo(initialPatchCount - 1), "Should have one less patch");
-            Assert.That(reloaded.GetPatch("Disable Shadows"), Is.Null, "Removed patch should not exist");
+            Assert.That(reloaded.GetPatch(patchToRemove), Is.Null, "Removed patch should not exist");
+
+            // Verify all remaining patches are intact
+            foreach (string patchName in originalPatchNames.Where(n => n != patchToRemove))
+            {
+                PatchEntry? reloadedPatch = reloaded.GetPatch(patchName);
+                Assert.That(reloadedPatch, Is.Not.Null, $"Patch '{patchName}' should still exist");
+
+                PatchEntry originalPatch = patchFile.Patches.First(p => p.Name == patchName);
+                Assert.That(reloadedPatch.Name, Is.EqualTo(originalPatch.Name), "Patch name should match");
+                Assert.That(reloadedPatch.Author, Is.EqualTo(originalPatch.Author), "Patch author should match");
+                Assert.That(reloadedPatch.Commands.Count, Is.EqualTo(originalPatch.Commands.Count), "Command count should match");
+                Assert.That(reloadedPatch.IsEnabled, Is.EqualTo(originalPatch.IsEnabled), "Enabled state should match");
+            }
+
+            // Verify metadata is intact
+            Assert.That(reloaded.TitleName, Is.EqualTo(patchFile.TitleName), "Title name should remain the same");
+            Assert.That(reloaded.TitleId, Is.EqualTo(patchFile.TitleId), "Title ID should remain the same");
+            Assert.That(reloaded.Hashes.Count, Is.EqualTo(patchFile.Hashes.Count), "Hash count should remain the same");
         }
         finally
         {
@@ -974,6 +1042,10 @@ hash = ""AAAAAAAAAAAAAAAA""
         string tempPath = Path.Combine(outputFolder, $"4D5309C9 - Test Add Patch.patch.toml");
         PatchFile patchFile = PatchFile.Load(_testPatchFilePath);
         int initialPatchCount = patchFile.Patches.Count;
+
+        // Capture original state
+        List<string> originalPatchNames = patchFile.Patches.Select(p => p.Name).ToList();
+        var originalMetadata = new { patchFile.TitleName, patchFile.TitleId, HashCount = patchFile.Hashes.Count };
 
         try
         {
@@ -1000,6 +1072,24 @@ hash = ""AAAAAAAAAAAAAAAA""
             Assert.That(addedPatch.Commands.Count, Is.EqualTo(1));
             Assert.That(addedPatch.Commands[0].Address, Is.EqualTo(0x82000000));
             Assert.That(addedPatch.Commands[0].Value, Is.EqualTo(0x60000000u));
+
+            // Verify all original patches are intact
+            foreach (string patchName in originalPatchNames)
+            {
+                PatchEntry? reloadedPatch = reloaded.GetPatch(patchName);
+                Assert.That(reloadedPatch, Is.Not.Null, $"Original patch '{patchName}' should still exist");
+
+                PatchEntry originalPatch = patchFile.Patches.First(p => p.Name == patchName);
+                Assert.That(reloadedPatch.Name, Is.EqualTo(originalPatch.Name), "Patch name should match");
+                Assert.That(reloadedPatch.Author, Is.EqualTo(originalPatch.Author), "Patch author should match");
+                Assert.That(reloadedPatch.Commands.Count, Is.EqualTo(originalPatch.Commands.Count), "Command count should match");
+                Assert.That(reloadedPatch.IsEnabled, Is.EqualTo(originalPatch.IsEnabled), "Enabled state should match");
+            }
+
+            // Verify metadata is intact
+            Assert.That(reloaded.TitleName, Is.EqualTo(originalMetadata.TitleName), "Title name should remain the same");
+            Assert.That(reloaded.TitleId, Is.EqualTo(originalMetadata.TitleId), "Title ID should remain the same");
+            Assert.That(reloaded.Hashes.Count, Is.EqualTo(originalMetadata.HashCount), "Hash count should remain the same");
         }
         finally
         {
@@ -1019,6 +1109,10 @@ hash = ""AAAAAAAAAAAAAAAA""
         string tempPath = Path.Combine(outputFolder, $"4D5309C9 - Test Replace Patch.patch.toml");
         PatchFile patchFile = PatchFile.Load(_testPatchFilePath);
         int initialPatchCount = patchFile.Patches.Count;
+
+        // Capture original patch names (excluding the one we'll remove)
+        List<string> originalPatchNames = patchFile.Patches.Where(p => p.Name != "Disable Shadows").Select(p => p.Name).ToList();
+        var originalMetadata = new { patchFile.TitleName, patchFile.TitleId };
 
         try
         {
@@ -1045,6 +1139,22 @@ hash = ""AAAAAAAAAAAAAAAA""
             Assert.That(addedPatch, Is.Not.Null, "Added patch should exist");
             Assert.That(addedPatch.Author, Is.EqualTo("New Author"));
             Assert.That(addedPatch.IsEnabled, Is.True, "New patch should be enabled");
+
+            // Verify all other original patches are intact
+            foreach (string patchName in originalPatchNames)
+            {
+                PatchEntry? reloadedPatch = reloaded.GetPatch(patchName);
+                Assert.That(reloadedPatch, Is.Not.Null, $"Original patch '{patchName}' should still exist");
+
+                PatchEntry originalPatch = patchFile.Patches.First(p => p.Name == patchName);
+                Assert.That(reloadedPatch.Name, Is.EqualTo(originalPatch.Name), "Patch name should match");
+                Assert.That(reloadedPatch.Author, Is.EqualTo(originalPatch.Author), "Patch author should match");
+                Assert.That(reloadedPatch.Commands.Count, Is.EqualTo(originalPatch.Commands.Count), "Command count should match");
+            }
+
+            // Verify metadata is intact
+            Assert.That(reloaded.TitleName, Is.EqualTo(originalMetadata.TitleName), "Title name should remain the same");
+            Assert.That(reloaded.TitleId, Is.EqualTo(originalMetadata.TitleId), "Title ID should remain the same");
         }
         finally
         {
@@ -1067,9 +1177,9 @@ hash = ""AAAAAAAAAAAAAAAA""
         try
         {
             // Act - Toggle multiple patches
-            var patch1 = patchFile.GetPatch("Disable Motion Blur");
-            var patch2 = patchFile.GetPatch("Disable Depth of Field");
-            var patch3 = patchFile.GetPatch("Disable Shadows");
+            PatchEntry? patch1 = patchFile.GetPatch("Disable Motion Blur");
+            PatchEntry? patch2 = patchFile.GetPatch("Disable Depth of Field");
+            PatchEntry? patch3 = patchFile.GetPatch("Disable Shadows");
 
             Assert.That(patch1, Is.Not.Null);
             Assert.That(patch2, Is.Not.Null);
@@ -1085,9 +1195,9 @@ hash = ""AAAAAAAAAAAAAAAA""
             PatchFile reloaded = PatchFile.Load(tempPath);
 
             // Assert
-            var reloadedPatch1 = reloaded.GetPatch("Disable Motion Blur");
-            var reloadedPatch2 = reloaded.GetPatch("Disable Depth of Field");
-            var reloadedPatch3 = reloaded.GetPatch("Disable Shadows");
+            PatchEntry? reloadedPatch1 = reloaded.GetPatch("Disable Motion Blur");
+            PatchEntry? reloadedPatch2 = reloaded.GetPatch("Disable Depth of Field");
+            PatchEntry? reloadedPatch3 = reloaded.GetPatch("Disable Shadows");
 
             Assert.That(reloadedPatch1?.IsEnabled, Is.True);
             Assert.That(reloadedPatch2?.IsEnabled, Is.True);
@@ -1134,10 +1244,10 @@ hash = ""AAAAAAAAAAAAAAAA""
             Assert.That(reloadedPatch, Is.Not.Null);
             Assert.That(reloadedPatch.Commands.Count, Is.EqualTo(4), "Should have 4 commands");
 
-            var cmd1 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.Be32);
-            var cmd2 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.Be8);
-            var cmd3 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.Be16);
-            var cmd4 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.F32);
+            PatchCommand? cmd1 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.Be32);
+            PatchCommand? cmd2 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.Be8);
+            PatchCommand? cmd3 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.Be16);
+            PatchCommand? cmd4 = reloadedPatch.Commands.FirstOrDefault(c => c.Type == PatchType.F32);
 
             Assert.That(cmd1, Is.Not.Null);
             Assert.That(cmd1.Address, Is.EqualTo(0x82000000));
@@ -1158,6 +1268,115 @@ hash = ""AAAAAAAAAAAAAAAA""
         finally
         {
             // Cleanup
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
+    #endregion
+
+    #region Comprehensive Integrity Tests
+
+    /// <summary>
+    /// Comprehensive test to verify that modifying one property doesn't affect any other properties.
+    /// This test ensures complete round-trip integrity when making changes to patch files.
+    /// </summary>
+    [Test]
+    public void Load_ModifyPatch_ComprehensiveIntegrityCheck()
+    {
+        string outputFolder = Path.GetDirectoryName(_testPatchFilePath)!;
+        string tempPath = Path.Combine(outputFolder, $"4D5309C9 - Test Integrity.patch.toml");
+        PatchFile patchFile = PatchFile.Load(_testPatchFilePath);
+
+        // Capture complete original state
+        var originalState = new
+        {
+            TitleName = patchFile.TitleName,
+            TitleId = patchFile.TitleId,
+            HashCount = patchFile.Hashes.Count,
+            Hashes = patchFile.Hashes.ToList(),
+            PatchCount = patchFile.Patches.Count,
+            Patches = patchFile.Patches.Select(p => new
+            {
+                p.Name,
+                p.Author,
+                p.Description,
+                p.IsEnabled,
+                CommandCount = p.Commands.Count,
+                Commands = p.Commands.Select(c => new { c.Address, c.Type, c.Value }).ToList()
+            }).ToList()
+        };
+
+        try
+        {
+            // Act - Enable one patch
+            PatchEntry? patchToModify = patchFile.GetPatch("Disable Motion Blur");
+            Assert.That(patchToModify, Is.Not.Null);
+            bool originalEnabledState = patchToModify.IsEnabled;
+            patchToModify.IsEnabled = !originalEnabledState; // Toggle the state
+
+            patchFile.Save(tempPath);
+
+            // Reload and verify
+            PatchFile reloaded = PatchFile.Load(tempPath);
+            PatchEntry? reloadedPatch = reloaded.GetPatch("Disable Motion Blur");
+
+            // Assert - Verify the change took effect
+            Assert.That(reloadedPatch, Is.Not.Null);
+            Assert.That(reloadedPatch.IsEnabled, Is.EqualTo(!originalEnabledState), "Enabled state should be toggled");
+
+            // Assert - Verify metadata unchanged
+            Assert.That(reloaded.TitleName, Is.EqualTo(originalState.TitleName));
+            Assert.That(reloaded.TitleId, Is.EqualTo(originalState.TitleId));
+            Assert.That(reloaded.Hashes.Count, Is.EqualTo(originalState.HashCount));
+            for (int i = 0; i < originalState.Hashes.Count; i++)
+            {
+                Assert.That(reloaded.Hashes[i], Is.EqualTo(originalState.Hashes[i]));
+            }
+
+            // Assert - Verify patch count unchanged
+            Assert.That(reloaded.Patches.Count, Is.EqualTo(originalState.PatchCount));
+
+            // Assert - Verify all patches
+            foreach (var originalPatch in originalState.Patches)
+            {
+                PatchEntry? reloadedPatchEntry = reloaded.GetPatch(originalPatch.Name);
+                Assert.That(reloadedPatchEntry, Is.Not.Null, $"Patch '{originalPatch.Name}' should exist");
+
+                // Verify patch metadata
+                Assert.That(reloadedPatchEntry.Name, Is.EqualTo(originalPatch.Name));
+                Assert.That(reloadedPatchEntry.Author, Is.EqualTo(originalPatch.Author));
+                Assert.That(reloadedPatchEntry.Description, Is.EqualTo(originalPatch.Description));
+                Assert.That(reloadedPatchEntry.Commands.Count, Is.EqualTo(originalPatch.CommandCount));
+
+                // Verify enabled state (only the modified one should be different)
+                if (originalPatch.Name == "Disable Motion Blur")
+                {
+                    Assert.That(reloadedPatchEntry.IsEnabled, Is.EqualTo(!originalPatch.IsEnabled),
+                        "Modified patch should have new state");
+                }
+                else
+                {
+                    Assert.That(reloadedPatchEntry.IsEnabled, Is.EqualTo(originalPatch.IsEnabled),
+                        $"Patch '{originalPatch.Name}' should maintain original state");
+                }
+
+                // Verify all commands
+                for (int i = 0; i < originalPatch.CommandCount; i++)
+                {
+                    Assert.That(reloadedPatchEntry.Commands[i].Address, Is.EqualTo(originalPatch.Commands[i].Address),
+                        $"Command {i} address should match");
+                    Assert.That(reloadedPatchEntry.Commands[i].Type, Is.EqualTo(originalPatch.Commands[i].Type),
+                        $"Command {i} type should match");
+                    Assert.That(reloadedPatchEntry.Commands[i].Value, Is.EqualTo(originalPatch.Commands[i].Value),
+                        $"Command {i} value should match");
+                }
+            }
+        }
+        finally
+        {
             if (File.Exists(tempPath))
             {
                 File.Delete(tempPath);
