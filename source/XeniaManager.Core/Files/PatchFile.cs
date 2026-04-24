@@ -761,23 +761,15 @@ public class PatchFile
             sb.AppendLine($"    is_enabled = {patch.IsEnabled.ToString().ToLower()}");
             sb.AppendLine();
 
-            // Write commands in original order, with blank line when type changes
-            PatchCommand? lastCommand = null;
+            // Write commands in original order
             foreach (PatchCommand command in patch.Commands)
             {
-                if (lastCommand != null && lastCommand.Type != command.Type)
-                {
-                    sb.AppendLine();
-                }
-
                 string typeString = GetPatchTypeString(command.Type);
                 sb.AppendLine($"    [[patch.{typeString}]]");
                 sb.AppendLine($"        address = 0x{command.Address:x8}");
 
                 string valueStr = command.GetValueAsString() ?? "0x00";
                 sb.AppendLine($"        value = {valueStr}");
-
-                lastCommand = command;
             }
 
             sb.AppendLine();
