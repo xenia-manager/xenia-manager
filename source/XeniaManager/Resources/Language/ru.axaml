@@ -1108,8 +1108,8 @@
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr_better_drive_cam.Comment">(Saints Row 1 и 2) Отвязка вращения камеры при повороте транспортного средства при отключённом автоцентрировании</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Title">(Saints Row 1)&#10;Отключение общей перезарядки оружия</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Comment">(Saints Row 1) Отключение функции перезарядки оружия, привязанной к кнопке A. После активации кнопка A будет отвечать только за подбор оружия/взаимодействие.</sys:String>
-    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Title">(Saints Row 1)&#10;Смена кнопки выбора оружия</sys:String>
-    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Comment">(Saints Row 1) Меняет местами функции левого (LB) и правого (RB) бамперов для открытия радиального меню выбора оружия и масштабирования карты</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Title">(Saints Row 1)&#10;Смена направления колеса мыши</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Comment">(Saints Row 1) Смена привязки для колеса мыши при выборе оружия и направления масштабирования карты</sys:String>
 
     <!-- About Page -->
     <sys:String x:Key="AboutPage.App.Description">Xenia Manager - мощный инструмент для управления эмулятором Xenia. Легко устанавливайте, обновляйте и управляйте разными версиями эмулятора Xenia через удобный интерфейс.</sys:String>
