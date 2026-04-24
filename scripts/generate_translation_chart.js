@@ -3,44 +3,10 @@ const { createCanvas } = require('canvas');
 
 // Language code to language name mapping
 const LANGUAGE_NAMES = {
-    'ar': 'Arabic',
-    'bg': 'Bulgarian',
-    'ca': 'Catalan',
-    'cs': 'Czech',
-    'da': 'Danish',
-    'de': 'German',
-    'el': 'Greek',
     'en': 'English',
-    'es': 'Spanish',
-    'et': 'Estonian',
-    'fi': 'Finnish',
-    'fr': 'French',
-    'he': 'Hebrew',
-    'hi': 'Hindi',
     'hr': 'Croatian',
-    'hu': 'Hungarian',
-    'id': 'Indonesian',
-    'it': 'Italian',
-    'ja': 'Japanese',
-    'ko': 'Korean',
-    'lt': 'Lithuanian',
-    'lv': 'Latvian',
-    'ms': 'Malay',
-    'nl': 'Dutch',
-    'no': 'Norwegian',
-    'pl': 'Polish',
-    'pt': 'Portuguese',
-    'ro': 'Romanian',
-    'ru': 'Russian',
-    'sk': 'Slovak',
-    'sl': 'Slovenian',
-    'sr': 'Serbian',
-    'sv': 'Swedish',
-    'th': 'Thai',
-    'tr': 'Turkish',
-    'uk': 'Ukrainian',
-    'vi': 'Vietnamese',
-    'zh': 'Chinese'
+    'zh-CN': 'Simplified Chinese'
+    // Add more here
 };
 
 function getLanguageName(code) {

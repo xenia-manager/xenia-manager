@@ -316,7 +316,7 @@ def find_language_files(directory: str) -> Dict[str, str]:
         Dictionary mapping language codes to file paths
     """
     language_files = {}
-    pattern = re.compile(r"^([a-z]{2})\.axaml$")
+    pattern = re.compile(r"^([a-z]{2}(?:-[A-Z]{2})?)\.axaml$")
 
     for filename in os.listdir(directory):
         match = pattern.match(filename)
