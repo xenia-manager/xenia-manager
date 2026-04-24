@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using XeniaManager.Core.Logging;
@@ -150,57 +151,29 @@ public class PatchFile
         string[] lines = content.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
         PatchEntry? currentPatch = null;
         string? currentCommandType = null;
+        bool isInPatchSection = false;
 
         for (int i = 0; i < lines.Length; i++)
         {
             string line = lines[i];
             string trimmedLine = line.Trim();
 
-            if (string.IsNullOrEmpty(trimmedLine))
+            // Skip empty lines and pure comment lines in most contexts
+            // Exception: #media_id lines need to be processed
+            if (string.IsNullOrEmpty(trimmedLine) || (trimmedLine.StartsWith("#") && !trimmedLine.StartsWith("#media_id")))
             {
                 continue;
             }
 
             if (trimmedLine.StartsWith("title_name"))
             {
-                // Check for inline comment: title_name = "Value" # comment
-                Match m = Regex.Match(trimmedLine, @"^title_name\s*=\s*""([^""]+)""\s*#\s*(.*)");
-                if (m.Success)
-                {
-                    patchFile.Document.TitleName = m.Groups[1].Value;
-                    patchFile.Document.TitleNameComment = m.Groups[2].Value.Trim();
-                    Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
-                }
-                else
-                {
-                    m = Regex.Match(trimmedLine, @"^title_name\s*=\s*""([^""]*)""");
-                    if (m.Success)
-                    {
-                        patchFile.Document.TitleName = m.Groups[1].Value;
-                        Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
-                    }
-                }
+                ParseTitleName(trimmedLine, patchFile);
                 continue;
             }
 
             if (trimmedLine.StartsWith("title_id"))
             {
-                Match m = Regex.Match(trimmedLine, @"^title_id\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
-                if (m.Success)
-                {
-                    patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
-                    patchFile.Document.TitleIdComment = m.Groups[2].Value.Trim();
-                    Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
-                }
-                else
-                {
-                    m = Regex.Match(trimmedLine, @"^title_id\s*=\s*""([A-F0-9]+)""");
-                    if (m.Success)
-                    {
-                        patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
-                        Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
-                    }
-                }
+                ParseTitleId(trimmedLine, patchFile);
                 continue;
             }
 
@@ -210,13 +183,7 @@ public class PatchFile
                 continue;
             }
 
-            if (trimmedLine.StartsWith("#media_id"))
-            {
-                ParseMediaIdArray(trimmedLine, lines, i, patchFile);
-                continue;
-            }
-
-            if (trimmedLine.StartsWith("media_id"))
+            if (trimmedLine.StartsWith("#media_id") || trimmedLine.StartsWith("media_id"))
             {
                 ParseMediaIdArray(trimmedLine, lines, i, patchFile);
                 continue;
@@ -230,10 +197,11 @@ public class PatchFile
                 }
                 currentPatch = new PatchEntry();
                 currentCommandType = null;
+                isInPatchSection = true;
                 continue;
             }
 
-            if (trimmedLine.StartsWith("[[patch.") && currentPatch != null)
+            if (isInPatchSection && currentPatch != null && trimmedLine.StartsWith("[[patch.") && trimmedLine.EndsWith("]]"))
             {
                 Match m = Regex.Match(trimmedLine, @"^\[\[patch\.([^\]]+)\]\]");
                 if (m.Success)
@@ -307,11 +275,56 @@ public class PatchFile
     }
 
     /// <summary>
+    /// Parses the title_name field from a line.
+    /// </summary>
+    private static void ParseTitleName(string line, PatchFile patchFile)
+    {
+        Match m = Regex.Match(line, @"^title_name\s*=\s*""([^""]+)""\s*#\s*(.*)");
+        if (m.Success)
+        {
+            patchFile.Document.TitleName = m.Groups[1].Value;
+            patchFile.Document.TitleNameComment = m.Groups[2].Value.Trim();
+            Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
+            return;
+        }
+
+        m = Regex.Match(line, @"^title_name\s*=\s*""([^""]*)""");
+        if (m.Success)
+        {
+            patchFile.Document.TitleName = m.Groups[1].Value;
+            Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
+        }
+    }
+
+    /// <summary>
+    /// Parses the title_id field from a line.
+    /// </summary>
+    private static void ParseTitleId(string line, PatchFile patchFile)
+    {
+        Match m = Regex.Match(line, @"^title_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
+        if (m.Success)
+        {
+            patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
+            patchFile.Document.TitleIdComment = m.Groups[2].Value.Trim();
+            Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
+            return;
+        }
+
+        m = Regex.Match(line, @"^title_id\s*=\s*""([A-Fa-f0-9]+)""");
+        if (m.Success)
+        {
+            patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
+            Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
+        }
+    }
+
+    /// <summary>
     /// Parses the hash field from the TOML content.
     /// </summary>
     private static void ParseHashValue(string line, string[] lines, int lineIndex, PatchFile patchFile)
     {
-        Match m = Regex.Match(line, @"^hash\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
+        // Single hash with optional comment
+        Match m = Regex.Match(line, @"^hash\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
         if (m.Success)
         {
             patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
@@ -320,7 +333,8 @@ public class PatchFile
             return;
         }
 
-        m = Regex.Match(line, @"^hash\s*=\s*""([A-F0-9]+)""");
+        // Single hash without comment
+        m = Regex.Match(line, @"^hash\s*=\s*""([A-Fa-f0-9]+)""");
         if (m.Success)
         {
             patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
@@ -328,6 +342,7 @@ public class PatchFile
             return;
         }
 
+        // Hash array format
         m = Regex.Match(line, @"^hash\s*=\s*\[");
         if (m.Success)
         {
@@ -338,7 +353,8 @@ public class PatchFile
                 {
                     break;
                 }
-                m = Regex.Match(trimmed, @"""([A-F0-9]+)""");
+                // Extract hash from array line (handles comments)
+                m = Regex.Match(trimmed, @"""([A-Fa-f0-9]+)""");
                 if (m.Success)
                 {
                     patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
@@ -358,29 +374,38 @@ public class PatchFile
 
         if (hasBracket)
         {
-            string arrayChar = isCommented ? "#" : "";
+            // Array format (commented or not)
             for (int i = lineIndex + 1; i < lines.Length; i++)
             {
                 string trimmed = lines[i].Trim();
-                if (trimmed == $"{arrayChar}]")
+
+                // Check for end of array (either #] or ])
+                if (trimmed == "#]" || trimmed == "]")
                 {
                     break;
                 }
 
                 if (isCommented)
                 {
-                    Match m = Regex.Match(trimmed, @"#\s*""([A-F0-9]+)""\s*,?\s*(?:#\s*(.*))?");
+                    // Parse commented media ID with optional comment
+                    // Format: # "2B7A1346", # Disc (Europe, Asia): http://redump.org/disc/84331
+                    Match m = Regex.Match(trimmed, @"^#\s*""([A-Fa-f0-9]+)""\s*,?\s*(?:#\s*(.*))?$");
                     if (m.Success)
                     {
                         string mediaId = m.Groups[1].Value.ToUpper();
                         string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : string.Empty;
                         patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, true));
-                        Logger.Debug<PatchFile>($"Media ID: {mediaId}");
+                        Logger.Debug<PatchFile>($"Media ID: {mediaId} (commented)");
+                    }
+                    else
+                    {
+                        Logger.Warning<PatchFile>($"Failed to parse commented media ID line: {trimmed}");
                     }
                 }
                 else
                 {
-                    Match m = Regex.Match(trimmed, @"""([A-F0-9]+)""\s*,?");
+                    // Parse uncommented media ID
+                    Match m = Regex.Match(trimmed, @"""([A-Fa-f0-9]+)""\s*,?");
                     if (m.Success)
                     {
                         string mediaId = m.Groups[1].Value.ToUpper();
@@ -392,7 +417,8 @@ public class PatchFile
         }
         else if (!isCommented)
         {
-            Match m = Regex.Match(line, @"^media_id\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
+            // Single media_id (not commented)
+            Match m = Regex.Match(line, @"^media_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
@@ -401,7 +427,7 @@ public class PatchFile
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                 return;
             }
-            m = Regex.Match(line, @"^media_id\s*=\s*""([A-F0-9]+)""");
+            m = Regex.Match(line, @"^media_id\s*=\s*""([A-Fa-f0-9]+)""");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
@@ -411,7 +437,8 @@ public class PatchFile
         }
         else
         {
-            Match m = Regex.Match(line, @"#media_id\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
+            // Single commented media_id
+            Match m = Regex.Match(line, @"#media_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
@@ -420,7 +447,7 @@ public class PatchFile
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                 return;
             }
-            m = Regex.Match(line, @"#media_id\s*=\s*""([A-F0-9]+)""");
+            m = Regex.Match(line, @"#media_id\s*=\s*""([A-Fa-f0-9]+)""");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
@@ -439,6 +466,7 @@ public class PatchFile
         Match addressMatch = Regex.Match(addressLine, @"address\s*=\s*0x([0-9a-fA-F]+)");
         if (!addressMatch.Success)
         {
+            Logger.Warning<PatchFile>($"Failed to parse address at line {lineIndex + 1}");
             return;
         }
 
@@ -446,6 +474,7 @@ public class PatchFile
 
         if (lineIndex >= lines.Length - 1)
         {
+            Logger.Warning<PatchFile>($"No value line found after address at line {lineIndex + 1}");
             return;
         }
 
@@ -453,6 +482,7 @@ public class PatchFile
         Match valueMatch = Regex.Match(valueLine, @"value\s*=\s*(.+)");
         if (!valueMatch.Success)
         {
+            Logger.Warning<PatchFile>($"Failed to parse value at line {lineIndex + 2}");
             return;
         }
 
@@ -460,6 +490,7 @@ public class PatchFile
         object? value = ParseValue(valueStr, commandType);
         if (value == null)
         {
+            Logger.Warning<PatchFile>($"Failed to parse value '{valueStr}' for type {commandType} at line {lineIndex + 2}");
             return;
         }
 
@@ -471,6 +502,7 @@ public class PatchFile
         };
 
         patch.Commands.Add(cmd);
+        Logger.Debug<PatchFile>($"Parsed {commandType} command: address=0x{address:x8}, value={value}");
     }
 
     /// <summary>
@@ -481,6 +513,7 @@ public class PatchFile
         valueStr = valueStr.Trim();
         string typeLower = patchType.ToLower();
 
+        // String types - remove quotes
         if (typeLower == "string" || typeLower == "u16string")
         {
             if (valueStr.StartsWith("\"") && valueStr.EndsWith("\""))
@@ -490,24 +523,65 @@ public class PatchFile
             return valueStr;
         }
 
-        try
+        // Hex number types
+        if (typeLower is "be8" or "be16" or "be32" or "be64")
         {
-            return typeLower switch
+            string hexValue = valueStr.Replace("0x", "").Replace("0X", "");
+            try
             {
-                "be8" => Convert.ToByte(valueStr.Replace("0x", ""), 16),
-                "be16" => Convert.ToUInt16(valueStr.Replace("0x", ""), 16),
-                "be32" => Convert.ToUInt32(valueStr.Replace("0x", ""), 16),
-                "be64" => Convert.ToUInt64(valueStr.Replace("0x", ""), 16),
-                "f32" => float.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
-                "f64" => double.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
-                "array" => ParseArrayValue(valueStr),
-                _ => null
-            };
+                return typeLower switch
+                {
+                    "be8" => Convert.ToByte(hexValue, 16),
+                    "be16" => Convert.ToUInt16(hexValue, 16),
+                    "be32" => Convert.ToUInt32(hexValue, 16),
+                    "be64" => Convert.ToUInt64(hexValue, 16),
+                    _ => null
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<PatchFile>($"Failed to parse hex value '{valueStr}' for type {typeLower}: {ex.Message}");
+                return null;
+            }
         }
-        catch
+
+        // Float types
+        if (typeLower is "f32" or "f64")
         {
-            return null;
+            try
+            {
+                // Handle hex float format (0x...)
+                if (valueStr.StartsWith("0x") || valueStr.StartsWith("0X"))
+                {
+                    // For floats in hex format, we need special handling
+                    // This is a simplification - real implementation might need more work
+                    return typeLower switch
+                    {
+                        "f32" => (object)float.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
+                        "f64" => double.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture)
+                    };
+                }
+                return typeLower switch
+                {
+                    "f32" => (object)float.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
+                    "f64" => double.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture)
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<PatchFile>($"Failed to parse float value '{valueStr}' for type {typeLower}: {ex.Message}");
+                return null;
+            }
         }
+
+        // Array type
+        if (typeLower == "array")
+        {
+            return ParseArrayValue(valueStr);
+        }
+
+        Logger.Warning<PatchFile>($"Unknown patch type: {typeLower}");
+        return null;
     }
 
     /// <summary>
@@ -523,12 +597,14 @@ public class PatchFile
 
         if (!testStr.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
         {
+            Logger.Warning<PatchFile>($"Array value must start with 0x: {valueStr}");
             return null;
         }
 
         string hex = testStr.Substring(2);
         if (hex.Length % 2 != 0)
         {
+            Logger.Warning<PatchFile>($"Array hex length must be even: {hex}");
             return null;
         }
 
@@ -537,7 +613,11 @@ public class PatchFile
 
         for (int i = 0; i < byteCount; i++)
         {
-            bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+            if (!byte.TryParse(hex.Substring(i * 2, 2), NumberStyles.HexNumber, null, out bytes[i]))
+            {
+                Logger.Warning<PatchFile>($"Failed to parse array byte at position {i}: {hex.Substring(i * 2, 2)}");
+                return null;
+            }
         }
 
         return bytes;
