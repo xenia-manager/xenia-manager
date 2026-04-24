@@ -163,22 +163,43 @@ public class PatchFile
 
             if (trimmedLine.StartsWith("title_name"))
             {
-                Match m = Regex.Match(trimmedLine, @"^title_name\s*=\s*""([^""]*)""");
+                // Check for inline comment: title_name = "Value" # comment
+                Match m = Regex.Match(trimmedLine, @"^title_name\s*=\s*""([^""]+)""\s*#\s*(.*)");
                 if (m.Success)
                 {
                     patchFile.Document.TitleName = m.Groups[1].Value;
+                    patchFile.Document.TitleNameComment = m.Groups[2].Value.Trim();
                     Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
+                }
+                else
+                {
+                    m = Regex.Match(trimmedLine, @"^title_name\s*=\s*""([^""]*)""");
+                    if (m.Success)
+                    {
+                        patchFile.Document.TitleName = m.Groups[1].Value;
+                        Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
+                    }
                 }
                 continue;
             }
 
             if (trimmedLine.StartsWith("title_id"))
             {
-                Match m = Regex.Match(trimmedLine, @"^title_id\s*=\s*""([A-F0-9]+)""");
+                Match m = Regex.Match(trimmedLine, @"^title_id\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
                 if (m.Success)
                 {
                     patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
+                    patchFile.Document.TitleIdComment = m.Groups[2].Value.Trim();
                     Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
+                }
+                else
+                {
+                    m = Regex.Match(trimmedLine, @"^title_id\s*=\s*""([A-F0-9]+)""");
+                    if (m.Success)
+                    {
+                        patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
+                        Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
+                    }
                 }
                 continue;
             }
@@ -290,7 +311,16 @@ public class PatchFile
     /// </summary>
     private static void ParseHashValue(string line, string[] lines, int lineIndex, PatchFile patchFile)
     {
-        Match m = Regex.Match(line, @"^hash\s*=\s*""([A-F0-9]+)""");
+        Match m = Regex.Match(line, @"^hash\s*=\s*""([A-F0-9]+)""\s*#\s*(.*)");
+        if (m.Success)
+        {
+            patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
+            patchFile.Document.HashComment = m.Groups[2].Value.Trim();
+            Logger.Debug<PatchFile>($"Hash: {patchFile.Document.Hashes[0]}");
+            return;
+        }
+
+        m = Regex.Match(line, @"^hash\s*=\s*""([A-F0-9]+)""");
         if (m.Success)
         {
             patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
@@ -587,13 +617,23 @@ public class PatchFile
         StringBuilder sb = new StringBuilder();
 
         // Write header
-        sb.AppendLine($"title_name = \"{Document.TitleName}\"");
-        sb.AppendLine($"title_id = \"{Document.TitleId.ToUpper()}\"");
+        string titleNameComment = !string.IsNullOrEmpty(Document.TitleNameComment)
+            ? $"    # {Document.TitleNameComment}"
+            : string.Empty;
+        sb.AppendLine($"title_name = \"{Document.TitleName}\"{titleNameComment}");
+
+        string titleIdComment = !string.IsNullOrEmpty(Document.TitleIdComment)
+            ? $"    # {Document.TitleIdComment}"
+            : string.Empty;
+        sb.AppendLine($"title_id = \"{Document.TitleId.ToUpper()}\"{titleIdComment}");
 
         // Write hashes
         if (Document.Hashes.Count == 1)
         {
-            sb.AppendLine($"hash = \"{Document.Hashes[0].ToUpper()}\"");
+            string hashComment = !string.IsNullOrEmpty(Document.HashComment)
+                ? $"    # {Document.HashComment}"
+                : string.Empty;
+            sb.AppendLine($"hash = \"{Document.Hashes[0].ToUpper()}\"{hashComment}");
         }
         else
         {

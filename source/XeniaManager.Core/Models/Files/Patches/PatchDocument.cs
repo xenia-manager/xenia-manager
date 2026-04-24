@@ -12,10 +12,20 @@ public class PatchDocument
     public string TitleName { get; set; } = string.Empty;
 
     /// <summary>
+    /// Optional comment for the title_name field.
+    /// </summary>
+    public string? TitleNameComment { get; set; }
+
+    /// <summary>
     /// The title ID in uppercase hex (e.g., "4D5309C9").
     /// Format: AB-1234 becomes 4D5309C9.
     /// </summary>
     public string TitleId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional comment for the title_id field.
+    /// </summary>
+    public string? TitleIdComment { get; set; }
 
     /// <summary>
     /// The module hash in uppercase hex (e.g., "D48ABF1704CE5C4A").
@@ -23,6 +33,11 @@ public class PatchDocument
     /// Can be a single hash or multiple hashes for different executables.
     /// </summary>
     public List<string> Hashes { get; set; } = [];
+
+    /// <summary>
+    /// Optional comment for the hash field (e.g., "# default.xex").
+    /// </summary>
+    public string? HashComment { get; set; }
 
     /// <summary>
     /// Optional media IDs with their associated comments.
