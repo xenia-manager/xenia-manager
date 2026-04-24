@@ -553,18 +553,13 @@ public class PatchFile
                 // Handle hex float format (0x...)
                 if (valueStr.StartsWith("0x") || valueStr.StartsWith("0X"))
                 {
-                    // For floats in hex format, we need special handling
-                    // This is a simplification - real implementation might need more work
-                    return typeLower switch
-                    {
-                        "f32" => (object)float.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
-                        "f64" => double.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture)
-                    };
+                    // TODO: For floats in hex format, we might need special handling
                 }
                 return typeLower switch
                 {
-                    "f32" => (object)float.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture),
-                    "f64" => double.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture)
+                    "f32" => (object)float.Parse(valueStr, CultureInfo.InvariantCulture),
+                    "f64" => double.Parse(valueStr, CultureInfo.InvariantCulture),
+                    _ => throw new ArgumentOutOfRangeException()
                 };
             }
             catch (Exception ex)
