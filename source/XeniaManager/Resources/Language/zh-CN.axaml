@@ -1133,8 +1133,6 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - 适用于 .NET 的灵活日志框架</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - 游戏详情解析</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Tomlyn.Title">Tomlyn</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Tomlyn.ToolTip"> - TOML 配置文件解析器</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - 归档和压缩处理</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">本应用程序不以任何方式隶属于 Microsoft Corporation 或 Xenia Project，也未获得其认可或赞助。所有商标、徽标和品牌名称均为其各自所有者的财产。&#10;Xbox 360 是 Microsoft Corporation 在美国和/或其他国家/地区的注册商标。&#10;Xenia 是 Xenia Project 的注册商标。&#10;对这些或其他商标的任何引用仅出于标识兼容性或功能的目的，并不意味着与商标持有者有任何关联或获得其认可。&#10;本软件仅供教育和信息目的使用。它不包含或分发 Microsoft Corporation 或任何第三方拥有的任何受版权保护的内容。用户全权负责确保其对本软件的使用符合所有适用法律，包括版权和许可法律。&#10;使用本应用程序运行或与专有软件或固件交互的任何行为都必须在相关最终用户许可协议 (EULA) 的范围内进行。本应用程序的开发者和分发者不以任何形式纵容或支持盗版行为。&#10;本应用程序按"原样"提供，不作任何明示或暗示的担保。使用风险自负。</sys:String>

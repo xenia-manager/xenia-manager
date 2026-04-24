@@ -356,23 +356,6 @@
                                                     Background="Transparent"
                                                     BorderThickness="0"
                                                     Command="{Binding OpenUrlCommand}"
-                                                    CommandParameter="https://github.com/xoofx/Tomlyn"
-                                                    Cursor="Hand"
-                                                    Foreground="{DynamicResource SystemAccentColorLight2Brush}"
-                                                    HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.Credits.Tomlyn.Title}" />
-                                            </Button>
-                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.Credits.Tomlyn.ToolTip}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                                                <Run Text="• " />
-                                            </TextBlock>
-                                            <Button Padding="0"
-                                                    Background="Transparent"
-                                                    BorderThickness="0"
-                                                    Command="{Binding OpenUrlCommand}"
                                                     CommandParameter="https://github.com/adamhathcock/sharpcompress"
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
