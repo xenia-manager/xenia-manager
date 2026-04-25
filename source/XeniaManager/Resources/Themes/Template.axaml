@@ -6,10 +6,18 @@ THEME TEMPLATE FOR XENIA MANAGER
 This file serves as a TEMPLATE for creating new themes in Xenia Manager.
 To create a new theme:
 
-1. Copy this file to a new .axaml file (e.g., "MyCustomTheme.axaml")
-2. Replace all color values with your theme's colors
-3. Update ThemeService.cs to register your new theme
-4. Build and test your theme
+1. Save this file in the Themes folder next to XeniaManager.exe
+2. Name it with your theme name ending in Dark or Light (e.g., "MyThemeDark.axaml")
+3. Replace all color values with your theme's colors
+4. The theme will automatically appear in Settings > Theme
+
+THEME NAME GUIDELINES
+- Include "Dark" or "Light" in the filename to set the base theme
+- Use PascalCase for display name (e.g., "MidnightPurple" displays as "Midnight Purple")
+- Examples: "MyCustomDark.axaml", "OceanBlueLight.axaml", "MidnightPurpleDark.axaml"
+
+ALTERNATIVE: Use a sidecar JSON file for metadata:
+- Create "MyTheme.json" next to your axaml file with {"BaseTheme": "Dark"}
 
 ================================================================================
 REQUIRED COLOR DEFINITIONS
@@ -23,7 +31,7 @@ Do NOT modify the x:Key names - they are used by the application.
     <!-- =====================================================================
          BACKGROUND COLORS
          Define your theme's background colors here
-         ===================================================================== -->
+    ===================================================================== -->
 
     <!-- Main application background -->
     <Color x:Key="SolidBackgroundFillColorBase">#FFFFFFFF</Color>
@@ -43,7 +51,7 @@ Do NOT modify the x:Key names - they are used by the application.
     <!-- =====================================================================
          ACCENT COLORS
          Your theme's primary accent color (Xbox Green by default)
-         ===================================================================== -->
+    ===================================================================== -->
 
     <!-- Main accent color -->
     <Color x:Key="SystemAccentColor">#FF107C10</Color>
@@ -61,7 +69,7 @@ Do NOT modify the x:Key names - they are used by the application.
     <!-- =====================================================================
          TEXT COLORS
          Define text colors for your theme
-         ===================================================================== -->
+    ===================================================================== -->
 
     <!-- Primary text (main content) -->
     <Color x:Key="TextFillColorPrimary">#FF000000</Color>
@@ -82,30 +90,30 @@ Do NOT modify the x:Key names - they are used by the application.
     <Color x:Key="AccentTextFillColorPrimary">#FF107C10</Color>
     <Color x:Key="AccentTextFillColorSecondary">#FF0E6B0E</Color>
     <Color x:Key="AccentTextFillColorTertiary">#FF2D9B2D</Color>
-    <Color x:Key="AccentTextFillColorDisabled">#66107C10</Color>
+    <Color x:Key="AccentTextFillColorDisabled">#66000000</Color>
 
     <!-- Text on accent colors -->
-    <Color x:Key="TextOnAccentFillColorSelectedText">#FFFFFF</Color>
-    <Color x:Key="TextOnAccentFillColorPrimary">#000000</Color>
+    <Color x:Key="TextOnAccentFillColorSelectedText">#FFFFFFFF</Color>
+    <Color x:Key="TextOnAccentFillColorPrimary">#FF000000</Color>
     <Color x:Key="TextOnAccentFillColorSecondary">#80000000</Color>
     <Color x:Key="TextOnAccentFillColorDisabled">#66000000</Color>
 
     <!-- =====================================================================
          CONTROL FILL COLORS
          Colors for interactive elements (buttons, inputs, etc.)
-         ===================================================================== -->
+    ===================================================================== -->
 
     <!-- Default control background -->
     <Color x:Key="ControlFillColorDefault">#0D000000</Color>
 
     <!-- Secondary control (hover state) -->
-    <Color x:Key="ControlFillColorSecondary">#0A000000</Color>
+    <Color x:Key="ControlFillColorSecondary">#1A000000</Color>
 
     <!-- Tertiary control (pressed state) -->
-    <Color x:Key="ControlFillColorTertiary">#08000000</Color>
+    <Color x:Key="ControlFillColorTertiary">#29000000</Color>
 
     <!-- Disabled control -->
-    <Color x:Key="ControlFillColorDisabled">#05000000</Color>
+    <Color x:Key="ControlFillColorDisabled">#0A000000</Color>
 
     <!-- Transparent control -->
     <Color x:Key="ControlFillColorTransparent">#00000000</Color>
@@ -114,39 +122,39 @@ Do NOT modify the x:Key names - they are used by the application.
     <Color x:Key="ControlFillColorInputActive">#FFFFFFFF</Color>
 
     <!-- Strong control fills -->
-    <Color x:Key="ControlStrongFillColorDefault">#66000000</Color>
-    <Color x:Key="ControlStrongFillColorDisabled">#33000000</Color>
-    <Color x:Key="ControlSolidFillColorDefault">#FF000000</Color>
+    <Color x:Key="ControlStrongFillColorDefault">#8BFFFFFF</Color>
+    <Color x:Key="ControlStrongFillColorDisabled">#3FFFFFFF</Color>
+    <Color x:Key="ControlSolidFillColorDefault">#FF454545</Color>
 
     <!-- Alt control fills -->
-    <Color x:Key="ControlAltFillColorTransparent">#00000000</Color>
-    <Color x:Key="ControlAltFillColorSecondary">#05000000</Color>
-    <Color x:Key="ControlAltFillColorTertiary">#0A000000</Color>
-    <Color x:Key="ControlAltFillColorQuarternary">#1A000000</Color>
-    <Color x:Key="ControlAltFillColorDisabled">#00000000</Color>
+    <Color x:Key="ControlAltFillColorTransparent">#00FFFFFF</Color>
+    <Color x:Key="ControlAltFillColorSecondary">#19000000</Color>
+    <Color x:Key="ControlAltFillColorTertiary">#0BFFFFFF</Color>
+    <Color x:Key="ControlAltFillColorQuarternary">#12FFFFFF</Color>
+    <Color x:Key="ControlAltFillColorDisabled">#00FFFFFF</Color>
 
     <!-- Subtle fills -->
-    <Color x:Key="SubtleFillColorTransparent">#00000000</Color>
-    <Color x:Key="SubtleFillColorSecondary">#08000000</Color>
-    <Color x:Key="SubtleFillColorTertiary">#05000000</Color>
-    <Color x:Key="SubtleFillColorDisabled">#00000000</Color>
+    <Color x:Key="SubtleFillColorTransparent">#00FFFFFF</Color>
+    <Color x:Key="SubtleFillColorSecondary">#0FFFFFFF</Color>
+    <Color x:Key="SubtleFillColorTertiary">#0AFFFFFF</Color>
+    <Color x:Key="SubtleFillColorDisabled">#00FFFFFF</Color>
 
     <!-- Control on image fills -->
-    <Color x:Key="ControlOnImageFillColorDefault">#E6FFFFFF</Color>
+    <Color x:Key="ControlOnImageFillColorDefault">#B3FFFFFF</Color>
     <Color x:Key="ControlOnImageFillColorSecondary">#FFF8F8F8</Color>
     <Color x:Key="ControlOnImageFillColorTertiary">#FFFAFAFA</Color>
-    <Color x:Key="ControlOnImageFillColorDisabled">#00000000</Color>
+    <Color x:Key="ControlOnImageFillColorDisabled">#FFE0E0E0</Color>
 
     <!-- =====================================================================
          CONTROL STROKE COLORS
          Border and outline colors
-         ===================================================================== -->
+    ===================================================================== -->
 
     <!-- Default stroke -->
     <Color x:Key="ControlStrokeColorDefault">#0D000000</Color>
 
     <!-- Secondary stroke -->
-    <Color x:Key="ControlStrokeColorSecondary">#1A000000</Color>
+    <Color x:Key="ControlStrokeColorSecondary">#14000000</Color>
 
     <!-- Stroke on accent -->
     <Color x:Key="ControlStrokeColorOnAccentDefault">#1AFFFFFF</Color>
@@ -157,13 +165,13 @@ Do NOT modify the x:Key names - they are used by the application.
     <Color x:Key="ControlStrokeColorForStrongFillWhenOnImage">#59FFFFFF</Color>
 
     <!-- Strong stroke -->
-    <Color x:Key="ControlStrongStrokeColorDefault">#66000000</Color>
-    <Color x:Key="ControlStrongStrokeColorDisabled">#26000000</Color>
+    <Color x:Key="ControlStrongStrokeColorDefault">#8BFFFFFF</Color>
+    <Color x:Key="ControlStrongStrokeColorDisabled">#28FFFFFF</Color>
 
     <!-- =====================================================================
          CARD COLORS
          Colors for card components
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="CardBackgroundFillColorDefault">#FFFFFFFF</Color>
     <Color x:Key="CardBackgroundFillColorSecondary">#FFF8F8F8</Color>
@@ -173,26 +181,26 @@ Do NOT modify the x:Key names - they are used by the application.
     <!-- =====================================================================
          SURFACE STROKE COLORS
          Borders for surfaces and flyouts
-         ===================================================================== -->
+    ===================================================================== -->
 
-    <Color x:Key="SurfaceStrokeColorDefault">#33CCCCCC</Color>
+    <Color x:Key="SurfaceStrokeColorDefault">#66757575</Color>
     <Color x:Key="SurfaceStrokeColorFlyout">#0D000000</Color>
-    <Color x:Key="SurfaceStrokeColorInverse">#1A000000</Color>
+    <Color x:Key="SurfaceStrokeColorInverse">#0F000000</Color>
 
     <!-- =====================================================================
          DIVIDER COLOR
          Separator lines
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="DividerStrokeColorDefault">#0D000000</Color>
 
     <!-- =====================================================================
          LAYER COLORS
          Overlay and layer colors
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="LayerFillColorDefault">#CCFFFFFF</Color>
-    <Color x:Key="LayerFillColorAlt">#FFF8F8F8</Color>
+    <Color x:Key="LayerFillColorAlt">#0DFFFFFF</Color>
     <Color x:Key="LayerOnAcrylicFillColorDefault">#66FFFFFF</Color>
     <Color x:Key="LayerOnAccentAcrylicFillColorDefault">#33000000</Color>
     <Color x:Key="LayerOnMicaBaseAltFillColorDefault">#E6FFFFFF</Color>
@@ -203,14 +211,14 @@ Do NOT modify the x:Key names - they are used by the application.
     <!-- =====================================================================
          SMOKE FILL COLOR
          Semi-transparent overlay
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="SmokeFillColorDefault">#80FFFFFF</Color>
 
     <!-- =====================================================================
          SYSTEM STATE COLORS
          Success, warning, error, and info states
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="SystemFillColorSuccess">#FF107C10</Color>
     <Color x:Key="SystemFillColorCaution">#FFE68A00</Color>
@@ -218,7 +226,7 @@ Do NOT modify the x:Key names - they are used by the application.
     <Color x:Key="SystemFillColorNeutral">#66000000</Color>
     <Color x:Key="SystemFillColorSolidNeutral">#FF666666</Color>
 
-    <Color x:Key="SystemFillColorAttentionBackground">#CCFFFFFF</Color>
+    <Color x:Key="SystemFillColorAttentionBackground">#08FFFFFF</Color>
     <Color x:Key="SystemFillColorSuccessBackground">#FFE6F5E6</Color>
     <Color x:Key="SystemFillColorCautionBackground">#FFFFF4E6</Color>
     <Color x:Key="SystemFillColorCriticalBackground">#FFFFEAEA</Color>
@@ -229,14 +237,14 @@ Do NOT modify the x:Key names - they are used by the application.
     <!-- =====================================================================
          ACCENT FILL COLOR
          Disabled accent state
-         ===================================================================== -->
+    ===================================================================== -->
 
-    <Color x:Key="AccentFillColorDisabled">#37000000</Color>
+    <Color x:Key="AccentFillColorDisabled">#28FFFFFF</Color>
 
     <!-- =====================================================================
          ACRYLIC COLORS
          Acrylic/mica effect backgrounds
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="AcrylicBackgroundFillColorDefault">#FFF9F9F9</Color>
     <Color x:Key="AcrylicInAppFillColorDefault">#FFF9F9F9</Color>
@@ -244,15 +252,15 @@ Do NOT modify the x:Key names - they are used by the application.
     <Color x:Key="AcrylicInAppFillColorDefaultInverse">#FF2C2C2C</Color>
     <Color x:Key="AcrylicBackgroundFillColorBase">#FFEEEEEE</Color>
     <Color x:Key="AcrylicInAppFillColorBase">#FFEEEEEE</Color>
-    <Color x:Key="AccentAcrylicBackgroundFillColorDefault">#FF7BC67B</Color>
-    <Color x:Key="AccentAcrylicInAppFillColorDefault">#FF7BC67B</Color>
-    <Color x:Key="AccentAcrylicBackgroundFillColorBase">#FF7BC67B</Color>
-    <Color x:Key="AccentAcrylicInAppFillColorBase">#FF7BC67B</Color>
+    <Color x:Key="AccentAcrylicBackgroundFillColorDefault">#337BC67B</Color>
+    <Color x:Key="AccentAcrylicInAppFillColorDefault">#337BC67B</Color>
+    <Color x:Key="AccentAcrylicBackgroundFillColorBase">#337BC67B</Color>
+    <Color x:Key="AccentAcrylicInAppFillColorBase">#337BC67B</Color>
 
     <!-- =====================================================================
          FOCUS COLORS
          Focus indicator colors (Xbox controller focus ring)
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="FocusStrokeColorOuter">#FF107C10</Color>
     <Color x:Key="FocusStrokeColorInner">#33107C10</Color>
@@ -260,7 +268,7 @@ Do NOT modify the x:Key names - they are used by the application.
     <!-- =====================================================================
          HIGH CONTRAST COLORS
          Placeholder colors for high contrast mode (set to magenta)
-         ===================================================================== -->
+    ===================================================================== -->
 
     <Color x:Key="SystemColorWindowTextColorBrush">#FF00FF</Color>
     <Color x:Key="SystemColorWindowColorBrush">#FF00FF</Color>
@@ -271,37 +279,201 @@ Do NOT modify the x:Key names - they are used by the application.
     <Color x:Key="SystemColorHotlightColorBrush">#FF00FF</Color>
     <Color x:Key="SystemColorGrayTextColorBrush">#FF00FF</Color>
 
+    <!-- =====================================================================
+         BRUSHES
+         Solid color brushes for the theme
+    ===================================================================== -->
+
+    <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush" Color="#FFF8F8F8" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush" Color="#FFF2F2F2" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorQuarternaryBrush" Color="#FFECECEC" />
+
+    <SolidColorBrush x:Key="SystemAccentColorBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="SystemAccentColorLight1Brush" Color="#FF2D9B2D" />
+    <SolidColorBrush x:Key="SystemAccentColorLight2Brush" Color="#FF52B043" />
+    <SolidColorBrush x:Key="SystemAccentColorLight3Brush" Color="#FF7BC67B" />
+
+    <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#CC000000" />
+    <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#99000000" />
+    <SolidColorBrush x:Key="TextFillColorDisabledBrush" Color="#4D000000" />
+    <SolidColorBrush x:Key="TextFillColorInverseBrush" Color="#FFFFFFFF" />
+
+    <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="#FF0E6B0E" />
+    <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush" Color="#FF2D9B2D" />
+    <SolidColorBrush x:Key="AccentTextFillColorDisabledBrush" Color="#66000000" />
+
+    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="#80000000" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorDisabledBrush" Color="#66000000" />
+
+    <SolidColorBrush x:Key="ButtonBackground" Color="#0D000000" />
+    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#1A000000" />
+    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#29000000" />
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="#0D000000" />
+
+    <SolidColorBrush x:Key="AccentButtonBackground" Color="#FF107C10" />
+    <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#FF2D9B2D" />
+    <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#FF0E6B0E" />
+    <SolidColorBrush x:Key="AccentButtonForeground" Color="#FFFFFFFF" />
+
+    <SolidColorBrush x:Key="TextControlBackground" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFF8F8F8" />
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="#0D000000" />
+    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF107C10" />
+
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#33107C10" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#44107C10" />
+    <SolidColorBrush x:Key="ListViewItemForegroundSelected" Color="#FFFFFFFF" />
+
+    <SolidColorBrush x:Key="ProgressBarBackground" Color="#1A000000" />
+    <SolidColorBrush x:Key="ProgressBarForeground" Color="#FF107C10" />
+    <SolidColorBrush x:Key="ProgressRingForeground" Color="#FF107C10" />
+
+    <SolidColorBrush x:Key="ToolTipBackground" Color="#FFF2F2F2" />
+    <SolidColorBrush x:Key="ToolTipForeground" Color="#FF000000" />
+    <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#0D000000" />
+
+    <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#0D000000" />
+    <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#1A000000" />
+    <SolidColorBrush x:Key="ControlFillColorTertiaryBrush" Color="#29000000" />
+    <SolidColorBrush x:Key="ControlFillColorDisabledBrush" Color="#0A000000" />
+    <SolidColorBrush x:Key="ControlFillColorTransparentBrush" Color="#00000000" />
+    <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#FFF8F8F8" />
+
+    <SolidColorBrush x:Key="ControlStrongFillColorDefaultBrush" Color="#8BFFFFFF" />
+    <SolidColorBrush x:Key="ControlStrongFillColorDisabledBrush" Color="#3FFFFFFF" />
+    <SolidColorBrush x:Key="ControlSolidFillColorDefaultBrush" Color="#FF454545" />
+
+    <SolidColorBrush x:Key="ControlAltFillColorTransparentBrush" Color="#00FFFFFF" />
+    <SolidColorBrush x:Key="ControlAltFillColorSecondaryBrush" Color="#19000000" />
+    <SolidColorBrush x:Key="ControlAltFillColorTertiaryBrush" Color="#0BFFFFFF" />
+    <SolidColorBrush x:Key="ControlAltFillColorQuarternaryBrush" Color="#12FFFFFF" />
+    <SolidColorBrush x:Key="ControlAltFillColorDisabledBrush" Color="#00FFFFFF" />
+
+    <SolidColorBrush x:Key="SubtleFillColorTransparentBrush" Color="#00FFFFFF" />
+    <SolidColorBrush x:Key="SubtleFillColorSecondaryBrush" Color="#0FFFFFFF" />
+    <SolidColorBrush x:Key="SubtleFillColorTertiaryBrush" Color="#0AFFFFFF" />
+    <SolidColorBrush x:Key="SubtleFillColorDisabledBrush" Color="#00FFFFFF" />
+
+    <SolidColorBrush x:Key="ControlOnImageFillColorDefaultBrush" Color="#B3FFFFFF" />
+    <SolidColorBrush x:Key="ControlOnImageFillColorSecondaryBrush" Color="#FFF8F8F8" />
+    <SolidColorBrush x:Key="ControlOnImageFillColorTertiaryBrush" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="ControlOnImageFillColorDisabledBrush" Color="#FFE0E0E0" />
+
+    <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#0D000000" />
+    <SolidColorBrush x:Key="ControlStrokeColorSecondaryBrush" Color="#14000000" />
+    <SolidColorBrush x:Key="ControlStrokeColorOnAccentDefaultBrush" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="ControlStrokeColorOnAccentSecondaryBrush" Color="#40FFFFFF" />
+    <SolidColorBrush x:Key="ControlStrokeColorOnAccentTertiaryBrush" Color="#33FFFFFF" />
+    <SolidColorBrush x:Key="ControlStrokeColorOnAccentDisabledBrush" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="ControlStrokeColorForStrongFillWhenOnImageBrush" Color="#59FFFFFF" />
+
+    <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#8BFFFFFF" />
+    <SolidColorBrush x:Key="ControlStrongStrokeColorDisabledBrush" Color="#28FFFFFF" />
+
+    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#FF0E6B0E" />
+    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FF0E6B0E" Opacity="0.9" />
+    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#FF0E6B0E" Opacity="0.8" />
+    <SolidColorBrush x:Key="AccentFillColorDisabledBrush" Color="#28FFFFFF" />
+
+    <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#0D000000" />
+    <SolidColorBrush x:Key="CardBackgroundFillColorSecondaryBrush" Color="#08000000" />
+    <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#0D000000" />
+    <SolidColorBrush x:Key="CardStrokeColorDefaultSolidBrush" Color="#FFE0E0E0" />
+
+    <SolidColorBrush x:Key="SurfaceStrokeColorDefaultBrush" Color="#66757575" />
+    <SolidColorBrush x:Key="SurfaceStrokeColorFlyoutBrush" Color="#1A000000" />
+    <SolidColorBrush x:Key="SurfaceStrokeColorInverseBrush" Color="#0F000000" />
+
+    <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#0D000000" />
+
+    <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#CCFFFFFF" />
+    <SolidColorBrush x:Key="LayerFillColorAltBrush" Color="#0DFFFFFF" />
+    <SolidColorBrush x:Key="LayerOnAcrylicFillColorDefaultBrush" Color="#66FFFFFF" />
+    <SolidColorBrush x:Key="LayerOnAccentAcrylicFillColorDefaultBrush" Color="#33000000" />
+    <SolidColorBrush x:Key="LayerOnMicaBaseAltFillColorDefaultBrush" Color="#E6FFFFFF" />
+    <SolidColorBrush x:Key="LayerOnMicaBaseAltFillColorSecondaryBrush" Color="#0DFFFFFF" />
+    <SolidColorBrush x:Key="LayerOnMicaBaseAltFillColorTertiaryBrush" Color="#FFF8F8F8" />
+    <SolidColorBrush x:Key="LayerOnMicaBaseAltFillColorTransparentBrush" Color="#00FFFFFF" />
+
+    <SolidColorBrush x:Key="SmokeFillColorDefaultBrush" Color="#80FFFFFF" />
+
+    <SolidColorBrush x:Key="SystemFillColorAttentionBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="SystemFillColorSuccessBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="SystemFillColorCautionBrush" Color="#FFE68A00" />
+    <SolidColorBrush x:Key="SystemFillColorCriticalBrush" Color="#FFE63946" />
+    <SolidColorBrush x:Key="SystemFillColorNeutralBrush" Color="#66000000" />
+    <SolidColorBrush x:Key="SystemFillColorSolidNeutralBrush" Color="#FF666666" />
+    <SolidColorBrush x:Key="SystemFillColorAttentionBackgroundBrush" Color="#08FFFFFF" />
+    <SolidColorBrush x:Key="SystemFillColorSuccessBackgroundBrush" Color="#FFE6F5E6" />
+    <SolidColorBrush x:Key="SystemFillColorCautionBackgroundBrush" Color="#FFFFF4E6" />
+    <SolidColorBrush x:Key="SystemFillColorCriticalBackgroundBrush" Color="#FFFFEAEA" />
+    <SolidColorBrush x:Key="SystemFillColorNeutralBackgroundBrush" Color="#08000000" />
+    <SolidColorBrush x:Key="SystemFillColorSolidAttentionBackgroundBrush" Color="#FFF8F8F8" />
+    <SolidColorBrush x:Key="SystemFillColorSolidNeutralBackgroundBrush" Color="#FFF2F2F2" />
+
+    <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="FocusStrokeColorInnerBrush" Color="#33107C10" />
+
+    <SolidColorBrush x:Key="AcrylicBackgroundFillColorDefaultBrush" Color="#FFF9F9F9" />
+    <SolidColorBrush x:Key="AcrylicInAppFillColorDefaultBrush" Color="#FFF9F9F9" />
+    <SolidColorBrush x:Key="AcrylicBackgroundFillColorDefaultInverseBrush" Color="#FF2C2C2C" />
+    <SolidColorBrush x:Key="AcrylicInAppFillColorDefaultInverseBrush" Color="#FF2C2C2C" />
+    <SolidColorBrush x:Key="AcrylicBackgroundFillColorBaseBrush" Color="#FFEEEEEE" />
+    <SolidColorBrush x:Key="AcrylicInAppFillColorBaseBrush" Color="#FFEEEEEE" />
+    <SolidColorBrush x:Key="AccentAcrylicBackgroundFillColorDefaultBrush" Color="#337BC67B" />
+    <SolidColorBrush x:Key="AccentAcrylicInAppFillColorDefaultBrush" Color="#337BC67B" />
+    <SolidColorBrush x:Key="AccentAcrylicBackgroundFillColorBaseBrush" Color="#337BC67B" />
+    <SolidColorBrush x:Key="AccentAcrylicInAppFillColorBaseBrush" Color="#337BC67B" />
+
+    <SolidColorBrush x:Key="SystemControlTransparentBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentVeryHighBrush" Color="#FF107C10" Opacity="0.9" />
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumLowBrush" Color="#FF107C10" Opacity="0.75" />
+    <SolidColorBrush x:Key="SystemControlFocusVisualPrimaryBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="SystemControlFocusVisualSecondaryBrush" Color="#33107C10" />
+
+    <LinearGradientBrush x:Key="ControlElevationBorderBrush" StartPoint="0,0" EndPoint="0,3">
+        <LinearGradientBrush.Transform>
+            <ScaleTransform ScaleY="-1" />
+        </LinearGradientBrush.Transform>
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.33" Color="#0D000000" />
+            <GradientStop Offset="1" Color="#08000000" />
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="CircleElevationBorderBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.50" Color="#08000000"/>
+            <GradientStop Offset="0.70" Color="#0D000000"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AccentControlElevationBorderBrush" StartPoint="0,0" EndPoint="0,3">
+        <LinearGradientBrush.Transform>
+            <ScaleTransform ScaleY="-1" />
+        </LinearGradientBrush.Transform>
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.33" Color="#230E6B0E"/>
+            <GradientStop Offset="1.0" Color="#14107C10"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="SystemColorWindowTextColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorWindowColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorButtonFaceColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorButtonTextColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorHighlightColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorHighlightTextColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorHotlightColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorGrayTextColorBrush" Color="#FF00FF" />
+
+    <StaticResource x:Key="DefaultTextForegroundThemeBrush" ResourceKey="TextFillColorPrimaryBrush" />
+
 </ResourceDictionary>
-
-<!--
-================================================================================
-NEXT STEPS AFTER CREATING YOUR THEME
-================================================================================
-
-1. Save your theme file in the Resources/Themes/ directory
-   Example: "MyCustomTheme.axaml"
-2. Register your theme in ThemeService.cs:
-   Add your theme to the _themeConfigs dictionary:
-   [Theme.MyCustom] = new ThemeConfiguration
-   {
-       BaseTheme = ThemeVariant.Dark, // or ThemeVariant.Light
-       ResourcePath = "avares://XeniaManager/Resources/Themes/MyCustomTheme.axaml",
-       FallbackTheme = Theme.Dark // optional fallback
-   },
-
-3. Add your theme to the Theme enum in Models/Theme.cs (if needed)
-
-4. Build and test your theme!
-
-================================================================================
-TIPS FOR CREATING THEMES
-================================================================================
-
-- For DARK themes: Use dark backgrounds (#FF000000) with light text (#FFFFFFFF)
-- For LIGHT themes: Use light backgrounds (#FFFFFFFF) with dark text (#FF000000)
-- Keep sufficient contrast ratios for accessibility (WCAG AA minimum)
-- Test your theme with different controls (buttons, textboxes, lists, etc.)
-- The accent color should work on both light and dark backgrounds
-
-================================================================================
--->
