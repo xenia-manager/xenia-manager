@@ -5,6 +5,7 @@ const { createCanvas } = require('canvas');
 const LANGUAGE_NAMES = {
     'en': 'English',
     'hr': 'Croatian',
+    'ru': "Russian",
     'zh-CN': 'Simplified Chinese'
     // Add more here
 };
