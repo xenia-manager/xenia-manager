@@ -700,7 +700,7 @@
     <sys:String x:Key="MousehookControlsEditorDialog.AddButton">Добавить</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.NoBindingsFound">Не найдено настроек клавиш.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.RemoveEntry.ToolTip">Удалить привязку</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.ToolTip">Detect Input</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.ToolTip">Распознать ввод</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.SubToolTip">Нажмите клавишу или кнопку мыши для определения</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.NoInputDetected.Title">Входной сигнал не обнаружен</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.NoInputDetected.Message">В течение 10 секунд не было зафиксировано никаких действий с клавиатуры или мыши.</sys:String>
@@ -786,8 +786,8 @@
     <sys:String x:Key="ConfigUiSettings.APU.use_new_decoder.Title">Аудиодекодер XMA</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.use_new_decoder.Comment">Включение новой версии аудиодекодера XMA вместо старого</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.Title">Декодер XMA</sys:String>
-    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.Comment">- Отключено: звук не будет декодироваться.&#10;- Мастер-версия: декодер такой же, как в оригинальной Xenia.&#10;- Старый: модифицированная мастер-версия с небольшими улучшениями.&#10;- Новый: новая версия декодера. Наиболее стабильная, но ещё в разработке.</sys:String>
-    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.fake">Отключено</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.Comment">- Имитация: звук не будет декодироваться.&#10;- Мастер-версия: декодер такой же, как в оригинальной Xenia.&#10;- Старый: модифицированная мастер-версия с небольшими улучшениями.&#10;- Новый: новая версия декодера. Наиболее стабильная, но ещё в разработке.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.fake">Имитация</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.master">Мастер-версия</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.old">Старый</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.new">Новый</sys:String>
