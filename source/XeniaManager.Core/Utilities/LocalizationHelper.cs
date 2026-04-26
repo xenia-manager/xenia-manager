@@ -31,6 +31,7 @@ public class LocalizationHelper
     [
         new CultureInfo(DefaultLanguageCode), // English
         new CultureInfo("hr"), // Hrvatski
+        new CultureInfo("ru"), // Русский
         new CultureInfo("zh-CN") // Simplified Chinese
     ];
 
