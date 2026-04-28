@@ -488,6 +488,9 @@
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID 和 Media ID 是自动检测的，无法更改。</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIds">替代 ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">输入替代 ID...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Add">添加</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">游戏标题</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">输入游戏标题</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">游戏路径</sys:String>
@@ -754,6 +757,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.HID">HID</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">WinKey 绑定</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">内核</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Logging">日志</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Memory">内存</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Storage">存储</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.UI">界面</sys:String>
@@ -983,6 +987,16 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Comment">应用标题更新</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">命令行</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">指定提供给客户端的额外命令行参数</sys:String>
+    
+    <!-- Config UI Settings - Logging Options -->
+	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">启用控制台</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">随主窗口打开控制台窗口</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">日志级别</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">要记录的最高日志级别</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">错误</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">警告</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">信息</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">调试</sys:String>
 
     <!-- Config UI Settings - Memory Options -->
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">保护零页</sys:String>
