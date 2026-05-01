@@ -16,6 +16,11 @@ public class ThemeDisplayItem
     public Theme ThemeValue { get; set; }
 
     /// <summary>
+    /// Path to the custom theme file
+    /// </summary>
+    public string CustomThemePath { get; set; } = string.Empty;
+
+    /// <summary>
     /// Returns a string representation of this ThemeDisplayItem
     /// </summary>
     /// <returns>Display name of ThemeDisplayItem</returns>
