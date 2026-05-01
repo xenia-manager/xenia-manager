@@ -431,6 +431,10 @@
     <sys:String x:Key="MessageBox.No">Ne</sys:String>
     <sys:String x:Key="MessageBox.Cancel">Otkaži</sys:String>
 
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Nema instaliranog emulatora</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Nije pronađena nijedna instalacija Xenia emulatora. Molimo instalirajte Xenia emulator.</sys:String>
+
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Zakrpe</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Dodaj novu zakrpu</sys:String>

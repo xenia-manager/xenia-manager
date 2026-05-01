@@ -12,6 +12,7 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Views.Pages;
 
 namespace XeniaManager.Services;
@@ -40,6 +41,11 @@ public class NavigationService
     /// Event signalizing that the service navigated to the selected Avalonia Page
     /// </summary>
     public event EventHandler<string>? Navigated;
+
+    /// <summary>
+    /// Service for showing message boxes
+    /// </summary>
+    private readonly IMessageBoxService _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
 
     // Functions
     /// <summary>
@@ -110,8 +116,10 @@ public class NavigationService
                     {
                         case 0:
                             Logger.Error<NavigationService>("No Xenia installations found");
-                            // TODO: Custom Exception
-                            throw new Exception("No Xenia installations found");
+                            await _messageBoxService.ShowWarningAsync(
+                                LocalizationHelper.GetText("NavigationService.NoXeniaInstalled.Title"),
+                                LocalizationHelper.GetText("NavigationService.NoXeniaInstalled.Message"));
+                            return;
                         case 1:
                             Logger.Info<NavigationService>($"Only one Xenia version installed: {installedVersions[0]}, launching directly");
                             EventManager.Instance.DisableWindow();

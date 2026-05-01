@@ -431,6 +431,10 @@
     <sys:String x:Key="MessageBox.No">No</sys:String>
     <sys:String x:Key="MessageBox.Cancel">Cancel</sys:String>
 
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">No Xenia Installed</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">No Xenia installations were found. Please install Xenia first before trying to launch.</sys:String>
+
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Add New Patch</sys:String>
