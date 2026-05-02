@@ -470,7 +470,7 @@ public class PatchFile
             return;
         }
 
-        uint address = Convert.ToUInt32(addressMatch.Groups[1].Value, 16);
+        ulong address = Convert.ToUInt64(addressMatch.Groups[1].Value, 16);
 
         if (lineIndex >= lines.Length - 1)
         {
@@ -503,7 +503,7 @@ public class PatchFile
         };
 
         patch.Commands.Add(cmd);
-        Logger.Debug<PatchFile>($"Parsed {commandType} command: address=0x{address:x8}, value={value}");
+        Logger.Debug<PatchFile>($"Parsed {commandType} command: address=0x{address:x}, value={value}");
     }
 
     /// <summary>
@@ -782,7 +782,7 @@ public class PatchFile
             {
                 string typeString = GetPatchTypeString(command.Type);
                 sb.AppendLine($"    [[patch.{typeString}]]");
-                sb.AppendLine($"        address = 0x{command.Address:x8}");
+                sb.AppendLine($"        address = 0x{command.Address:x}");
 
                 string valueStr = command.GetValueAsString() ?? "0x00";
                 sb.AppendLine($"        value = {valueStr}");

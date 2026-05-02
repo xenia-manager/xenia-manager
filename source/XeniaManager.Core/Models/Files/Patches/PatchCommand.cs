@@ -9,10 +9,10 @@ namespace XeniaManager.Core.Models.Files.Patches;
 public class PatchCommand
 {
     /// <summary>
-    /// The memory address to patch (typically starts with 0x8, always 4 bytes).
+    /// The memory address to patch (typically starts with 0x8, can be up to 8 bytes).
     /// Stored as lowercase hex in TOML.
     /// </summary>
-    public uint Address { get; set; }
+    public ulong Address { get; set; }
 
     /// <summary>
     /// The value to write at the address.
@@ -41,7 +41,7 @@ public class PatchCommand
     /// <param name="address">The memory address to patch.</param>
     /// <param name="value">The value to write.</param>
     /// <param name="type">The type of patch.</param>
-    public PatchCommand(uint address, object? value, PatchType type)
+    public PatchCommand(ulong address, object? value, PatchType type)
     {
         Address = address;
         Value = value;

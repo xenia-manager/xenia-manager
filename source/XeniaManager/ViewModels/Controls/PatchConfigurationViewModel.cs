@@ -21,7 +21,7 @@ namespace XeniaManager.ViewModels.Controls;
 public partial class PatchCommandViewModel : ObservableObject
 {
     [ObservableProperty] private PatchType _type;
-    [ObservableProperty] private uint _address;
+    [ObservableProperty] private ulong _address;
     [ObservableProperty] private string _value = string.Empty;
     [ObservableProperty] private bool _isSelected;
     [ObservableProperty] private bool _isValid = true;
