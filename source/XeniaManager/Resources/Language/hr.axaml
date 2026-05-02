@@ -443,8 +443,13 @@
     <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Naziv zakrpe</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Autor</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Opis (neobavezno)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Koment zaglavlja (neobavezno)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Naredbe zakrpe</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Tip:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Koment tipa</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">Koment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">Koment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Koment (neobavezno)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Adresa:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Vrijednost:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
