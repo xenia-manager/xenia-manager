@@ -201,7 +201,7 @@ public class PatchFile
                 continue;
             }
 
-            if (isInPatchSection && currentPatch != null && trimmedLine.StartsWith("[[patch.") && trimmedLine.EndsWith("]]"))
+            if (isInPatchSection && currentPatch != null && trimmedLine.StartsWith("[[patch."))
             {
                 Match m = Regex.Match(trimmedLine, @"^\[\[patch\.([^\]]+)\]\]");
                 if (m.Success)
@@ -487,6 +487,7 @@ public class PatchFile
         }
 
         string valueStr = valueMatch.Groups[1].Value.Trim().TrimEnd(',');
+        valueStr = StripInlineComment(valueStr);
         object? value = ParseValue(valueStr, commandType);
         if (value == null)
         {
@@ -503,6 +504,26 @@ public class PatchFile
 
         patch.Commands.Add(cmd);
         Logger.Debug<PatchFile>($"Parsed {commandType} command: address=0x{address:x8}, value={value}");
+    }
+
+    /// <summary>
+    /// Strips inline TOML comments from a value string, preserving # inside quoted strings.
+    /// </summary>
+    private static string StripInlineComment(string valueStr)
+    {
+        bool inQuotes = false;
+        for (int i = 0; i < valueStr.Length; i++)
+        {
+            if (valueStr[i] == '"' && (i == 0 || valueStr[i - 1] != '\\'))
+            {
+                inQuotes = !inQuotes;
+            }
+            else if (valueStr[i] == '#' && !inQuotes)
+            {
+                return valueStr.Substring(0, i).TrimEnd();
+            }
+        }
+        return valueStr;
     }
 
     /// <summary>
@@ -746,13 +767,13 @@ public class PatchFile
         {
             sb.AppendLine("[[patch]]");
             sb.AppendLine($"    name = \"{patch.Name}\"");
-            sb.AppendLine($"    author = \"{patch.Author}\"");
 
             if (!string.IsNullOrEmpty(patch.Description))
             {
                 sb.AppendLine($"    desc = \"{patch.Description}\"");
             }
 
+            sb.AppendLine($"    author = \"{patch.Author}\"");
             sb.AppendLine($"    is_enabled = {patch.IsEnabled.ToString().ToLower()}");
             sb.AppendLine();
 
