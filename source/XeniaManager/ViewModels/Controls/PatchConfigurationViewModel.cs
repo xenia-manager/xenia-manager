@@ -48,8 +48,8 @@ public partial class PatchCommandViewModel : ObservableObject
 
         string? rawValue = command.GetValueAsString();
 
-        // Strip quotes from string values for display in the textbox
-        if (Type is PatchType.String or PatchType.U16String && rawValue != null)
+        // Strip quotes from string/array values for display in the textbox
+        if (Type is PatchType.String or PatchType.U16String or PatchType.Array && rawValue != null)
         {
             string trimmed = rawValue.Trim();
             if ((trimmed.StartsWith("\"") && trimmed.EndsWith("\"")) ||
