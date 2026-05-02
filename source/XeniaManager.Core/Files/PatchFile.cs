@@ -562,25 +562,36 @@ public class PatchFile
         }
 
         string valueStr = valueMatch.Groups[1].Value.Trim().TrimEnd(',');
-        object? value = ParseValue(valueStr, commandType);
-        if (value == null)
-        {
-            Logger.Warning<PatchFile>($"Failed to parse value '{valueStr}' for type {commandType} at line {lineIndex + 2}");
-            return;
-        }
 
         PatchCommand cmd = new PatchCommand
         {
             Address = address,
-            Value = value,
             Type = ParsePatchType(commandType),
             TypeComment = typeComment,
             AddressComment = addressComment,
             ValueComment = valueComment
         };
 
+        if (commandType.ToLower() == "array")
+        {
+            (byte[]? bytes, bool usePrefix) = ParseArrayValue(valueStr);
+            cmd.Value = bytes;
+            cmd.UseArrayPrefix = usePrefix;
+            Logger.Debug<PatchFile>($"Array parsed: usePrefix={usePrefix}, bytes={bytes?.Length}");
+        }
+        else
+        {
+            cmd.Value = ParseValue(valueStr, commandType, cmd);
+        }
+
+        if (cmd.Value == null)
+        {
+            Logger.Warning<PatchFile>($"Failed to parse value '{valueStr}' for type {commandType} at line {lineIndex + 2}");
+            return;
+        }
+
         patch.Commands.Add(cmd);
-        Logger.Debug<PatchFile>($"Parsed {commandType} command: address=0x{address:x}, value={value}");
+        Logger.Debug<PatchFile>($"Parsed {commandType} command: address=0x{address:x}, value={cmd.Value}");
     }
 
     /// <summary>
@@ -624,7 +635,7 @@ public class PatchFile
     /// <summary>
     /// Parses a value string based on the patch type.
     /// </summary>
-    private static object? ParseValue(string valueStr, string patchType)
+    private static object? ParseValue(string valueStr, string patchType, PatchCommand? command)
     {
         valueStr = valueStr.Trim();
         string typeLower = patchType.ToLower();
@@ -688,7 +699,12 @@ public class PatchFile
         // Array type
         if (typeLower == "array")
         {
-            return ParseArrayValue(valueStr);
+            (byte[]? bytes, bool usePrefix) = ParseArrayValue(valueStr);
+            if (bytes != null && command != null)
+            {
+                command.UseArrayPrefix = usePrefix;
+            }
+            return bytes;
         }
 
         Logger.Warning<PatchFile>($"Unknown patch type: {typeLower}");
@@ -697,10 +713,14 @@ public class PatchFile
 
     /// <summary>
     /// Parses an array value (hex string like "0x##*" or just "##*").
+    /// Supports both "0x-prefixed" and "non-prefixed" formats per spec.
+    /// Returns the byte array and a flag indicating if "0x" prefix was used.
     /// </summary>
-    private static byte[]? ParseArrayValue(string valueStr)
+    private static (byte[]? Bytes, bool UsedPrefix) ParseArrayValue(string valueStr)
     {
         string testStr = valueStr;
+        bool usedPrefix = false;
+
         if (testStr.StartsWith("\"") && testStr.EndsWith("\""))
         {
             testStr = testStr.Substring(1, testStr.Length - 2);
@@ -710,15 +730,25 @@ public class PatchFile
         if (testStr.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
         {
             hex = testStr.Substring(2);
+            usedPrefix = true;
         }
         else
         {
             hex = testStr;
         }
+
+        hex = hex.Trim();
+
+        if (hex.Length == 0)
+        {
+            Logger.Warning<PatchFile>("Array hex value is empty");
+            return (Array.Empty<byte>(), usedPrefix);
+        }
+
         if (hex.Length % 2 != 0)
         {
             Logger.Warning<PatchFile>($"Array hex length must be even: {hex}");
-            return null;
+            return (null, usedPrefix);
         }
 
         int byteCount = hex.Length / 2;
@@ -729,11 +759,11 @@ public class PatchFile
             if (!byte.TryParse(hex.Substring(i * 2, 2), NumberStyles.HexNumber, null, out bytes[i]))
             {
                 Logger.Warning<PatchFile>($"Failed to parse array byte at position {i}: {hex.Substring(i * 2, 2)}");
-                return null;
+                return (null, usedPrefix);
             }
         }
 
-        return bytes;
+        return (bytes, usedPrefix);
     }
 
     /// <summary>

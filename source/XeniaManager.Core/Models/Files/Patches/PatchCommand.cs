@@ -1,4 +1,5 @@
 using System.Globalization;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.Core.Models.Files.Patches;
 
@@ -44,6 +45,12 @@ public class PatchCommand
     public string? ValueComment { get; set; }
 
     /// <summary>
+    /// For Array type: tracks whether the original format used "0x" prefix.
+    /// null = default behavior (use 0x prefix), true = use prefix, false = no prefix.
+    /// </summary>
+    public bool? UseArrayPrefix { get; set; }
+
+    /// <summary>
     /// Creates a new instance of PatchCommand.
     /// </summary>
     public PatchCommand()
@@ -66,6 +73,7 @@ public class PatchCommand
     /// <summary>
     /// Converts the value to a string representation suitable for TOML output.
     /// Hex values are lowercase, strings are quoted. Floats use invariant culture.
+    /// Array values preserve the original format's "0x" prefix if present.
     /// </summary>
     /// <returns>The string representation of the value.</returns>
     public string? GetValueAsString()
@@ -76,12 +84,23 @@ public class PatchCommand
             ushort shortValue => $"0x{shortValue:x4}",
             uint uIntValue => $"0x{uIntValue:x8}",
             ulong longValue => $"0x{longValue:x16}",
-            byte[] byteArrayValue => $"\"0x{BitConverter.ToString(byteArrayValue).Replace("-", "").ToLower()}\"",
+            byte[] byteArrayValue => FormatArrayValue(byteArrayValue),
             float floatValue => floatValue.ToString(CultureInfo.InvariantCulture),
             double doubleValue => doubleValue.ToString(CultureInfo.InvariantCulture),
             string stringValue => $"\"{stringValue}\"",
             null => null,
             _ => Value.ToString()
         };
+    }
+
+    /// <summary>
+    /// Formats array value preserving original prefix format.
+    /// </summary>
+    private string FormatArrayValue(byte[] bytes)
+    {
+        string hex = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+        bool usePrefix = UseArrayPrefix ?? true;
+        Logger.Debug<PatchCommand>($"FormatArrayValue: UseArrayPrefix={UseArrayPrefix}, usePrefix={usePrefix}");
+        return usePrefix ? $"\"0x{hex}\"" : $"\"{hex}\"";
     }
 }
