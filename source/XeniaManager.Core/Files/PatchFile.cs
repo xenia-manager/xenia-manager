@@ -217,17 +217,24 @@ public class PatchFile
 
             string lineToProcess = processedLine;
 
+            // Extract [[patch]] header comment from raw trimmed line BEFORE stripping
+            string? patchHeaderComment = null;
+            if (trimmedLine.StartsWith("[[patch]]", StringComparison.OrdinalIgnoreCase))
+            {
+                Match patchHeaderMatch = Regex.Match(trimmedLine, @"^\[\[patch\]\]\s*#\s*(.+)$", RegexOptions.IgnoreCase);
+                patchHeaderComment = patchHeaderMatch.Success ? patchHeaderMatch.Groups[1].Value.Trim() : null;
+            }
+
             if (lineToProcess.StartsWith("[[patch]]", StringComparison.OrdinalIgnoreCase))
             {
-                // Capture [[patch]] header comment if present
-                Match patchHeaderMatch = Regex.Match(lineToProcess, @"^\[\[patch\]\]\s*#\s*(.*)", RegexOptions.IgnoreCase);
-                string patchHeaderComment = patchHeaderMatch.Success ? patchHeaderMatch.Groups[1].Value.Trim() : string.Empty;
-
                 if (currentPatch != null && !string.IsNullOrEmpty(currentPatch.Name) && !string.IsNullOrEmpty(currentPatch.Author))
                 {
                     patchFile.Document.Patches.Add(currentPatch);
                 }
-                currentPatch = new PatchEntry();
+                currentPatch = new PatchEntry
+                {
+                    HeaderComment = patchHeaderComment
+                };
                 currentCommandType = null;
                 isInPatchSection = true;
                 continue;
@@ -333,50 +340,6 @@ public class PatchFile
         {
             patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
             patchFile.Document.TitleIdComment = comment ?? string.Empty;
-            Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
-        }
-    }
-
-    /// <summary>
-    /// Parses the title_name field from a line.
-    /// </summary>
-    private static void ParseTitleName(string line, PatchFile patchFile)
-    {
-        Match m = Regex.Match(line, @"^title_name\s*=\s*""([^""]+)""\s*#\s*(.*)");
-        if (m.Success)
-        {
-            patchFile.Document.TitleName = m.Groups[1].Value;
-            patchFile.Document.TitleNameComment = m.Groups[2].Value.Trim();
-            Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
-            return;
-        }
-
-        m = Regex.Match(line, @"^title_name\s*=\s*""([^""]*)""");
-        if (m.Success)
-        {
-            patchFile.Document.TitleName = m.Groups[1].Value;
-            Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
-        }
-    }
-
-    /// <summary>
-    /// Parses the title_id field from a line.
-    /// </summary>
-    private static void ParseTitleId(string line, PatchFile patchFile)
-    {
-        Match m = Regex.Match(line, @"^title_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
-        if (m.Success)
-        {
-            patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
-            patchFile.Document.TitleIdComment = m.Groups[2].Value.Trim();
-            Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
-            return;
-        }
-
-        m = Regex.Match(line, @"^title_id\s*=\s*""([A-Fa-f0-9]+)""");
-        if (m.Success)
-        {
-            patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
             Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
         }
     }
@@ -733,7 +696,7 @@ public class PatchFile
     }
 
     /// <summary>
-    /// Parses an array value (hex string like "0x##*").
+    /// Parses an array value (hex string like "0x##*" or just "##*").
     /// </summary>
     private static byte[]? ParseArrayValue(string valueStr)
     {
@@ -743,13 +706,15 @@ public class PatchFile
             testStr = testStr.Substring(1, testStr.Length - 2);
         }
 
-        if (!testStr.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        string hex;
+        if (testStr.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
         {
-            Logger.Warning<PatchFile>($"Array value must start with 0x: {valueStr}");
-            return null;
+            hex = testStr.Substring(2);
         }
-
-        string hex = testStr.Substring(2);
+        else
+        {
+            hex = testStr;
+        }
         if (hex.Length % 2 != 0)
         {
             Logger.Warning<PatchFile>($"Array hex length must be even: {hex}");
@@ -925,7 +890,14 @@ public class PatchFile
         // Write patches
         foreach (PatchEntry patch in Document.Patches)
         {
-            sb.AppendLine("[[patch]]");
+            if (!string.IsNullOrEmpty(patch.HeaderComment))
+            {
+                sb.AppendLine($"[[patch]] # {patch.HeaderComment}");
+            }
+            else
+            {
+                sb.AppendLine("[[patch]]");
+            }
             sb.AppendLine($"    name = \"{patch.Name}\"");
 
             if (!string.IsNullOrEmpty(patch.Description))

@@ -268,6 +268,7 @@ public partial class PatchEntryViewModel : ObservableObject
     [ObservableProperty] private string? _description;
     [ObservableProperty] private bool _isEnabled;
     [ObservableProperty] private bool _isExpanded;
+    [ObservableProperty] private string? _headerComment;
     [ObservableProperty] private ObservableCollection<PatchCommandViewModel> _commands = [];
     [ObservableProperty] private PatchEntry _originalEntry;
     [ObservableProperty] private PatchConfigurationViewModel? _parentViewModel;
@@ -280,6 +281,7 @@ public partial class PatchEntryViewModel : ObservableObject
         Author = entry.Author;
         Description = entry.Description;
         IsEnabled = entry.IsEnabled;
+        HeaderComment = entry.HeaderComment;
 
         foreach (PatchCommand command in entry.Commands)
         {
@@ -294,7 +296,8 @@ public partial class PatchEntryViewModel : ObservableObject
             Name = Name,
             Author = Author,
             Description = Description,
-            IsEnabled = IsEnabled
+            IsEnabled = IsEnabled,
+            HeaderComment = HeaderComment
         };
 
         foreach (PatchCommandViewModel commandVm in Commands)
