@@ -27,6 +27,9 @@ public partial class PatchCommandViewModel : ObservableObject
     [ObservableProperty] private bool _isValid = true;
     [ObservableProperty] private string _validationError = string.Empty;
     [ObservableProperty] private PatchConfigurationViewModel? _parentViewModel;
+    [ObservableProperty] private string? _typeComment;
+    [ObservableProperty] private string? _addressComment;
+    [ObservableProperty] private string? _valueComment;
 
     public PatchCommandViewModel()
     {
@@ -37,6 +40,10 @@ public partial class PatchCommandViewModel : ObservableObject
         _parentViewModel = parentViewModel;
         Type = command.Type;
         Address = command.Address;
+        _typeComment = command.TypeComment;
+        _addressComment = command.AddressComment;
+        _valueComment = command.ValueComment;
+
         string? rawValue = command.GetValueAsString();
 
         // Strip quotes from string values for display in the textbox
@@ -215,7 +222,10 @@ public partial class PatchCommandViewModel : ObservableObject
         {
             Type = Type,
             Address = Address,
-            Value = ParseValue(Value, Type)
+            Value = ParseValue(Value, Type),
+            TypeComment = TypeComment,
+            AddressComment = AddressComment,
+            ValueComment = ValueComment
         };
     }
 

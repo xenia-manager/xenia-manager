@@ -29,6 +29,21 @@ public class PatchCommand
     public PatchType Type { get; set; }
 
     /// <summary>
+    /// Optional inline comment from the [[patch.type]] line.
+    /// </summary>
+    public string? TypeComment { get; set; }
+
+    /// <summary>
+    /// Optional inline comment from the address line.
+    /// </summary>
+    public string? AddressComment { get; set; }
+
+    /// <summary>
+    /// Optional inline comment from the value line.
+    /// </summary>
+    public string? ValueComment { get; set; }
+
+    /// <summary>
     /// Creates a new instance of PatchCommand.
     /// </summary>
     public PatchCommand()

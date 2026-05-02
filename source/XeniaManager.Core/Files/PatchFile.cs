@@ -151,6 +151,7 @@ public class PatchFile
         string[] lines = content.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
         PatchEntry? currentPatch = null;
         string? currentCommandType = null;
+        string? currentCommandTypeComment = null;
         bool isInPatchSection = false;
 
         for (int i = 0; i < lines.Length; i++)
@@ -158,39 +159,70 @@ public class PatchFile
             string line = lines[i];
             string trimmedLine = line.Trim();
 
-            // Skip empty lines and pure comment lines in most contexts
-            // Exception: #media_id lines need to be processed
-            if (string.IsNullOrEmpty(trimmedLine) || (trimmedLine.StartsWith("#") && !trimmedLine.StartsWith("#media_id")))
+            if (string.IsNullOrEmpty(trimmedLine))
             {
                 continue;
             }
 
-            if (trimmedLine.StartsWith("title_name"))
+            // Special handling for [[patch.type]] - extract comment BEFORE stripping
+            if (isInPatchSection && trimmedLine.StartsWith("[[patch.", StringComparison.OrdinalIgnoreCase))
             {
-                ParseTitleName(trimmedLine, patchFile);
+                // Extract command type from raw line
+                Match typeMatch = Regex.Match(trimmedLine, @"^\[\[patch\.([^\]]+)\]\]", RegexOptions.IgnoreCase);
+                if (typeMatch.Success)
+                {
+                    currentCommandType = typeMatch.Groups[1].Value;
+                }
+
+                // Note: This regex has TWO groups - group 1 is type, group 2 is comment
+                Match inlineCommentMatch = Regex.Match(trimmedLine, @"^\[\[patch\.([^\]]+)\]\]\s*#\s*(.+)$", RegexOptions.IgnoreCase);
+                if (inlineCommentMatch.Success)
+                {
+                    currentCommandTypeComment = inlineCommentMatch.Groups[2].Value.Trim();
+                    Logger.Debug<PatchFile>($"Command type '{currentCommandType}' has inline comment: {currentCommandTypeComment}");
+                }
+
                 continue;
             }
 
-            if (trimmedLine.StartsWith("title_id"))
+            // Special handling for header fields - extract comments BEFORE stripping
+            if (trimmedLine.StartsWith("title_name", StringComparison.OrdinalIgnoreCase))
             {
-                ParseTitleId(trimmedLine, patchFile);
+                ParseTitleNameWithComment(trimmedLine, patchFile);
                 continue;
             }
 
-            if (trimmedLine.StartsWith("hash"))
+            if (trimmedLine.StartsWith("title_id", StringComparison.OrdinalIgnoreCase))
+            {
+                ParseTitleIdWithComment(trimmedLine, patchFile);
+                continue;
+            }
+
+            // Parse hash before stripping to preserve comments
+            if (trimmedLine.StartsWith("hash", StringComparison.OrdinalIgnoreCase))
             {
                 ParseHashValue(trimmedLine, lines, i, patchFile);
                 continue;
             }
 
-            if (trimmedLine.StartsWith("#media_id") || trimmedLine.StartsWith("media_id"))
+            if (trimmedLine.StartsWith("#media_id", StringComparison.OrdinalIgnoreCase) ||
+                trimmedLine.StartsWith("media_id", StringComparison.OrdinalIgnoreCase))
             {
                 ParseMediaIdArray(trimmedLine, lines, i, patchFile);
                 continue;
             }
 
-            if (trimmedLine.StartsWith("[[patch]]"))
+            // Strip inline comments for all other lines (preserve # inside quoted strings)
+            string processedLine = StripInlineComment(trimmedLine);
+
+            string lineToProcess = processedLine;
+
+            if (lineToProcess.StartsWith("[[patch]]", StringComparison.OrdinalIgnoreCase))
             {
+                // Capture [[patch]] header comment if present
+                Match patchHeaderMatch = Regex.Match(lineToProcess, @"^\[\[patch\]\]\s*#\s*(.*)", RegexOptions.IgnoreCase);
+                string patchHeaderComment = patchHeaderMatch.Success ? patchHeaderMatch.Groups[1].Value.Trim() : string.Empty;
+
                 if (currentPatch != null && !string.IsNullOrEmpty(currentPatch.Name) && !string.IsNullOrEmpty(currentPatch.Author))
                 {
                     patchFile.Document.Patches.Add(currentPatch);
@@ -201,25 +233,16 @@ public class PatchFile
                 continue;
             }
 
-            if (isInPatchSection && currentPatch != null && trimmedLine.StartsWith("[[patch."))
+            if (currentPatch != null && currentCommandType != null && lineToProcess.StartsWith("address", StringComparison.OrdinalIgnoreCase))
             {
-                Match m = Regex.Match(trimmedLine, @"^\[\[patch\.([^\]]+)\]\]");
-                if (m.Success)
-                {
-                    currentCommandType = m.Groups[1].Value;
-                }
+                ParsePatchCommand(lines, i, currentPatch, currentCommandType, currentCommandTypeComment);
+                currentCommandTypeComment = null;
                 continue;
             }
 
-            if (currentPatch != null && currentCommandType != null && trimmedLine.StartsWith("address"))
+            if (currentPatch != null && (lineToProcess.StartsWith("name", StringComparison.OrdinalIgnoreCase)))
             {
-                ParsePatchCommand(lines, i, currentPatch, currentCommandType);
-                continue;
-            }
-
-            if (currentPatch != null && trimmedLine.StartsWith("name"))
-            {
-                Match m = Regex.Match(trimmedLine, @"^name\s*=\s*""([^""]*)""");
+                Match m = Regex.Match(lineToProcess, @"^name\s*=\s*""([^""]*)""", RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
                     currentPatch.Name = m.Groups[1].Value;
@@ -227,9 +250,9 @@ public class PatchFile
                 continue;
             }
 
-            if (currentPatch != null && trimmedLine.StartsWith("author"))
+            if (currentPatch != null && (lineToProcess.StartsWith("author", StringComparison.OrdinalIgnoreCase)))
             {
-                Match m = Regex.Match(trimmedLine, @"^author\s*=\s*""([^""]*)""");
+                Match m = Regex.Match(lineToProcess, @"^author\s*=\s*""([^""]*)""", RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
                     currentPatch.Author = m.Groups[1].Value;
@@ -237,19 +260,19 @@ public class PatchFile
                 continue;
             }
 
-            if (currentPatch != null && trimmedLine.StartsWith("desc"))
+            if (currentPatch != null && (lineToProcess.StartsWith("desc", StringComparison.OrdinalIgnoreCase) || lineToProcess.StartsWith("Desc", StringComparison.OrdinalIgnoreCase)))
             {
-                Match m = Regex.Match(trimmedLine, @"^desc\s*=\s*""([^""]*)""");
+                Match m = Regex.Match(lineToProcess, @"^(desc|Desc)\s*=\s*""([^""]*)""", RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
-                    currentPatch.Description = m.Groups[1].Value;
+                    currentPatch.Description = m.Groups[2].Value;
                 }
                 continue;
             }
 
-            if (currentPatch != null && trimmedLine.StartsWith("is_enabled"))
+            if (currentPatch != null && lineToProcess.StartsWith("is_enabled", StringComparison.OrdinalIgnoreCase))
             {
-                Match m = Regex.Match(trimmedLine, @"^is_enabled\s*=\s*(true|false)", RegexOptions.IgnoreCase);
+                Match m = Regex.Match(lineToProcess, @"^is_enabled\s*=\s*(true|false)", RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
                     currentPatch.IsEnabled = m.Groups[1].Value.Equals("true", StringComparison.OrdinalIgnoreCase);
@@ -271,6 +294,46 @@ public class PatchFile
                 continue;
             }
             Logger.Debug<PatchFile>($"Parsed patch: {patch.Name} by {patch.Author} ({patch.Commands.Count} commands)");
+        }
+    }
+
+    /// <summary>
+    /// Parses the title_name field from a line (with inline comment extraction).
+    /// </summary>
+    private static void ParseTitleNameWithComment(string rawLine, PatchFile patchFile)
+    {
+        // Extract comment first
+        Match commentMatch = Regex.Match(rawLine, @"^title_name\s*=\s*""[^""]+""\s*#\s*(.+)$");
+        string? comment = commentMatch.Success ? commentMatch.Groups[1].Value.Trim() : null;
+
+        // Now strip comment and extract title name
+        string strippedLine = StripInlineComment(rawLine);
+        Match m = Regex.Match(strippedLine, @"^title_name\s*=\s*""([^""]+)""");
+        if (m.Success)
+        {
+            patchFile.Document.TitleName = m.Groups[1].Value;
+            patchFile.Document.TitleNameComment = comment ?? string.Empty;
+            Logger.Debug<PatchFile>($"Title Name: {patchFile.Document.TitleName}");
+        }
+    }
+
+    /// <summary>
+    /// Parses the title_id field from a line (with inline comment extraction).
+    /// </summary>
+    private static void ParseTitleIdWithComment(string rawLine, PatchFile patchFile)
+    {
+        // Extract comment first
+        Match commentMatch = Regex.Match(rawLine, @"^title_id\s*=\s*""[A-Fa-f0-9]+""\s*#\s*(.+)$");
+        string? comment = commentMatch.Success ? commentMatch.Groups[1].Value.Trim() : null;
+
+        // Now strip comment and extract title id
+        string strippedLine = StripInlineComment(rawLine);
+        Match m = Regex.Match(strippedLine, @"^title_id\s*=\s*""([A-Fa-f0-9]+)""");
+        if (m.Success)
+        {
+            patchFile.Document.TitleId = m.Groups[1].Value.ToUpper();
+            patchFile.Document.TitleIdComment = comment ?? string.Empty;
+            Logger.Debug<PatchFile>($"Title ID: {patchFile.Document.TitleId}");
         }
     }
 
@@ -319,12 +382,12 @@ public class PatchFile
     }
 
     /// <summary>
-    /// Parses the hash field from the TOML content.
+    /// Parses the hash field from the TOML content (handles raw line with comment).
     /// </summary>
-    private static void ParseHashValue(string line, string[] lines, int lineIndex, PatchFile patchFile)
+    private static void ParseHashValue(string rawLine, string[] lines, int lineIndex, PatchFile patchFile)
     {
         // Single hash with optional comment
-        Match m = Regex.Match(line, @"^hash\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
+        Match m = Regex.Match(rawLine, @"^hash\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
         if (m.Success)
         {
             patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
@@ -334,7 +397,7 @@ public class PatchFile
         }
 
         // Single hash without comment
-        m = Regex.Match(line, @"^hash\s*=\s*""([A-Fa-f0-9]+)""");
+        m = Regex.Match(rawLine, @"^hash\s*=\s*""([A-Fa-f0-9]+)""");
         if (m.Success)
         {
             patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
@@ -343,18 +406,34 @@ public class PatchFile
         }
 
         // Hash array format
-        m = Regex.Match(line, @"^hash\s*=\s*\[");
+        m = Regex.Match(rawLine, @"^hash\s*=\s*\[");
         if (m.Success)
         {
             for (int i = lineIndex + 1; i < lines.Length; i++)
             {
-                string trimmed = lines[i].Trim();
+                string rawLineArray = lines[i];
+                string trimmed = rawLineArray.Trim();
+
                 if (trimmed == "]")
                 {
                     break;
                 }
-                // Extract hash from array line (handles comments)
-                m = Regex.Match(trimmed, @"""([A-Fa-f0-9]+)""");
+
+                // Skip commented-out hash entries (lines starting with #)
+                if (trimmed.StartsWith("#"))
+                {
+                    // Check if it's a commented hash entry for logging/marking disabled
+                    Match commentedMatch = Regex.Match(trimmed, @"^#\s*""([A-Fa-f0-9]+)""\s*,?\s*(?:#\s*(.*))?$");
+                    if (commentedMatch.Success)
+                    {
+                        Logger.Debug<PatchFile>($"Hash (disabled): {commentedMatch.Groups[1].Value}");
+                    }
+                    continue;
+                }
+
+                // Strip inline comment before extracting hash
+                string processedLine = StripInlineComment(trimmed);
+                m = Regex.Match(processedLine, @"""([A-Fa-f0-9]+)""");
                 if (m.Success)
                 {
                     patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
@@ -365,12 +444,21 @@ public class PatchFile
     }
 
     /// <summary>
-    /// Parses the media_id field from the TOML content.
+    /// Parses the media_id field from the TOML content (handles raw line with comment).
     /// </summary>
-    private static void ParseMediaIdArray(string line, string[] lines, int lineIndex, PatchFile patchFile)
+    private static void ParseMediaIdArray(string rawLine, string[] lines, int lineIndex, PatchFile patchFile)
     {
-        bool isCommented = line.StartsWith("#");
-        bool hasBracket = line.Contains("[");
+        // The rawLine still has inline comment
+        // First extract the comment from the header line if present
+        string? headerComment = null;
+        Match headerCommentMatch = Regex.Match(rawLine, @"^#media_id\s*=\s*""[A-Fa-f0-9]+""\s*#\s*(.+)$");
+        if (headerCommentMatch.Success)
+        {
+            headerComment = headerCommentMatch.Groups[1].Value.Trim();
+        }
+
+        bool isCommented = rawLine.StartsWith("#");
+        bool hasBracket = rawLine.Contains("[");
 
         if (hasBracket)
         {
@@ -417,41 +505,41 @@ public class PatchFile
         }
         else if (!isCommented)
         {
-            // Single media_id (not commented)
-            Match m = Regex.Match(line, @"^media_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
+            // Single media_id (not commented) - use rawLine with comment
+            Match m = Regex.Match(rawLine, @"^media_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
-                string comment = m.Groups[2].Value.Trim();
+                string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : (headerComment ?? string.Empty);
                 patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, false));
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                 return;
             }
-            m = Regex.Match(line, @"^media_id\s*=\s*""([A-Fa-f0-9]+)""");
+            m = Regex.Match(rawLine, @"^media_id\s*=\s*""([A-Fa-f0-9]+)""");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
-                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, string.Empty, false));
+                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, headerComment ?? string.Empty, false));
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
             }
         }
         else
         {
-            // Single commented media_id
-            Match m = Regex.Match(line, @"#media_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
+            // Single commented media_id - use rawLine with comment
+            Match m = Regex.Match(rawLine, @"^#media_id\s*=\s*""([A-Fa-f0-9]+)""\s*#\s*(.*)");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
-                string comment = m.Groups[2].Value.Trim();
+                string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : (headerComment ?? string.Empty);
                 patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, true));
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                 return;
             }
-            m = Regex.Match(line, @"#media_id\s*=\s*""([A-Fa-f0-9]+)""");
+            m = Regex.Match(rawLine, @"^#media_id\s*=\s*""([A-Fa-f0-9]+)""");
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
-                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, string.Empty, true));
+                patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, headerComment ?? string.Empty, true));
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
             }
         }
@@ -460,9 +548,21 @@ public class PatchFile
     /// <summary>
     /// Parses a patch command from the TOML content.
     /// </summary>
-    private static void ParsePatchCommand(string[] lines, int lineIndex, PatchEntry patch, string commandType)
+    private static void ParsePatchCommand(string[] lines, int lineIndex, PatchEntry patch, string commandType, string? typeComment)
     {
-        string addressLine = lines[lineIndex].Trim();
+        string rawAddressLine = lines[lineIndex].Trim();
+
+        // Extract address comment - more flexible regex to handle whitespace
+        string? addressComment = null;
+        Match addressCommentMatch = Regex.Match(rawAddressLine, @"address\s*=\s*0x[0-9a-fA-F]+\s*#\s*(.+?)\s*$");
+        if (addressCommentMatch.Success)
+        {
+            addressComment = addressCommentMatch.Groups[1].Value.Trim();
+        }
+
+        // Strip inline comment from address line (preserve # inside quotes)
+        string addressLine = StripInlineComment(rawAddressLine);
+
         Match addressMatch = Regex.Match(addressLine, @"address\s*=\s*0x([0-9a-fA-F]+)");
         if (!addressMatch.Success)
         {
@@ -478,7 +578,19 @@ public class PatchFile
             return;
         }
 
-        string valueLine = lines[lineIndex + 1].Trim();
+        string rawValueLine = lines[lineIndex + 1].Trim();
+
+        // Extract value comment - more flexible regex to handle whitespace
+        string? valueComment = null;
+        Match valueCommentMatch = Regex.Match(rawValueLine, @"value\s*=\s*.+?\s*#\s*(.+?)\s*$");
+        if (valueCommentMatch.Success)
+        {
+            valueComment = valueCommentMatch.Groups[1].Value.Trim();
+        }
+
+        // Strip inline comment from value line (preserve # inside quotes)
+        string valueLine = StripInlineComment(rawValueLine);
+
         Match valueMatch = Regex.Match(valueLine, @"value\s*=\s*(.+)");
         if (!valueMatch.Success)
         {
@@ -487,7 +599,6 @@ public class PatchFile
         }
 
         string valueStr = valueMatch.Groups[1].Value.Trim().TrimEnd(',');
-        valueStr = StripInlineComment(valueStr);
         object? value = ParseValue(valueStr, commandType);
         if (value == null)
         {
@@ -499,7 +610,10 @@ public class PatchFile
         {
             Address = address,
             Value = value,
-            Type = ParsePatchType(commandType)
+            Type = ParsePatchType(commandType),
+            TypeComment = typeComment,
+            AddressComment = addressComment,
+            ValueComment = valueComment
         };
 
         patch.Commands.Add(cmd);
@@ -508,21 +622,39 @@ public class PatchFile
 
     /// <summary>
     /// Strips inline TOML comments from a value string, preserving # inside quoted strings.
+    /// Handles escaped quotes (\").
     /// </summary>
     private static string StripInlineComment(string valueStr)
     {
         bool inQuotes = false;
+        bool escaped = false;
+
         for (int i = 0; i < valueStr.Length; i++)
         {
-            if (valueStr[i] == '"' && (i == 0 || valueStr[i - 1] != '\\'))
+            char c = valueStr[i];
+
+            if (escaped)
+            {
+                escaped = false;
+                continue;
+            }
+
+            if (c == '\\')
+            {
+                escaped = true;
+                continue;
+            }
+
+            if (c == '"')
             {
                 inQuotes = !inQuotes;
             }
-            else if (valueStr[i] == '#' && !inQuotes)
+            else if (c == '#' && !inQuotes)
             {
                 return valueStr.Substring(0, i).TrimEnd();
             }
         }
+
         return valueStr;
     }
 
@@ -713,23 +845,36 @@ public class PatchFile
         StringBuilder sb = new StringBuilder();
 
         // Write header
-        string titleNameComment = !string.IsNullOrEmpty(Document.TitleNameComment)
-            ? $"    # {Document.TitleNameComment}"
-            : string.Empty;
-        sb.AppendLine($"title_name = \"{Document.TitleName}\"{titleNameComment}");
+        if (!string.IsNullOrEmpty(Document.TitleNameComment))
+        {
+            sb.AppendLine($"title_name = \"{Document.TitleName}\" # {Document.TitleNameComment}");
+        }
+        else
+        {
+            sb.AppendLine($"title_name = \"{Document.TitleName}\"");
+        }
 
-        string titleIdComment = !string.IsNullOrEmpty(Document.TitleIdComment)
-            ? $"    # {Document.TitleIdComment}"
-            : string.Empty;
-        sb.AppendLine($"title_id = \"{Document.TitleId.ToUpper()}\"{titleIdComment}");
+        if (!string.IsNullOrEmpty(Document.TitleIdComment))
+        {
+            sb.AppendLine($"title_id = \"{Document.TitleId.ToUpper()}\" # {Document.TitleIdComment}");
+        }
+        else
+        {
+            sb.AppendLine($"title_id = \"{Document.TitleId.ToUpper()}\"");
+        }
+        ;
 
         // Write hashes
         if (Document.Hashes.Count == 1)
         {
-            string hashComment = !string.IsNullOrEmpty(Document.HashComment)
-                ? $"    # {Document.HashComment}"
-                : string.Empty;
-            sb.AppendLine($"hash = \"{Document.Hashes[0].ToUpper()}\"{hashComment}");
+            if (!string.IsNullOrEmpty(Document.HashComment))
+            {
+                sb.AppendLine($"hash = \"{Document.Hashes[0].ToUpper()}\" # {Document.HashComment}");
+            }
+            else
+            {
+                sb.AppendLine($"hash = \"{Document.Hashes[0].ToUpper()}\"");
+            }
         }
         else
         {
@@ -747,20 +892,35 @@ public class PatchFile
             if (Document.MediaIds.Count == 1)
             {
                 MediaIdEntry entry = Document.MediaIds[0];
-                string comment = !string.IsNullOrEmpty(entry.Comment) ? entry.Comment : string.Empty;
-                sb.AppendLine($"#media_id = \"{entry.Id}\"    # {comment}");
+                if (!string.IsNullOrEmpty(entry.Comment))
+                {
+                    sb.AppendLine($"#media_id = \"{entry.Id}\" # {entry.Comment}");
+                }
+                else
+                {
+                    sb.AppendLine($"#media_id = \"{entry.Id}\"");
+                }
             }
             else
             {
                 sb.AppendLine("#media_id = [");
                 foreach (MediaIdEntry entry in Document.MediaIds)
                 {
-                    string commentSuffix = !string.IsNullOrEmpty(entry.Comment) ? $" # {entry.Comment}" : string.Empty;
-                    sb.AppendLine($"#    \"{entry.Id}\"{commentSuffix}");
+                    if (!string.IsNullOrEmpty(entry.Comment))
+                    {
+                        sb.AppendLine($"#    \"{entry.Id}\" # {entry.Comment}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"#    \"{entry.Id}\"");
+                    }
                 }
                 sb.AppendLine("#]");
             }
         }
+
+        // Empty line between header (and media_ids if present) and patches
+        sb.AppendLine();
 
         // Write patches
         foreach (PatchEntry patch in Document.Patches)
@@ -781,11 +941,36 @@ public class PatchFile
             foreach (PatchCommand command in patch.Commands)
             {
                 string typeString = GetPatchTypeString(command.Type);
-                sb.AppendLine($"    [[patch.{typeString}]]");
-                sb.AppendLine($"        address = 0x{command.Address:x}");
+                bool hasTypeComment = !string.IsNullOrWhiteSpace(command.TypeComment);
+                if (hasTypeComment)
+                {
+                    sb.AppendLine($"    [[patch.{typeString}]] # {command.TypeComment}");
+                }
+                else
+                {
+                    sb.AppendLine($"    [[patch.{typeString}]]");
+                }
+
+                bool hasAddressComment = !string.IsNullOrWhiteSpace(command.AddressComment);
+                if (hasAddressComment)
+                {
+                    sb.AppendLine($"        address = 0x{command.Address:x} # {command.AddressComment}");
+                }
+                else
+                {
+                    sb.AppendLine($"        address = 0x{command.Address:x}");
+                }
 
                 string valueStr = command.GetValueAsString() ?? "0x00";
-                sb.AppendLine($"        value = {valueStr}");
+                bool hasValueComment = !string.IsNullOrWhiteSpace(command.ValueComment);
+                if (hasValueComment)
+                {
+                    sb.AppendLine($"        value = {valueStr} # {command.ValueComment}");
+                }
+                else
+                {
+                    sb.AppendLine($"        value = {valueStr}");
+                }
             }
 
             sb.AppendLine();
