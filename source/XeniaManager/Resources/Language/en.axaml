@@ -443,8 +443,13 @@
     <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Patch Name</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Author</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Description (optional)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Header Comment (optional)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Patch Commands</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Type:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Type comment</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">Comment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">Comment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Comment (optional)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Address:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Value:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>

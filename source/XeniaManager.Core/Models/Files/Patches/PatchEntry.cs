@@ -34,6 +34,11 @@ public class PatchEntry
     public List<PatchCommand> Commands { get; set; } = [];
 
     /// <summary>
+    /// Optional inline comment from the [[patch]] header line (e.g., [[patch]] # Netplay).
+    /// </summary>
+    public string? HeaderComment { get; set; }
+
+    /// <summary>
     /// Creates a new instance of PatchEntry.
     /// </summary>
     public PatchEntry()
