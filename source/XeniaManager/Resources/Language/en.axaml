@@ -4,6 +4,11 @@
     <!-- App global -->
     <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
+    <!-- Welcome Dialog -->
+    <sys:String x:Key="WelcomeDialog.Title">Welcome to Xenia Manager</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">Please select your preferred theme for the UI:</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">Continue</sys:String>
+
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>

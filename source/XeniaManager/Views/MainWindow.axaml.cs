@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Controls;
 using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
@@ -43,6 +44,11 @@ public partial class MainWindow : AppWindow
     {
         try
         {
+            if (_settings.Settings.General.FirstStartup)
+            {
+                await ShowWelcomeDialog();
+            }
+
             if (_settings.Settings.UpdateChecks.CheckForUpdatesOnStartup)
             {
                 await CheckForEmulatorUpdates();
@@ -197,5 +203,25 @@ public partial class MainWindow : AppWindow
     private void OnWindowDisabled(bool isDisabled)
     {
         _viewModel.DisableWindow = isDisabled;
+    }
+
+    private async Task ShowWelcomeDialog()
+    {
+        Logger.Info<MainWindow>("First startup detected, showing welcome dialog");
+
+        ThemeService? themeService = App.Services.GetService<ThemeService>();
+
+        Theme? selectedTheme = await WelcomeDialog.ShowAsync();
+
+        if (selectedTheme.HasValue)
+        {
+            _settings.Settings.Ui.Theme = selectedTheme.Value;
+            themeService?.SetTheme(selectedTheme.Value);
+            Logger.Info<MainWindow>($"Theme set to {selectedTheme.Value} on first startup");
+        }
+
+        _settings.Settings.General.FirstStartup = false;
+        await _settings.SaveSettingsAsync();
+        Logger.Info<MainWindow>("Welcome dialog completed, FirstStartup set to false");
     }
 }

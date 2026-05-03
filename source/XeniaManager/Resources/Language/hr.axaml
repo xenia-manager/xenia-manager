@@ -4,6 +4,11 @@
     <!-- App global -->
     <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
+    <!-- Welcome Dialog -->
+    <sys:String x:Key="WelcomeDialog.Title">Dobrodošli u Xenia Manager</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">Molimo izaberite svoju preferiranu temu za korisničko sučelje:</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">Nastavi</sys:String>
+
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Pokreni Emulator</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Biblioteka igara</sys:String>
