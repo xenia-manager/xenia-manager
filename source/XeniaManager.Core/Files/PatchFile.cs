@@ -394,13 +394,22 @@ public class PatchFile
                     continue;
                 }
 
+                // Extract inline comment before stripping
+                string? inlineComment = null;
+                Match inlineCommentMatch = Regex.Match(trimmed, @"^""([A-Fa-f0-9]+)""\s*,?\s*#\s*(.+)$");
+                if (inlineCommentMatch.Success)
+                {
+                    inlineComment = inlineCommentMatch.Groups[2].Value.Trim();
+                }
+
                 // Strip inline comment before extracting hash
                 string processedLine = StripInlineComment(trimmed);
                 m = Regex.Match(processedLine, @"""([A-Fa-f0-9]+)""");
                 if (m.Success)
                 {
                     patchFile.Document.Hashes.Add(m.Groups[1].Value.ToUpper());
-                    Logger.Debug<PatchFile>($"Hash: {m.Groups[1].Value}");
+                    patchFile.Document.HashComments.Add(inlineComment ?? string.Empty);
+                    Logger.Debug<PatchFile>($"Hash: {m.Groups[1].Value}" + (inlineComment != null ? $" - {inlineComment}" : ""));
                 }
             }
         }
@@ -874,9 +883,18 @@ public class PatchFile
         else
         {
             sb.AppendLine("hash = [");
-            foreach (string hash in Document.Hashes)
+            for (int i = 0; i < Document.Hashes.Count; i++)
             {
-                sb.AppendLine($"    \"{hash.ToUpper()}\"");
+                string hash = Document.Hashes[i].ToUpper();
+                string? comment = i < Document.HashComments.Count ? Document.HashComments[i] : null;
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    sb.AppendLine($" \"{hash}\" # {comment}");
+                }
+                else
+                {
+                    sb.AppendLine($" \"{hash}\"");
+                }
             }
             sb.AppendLine("]");
         }

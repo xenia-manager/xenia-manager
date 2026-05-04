@@ -202,6 +202,59 @@ hash = [
     }
 
     [Test]
+    public void FromString_HashArrayWithComments_ParsesCorrectly()
+    {
+        // Arrange
+        string tomlContent = @"
+title_name = ""Multi Hash Game""
+title_id = ""87654321""
+hash = [
+    ""AAAA1111BBBB2222"", # default.xex
+    ""CCCC3333DDDD4444""  # PhantasyRow.xex
+]
+
+[[patch]]
+name = ""Patch""
+author = ""Author""
+is_enabled = false
+
+[[patch.be8]]
+address = 0x82000000
+value = 0x00
+";
+
+        // Act
+        PatchFile patchFile = PatchFile.FromString(tomlContent);
+
+        // Assert
+        Assert.That(patchFile.Hashes, Has.Count.EqualTo(2));
+        Assert.That(patchFile.Hashes[0], Is.EqualTo("AAAA1111BBBB2222"));
+        Assert.That(patchFile.Hashes[1], Is.EqualTo("CCCC3333DDDD4444"));
+        Assert.That(patchFile.Document.HashComments, Has.Count.EqualTo(2));
+        Assert.That(patchFile.Document.HashComments[0], Does.Contain("default.xex"));
+        Assert.That(patchFile.Document.HashComments[1], Does.Contain("PhantasyRow.xex"));
+    }
+
+    [Test]
+    public void ToTomlString_HashArrayWithComments_PreservesComments()
+    {
+        // Arrange
+        PatchFile patchFile = PatchFile.Create("Test Game", "12345678", "HASH1");
+        patchFile.Document.Hashes.Add("HASH2");
+        patchFile.Document.Hashes.Add("HASH3");
+        patchFile.Document.HashComments.Add("first hash comment");
+        patchFile.Document.HashComments.Add("second hash comment");
+
+        // Act
+        string tomlContent = patchFile.ToTomlString();
+
+        // Assert
+        Assert.That(tomlContent, Does.Contain("\"HASH1\" # first hash comment"));
+        Assert.That(tomlContent, Does.Contain("\"HASH2\" # second hash comment"));
+        Assert.That(tomlContent, Does.Contain("\"HASH3\""));
+    }
+
+    [Test]
     public void FromString_WithMediaIds_ParsesCorrectly()
     {
         // Arrange
