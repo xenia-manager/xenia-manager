@@ -677,10 +677,11 @@ public class PatchFile
         {
             try
             {
-                // Handle hex float format (0x...)
                 if (valueStr.StartsWith("0x") || valueStr.StartsWith("0X"))
                 {
-                    // TODO: For floats in hex format, we might need special handling
+                    // TODO: If Hex floats get used, this will need to be properly implemented
+                    Logger.Warning<PatchFile>($"Hex float format not supported: {valueStr}");
+                    return null;
                 }
                 return typeLower switch
                 {
@@ -857,7 +858,6 @@ public class PatchFile
         {
             sb.AppendLine($"title_id = \"{Document.TitleId.ToUpper()}\"");
         }
-        ;
 
         // Write hashes
         if (Document.Hashes.Count == 1)
