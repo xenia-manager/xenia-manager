@@ -115,12 +115,12 @@ public class PatchFile
     /// <exception cref="ArgumentException">Thrown when the TOML content is invalid.</exception>
     public static PatchFile FromString(string content)
     {
-        Logger.Trace<PatchFile>($"Parsing patch file from TOML string ({content.Length} bytes)");
-
         if (content == null)
         {
             throw new ArgumentException("Content cannot be null.", nameof(content));
         }
+
+        Logger.Trace<PatchFile>($"Parsing patch file from TOML string ({content.Length} bytes)");
 
         string trimmed = content.Trim();
         if (trimmed.Contains("[[[[") || trimmed.Contains("]]]"))

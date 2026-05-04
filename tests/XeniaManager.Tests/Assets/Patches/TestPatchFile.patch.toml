@@ -1,0 +1,101 @@
+title_name = "Comprehensive Test Game" # Test game for all features
+title_id = "ABCDEF01" # TT-1234
+hash = "DEADBEEFCAFEBABE" # default.xex
+#media_id = [
+# "1B2C3D4E", # Disc (USA): http://redump.org/disc/12345
+# "5F6E7D8C" # Disc (Europe): http://redump.org/disc/67890
+#]
+
+[[patch]] # Netplay patch example
+name = "Basic BE32 Patch"
+desc = "A basic patch with be32 type"
+author = "TestAuthor"
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82000000
+value = 0x60000000
+
+[[patch]]
+name = "Multiple Commands"
+author = "TestAuthor"
+is_enabled = false
+
+[[patch.be8]]
+address = 0x82000004
+value = 0x01 # 0x00=unlimited; 0x01=60FPS
+
+[[patch.be16]]
+address = 0x82000008
+value = 0x0500 # 1024 -> 1280
+
+[[patch.be32]]
+address = 0x8200000c
+value = 0x3c000000
+
+[[patch]]
+name = "Float Values Test"
+desc = "Testing f32 and f64 patch types"
+author = "TestAuthor"
+is_enabled = false
+
+[[patch.f32]]
+address = 0x82000010
+value = 2.0
+
+[[patch.f32]]
+address = 0x82000014
+value = 1.5
+
+[[patch.f64]]
+address = 0x82000018
+value = 3.14159
+
+[[patch]]
+name = "String and Array Values"
+author = "TestAuthor"
+is_enabled = false
+
+[[patch.string]]
+address = 0x820011a8 # 248 chars available
+value = "default.xex -game tf "
+
+[[patch.array]]
+address = 0x820c973c # g_DownScale2x2PS.pso
+value = "0x675F73747232445368616465722E76736F000000"
+
+[[patch.array]]
+address = 0x820c975c # Array without 0x prefix
+value = "deadbeefcafebabe"
+
+[[patch]]
+name = "64-bit Address Test"
+author = "TestAuthor"
+is_enabled = false
+
+[[patch.be8]]
+address = 0x18340043c
+value = 0x01
+
+[[patch.be8]]
+address = 0x18340044c # Frametime
+value = 0x02
+
+[[patch]]
+name = "Patch with Capitalized Desc"
+Desc = "This uses capitalized Desc field"
+author = "TestAuthor"
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82500000
+value = 0x48000000
+
+[[patch]]
+name = "BE64 Test"
+author = "TestAuthor"
+is_enabled = false
+
+[[patch.be64]]
+address = 0x82000020
+value = 0xDEADBEEFCAFEBABE
