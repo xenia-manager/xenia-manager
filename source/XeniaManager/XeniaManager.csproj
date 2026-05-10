@@ -6,7 +6,7 @@
         <SelfContained>false</SelfContained>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <AssemblyVersion>4.1.2</AssemblyVersion>
+        <AssemblyVersion>4.1.3</AssemblyVersion>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     </PropertyGroup>
 
@@ -21,6 +21,9 @@
     <ItemGroup>
       <Compile Update="Controls\ConfigEditorControl.axaml.cs">
         <DependentUpon>ConfigEditorControl.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Controls\WelcomeDialog.axaml.cs">
+        <DependentUpon>WelcomeDialog.axaml</DependentUpon>
       </Compile>
     </ItemGroup>
 </Project>

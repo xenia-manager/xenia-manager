@@ -36,8 +36,15 @@ public class PatchDocument
 
     /// <summary>
     /// Optional comment for the hash field (e.g., "# default.xex").
+    /// Used for single hash format.
     /// </summary>
     public string? HashComment { get; set; }
+
+    /// <summary>
+    /// Optional comments for each hash in the array.
+    /// Parallel list to Hashes - index matches Hashes index.
+    /// </summary>
+    public List<string> HashComments { get; set; } = [];
 
     /// <summary>
     /// Optional media IDs with their associated comments.

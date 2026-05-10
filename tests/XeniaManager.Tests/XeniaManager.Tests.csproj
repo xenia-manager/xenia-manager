@@ -40,9 +40,6 @@
       <None Update="Assets\Account">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Assets\TestPatchFile.toml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Assets\TestConfigFile.config.toml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -75,6 +72,9 @@
       </None>
       <None Update="Assets\TestShortcuts.vdf">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Assets\Patches\TestPatchFile.patch.toml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 

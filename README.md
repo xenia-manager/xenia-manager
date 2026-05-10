@@ -94,6 +94,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 - [theheroGAC](https://github.com/theheroGAC) - Italian Translation (v3)
 - [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation (v3)
 - [Mavethee](https://github.com/mavethee) - Polish Translation (v3)
+- [AndylgTom](https://github.com/AndylgTom) - Russian Translation (v4)
 - [ElTioRata](https://github.com/ElTioRata) – Spanish Translation (v3)
 
 ### Research & References

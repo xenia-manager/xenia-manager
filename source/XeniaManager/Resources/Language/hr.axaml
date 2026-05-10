@@ -4,6 +4,11 @@
     <!-- App global -->
     <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
+    <!-- Welcome Dialog -->
+    <sys:String x:Key="WelcomeDialog.Title">Dobrodošli u Xenia Manager</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">Molimo izaberite svoju preferiranu temu za korisničko sučelje:</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">Nastavi</sys:String>
+
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Pokreni Emulator</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Biblioteka igara</sys:String>
@@ -431,6 +436,10 @@
     <sys:String x:Key="MessageBox.No">Ne</sys:String>
     <sys:String x:Key="MessageBox.Cancel">Otkaži</sys:String>
 
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Nema instaliranog emulatora</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Nije pronađena nijedna instalacija Xenia emulatora. Molimo instalirajte Xenia emulator.</sys:String>
+
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Zakrpe</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Dodaj novu zakrpu</sys:String>
@@ -439,8 +448,13 @@
     <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Naziv zakrpe</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Autor</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Opis (neobavezno)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Koment zaglavlja (neobavezno)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Naredbe zakrpe</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Tip:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Koment tipa</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">Koment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">Koment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Koment (neobavezno)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Adresa:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Vrijednost:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>

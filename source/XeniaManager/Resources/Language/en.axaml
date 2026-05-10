@@ -4,6 +4,11 @@
     <!-- App global -->
     <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
+    <!-- Welcome Dialog -->
+    <sys:String x:Key="WelcomeDialog.Title">Welcome to Xenia Manager</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">Please select your preferred theme for the UI:</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">Continue</sys:String>
+
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
@@ -431,6 +436,10 @@
     <sys:String x:Key="MessageBox.No">No</sys:String>
     <sys:String x:Key="MessageBox.Cancel">Cancel</sys:String>
 
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">No Xenia Installed</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">No Xenia installations were found. Please install Xenia first before trying to launch.</sys:String>
+
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Add New Patch</sys:String>
@@ -439,8 +448,13 @@
     <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Patch Name</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Author</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Description (optional)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Header Comment (optional)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Patch Commands</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Type:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Type comment</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">Comment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">Comment:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Comment (optional)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Address:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Value:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>

@@ -21,12 +21,16 @@ namespace XeniaManager.ViewModels.Controls;
 public partial class PatchCommandViewModel : ObservableObject
 {
     [ObservableProperty] private PatchType _type;
-    [ObservableProperty] private uint _address;
+    [ObservableProperty] private ulong _address;
     [ObservableProperty] private string _value = string.Empty;
     [ObservableProperty] private bool _isSelected;
     [ObservableProperty] private bool _isValid = true;
     [ObservableProperty] private string _validationError = string.Empty;
     [ObservableProperty] private PatchConfigurationViewModel? _parentViewModel;
+    [ObservableProperty] private string? _typeComment;
+    [ObservableProperty] private string? _addressComment;
+    [ObservableProperty] private string? _valueComment;
+    [ObservableProperty] private bool? _useArrayPrefix;
 
     public PatchCommandViewModel()
     {
@@ -37,10 +41,15 @@ public partial class PatchCommandViewModel : ObservableObject
         _parentViewModel = parentViewModel;
         Type = command.Type;
         Address = command.Address;
+        _typeComment = command.TypeComment;
+        _addressComment = command.AddressComment;
+        _valueComment = command.ValueComment;
+        _useArrayPrefix = command.UseArrayPrefix;
+
         string? rawValue = command.GetValueAsString();
 
-        // Strip quotes from string values for display in the textbox
-        if (Type is PatchType.String or PatchType.U16String && rawValue != null)
+        // Strip quotes from string/array values for display in the textbox
+        if (Type is PatchType.String or PatchType.U16String or PatchType.Array && rawValue != null)
         {
             string trimmed = rawValue.Trim();
             if ((trimmed.StartsWith("\"") && trimmed.EndsWith("\"")) ||
@@ -138,35 +147,95 @@ public partial class PatchCommandViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Validates an array value (hex string of any size).
+    /// Parses an array value string to byte array.
+    /// Supports: "0x0102030405", "0102030405", "0x01 0x02 0x03", "01 02 03 04 05"
     /// </summary>
-    /// <param name="value">The array value to validate (e.g., "0x01 0x02 0x03").</param>
+    private static byte[] ParseArrayString(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return Array.Empty<byte>();
+        }
+
+        string input = value.Trim();
+
+        if (input.StartsWith("\"") && input.EndsWith("\""))
+        {
+            input = input.Substring(1, input.Length - 2);
+        }
+
+        bool hasPrefix = input.StartsWith("0x", StringComparison.OrdinalIgnoreCase);
+        string hex = hasPrefix ? input.Substring(2) : input;
+        hex = hex.Replace(" ", "");
+
+        if (hex.Length == 0)
+        {
+            return Array.Empty<byte>();
+        }
+
+        if (hex.Length % 2 != 0)
+        {
+            Logger.Warning<PatchConfigurationViewModel>($"Array hex length must be even: {hex}");
+            return Array.Empty<byte>();
+        }
+
+        int byteCount = hex.Length / 2;
+        byte[] bytes = new byte[byteCount];
+
+        for (int i = 0; i < byteCount; i++)
+        {
+            if (!byte.TryParse(hex.Substring(i * 2, 2), NumberStyles.HexNumber, null, out bytes[i]))
+            {
+                Logger.Warning<PatchConfigurationViewModel>($"Failed to parse array byte: {hex.Substring(i * 2, 2)}");
+                return Array.Empty<byte>();
+            }
+        }
+
+        return bytes;
+    }
+
+    /// <summary>
+    /// Validates an array value (hex string of any size).
+    /// Supports: "0x-prefixed continuous", "non-prefixed continuous"
+    /// </summary>
+    /// <param name="value">The array value to validate (e.g., "0x0102030405" or "0102030405").</param>
     /// <returns>A tuple containing (isValid, errorMessage).</returns>
     private static (bool IsValid, string ErrorMessage) ValidateArray(string value)
     {
         string arrayValue = value.Trim();
 
-        // Array can be specified as "0x##*" format or space-separated hex bytes
+        if (arrayValue.StartsWith("\"") && arrayValue.EndsWith("\""))
+        {
+            arrayValue = arrayValue.Substring(1, arrayValue.Length - 2);
+        }
+
         if (arrayValue.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
         {
             string hexPart = arrayValue.Substring(2);
-            // Allow space-separated hex bytes or continuous hex string
             string cleanedHex = hexPart.Replace(" ", "");
             if (!Regex.IsMatch(cleanedHex, "^[0-9A-Fa-f]*$"))
             {
-                return (false, "Invalid array format. Use space-separated hex bytes (e.g., 0x01 0x02 0x03)");
+                return (false, "Invalid array format. Use hex bytes (e.g., 0x0102030405)");
+            }
+            if (cleanedHex.Length % 2 != 0)
+            {
+                return (false, "Array hex must have even number of characters");
             }
         }
         else
         {
-            // Space-separated hex bytes without 0x prefix
-            string[] bytes = arrayValue.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (string byteStr in bytes)
+            string cleanedHex = arrayValue.Replace(" ", "");
+            if (cleanedHex.Length == 0)
             {
-                if (!Regex.IsMatch(byteStr, "^[0-9A-Fa-f]{1,2}$"))
-                {
-                    return (false, $"Invalid byte value in array: {byteStr}");
-                }
+                return (true, string.Empty);
+            }
+            if (!Regex.IsMatch(cleanedHex, "^[0-9A-Fa-f]+$"))
+            {
+                return (false, "Invalid array format. Use hex bytes (e.g., 0102030405)");
+            }
+            if (cleanedHex.Length % 2 != 0)
+            {
+                return (false, "Array hex must have even number of characters");
             }
         }
 
@@ -215,7 +284,11 @@ public partial class PatchCommandViewModel : ObservableObject
         {
             Type = Type,
             Address = Address,
-            Value = ParseValue(Value, Type)
+            Value = ParseValue(Value, Type),
+            TypeComment = TypeComment,
+            AddressComment = AddressComment,
+            ValueComment = ValueComment,
+            UseArrayPrefix = UseArrayPrefix
         };
     }
 
@@ -237,7 +310,7 @@ public partial class PatchCommandViewModel : ObservableObject
                 PatchType.F32 => float.Parse(value, CultureInfo.InvariantCulture),
                 PatchType.F64 => double.Parse(value, CultureInfo.InvariantCulture),
                 PatchType.String or PatchType.U16String => value,
-                PatchType.Array => value,
+                PatchType.Array => ParseArrayString(value),
                 _ => value
             };
         }
@@ -258,6 +331,7 @@ public partial class PatchEntryViewModel : ObservableObject
     [ObservableProperty] private string? _description;
     [ObservableProperty] private bool _isEnabled;
     [ObservableProperty] private bool _isExpanded;
+    [ObservableProperty] private string? _headerComment;
     [ObservableProperty] private ObservableCollection<PatchCommandViewModel> _commands = [];
     [ObservableProperty] private PatchEntry _originalEntry;
     [ObservableProperty] private PatchConfigurationViewModel? _parentViewModel;
@@ -270,6 +344,7 @@ public partial class PatchEntryViewModel : ObservableObject
         Author = entry.Author;
         Description = entry.Description;
         IsEnabled = entry.IsEnabled;
+        HeaderComment = entry.HeaderComment;
 
         foreach (PatchCommand command in entry.Commands)
         {
@@ -284,7 +359,8 @@ public partial class PatchEntryViewModel : ObservableObject
             Name = Name,
             Author = Author,
             Description = Description,
-            IsEnabled = IsEnabled
+            IsEnabled = IsEnabled,
+            HeaderComment = HeaderComment
         };
 
         foreach (PatchCommandViewModel commandVm in Commands)

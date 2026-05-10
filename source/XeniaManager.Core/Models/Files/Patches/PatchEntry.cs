@@ -34,6 +34,11 @@ public class PatchEntry
     public List<PatchCommand> Commands { get; set; } = [];
 
     /// <summary>
+    /// Optional inline comment from the [[patch]] header line (e.g., [[patch]] # Netplay).
+    /// </summary>
+    public string? HeaderComment { get; set; }
+
+    /// <summary>
     /// Creates a new instance of PatchEntry.
     /// </summary>
     public PatchEntry()
@@ -61,7 +66,7 @@ public class PatchEntry
     /// <param name="address">The memory address to patch.</param>
     /// <param name="value">The value to write.</param>
     /// <param name="type">The type of patch command.</param>
-    public void AddCommand(uint address, object? value, PatchType type)
+    public void AddCommand(ulong address, object? value, PatchType type)
     {
         Commands.Add(new PatchCommand(address, value, type));
     }
