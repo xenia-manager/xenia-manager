@@ -4,6 +4,11 @@
     <!-- App global -->
     <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
+    <!-- Welcome Dialog -->
+    <sys:String x:Key="WelcomeDialog.Title">欢迎使用 Xenia Manager</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">请选择您喜欢的界面主题：</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">继续</sys:String>
+
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">打开 Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">游戏库</sys:String>
@@ -431,6 +436,10 @@
     <sys:String x:Key="MessageBox.No">否</sys:String>
     <sys:String x:Key="MessageBox.Cancel">取消</sys:String>
 
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">未安装 Xenia</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">未找到任何 Xenia 安装。请先安装 Xenia 再尝试启动。</sys:String>
+
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - 补丁</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">添加新补丁</sys:String>
@@ -439,8 +448,13 @@
     <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">补丁名称</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">作者</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">描述（可选）</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">头部注释（可选）</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">补丁命令</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">类型：</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">类型注释</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">注释：</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">注释：</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">注释（可选）</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">地址：</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">值：</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
