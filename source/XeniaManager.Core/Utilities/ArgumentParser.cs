@@ -83,4 +83,41 @@ public class ArgumentParser
         Logger.Debug<ArgumentParser>("No matching game found in desktop arguments");
         return null;
     }
+
+    /// <summary>
+    /// Checks if the desktop arguments contain a specific config overrides and returns a config string.
+    /// This method handles xenia overrides that may be wrapped in quotes.
+    /// </summary>
+    /// <param name="args">The array of string arguments from the desktop shortcut.</param>
+    /// <returns>The xenia config string if found, null otherwise.</returns>
+    public static string? GetConfigOverridesFromArgs(string[]? args)
+    {
+        Logger.Debug<ArgumentParser>($"Checking if desktop arguments contain config overrides");
+
+        if (args == null || args.Length == 0)
+        {
+            Logger.Debug<ArgumentParser>("No arguments provided");
+            return null;
+        }
+        string configOverrideArgs = "";
+
+        // Check if any argument matches a game title (with or without quotes)
+        foreach (string arg in args)
+        {
+            string trimmedArg = arg.Trim('"');
+
+            if (trimmedArg[0..2] == "--")
+            {
+                configOverrideArgs += trimmedArg + " ";
+            }
+        }
+
+        if (configOverrideArgs == null || configOverrideArgs.Length == 0)
+        {
+            Logger.Debug<ArgumentParser>("No override arguments provided");
+            return null;
+        }
+        Logger.Debug<ArgumentParser>($"Found overrides '{configOverrideArgs}' in desktop arguments");
+        return configOverrideArgs;
+    }
 }
