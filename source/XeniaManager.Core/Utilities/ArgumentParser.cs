@@ -127,8 +127,8 @@ public class ArgumentParser
         {
             string trimmedArg = arg.Trim('"');
             if (trimmedArg.StartsWith("--") &&
-                !trimmedArg.Equals(ArgumentFlags.Game, StringComparison.OrdinalIgnoreCase) &&
-                !trimmedArg.Equals(ArgumentFlags.XeniaArgs, StringComparison.OrdinalIgnoreCase))
+                !ArgumentFlags.Game.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)) &&
+                !ArgumentFlags.XeniaArgs.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)))
             {
                 configOverrideArgs += trimmedArg + " ";
             }
@@ -147,9 +147,9 @@ public class ArgumentParser
     /// Helper to retrieve flag value
     /// </summary>
     /// <param name="args">Launch Arguments</param>
-    /// <param name="flag">Flag</param>
+    /// <param name="flags">Array of flag aliases</param>
     /// <returns>Index where the flag is and it's values</returns>
-    private static (int Index, string? Value) TryGetFlagValue(string[]? args, string flag)
+    private static (int Index, string? Value) TryGetFlagValue(string[]? args, string[] flags)
     {
         if (args == null || args.Length == 0)
         {
@@ -158,13 +158,16 @@ public class ArgumentParser
 
         for (int i = 0; i < args.Length; i++)
         {
-            if (args[i].Equals(flag, StringComparison.OrdinalIgnoreCase))
+            foreach (string flag in flags)
             {
-                if (i + 1 < args.Length)
+                if (args[i].Equals(flag, StringComparison.OrdinalIgnoreCase))
                 {
-                    return (i, args[i + 1].Trim('"'));
+                    if (i + 1 < args.Length)
+                    {
+                        return (i, args[i + 1].Trim('"'));
+                    }
+                    return (i, null);
                 }
-                return (i, null);
             }
         }
         return (-1, null);
