@@ -1,3 +1,4 @@
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Game;
@@ -50,6 +51,19 @@ public class ArgumentParser
     /// <returns>The matching Game if found in GameManager.Games, null otherwise.</returns>
     public static Game? GetGameFromArgs(string[]? args)
     {
+        // Try explicit flag first
+        (int flagIndex, string? flagValue) = TryGetFlagValue(args, ArgumentFlags.Game);
+        if (!string.IsNullOrWhiteSpace(flagValue))
+        {
+            string trimmed = flagValue.Trim('"');
+            Game? match = GameManager.Games.FirstOrDefault(g => g.Title.Equals(trimmed, StringComparison.OrdinalIgnoreCase));
+            if (match is { FileLocations.IsGamePathValid: true })
+            {
+                Logger.Debug<ArgumentParser>("Found game via --game flag '{0}'", trimmed);
+                return match;
+            }
+        }
+        // Fallback to positional search (original logic)
         Logger.Debug<ArgumentParser>($"Checking if desktop arguments contain a game title");
 
         if (args == null || args.Length == 0)
@@ -99,25 +113,60 @@ public class ArgumentParser
             Logger.Debug<ArgumentParser>("No arguments provided");
             return null;
         }
+        // Flag based overrides first
+        (int xeniaFlagIndex, string? xeniaFlagValue) = TryGetFlagValue(args, ArgumentFlags.XeniaArgs);
+        if (!string.IsNullOrWhiteSpace(xeniaFlagValue))
+        {
+            return xeniaFlagValue;
+        }
+
         string configOverrideArgs = "";
 
-        // Check if any argument matches a game title (with or without quotes)
+        // Collect any remaining -- arguments (excluding known flags)
         foreach (string arg in args)
         {
             string trimmedArg = arg.Trim('"');
-
-            if (trimmedArg[0..2] == "--")
+            if (trimmedArg.StartsWith("--") &&
+                !trimmedArg.Equals(ArgumentFlags.Game, StringComparison.OrdinalIgnoreCase) &&
+                !trimmedArg.Equals(ArgumentFlags.XeniaArgs, StringComparison.OrdinalIgnoreCase))
             {
                 configOverrideArgs += trimmedArg + " ";
             }
         }
 
-        if (configOverrideArgs == null || configOverrideArgs.Length == 0)
+        if (string.IsNullOrEmpty(configOverrideArgs))
         {
             Logger.Debug<ArgumentParser>("No override arguments provided");
             return null;
         }
         Logger.Debug<ArgumentParser>($"Found overrides '{configOverrideArgs}' in desktop arguments");
         return configOverrideArgs;
+    }
+
+    /// <summary>
+    /// Helper to retrieve flag value
+    /// </summary>
+    /// <param name="args">Launch Arguments</param>
+    /// <param name="flag">Flag</param>
+    /// <returns>Index where the flag is and it's values</returns>
+    private static (int Index, string? Value) TryGetFlagValue(string[]? args, string flag)
+    {
+        if (args == null || args.Length == 0)
+        {
+            return (-1, null);
+        }
+
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i].Equals(flag, StringComparison.OrdinalIgnoreCase))
+            {
+                if (i + 1 < args.Length)
+                {
+                    return (i, args[i + 1].Trim('"'));
+                }
+                return (i, null);
+            }
+        }
+        return (-1, null);
     }
 }
