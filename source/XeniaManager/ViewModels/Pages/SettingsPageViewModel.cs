@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -78,20 +82,8 @@ public partial class SettingsPageViewModel : ViewModelBase
     }
 
     // Theme Settings
-    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; set; } =
-    [
-        new ThemeDisplayItem
-        {
-            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Light"),
-            ThemeValue = Theme.Light
-        },
-
-        new ThemeDisplayItem
-        {
-            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Dark"),
-            ThemeValue = Theme.Dark
-        }
-    ];
+    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; set; } = [];
+    private string _selectedCustomThemePath = string.Empty;
 
     [ObservableProperty] private Theme selectedTheme;
     partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
@@ -110,12 +102,23 @@ public partial class SettingsPageViewModel : ViewModelBase
         {
             for (int i = 0; i < AppThemeOptions.Count; i++)
             {
-                if (AppThemeOptions[i].ThemeValue == SelectedTheme)
+                ThemeDisplayItem option = AppThemeOptions[i];
+                if (option.ThemeValue == SelectedTheme)
                 {
-                    return i;
+                    if (option.ThemeValue == Theme.Custom)
+                    {
+                        if (option.CustomThemePath == _settings.Settings.Ui.CustomThemePath)
+                        {
+                            return i;
+                        }
+                    }
+                    else
+                    {
+                        return i;
+                    }
                 }
             }
-            return 0; // Default to the first theme if not found
+            return 0;
         }
         set
         {
@@ -123,17 +126,28 @@ public partial class SettingsPageViewModel : ViewModelBase
             {
                 return;
             }
-            if (SelectedTheme == AppThemeOptions[value].ThemeValue)
+            if (SelectedTheme == AppThemeOptions[value].ThemeValue && AppThemeOptions[value].CustomThemePath == _settings.Settings.Ui.CustomThemePath)
             {
                 return;
             }
-            SelectedTheme = AppThemeOptions[value].ThemeValue;
 
-            // Update settings when the theme changes
-            _settings.Settings.Ui.Theme = SelectedTheme;
+            Theme newTheme = AppThemeOptions[value].ThemeValue;
+
+            if (newTheme == Theme.Custom)
+            {
+                string customPath = AppThemeOptions[value].CustomThemePath;
+                _settings.Settings.Ui.CustomThemePath = customPath;
+                _themeService.SetTheme(newTheme, customPath);
+            }
+            else
+            {
+                _themeService.SetTheme(newTheme);
+                _settings.Settings.Ui.CustomThemePath = string.Empty;
+            }
+
+            SelectedTheme = newTheme;
+            _settings.Settings.Ui.Theme = newTheme;
             _settings.SaveSettings();
-
-            _themeService.SetTheme(SelectedTheme);
         }
     }
 
@@ -265,6 +279,14 @@ public partial class SettingsPageViewModel : ViewModelBase
 
         // Load theme
         SelectedTheme = _settings.Settings.Ui.Theme;
+        _selectedCustomThemePath = _settings.Settings.Ui.CustomThemePath;
+        LoadThemeOptions();
+
+        // Load custom theme if selected
+        if (SelectedTheme == Theme.Custom && !string.IsNullOrEmpty(_selectedCustomThemePath))
+        {
+            _themeService.SetTheme(SelectedTheme, _selectedCustomThemePath);
+        }
 
         // Load loading screen setting
         LoadingScreen = _settings.Settings.Ui.Window.LoadingScreen;
@@ -273,6 +295,76 @@ public partial class SettingsPageViewModel : ViewModelBase
         OnPropertyChanged(nameof(SelectedLogLevelIndex));
 
         Logger.Debug<SettingsPageViewModel>("Completed LoadUISettings method");
+    }
+
+    private void LoadThemeOptions()
+    {
+        AppThemeOptions.Clear();
+
+        AppThemeOptions.Add(new ThemeDisplayItem
+        {
+            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Light"),
+            ThemeValue = Theme.Light
+        });
+
+        AppThemeOptions.Add(new ThemeDisplayItem
+        {
+            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Dark"),
+            ThemeValue = Theme.Dark
+        });
+
+        IEnumerable<string> customThemes = _themeService.GetCustomThemeFiles();
+        foreach (string customTheme in customThemes)
+        {
+            string rawName = Path.GetFileNameWithoutExtension(customTheme);
+            string formattedName = FormatThemeName(rawName);
+            AppThemeOptions.Add(new ThemeDisplayItem
+            {
+                DisplayName = formattedName,
+                ThemeValue = Theme.Custom,
+                CustomThemePath = customTheme
+            });
+        }
+
+        if (AppThemeOptions.Count > 0)
+        {
+            OnPropertyChanged(nameof(AppThemeOptions));
+        }
+    }
+
+    private static string FormatThemeName(string rawName)
+    {
+        string name = rawName;
+
+        name = Regex.Replace(name, "Dark", "", RegexOptions.IgnoreCase);
+        name = Regex.Replace(name, "Light", "", RegexOptions.IgnoreCase);
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < name.Length; i++)
+        {
+            char c = name[i];
+            if (char.IsUpper(c) && i > 0)
+            {
+                result.Append(' ');
+                result.Append(c);
+            }
+            else
+            {
+                result.Append(c);
+            }
+        }
+
+        string formatted = result.ToString().Trim();
+        if (string.IsNullOrEmpty(formatted))
+        {
+            formatted = rawName;
+        }
+        else
+        {
+            formatted = char.ToUpper(formatted[0]) + formatted.Substring(1);
+        }
+
+        return formatted;
     }
 
     /// <summary>

@@ -24,6 +24,13 @@ public class UiSettings
     public Theme Theme { get; set; } = Theme.Light;
 
     /// <summary>
+    /// <para>Path to custom theme file</para>
+    /// Used when Theme is set to Custom
+    /// </summary>
+    [JsonPropertyName("customThemePath")]
+    public string CustomThemePath { get; set; } = string.Empty;
+
+    /// <summary>
     /// Window properties
     /// </summary>
     [JsonPropertyName("window")]

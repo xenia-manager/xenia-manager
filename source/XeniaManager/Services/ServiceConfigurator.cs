@@ -55,7 +55,15 @@ public class ServiceConfigurator
             try
             {
                 Theme savedTheme = settings.Settings.Ui.Theme;
-                themeService.SetTheme(savedTheme);
+                string customThemePath = settings.Settings.Ui.CustomThemePath;
+                if (savedTheme == Theme.Custom && !string.IsNullOrEmpty(customThemePath))
+                {
+                    themeService.SetTheme(savedTheme, customThemePath);
+                }
+                else
+                {
+                    themeService.SetTheme(savedTheme);
+                }
                 Logger.Info<ServiceProvider>($"Applied saved theme during service initialization: {savedTheme}");
             }
             catch (Exception ex)
