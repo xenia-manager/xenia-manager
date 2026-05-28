@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Tests;
@@ -5,12 +7,13 @@ namespace XeniaManager.Tests;
 [TestFixture]
 public class HttpClientServiceTests
 {
+    private const string TestUrl = "https://httpbin.org/get";
     [Test]
     public void Constructor_WithDefaultTimeout_SetsTimeoutTo15Seconds()
     {
         // Act
         using HttpClientService httpClientService = new HttpClientService();
-        
+
         // Assert
         // Note: We can't directly access the timeout property since it's internal to the HttpClientService,
         // but we can verify the constructor doesn't throw an exception
@@ -46,10 +49,18 @@ public class HttpClientServiceTests
         // Arrange
         using HttpClientService httpClientService = new HttpClientService();
         // Using a reliable test endpoint that returns a simple response
-        string testUrl = "https://httpbin.org/get";
 
         // Act
-        string response = await httpClientService.GetAsync(testUrl);
+        string response;
+        try
+        {
+            response = await httpClientService.GetAsync(TestUrl);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.ServiceUnavailable)
+        {
+            Assert.Ignore($"Test skipped because httpbin.org is unavailable (503): {ex.Message}");
+            return;
+        }
 
         // Assert
         Assert.That(response, Is.Not.Null);
@@ -61,11 +72,19 @@ public class HttpClientServiceTests
     {
         // Arrange
         using HttpClientService httpClientService = new HttpClientService();
-        string testUrl = "https://httpbin.org/get";
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         // Act
-        string response = await httpClientService.GetAsync(testUrl, cancellationTokenSource.Token);
+        string response;
+        try
+        {
+            response = await httpClientService.GetAsync(TestUrl, cancellationTokenSource.Token);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.ServiceUnavailable)
+        {
+            Assert.Ignore($"Test skipped because httpbin.org is unavailable (503): {ex.Message}");
+            return;
+        }
 
         // Assert
         Assert.That(response, Is.Not.Null);
@@ -80,8 +99,7 @@ public class HttpClientServiceTests
         httpClientService.Dispose();
 
         // Act & Assert
-        ObjectDisposedException exception = Assert.ThrowsAsync<ObjectDisposedException>(
-            async () => await httpClientService.GetAsync("https://httpbin.org/get")
+        ObjectDisposedException exception = Assert.ThrowsAsync<ObjectDisposedException>(async () => await httpClientService.GetAsync(TestUrl)
         );
         Assert.That(exception.ObjectName, Is.EqualTo(httpClientService.GetType().FullName));
     }
@@ -94,8 +112,7 @@ public class HttpClientServiceTests
         httpClientService.Dispose();
 
         // Act & Assert
-        ObjectDisposedException exception = Assert.ThrowsAsync<ObjectDisposedException>(
-            async () => await httpClientService.GetAsync(null!)
+        ObjectDisposedException exception = Assert.ThrowsAsync<ObjectDisposedException>(async () => await httpClientService.GetAsync(null!)
         );
         Assert.That(exception.ObjectName, Is.EqualTo(httpClientService.GetType().FullName));
     }
