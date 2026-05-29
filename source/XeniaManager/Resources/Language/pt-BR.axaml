@@ -53,7 +53,7 @@
     <sys:String x:Key="FolderScanProgressDialog.Status.Scanning">Escaneando: {0}</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Complete">Escaneamento concluído! {0} jogo(s) encontrado(s)</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Cancelled">Escaneamento cancelado</sys:String>
-    <sys:String x:Key="FolderScanProgressDialog.Status.Initializing">Initializing...</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Initializing">Inicializando...</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Error">Erro: {0}</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Statistics.Folders">Pastas</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Statistics.GamesFound">Jogos Encontrados</sys:String>
@@ -92,7 +92,7 @@
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Message">O provedor de armazenamento não está disponível.</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.FolderPicker.Title">Selecione a Pasta de Exportação</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Title">Atalhos Exportados</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Message">Atalhos de jogo exportados com sucesso: {0}.&#10;Failed: {1}&#10;&#10;Exportações bem-sucedidas: &#10;{2}&#10;&#10;Exportações com falha:&#10;{3}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Message">Atalhos de jogo exportados com sucesso: {0}.&#10;Falhou: {1}&#10;&#10;Exportações bem-sucedidas: &#10;{2}&#10;&#10;Exportações com falha:&#10;{3}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Title">Falha na Exportação</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Message">Ocorreu um erro ao exportar os atalhos do jogo.&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Title">Exportar Atalhos dos Jogos</sys:String>
@@ -681,7 +681,7 @@
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Atualizações disponíveis para o Xenia Manager</sys:String>
 
     <!-- Config Editor Dialog -->
-    <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Configuration Editor</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Editor de Configuração</sys:String>
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.SaveButton.Text">Salvar</sys:String>
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.CancelButton.Text">Cancelar</sys:String>
     <sys:String x:Key="ConfigEditorDialog.Save.Failed.Title">Falha ao salvar</sys:String>
@@ -997,7 +997,7 @@
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Comment">List of keys to bind to Y, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
 
     <!-- Config UI Settings - Kernel Options -->
-    <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Title">Apply Title Atualizar</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Title">Aplicar Atualização do Jogo</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Comment">Aplicar atualizações de título</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">Command Line</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">Especificar linha de comando adicional fornecida ao convidado</sys:String>
