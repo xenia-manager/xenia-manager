@@ -243,6 +243,13 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void Refresh()
+    {
+        GameManager.LoadLibrary();
+        RefreshLibrary();
+    }
+
+    [RelayCommand]
     private void ToggleGameTitle()
     {
         ShowGameTitle = !ShowGameTitle;

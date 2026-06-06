@@ -20,7 +20,8 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="64" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!-- Search -->
@@ -34,8 +35,20 @@
                      Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
 
-            <!-- Menu -->
+            <!-- Refresh -->
             <Button Grid.Column="1"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Command="{Binding RefreshCommand}"
+                    ToolTip.Tip="{DynamicResource LibraryPage.Refresh.ToolTip}">
+                <icons:SymbolIcon Symbol="ArrowSync" />
+            </Button>
+
+            <!-- Menu -->
+            <Button Grid.Column="2"
                     Background="Transparent"
                     BorderThickness="0"
                     Cursor="Hand"
