@@ -116,6 +116,19 @@
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Title">优化失败</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">优化游戏设置时出错。&#10;{0}</sys:String>
 
+    <!-- Remove Invalid Games -->
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
+    
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">游戏时间：</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">从未玩过</sys:String>

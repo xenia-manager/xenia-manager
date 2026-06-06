@@ -146,6 +146,15 @@
                                 <icons:SymbolIcon Symbol="Add" />
                             </MenuItem.Icon>
                         </MenuItem>
+                        <Separator />
+                        <!-- Remove Invalid Games -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.RemoveInvalidGames.Header}"
+                                  Command="{Binding RemoveInvalidGamesCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.RemoveInvalidGames.ToolTip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Delete" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

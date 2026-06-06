@@ -116,6 +116,19 @@
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Title">Optimize Edilemedi</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">Oyun ayarları optimize edilirken bir hata oluştu.&#10;{0}</sys:String>
 
+    <!-- Remove Invalid Games -->
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
+    
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Oynanan Süre: </sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Henüz oynanmadı</sys:String>

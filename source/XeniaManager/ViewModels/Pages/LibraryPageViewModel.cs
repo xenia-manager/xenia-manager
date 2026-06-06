@@ -1099,6 +1099,89 @@ public partial class LibraryPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    private async Task RemoveInvalidGames()
+    {
+        try
+        {
+            Logger.Info<LibraryPageViewModel>("Starting removal of invalid games");
+
+            List<Game> invalidGames = GameManager.Games
+                .Where(g => !g.FileLocations.IsGamePathValid)
+                .ToList();
+
+            int count = invalidGames.Count;
+
+            if (count == 0)
+            {
+                Logger.Info<LibraryPageViewModel>("No invalid games found");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.NoneFound.Title"),
+                    LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.NoneFound.Message"));
+                return;
+            }
+
+            string message = count == 1
+                ? LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage")
+                : string.Format(LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage"), count);
+
+            if (!await _messageBoxService.ShowConfirmationAsync(
+                    LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.Confirmation.Title"),
+                    message))
+            {
+                Logger.Info<LibraryPageViewModel>("User cancelled invalid games removal");
+                return;
+            }
+
+            int removedCount = 0;
+            int failCount = 0;
+            List<string> failedGames = [];
+
+            foreach (Game game in invalidGames)
+            {
+                try
+                {
+                    Logger.Info<LibraryPageViewModel>($"Removing invalid game: {game.Title} (Path: {game.FileLocations.Game})");
+                    GameManager.RemoveGame(game);
+                    removedCount++;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<LibraryPageViewModel>($"Failed to remove invalid game: {game.Title}");
+                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                    failCount++;
+                    failedGames.Add(game.Title);
+                }
+            }
+
+            RefreshLibrary();
+
+            if (failCount == 0)
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.Success.Message"), removedCount));
+            }
+            else
+            {
+                string failedList = string.Join(", ", failedGames);
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("LibraryPage.DeleteSelected.PartialSuccess.Title"),
+                    string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.PartialSuccess.Message"),
+                        removedCount, failCount, failedList));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to remove invalid games");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.Error.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.RemoveInvalidGames.Error.Message"), ex.Message));
+        }
+    }
+
+
     // Multiselect commands
     [RelayCommand]
     private void SelectAllGames()
