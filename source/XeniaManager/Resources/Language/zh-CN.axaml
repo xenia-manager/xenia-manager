@@ -21,6 +21,7 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.Watermark">搜索...</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">编辑网格视图</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">显示/隐藏封面上的额外信息</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">游戏标题</sys:String>
@@ -1001,7 +1002,7 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Comment">应用标题更新</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">命令行</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">指定提供给客户端的额外命令行参数</sys:String>
-    
+
     <!-- Config UI Settings - Logging Options -->
 	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">启用控制台</sys:String>
 	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">随主窗口打开控制台窗口</sys:String>

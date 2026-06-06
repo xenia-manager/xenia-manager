@@ -4,6 +4,11 @@
     <!-- App global -->
     <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
+    <!-- Welcome Dialog -->
+    <sys:String x:Key="WelcomeDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">#NOTTRANSLATED#</sys:String>
+
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Запуск Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Библиотека</sys:String>
@@ -16,6 +21,7 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.Watermark">Поиск…</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Отображение элементов обложки</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Показать/скрыть дополнительную информацию на обложках игр</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Название игры</sys:String>
@@ -431,6 +437,10 @@
     <sys:String x:Key="MessageBox.No">Нет</sys:String>
     <sys:String x:Key="MessageBox.Cancel">Отменить</sys:String>
 
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">#NOTTRANSLATED#</sys:String>
+
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Патчи</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Добавить новый патч</sys:String>
@@ -439,8 +449,13 @@
     <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Название патча</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Автор</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Описание (необязательно)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Действия патча</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Тип:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Адрес:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Значение:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>

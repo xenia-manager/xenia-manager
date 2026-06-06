@@ -21,6 +21,7 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.Watermark">Ara...</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Izgara Görünümünü Düzenle</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Kutu kapaklarındaki ek bilgileri göster/gizle</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Oyun Başlığı</sys:String>

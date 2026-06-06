@@ -21,6 +21,7 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.Watermark">Buscar...</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Editar Visão de Grade</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Exibir/Ocultar informação adicional na arte da caixa</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Título do Jogo</sys:String>
@@ -1024,7 +1025,7 @@
     <sys:String x:Key="ConfigUiSettings.Storage.mount_scratch.Title">Mount Scratch</sys:String>
     <sys:String x:Key="ConfigUiSettings.Storage.mount_scratch.Comment">Habilitar a montagem do scratch</sys:String>
 
-    <!-- Config UI Settings - Interface Options -->
+    <!-- Config UI Settings - UI Options -->
     <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Title">Show Achievement Notification</sys:String>
     <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Comment">Exibir notificação de conquista na tela</sys:String>
 
