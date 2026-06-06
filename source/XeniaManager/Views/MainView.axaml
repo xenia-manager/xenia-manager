@@ -18,7 +18,6 @@
                              IsSettingsVisible="False"
                              PaneDisplayMode="Left"
                              IsPaneOpen="False"
-                             OpenPaneLength="160"
                              IsPaneToggleButtonVisible="True"
                              ItemInvoked="NavigationView_OnItemInvoked">
         <!-- Navigation Items -->

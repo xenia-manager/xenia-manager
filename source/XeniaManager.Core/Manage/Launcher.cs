@@ -155,10 +155,11 @@ public class Launcher
     /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
+    /// <param name="configOverridesFromArgs">Optional config string when game loading starts</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null)
+    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null)
     {
-        await LaunchGameCoreAsync(game, async: true, settings, outputHandler, onGameLoadingStarted);
+        await LaunchGameCoreAsync(game, async: true, settings, outputHandler, onGameLoadingStarted, configOverridesFromArgs);
     }
 
     /// <summary>
@@ -189,8 +190,9 @@ public class Launcher
     /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
+    /// <param name="configOverridesFromArgs">Optional config string when game loading starts</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null)
+    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null)
     {
         if (XeniaUpdating)
         {
@@ -243,8 +245,16 @@ public class Launcher
             xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.FileLocations.CustomEmulatorExecutable);
         }
 
-        // Set the game file path as a command-line argument
-        xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}""";
+        if (configOverridesFromArgs == null || configOverridesFromArgs.Length == 0)
+        {
+            // Set the game file path as a command-line argument
+            xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}""";
+        }
+        else
+        {
+            // Set the game file path as a command-line argument
+            xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}"" {configOverridesFromArgs}";
+        }
 
         Logger.Trace<Launcher>($"Process configuration - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
 
@@ -346,8 +356,8 @@ public class Launcher
                     }
                 }
 
-                // Save configuration changes if the configuration was modified during the session
-                if (changedConfig)
+                // Save configuration changes if the configuration was modified during the session and not launched with config overrides
+                if (changedConfig && (configOverridesFromArgs == null || configOverridesFromArgs.Length == 0))
                 {
                     Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
                     ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);

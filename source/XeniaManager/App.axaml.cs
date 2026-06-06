@@ -89,6 +89,7 @@ public partial class App : Application
 
             // Check for arguments first (before showing MainWindow)
             Game? gameFromArgs = ArgumentParser.GetGameFromArgs(desktop.Args);
+            string? configOverridesFromArgs = ArgumentParser.GetConfigOverridesFromArgs(desktop.Args);
 
             if (gameFromArgs != null)
             {
@@ -108,7 +109,7 @@ public partial class App : Application
                 };
 
                 // Launch the game with a loading screen
-                ArgumentChecker(gameFromArgs, settings, mainWindow);
+                ArgumentChecker(gameFromArgs, settings, mainWindow, configOverridesFromArgs);
             }
             else
             {
@@ -250,7 +251,7 @@ public partial class App : Application
         }
     }
 
-    private async void ArgumentChecker(Game game, Settings settings, MainWindow mainWindow)
+    private async void ArgumentChecker(Game game, Settings settings, MainWindow mainWindow, string? configOverridesFromArgs = null)
     {
         Logger.Info<App>($"Launching game '{game.Title}' directly from desktop shortcut.");
 
@@ -289,7 +290,7 @@ public partial class App : Application
             }
 
             // Launch the game asynchronously
-            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted);
+            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted, configOverridesFromArgs: configOverridesFromArgs);
             Logger.Info<App>($"Game session ended for '{game.Title}'");
         }
         catch (Exception ex)
