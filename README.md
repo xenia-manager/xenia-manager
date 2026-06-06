@@ -96,6 +96,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 - [Mavethee](https://github.com/mavethee) - Polish Translation (v3)
 - [AndylgTom](https://github.com/AndylgTom) - Russian Translation (v4)
 - [ElTioRata](https://github.com/ElTioRata) – Spanish Translation (v3)
+- [luzility](https://github.com/luzility) - Turkish Translation (v4)
 
 ### Research & References
 

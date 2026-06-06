@@ -33,6 +33,7 @@ public class LocalizationHelper
         new CultureInfo("hr"), // Hrvatski
         new CultureInfo("zh-CN"), // Simplified Chinese
         new CultureInfo("ru"), // Русский
+        new CultureInfo("tr") // Turkce
     // ... add your language code here
     ];
 
