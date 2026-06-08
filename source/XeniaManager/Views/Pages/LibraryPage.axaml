@@ -15,7 +15,12 @@
     </Design.DataContext>
 
     <!-- UI -->
-    <Grid RowDefinitions="64,Auto,*,Auto">
+    <Grid RowDefinitions="64,Auto,*,Auto"
+          DragDrop.AllowDrop="True"
+          DragDrop.DragEnter="OnDragEnter"
+          DragDrop.DragOver="OnDragOver"
+          DragDrop.DragLeave="OnDragLeave"
+          DragDrop.Drop="OnDrop">
         <!-- Search & Menu -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -583,6 +588,33 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- Drag & Drop Overlay -->
+        <Border Grid.Row="2"
+                IsVisible="{Binding IsDragOverlayVisible}"
+                Background="#CC1A1A2E"
+                BorderThickness="3"
+                BorderBrush="#66FFFFFF"
+                CornerRadius="12"
+                Margin="16"
+                IsHitTestVisible="False">
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Spacing="12">
+                <icons:SymbolIcon Symbol="Add"
+                                  FontSize="64"
+                                  Foreground="White" />
+                <TextBlock Text="{DynamicResource LibraryPage.DragDrop.Title}"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           TextAlignment="Center" />
+                <TextBlock Text="{DynamicResource LibraryPage.DragDrop.Subtitle}"
+                           FontSize="14"
+                           Foreground="#CCFFFFFF"
+                           TextAlignment="Center" />
             </StackPanel>
         </Border>
     </Grid>
