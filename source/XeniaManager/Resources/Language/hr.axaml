@@ -116,6 +116,19 @@
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Title">Optimizacija nije uspjela</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">Došlo je do greške prilikom optimizacije postavki igara.&#10;{0}</sys:String>
 
+    <!-- Remove Invalid Games -->
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">Ukloni neispravne igre</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">Uklanja sve igre s nedostajućim ili neispravnom putanjom do izvršujuće datoteke iz biblioteke</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">Ukloni neispravne igre</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">U vašoj biblioteci nalazi se 1 neispravna igra. Želite li je ukloniti?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">U vašoj biblioteci nalazi se {0} neispravnih igara. Želite li ih ukloniti?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">Nema neispravnih igara</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">U vašoj biblioteci nema neispravnih igara.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">Neispravne igre uklonjene</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">Uspješno je uklonjeno {0} neispravnih igara iz biblioteke.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">Uklanjanje igara nije uspjelo</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">Došlo je do pogreške prilikom uklanjanja neispravnih igara.&#10;{0}</sys:String>
+
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Vrijeme igranja: </sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Nikada igrano</sys:String>
