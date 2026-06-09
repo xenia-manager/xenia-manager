@@ -18,4 +18,10 @@ public class GeneralSettings
     /// </summary>
     [JsonPropertyName("parse_game_details_with_xenia")]
     public bool ParseGameDetailsWithXenia { get; set; } = true;
+
+    /// <summary>
+    /// Whether to use MediaId from game files to find a matching media entry title
+    /// </summary>
+    [JsonPropertyName("use_media_id_for_title")]
+    public bool UseMediaIdForTitle { get; set; } = true;
 }

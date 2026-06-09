@@ -490,9 +490,10 @@ public class GameManager
     /// <param name="selectedGame">The game information containing alternative IDs.</param>
     /// <param name="gamePath">The file path to the game.</param>
     /// <param name="details">The parsed game details (title, title ID, media ID).</param>
+    /// <param name="useMediaIdForTitle">Whether to use MediaId to find a matching media entry title.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
-    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details)
+    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details, bool useMediaIdForTitle = false)
     {
         // Use GameInfo's Id if titleId is "00000000"
         string actualTitleId = details.TitleId == "00000000" ? selectedGame.Id ?? details.TitleId : details.TitleId;
@@ -512,10 +513,26 @@ public class GameManager
         Logger.Info<GameManager>($"Successfully retrieved game information - Title: '{detailedGameInfo.Title?.Full}'");
         Logger.Debug<GameManager>($"Processing game title - Original: '{detailedGameInfo.Title?.Full}', Sanitized: '{detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ')}'");
 
+        // Try to find a matching media entry by MediaId for a more specific title (if enabled)
+        string resolvedTitle = detailedGameInfo.Title?.Full ?? details.Title;
+        if (useMediaIdForTitle && details.MediaId != "00000000" && detailedGameInfo.Media?.Count > 0)
+        {
+            Media? matchingMedia = detailedGameInfo.Media.FirstOrDefault(m => string.Equals(m.Id, details.MediaId, StringComparison.OrdinalIgnoreCase));
+            if (matchingMedia?.Title != null)
+            {
+                resolvedTitle = matchingMedia.Title;
+                Logger.Info<GameManager>($"Found matching media entry for MediaId: {details.MediaId} - Title: '{resolvedTitle}'");
+            }
+            else
+            {
+                Logger.Debug<GameManager>($"No matching media entry found for MediaId: {details.MediaId}, falling back to database title");
+            }
+        }
+
         // Create a new game entry
         Game newGame = new Game
         {
-            Title = detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ') ?? details.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
+            Title = resolvedTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
             GameId = actualTitleId,
             AlternativeIDs = selectedGame.AlternativeId!,
             MediaId = details.MediaId,

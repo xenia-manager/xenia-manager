@@ -128,7 +128,7 @@
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
-    
+
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Oynanan Süre: </sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Henüz oynanmadı</sys:String>
@@ -313,6 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Oyun Bilgilerini Çözümlemek İçin Xenia'yı Kullan</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Oyun bilgilerini Xenia emülatörünü kullanarak otomatik olarak algılar</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Oyunları veya oyun bilgilerini algılamakta sorun yaşıyorsanız bunu etkinleştirin</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Başlangıçta Güncellemeleri Denetle</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Uygulama başlatıldığında Xenia ve Xenia Manager güncellemelerini otomatik olarak denetler</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Uygulama başlatılırken güncelleme denetimlerini atlamak için bunu devre dışı bırakın</sys:String>

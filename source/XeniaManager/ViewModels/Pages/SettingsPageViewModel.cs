@@ -48,6 +48,18 @@ public partial class SettingsPageViewModel : ViewModelBase
         _settings.SaveSettings();
     }
 
+    [ObservableProperty] private bool useMediaIdForTitle;
+    partial void OnUseMediaIdForTitleChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Use MediaId for Title changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.UseMediaIdForTitle = newValue;
+        _settings.SaveSettings();
+    }
+
     // UI Settings
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
@@ -216,6 +228,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         // Load general settings
         ParseGameDetailsWithXenia = _settings.Settings.General.ParseGameDetailsWithXenia;
         CheckForUpdatesOnStartup = _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup;
+        UseMediaIdForTitle = _settings.Settings.General.UseMediaIdForTitle;
 
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();
