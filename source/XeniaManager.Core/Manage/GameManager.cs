@@ -10,7 +10,6 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Models.Files;
-using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
@@ -243,7 +242,7 @@ public class GameManager
                 case FileSignature.PIRS:
                 {
                     Logger.Info<GameManager>($"Detected STFS package ({fileSignature}), parsing: {gamePath}");
-                    StfsFile stfs = StfsFile.Load(gamePath);
+                    using StfsFile stfs = StfsFile.LoadHeaderOnly(gamePath);
                     string title = string.IsNullOrWhiteSpace(stfs.Metadata.TitleName) ? stfs.Metadata.DisplayName : stfs.Metadata.TitleName;
                     string titleId = stfs.Metadata.TitleIdHex;
                     string mediaId = stfs.Metadata.MediaIdHex;
@@ -356,6 +355,14 @@ public class GameManager
         // Initialize XeniaOutputHandler for reading game details
         XeniaOutputHandler outputHandler = new XeniaOutputHandler(null, true);
         outputHandler.ConfigureProcess(xenia);
+
+        // Delete stale log file before launching to prevent picking up output from a previous process
+        string xeniaLogPath = Path.Combine(xenia.StartInfo.WorkingDirectory, "xenia.log");
+        if (File.Exists(xeniaLogPath))
+        {
+            Logger.Debug<GameManager>($"Deleting stale xenia.log before launch: {xeniaLogPath}");
+            File.Delete(xeniaLogPath);
+        }
 
         xenia.Start();
         Logger.Info<GameManager>($"Started Xenia process for game: {gamePath} with PID: {xenia.Id}");
@@ -906,7 +913,7 @@ public class GameManager
                     if (signature is FileSignature.CON or FileSignature.LIVE or FileSignature.PIRS)
                     {
                         // Check if the STFS file is a valid game type (not Installer or MarketplaceContent)
-                        if (IsValidStfsGameFile(file))
+                        if (StfsFile.IsValidGamePackage(file))
                         {
                             Logger.Trace<GameManager>($"Found STFS file ({signature}): {file}");
                             gameFiles.Add(file);
@@ -996,38 +1003,6 @@ public class GameManager
 
         Logger.Info<GameManager>($"Directory traversal complete. Found {gameFiles.Count} game files.");
         return gameFiles;
-    }
-
-    /// <summary>
-    /// Determines if an STFS file is a valid game file by checking its content type.
-    /// Filters out Installer and MarketplaceContent packages which are not standalone games.
-    /// </summary>
-    /// <param name="filePath">The path to the STFS file to check.</param>
-    /// <returns>True if the file is a valid game type, false otherwise.</returns>
-    private static bool IsValidStfsGameFile(string filePath)
-    {
-        try
-        {
-            using StfsFile stfs = StfsFile.Load(filePath);
-            ContentType contentType = stfs.Metadata.ContentType;
-
-            // Only accept Xbox360Title/Arcade Title/Demo/GOD
-            if (contentType is ContentType.Xbox360Title or ContentType.ArcadeTitle or ContentType.GameDemo or ContentType.GameOnDemand)
-            {
-                Logger.Trace<GameManager>($"STFS file has valid content type: {contentType}");
-                return true;
-            }
-
-            // Others are considered either DLC, Title Update or not launchable
-            Logger.Trace<GameManager>($"STFS file has excluded content type: {contentType}");
-            return false;
-        }
-        catch (Exception ex)
-        {
-            Logger.Trace<GameManager>($"Failed to check STFS content type for {filePath}: {ex.Message}");
-            // If we can't determine the content type, assume it's not a valid game file
-            return false;
-        }
     }
 
     /// <summary>
