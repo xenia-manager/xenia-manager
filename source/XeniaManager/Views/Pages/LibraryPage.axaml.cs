@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.ViewModels.Items;
 using XeniaManager.ViewModels.Pages;
@@ -121,5 +123,44 @@ public partial class LibraryPage : UserControl
             }
             _lastSelectedGame = null;
         }
+    }
+
+    // Drag & Drop Support
+    private void OnDragEnter(object? sender, DragEventArgs e)
+    {
+        e.DragEffects = DragDropEffects.Copy;
+        _viewModel.IsDragOverlayVisible = true;
+    }
+
+    private void OnDragOver(object? sender, DragEventArgs e)
+    {
+        e.DragEffects = DragDropEffects.Copy;
+    }
+
+    private void OnDragLeave(object? sender, DragEventArgs e)
+    {
+        _viewModel.IsDragOverlayVisible = false;
+    }
+
+    private async void OnDrop(object? sender, DragEventArgs e)
+    {
+        _viewModel.IsDragOverlayVisible = false;
+
+        IStorageItem[]? files = e.DataTransfer.TryGetFiles();
+        if (files == null)
+        {
+            return;
+        }
+
+        List<string> supportedFiles = files
+            .Select(item => item.Path.LocalPath)
+            .ToList();
+
+        if (supportedFiles.Count == 0)
+        {
+            return;
+        }
+
+        await _viewModel.AddDroppedFilesAsync(supportedFiles);
     }
 }

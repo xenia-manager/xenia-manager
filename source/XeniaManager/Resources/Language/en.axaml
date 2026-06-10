@@ -1184,4 +1184,8 @@
     <sys:String x:Key="AboutPage.GithubButton.ToolTip">Opens Xenia Manager's GitHub Repository</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">There is a newer version of Xenia Manager available.</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">You are currently on the latest version of Xenia Manager.</sys:String>
+
+    <!-- Library Page - Drag & Drop -->
+    <sys:String x:Key="LibraryPage.DragDrop.Title">Drop files to add games</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">.iso, .xex, .zar files are supported</sys:String>
 </ResourceDictionary>
