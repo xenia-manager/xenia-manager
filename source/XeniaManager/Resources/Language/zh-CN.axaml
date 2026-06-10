@@ -21,7 +21,7 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.Watermark">搜索...</sys:String>
-    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">重新加载游戏库</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">编辑网格视图</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">显示/隐藏封面上的额外信息</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">游戏标题</sys:String>
@@ -117,18 +117,18 @@
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">优化游戏设置时出错。&#10;{0}</sys:String>
 
     <!-- Remove Invalid Games -->
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
-
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">移除无效游戏</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">从库中移除所有文件路径缺失或损坏的游戏</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">移除无效游戏</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">您的库中有 1 个无效游戏。是否要移除它？</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">您的库中有 {0} 个无效游戏。是否要移除它们？</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">没有无效游戏</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">您的库中没有无效游戏。</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">无效游戏已移除</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">已成功从库中移除 {0} 个无效游戏。</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">移除游戏失败</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">移除无效游戏时发生错误。&#10;{0}</sys:String>
+    
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">游戏时间：</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">从未玩过</sys:String>
