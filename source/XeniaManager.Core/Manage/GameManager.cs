@@ -360,8 +360,16 @@ public class GameManager
         string xeniaLogPath = Path.Combine(xenia.StartInfo.WorkingDirectory, "xenia.log");
         if (File.Exists(xeniaLogPath))
         {
-            Logger.Debug<GameManager>($"Deleting stale xenia.log before launch: {xeniaLogPath}");
-            File.Delete(xeniaLogPath);
+            Logger.Warning<GameManager>($"Deleting stale Xenia log file before launch {xeniaLogPath}");
+            try
+            {
+                File.Delete(xeniaLogPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<GameManager>("Error deleting stale Xenia log file");
+                Logger.LogExceptionDetails<GameManager>(ex);
+            }
         }
 
         xenia.Start();
@@ -403,7 +411,7 @@ public class GameManager
         Logger.Debug<GameManager>($"Completed output extraction. Found Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}', Attempts: {numberOfTries}");
 
         Logger.Info<GameManager>($"Killing Xenia process with PID: {xenia.Id}");
-        xenia.Kill(); // Force to close Xenia
+        xenia.Kill(); // Force close Xenia
 
         // Fallback - Using Xenia.log to fill in any missing details
         if (details.Title == "Not found" || details.TitleId == "00000000" || details.MediaId == "00000000")
