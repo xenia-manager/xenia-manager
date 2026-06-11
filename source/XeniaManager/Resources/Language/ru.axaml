@@ -128,7 +128,7 @@
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
-    
+
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Сыграно: </sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Не запускалась</sys:String>
@@ -313,6 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Парсинг информации о игре с помощью Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Автоматический парсинг игровых данных с помощью эмулятора Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Включите эту опцию, если у вас возникают проблемы с обнаружением игр или получением информации о них</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Проверка наличия обновлений при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Автоматическая проверка обновлений Xenia и Xenia Manager при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Отключите эту опцию, чтобы пропускать проверку обновлений при запуске программы</sys:String>

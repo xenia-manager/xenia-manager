@@ -460,7 +460,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                         {
                             // Add the game using fetched GameInfo
                             GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details);
+                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle);
                         }
                         else
                         {
@@ -681,7 +681,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                     if (XboxDatabase.FilteredDatabase.Count == 1)
                     {
                         GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                        await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details);
+                        await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details, _settings.Settings.General.UseMediaIdForTitle);
                     }
                     else
                     {

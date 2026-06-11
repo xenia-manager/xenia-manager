@@ -313,6 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Dohvati detalje igre pomoću Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Automatski dohvaća detalje igre koristeći Xenia emulator</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Omogućite ovo ako imate poteškoća s prepoznavanjem igara ili njihovih detalja</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Koristi MediaId za naslov igre</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Koristi MediaId iz datoteka igre za pronalaženje odgovarajućeg naslova</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Onemogući za uvijek korištenje naslova iz baze podataka umjesto naslova specifičnih za odabrani medij</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Provjeri ažuriranja pri pokretanju</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatski provjerava ažuriranja za Xenia i Xenia Manager prilikom pokretanja aplikacije</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Onemogućite ovo da biste preskočili provjeru ažuriranja tijekom pokretanja aplikacije</sys:String>

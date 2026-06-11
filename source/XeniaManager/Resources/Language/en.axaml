@@ -313,6 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Parse Game Details with Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Automatically parse game details using Xenia emulator</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Enable this if you struggle with detecting games or game details</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Use MediaId for Game Title</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Use the MediaId from game files to find a matching media entry title</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Disable to always use the database title instead of media-specific titles</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Check for Updates on Startup</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatically check for Xenia and Xenia Manager updates when the application starts</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Disable this to skip update checks during application startup</sys:String>
