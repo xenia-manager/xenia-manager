@@ -135,12 +135,108 @@ public class StfsFile : IDisposable
     }
 
     /// <summary>
+    /// Loads only the metadata header of an STFS package without reading the full file or parsing the file table.
+    /// Reads approximately 40KB - enough for the complete metadata header including Version 2 fields.
+    /// This is significantly more memory-efficient than Load() for operations that only need metadata.
+    /// </summary>
+    /// <param name="filePath">The path to the STFS package file.</param>
+    /// <returns>A new StfsFile instance with metadata parsed but no file entries.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the file does not exist.</exception>
+    /// <exception cref="ArgumentException">Thrown when the file has an invalid magic number.</exception>
+    public static StfsFile LoadHeaderOnly(string filePath)
+    {
+        Logger.Debug<StfsFile>($"Loading STFS package header from {filePath}");
+
+        if (!File.Exists(filePath))
+        {
+            Logger.Error<StfsFile>($"STFS package does not exist: {filePath}");
+            throw new FileNotFoundException($"STFS package does not exist at {filePath}", filePath);
+        }
+
+        // Read only the first 0xA000 bytes — should be enough for the full metadata header.
+        // V2 packages store additional display names at 0x541A and descriptions at 0x941A;
+        // 0xA000 rounds up to the next clean hex boundary past the farthest read at ~0x971A.
+        byte[] fileData = ReadFilePortion(filePath, 0xA000);
+        Logger.Info<StfsFile>($"Loaded STFS package header: {filePath} ({fileData.Length} bytes)");
+
+        StfsFile stfs = FromBytes(fileData, parseFileTable: false);
+
+        stfs.PackageName = Path.GetFileName(filePath);
+        stfs.PackagePath = filePath;
+        Logger.Debug<StfsFile>($"Package name set to: {stfs.PackageName}");
+
+        return stfs;
+    }
+
+    /// <summary>
+    /// Reads up to <paramref name="maxBytes"/> from the beginning of a file.
+    /// </summary>
+    /// <param name="filePath">The path to the file to read.</param>
+    /// <param name="maxBytes">The maximum number of bytes to read.</param>
+    private static byte[] ReadFilePortion(string filePath, int maxBytes)
+    {
+        Logger.Trace<StfsFile>($"Reading up to {maxBytes} bytes from start of: {filePath}");
+        using FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        int length = (int)Math.Min(maxBytes, fs.Length);
+        Logger.Trace<StfsFile>($"File size: {fs.Length}, reading: {length} bytes");
+        byte[] buffer = new byte[length];
+        fs.ReadExactly(buffer, 0, length);
+        Logger.Trace<StfsFile>($"Successfully read {length} bytes from: {filePath}");
+        return buffer;
+    }
+
+    /// <summary>
+    /// Determines if an STFS file is a valid game package by checking its content type.
+    /// Reads only the first 4KB of the file — significantly more memory-efficient than loading the full package.
+    /// Filters out Installer and MarketplaceContent packages which are not standalone games.
+    /// </summary>
+    /// <param name="filePath">The path to the STFS file to check.</param>
+    /// <returns>True if the file is a valid game type, false otherwise.</returns>
+    public static bool IsValidGamePackage(string filePath)
+    {
+        try
+        {
+            // Read only the first 4KB to check magic bytes and content type
+            // ContentType is at offset 0x0344 (4 bytes big endian)
+            using FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            byte[] header = new byte[0x400];
+            int bytesRead = fs.Read(header, 0, header.Length);
+            if (bytesRead < 0x348)
+            {
+                return false;
+            }
+
+            // Check STFS magic
+            string magic = Encoding.ASCII.GetString(header, 0, 4);
+            if (magic is not ("CON " or "PIRS" or "LIVE"))
+            {
+                return false;
+            }
+
+            // Read content type at offset 0x0344
+            ContentType contentType = (ContentType)BinaryPrimitives.ReadUInt32BigEndian(header.AsSpan(0x0344));
+
+            // Only accept Xbox360Title/Arcade Title/Demo/GOD
+            bool isValid = contentType is ContentType.Xbox360Title or ContentType.ArcadeTitle or ContentType.GameDemo or ContentType.GameOnDemand;
+            Logger.Trace<StfsFile>($"STFS file {(isValid ? "has valid" : "has excluded")} content type: {contentType}");
+            return isValid;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<StfsFile>($"Failed to check STFS content type for {filePath}");
+            Logger.LogExceptionDetails<StfsFile>(ex);
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Parses an STFS package from raw bytes.
     /// </summary>
     /// <param name="data">The raw byte data of the STFS package.</param>
+    /// <param name="parseFileTable">Parse file table from the STFS package</param>
     /// <returns>A new StfsFile instance.</returns>
     /// <exception cref="ArgumentException">Thrown when the magic number is invalid.</exception>
-    public static StfsFile FromBytes(byte[] data)
+    public static StfsFile FromBytes(byte[] data, bool parseFileTable = true)
     {
         Logger.Trace<StfsFile>($"Parsing STFS package from bytes ({data.Length} bytes)");
         Logger.Trace<StfsFile>($"First 64 bytes: {BitConverter.ToString(data.Take(64).ToArray())}");
@@ -217,10 +313,12 @@ public class StfsFile : IDisposable
         stfs.blocksPerHashTable = (uint)stfs.Metadata.VolumeDescriptor.BlocksPerHashTable;
         Logger.Debug<StfsFile>($"Blocks per hash table: {stfs.blocksPerHashTable} (from volume descriptor flags: 0x{stfs.Metadata.VolumeDescriptor.Flags:X2})");
 
-        // Parse file table
-        Logger.Debug<StfsFile>($"Parsing file table...");
-        stfs.ParseFileTable();
-        Logger.Info<StfsFile>($"Successfully parsed STFS package with {stfs.FileEntries.Count} file entries");
+        if (parseFileTable)
+        {
+            Logger.Debug<StfsFile>($"Parsing file table...");
+            stfs.ParseFileTable();
+            Logger.Info<StfsFile>($"Successfully parsed STFS package with {stfs.FileEntries.Count} file entries");
+        }
 
         return stfs;
     }

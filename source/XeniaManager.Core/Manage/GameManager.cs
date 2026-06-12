@@ -10,7 +10,6 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Models.Files;
-using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
@@ -243,7 +242,7 @@ public class GameManager
                 case FileSignature.PIRS:
                 {
                     Logger.Info<GameManager>($"Detected STFS package ({fileSignature}), parsing: {gamePath}");
-                    StfsFile stfs = StfsFile.Load(gamePath);
+                    using StfsFile stfs = StfsFile.LoadHeaderOnly(gamePath);
                     string title = string.IsNullOrWhiteSpace(stfs.Metadata.TitleName) ? stfs.Metadata.DisplayName : stfs.Metadata.TitleName;
                     string titleId = stfs.Metadata.TitleIdHex;
                     string mediaId = stfs.Metadata.MediaIdHex;
@@ -357,6 +356,22 @@ public class GameManager
         XeniaOutputHandler outputHandler = new XeniaOutputHandler(null, true);
         outputHandler.ConfigureProcess(xenia);
 
+        // Delete stale log file before launching to prevent picking up output from a previous process
+        string xeniaLogPath = Path.Combine(xenia.StartInfo.WorkingDirectory, "xenia.log");
+        if (File.Exists(xeniaLogPath))
+        {
+            Logger.Warning<GameManager>($"Deleting stale Xenia log file before launch {xeniaLogPath}");
+            try
+            {
+                File.Delete(xeniaLogPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<GameManager>("Error deleting stale Xenia log file");
+                Logger.LogExceptionDetails<GameManager>(ex);
+            }
+        }
+
         xenia.Start();
         Logger.Info<GameManager>($"Started Xenia process for game: {gamePath} with PID: {xenia.Id}");
 
@@ -396,7 +411,7 @@ public class GameManager
         Logger.Debug<GameManager>($"Completed output extraction. Found Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}', Attempts: {numberOfTries}");
 
         Logger.Info<GameManager>($"Killing Xenia process with PID: {xenia.Id}");
-        xenia.Kill(); // Force to close Xenia
+        xenia.Kill(); // Force close Xenia
 
         // Fallback - Using Xenia.log to fill in any missing details
         if (details.Title == "Not found" || details.TitleId == "00000000" || details.MediaId == "00000000")
@@ -838,83 +853,66 @@ public class GameManager
                 gameFiles.Count,
                 Math.Min(100, (directoriesScanned * 100) / Math.Max(1, estimatedTotalDirectories)));
 
-            bool xexFound = false;
-
-            // Find all ISO files
-            foreach (string extension in new[] { ".iso", ".xiso" })
+            // Single enumeration for all files and subdirectories
+            string[] allFiles;
+            string[] subDirectories;
+            try
             {
-                string[] isoFiles = Directory.GetFiles(currentDirectory, $"*{extension}", SearchOption.TopDirectoryOnly);
-                foreach (string isoFile in isoFiles)
-                {
-                    Logger.Trace<GameManager>($"Found ISO file: {isoFile}");
-                    gameFiles.Add(isoFile);
-                }
+                allFiles = Directory.GetFiles(currentDirectory, "*", SearchOption.TopDirectoryOnly);
+                subDirectories = Directory.GetDirectories(currentDirectory, "*", SearchOption.TopDirectoryOnly);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Logger.Warning<GameManager>($"Access denied to directory: {currentDirectory}");
+                continue;
             }
 
-            // Find all ZAR files (only if scanZarFiles is enabled)
-            if (scanZarFiles)
-            {
-                string[] zarFiles = Directory.GetFiles(currentDirectory, "*.zar", SearchOption.TopDirectoryOnly);
-                foreach (string zarFile in zarFiles)
-                {
-                    Logger.Trace<GameManager>($"Found ZAR file: {zarFile}");
-                    gameFiles.Add(zarFile);
-                }
-            }
+            List<string> xexCandidates = new List<string>();
+            int filesFoundHere = 0;
 
-            // Find all XEX files
-            // First check for default.xex (case-insensitive), then fall back to any .xex files
-            string? defaultXex = Directory.GetFiles(currentDirectory, "default.xex", SearchOption.TopDirectoryOnly)
-                .FirstOrDefault(f => f.Equals(Path.Combine(currentDirectory, "default.xex"), StringComparison.OrdinalIgnoreCase));
-
-            string[] xexFiles;
-            if (!string.IsNullOrEmpty(defaultXex))
+            foreach (string file in allFiles)
             {
-                // Prefer default.xex if it exists
-                xexFiles = [defaultXex];
-                Logger.Trace<GameManager>($"Found default.xex file: {defaultXex}");
-            }
-            else
-            {
-                // Fall back to finding all .xex files
-                xexFiles = Directory.GetFiles(currentDirectory, "*.xex", SearchOption.TopDirectoryOnly);
-            }
-
-            if (xexFiles.Length > 0)
-            {
-                foreach (string xexFile in xexFiles)
-                {
-                    Logger.Trace<GameManager>($"Found XEX file: {xexFile}");
-                    gameFiles.Add(xexFile);
-                }
-                xexFound = true;
-            }
-
-            // Find all STFS files (CON, LIVE, PIRS)
-            foreach (string file in Directory.GetFiles(currentDirectory, "*", SearchOption.TopDirectoryOnly))
-            {
-                // Skip if already identified as ISO, ZAR, or XEX
-                string extension = Path.GetExtension(file).ToLowerInvariant();
-                if (extension is ".iso" or ".xiso" or ".zar" or ".xex")
-                {
-                    continue;
-                }
-
                 try
                 {
-                    FileSignature signature = FileIdentifier.IdentifyFileType(file);
-                    if (signature is FileSignature.CON or FileSignature.LIVE or FileSignature.PIRS)
+                    FileSignature fileSignature = FileIdentifier.IdentifyFileType(file);
+                    switch (fileSignature)
                     {
-                        // Check if the STFS file is a valid game type (not Installer or MarketplaceContent)
-                        if (IsValidStfsGameFile(file))
-                        {
-                            Logger.Trace<GameManager>($"Found STFS file ({signature}): {file}");
+                        case FileSignature.ISO:
+                        case FileSignature.XISO:
+                            Logger.Trace<GameManager>($"Found disc image ({fileSignature}): {file}");
                             gameFiles.Add(file);
-                        }
-                        else
-                        {
-                            Logger.Trace<GameManager>($"Skipping STFS file (Installer/MarketplaceContent): {file}");
-                        }
+                            filesFoundHere++;
+                            break;
+
+                        case FileSignature.ZAR:
+                            if (scanZarFiles)
+                            {
+                                Logger.Trace<GameManager>($"Found ZAR archive: {file}");
+                                gameFiles.Add(file);
+                                filesFoundHere++;
+                            }
+                            break;
+
+                        case FileSignature.XEX1:
+                        case FileSignature.XEX2:
+                            xexCandidates.Add(file);
+                            break;
+
+                        case FileSignature.CON:
+                        case FileSignature.LIVE:
+                        case FileSignature.PIRS:
+                            // Check if the STFS file is a valid game type (not Installer or MarketplaceContent)
+                            if (StfsFile.IsValidGamePackage(file))
+                            {
+                                Logger.Trace<GameManager>($"Found STFS file ({fileSignature}): {file}");
+                                gameFiles.Add(file);
+                                filesFoundHere++;
+                            }
+                            else
+                            {
+                                Logger.Trace<GameManager>($"Skipping STFS file (Installer/MarketplaceContent): {file}");
+                            }
+                            break;
                     }
                 }
                 catch (Exception ex)
@@ -923,10 +921,35 @@ public class GameManager
                 }
             }
 
-            // Log how many game files were found in this directory
-            if (gameFiles.Any(f => Path.GetDirectoryName(f) == currentDirectory))
+            // Process XEX files: prefer default.xex over other .xex files
+            bool xexFound = false;
+            if (xexCandidates.Count > 0)
             {
-                Logger.Debug<GameManager>($"Added {gameFiles.Count(f => Path.GetDirectoryName(f) == currentDirectory)} game file(s) from {currentDirectory}");
+                string? defaultXex = xexCandidates.FirstOrDefault(f =>
+                    Path.GetFileName(f).Equals("default.xex", StringComparison.OrdinalIgnoreCase));
+
+                if (defaultXex != null)
+                {
+                    Logger.Trace<GameManager>($"Found default.xex file: {defaultXex}");
+                    gameFiles.Add(defaultXex);
+                    filesFoundHere++;
+                }
+                else
+                {
+                    foreach (string xexFile in xexCandidates)
+                    {
+                        Logger.Trace<GameManager>($"Found XEX file: {xexFile}");
+                        gameFiles.Add(xexFile);
+                        filesFoundHere++;
+                    }
+                }
+                xexFound = true;
+            }
+
+            // Log how many game files were found in this directory
+            if (filesFoundHere > 0)
+            {
+                Logger.Debug<GameManager>($"Added {filesFoundHere} game file(s) from {currentDirectory}");
             }
             else
             {
@@ -937,56 +960,28 @@ public class GameManager
             // If XEX files found, only scan "content" subdirectory (for DLC/additional content)
             if (xexFound)
             {
-                try
-                {
-                    string? contentDirectory = Directory.GetDirectories(currentDirectory, "content", SearchOption.TopDirectoryOnly)
-                        .FirstOrDefault(d => d.Equals(Path.Combine(currentDirectory, "content"), StringComparison.OrdinalIgnoreCase));
+                string? contentDirectory = subDirectories.FirstOrDefault(d => Path.GetFileName(d).Equals("content", StringComparison.OrdinalIgnoreCase));
 
-                    if (!string.IsNullOrEmpty(contentDirectory))
-                    {
-                        directoriesToScan.Enqueue(contentDirectory);
-                        estimatedTotalDirectories++; // Update estimate
-                        Logger.Trace<GameManager>($"XEX file(s) found in {currentDirectory}, scanning 'content' subdirectory for DLC");
-                    }
-                    else
-                    {
-                        Logger.Trace<GameManager>($"XEX file(s) found in {currentDirectory}, no 'content' subdirectory found");
-                    }
-                }
-                catch (UnauthorizedAccessException ex)
+                if (contentDirectory != null)
                 {
-                    Logger.Warning<GameManager>($"Access denied to 'content' subdirectory of {currentDirectory}");
-                    Logger.LogExceptionDetails<GameManager>(ex);
+                    directoriesToScan.Enqueue(contentDirectory);
+                    estimatedTotalDirectories++; // Update estimate
+                    Logger.Trace<GameManager>($"XEX file(s) found in {currentDirectory}, scanning 'content' subdirectory for DLC");
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.Warning<GameManager>($"Failed to enumerate 'content' subdirectory of {currentDirectory}");
-                    Logger.LogExceptionDetails<GameManager>(ex);
+                    Logger.Trace<GameManager>($"XEX file(s) found in {currentDirectory}, no 'content' subdirectory found");
                 }
             }
             else
             {
                 // No XEX found, scan all subdirectories
-                try
+                foreach (string subDirectory in subDirectories)
                 {
-                    string[] subDirectories = Directory.GetDirectories(currentDirectory, "*", SearchOption.TopDirectoryOnly);
-                    foreach (string subDirectory in subDirectories)
-                    {
-                        directoriesToScan.Enqueue(subDirectory);
-                    }
-                    estimatedTotalDirectories += subDirectories.Length; // Update estimate
-                    Logger.Trace<GameManager>($"Queued {subDirectories.Length} subdirectories for scanning");
+                    directoriesToScan.Enqueue(subDirectory);
                 }
-                catch (UnauthorizedAccessException ex)
-                {
-                    Logger.Warning<GameManager>($"Access denied to subdirectories of {currentDirectory}");
-                    Logger.LogExceptionDetails<GameManager>(ex);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warning<GameManager>($"Failed to enumerate subdirectories of {currentDirectory}");
-                    Logger.LogExceptionDetails<GameManager>(ex);
-                }
+                estimatedTotalDirectories += subDirectories.Length; // Update estimate
+                Logger.Trace<GameManager>($"Queued {subDirectories.Length} subdirectories for scanning");
             }
         }
 
@@ -996,38 +991,6 @@ public class GameManager
 
         Logger.Info<GameManager>($"Directory traversal complete. Found {gameFiles.Count} game files.");
         return gameFiles;
-    }
-
-    /// <summary>
-    /// Determines if an STFS file is a valid game file by checking its content type.
-    /// Filters out Installer and MarketplaceContent packages which are not standalone games.
-    /// </summary>
-    /// <param name="filePath">The path to the STFS file to check.</param>
-    /// <returns>True if the file is a valid game type, false otherwise.</returns>
-    private static bool IsValidStfsGameFile(string filePath)
-    {
-        try
-        {
-            using StfsFile stfs = StfsFile.Load(filePath);
-            ContentType contentType = stfs.Metadata.ContentType;
-
-            // Only accept Xbox360Title/Arcade Title/Demo/GOD
-            if (contentType is ContentType.Xbox360Title or ContentType.ArcadeTitle or ContentType.GameDemo or ContentType.GameOnDemand)
-            {
-                Logger.Trace<GameManager>($"STFS file has valid content type: {contentType}");
-                return true;
-            }
-
-            // Others are considered either DLC, Title Update or not launchable
-            Logger.Trace<GameManager>($"STFS file has excluded content type: {contentType}");
-            return false;
-        }
-        catch (Exception ex)
-        {
-            Logger.Trace<GameManager>($"Failed to check STFS content type for {filePath}: {ex.Message}");
-            // If we can't determine the content type, assume it's not a valid game file
-            return false;
-        }
     }
 
     /// <summary>
