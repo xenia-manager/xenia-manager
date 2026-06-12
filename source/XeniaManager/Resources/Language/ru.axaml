@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Профили отсутствуют</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Нет профилей, чтобы включить автобэкап сохранений.&#10;Сначала создайте или импортируйте профиль.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Общая папка для игровых данных</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Все версии Xenia будут использовать одну и ту же папку для игровых данных (папка Content)</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">Примечание: для изменения необходимо запустить Xenia Manager с правами администратора</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Требуются права администратора</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Это действие требует прав администратора.&#10;Перезапустите Xenia Manager от имени администратора.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Отдельные папки для игровых данных</sys:String>

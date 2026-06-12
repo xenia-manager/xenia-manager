@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Nenhum Perfil Disponível</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Nenhum perfil encontrado para ativar o backup automático de salvamento.&#10;Crie ou importe um perfil primeiro.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Pasta de conteúdo unificada</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Faz com que todas as versões do Xenia tenham a mesma pasta de conteúdo</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NOTA: Isso requer que o Xenia Manager seja executado como administrador durante a instalação do Xenia.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Administrador Necessário</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Esta ação requer que o Xenia Manager seja executado como administrador.&#10;Reinicie o Xenia Manager com privilégios administrativos.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Pastas de conteúdo separadas</sys:String>

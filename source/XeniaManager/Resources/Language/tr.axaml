@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Profiller Mevcut Değil</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Otomatik Kayıt Yedekleme özelliğini etkinleştirmek için profil bulunamadı.&#10;Lütfen önce bir profil oluşturun veya içe aktarın.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Birleşik İçerik Klasörü</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Tüm Xenia sürümlerinin aynı içerik klasörünü kullanmasını sağlar</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NOT: Bu özellik, Xenia kurulurken Xenia Manager'ın yönetici olarak çalıştırılmasını gerektirir</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Yönetici Yetkisi Gerekiyor</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Bu işlem için Xenia Manager'ın yönetici olarak çalıştırılması gerekir.&#10;Lütfen Xenia Manager'ı yönetici yetkileriyle yeniden başlatın.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">İçerik Klasörlerini Ayır</sys:String>

@@ -115,6 +115,9 @@ public partial class ManagePageViewModel : ViewModelBase
 
     [ObservableProperty] private bool unifiedContentFolder;
     [ObservableProperty] private bool isAdministrator;
+    [ObservableProperty] private bool isNtfsDrive;
+
+    public bool IsUnifiedContentFolderEnabled => IsAdministrator && IsNtfsDrive;
 
     partial void OnUseNetplayNightlyChanged(bool value)
     {
@@ -129,6 +132,9 @@ public partial class ManagePageViewModel : ViewModelBase
         NetplayCheckForUpdates = NetplayInstalled && !NetplayUpdate;
     }
 
+    partial void OnIsAdministratorChanged(bool value) => OnPropertyChanged(nameof(IsUnifiedContentFolderEnabled));
+    partial void OnIsNtfsDriveChanged(bool value) => OnPropertyChanged(nameof(IsUnifiedContentFolderEnabled));
+
     // Constructor
     public ManagePageViewModel()
     {
@@ -137,6 +143,7 @@ public partial class ManagePageViewModel : ViewModelBase
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
         _libraryPageViewModel = App.Services.GetRequiredService<LibraryPageViewModel>();
         IsAdministrator = SecurityUtilities.IsRunAsAdministrator();
+        IsNtfsDrive = SecurityUtilities.IsNtfsDrive(AppPaths.EmulatorsDirectory);
         AutomaticSaveBackup = _settings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup;
         UnifiedContentFolder = _settings.Settings.Emulator.Settings.UnifiedContentFolder;
         UpdateEmulatorStatus();

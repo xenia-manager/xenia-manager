@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">无可用配置文件</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">未找到任何配置文件以启用自动存档备份。&#10;请先创建或导入一个配置文件。</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">统一内容文件夹</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">使所有 Xenia 版本使用相同的内容文件夹</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">注意：安装 Xenia 时需要以管理员身份运行 Xenia Manager 才能启用此功能</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">使所有 Xenia 版本共享相同的内容文件夹。需要管理员权限和 NTFS 驱动器。</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">注意：需要管理员权限和 NTFS 格式的驱动器，因为此功能使用符号链接</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">需要管理员权限</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">此操作需要以管理员身份运行 Xenia Manager。&#10;请以管理员权限重新启动 Xenia Manager。</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">分离内容文件夹</sys:String>
