@@ -1,10 +1,12 @@
+using XeniaManager.Core.Logging;
+
 namespace XeniaManager.Core.Utilities;
 
 /// <summary>
 /// Provides helper methods for converting relative paths to absolute paths
 /// based on the application's runtime base directory.
 /// </summary>
-public static class AppPathResolver
+public class AppPathResolver
 {
     private static readonly string _baseDirectory = ResolveBaseDirectory();
 
@@ -69,4 +71,27 @@ public static class AppPathResolver
     /// <param name="relativePaths">An ordered set of relative path segments.</param>
     /// <returns>The resulting absolute path.</returns>
     public static string GetFullPath(params string[] relativePaths) => Path.Combine(new[] { _baseDirectory }.Concat(relativePaths).ToArray());
+
+    /// <summary>
+    /// Replaces all characters invalid for use in Windows filenames with spaces.
+    /// </summary>
+    /// <param name="input">The string to sanitize.</param>
+    /// <returns>The sanitized string with invalid filename characters replaced by spaces.</returns>
+    public static string SanitizeForFilename(string input)
+    {
+        Logger.Debug<AppPathResolver>($"Sanitizing filename input: '{input}'");
+        input = input.Replace(":", " -");
+        foreach (char c in Path.GetInvalidFileNameChars().Where(c => c != ':'))
+        {
+            input = input.Replace(c, ' ');
+        }
+        string result = input;
+        while (result.Contains("  "))
+        {
+            result = result.Replace("  ", " ");
+        }
+        result = result.Trim();
+        Logger.Debug<AppPathResolver>($"Sanitized filename result: '{result}'");
+        return result;
+    }
 }

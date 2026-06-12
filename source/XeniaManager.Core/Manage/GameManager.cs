@@ -511,7 +511,7 @@ public class GameManager
         }
 
         Logger.Info<GameManager>($"Successfully retrieved game information - Title: '{detailedGameInfo.Title?.Full}'");
-        Logger.Debug<GameManager>($"Processing game title - Original: '{detailedGameInfo.Title?.Full}', Sanitized: '{detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ')}'");
+        Logger.Debug<GameManager>($"Processing game title: '{detailedGameInfo.Title?.Full}'");
 
         // Try to find a matching media entry by MediaId for a more specific title (if enabled)
         string resolvedTitle = detailedGameInfo.Title?.Full ?? details.Title;
@@ -532,7 +532,7 @@ public class GameManager
         // Create a new game entry
         Game newGame = new Game
         {
-            Title = resolvedTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
+            Title = AppPathResolver.SanitizeForFilename(resolvedTitle),
             GameId = actualTitleId,
             AlternativeIDs = selectedGame.AlternativeId!,
             MediaId = details.MediaId,
@@ -666,8 +666,8 @@ public class GameManager
 
         Logger.Info<GameManager>($"Creating new game entry for unknown game: '{details.Title}' (TitleId: {details.TitleId})");
         string sanitizedTitle = details.Title != "Not found"
-            ? details.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ')
-            : Path.GetFileNameWithoutExtension(gamePath).Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+            ? AppPathResolver.SanitizeForFilename(details.Title)
+            : AppPathResolver.SanitizeForFilename(Path.GetFileNameWithoutExtension(gamePath));
         Logger.Debug<GameManager>($"Processing game title - Original: '{details.Title}', Sanitized: '{sanitizedTitle}'");
 
         // Create a new game entry

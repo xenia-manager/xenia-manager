@@ -206,7 +206,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// <returns>The filtered title.</returns>
     private string FilterGameTitle(string title)
     {
-        return title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+        return AppPathResolver.SanitizeForFilename(title);
     }
 
     /// <summary>
