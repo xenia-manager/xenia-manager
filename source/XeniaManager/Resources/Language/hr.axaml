@@ -1187,4 +1187,8 @@
     <sys:String x:Key="AboutPage.GithubButton.ToolTip">Otvara GitHub repozitorij Xenia Managera</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">Dostupna je novija verzija Xenia Managera.</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">Koristite najnoviju verziju Xenia Managera.</sys:String>
+
+    <!-- Library Page - Drag & Drop -->
+    <sys:String x:Key="LibraryPage.DragDrop.Title">Ispustite datoteke za dodavanje igara</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">Podržane su .iso, .xex, .zar datoteke</sys:String>
 </ResourceDictionary>
