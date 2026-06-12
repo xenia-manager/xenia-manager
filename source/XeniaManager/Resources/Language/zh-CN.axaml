@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">无可用配置文件</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">未找到任何配置文件以启用自动存档备份。&#10;请先创建或导入一个配置文件。</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">统一内容文件夹</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">使所有 Xenia 版本共享相同的内容文件夹。需要管理员权限和 NTFS 驱动器。</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">注意：需要管理员权限和 NTFS 格式的驱动器，因为此功能使用符号链接</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">使所有 Xenia 版本共享相同的内容文件夹。需要管理员权限和 NTFS 分区。</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">注意：需要管理员权限和 NTFS 格式的分区，因为此功能使用符号链接</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">需要管理员权限</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">此操作需要以管理员身份运行 Xenia Manager。&#10;请以管理员权限重新启动 Xenia Manager。</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">分离内容文件夹</sys:String>
@@ -313,9 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">使用 Xenia 解析游戏详情</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">自动使用 Xenia 模拟器解析游戏详情</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">如果在检测游戏或游戏详情时遇到问题，请启用此选项</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">使用 MediaId 作为游戏标题</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">使用游戏文件中的 MediaId 查找匹配的媒体条目标题</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">禁用后始终使用数据库标题，而不使用特定于媒体的标题</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">启动时检查更新</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">在应用程序启动时自动检查 Xenia 和 Xenia Manager 的更新</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">禁用此选项可在应用程序启动时跳过更新检查</sys:String>
@@ -1187,4 +1187,7 @@
     <sys:String x:Key="AboutPage.GithubButton.ToolTip">打开 Xenia Manager 的 GitHub 仓库</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">有新版本的 Xenia Manager 可用。</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">您当前使用的是最新版本的 Xenia Manager。</sys:String>
+    <!-- Library Page - Drag & Drop -->
+    <sys:String x:Key="LibraryPage.DragDrop.Title">将文件拖放至此处来添加游戏</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">支持 .iso、.xex、.zar 文件</sys:String>
 </ResourceDictionary>
