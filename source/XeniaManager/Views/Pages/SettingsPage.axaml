@@ -29,6 +29,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.ToolTip}"
                                             Icon="Document"
                                             IsChecked="{Binding ParseGameDetailsWithXenia, Mode=TwoWay}" />
+                    <!-- Use MediaId for Title -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.UseMediaIdForTitle}"
+                                            Description="{DynamicResource SettingsPage.General.UseMediaIdForTitle.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.UseMediaIdForTitle.ToolTip}"
+                                            Icon="Tag"
+                                            IsChecked="{Binding UseMediaIdForTitle, Mode=TwoWay}" />
                     <!-- Check for Updates on Startup -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup}"
                                             Description="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Description}"

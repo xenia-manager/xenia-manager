@@ -206,7 +206,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// <returns>The filtered title.</returns>
     private string FilterGameTitle(string title)
     {
-        return title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+        return AppPathResolver.SanitizeForFilename(title);
     }
 
     /// <summary>
@@ -636,24 +636,48 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 Logger.Info<GameDetailsEditorViewModel>($"Game title changed from '{oldTitle}' to '{filteredTitle}'");
 
                 // Update artwork directory
-                string oldArtworkPath = Path.Combine(AppPaths.GameDataDirectory, oldTitle, "Artwork");
+                // Derive old directory from stored artwork paths first (more reliable
+                // than _game.Title, since the on-disk name may differ from a prior edit)
+                string? oldArtworkPath = null;
+                foreach (string artPath in new[] { _game.Artwork.Icon, _game.Artwork.Boxart, _game.Artwork.Background })
+                {
+                    if (!string.IsNullOrEmpty(artPath))
+                    {
+                        string? dir = Path.GetDirectoryName(AppPathResolver.GetFullPath(artPath));
+                        if (dir != null)
+                        {
+                            oldArtworkPath = dir;
+                            break;
+                        }
+                    }
+                }
+                oldArtworkPath ??= Path.Combine(AppPaths.GameDataDirectory, oldTitle, "Artwork");
+
                 string newArtworkPath = Path.Combine(AppPaths.GameDataDirectory, filteredTitle, "Artwork");
 
                 if (Directory.Exists(oldArtworkPath))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(newArtworkPath)!);
-                    Directory.Move(oldArtworkPath, newArtworkPath);
-                    Logger.Info<GameDetailsEditorViewModel>($"Moved artwork directory from '{oldArtworkPath}' to '{newArtworkPath}'");
+                    if (!string.Equals(Path.GetFullPath(oldArtworkPath), Path.GetFullPath(newArtworkPath), StringComparison.OrdinalIgnoreCase))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(newArtworkPath)!);
+                        Directory.Move(oldArtworkPath, newArtworkPath);
+                        Logger.Info<GameDetailsEditorViewModel>($"Moved artwork directory from '{oldArtworkPath}' to '{newArtworkPath}'");
+                    }
                 }
 
                 // Update config file path
                 string oldConfigPath = _game.FileLocations.Config;
                 string newConfigPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{filteredTitle}.config.toml");
 
-                if (File.Exists(AppPathResolver.GetFullPath(oldConfigPath)))
+                string fullOldConfig = AppPathResolver.GetFullPath(oldConfigPath);
+                string fullNewConfig = AppPathResolver.GetFullPath(newConfigPath);
+                if (File.Exists(fullOldConfig))
                 {
-                    File.Move(AppPathResolver.GetFullPath(oldConfigPath), AppPathResolver.GetFullPath(newConfigPath), true);
-                    Logger.Info<GameDetailsEditorViewModel>($"Moved config file from '{oldConfigPath}' to '{newConfigPath}'");
+                    if (!string.Equals(Path.GetFullPath(fullOldConfig), Path.GetFullPath(fullNewConfig), StringComparison.OrdinalIgnoreCase))
+                    {
+                        File.Move(fullOldConfig, fullNewConfig, true);
+                        Logger.Info<GameDetailsEditorViewModel>($"Moved config file from '{oldConfigPath}' to '{newConfigPath}'");
+                    }
                 }
 
                 // Update patch file path (If it exists)
@@ -662,10 +686,15 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                     string oldPatchesPath = _game.FileLocations.Patch;
                     string newPatchPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{_game.GameId} - {filteredTitle}.patch.toml");
 
-                    if (oldPatchesPath != null && File.Exists(AppPathResolver.GetFullPath(oldPatchesPath)))
+                    string fullOldPatch = AppPathResolver.GetFullPath(oldPatchesPath);
+                    string fullNewPatch = AppPathResolver.GetFullPath(newPatchPath);
+                    if (File.Exists(fullOldPatch))
                     {
-                        File.Move(AppPathResolver.GetFullPath(oldPatchesPath), AppPathResolver.GetFullPath(newPatchPath), true);
-                        Logger.Info<GameDetailsEditorViewModel>($"Moved patches file from '{oldPatchesPath}' to '{newPatchPath}'");
+                        if (!string.Equals(Path.GetFullPath(fullOldPatch), Path.GetFullPath(fullNewPatch), StringComparison.OrdinalIgnoreCase))
+                        {
+                            File.Move(fullOldPatch, fullNewPatch, true);
+                            Logger.Info<GameDetailsEditorViewModel>($"Moved patches file from '{oldPatchesPath}' to '{newPatchPath}'");
+                        }
                     }
                     _game.FileLocations.Patch = newPatchPath;
                 }

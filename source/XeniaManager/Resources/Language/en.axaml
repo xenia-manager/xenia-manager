@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">No Profiles Available</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">No profiles found to enable Automatic Save Backup.&#10;Please create or import a profile first.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Unified content folder</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Makes all Xenia versions have same content folder</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NOTE: This requires Xenia Manager to be run as Administrator while installing Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Makes all Xenia versions share the same content folder. Requires admin rights and NTFS drive.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NOTE: Requires administrator privileges and an NTFS-formatted drive because this feature uses symbolic links</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Administrator Required</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">This action requires Xenia Manager to be run as Administrator.&#10;Please restart Xenia Manager with administrative privileges.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Separate Content Folders</sys:String>
@@ -313,6 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Parse Game Details with Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Automatically parse game details using Xenia emulator</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Enable this if you struggle with detecting games or game details</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Use MediaId for Game Title</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Use the MediaId from game files to find a matching media entry title</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Disable to always use the database title instead of media-specific titles</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Check for Updates on Startup</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatically check for Xenia and Xenia Manager updates when the application starts</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Disable this to skip update checks during application startup</sys:String>
@@ -1184,4 +1187,8 @@
     <sys:String x:Key="AboutPage.GithubButton.ToolTip">Opens Xenia Manager's GitHub Repository</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">There is a newer version of Xenia Manager available.</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">You are currently on the latest version of Xenia Manager.</sys:String>
+
+    <!-- Library Page - Drag & Drop -->
+    <sys:String x:Key="LibraryPage.DragDrop.Title">Drop files to add games</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">.iso, .xex, .zar files are supported</sys:String>
 </ResourceDictionary>

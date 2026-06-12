@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Nema dostupnih profila</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Nema pronađenih profila za omogućavanje automatskog sigurnosnog kopiranja.&#10;Molimo prvo stvorite ili uvezite profil.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Zajednička mapa sadržaja</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Omogućuje da sve verzije Xenia emulatora koriste istu mapu sadržaja</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NAPOMENA: Ovo zahtijeva pokretanje Xenia Managera kao administrator prilikom instalacije Xenia emulatora</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Omogućuje da sve verzije Xenia emulatora koriste istu mapu sadržaja. Zahtijeva administratorska prava i NTFS formatirani disk.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NAPOMENA: Zahtijeva administratorska prava i NTFS formatirani disk jer ova značajka koristi simboličke veze</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Potrebne administratorske ovlasti</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Ova radnja zahtijeva pokretanje Xenia Managera kao administrator.&#10;Molimo ponovno pokrenite Xenia Manager s administratorskim ovlastima.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Odvajanje mapa sadržaja</sys:String>
@@ -313,6 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Dohvati detalje igre pomoću Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Automatski dohvaća detalje igre koristeći Xenia emulator</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Omogućite ovo ako imate poteškoća s prepoznavanjem igara ili njihovih detalja</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Koristi MediaId za naslov igre</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Koristi MediaId iz datoteka igre za pronalaženje odgovarajućeg naslova</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Onemogući za uvijek korištenje naslova iz baze podataka umjesto naslova specifičnih za odabrani medij</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Provjeri ažuriranja pri pokretanju</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatski provjerava ažuriranja za Xenia i Xenia Manager prilikom pokretanja aplikacije</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Onemogućite ovo da biste preskočili provjeru ažuriranja tijekom pokretanja aplikacije</sys:String>

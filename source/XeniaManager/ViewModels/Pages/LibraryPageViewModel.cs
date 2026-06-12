@@ -127,6 +127,9 @@ public partial class LibraryPageViewModel : ViewModelBase
         }
     }
 
+    // Drag & Drop overlay
+    [ObservableProperty] private bool _isDragOverlayVisible;
+
     // Search
     [ObservableProperty] private string _searchQuery = string.Empty;
 
@@ -457,7 +460,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                         {
                             // Add the game using fetched GameInfo
                             GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details);
+                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle);
                         }
                         else
                         {
@@ -521,42 +524,19 @@ public partial class LibraryPageViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddGame()
     {
-        // Initialize required variables
-        XeniaVersion xeniaVersion;
+        XeniaVersion? xeniaVersion = await SelectXeniaVersionAsync();
+        if (xeniaVersion == null)
+        {
+            return;
+        }
+
         IStorageProvider? storageProvider;
-
-        // Build file type filter - exclude .zar if ParseGameDetailsWithXenia is disabled
-        List<FilePickerFileType> fileTypeFilters = new List<FilePickerFileType>
-        {
-            new FilePickerFileType("Supported Files")
-            {
-                Patterns = _settings.Settings.General.ParseGameDetailsWithXenia
-                    ? ["*.iso", "*.xex", "*.zar"]
-                    : ["*.iso", "*.xex"]
-            },
-            new FilePickerFileType("All Files")
-            {
-                Patterns = ["*"]
-            }
-        };
-
-        // Create a file picker
-        FilePickerOpenOptions options = new FilePickerOpenOptions
-        {
-            Title = LocalizationHelper.GetText("LibraryPage.Options.AddGame.FilePicker.Title"),
-            AllowMultiple = true,
-            FileTypeFilter = fileTypeFilters
-        };
-
-        // Check if StorageProvider is available
         try
         {
-            // Check if we have StorageProvider
             storageProvider = App.MainWindow?.StorageProvider;
             if (storageProvider == null)
             {
                 Logger.Warning<LibraryPageViewModel>("Storage provider is not available");
-                // TODO: Custom Exception
                 throw new Exception();
             }
         }
@@ -569,7 +549,43 @@ public partial class LibraryPageViewModel : ViewModelBase
             return;
         }
 
-        // Select the correct Xenia version
+        List<FilePickerFileType> fileTypeFilters =
+        [
+            new FilePickerFileType("Supported Files")
+            {
+                Patterns = _settings.Settings.General.ParseGameDetailsWithXenia
+                    ? ["*.iso", "*.xex", "*.zar"]
+                    : ["*.iso", "*.xex"]
+            },
+
+            new FilePickerFileType("All Files")
+            {
+                Patterns = ["*"]
+            }
+        ];
+
+        FilePickerOpenOptions options = new FilePickerOpenOptions
+        {
+            Title = LocalizationHelper.GetText("LibraryPage.Options.AddGame.FilePicker.Title"),
+            AllowMultiple = true,
+            FileTypeFilter = fileTypeFilters
+        };
+
+        IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(options);
+        if (files.Count == 0)
+        {
+            return;
+        }
+
+        await ProcessAndAddGamesAsync(files.Select(f => f.Path.LocalPath).ToList(), xeniaVersion.Value);
+    }
+
+    /// <summary>
+    /// Prompts the user to select a Xenia version from installed versions.
+    /// Returns null if cancelled, no versions available, or an error occurs.
+    /// </summary>
+    private async Task<XeniaVersion?> SelectXeniaVersionAsync()
+    {
         try
         {
             List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
@@ -577,27 +593,22 @@ public partial class LibraryPageViewModel : ViewModelBase
             {
                 case 0:
                     Logger.Error<LibraryPageViewModel>("No Xenia installations found, throwing exception");
-                    // TODO: Custom exception
                     throw new Exception();
                 case 1:
                     Logger.Info<LibraryPageViewModel>($"Only Xenia {installedVersions[0]} is installed");
-                    xeniaVersion = installedVersions[0];
-                    break;
+                    return installedVersions[0];
                 default:
                     XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
                     if (chosen is { } version)
                     {
-                        // User selected a version – proceed
                         Logger.Info<LibraryPageViewModel>($"User selected Xenia {chosen}, proceeding with launch");
-                        xeniaVersion = version;
+                        return version;
                     }
                     else
                     {
-                        // User canceled the selection
                         Logger.Info<LibraryPageViewModel>("Xenia version selection was cancelled by user");
-                        return;
+                        return null;
                     }
-                    break;
             }
         }
         catch (Exception ex)
@@ -606,42 +617,43 @@ public partial class LibraryPageViewModel : ViewModelBase
             Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("LibraryPage.Options.AddGame.MissingXenia.Title"),
                 LocalizationHelper.GetText("LibraryPage.Options.AddGame.MissingXenia.Message"));
-            return;
+            return null;
         }
+    }
 
-        // Open file picker
-        IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(options);
+    /// <summary>
+    /// Processes a list of file paths and adds them as games to the library.
+    /// </summary>
+    private async Task ProcessAndAddGamesAsync(List<string> filePaths, XeniaVersion xeniaVersion)
+    {
         EventManager.Instance.DisableWindow();
 
-        // Add all files
-        foreach (IStorageFile file in files)
+        foreach (string filePath in filePaths)
         {
             try
             {
-                // Skip .zar files if ParseGameDetailsWithXenia is disabled
-                if (!_settings.Settings.General.ParseGameDetailsWithXenia && file.Path.LocalPath.EndsWith(".zar", StringComparison.OrdinalIgnoreCase))
+                if (!_settings.Settings.General.ParseGameDetailsWithXenia && filePath.EndsWith(".zar", StringComparison.OrdinalIgnoreCase))
                 {
-                    Logger.Warning<LibraryPageViewModel>($"Skipping .zar file (ParseGameDetailsWithXenia disabled): {file.Path.LocalPath}");
+                    Logger.Warning<LibraryPageViewModel>($"Skipping .zar file (ParseGameDetailsWithXenia disabled): {filePath}");
                     continue;
                 }
 
-                Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
-                ParsedGameDetails details = GameManager.GetGameDetails(file.Path.LocalPath);
+                Logger.Info<LibraryPageViewModel>($"Selected File: {filePath}");
+                ParsedGameDetails details = GameManager.GetGameDetails(filePath);
 
                 if (!details.IsValid && _settings.Settings.General.ParseGameDetailsWithXenia)
                 {
-                    // Fetching details using Xenia
-                    details = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
+                    details = await GameManager.GetGameDetailsWithXenia(filePath, xeniaVersion);
                 }
 
                 if (!details.IsValid)
                 {
-                    Logger.Warning<LibraryPageViewModel>($"Game details are invalid: {file.Path.LocalPath}");
+                    Logger.Warning<LibraryPageViewModel>($"Game details are invalid: {filePath}");
                     Logger.Debug<LibraryPageViewModel>($"Title: {details.Title}, Game ID: {details.TitleId}, Media ID: {details.MediaId}");
                     EventManager.Instance.EnableWindow();
                     bool confirm = await _messageBoxService.ShowConfirmationAsync(
                         LocalizationHelper.GetText("LibraryPage.Options.AddGame.FailedDetection.Title"),
-                        string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.FailedDetection.Message"), file.Path.LocalPath));
+                        string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.FailedDetection.Message"), filePath));
 
                     if (!confirm)
                     {
@@ -649,13 +661,12 @@ public partial class LibraryPageViewModel : ViewModelBase
                         return;
                     }
 
-                    // Apply fallback title logic
                     EventManager.Instance.DisableWindow();
                     if (details.Title == "Not found" || string.IsNullOrEmpty(details.Title))
                     {
-                        Logger.Warning<LibraryPageViewModel>($"Could not extract game title, using fallback method. Game path: {file.Path.LocalPath}");
-                        string? directoryName = Path.GetFileName(Path.GetDirectoryName(file.Path.LocalPath));
-                        string fileName = Path.GetFileNameWithoutExtension(file.Path.LocalPath);
+                        Logger.Warning<LibraryPageViewModel>($"Could not extract game title, using fallback method. Game path: {filePath}");
+                        string? directoryName = Path.GetFileName(Path.GetDirectoryName(filePath));
+                        string fileName = Path.GetFileNameWithoutExtension(filePath);
                         details.Title = $"{directoryName}\\{fileName}";
                         Logger.Debug<LibraryPageViewModel>($"Applied fallback game title: '{details.Title}'");
                     }
@@ -669,39 +680,49 @@ public partial class LibraryPageViewModel : ViewModelBase
                     await Task.WhenAll(XboxDatabase.SearchDatabase(details.TitleId));
                     if (XboxDatabase.FilteredDatabase.Count == 1)
                     {
-                        // Add the game using fetched GameInfo
                         GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                        await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, details);
+                        await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details, _settings.Settings.General.UseMediaIdForTitle);
                     }
                     else
                     {
-                        // TODO: Open GameDatabaseWindow to allow the user to select the game
-                        // Currently disabled
-                        await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
+                        await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
                     }
                 }
                 catch (HttpRequestException)
                 {
                     Logger.Warning<LibraryPageViewModel>($"Failed to fetch x360db, adding the game as unknown");
-                    await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
                 }
                 catch (TaskCanceledException)
                 {
                     Logger.Warning<LibraryPageViewModel>($"Task canceled while searching database for game {details.TitleId}, adding the game as unknown");
-                    await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
                 }
             }
             catch (Exception ex)
             {
-                Logger.Error<LibraryPageViewModel>($"Failed to add game: {file.Path.LocalPath}");
+                Logger.Error<LibraryPageViewModel>($"Failed to add game: {filePath}");
                 Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
                 EventManager.Instance.EnableWindow();
                 await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Title"),
-                    string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Message"), file.Path.LocalPath, ex));
+                    string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Message"), filePath, ex));
             }
         }
         EventManager.Instance.EnableWindow();
         RefreshLibrary();
+    }
+
+    /// <summary>
+    /// Processes dropped files by first selecting a Xenia version, then adding them to the library.
+    /// </summary>
+    public async Task AddDroppedFilesAsync(List<string> filePaths)
+    {
+        XeniaVersion? xeniaVersion = await SelectXeniaVersionAsync();
+        if (xeniaVersion == null)
+        {
+            return;
+        }
+        await ProcessAndAddGamesAsync(filePaths, xeniaVersion.Value);
     }
 
     [RelayCommand]

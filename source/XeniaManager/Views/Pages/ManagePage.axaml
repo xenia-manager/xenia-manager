@@ -413,7 +413,7 @@
                                                 Icon="Folder"
                                                 ShowIconBackground="True"
                                                 IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
-                                                IsEnabled="{Binding IsAdministrator}"
+                                                IsEnabled="{Binding IsUnifiedContentFolderEnabled}"
                                                 Command="{Binding UnifyContentFolderCommand}" />
                     </StackPanel>
                 </cards:CustomCard>

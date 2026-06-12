@@ -61,6 +61,11 @@ public class HttpClientServiceTests
             Assert.Ignore($"Test skipped because httpbin.org is unavailable (503): {ex.Message}");
             return;
         }
+        catch (TimeoutException)
+        {
+            Assert.Ignore("Test skipped because httpbin.org timed out");
+            return;
+        }
 
         // Assert
         Assert.That(response, Is.Not.Null);
@@ -83,6 +88,11 @@ public class HttpClientServiceTests
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.ServiceUnavailable)
         {
             Assert.Ignore($"Test skipped because httpbin.org is unavailable (503): {ex.Message}");
+            return;
+        }
+        catch (TimeoutException)
+        {
+            Assert.Ignore("Test skipped because httpbin.org timed out");
             return;
         }
 

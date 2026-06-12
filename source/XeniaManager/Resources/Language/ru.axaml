@@ -128,7 +128,7 @@
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
-    
+
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Сыграно: </sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Не запускалась</sys:String>
@@ -207,8 +207,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Профили отсутствуют</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Нет профилей, чтобы включить автобэкап сохранений.&#10;Сначала создайте или импортируйте профиль.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Общая папка для игровых данных</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Все версии Xenia будут использовать одну и ту же папку для игровых данных (папка Content)</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">Примечание: для изменения необходимо запустить Xenia Manager с правами администратора</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Требуются права администратора</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Это действие требует прав администратора.&#10;Перезапустите Xenia Manager от имени администратора.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Отдельные папки для игровых данных</sys:String>
@@ -313,6 +313,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Парсинг информации о игре с помощью Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Автоматический парсинг игровых данных с помощью эмулятора Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Включите эту опцию, если у вас возникают проблемы с обнаружением игр или получением информации о них</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Проверка наличия обновлений при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Автоматическая проверка обновлений Xenia и Xenia Manager при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Отключите эту опцию, чтобы пропускать проверку обновлений при запуске программы</sys:String>
