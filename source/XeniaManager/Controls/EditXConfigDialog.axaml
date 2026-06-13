@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
+             x:Class="XeniaManager.Controls.EditXConfigDialog"
+             x:DataType="vm:EditXConfigDialogViewModel"
+             Width="500">
+    <Grid RowDefinitions="Auto,*">
+        <!-- XConfig Settings Edit Section -->
+        <cards:CustomCard Grid.Row="1"
+                          Margin="0,16,0,0"
+                          HorizontalAlignment="Stretch">
+            <StackPanel Spacing="8"
+                        HorizontalAlignment="Stretch">
+                <!-- Resolution Selection -->
+                <cards:ComboBoxCard Title="{DynamicResource EditXConfigDialog.Edit.Resolution.Label}"
+                                    ItemsSource="{Binding Resolutions}"
+                                    SelectedIndex="{Binding SelectedResolutionIndex, Mode=TwoWay}"
+                                    Icon="Settings"
+                                    ShowIconBackground="True"
+                                    ComboBoxMinWidth="180"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" />
+
+                <!-- Language Selection -->
+                <cards:ComboBoxCard Title="{DynamicResource EditXConfigDialog.Edit.Language.Label}"
+                                    ItemsSource="{Binding Languages}"
+                                    SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"
+                                    Icon="Translate"
+                                    ShowIconBackground="True"
+                                    ComboBoxMinWidth="180"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" />
+
+                <!-- Online Country Selection -->
+                <cards:ComboBoxCard Title="{DynamicResource EditXConfigDialog.Edit.Country.Label}"
+                                    ItemsSource="{Binding Countries}"
+                                    SelectedIndex="{Binding SelectedCountryIndex, Mode=TwoWay}"
+                                    Icon="Globe"
+                                    ShowIconBackground="True"
+                                    ComboBoxMinWidth="180"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" />
+
+                <!-- Default Profile Selection -->
+                <cards:ComboBoxCard Title="{DynamicResource EditXConfigDialog.Edit.DefaultProfile.Label}"
+                                    ItemsSource="{Binding Profiles}"
+                                    SelectedIndex="{Binding SelectedProfileIndex, Mode=TwoWay}"
+                                    Icon="Person"
+                                    ShowIconBackground="True"
+                                    ComboBoxMinWidth="180"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" />
+            </StackPanel>
+        </cards:CustomCard>
+    </Grid>
+</UserControl>

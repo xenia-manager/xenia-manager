@@ -377,6 +377,21 @@
                             </cards:CardHeader>
                         </cards:CustomCard>
 
+                        <!-- Edit XConfig Settings -->
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.EditXConfig.Title}"
+                                              Description="{DynamicResource ManagePage.Content.EditXConfig.Description}"
+                                              Icon="Settings"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Content="{DynamicResource ManagePage.EditXConfig.Button}"
+                                            Command="{Binding EditXConfigCommand}">
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
+
                         <!-- Automatic Save Backup -->
                         <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
                             <cards:CardHeader Title="{DynamicResource ManagePage.Content.AutomaticSaveBackup.Title}"

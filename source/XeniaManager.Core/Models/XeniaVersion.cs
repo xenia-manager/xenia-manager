@@ -51,6 +51,7 @@ public sealed class XeniaVersionInfo
     public string ConfigLocation { get; }
     public string DefaultConfigLocation { get; }
     public string? BindingsLocation { get; }
+    public string XConfigLocation { get; }
 
     private XeniaVersionInfo(XeniaPaths paths)
     {
@@ -70,6 +71,7 @@ public sealed class XeniaVersionInfo
         ConfigLocation = paths.ConfigLocation;
         DefaultConfigLocation = paths.DefaultConfigLocation;
         BindingsLocation = paths.BindingsLocation;
+        XConfigLocation = paths.XConfigLocation;
     }
 
     public static XeniaVersionInfo GetXeniaVersionInfo(XeniaVersion version)

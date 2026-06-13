@@ -90,6 +90,12 @@ public sealed class XeniaPaths
     public string? BindingsLocation { get; }
 
     /// <summary>
+    /// Gets the path to the XConfig settings file for this Xenia variant.
+    /// Format: "{EmulatorDir}/xconfig.settings"
+    /// </summary>
+    public string XConfigLocation { get; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="XeniaPaths"/> class with the specified parameters.
     /// </summary>
     /// <param name="name">The display name of the Xenia variant.</param>
@@ -118,6 +124,8 @@ public sealed class XeniaPaths
         BindingsLocation = bindingsName != null
             ? Path.Combine(EmulatorDir, bindingsName)
             : null;
+
+        XConfigLocation = Path.Combine(EmulatorDir, "xconfig.settings");
     }
 
     /// <summary>
