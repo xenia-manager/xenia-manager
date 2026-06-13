@@ -305,11 +305,27 @@ public class GameManager
                     };
                 }
 
-                // Unsupported file types
+                // ZAR archives
                 case FileSignature.ZAR:
                 {
-                    Logger.Warning<GameManager>($"ZAR archives are not supported: {gamePath}");
-                    return new ParsedGameDetails();
+                    Logger.Info<GameManager>($"Detected ZAR archive, parsing: {gamePath}");
+                    using ZarFile zar = ZarFile.Load(gamePath);
+                    if (!zar.IsValid || zar.XexFile == null)
+                    {
+                        Logger.Warning<GameManager>($"ZAR archive is invalid or default.xex could not be parsed: {zar.ValidationError}");
+                        return new ParsedGameDetails();
+                    }
+
+                    string title = Path.GetFileNameWithoutExtension(gamePath);
+                    string titleId = zar.XexFile.TitleId;
+                    string mediaId = zar.XexFile.MediaId;
+                    Logger.Info<GameManager>($"ZAR archive parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
+                    return new ParsedGameDetails
+                    {
+                        Title = title,
+                        TitleId = titleId,
+                        MediaId = mediaId
+                    };
                 }
 
                 default:
@@ -804,18 +820,17 @@ public class GameManager
     /// - For other types (ISO, ZAR, STFS): continues scanning subdirectories
     /// Supported file types:
     /// 1. ISO files (.iso, .xiso)
-    /// 2. ZAR archives (.zar) - only if scanZarFiles is true
+    /// 2. ZAR archives (.zar)
     /// 3. XEX files (.xex) - Finding any XEX stops subdirectory scanning (unless there is a "content" folder, that folder will be scanned as well)
     /// 4. STFS files (CON, LIVE, PIRS - detected by header)
     /// </summary>
     /// <param name="directoryPath">The root directory to scan for games.</param>
-    /// <param name="scanZarFiles">Whether to scan for .zar files. Defaults to true.</param>
     /// <param name="cancellationToken">Optional cancellation token to cancel the scan operation.</param>
     /// <param name="progressReporter">
     /// Optional progress reporter callback: (statusMessage, currentDirectory, directoriesScanned, gameFilesFound, progressPercentage)
     /// </param>
     /// <returns>A list of all game file paths found in the directory tree.</returns>
-    public static List<string> DiscoverGameFiles(string directoryPath, bool scanZarFiles = true,
+    public static List<string> DiscoverGameFiles(string directoryPath,
         CancellationToken cancellationToken = default, Action<string, string, int, int, int>? progressReporter = null)
     {
         List<string> gameFiles = [];
@@ -885,12 +900,9 @@ public class GameManager
                             break;
 
                         case FileSignature.ZAR:
-                            if (scanZarFiles)
-                            {
-                                Logger.Trace<GameManager>($"Found ZAR archive: {file}");
-                                gameFiles.Add(file);
-                                filesFoundHere++;
-                            }
+                            Logger.Trace<GameManager>($"Found ZAR archive: {file}");
+                            gameFiles.Add(file);
+                            filesFoundHere++;
                             break;
 
                         case FileSignature.XEX1:
