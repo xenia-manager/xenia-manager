@@ -128,7 +128,7 @@
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">已成功从库中移除 {0} 个无效游戏。</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">移除游戏失败</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">移除无效游戏时发生错误。&#10;{0}</sys:String>
-    
+
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">游戏时间：</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">从未玩过</sys:String>
@@ -226,6 +226,11 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">管理配置文件</sys:String>
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">允许用户修改 Xenia 配置文件</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">管理</sys:String>
+
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">#NOTTRANSLATED#</sys:String>
+
     <sys:String x:Key="ManagePage.Content.Install.Title">安装内容</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">为 Xenia 安装 DLC、更新及其他内容</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Button">安装内容</sys:String>
@@ -624,6 +629,18 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Title">配置文件已保存</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">已成功保存 {1} 个配置文件中的 {0} 个。</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">保存失败</sys:String>
+
+    <!-- Edit XConfig Dialog -->
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia 版本选择对话框</sys:String>
@@ -1187,6 +1204,7 @@
     <sys:String x:Key="AboutPage.GithubButton.ToolTip">打开 Xenia Manager 的 GitHub 仓库</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">有新版本的 Xenia Manager 可用。</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">您当前使用的是最新版本的 Xenia Manager。</sys:String>
+
     <!-- Library Page - Drag & Drop -->
     <sys:String x:Key="LibraryPage.DragDrop.Title">将文件拖放至此处来添加游戏</sys:String>
     <sys:String x:Key="LibraryPage.DragDrop.Subtitle">支持 .iso、.xex、.zar 文件</sys:String>

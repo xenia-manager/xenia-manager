@@ -226,6 +226,11 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">Gerenciar Perfis</sys:String>
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Permite que o usuário modifique os perfis do Xenia</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">Gerenciar</sys:String>
+
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">#NOTTRANSLATED#</sys:String>
+
     <sys:String x:Key="ManagePage.Content.Install.Title">Instalar Conteúdo</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Instalar DLCs, atualizações e outros conteúdos para o Xenia</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Button">Instalar Conteúdo</sys:String>
@@ -624,6 +629,18 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Title">Perfis Salvos</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">{0} de {1} perfil(is) salvo(s) com sucesso.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Falha ao Salvar</sys:String>
+
+    <!-- Edit XConfig Dialog -->
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Diálogo de Seleção do Xenia</sys:String>
@@ -1187,4 +1204,8 @@
     <sys:String x:Key="AboutPage.GithubButton.ToolTip">Abre o repositório GitHub do Xenia Manager</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">Há uma versão mais recente do Xenia Manager disponível.</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">Você está usando a versão mais recente do Xenia Manager.</sys:String>
+
+    <!-- Library Page - Drag & Drop -->
+    <sys:String x:Key="LibraryPage.DragDrop.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>

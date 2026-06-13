@@ -226,6 +226,11 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">Upravljanje profilima</sys:String>
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Omogućuje izmjenu Xenia profila</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">Upravljaj</sys:String>
+
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">Uredi postavke nadzorne ploče</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Uredi postavke Xbox 360 nadzorne ploče (rezolucija, jezik, država, zadani profil)</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">Uredi</sys:String>
+
     <sys:String x:Key="ManagePage.Content.Install.Title">Instaliraj sadržaj</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Instalirajte DLC, ažuriranja i ostali sadržaj za Xenia</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Button">Instaliraj sadržaj</sys:String>
@@ -624,6 +629,18 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Title">Profili spremljeni</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">Uspješno spremljeno {0} od {1} profila.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Spremanje nije uspjelo</sys:String>
+
+    <!-- Edit XConfig Dialog -->
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">Uredi postavke nadzorne ploče</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">Spremi</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">Odustani</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">Rezolucija</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">Jezik</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">Zemlja</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">Zadani profil</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">Spremanje nije uspjelo</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">Nije moguće učitati datoteku xconfig.settings.</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">Nije pronađena datoteka xconfig.settings ni za jednu instaliranu verziju Xenije.</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Odabir verzije Xenia emulatora</sys:String>
