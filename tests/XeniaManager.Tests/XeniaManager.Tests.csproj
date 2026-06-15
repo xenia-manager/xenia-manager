@@ -76,6 +76,9 @@
       <None Update="Assets\Patches\TestPatchFile.patch.toml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Assets\TestXConfig.settings">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

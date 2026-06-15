@@ -25,5 +25,8 @@
       <Compile Update="Controls\WelcomeDialog.axaml.cs">
         <DependentUpon>WelcomeDialog.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Controls\EditXConfigDialog.axaml.cs">
+        <DependentUpon>EditXConfigDialog.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

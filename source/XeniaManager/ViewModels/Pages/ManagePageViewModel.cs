@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
@@ -1224,6 +1225,87 @@ public partial class ManagePageViewModel : ViewModelBase
         finally
         {
             LoadAllProfiles();
+        }
+    }
+
+    /// <summary>
+    /// Opens the Edit XConfig dialog for the selected Xenia version.
+    /// Filters installed versions to only those with an existing XConfig file,
+    /// then loads the XConfig and available profiles before showing the editing dialog.
+    /// </summary>
+    [RelayCommand]
+    private async Task EditXConfig()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing XConfig editing");
+
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+
+            if (installedVersions.Count == 0)
+            {
+                Logger.Warning<ManagePageViewModel>("No Xenia versions installed");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.Install.NoEmulator.Title"),
+                    LocalizationHelper.GetText("ManagePage.Content.Install.NoEmulator.Message"));
+                return;
+            }
+
+            List<XeniaVersion> versionsWithXConfig = installedVersions
+                .Where(XConfigManager.XConfigExists)
+                .ToList();
+
+            if (versionsWithXConfig.Count == 0)
+            {
+                Logger.Warning<ManagePageViewModel>("No Xenia versions have xconfig.settings");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("EditXConfigDialog.ContentDialog.Title"),
+                    LocalizationHelper.GetText("EditXConfigDialog.NoXConfigFound.Message"));
+                return;
+            }
+
+            XeniaVersion selectedVersion;
+
+            if (versionsWithXConfig.Count > 1)
+            {
+                Logger.Info<ManagePageViewModel>($"Multiple Xenia versions with XConfig: {versionsWithXConfig.Count}");
+                XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(versionsWithXConfig);
+
+                if (chosen == null)
+                {
+                    Logger.Info<ManagePageViewModel>("User canceled Xenia version selection");
+                    return;
+                }
+
+                selectedVersion = chosen.Value;
+                Logger.Info<ManagePageViewModel>($"User selected Xenia version: {selectedVersion}");
+            }
+            else
+            {
+                selectedVersion = versionsWithXConfig.First();
+                Logger.Info<ManagePageViewModel>($"Using single Xenia version with XConfig: {selectedVersion}");
+            }
+
+            XConfigFile? xconfig = XConfigManager.LoadXConfig(selectedVersion);
+            if (xconfig == null)
+            {
+                Logger.Error<ManagePageViewModel>("Failed to load XConfig file");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("EditXConfigDialog.Save.Failed.Title"),
+                    LocalizationHelper.GetText("EditXConfigDialog.LoadFailed.Message"));
+                return;
+            }
+
+            List<AccountInfo> profiles = ProfileManager.LoadProfiles(selectedVersion);
+            await EditXConfigDialog.ShowAsync(xconfig, profiles, selectedVersion);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to edit XConfig");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("EditXConfigDialog.Save.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Message"), ex.Message));
         }
     }
 

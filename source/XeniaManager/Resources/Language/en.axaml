@@ -226,6 +226,11 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">Manage Profiles</sys:String>
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Allows the user to modify Xenia Profiles</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">Manage</sys:String>
+
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">Edit XConfig Settings</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Edit Xbox 360 dashboard settings (resolution, language, country, default profile)</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">Edit</sys:String>
+
     <sys:String x:Key="ManagePage.Content.Install.Title">Install Content</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Install DLC, updates, and other content for Xenia</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Button">Install Content</sys:String>
@@ -624,6 +629,18 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Title">Profiles Saved</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">Successfully saved {0} out of {1} profile(s).</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Save Failed</sys:String>
+
+    <!-- Edit XConfig Dialog -->
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">Edit XConfig Settings</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">Save</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">Resolution</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">Language</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">Online Country</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">Default Profile</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">Save Failed</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">Failed to load xconfig.settings file.</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">No xconfig.settings file found for any installed Xenia version.</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>
