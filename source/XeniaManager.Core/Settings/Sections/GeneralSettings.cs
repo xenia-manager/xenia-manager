@@ -17,7 +17,7 @@ public class GeneralSettings
     /// Whether to parse game details with Xenia emulator
     /// </summary>
     [JsonPropertyName("parse_game_details_with_xenia")]
-    public bool ParseGameDetailsWithXenia { get; set; } = true;
+    public bool ParseGameDetailsWithXenia { get; set; } = false;
 
     /// <summary>
     /// Whether to use MediaId from game files to find a matching media entry title
