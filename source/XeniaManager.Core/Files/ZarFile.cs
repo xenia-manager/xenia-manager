@@ -31,6 +31,8 @@ public sealed class ZarFile : IDisposable
     private readonly byte[] _nameTable;
     private readonly List<FileDirectoryEntry> _fileTree;
     private readonly ulong _compressedDataOffset;
+    private List<DirEntry>? _files;
+    private List<DirEntry>? _entries;
 
     /// <summary>
     /// Gets the parsed XEX file from the archive's default.xex.
@@ -53,6 +55,41 @@ public sealed class ZarFile : IDisposable
     /// Gets the path to the ZAR archive file.
     /// </summary>
     public string FilePath { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Gets a flat list of all files in the archive with their full paths and sizes.
+    /// Lazily computed and cached on first access.
+    /// </summary>
+    public IReadOnlyList<DirEntry> Files
+    {
+        get
+        {
+            if (_files == null)
+            {
+                _files = new List<DirEntry>();
+                CollectFiles(0, string.Empty, _files);
+            }
+            return _files;
+        }
+    }
+
+    /// <summary>
+    /// Gets a flat list of all entries (files and directories) in the archive
+    /// with their full paths and sizes. Directories have IsFile = false and Size = 0.
+    /// Lazily computed and cached on first access.
+    /// </summary>
+    public IReadOnlyList<DirEntry> Entries
+    {
+        get
+        {
+            if (_entries == null)
+            {
+                _entries = new List<DirEntry>();
+                CollectEntries(0, string.Empty, _entries);
+            }
+            return _entries;
+        }
+    }
 
     /// <summary>
     /// Private constructor to enforce factory methods.
@@ -368,6 +405,74 @@ public sealed class ZarFile : IDisposable
         }
 
         return entries;
+    }
+
+    /// <summary>
+    /// Recursively collects all file entries under a node into the results list.
+    /// </summary>
+    private void CollectFiles(uint nodeIdx, string currentPath, List<DirEntry> results)
+    {
+        FileDirectoryEntry entry = _fileTree[(int)nodeIdx];
+        if (entry.IsFile)
+        {
+            results.Add(new DirEntry
+            {
+                Name = currentPath,
+                IsFile = true,
+                Size = entry.GetFileSize()
+            });
+        }
+        else
+        {
+            uint start = entry.NodeStartIndex;
+            uint end = start + entry.Count;
+            for (uint i = start; i < end; i++)
+            {
+                FileDirectoryEntry child = _fileTree[(int)i];
+                string name = ReadName(child.NameOffset);
+                string childPath = string.IsNullOrEmpty(currentPath) ? name : $"{currentPath}/{name}";
+                CollectFiles(i, childPath, results);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Recursively collects all entries (files and directories) under a node into the results list.
+    /// </summary>
+    private void CollectEntries(uint nodeIdx, string currentPath, List<DirEntry> results)
+    {
+        FileDirectoryEntry entry = _fileTree[(int)nodeIdx];
+        if (entry.IsFile)
+        {
+            results.Add(new DirEntry
+            {
+                Name = currentPath,
+                IsFile = true,
+                Size = entry.GetFileSize()
+            });
+        }
+        else
+        {
+            uint start = entry.NodeStartIndex;
+            uint end = start + entry.Count;
+
+            for (uint i = start; i < end; i++)
+            {
+                FileDirectoryEntry child = _fileTree[(int)i];
+                string name = ReadName(child.NameOffset);
+                string childPath = string.IsNullOrEmpty(currentPath) ? name : $"{currentPath}/{name}";
+                results.Add(new DirEntry
+                {
+                    Name = childPath,
+                    IsFile = child.IsFile,
+                    Size = child.IsFile ? child.GetFileSize() : 0
+                });
+                if (!child.IsFile)
+                {
+                    CollectEntries(i, childPath, results);
+                }
+            }
+        }
     }
 
     /// <summary>

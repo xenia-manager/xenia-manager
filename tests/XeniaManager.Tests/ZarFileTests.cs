@@ -16,7 +16,6 @@ public class ZarFileTests
     {
         string assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         _assetsFolder = Path.Combine(assemblyLocation, "Assets");
-        _testZarPath = @"E:\Games\Roms\Xbox 360\Serious Sam Collection\Serious Sam Collection.zar";
     }
 
     /// <summary>
