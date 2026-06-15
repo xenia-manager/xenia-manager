@@ -358,10 +358,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             string folderPath = selectedFolder[0].Path.LocalPath;
             Logger.Info<LibraryPageViewModel>($"User selected folder: {folderPath}");
 
-            // Scan the directory with the progress dialog Disable
-            // .zar file scanning if ParseGameDetailsWithXenia is disabled
-            bool scanZarFiles = _settings.Settings.General.ParseGameDetailsWithXenia;
-
+            // Scan the directory with the progress dialog
             List<string> discoveredGameFiles;
             bool scanCancelled;
 
@@ -373,7 +370,6 @@ public partial class LibraryPageViewModel : ViewModelBase
                     return await Task.Run(() =>
                         GameManager.DiscoverGameFiles(
                             folderPath,
-                            scanZarFiles,
                             cancellationToken,
                             progressReporter), cancellationToken);
                 });
@@ -553,9 +549,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         [
             new FilePickerFileType("Supported Files")
             {
-                Patterns = _settings.Settings.General.ParseGameDetailsWithXenia
-                    ? ["*.iso", "*.xex", "*.zar"]
-                    : ["*.iso", "*.xex"]
+                Patterns = ["*.iso", "*.xex", "*.zar"]
             },
 
             new FilePickerFileType("All Files")
@@ -632,12 +626,6 @@ public partial class LibraryPageViewModel : ViewModelBase
         {
             try
             {
-                if (!_settings.Settings.General.ParseGameDetailsWithXenia && filePath.EndsWith(".zar", StringComparison.OrdinalIgnoreCase))
-                {
-                    Logger.Warning<LibraryPageViewModel>($"Skipping .zar file (ParseGameDetailsWithXenia disabled): {filePath}");
-                    continue;
-                }
-
                 Logger.Info<LibraryPageViewModel>($"Selected File: {filePath}");
                 ParsedGameDetails details = GameManager.GetGameDetails(filePath);
 

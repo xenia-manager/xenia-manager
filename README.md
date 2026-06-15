@@ -111,8 +111,8 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 - [FluentAvalonia](https://github.com/amwx/FluentAvalonia/) – Fluent Design controls for Avalonia
 - [FluentIcons](https://github.com/davidxuang/FluentIcons) – Fluent Design icon library
 - [NLog](https://github.com/NLog/NLog) – logging and diagnostics
-- [Tomlyn](https://github.com/xoofx/Tomlyn) – TOML parser/writer
 - [SharpCompress](https://github.com/adamhathcock/sharpcompress) – archive compression handling
+- [ZstdSharp.Port](https://github.com/oleg-st/ZstdSharp) – Zstandard compression for .NET
 
 ---
 
