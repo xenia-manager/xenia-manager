@@ -1,6 +1,7 @@
 using System.Reflection;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Tests;
 
@@ -9,17 +10,48 @@ public class BindingsFileTests
 {
     private string _assetsFolder = string.Empty;
     private string _testBindingsFilePath = string.Empty;
+    private string _localFilePath = string.Empty;
+
+    private const string RemoteBindingsUrl =
+        "https://raw.githubusercontent.com/marinesciencedude/xenia-canary-mousehook/refs/heads/mousehook/bindings.ini";
 
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
         // Get the path to the Assets directory
         string assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         _assetsFolder = Path.Combine(assemblyLocation, "Assets");
-        _testBindingsFilePath = Path.Combine(_assetsFolder, "TestBindingsFile.ini");
+        _localFilePath = Path.Combine(_assetsFolder, "TestBindingsFile.ini");
+
+        // Try to fetch the bindings file from the remote repository
+        try
+        {
+            using HttpClientService client = new HttpClientService();
+            string content = await client.GetAsync(RemoteBindingsUrl);
+
+            // Write to a temp file and use that
+            string tempPath = Path.Combine(Path.GetTempPath(), $"bindings_{Guid.NewGuid()}.ini");
+            await File.WriteAllTextAsync(tempPath, content);
+            _testBindingsFilePath = tempPath;
+        }
+        catch
+        {
+            // Remote fetch failed, fall back to the local test asset
+            _testBindingsFilePath = _localFilePath;
+        }
 
         // Verify the test file exists
         Assert.That(File.Exists(_testBindingsFilePath), Is.True, $"Test bindings file does not exist at {_testBindingsFilePath}");
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Clean up temp file if one was created from remote fetch
+        if (_testBindingsFilePath != _localFilePath && File.Exists(_testBindingsFilePath))
+        {
+            File.Delete(_testBindingsFilePath);
+        }
     }
 
     #region Load Tests
