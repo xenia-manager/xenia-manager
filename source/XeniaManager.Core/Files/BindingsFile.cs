@@ -380,20 +380,17 @@ public class BindingsFile
         }
         else
         {
-            // No ; comment separator found
-            // Check if the value contains spaces - if so, it's a comment, not a binding
-            // Valid binding values are single tokens (e.g., "weapon10", "LS-Up", "Start")
-            // This handles cases like: "; = weapon10 will reload weapons independently..."
-            if (valueAndComment.Contains(' '))
+            // Semicolon key with multi-word value is a comment, not a binding.
+            // e.g. "; = weapon10 will reload weapons independently..." is a comment.
+            // Regular keys can have multi-word values like "Y + RT" (combo bindings).
+            if (key == ";" && valueAndComment.Contains(' '))
             {
-                // Value contains spaces, so this is a comment line, not a valid binding
+                // Value contains ; & spaces, so this is a comment line, not a valid binding
                 // Skip this entry
                 return;
             }
-            else
-            {
-                valuePart = valueAndComment;
-            }
+
+            valuePart = valueAndComment;
         }
 
         currentEntry = section.AddEntry(key, valuePart, inlineComment, isCommented);

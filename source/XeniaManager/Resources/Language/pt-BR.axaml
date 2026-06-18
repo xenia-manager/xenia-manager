@@ -757,6 +757,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Falha ao salvar</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">A tecla não pode ser "Nenhuma" para a vinculação "{0}". Selecione uma tecla válida.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">O valor não pode ser "Nenhum" para a vinculação "{0}". Selecione uma entrada de controle válida.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">#NOTTRANSLATED#</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Redefinir Configurações</sys:String>
@@ -1197,6 +1200,8 @@
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Análise de detalhes de jogos</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Manipulação de arquivos e compressão</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Este aplicativo não é afiliado, endossado ou patrocinado pela Microsoft Corporation ou pelo Projeto Xenia de forma alguma. Todas as marcas registradas, logotipos e nomes de marcas são propriedade de seus respectivos proprietários. "Xbox 360 é uma marca registrada da Microsoft Corporation nos Estados Unidos e/ou em outros países." "Xenia é uma marca registrada do Projeto Xenia." Quaisquer referências a essas ou outras marcas registradas são feitas exclusivamente com o objetivo de identificar compatibilidade ou funcionalidade e não implicam qualquer associação ou endosso pelos detentores das marcas registradas. "Este software destina-se apenas a fins educacionais e informativos." Este software não contém nem distribui qualquer conteúdo protegido por direitos autorais pertencente à Microsoft Corporation ou a terceiros. Os usuários são os únicos responsáveis ​​por garantir que o uso deste software esteja em conformidade com todas as leis aplicáveis, incluindo leis de direitos autorais e de licenciamento. Qualquer uso deste aplicativo para executar ou interagir com software ou firmware proprietário deve ser realizado com a devida autorização dentro dos limites dos contratos de licença de usuário final (EULAs) relevantes. Os desenvolvedores e distribuidores deste aplicativo não toleram nem apoiam a pirataria de nenhuma forma. Este aplicativo é fornecido "como está", sem garantia de qualquer tipo, expressa ou implícita. Use por sua conta e risco.</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">Usar versão experimental</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">Ative para receber atualizações de recursos experimentais e acesso antecipado a novos recursos</sys:String>

@@ -772,10 +772,9 @@ key = value
     }
 
     [Test]
-    public void FromString_EntryWithValueContainingSpaces_TreatedAsComment()
+    public void FromString_EntryWithValueContainingSpaces_ParsesCorrectly()
     {
-        // Arrange - binding values should be single tokens
-        // Values with multiple words are treated as comments (not valid bindings)
+        // Arrange - combo bindings like "Y + RT" have spaces in the value
         string bindingsContent = @"
 [Section1]
 key = value with spaces
@@ -784,10 +783,11 @@ key = value with spaces
         // Act
         BindingsFile bindingsFile = BindingsFile.FromString(bindingsContent);
 
-        // Assert - no entry should be created because the value has multiple words
+        // Assert - entry is parsed with the full multi-word value
         BindingsSection? section = bindingsFile.GetSection("Section1");
         Assert.That(section, Is.Not.Null);
-        Assert.That(section.Entries, Is.Empty);
+        Assert.That(section.Entries, Has.Count.EqualTo(1));
+        Assert.That(section.GetValue<string>("key"), Is.EqualTo("value with spaces"));
     }
 
     [Test]

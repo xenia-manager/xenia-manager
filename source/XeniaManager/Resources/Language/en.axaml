@@ -757,6 +757,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Save Failed</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Key cannot be "None" for binding "{0}". Please select a valid key.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Value cannot be "None" for binding "{0}". Please select a valid controller input.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">Multibind</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">Select bindings to combine:</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">Apply</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Reset Settings</sys:String>

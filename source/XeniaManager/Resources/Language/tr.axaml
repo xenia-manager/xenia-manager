@@ -757,6 +757,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Kaydetme Başarısız</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">"{0}" tuş ataması için tuş "Hiçbiri" olamaz. Lütfen geçerli bir tuş seçin.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">"{0}" tuş ataması için değer "Hiçbiri" olamaz. Lütfen geçerli bir kontrolcü girişi seçin.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">#NOTTRANSLATED#</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Ayarları Sıfırla</sys:String>
@@ -1197,6 +1200,8 @@
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Oyun bilgilerinin ayrıştırılması</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Arşiv ve sıkıştırma işlemleri</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Bu uygulama, Microsoft Corporation veya Xenia Project ile hiçbir şekilde bağlantılı değildir, onlar tarafından desteklenmemekte veya sponsorluğu yapılmamaktadır. Tüm ticari markalar, logolar ve marka adları ilgili sahiplerinin mülkiyetindedir.&#10;Xbox 360, Microsoft Corporation'ın Amerika Birleşik Devletleri ve/veya diğer ülkelerdeki tescilli ticari markasıdır.&#10;Xenia, Xenia Project'in tescilli ticari markasıdır.&#10;Bu ve diğer ticari markalara yapılan tüm atıflar yalnızca uyumluluk veya işlevselliği belirtmek amacıyla yapılmıştır ve ticari marka sahipleriyle herhangi bir bağlantı ya da onlar tarafından onaylandığı anlamına gelmez.&#10;Bu yazılım yalnızca eğitim ve bilgilendirme amaçlıdır. Microsoft Corporation'a veya herhangi bir üçüncü tarafa ait telif hakkıyla korunan içerikleri içermez ya da dağıtmaz. Kullanıcılar, bu yazılımı kullanımlarının telif hakkı ve lisans yasaları da dahil olmak üzere yürürlükteki tüm yasalara uygun olmasını sağlamaktan tamamen sorumludur.&#10;Bu uygulamanın tescilli yazılım veya ürün yazılımı (firmware) çalıştırmak ya da bunlarla etkileşim kurmak amacıyla kullanılması, ilgili Son Kullanıcı Lisans Sözleşmelerinin (EULA) sınırları içinde gerçekleştirilmelidir. Bu uygulamanın geliştiricileri ve dağıtıcıları hiçbir şekilde korsanlığı desteklemez veya teşvik etmez.&#10;Bu uygulama, açık veya zımni hiçbir garanti verilmeden "olduğu gibi" sunulmaktadır. Kullanım riski tamamen size aittir.</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">Deneysel Sürümü Kullan</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">Deneysel özellik güncellemelerini almak ve yeni özelliklere erken erişmek için etkinleştirin</sys:String>

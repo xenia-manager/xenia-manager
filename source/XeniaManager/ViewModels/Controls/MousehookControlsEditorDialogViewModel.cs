@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Core.Extensions;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Bindings;
@@ -77,6 +78,13 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
     /// Gets the list of available XInput bindings for the value combobox.
     /// </summary>
     public ObservableCollection<string> AvailableValues { get; } = [];
+
+    /// <summary>
+    /// Entries to show in the multibind popup checklist.
+    /// </summary>
+    public ObservableCollection<BindingsOptionItem> MultibindOptions { get; } = [];
+
+    private BindingsEntryViewModel? _multibindTargetEntry;
 
     public MousehookControlsEditorDialogViewModel(BindingsFile bindingsFile, List<BindingsSection> gameBindingsSections)
     {
@@ -173,6 +181,17 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
             return;
         }
 
+        // Seed AvailableValues with any entry values not already in the list,
+        // so combo values like "Y + RT" appear as pickable options.
+        foreach (BindingsEntry entry in _currentSection.Entries)
+        {
+            string? valueStr = entry.Value?.ToString();
+            if (!string.IsNullOrEmpty(valueStr) && !AvailableValues.Contains(valueStr))
+            {
+                AvailableValues.Add(valueStr);
+            }
+        }
+
         int index = 0;
         foreach (BindingsEntry entry in _currentSection.Entries)
         {
@@ -241,6 +260,59 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
         OnPropertyChanged(nameof(EntriesCountText));
 
         Logger.Info<MousehookControlsEditorDialogViewModel>($"Added new entry to section: {_currentSection.Name}");
+    }
+
+    /// <summary>
+    /// Opens the multibind popup for the specified entry.
+    /// </summary>
+    [RelayCommand]
+    private void ShowMultibindPopup(BindingsEntryViewModel? entry)
+    {
+        if (entry == null)
+        {
+            return;
+        }
+
+        _multibindTargetEntry = entry;
+
+        MultibindOptions.Clear();
+        HashSet<string> checkedItems = (entry.Value)
+            .Split(['+'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(s => s.Trim())
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        foreach (XInputBinding binding in Enum.GetValues<XInputBinding>())
+        {
+            string name = binding.ToBindingString();
+            MultibindOptions.Add(new BindingsOptionItem(name, checkedItems.Contains(name)));
+        }
+
+        Logger.Debug<MousehookControlsEditorDialogViewModel>($"Opened multibind popup for entry: {entry.Key}");
+    }
+
+    /// <summary>
+    /// Applies the multibind selection to the target entry.
+    /// </summary>
+    [RelayCommand]
+    private void ApplyMultibindSelection()
+    {
+        if (_multibindTargetEntry == null)
+        {
+            return;
+        }
+
+        string newValue = string.Join(" + ", MultibindOptions
+            .Where(o => o.IsChecked)
+            .Select(o => o.Name));
+
+        if (!string.IsNullOrEmpty(newValue) && !AvailableValues.Contains(newValue))
+        {
+            AvailableValues.Add(newValue);
+        }
+
+        _multibindTargetEntry.Value = newValue;
+
+        Logger.Info<MousehookControlsEditorDialogViewModel>($"Applied multibind: {_multibindTargetEntry.Key} = {newValue}");
     }
 
     /// <summary>

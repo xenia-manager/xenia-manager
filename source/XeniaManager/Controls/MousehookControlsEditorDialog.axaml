@@ -83,7 +83,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Padding="12,8" Margin="4,2">
-                                    <Grid ColumnDefinitions="Auto,*,*,Auto,Auto">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,Auto">
                                         <!-- Comment CheckBox -->
                                         <CheckBox Grid.Column="0"
                                                   IsChecked="{Binding IsCommented, Mode=TwoWay}"
@@ -95,7 +95,7 @@
                                         <!-- Value ComboBox -->
                                         <ComboBox Grid.Column="1"
                                                   ItemsSource="{Binding Parent.AvailableValues}"
-                                                  SelectedItem="{Binding Value, Mode=TwoWay}"
+                                                  SelectedItem="{Binding Value}"
                                                   HorizontalAlignment="Stretch"
                                                   Margin="0,0,8,0">
                                             <ToolTip.Tip>
@@ -103,8 +103,48 @@
                                             </ToolTip.Tip>
                                         </ComboBox>
 
+                                        <!-- Multibind Button -->
+                                        <Button Grid.Column="2"
+                                                Command="{Binding Parent.ShowMultibindPopupCommand}"
+                                                CommandParameter="{Binding}"
+                                                Padding="8,4"
+                                                Margin="0,0,8,0"
+                                                ToolTip.Tip="{DynamicResource MousehookControlsEditorDialog.MultibindToolTip}">
+                                            <fluent:SymbolIcon Symbol="KeyMultiple" />
+                                            <Button.Flyout>
+                                                <Flyout Placement="Bottom"
+                                                        ShowMode="Standard">
+                                                    <StackPanel DataContext="{Binding Parent}"
+                                                                Width="220"
+                                                                MaxHeight="300"
+                                                                Spacing="8"
+                                                                Margin="12">
+                                                        <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.MultibindFlyoutTitle}"
+                                                                   FontWeight="SemiBold" />
+                                                        <ScrollViewer MaxHeight="220"
+                                                                      HorizontalScrollBarVisibility="Disabled"
+                                                                      VerticalScrollBarVisibility="Auto">
+                                                            <ItemsControl ItemsSource="{Binding MultibindOptions}">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <CheckBox Content="{Binding Name}"
+                                                                                  IsChecked="{Binding IsChecked}"
+                                                                                  Margin="0,2" />
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </ScrollViewer>
+                                                        <Button Content="{DynamicResource MousehookControlsEditorDialog.MultibindApplyButton}"
+                                                                Command="{Binding ApplyMultibindSelectionCommand}"
+                                                                HorizontalAlignment="Stretch"
+                                                                Classes="accent" />
+                                                    </StackPanel>
+                                                </Flyout>
+                                            </Button.Flyout>
+                                        </Button>
+
                                         <!-- Key ComboBox -->
-                                        <ComboBox Grid.Column="2"
+                                        <ComboBox Grid.Column="3"
                                                   ItemsSource="{Binding Parent.AvailableKeys}"
                                                   SelectedItem="{Binding Key, Mode=TwoWay}"
                                                   HorizontalAlignment="Stretch"
@@ -120,7 +160,7 @@
                                         </ComboBox>
 
                                         <!-- Detect Input Button -->
-                                        <Button Grid.Column="3"
+                                        <Button Grid.Column="4"
                                                 Command="{Binding Parent.DetectInputCommand}"
                                                 CommandParameter="{Binding}"
                                                 Padding="8,4"
@@ -137,7 +177,7 @@
                                         </Button>
 
                                         <!-- Remove button -->
-                                        <Button Grid.Column="4"
+                                        <Button Grid.Column="5"
                                                 Command="{Binding Parent.RemoveEntryCommand}"
                                                 CommandParameter="{Binding}"
                                                 Padding="8,4"

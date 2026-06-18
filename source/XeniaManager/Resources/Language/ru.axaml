@@ -757,6 +757,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Не удалось сохранить</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Назначьте клавишу клавиатуры для кнопки геймпада "{0}".&#10;Значение "None" недопустимо.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Назначьте кнопку геймпада для клавиши "{0}".&#10;Значение "None" недопустимо.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">#NOTTRANSLATED#</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Сброс настроек</sys:String>
@@ -1197,6 +1200,8 @@
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Парсинг данных игры</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Поддержка архивов и сжатия</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Это приложение никоим образом не связано, не одобрено и не спонсируется корпорацией Microsoft или проектом Xenia. Все торговые марки, логотипы и наименования брендов являются собственностью их соответствующих владельцев.&#10; Xbox 360 является зарегистрированной торговой маркой корпорации Microsoft в США и/или других странах.&#10;Xenia является зарегистрированной торговой маркой проекта Xenia.&#10;Любые ссылки на эти или другие торговые марки делаются исключительно в целях идентификации совместимости или функциональности и не подразумевают какую-либо ассоциацию или одобрение владельцами торговых марок.&#10;Это программное обеспечение предназначено исключительно для образовательных и информационных целей. Оно не содержит и не распространяет какое-либо защищённое авторским правом содержимое, принадлежащее корпорации Microsoft или любому третьему лицу. Пользователи несут полную ответственность за соблюдение всех применимых законов, включая законы об авторском праве и лицензировании.&#10;Любое использование этого приложения для запуска или взаимодействия с проприетарным программным обеспечением или прошивкой должно осуществляться в рамках соответствующих лицензионных соглашений конечного пользователя (EULA). Разработчики и распространители этого приложения не одобряют и не поддерживают пиратство в любой форме.&#10;Это приложение предоставляется «как есть», без каких-либо гарантий, явных или подразумеваемых. Используйте на свой страх и риск.</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">Использовать экспериментальную сборку</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">Включите, если хотите получать экспериментальные сборки программы</sys:String>
