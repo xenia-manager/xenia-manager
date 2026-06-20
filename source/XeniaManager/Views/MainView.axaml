@@ -19,7 +19,7 @@
                              PaneDisplayMode="Left"
                              IsPaneOpen="False"
                              IsPaneToggleButtonVisible="True"
-                             ItemInvoked="NavigationView_OnItemInvoked">
+                              ItemInvoked="NavigationView_OnItemInvoked">
         <!-- Navigation Items -->
         <controls:NavigationView.MenuItems>
             <!-- Open Xenia -->
