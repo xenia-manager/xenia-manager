@@ -6,7 +6,9 @@ const LANGUAGE_NAMES = {
     'en': 'English',
     'hr': 'Croatian',
     'ru': "Russian",
-    'zh-CN': 'Simplified Chinese'
+    'zh-CN': 'Simplified Chinese',
+    'pt-BR': 'Brazilian Portuguese',
+    'tr': 'Turkish'
     // Add more here
 };
 
