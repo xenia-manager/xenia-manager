@@ -69,20 +69,13 @@ public class ArchiveExtractorTests
             Assert.Inconclusive("TestFile.7z not found in Assets folder");
         }
 
-        // Act & Assert - Skip if 7Z format is not supported by SharpCompress
-        try
-        {
-            ArchiveExtractor.ExtractArchive(_test7zPath, _testOutputPath);
+        // Act
+        ArchiveExtractor.ExtractArchive(_test7zPath, _testOutputPath);
 
-            // If we get here, the extraction worked
-            Assert.That(Directory.Exists(_testOutputPath), Is.True);
-            string[] extractedFiles = Directory.GetFiles(_testOutputPath, "*", SearchOption.AllDirectories);
-            Assert.That(extractedFiles.Length, Is.GreaterThan(0), "At least one file should be extracted from the 7Z archive");
-        }
-        catch (SharpCompress.Common.InvalidFormatException)
-        {
-            Assert.Inconclusive("7Z format not supported by current SharpCompress version");
-        }
+        // Assert
+        Assert.That(Directory.Exists(_testOutputPath), Is.True);
+        string[] extractedFiles = Directory.GetFiles(_testOutputPath, "*", SearchOption.AllDirectories);
+        Assert.That(extractedFiles.Length, Is.GreaterThan(0), "At least one file should be extracted from the 7Z archive");
     }
 
     [Test]
@@ -150,20 +143,13 @@ public class ArchiveExtractorTests
             Assert.Inconclusive("TestFile.7z not found in Assets folder");
         }
 
-        // Act & Assert - Skip if 7Z format is not supported by SharpCompress
-        try
-        {
-            await ArchiveExtractor.ExtractArchiveAsync(_test7zPath, _testOutputPath);
+        // Act
+        await ArchiveExtractor.ExtractArchiveAsync(_test7zPath, _testOutputPath);
 
-            // If we get here, the extraction worked
-            Assert.That(Directory.Exists(_testOutputPath), Is.True);
-            string[] extractedFiles = Directory.GetFiles(_testOutputPath, "*", SearchOption.AllDirectories);
-            Assert.That(extractedFiles.Length, Is.GreaterThan(0), "At least one file should be extracted from the 7Z archive");
-        }
-        catch (SharpCompress.Common.InvalidFormatException)
-        {
-            Assert.Inconclusive("7Z format not supported by current SharpCompress version");
-        }
+        // Assert
+        Assert.That(Directory.Exists(_testOutputPath), Is.True);
+        string[] extractedFiles = Directory.GetFiles(_testOutputPath, "*", SearchOption.AllDirectories);
+        Assert.That(extractedFiles.Length, Is.GreaterThan(0), "At least one file should be extracted from the 7Z archive");
     }
 
     [Test]

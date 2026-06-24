@@ -1,3 +1,5 @@
+using SharpCompress.Archives;
+using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using XeniaManager.Core.Logging;
@@ -39,16 +41,35 @@ public class ArchiveExtractor
         {
             Directory.CreateDirectory(outputPath);
 
-            using FileStream stream = File.OpenRead(archivePath);
-            using IReader reader = ReaderFactory.OpenReader(stream);
             int extractedCount = 0;
+            string extension = GetNormalizedExtension(archivePath);
 
-            while (reader.MoveToNextEntry())
+            if (extension == ".7z")
             {
-                if (!reader.Entry.IsDirectory && ShouldExtractEntry(reader.Entry, filesToExtract))
+                using FileStream stream = File.OpenRead(archivePath);
+                using IArchive archive = SevenZipArchive.OpenArchive(stream);
+
+                foreach (IArchiveEntry entry in archive.Entries)
                 {
-                    reader.WriteEntryToDirectory(outputPath, DefaultExtractionOptions);
-                    extractedCount++;
+                    if (!entry.IsDirectory && ShouldExtractEntry(entry, filesToExtract))
+                    {
+                        entry.WriteToDirectory(outputPath, DefaultExtractionOptions);
+                        extractedCount++;
+                    }
+                }
+            }
+            else
+            {
+                using FileStream stream = File.OpenRead(archivePath);
+                using IReader reader = ReaderFactory.OpenReader(stream);
+
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory && ShouldExtractEntry(reader.Entry, filesToExtract))
+                    {
+                        reader.WriteEntryToDirectory(outputPath, DefaultExtractionOptions);
+                        extractedCount++;
+                    }
                 }
             }
 
@@ -99,26 +120,55 @@ public class ArchiveExtractor
             Directory.CreateDirectory(outputPath);
             string resolvedOutputPath = Path.GetFullPath(outputPath);
 
-            await using FileStream stream = File.OpenRead(archivePath);
-            await using IAsyncReader reader = await ReaderFactory.OpenAsyncReader(stream, cancellationToken: cancellationToken);
             int extractedCount = 0;
+            string extension = GetNormalizedExtension(archivePath);
 
-            while (await reader.MoveToNextEntryAsync(cancellationToken))
+            if (extension == ".7z")
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                await using FileStream stream = File.OpenRead(archivePath);
+                using IArchive archive = SevenZipArchive.OpenArchive(stream);
 
-                if (!reader.Entry.IsDirectory && ShouldExtractEntry(reader.Entry, filesToExtract))
+                foreach (IArchiveEntry entry in archive.Entries)
                 {
-                    string entryOutputPath = GetSafeEntryOutputPath(resolvedOutputPath, reader.Entry.Key);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    string? entryDirectory = Path.GetDirectoryName(entryOutputPath);
-                    if (!string.IsNullOrEmpty(entryDirectory))
+                    if (!entry.IsDirectory && ShouldExtractEntry(entry, filesToExtract))
                     {
-                        Directory.CreateDirectory(entryDirectory);
-                    }
+                        string entryOutputPath = GetSafeEntryOutputPath(resolvedOutputPath, entry.Key);
 
-                    await reader.WriteEntryToFileAsync(entryOutputPath, DefaultExtractionOptions, cancellationToken: cancellationToken);
-                    extractedCount++;
+                        string? entryDirectory = Path.GetDirectoryName(entryOutputPath);
+                        if (!string.IsNullOrEmpty(entryDirectory))
+                        {
+                            Directory.CreateDirectory(entryDirectory);
+                        }
+
+                        await entry.WriteToFileAsync(entryOutputPath, DefaultExtractionOptions, cancellationToken);
+                        extractedCount++;
+                    }
+                }
+            }
+            else
+            {
+                await using FileStream stream = File.OpenRead(archivePath);
+                await using IAsyncReader reader = await ReaderFactory.OpenAsyncReader(stream, cancellationToken: cancellationToken);
+
+                while (await reader.MoveToNextEntryAsync(cancellationToken))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    if (!reader.Entry.IsDirectory && ShouldExtractEntry(reader.Entry, filesToExtract))
+                    {
+                        string entryOutputPath = GetSafeEntryOutputPath(resolvedOutputPath, reader.Entry.Key);
+
+                        string? entryDirectory = Path.GetDirectoryName(entryOutputPath);
+                        if (!string.IsNullOrEmpty(entryDirectory))
+                        {
+                            Directory.CreateDirectory(entryDirectory);
+                        }
+
+                        await reader.WriteEntryToFileAsync(entryOutputPath, DefaultExtractionOptions, cancellationToken: cancellationToken);
+                        extractedCount++;
+                    }
                 }
             }
 
