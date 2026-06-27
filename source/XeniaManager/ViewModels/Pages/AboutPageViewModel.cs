@@ -185,7 +185,7 @@ public partial class AboutPageViewModel : ViewModelBase
                 DownloadProgressStatus = $"{LocalizationHelper.GetText("AboutPage.DownloadingUpdate")} - {progress}%";
             };
 
-            string archiveFileName = "XeniaManager.Update.zip";
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
             string archivePath = Path.Combine(AppPaths.DownloadsDirectory, archiveFileName);
             string extractPath = Path.Combine(AppPaths.DownloadsDirectory, "UpdateExtract");
 

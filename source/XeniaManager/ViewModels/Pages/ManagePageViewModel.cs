@@ -325,10 +325,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Download the emulator
             DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Canary");
-            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
 
             // Extract the emulator
-            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, archiveFileName),
                 AppPathResolver.GetFullPath(XeniaPaths.Canary.EmulatorDir));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
@@ -404,10 +405,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Download the emulator
             DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Canary");
-            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
 
             // Extract the emulator
-            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, archiveFileName),
                 AppPathResolver.GetFullPath(XeniaPaths.Canary.EmulatorDir));
 
             // Update Emulator Details
@@ -583,10 +585,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Download the emulator
             DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Netplay");
-            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
 
             // Extract the emulator
-            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, archiveFileName),
                 AppPathResolver.GetFullPath(XeniaPaths.Netplay.EmulatorDir));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
@@ -677,10 +680,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Download the emulator
             DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Netplay");
-            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
 
             // Extract the emulator
-            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, archiveFileName),
                 AppPathResolver.GetFullPath(XeniaPaths.Netplay.EmulatorDir));
 
             // Update Emulator Details
@@ -868,10 +872,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Download the emulator
             DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Mousehook");
-            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
 
             // Extract the emulator
-            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, archiveFileName),
                 AppPathResolver.GetFullPath(XeniaPaths.Mousehook.EmulatorDir));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
@@ -951,10 +956,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Download the emulator
             DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Mousehook");
-            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
 
             // Extract the emulator
-            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, archiveFileName),
                 AppPathResolver.GetFullPath(XeniaPaths.Mousehook.EmulatorDir));
 
             // Update Emulator Details
@@ -1509,10 +1515,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Download the emulator
             DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), version);
-            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+            string archiveFileName = Path.GetFileName(new Uri(releaseBuild.Url).LocalPath);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
 
             // Extract the emulator
-            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"), emulatorDir);
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, archiveFileName), emulatorDir);
 
             // Update settings with new version info
             switch (version)
