@@ -46,6 +46,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Scan Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">An error occurred while scanning the directory:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Scan Error</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Scan Directory</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Select the source for scanning:</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Scan Games folder</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Scan custom folder</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">Cancel</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Scanning for Games</sys:String>

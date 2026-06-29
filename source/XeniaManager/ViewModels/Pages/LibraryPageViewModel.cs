@@ -14,6 +14,7 @@ using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
@@ -340,23 +341,46 @@ public partial class LibraryPageViewModel : ViewModelBase
             return;
         }
 
-        // Open folder picker dialog
+        // Choose scan source (Games folder or custom folder)
         try
         {
-            FolderPickerOpenOptions options = new FolderPickerOpenOptions
-            {
-                Title = LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.FolderPicker.Title")
-            };
+            ContentDialogResult scanChoice = await _messageBoxService.ShowCustomDialogAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Title"),
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Message"),
+                primaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder"),
+                secondaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder"),
+                closeButtonText: LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Cancel"));
 
-            IReadOnlyList<IStorageFolder> selectedFolder = await storageProvider.OpenFolderPickerAsync(options);
-            if (selectedFolder.Count == 0)
+            string folderPath;
+
+            if (scanChoice == ContentDialogResult.None)
             {
-                Logger.Info<LibraryPageViewModel>("User cancelled folder selection");
+                Logger.Info<LibraryPageViewModel>("User cancelled scan directory");
                 return;
             }
 
-            string folderPath = selectedFolder[0].Path.LocalPath;
-            Logger.Info<LibraryPageViewModel>($"User selected folder: {folderPath}");
+            if (scanChoice == ContentDialogResult.Primary)
+            {
+                folderPath = AppPaths.GamesDirectory;
+                Logger.Info<LibraryPageViewModel>($"User selected Games folder: {folderPath}");
+            }
+            else
+            {
+                FolderPickerOpenOptions options = new FolderPickerOpenOptions
+                {
+                    Title = LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.FolderPicker.Title")
+                };
+
+                IReadOnlyList<IStorageFolder> selectedFolder = await storageProvider.OpenFolderPickerAsync(options);
+                if (selectedFolder.Count == 0)
+                {
+                    Logger.Info<LibraryPageViewModel>("User cancelled folder selection");
+                    return;
+                }
+
+                folderPath = selectedFolder[0].Path.LocalPath;
+                Logger.Info<LibraryPageViewModel>($"User selected folder: {folderPath}");
+            }
 
             // Scan the directory with the progress dialog
             List<string> discoveredGameFiles;
