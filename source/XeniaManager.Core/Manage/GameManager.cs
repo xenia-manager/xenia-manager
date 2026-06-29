@@ -1236,7 +1236,7 @@ public class GameManager
     /// </summary>
     /// <param name="absolutePath">The absolute path to the game file.</param>
     /// <returns>A relative path if under Games directory; otherwise, the original absolute path.</returns>
-    private static string GetRelativeGamePath(string absolutePath)
+    public static string GetRelativeGamePath(string absolutePath)
     {
         string gamesDir = AppPaths.GamesDirectory;
 
