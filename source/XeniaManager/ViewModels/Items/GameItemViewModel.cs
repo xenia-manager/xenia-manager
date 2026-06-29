@@ -68,7 +68,7 @@ public partial class GameItemViewModel : ViewModelBase
     {
         if (!Game.FileLocations.IsGamePathValid)
         {
-            Logger.Warning<GameItemViewModel>($"Invalid game path: {Game.FileLocations.Game}");
+            Logger.Warning<GameItemViewModel>($"Invalid game path: {Game.FileLocations.ResolvedGamePath}");
             return;
         }
 

@@ -1174,7 +1174,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             {
                 try
                 {
-                    Logger.Info<LibraryPageViewModel>($"Removing invalid game: {game.Title} (Path: {game.FileLocations.Game})");
+                    Logger.Info<LibraryPageViewModel>($"Removing invalid game: {game.Title} (Path: {game.FileLocations.ResolvedGamePath})");
                     GameManager.RemoveGame(game);
                     removedCount++;
                 }
