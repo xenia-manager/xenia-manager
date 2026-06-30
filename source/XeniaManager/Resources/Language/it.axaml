@@ -1,0 +1,1213 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- App global -->
+    <sys:String x:Key="App.Title">Xenia Manager</sys:String>
+
+    <!-- Welcome Dialog -->
+    <sys:String x:Key="WelcomeDialog.Title">Benvenuto in Xenia Manager</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">Seleziona il tema preferito per l'interfaccia:</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">Continua</sys:String>
+
+    <!-- Main View -->
+    <sys:String x:Key="MainView.Navigation.OpenXenia">Apri Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.Library">Libreria Giochi</sys:String>
+    <sys:String x:Key="MainView.Navigation.XeniaSettings">Impostazioni Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.ManagePage">Gestisci Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.About">Informazioni</sys:String>
+    <sys:String x:Key="MainView.Navigation.Settings">Impostazioni</sys:String>
+    <sys:String x:Key="MainView.Navigation.Error.Title">Errore di navigazione</sys:String>
+    <sys:String x:Key="MainView.Navigation.Error.Message">Impossibile navigare alla pagina designata.&#10;{0}</sys:String>
+
+    <!-- Library Page -->
+    <sys:String x:Key="LibraryPage.Search.Watermark">Cerca...</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ricarica la libreria giochi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Modifica Vista Griglia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Mostra/Nascondi informazioni aggiuntive sulle copertine</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Titolo Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Valutazione Compatibilità</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Versione Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Mostra l'icona della versione Xenia per ogni gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Avvia con Doppio Click</sys:String>
+    <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Passa da singolo a doppio click per avviare i giochi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scansiona Cartella</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ToolTip">Scansiona la cartella selezionata alla ricerca di giochi&#10;Consulta la Wiki per maggiori dettagli su questa funzione</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.NoXeniaInstalled.Title">Xenia Non Installato</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.NoXeniaInstalled.Message">Nessuna versione di Xenia è attualmente installata.&#10;Installa Xenia prima di continuare.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.XeniaSelectionError.Title">Errore di Selezione Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.XeniaSelectionError.Message">Impossibile selezionare la versione di Xenia.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.FolderPicker.Title">Seleziona Cartella da Scansionare</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Success.Title">Scansione Completata</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Success.Message">Aggiunti con successo {0} gioco/i alla libreria.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.NoGamesFound.Title">Scansione Completata</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.NoGamesFound.Message">Nessun nuovo gioco trovato nella cartella selezionata.&#10;&#10;La cartella potrebbe non contenere file di gioco compatibili, oppure i giochi sono già presenti nella libreria.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Scansione Fallita</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Si è verificato un errore durante la scansione della cartella:&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Errore di Scansione</sys:String>
+
+    <!-- Folder Scan Progress Dialog -->
+    <sys:String x:Key="FolderScanProgressDialog.Title">Scansione in Corso</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Subtitle">Attendi mentre cerchiamo i file di gioco</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Starting">Avvio scansione...</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Scanning">Scansione: {0}</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Complete">Scansione completata! Trovati {0} gioco/i</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Cancelled">Scansione annullata</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Initializing">Inizializzazione...</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Error">Errore: {0}</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Statistics.Folders">Cartelle</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Statistics.GamesFound">Giochi Trovati</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Button.Cancel">Annulla</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Button.Close">Chiudi</sys:String>
+
+    <!-- Add Games Progress Dialog -->
+    <sys:String x:Key="AddGamesProgressDialog.Title">Aggiunta Giochi alla Libreria</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Subtitle">Elaborazione dei file di gioco rilevati</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Processed">Elaborati</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Added">Aggiunti</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Skipped">Saltati</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Failed">Falliti</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Button.Close">Chiudi</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Status.Complete">Completato! Aggiunti {0} gioco/i</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Status.Initializing">Inizializzazione</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Status.Error">Errore: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Header">Aggiungi Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.ToolTip">Aggiunge il file di gioco selezionato a Xenia Manager</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Title">Xenia Mancante</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Message">Nessuna versione di Xenia è attualmente installata.&#10;Installa Xenia prima di continuare.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Title">Impossibile aggiungere il gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Message">Si è verificato un errore durante l'aggiunta di {0}.&#10;{1}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.FailedDetection.Title">Rilevamento Gioco Fallito</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.FailedDetection.Message">Impossibile rilevare i dettagli del gioco per {0}.&#10;Vuoi comunque aggiungere questo gioco con informazioni limitate?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.FilePicker.Title">Seleziona Gioco da Aggiungere</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.Processing">Elaborazione: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate">Duplicato saltato: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.SkippingInvalid">Gioco non valido saltato: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.Processed">Elaborati: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Header">Esporta Collegamenti</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ToolTip">Esporta i collegamenti di tutti i giochi nella cartella designata</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.FolderPicker.Title">Seleziona Cartella di Esportazione</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Title">Collegamenti Esportati</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Message">Esportati con successo {0} collegamento/i di gioco.&#10;Fallite: {1}&#10;&#10;Esportazioni riuscite:&#10;{2}&#10;&#10;Esportazioni fallite:&#10;{3}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Title">Esportazione Fallita</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Message">Si è verificato un errore durante l'esportazione dei collegamenti.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Title">Esporta Collegamenti Giochi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Message">Dove vuoi esportare i collegamenti dei giochi?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder">Cartella</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam">Steam</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel">Annulla</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Title">Collegamenti Steam Esportati</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Message">Esportati con successo {0} collegamento/i Steam.&#10;Fallite: {1}&#10;&#10;Esportazioni riuscite:&#10;{2}&#10;&#10;Esportazioni fallite:&#10;{3}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Aggiorna Valutazioni Compatibilità</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Aggiorna le valutazioni di compatibilità per tutti i giochi della libreria dal database online</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Aggiornamento Completato</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Aggiornati con successo {0} gioco/i.&#10;Invariati: {1}&#10;Falliti: {2}&#10;&#10;Giochi aggiornati:&#10;{3}&#10;&#10;Giochi invariati:&#10;{4}&#10;&#10;Aggiornamenti falliti:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Aggiornamento Fallito</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Si è verificato un errore durante l'aggiornamento delle valutazioni.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Ottimizza Giochi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Applica le impostazioni ottimizzate dal database online a tutti i giochi della libreria</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Ottimizzazione Completata</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Message">Ottimizzati con successo {0} gioco/i.&#10;Invariati: {1}&#10;Non trovati: {2}&#10;Falliti: {3}&#10;&#10;Giochi ottimizzati:&#10;{4}&#10;&#10;Giochi invariati:&#10;{5}&#10;&#10;Giochi senza impostazioni ottimizzate:&#10;{6}&#10;&#10;Ottimizzazioni fallite:&#10;{7}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Title">Ottimizzazione Fallita</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">Si è verificato un errore durante l'ottimizzazione delle impostazioni.&#10;{0}</sys:String>
+
+    <!-- Remove Invalid Games -->
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">Rimuovi Giochi Non Validi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">Rimuove dalla libreria tutti i giochi con percorsi file mancanti o errati</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">Rimuovi Giochi Non Validi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">C'è 1 gioco non valido nella tua libreria. Vuoi rimuoverlo?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">Ci sono {0} giochi non validi nella tua libreria. Vuoi rimuoverli?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">Nessun Gioco Non Valido</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">Non ci sono giochi non validi nella tua libreria.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">Giochi Non Validi Rimossi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">Rimossi con successo {0} gioco/i non validi dalla libreria.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">Rimozione Giochi Fallita</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">Si è verificato un errore durante la rimozione dei giochi non validi.&#10;{0}</sys:String>
+
+    <!-- Library Game Button - Playtime -->
+    <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Tempo di Gioco: </sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Mai giocato</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.Playtime.Minutes">{0} min</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.Playtime.Hours">{0} ore</sys:String>
+
+    <!-- Library Multiselect Delete -->
+    <sys:String x:Key="LibraryPage.DeleteSelected.Button">Elimina Selezionati</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.OneGameSelected">1 gioco selezionato</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.MultipleGamesSelected">{0} giochi selezionati</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.Title">Elimina Giochi Selezionati</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.Message">Vuoi rimuovere {0}?</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.MultipleMessage">Vuoi rimuovere {0} giochi selezionati?</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelectedWithContent.Confirmation.Title">Elimina Contenuto del Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelectedWithContent.Confirmation.Message">Vuoi rimuovere il contenuto dei giochi selezionati?&#10;Questo rimuoverà tutti i salvataggi e i contenuti scaricabili.</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Success.Title">Giochi Eliminati</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Success.Message">Eliminati con successo {0} gioco/i.</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Title">Successo Parziale</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Message">Eliminati {0} gioco/i, impossibile eliminare {1} gioco/i.&#10;&#10;Giochi falliti:&#10;{2}</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Error.Title">Eliminazione Fallita</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Impossibile eliminare i giochi selezionati:&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.ClearSelection.Button">Deseleziona Tutto</sys:String>
+
+    <!-- Library Game ToolTips -->
+    <sys:String x:Key="LibraryPage.Game.ToolTip.Path.Invalid">Il percorso del gioco non è valido</sys:String>
+
+    <!-- Compatibility Rating -->
+    <sys:String x:Key="CompatibilityRating.Unknown">Sconosciuta</sys:String>
+    <sys:String x:Key="CompatibilityRating.Unplayable">Non giocabile</sys:String>
+    <sys:String x:Key="CompatibilityRating.Loads">Si avvia</sys:String>
+    <sys:String x:Key="CompatibilityRating.Gameplay">Gameplay</sys:String>
+    <sys:String x:Key="CompatibilityRating.Playable">Giocabile</sys:String>
+
+    <!-- Manage Page -->
+    <sys:String x:Key="ManagePage.Emulator.Manage.Title">Gestione Emulatore</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Description">Installa e gestisci le diverse versioni dell'emulatore Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Canary.Title">Xenia Canary</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Netplay.Title">Xenia Netplay</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Mousehook.Title">Xenia Mousehook</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.NightlyBuild.ToolTip">Usa Nightly Build</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.NotInstalled">Non Installato</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Title">Installazione di Xenia {0} fallita</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Message">Xenia {0} non è riuscito ad installarsi.&#10;Errore completo:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Title">Installazione riuscita</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Message">Xenia {0} è installato</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Title">Privilegi di Amministratore Richiesti</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Message">Questa azione richiede l'esecuzione di Xenia Manager come Amministratore.&#10;Riavvia Xenia Manager con privilegi amministrativi.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Title">Aggiornamento di Xenia {0} fallito</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Xenia {0} non è riuscito ad aggiornarsi.&#10;Errore completo:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Title">Aggiornamento riuscito</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Message">Xenia {0} è aggiornato alla versione {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Title">Xenia {0} è in esecuzione</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Message">Impossibile aggiornare Xenia {0} mentre è in esecuzione.&#10;Chiudi Xenia {0} e riprova.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Controllo Aggiornamenti Fallito</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message">Impossibile verificare gli aggiornamenti.&#10;{0}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title">Conferma Disinstallazione</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message">Vuoi disinstallare Xenia {0}?&#10;Questo rimuoverà tutti i salvataggi e gli aggiornamenti insieme all'emulatore.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title">Disinstallazione di Xenia {0} fallita</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message">Xenia {0} non è riuscito a disinstallarsi.&#10;Errore completo:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title">Disinstallazione riuscita</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message">Xenia {0} è stato disinstallato</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Downloading">Download di Xenia {0}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.SDL.Downloading">Download del Database SDL Game Controller</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Title">Aggiornamento Disponibile</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Message">È disponibile una nuova versione di Xenia.&#10;Attuale: {0}&#10;Ultima: {1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Title">Aggiornato</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Message">Xenia è aggiornato</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Install">Installa</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Update">Aggiorna</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.CheckForUpdates">Controlla Aggiornamenti</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Uninstall">Disinstalla</sys:String>
+    <sys:String x:Key="ManagePage.Content.Management.Title">Gestione Contenuti</sys:String>
+    <sys:String x:Key="ManagePage.Content.Management.Description">Gestisci contenuti e profili</sys:String>
+    <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.Title">Backup Automatico Salvataggi</sys:String>
+    <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.Description">Esegue automaticamente il backup del salvataggio per il profilo selezionato</sys:String>
+    <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Nessun Profilo Disponibile</sys:String>
+    <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Nessun profilo trovato per abilitare il Backup Automatico.&#10;Crea o importa prima un profilo.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Cartella contenuti unificata</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Fa condividere la stessa cartella contenuti a tutte le versioni di Xenia. Richiede diritti admin e disco NTFS.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NOTA: Richiede privilegi di amministratore e un disco formattato NTFS poiché questa funzione usa link simbolici</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Privilegi di Amministratore Richiesti</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Questa azione richiede l'esecuzione di Xenia Manager come Amministratore.&#10;Riavvia Xenia Manager con privilegi amministrativi.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Cartelle Contenuti Separate</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Message">Vuoi separare le cartelle contenuti?&#10;Ogni versione di Xenia avrà la propria cartella contenuti indipendente.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Title">Unifica Cartelle Contenuti</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Message">Vuoi unificare le cartelle contenuti?&#10;Tutte le versioni di Xenia condivideranno la stessa cartella contenuti.&#10;&#10;Seleziona i contenuti di quale versione usare come base.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Success.Title">Unificazione Cartelle Riuscita</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Success.Message">Le cartelle contenuti sono state unificate con successo.&#10;Tutte le versioni di Xenia condividono ora la stessa cartella contenuti.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Success.Title">Separazione Cartelle Riuscita</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Success.Message">Le cartelle contenuti sono state separate con successo.&#10;Ogni versione di Xenia ha ora la propria cartella contenuti indipendente.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Title">Operazione Cartelle Contenuti Fallita</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Message">Impossibile unificare/separare le cartelle contenuti.&#10;Errore: {0}</sys:String>
+
+    <!-- Install Content Section -->
+    <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">Gestisci Profili</sys:String>
+    <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Consente all'utente di modificare i Profili Xenia</sys:String>
+    <sys:String x:Key="ManagePage.ManageProfiles.Button">Gestisci</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">Modifica Impostazioni XConfig</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Modifica le impostazioni della dashboard Xbox 360 (risoluzione, lingua, paese, profilo predefinito)</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">Modifica</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Title">Installa Contenuti</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Description">Installa DLC, aggiornamenti e altri contenuti per Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Button">Installa Contenuti</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.NoEmulator.Title">Nessun Emulatore Installato</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.NoEmulator.Message">Installa almeno una versione di Xenia prima di installare contenuti.</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Failed.Title">Installazione Contenuti Fallita</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Failed.Message">Impossibile installare i contenuti.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Title">Riscarica Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Description">Riscarica e reinstalla la versione di Xenia selezionata</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Button">Riscarica</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.NoEmulator.Title">Nessun Emulatore Installato</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.NoEmulator.Message">Installa almeno una versione di Xenia prima di riscaricarlo.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Confirmation.Title">Conferma Riscaricamento</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Confirmation.Message">Vuoi riscaricare Xenia {0}?&#10;Questo eliminerà l'installazione attuale e scaricherà una copia aggiornata.&#10;&#10;NOTA: Questo NON eliminerà i tuoi contenuti, salvataggi o file di configurazione.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Title">Riscaricamento Completato</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Message">Xenia {0} è stato riscaricato e installato con successo.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Title">Riscaricamento Fallito</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Message">Impossibile riscaricare Xenia.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Title">Esporta Log</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Description">Esporta il file di log di Xenia in una posizione specificata</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Button">Esporta Log</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoEmulator.Title">Nessun Emulatore Installato</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoEmulator.Message">Installa almeno una versione di Xenia prima di esportare i log.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.FolderPicker.Title">Seleziona Cartella di Esportazione</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoLogs.Title">Nessun File di Log Trovato</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoLogs.Message">Nessun file di log trovato per Xenia {0}.&#10;Esegui prima l'emulatore per generare un file di log.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Success.Title">Esportazione Riuscita</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Success.Message">File di log per Xenia {0} esportato con successo in:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Failed.Title">Esportazione Fallita</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Failed.Message">Impossibile esportare il file di log.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Title">Aggiorna Database SDL</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Description">Scarica un gamecontrollerdb.txt aggiornato per tutte le versioni di Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Button">Aggiorna</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Confirmation.Title">Conferma Aggiornamento</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Confirmation.Message">Vuoi scaricare un database SDL aggiornato per i controller?&#10;&#10;Questo aggiornerà gamecontrollerdb.txt per tutte le versioni di Xenia installate.</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Success.Title">Aggiornamento Completato</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Success.Message">Il database SDL per i controller è stato aggiornato con successo per tutte le versioni di Xenia.</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Failed.Title">Aggiornamento Fallito</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Failed.Message">Impossibile aggiornare il database SDL.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Title">Riscarica Binding</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Description">Riscarica il file bindings.ini per Xenia Mousehook</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Button">Riscarica</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.NotInstalled.Title">Mousehook Non Installato</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.NotInstalled.Message">Xenia Mousehook non è installato.&#10;Installa Xenia Mousehook prima di riscaricarne la configurazione.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Confirmation.Title">Conferma Riscaricamento</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Confirmation.Message">Vuoi riscaricare il file di binding per Xenia {0}?&#10;&#10;Questo sostituirà il tuo bindings.ini attuale con una copia aggiornata dal repository.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Downloading">Download configurazione per {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Title">Riscaricamento Completato</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Il file di configurazione per Xenia {0} è stato riscaricato con successo.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Riscaricamento Fallito</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Impossibile riscaricare il file di configurazione.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">Svuota Cache Shader</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">Elimina i file della cache shader</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">Svuota</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">Nessun Emulatore Installato</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">Installa almeno una versione di Xenia prima di svuotare la cache shader.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">Cache Shader Svuotata</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">Eliminati con successo {0} file cache shader per Xenia {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">Nessuna Cache Shader Trovata</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">Nessun file cache shader trovato per Xenia {0}.&#10;Avvia un gioco per generare la cache shader.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">Svuotamento Fallito</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">Impossibile svuotare la cache shader per Xenia {0}.&#10;Errore: {1}</sys:String>
+
+    <!-- Settings Page -->
+    <sys:String x:Key="SettingsPage.Ui.Title">Impostazioni Interfaccia</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Description">Personalizza l'interfaccia di Xenia Manager</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Language.Title">Lingua</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Language.Description">Cambia la lingua dell'interfaccia di Xenia Manager</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Language.ToolTip">NOTA: Alcune parti dell'interfaccia resteranno nella lingua originale finché l'app non viene riaperta.</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Title">Tema</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Description">Cambia il tema dell'interfaccia di Xenia Manager</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Chiaro</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Scuro</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Schermata di Caricamento</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Mostra lo sfondo della schermata di caricamento del gioco all'avvio</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Mostra un'animazione di caricamento mentre i giochi si avviano</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.Title">Impostazioni Debug</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.Description">Configura il comportamento e il livello di log</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.LogLevel.Title">Livello di Log</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.LogLevel.Description">Imposta il livello minimo di log per l'output</sys:String>
+    <sys:String x:Key="SettingsPage.General.Title">Impostazioni Generali</sys:String>
+    <sys:String x:Key="SettingsPage.General.Description">Configura le opzioni generali di Xenia Manager</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Analizza Dettagli Gioco con Xenia</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Analizza automaticamente i dettagli del gioco usando l'emulatore Xenia</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Abilita se hai difficoltà nel rilevamento dei giochi o dei loro dettagli</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Usa MediaId per il Titolo del Gioco</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Usa il MediaId dai file di gioco per trovare il titolo corrispondente nel database</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Disabilita per usare sempre il titolo del database anziché i titoli specifici del media</sys:String>
+    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Controlla Aggiornamenti all'Avvio</sys:String>
+    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Controlla automaticamente gli aggiornamenti di Xenia e Xenia Manager all'avvio</sys:String>
+    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Disabilita per saltare il controllo aggiornamenti all'avvio</sys:String>
+
+    <!-- Loading Screen Window -->
+    <sys:String x:Key="LoadingScreenWindow.LoadingText">Caricamento {0}</sys:String>
+
+    <!-- Controls -->
+    <sys:String x:Key="Controls.DownloadProgressCard.Title">Progresso Download</sys:String>
+    <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Progresso Download:</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Cerca per sezione o nome impostazione...</sys:String>
+
+    <!-- Game Button -->
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Contenuti</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Visualizza Contenuti Installati</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Backup Salvataggi</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Apre la cartella contenente tutti i backup dei salvataggi creati da Xenia Manager</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Nessun Backup Trovato</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Message">Nessun backup automatico trovato per questo gioco.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Title">Impossibile Aprire la Cartella</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Message">Si è verificato un errore durante l'apertura della cartella backup.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Header">Screenshot</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.ToolTip">Apre la cartella contenente tutti gli screenshot del gioco presi con Xenia</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Title">Nessuno Screenshot Trovato</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nessuno screenshot trovato per {0}.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Impossibile Aprire la Cartella</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Si è verificato un errore durante l'apertura della cartella screenshot.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Scarica</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Scarica le patch dal repository</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Failed.Title">Download Patch Fallito</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Failed.Message">Si è verificato un problema durante il download della patch.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Success.Title">Patch Scaricata</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Success.Message">Patch scaricata e installata con successo:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Header">Installa Locale</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.ToolTip">Installa patch da file .TOML locali</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.Title">Seleziona File Patch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Title">Title ID Patch Non Corrispondente</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Message">La patch selezionata è per il Title ID: {0} ({1})&#10;ma il gioco corrente ha Title ID: {2}&#10;&#10;Vuoi continuare ad installare questa patch?</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Success.Title">Patch Installata</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Success.Message">Patch installata con successo:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Error.Title">Installazione patch fallita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Error.Message">Si è verificato un problema durante l'installazione della patch.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Header">Aggiungi</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.ToolTip">Aggiungi patch da file .TOML locali in aggiunta alle patch già installate</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Title">Nessuna Patch Installata</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Message">Devi installare prima un file patch prima di aggiungerne altre.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.Title">Seleziona File Patch da Unire</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Success.Title">Patch Aggiunte</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Success.Message">Patch aggiunte con successo da:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Incompatible.Title">File Patch Incompatibile</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Incompatible.Message">Il file patch selezionato è incompatibile con la patch attualmente installata.&#10;I file patch devono avere hash corrispondenti per unire le patch.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FileNotFound.Message">Il file patch selezionato non è stato trovato.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Error.Title">Errore nell'Aggiunta delle Patch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Error.Message">Si è verificato un problema durante l'aggiunta di patch aggiuntive.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Header">Configura</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.ToolTip">Abilita o disabilita le patch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Title">Nessuna Patch Installata</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Message">Devi installare prima un file patch prima di configurarne le patch.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Title">Configurazione Salvata</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Message">La configurazione delle patch è stata salvata con successo.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Title">Errore di Configurazione</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Message">Si è verificato un problema durante la configurazione delle patch.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Header">Esporta</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.ToolTip">Esporta il file patch in una posizione</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Title">Nessuna Patch Installata</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Message">Devi installare prima un file patch prima di esportarlo.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Title">Esportazione Fallita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Message">Impossibile accedere alla finestra principale per la selezione del file.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.FilePicker.Title">Esporta File Patch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Title">Esportazione Riuscita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Message">File patch esportato con successo in:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Error.Title">Esportazione Fallita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Error.Message">Impossibile esportare il file patch:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Header">Rimuovi</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.ToolTip">Elimina il file patch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Title">Patch Rimossa</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Message">Il file patch è stato rimosso con successo.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Title">Errore</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Message">Si è verificato un problema durante la rimozione delle patch.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Header">Crea Collegamento</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.Header">Desktop</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.ToolTip">Crea un collegamento del gioco sul desktop</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Header">Steam</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.ToolTip">Aggiunge una scorciatoia su Steam&#10;NOTA: Creerà una scorciatoia per l'ultimo utente che ha effettuato l'accesso a Steam su questo PC</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Success.Title">Collegamento Creato</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Success.Message">Collegamento desktop creato con successo per {0}.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Title">Impossibile Creare il Collegamento</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Message">Si è verificato un errore durante la creazione del collegamento sul desktop.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Title">Collegamento Steam Creato</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Collegamento Steam creato con successo per '{0}' nella tua libreria Steam.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Impossibile Creare il Collegamento Steam</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Impossibile creare il collegamento Steam per '{0}'.&#10;{1}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Pagina Compatibilità</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Apre la pagina di compatibilità</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Nessuna Pagina di Compatibilità</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Message">Nessuna informazione di compatibilità disponibile per questo gioco.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Modifica Gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Header">Informazioni</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.ToolTip">Consente di modificare le informazioni del gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Title">Modifica Fallita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Message">Si è verificato un problema durante la modifica delle informazioni del gioco.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Header">Controlli Mousehook</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.ToolTip">Consente di modificare i controlli Xenia Mousehook per questo gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.Title">Errore Controlli Mousehook</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.MissingBindingsLocation">La posizione dei binding non è configurata. Assicurati che Xenia Mousehook sia configurato correttamente.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.InvalidTitleId">Impossibile analizzare il Title ID del gioco. Assicurati che il gioco abbia un ID valido.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.NoSectionsFound">Nessuna sezione binding trovata per '{0}'. Avvia prima il gioco per creare i binding predefiniti.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.FileNotFound">File binding non trovato. Assicurati che Xenia Mousehook sia installato e configurato.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.Message">Si è verificato un errore durante l'apertura dell'editor controlli mousehook: {0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Impostazioni</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ToolTip">Consente di modificare il file di configurazione del gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Title">File di Configurazione Non Trovato</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Message">File di configurazione non trovato per '{0}'. Avvia prima il gioco per generare un file di configurazione.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Title">Impostazioni Salvate</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Message">Le modifiche alla configurazione di '{0}' sono state salvate con successo.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Error.Title">Errore Modifica Impostazioni</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Error.Message">Impossibile aprire l'editor impostazioni per '{0}': {1}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Header">Rimuovi Gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.ToolTip">Rimuove il gioco da Xenia Manager&#10;NOTA: Questo non eliminerà il gioco dal sistema</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Title">Rimuovi Gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Message">Vuoi rimuovere {0}?</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title">Rimuovi Contenuti del Gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message">Vuoi rimuovere i contenuti di {0}?&#10;Questo rimuoverà tutti i salvataggi e i contenuti scaricabili.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Error.Title">Rimozione Gioco Fallita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Error.Message">Impossibile rimuovere '{0}': {1}</sys:String>
+
+    <!-- MessageBox -->
+    <sys:String x:Key="MessageBox.Ok">Ok</sys:String>
+    <sys:String x:Key="MessageBox.Yes">Sì</sys:String>
+    <sys:String x:Key="MessageBox.No">No</sys:String>
+    <sys:String x:Key="MessageBox.Cancel">Annulla</sys:String>
+
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Xenia Non Installato</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Nessuna installazione di Xenia trovata. Installa Xenia prima di tentare di avviarlo.</sys:String>
+
+    <!-- Patch Configuration Dialog -->
+    <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Aggiungi Nuova Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Elimina Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Dettagli Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Nome Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Autore</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Descrizione (opzionale)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Commento Intestazione (opzionale)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Comandi Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandType">Tipo:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Commento tipo</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">Commento:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">Commento:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Commento (opzionale)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Indirizzo:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandValue">Valore:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddCommand.ToolTip">Aggiungi Comando</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.ToolTip">Elimina Comando</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.SaveButton">Salva</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Title">Valori Patch Non Validi</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Header">Ci sono {0} comando/i patch non valido/i:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Entry">- Patch: {0}, Tipo: {1}, Indirizzo: {2}</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.More">... e altri {0}.</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Title">Salvataggio Fallito</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Message">Impossibile salvare la configurazione della patch.&#10;{0}</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CancelButton">Annulla</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Title">Rimuovi Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Message">Sei sicuro di voler rimuovere la patch "{0}"?</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.EditMode.Title">Modalità Modifica</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.EditMode.Description">Abilita la modifica per modificare le patch. Le modifiche vengono salvate quando clicchi su Salva.</sys:String>
+
+    <!-- Patch Selection Dialog -->
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Database Patch</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">Scarica</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">Annulla</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Cerca patch...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Ricerca Fallita</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">Si è verificato un errore durante la ricerca delle patch.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">Altre patch disponibili...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.Selection.Required.Title">Nessuna Patch Selezionata</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.Selection.Required.Message">Seleziona una patch dall'elenco prima di scaricarla.</sys:String>
+
+    <!-- Game Details Editor Dialog -->
+    <sys:String x:Key="GameDetailsEditor.DialogTitle">{0} - Editor Dettagli Gioco</sys:String>
+    <sys:String x:Key="GameDetailsEditor.SaveButton">Salva</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CancelButton">Annulla</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MediaAssetsSection">Risorse Multimediali</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart">Copertina</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Select">Seleziona Copertina</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Clear">Rimuovi Copertina</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon">Icona</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Select">Seleziona Icona</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Clear">Rimuovi Icona</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background">Sfondo</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Select">Seleziona Sfondo</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Clear">Rimuovi Sfondo</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Rilevamento Automatico</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Il Title ID e il Media ID vengono rilevati automaticamente e non possono essere modificati.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIds">ID Alternativi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Inserisci ID alternativo...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Add">Aggiungi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitle">Titolo Gioco</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Inserisci titolo del gioco</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath">Percorso Gioco</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Valutazione Compatibilità</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL Pagina Compatibilità</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Inserisci URL della pagina compatibilità</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.Change">Cambia percorso del gioco</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Seleziona File di Gioco</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.FilePicker.Title">Seleziona Immagine {0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Clear.Confirmation.Title">Rimuovi {0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Clear.Confirmation.Message">Sei sicuro di voler rimuovere {0}? Questo non eliminerà il file dal disco.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Update.Error.Title">Impossibile Aggiornare {0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Update.Error.Message">Impossibile aggiornare {0}.&#10;Errore: {1}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.Empty">Il titolo del gioco non può essere vuoto.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.TooLong">Il titolo del gioco non può superare i 100 caratteri.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.Duplicate">Esiste già un gioco con questo titolo. Usa un titolo unico.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.ValidationFailed.Title">Validazione Fallita</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.Failed.Title">Salvataggio Fallito</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.Failed.Message">Impossibile salvare i dettagli del gioco.&#10;{0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableRequired.Title">Eseguibile Personalizzato Richiesto</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableRequired.Message">Seleziona un eseguibile Xenia personalizzato quando usi la versione Personalizzata.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Title">Eseguibile Personalizzato Non Trovato</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Message">Il file eseguibile personalizzato selezionato non esiste. Seleziona un eseguibile valido.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.ArtworkOverlay.ToolTip">Clic destro per cambiare l'immagine</sys:String>
+    <sys:String x:Key="GameDetailsEditor.XeniaVersion">Versione Xenia attualmente usata</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutablePath">Percorso Eseguibile Personalizzato</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutablePath.Change">Cambia percorso eseguibile personalizzato</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutable.FilePicker.Title">Seleziona Eseguibile Xenia</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutable.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutable.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.</sys:String>
+
+    <!-- Install Content Dialog -->
+    <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Installa Contenuti</sys:String>
+    <sys:String x:Key="InstallContentDialog.ContentDialog.InstallButton.Text">Installa</sys:String>
+    <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Annulla</sys:String>
+    <sys:String x:Key="InstallContentDialog.AddContent.Button">Aggiungi Contenuto</sys:String>
+    <sys:String x:Key="InstallContentDialog.FilePicker.Title">Seleziona File Contenuti</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Success.Title">Installazione Riuscita</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Success.Message">I seguenti contenuti sono stati installati con successo:</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Installazione Parzialmente Riuscita</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Partial.Message">Alcuni contenuti sono stati installati con successo, ma altri hanno avuto errori:</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Failed.Title">Installazione Fallita</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Failed.Message">I seguenti contenuti non sono riusciti ad installarsi:</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Successful">Riusciti</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Failed">Falliti</sys:String>
+    <sys:String x:Key="InstallContentDialog.ContentItem.RemoveToolTip">Rimuovi dall'elenco</sys:String>
+
+    <!-- Install Content Progress -->
+    <sys:String x:Key="InstallContentDialog.Progress.Complete">Installazione completata</sys:String>
+    <sys:String x:Key="InstallContentDialog.Progress.Failed">Installazione fallita</sys:String>
+
+    <!-- Install Content Errors -->
+    <sys:String x:Key="InstallContentDialog.Errors.NoStfsData">Nessun dato STFS</sys:String>
+
+    <!-- Manage Profiles Dialog -->
+    <sys:String x:Key="ManageProfilesDialog.ContentDialog.Title">Gestisci Profili</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ContentDialog.SaveButton.Text">Salva</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ContentDialog.CancelButton.Text">Annulla</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Button">Salva</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Label">Gamertag</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.Empty">Il Gamertag non può essere vuoto</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.TooLong">Il Gamertag non può essere più lungo di {0} caratteri</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.InvalidFormat">Il Gamertag deve iniziare con una lettera e può contenere solo lettere, numeri e spazi tra le parole</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Country.Label">Paese Xbox Live</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Language.Label">Lingua Console</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.LiveEnabled.Title">Xbox Live</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.LiveEnabled.Description">Abilita le funzionalità Xbox Live per questo profilo</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.SubscriptionTier.Title">Livello Abbonamento</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.SubscriptionTier.Description">Livello di abbonamento Xbox Live per questo profilo</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.CreateAccount.Button.ToolTip">Crea nuovo account</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Button.ToolTip">Elimina account attualmente selezionato</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Button.ToolTip">Esporta profilo selezionato</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Button.ToolTip">Importa profilo da file</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Title">Elimina Account</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Message">Sei sicuro di voler eliminare l'account "{0}"?&#10;&#10;ATTENZIONE: Questo eliminerà permanentemente tutti i salvataggi e i contenuti associati a questo account. Questa azione non può essere annullata.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Title">Eliminazione Fallita</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Message">Impossibile eliminare l'account. Controlla i log per maggiori dettagli.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.FilePicker.Title">Esporta Profilo</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Confirmation.Title">Esporta Salvataggi</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Confirmation.Message">Vuoi esportare anche i file di salvataggio?&#10;&#10;Selezionando Sì esporterai tutti i contenuti associati a questo profilo.&#10;Selezionando No esporterai solo i dati del profilo dashboard (cartella FFFE07D1).</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Success.Title">Profilo Esportato</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Success.Message">Profilo '{0}' esportato con successo in:&#10;{1}</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Error.Title">Esportazione Fallita</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Error.WindowError">Impossibile accedere alla finestra per il selettore file</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ExportProfile.Error.Failed.Message">Impossibile esportare il profilo.&#10;Controlla i log per maggiori dettagli.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.FilePicker.Title">Importa Profilo</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Success.Title">Profilo Importato</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Success.Message">Profilo '{0}' importato con successo.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Canceled.Title">Importazione Annullata</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Canceled.Message">L'importazione del profilo è stata annullata o saltata.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.Title">Importazione Fallita</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.WindowError">Impossibile accedere alla finestra per il selettore file</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.Failed.Message">Impossibile importare il profilo.&#10;{0}&#10;Controlla i log per maggiori dettagli.</sys:String>
+    <sys:String x:Key="ProfileManager.Import.ConfirmReplace.Title">Sostituisci Profilo Esistente</sys:String>
+    <sys:String x:Key="ProfileManager.Import.ConfirmReplace.Message">Esiste già un profilo con lo stesso XUID:&#10;Gamertag: {0}&#10;XUID: {1}&#10;&#10;Vuoi sostituire il profilo esistente?&#10;&#10;ATTENZIONE: Questo eliminerà permanentemente il profilo esistente e tutti i suoi dati di salvataggio.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Success.Title">Profili Salvati</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">Salvati con successo {0} su {1} profilo/i.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Salvataggio Fallito</sys:String>
+
+    <!-- Edit XConfig Dialog -->
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">Modifica Impostazioni XConfig</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">Salva</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">Annulla</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">Risoluzione</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">Lingua</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">Paese Online</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">Profilo Predefinito</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">Salvataggio Fallito</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">Impossibile caricare il file xconfig.settings.</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">Nessun file xconfig.settings trovato per nessuna versione di Xenia installata.</sys:String>
+
+    <!-- Xenia Selection Dialog -->
+    <sys:String x:Key="XeniaSelectionDialog.Title">Selezione Versione Xenia</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Header">Seleziona Versione Xenia</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.SubHeader">Scegli quale build installata di Xenia vuoi usare.</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Canary.Title">Canary</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Mousehook.Title">Mousehook</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Netplay.Title">Netplay</sys:String>
+
+    <!-- Installed Content Dialog -->
+    <sys:String x:Key="InstalledContentDialog.LoadFailed.Title">Errore</sys:String>
+    <sys:String x:Key="InstalledContentDialog.LoadFailed.Message">Impossibile caricare i contenuti installati: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves">Esporta Salvataggi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves">Importa Salvataggi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteSelected">Elimina Selezionati</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteAll">Elimina Tutto</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory">Apri Cartella</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Apertura Cartella Fallita</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Impossibile aprire la cartella dei contenuti.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements">Obiettivi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.SelectAll">Seleziona Tutto</sys:String>
+    <sys:String x:Key="InstalledContentDialog.UnselectAll">Deseleziona Tutto</sys:String>
+    <sys:String x:Key="InstalledContentDialog.UnlockSelected">Sblocca Selezionati</sys:String>
+    <sys:String x:Key="InstalledContentDialog.LockSelected">Blocca Selezionati</sys:String>
+    <sys:String x:Key="InstalledContentDialog.UnlockAll">Sblocca Tutti</sys:String>
+    <sys:String x:Key="InstalledContentDialog.LockAll">Blocca Tutti</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Unlocked">Sbloccati: </sys:String>
+    <sys:String x:Key="InstalledContentDialog.NoAchievementsFound">Nessun obiettivo trovato</sys:String>
+    <sys:String x:Key="InstalledContentDialog.NoContentFound">Nessun contenuto trovato</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.All">Tutti</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Unlocked">Sbloccati</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Locked">Bloccati</sys:String>
+    <sys:String x:Key="InstalledContentDialog.NotUnlocked">Non sbloccato</sys:String>
+
+    <!-- Installed Content Dialog - Export/Import Messages -->
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.NoSaves.Title">Nessun Salvataggio</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.NoSaves.Message">Nessun salvataggio da esportare.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.MainWindow.Error.Title">Esporta Salvataggi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.MainWindow.Error.Message">Impossibile accedere alla finestra principale.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.FilePicker.Title">Esporta Salvataggi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Title">Esportazione Fallita</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Message">Impossibile esportare i salvataggi.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Title">Esportazione Riuscita</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Message">Esportati con successo {0} salvataggio/i in:&#10;{1}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.FilePicker.Title">Seleziona File di Salvataggio</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Title">Nessun Account Selezionato</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Message">Seleziona un account prima di importare i salvataggi.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Title">Importa Salvataggi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Message">Impossibile accedere alla finestra principale.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Title">Importazione Fallita</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Message">Impossibile importare i salvataggi.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Success.Title">Importazione Riuscita</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Success.Message">Salvataggi importati con successo per il Title ID {0}.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteSelected.Confirmation.Title">Conferma Eliminazione</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteSelected.Confirmation.Message">Sei sicuro di voler eliminare {0} file selezionato/i?&#10;&#10;File da eliminare:&#10;{1}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteAll.Confirmation.Title">Conferma Eliminazione di Tutto</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteAll.Confirmation.Message">Sei sicuro di voler eliminare tutti i {0} file/i?&#10;&#10;File da eliminare:&#10;{1}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Title">Sblocco Fallito</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Impossibile sbloccare gli obiettivi.&#10;Errore: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Blocco Fallito</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Impossibile bloccare gli obiettivi.&#10;Errore: {0}</sys:String>
+
+    <!-- Content Viewer Dialog -->
+    <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Contenuti Installati</sys:String>
+    <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Chiudi</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Funzione Segreta Sbloccata!</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Le funzioni di modifica obiettivi sono state abilitate.&#10;&#10;Usa con cautela - modificare gli obiettivi potrebbe influenzare il tuo profilo.</sys:String>
+
+    <!-- InfoBar Messages -->
+    <sys:String x:Key="InfoBar.UpdatesAvailable">Aggiornamenti disponibili: {0}</sys:String>
+    <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Aggiornamenti disponibili per Xenia Manager</sys:String>
+
+    <!-- Config Editor Dialog -->
+    <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Editor di Configurazione</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.ContentDialog.SaveButton.Text">Salva</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.ContentDialog.CancelButton.Text">Annulla</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.Save.Failed.Title">Salvataggio Fallito</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.Save.Failed.Message">Impossibile salvare il file di configurazione: {0}</sys:String>
+
+    <!-- Optimized Settings Dialog -->
+    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.Title">Impostazioni Ottimizzate</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.ApplyButton.Text">Applica</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.CancelButton.Text">Annulla</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Apply.Failed.Title">Applicazione Fallita</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Title">Errore Applicazione Impostazioni</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Message">Impossibile applicare le impostazioni ottimizzate: {0}</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Header.Subtitle">Rivedi e applica le impostazioni ottimizzate per questo gioco. Rimuovi le impostazioni che non vuoi applicare.</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Current">Attuale:</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Optimized">Ottimizzato:</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Modified">Modificato</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.New">Nuovo</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Remove.ToolTip">Rimuovi questa impostazione dall'applicazione</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Title">Nessuna impostazione ottimizzata compatibile trovata</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Message">Il file delle impostazioni ottimizzate contiene impostazioni che non corrispondono alla configurazione attuale.</sys:String>
+
+    <!-- Mousehook Controls Editor Dialog -->
+    <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.Title">Editor Controlli Mousehook</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.SaveButton.Text">Salva</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.CloseButton.Text">Chiudi</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Section.Label">Sezione Binding:</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.CommentEntry.ToolTip">Commenta il binding per disabilitarlo senza doverlo eliminare</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Key.ToolTip">Seleziona il tasto della tastiera da associare</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Value.ToolTip">Seleziona l'input del controller da associare</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.AddButton">Aggiungi</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.NoBindingsFound">Nessun binding trovato</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.RemoveEntry.ToolTip">Rimuovi questo binding</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.ToolTip">Rileva Input</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.SubToolTip">Premi un tasto o un pulsante del mouse per rilevarlo</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.NoInputDetected.Title">Nessun Input Rilevato</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.NoInputDetected.Message">Nessun input da tastiera o mouse rilevato entro 10 secondi.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Title">Errore Rilevamento Input</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Message">Si è verificato un errore durante il rilevamento dell'input. Riprova.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Salvataggio Fallito</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Il tasto non può essere "Nessuno" per il binding "{0}". Seleziona un tasto valido.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Il valore non può essere "Nessuno" per il binding "{0}". Seleziona un input controller valido.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">Associazione Multipla</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">Seleziona binding da combinare:</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">Applica</sys:String>
+
+    <!-- Xenia Settings Page -->
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Ripristina Impostazioni</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ToolTip">Ottimizza Impostazioni</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoSelection.Title">Nessuna Configurazione Selezionata</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoSelection.Message">Seleziona un file di configurazione prima di ottimizzare le impostazioni.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoGame.Title">Nessun Gioco Selezionato</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoGame.Message">Seleziona un gioco prima di ottimizzare le impostazioni.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Title">Impostazioni Ottimizzate Non Trovate</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Message">Nessuna impostazione ottimizzata trovata per: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Title">Configurazione Non Trovata</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Message">Impossibile caricare il file di configurazione per: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Success.Title">Impostazioni Ottimizzate</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Success.Message">Impostazioni ottimizzate applicate con successo per: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Error.Title">Ottimizzazione Fallita</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Error.Message">Impossibile applicare le impostazioni ottimizzate per: {0}&#10;Errore: {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.ToolTip">Apri nell'Editor</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.SaveSettings.ToolTip">Salva Impostazioni</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.NoConfigFile.Message">Nessun file di configurazione trovato.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.NoConfigFile.SubMessage">Assicurati che l'emulatore sia installato o avvia un gioco per generare i file di configurazione.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.LoadConfig.Error.Title">Errore Caricamento Configurazione</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.LoadConfig.Error.Message">Impossibile caricare la configurazione '{0}': {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.NoSelection.Title">Nessuna Configurazione Selezionata</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.NoSelection.Message">Seleziona un file di configurazione prima di ripristinare le impostazioni.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Confirmation.Title">Ripristina Impostazioni</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Confirmation.Message">Sei sicuro di voler ripristinare tutte le impostazioni ai valori predefiniti?&#10;Questa azione non può essere annullata.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Success.Title">Impostazioni Ripristinate</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Success.Message">Configurazione ripristinata con successo per: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Failure.Title">Ripristino Fallito</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Failure.Message">Impossibile ripristinare il file di configurazione '{0}': {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.NoSelection.Title">Nessuna Configurazione Selezionata</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.NoSelection.Message">Seleziona un file di configurazione prima di aprirlo nell'editor.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.Failure.Title">Apertura nell'Editor Fallita</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.Failure.Message">Impossibile aprire il file di configurazione '{0}': {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.SaveSettings.Success.Title">Impostazioni Salvate</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.SaveSettings.Success.Message">Le impostazioni di configurazione sono state salvate con successo.</sys:String>
+
+    <!-- Config UI Settings - Section Display Names -->
+    <sys:String x:Key="ConfigUiSettings.Section.APU">Audio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Content">Contenuti</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.CPU">CPU</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.D3D12">D3D12</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Display">Display</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.General">Generale</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.GPU">GPU</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.HID">HID</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">Associazioni WinKey</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Kernel">Kernel</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Logging">Log</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Memory">Memoria</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Storage">Archiviazione</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.UI">Interfaccia</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Video">Video</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Vulkan">Vulkan</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Live">Netplay</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.MouseHook">MouseHook</sys:String>
+
+    <!-- Config UI Settings - APU Options -->
+    <sys:String x:Key="ConfigUiSettings.APU.apu.Title">Sistema Audio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.Comment">Sistema Audio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.any">Qualsiasi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.nop">Nop</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.sdl">SDL</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.xaudio2">XAudio2</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu_max_queued_frames.Title">Frame Audio Max in Coda</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu_max_queued_frames.Comment">Permette di cambiare il max di frame audio in buffer per ridurre il ritardo audio&#10;Abbassare questo valore potrebbe causare problemi di prestazioni</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.mute.Title">Silenzia Audio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.mute.Comment">Silenzia tutto l'output audio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.enable_xmp.Title">XMP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.enable_xmp.Comment">Abilita la riproduzione del Music Player&#10;Può risolvere la musica in alcuni giochi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xmp_default_volume.Title">Volume Predefinito XMP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xmp_default_volume.Comment">Volume musica predefinito se il gioco non lo imposta</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_dedicated_xma_thread.Title">Thread XMA Dedicato</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_dedicated_xma_thread.Comment">Abilita la decodifica XMA su thread separato&#10;Con questa opzione disabilitata, aspettati risultati migliori ma prestazioni inferiori</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_new_decoder.Title">Decoder Audio XMA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_new_decoder.Comment">Abilita l'uso del nuovo decoder audio XMA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.Title">Decoder XMA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.Comment">fake: Nessun audio verrà decodificato&#10;master: Versione del decoder identica alla versione base di Xenia&#10;old: Decoder basato sulla versione master con alcuni miglioramenti&#10;new: Nuova versione del decoder. Offre la massima stabilità, ma non è ancora finita</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.fake">Fake</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.master">Master</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.old">Vecchio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.new">Nuovo</sys:String>
+
+    <!-- Config UI Settings - Content Options -->
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.Title">Maschera Licenza</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.Comment">- Nessuna Licenza: Modalità Demo&#10;- Prima Licenza: Generalmente la licenza versione completa nei titoli Xbox Live Arcade&#10;- Tutte le Licenze: Tutte le possibili licenze abilitate, ma potrebbe causare comportamenti inattesi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.option.0">Nessuna Licenza</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.option.1">Prima Licenza</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.option.-1">Tutte le Licenze</sys:String>
+
+    <!-- Config UI Settings - CPU Options -->
+    <sys:String x:Key="ConfigUiSettings.CPU.break_on_unimplemented_instructions.Title">Interrompi su Istruzioni Non Implementate</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.break_on_unimplemented_instructions.Comment">Interrompi nel debugger host se si incontra un'istruzione PowerPC non implementata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disable_context_promotion.Title">Disabilita Promozione Contesto</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disable_context_promotion.Comment">Disabilita le ottimizzazioni Context Promotion&#10;Potrebbe essere necessario per alcuni giochi sportivi, ma ridurrà le prestazioni</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disassemble_functions.Title">Disassembla Funzioni</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disassemble_functions.Comment">Disassembla le funzioni durante la generazione</sys:String>
+
+    <!-- Config UI Settings - D3D12 Options -->
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_allow_variable_refresh_rate_and_tearing.Title">Consenti Frequenza Variabile e Tearing</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_allow_variable_refresh_rate_and_tearing.Comment">In schermo intero, consenti la frequenza di aggiornamento variabile su display che la supportano&#10;Su display senza VRR, potrebbe verificarsi tearing in certi casi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.Title">Priorità Coda</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.Comment">Priorità di pianificazione della coda comandi grafica&#10;0 - Normale&#10;1 - Alta&#10;2 - Global Realtime (richiede privilegi admin)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.option.0">Normale</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.option.1">Alta</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.option.2">Global Realtime</sys:String>
+
+    <!-- Config UI Settings - Display Options -->
+    <sys:String x:Key="ConfigUiSettings.Display.fullscreen.Title">Schermo Intero</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.fullscreen.Comment">Se avviare l'emulatore a schermo intero</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.present_letterbox.Title">Letterbox</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.present_letterbox.Comment">Mantieni le proporzioni durante lo stretching mostrando barre attorno all'immagine</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.Title">Anti-Aliasing</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.Comment">Effetto anti-aliasing di post-processing da applicare all'output del gioco</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.option.none">Nessuno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.option.fxaa">FXAA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.option.fxaa_extreme">FXAA Estremo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.Title">Scalatura e Nitidezza</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.Comment">Effetto di post-processing per il ricampionamento e/o la nitidezza dell'output finale</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.option.bilinear">Bilineare</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.option.cas">CAS</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.option.fsr">FSR</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_sharpness_reduction.Title">Riduzione Nitidezza FSR</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_sharpness_reduction.Comment">Riduzione nitidezza per FSR, in stop&#10;Più basso = più nitido</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_cas_additional_sharpness.Title">Nitidezza Aggiuntiva CAS</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_cas_additional_sharpness.Comment">Nitidezza aggiuntiva per CAS, da 0 a 1&#10;Più alto = più nitido</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_max_upsampling_passes.Title">Passaggi Massimi Upsampling FSR</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_max_upsampling_passes.Comment">Numero massimo di passaggi di upsampling FSR prima di passare allo stretching bilineare</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_dither.Title">Dithering</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_dither.Comment">Applica dithering all'output finale per gradienti più uniformi</sys:String>
+
+    <!-- Config UI Settings - General Options -->
+    <sys:String x:Key="ConfigUiSettings.General.allow_plugins.Title">Consenti Plugin</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.allow_plugins.Comment">Consente il caricamento di plugin/trainer&#10;I plugin sono moduli xex homebrew per creare mod&#10;Funzione sperimentale</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.discord.Title">Discord Rich Presence</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.discord.Comment">Abilita Discord rich presence</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.apply_patches.Title">Applica Patch</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.apply_patches.Comment">Abilita la funzionalità di patch personalizzate</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Title">Tasti Rapidi Controller</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Comment">Tasti rapidi per controller Xbox e PS</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.launch_module.Title">Modulo di Avvio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.launch_module.Comment">Eseguibile da avviare invece del default.xex&#10;Lascia vuoto per avviare il modulo predefinito</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Title">Percorso Suono Notifica</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Comment">Percorso del suono di notifica selezionato&#10;NOTA: Il suono DEVE essere in formato wav!</sys:String>
+
+    <!-- Config UI Settings - GPU Options -->
+    <sys:String x:Key="ConfigUiSettings.GPU.vsync.Title">VSync</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.vsync.Comment">Abilita VSYNC</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.framerate_limit.Title">Limite Framerate</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.framerate_limit.Comment">Frame per secondo massimi&#10;0 = Illimitati&#10;Predefinito a 60 con VSYNC abilitato</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.Title">Sistema Grafico</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.Comment">Sistema grafico da usare</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.any">Qualsiasi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.d3d12">D3D12</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.vulkan">Vulkan</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.null">Null</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.Title">Percorso Render Target (D3D12)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.Comment">Percorso emulazione render target su Direct3D 12&#10;RTV - Render target host&#10;ROV - Rasterizer-ordered views</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.any">Auto</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.rtv">RTV</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.rov">ROV</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.Title">Percorso Render Target (Vulkan)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.Comment">Percorso emulazione render target su Vulkan&#10;FBO - Framebuffer host&#10;FSI - Fragment shader interlock</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.option.any">Auto</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.option.fbo">FBO</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.option.fsi">FSI</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.Title">Readback Resolve</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.Comment">Controlla readback CPU dei risultati render-to-texture&#10;None - disabilita&#10;Fast - 1 frame di ritardo&#10;Full - preciso ma lento</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">Nessuno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Veloce</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Completo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Scala Risoluzione X</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Scala in pixel interi della larghezza per scalare la risoluzione di rendering</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Scala Risoluzione Y</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Comment">Scala in pixel interi dell'altezza per scalare la risoluzione di rendering</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu_allow_invalid_fetch_constants.Title">Consenti Costanti Fetch Non Valide</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu_allow_invalid_fetch_constants.Comment">Consenti costanti fetch con tipo non valido&#10;Generalmente non sicuro ma può aggirare certi errori</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gamma_render_target_as_srgb.Title">Render Target Gamma come sRGB</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gamma_render_target_as_srgb.Comment">Usa output sRGB sull'host per blending corretto nello spazio colore lineare</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Title">Soglia Inferiore Occlusione</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Comment">Se -1 nessun conteggio campione viene scritto, i giochi potrebbero bloccarsi&#10;Altrimenti, il conteggio campione di ogni tile viene incrementato ad ogni EVENT_WRITE_ZPD</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Title">Soglia Superiore Occlusione</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Comment">Imposta a un numero maggiore della soglia inferiore&#10;Ignorato se la soglia inferiore è -1</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.use_fuzzy_alpha_epsilon.Title">Usa Epsilon Alpha Approssimativo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.use_fuzzy_alpha_epsilon.Comment">Confronto approssimativo per i valori alpha per prevenire sfarfallio su NVIDIA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.clear_memory_page_state.Title">Azzera Stato Pagine Memoria</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.clear_memory_page_state.Comment">Aggiorna lo stato delle pagine di memoria per abilitare i dati scritti dalla GPU</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.Title">Override Filtraggio Anisotropico</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.Comment">Forza il filtraggio anisotropico per le texture idonee&#10;Valori più alti mantengono texture più nitide a costo di maggiore larghezza di banda</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.-1">Nessun Override (Predefinito)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.0">Disabilita Filtraggio Anisotropico</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.1">1x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.2">2x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.3">4x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.4">8x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Compilazione Shader Asincrona</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Compila shader in background eliminando gli stutter&#10;Può causare brevi artefatti visivi durante la creazione delle pipeline</sys:String>
+
+    <!-- Config UI Settings - HID Options -->
+    <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Sistema di Input</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.Comment">Sistema di input da usare</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.any">Qualsiasi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.nop">Nop</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.sdl">SDL</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.winkey">WinKey</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.xinput">XInput</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.Title">Modalità Tastiera</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.Comment">Modalità di funzionamento della tastiera:&#10;0 - Disabilitata&#10;1 - Abilitata&#10;2 - Passthrough (richiede controller connesso)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.option.0">Disabilitata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.option.1">Abilitata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.option.2">Passthrough</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_user_index.Title">Indice Utente Tastiera</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_user_index.Comment">Porta controller emulata dalla tastiera (0-3)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.left_stick_deadzone_percentage.Title">Deadzone Stick Sinistro (LS)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.left_stick_deadzone_percentage.Comment">Livello di deadzone per lo stick sinistro (0-100%)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.right_stick_deadzone_percentage.Title">Deadzone Stick Destro (RS)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.right_stick_deadzone_percentage.Comment">Livello di deadzone per lo stick destro (0-100%)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.vibration.Title">Vibrazione</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.vibration.Comment">Attiva/disattiva la vibrazione del controller</sys:String>
+
+    <!-- Config UI Settings - HID.WinKey Options -->
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Title">Pulsante A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Comment">Tasti da associare ad A, separati da spazi. Formato: codice virtuale (0x26), carattere (A-Z, 0-9), con modificatori (^ = Shift, _ = senza Shift). Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Title">Pulsante B</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Comment">Tasti da associare a B, separati da spazi. Formato: codice virtuale (0x26), carattere (A-Z, 0-9), con modificatori (^ = Shift, _ = senza Shift). Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Title">Pulsante BACK</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Comment">Tasti da associare a BACK, separati da spazi. Formato: codice virtuale (0x26), carattere (A-Z, 0-9), con modificatori. Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Title">D-Pad Giù</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Comment">Tasti da associare a DPAD_DOWN, separati da spazi. Es: "^S" = Shift+S</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Title">D-Pad Sinistra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Comment">Tasti da associare a DPAD_LEFT, separati da spazi. Es: "^A" = Shift+A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Title">D-Pad Destra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Comment">Tasti da associare a DPAD_RIGHT, separati da spazi. Es: "^D" = Shift+D</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Title">D-Pad Su</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Comment">Tasti da associare a DPAD_UP, separati da spazi. Es: "^W" = Shift+W</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Title">Pulsante Guide</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Comment">Tasti da associare a GUIDE, separati da spazi. Es: "0x08" = Backspace</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Title">LB (Left Bumper)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Comment">Tasti da associare a LEFT_SHOULDER, separati da spazi. Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Title">Pressione Stick Sinistro (L3)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment">Tasti da associare a LEFT_THUMB_PRESSED, separati da spazi. Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Title">Thumbstick Sinistro Giù</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment">Tasti da associare a LEFT_THUMB_DOWN, separati da spazi. Es: "_S" = S senza Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Title">Thumbstick Sinistro Sinistra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment">Tasti da associare a LEFT_THUMB_LEFT, separati da spazi. Es: "_A" = A senza Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Title">Thumbstick Sinistro Destra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment">Tasti da associare a LEFT_THUMB_RIGHT, separati da spazi. Es: "_D" = D senza Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Title">Thumbstick Sinistro Su</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment">Tasti da associare a LEFT_THUMB_UP, separati da spazi. Es: "_W" = W senza Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Title">LT (Left Trigger)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment">Tasti da associare a LEFT_TRIGGER, separati da spazi. Es: "Q I" associa Q e I allo stesso grilletto</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Title">RB (Right Bumper)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Comment">Tasti da associare a RIGHT_SHOULDER, separati da spazi. Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Title">Pressione Stick Destro (R3)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment">Tasti da associare a RIGHT_THUMB_PRESSED, separati da spazi. Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Title">Thumbstick Destro Giù</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment">Tasti da associare a RIGHT_THUMB_DOWN, separati da spazi. Es: "0x28" = Freccia Giù</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Title">Thumbstick Destro Sinistra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment">Tasti da associare a RIGHT_THUMB_LEFT, separati da spazi. Es: "0x25" = Freccia Sinistra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Title">Thumbstick Destro Destra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment">Tasti da associare a RIGHT_THUMB_RIGHT, separati da spazi. Es: "0x27" = Freccia Destra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Title">Thumbstick Destro Su</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment">Tasti da associare a RIGHT_THUMB_UP, separati da spazi. Es: "0x26" = Freccia Su</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Title">RT (Right Trigger)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment">Tasti da associare a RIGHT_TRIGGER, separati da spazi. Es: "E O" associa E e O allo stesso grilletto</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Title">Pulsante START</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Comment">Tasti da associare a START, separati da spazi. Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Title">Pulsante X</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Comment">Tasti da associare a X, separati da spazi. Es: "Q I" associa Q e I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Title">Pulsante Y</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Comment">Tasti da associare a Y, separati da spazi. Es: "Q I" associa Q e I</sys:String>
+
+    <!-- Config UI Settings - Kernel Options -->
+    <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Title">Applica Aggiornamento Titolo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Comment">Applica gli aggiornamenti del titolo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">Riga di Comando</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">Argomenti aggiuntivi della riga di comando forniti al guest</sys:String>
+
+    <!-- Config UI Settings - Logging Options -->
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">Abilita Console</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">Apri una finestra console con la finestra principale</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">Livello di Log</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">Livello massimo da registrare</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">Errore</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">Avviso</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">Info</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">Debug</sys:String>
+
+    <!-- Config UI Settings - Memory Options -->
+    <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">Proteggi Zero</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Comment">Proteggi la pagina zero da letture e scritture</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Memory.scribble_heap.Title">Scribble Heap</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Memory.scribble_heap.Comment">Scrivi un valore specifico o casuale in tutta la memoria heap allocata</sys:String>
+
+    <!-- Config UI Settings - Storage Options -->
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_cache.Title">Monta Cache</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_cache.Comment">Abilita il montaggio della cache</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_scratch.Title">Monta Scratch</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_scratch.Comment">Abilita il montaggio scratch</sys:String>
+
+    <!-- Config UI Settings - UI Options -->
+    <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Title">Mostra Notifica Obiettivi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Comment">Mostra la notifica degli obiettivi sullo schermo</sys:String>
+
+    <!-- Config UI Settings - Video Options -->
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Title">Risoluzione Display Interna</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Comment">Consenti ai giochi di renderizzare in una risoluzione specifica</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.0">640x480</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.1">640x576</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.2">720x480</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.3">720x576</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.4">800x600</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.5">848x480</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.6">1024x768</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.7">1152x864</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.8">1280x720</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.9">1280x768</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.10">1280x960</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.11">1280x1024</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.12">1360x768</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.13">1440x900</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.14">1680x1050</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.15">1920x540</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Personalizzata (X/Y)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Larghezza Risoluzione Personalizzata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Larghezza personalizzata per la risoluzione display interna&#10;NOTA: Richiede Risoluzione impostata su "Personalizzata (X/Y)"</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Altezza Risoluzione Personalizzata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Altezza personalizzata per la risoluzione display interna&#10;NOTA: Richiede Risoluzione impostata su "Personalizzata (X/Y)"</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Widescreen</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Passa tra rapporto d'aspetto 16:9 e 4:3</sys:String>
+
+    <!-- Config UI Settings - Vulkan Options -->
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Title">Consenti Modalità Immediata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Comment">Consenti la modalità di presentazione immediata (1a priorità), latenza più bassa con possibile tearing</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_mailbox.Title">Consenti Modalità Mailbox</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_mailbox.Comment">Consenti la modalità mailbox (2a priorità), bassa latenza senza tearing</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_fifo_relaxed.Title">Consenti Modalità FIFO Rilassata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_fifo_relaxed.Comment">Consenti la modalità FIFO rilassata (3a priorità), attende il vsync ma può avere tearing se il framerate non raggiunge il refresh rate</sys:String>
+
+    <!-- Config UI Settings - Live/Netplay Options -->
+    <sys:String x:Key="ConfigUiSettings.Live.api_address.Title">Indirizzo API</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.api_address.Comment">Indirizzo server Xenia (es., IP:PORTA)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.discord_presence_user_index.Title">Indice Utente Discord Rich Presence</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.discord_presence_user_index.Comment">Indice profilo utente per Discord rich presence [0-3]</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.Title">Modalità Rete</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.Comment">Modalità di rete&#10;0 - Offline&#10;1 - Systemlink&#10;2 - Xbox Live</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.option.0">Offline</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.option.1">Systemlink</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.option.2">Xbox Live</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.upnp.Title">UPnP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.upnp.Comment">Forwarding porte automatico tramite UPnP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xhttp.Title">XHTTP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xhttp.Comment">Attiva/disattiva XHTTP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xlink_kai_systemlink_hack.Title">Hack SystemLink XLink Kai</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xlink_kai_systemlink_hack.Comment">Abilita hack per il supporto XLink Kai&#10;Potrebbe rompere alcuni giochi</sys:String>
+
+    <!-- Config UI Settings - MouseHook Options -->
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_autoaim.Title">Disabilita Autoaim</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_autoaim.Comment">Disabilita l'autoaim nei giochi che lo supportano (GoldenEye, Perfect Dark, Saints Row, COD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_fullscreen_esc_bind.Title">Disabilita ESC a Schermo Intero</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_fullscreen_esc_bind.Comment">Disabilita l'uscita dallo schermo intero premendo Escape</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.fov_sensitivity.Title">Sensibilità FOV</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.fov_sensitivity.Comment">Scala mouse quando il FOV viene ridotto (COD, DR, RDR e Giochi UE3)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_aim_turn_distance.Title">(GoldenEye/Perfect Dark)&#10;Distanza Rotazione Mira</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_aim_turn_distance.Comment">(GoldenEye/Perfect Dark) Distanza del mirino in modalità mira prima di ruotare la telecamera</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_debug_menu.Title">(GoldenEye)&#10;Menu Debug</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_debug_menu.Comment">(GoldenEye) Abilita il menu debug, accessibile con LB/1</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_gun_sway.Title">(GoldenEye/Perfect Dark)&#10;Oscillazione Arma</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_gun_sway.Comment">(GoldenEye/Perfect Dark) Abilita l'oscillazione dell'arma durante la rotazione</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_remove_blur.Title">(GoldenEye)&#10;Rimuovi Sfocatura</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_remove_blur.Comment">(GoldenEye) Rimuove la sfocatura a bassa risoluzione in modalità classica</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.internal_hook.Title">Hook Interno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.internal_hook.Comment">Tecnica di hooking migliore per iniezione mouse superiore (Saints Row 1)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_x.Title">Inverti Asse X</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_x.Comment">Inverti l'asse X del mouse</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_y.Title">Inverti Asse Y</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_y.Comment">Inverti l'asse Y del mouse</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.menu_sensitivity.Title">(GoldenEye/Saints Row 1)&#10;Sensibilità Menu</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.menu_sensitivity.Comment">(GoldenEye/Saints Row 1) Sensibilità del mouse nei menu</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_snappy_wheel.Title">(Red Dead Redemption)&#10;Ruota Rapida</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_snappy_wheel.Comment">(Red Dead Redemption) Aggancia la ruota delle armi a incrementi di 45 gradi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_turbo_gallop_horse.Title">(Red Dead Redemption)&#10;Galoppo Turbo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_turbo_gallop_horse.Comment">(Red Dead Redemption) Abilita il galoppo turbo per cavalli e carrozze</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sensitivity.Title">Sensibilità Mouse</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sensitivity.Comment">Sensibilità del mouse</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.source_sniper_sensitivity.Title">Sensibilità Cecchino Source</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.source_sniper_sensitivity.Comment">Sensibilità del mirino cecchino del motore Source</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr1_increase_vehicle_rotation_limit.Title">(Saints Row 1)&#10;Limite Rotazione Veicolo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr1_increase_vehicle_rotation_limit.Comment">(Saints Row 1) Modifica il limite di rotazione dei veicoli simile a quello a piedi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_better_handbrake_cam.Title">(Saints Row 2)&#10;Camera Freno a Mano Migliore</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_better_handbrake_cam.Comment">(Saints Row 2) Separa la rotazione X dai veicoli durante la frenata a mano come in SR1</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_hold_fine_aim.Title">(Saints Row 2)&#10;Tieni Mira Fine</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_hold_fine_aim.Comment">(Saints Row 2) Cambia la mira fine (ADS) da toggle a pressione mantenuta</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_better_drive_cam.Title">(Saints Row 1 &amp; 2)&#10;Camera Guida Migliore</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_better_drive_cam.Comment">(Saints Row 1&amp;2) Separa la rotazione X dai veicoli quando il auto-centering è disabilitato</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Title">(Saints Row 1)&#10;Disabilita Ricarica Condivisa</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Comment">(Saints Row 1) Disabilita la ricarica delle armi premendo il pulsante interno (A)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Title">(Saints Row 1)&#10;Inverti Ruota</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Comment">Inverte le associazioni per la ruota delle armi e la direzione zoom mappa in Saints Row 1</sys:String>
+
+    <!-- About Page -->
+    <sys:String x:Key="AboutPage.App.Description">Uno strumento di gestione completo per Xenia Emulator. Installa, aggiorna e gestisci facilmente le diverse versioni dell'emulatore Xenia con un'interfaccia intuitiva.</sys:String>
+    <sys:String x:Key="AboutPage.WebsiteButton.Text">Sito Web</sys:String>
+    <sys:String x:Key="AboutPage.GithubButton.Text">GitHub</sys:String>
+    <sys:String x:Key="AboutPage.CheckForUpdatesButton.Text">Controlla Aggiornamenti</sys:String>
+    <sys:String x:Key="AboutPage.UpdateXeniaManagerButton.Text">Aggiorna Xenia Manager</sys:String>
+    <sys:String x:Key="AboutPage.CheckForUpdatesFailed.Title">Controllo Aggiornamenti Fallito</sys:String>
+    <sys:String x:Key="AboutPage.CheckForUpdatesFailed.Message">Si è verificato un errore durante il controllo degli aggiornamenti:&#10;{0}</sys:String>
+    <sys:String x:Key="AboutPage.UpdateFailed.Title">Aggiornamento Fallito</sys:String>
+    <sys:String x:Key="AboutPage.UpdateFailed.Message">Si è verificato un errore durante l'aggiornamento di Xenia Manager:&#10;{0}</sys:String>
+    <sys:String x:Key="AboutPage.UpdateFailed.NoReleaseInfo">Impossibile ottenere le informazioni sulla release. Riprova più tardi.</sys:String>
+    <sys:String x:Key="AboutPage.DownloadingUpdate">Download aggiornamento</sys:String>
+    <sys:String x:Key="AboutPage.ExtractingUpdate">Estrazione aggiornamento</sys:String>
+    <sys:String x:Key="AboutPage.LicenseCredits.Text">Licenza e Crediti</sys:String>
+    <sys:String x:Key="AboutPage.LicenseCredits.SideText">Informazioni legali e riconoscimenti</sys:String>
+    <sys:String x:Key="AboutPage.License.Text">Questo software è concesso in licenza sotto la Licenza BSD-3-Clause.</sys:String>
+    <sys:String x:Key="AboutPage.Xbox360Emulation.Header">Emulazione Xbox 360</sys:String>
+    <sys:String x:Key="AboutPage.Libraries.Header">Librerie</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaProject.Title">Progetto Xenia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaProject.ToolTip"> - Emulatore Xbox 360 originale</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaCanary.Title">Xenia Canary</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaCanary.ToolTip"> - Build sperimentale con le ultime funzionalità</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaNetplay.Title">Xenia Netplay</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaNetplay.ToolTip"> - Supporto gioco multiplayer</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaMousehook.Title">Xenia Mousehook</sys:String>
+    <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - Supporto tastiera e mouse</sys:String>
+    <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
+    <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - Framework UI multipiattaforma con Fluent Design</sys:String>
+    <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - Controlli e temi Fluent Design per Avalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
+    <sys:String x:Key="AboutPage.Credits.FluentIcons.ToolTip"> - Framework per le Fluent Symbol Icons</sys:String>
+    <sys:String x:Key="AboutPage.Credits.NLog.Title">NLog</sys:String>
+    <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Framework di logging flessibile per .NET</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Analisi dettagli gioco</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Gestione archivi e compressione</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - Compressione Zstandard per .NET</sys:String>
+    <sys:String x:Key="AboutPage.FooterNote.Text">Questa applicazione non è affiliata, approvata o sponsorizzata da Microsoft Corporation o dal Progetto Xenia. Tutti i marchi sono di proprietà dei rispettivi titolari.&#10;Xbox 360 è un marchio registrato di Microsoft Corporation.&#10;Xenia è un marchio registrato del Progetto Xenia.&#10;Qualsiasi riferimento a questi marchi è fatto esclusivamente per identificare compatibilità o funzionalità.&#10;Questo software è destinato esclusivamente a scopi educativi e informativi. Non contiene né distribuisce contenuti protetti da copyright. Gli utenti sono responsabili di garantire la conformità alle leggi applicabili.&#10;Questa applicazione è fornita "così com'è" senza garanzie di alcun tipo. Usare a proprio rischio.</sys:String>
+    <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">Usa Build Sperimentale</sys:String>
+    <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">Abilita per ricevere aggiornamenti con funzionalità sperimentali e accesso anticipato</sys:String>
+    <sys:String x:Key="AboutPage.WebsiteButton.ToolTip">Apre il sito web di Xenia Manager</sys:String>
+    <sys:String x:Key="AboutPage.GithubButton.ToolTip">Apre il Repository GitHub di Xenia Manager</sys:String>
+    <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">È disponibile una versione più recente di Xenia Manager.</sys:String>
+    <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">Stai attualmente usando l'ultima versione di Xenia Manager.</sys:String>
+
+    <!-- Library Page - Drag and Drop -->
+    <sys:String x:Key="LibraryPage.DragDrop.Title">Trascina i file per aggiungere giochi</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">Sono supportati i file .iso, .xex, .zar</sys:String>
+</ResourceDictionary>
