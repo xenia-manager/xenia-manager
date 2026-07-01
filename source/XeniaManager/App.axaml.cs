@@ -196,6 +196,11 @@ public partial class App : Application
                 Logger.Info<App>($"Cleaned up {deletedCount} unused cached artwork files");
             });
 
+            // Stop the game directory watcher
+            Logger.Debug<App>("Stopping game directory watcher during shutdown");
+            GameDirectoryWatcherService watcher = Services.GetRequiredService<GameDirectoryWatcherService>();
+            watcher.Stop();
+
             // Save window properties (must happen before the window actually closes)
             settings.SaveWindowProperties(settings, mainWindow);
             Logger.Info<App>("Main window closing");

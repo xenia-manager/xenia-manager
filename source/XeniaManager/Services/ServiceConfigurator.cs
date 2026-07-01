@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels;
@@ -70,6 +71,8 @@ public class ServiceConfigurator
         services.AddSingleton<INotificationService, NotificationService>();
         // ReleaseService
         services.AddSingleton<IReleaseService, ReleaseService>();
+        // GameDirectoryWatcherService
+        services.AddSingleton<GameDirectoryWatcherService>();
 
         // Controls
         services.AddSingleton<PatchSelectionDialogViewModel>();
