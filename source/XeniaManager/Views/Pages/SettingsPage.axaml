@@ -41,6 +41,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.ToolTip}"
                                             Icon="ArrowClockwise"
                                             IsChecked="{Binding CheckForUpdatesOnStartup, Mode=TwoWay}" />
+                    <!-- Auto Detect New Games -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.AutoDetectNewGames}"
+                                            Description="{DynamicResource SettingsPage.General.AutoDetectNewGames.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.AutoDetectNewGames.ToolTip}"
+                                            Icon="Scan"
+                                            IsChecked="{Binding AutoDetectNewGames, Mode=TwoWay}" />
                 </StackPanel>
             </Expander>
             <!-- UI Settings -->
