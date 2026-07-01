@@ -24,4 +24,10 @@ public class GeneralSettings
     /// </summary>
     [JsonPropertyName("use_media_id_for_title")]
     public bool UseMediaIdForTitle { get; set; } = true;
+
+    /// <summary>
+    /// Whether to automatically detect new games added to the Games directory
+    /// </summary>
+    [JsonPropertyName("auto_detect_new_games")]
+    public bool AutoDetectNewGames { get; set; } = true;
 }

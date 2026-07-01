@@ -37,6 +37,11 @@ public partial class LibraryPageViewModel : ViewModelBase
     // Variables
     private Settings _settings { get; set; }
     private IMessageBoxService _messageBoxService { get; set; }
+    private INotificationService _notificationService { get; set; }
+    private GameDirectoryWatcherService _watcherService { get; set; }
+    private bool _isScanning;
+    private DateTime _lastNotificationTime = DateTime.MinValue;
+    private static readonly TimeSpan NotificationCooldown = TimeSpan.FromSeconds(10);
 
     // Search optimization
     private CancellationTokenSource? _debounceCts;
@@ -155,11 +160,15 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         _settings = App.Services.GetRequiredService<Settings>();
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
+        _notificationService = App.Services.GetRequiredService<INotificationService>();
+        _watcherService = App.Services.GetRequiredService<GameDirectoryWatcherService>();
 
         // Load UI settings
         LoadUiSettings();
 
         RefreshLibrary();
+
+        _watcherService.NewGameFilesDetected += OnNewGameFilesDetected;
     }
 
     /// <summary>
@@ -249,8 +258,238 @@ public partial class LibraryPageViewModel : ViewModelBase
     [RelayCommand]
     private void Refresh()
     {
+        Logger.Info<LibraryPageViewModel>("Refreshing game library");
         GameManager.LoadLibrary();
         RefreshLibrary();
+        _lastNotificationTime = DateTime.MinValue;
+        Logger.Debug<LibraryPageViewModel>("Library refreshed, notification cooldown reset");
+    }
+
+    /// <summary>
+    /// Handles the NewGameFilesDetected event from the directory watcher.
+    /// Shows a notification with a rescan action, with a cooldown to batch bulk copies.
+    /// </summary>
+    private void OnNewGameFilesDetected(object? sender, EventArgs e)
+    {
+        if (_isScanning)
+        {
+            Logger.Trace<LibraryPageViewModel>("Ignoring NewGameFilesDetected event (already scanning)");
+            return;
+        }
+
+        // Cooldown to batch bulk copies — suppress notifications for 10s after the last one
+        TimeSpan sinceLastNotification = DateTime.UtcNow - _lastNotificationTime;
+        if (sinceLastNotification < NotificationCooldown)
+        {
+            Logger.Trace<LibraryPageViewModel>($"Ignoring NewGameFilesDetected event (cooldown active, {sinceLastNotification.TotalSeconds:F1}s since last notification)");
+            return;
+        }
+
+        _lastNotificationTime = DateTime.UtcNow;
+        Logger.Info<LibraryPageViewModel>("New game files detected, showing notification");
+
+        _notificationService.ShowAction(
+            LocalizationHelper.GetText("InfoBar.NewGamesDetected.Message"),
+            InfoBarSeverity.Informational,
+            LocalizationHelper.GetText("InfoBar.NewGamesDetected.Action"),
+            async void () => await ScanGamesDirectoryAsync());
+    }
+
+    /// <summary>
+    /// Scans the default Games directory for new game files and adds them to the library.
+    /// Uses the first installed Xenia version. Shows progress dialogs and results.
+    /// </summary>
+    private async Task ScanGamesDirectoryAsync()
+    {
+        if (_isScanning)
+        {
+            Logger.Trace<LibraryPageViewModel>("Scan already in progress, skipping duplicate");
+            return;
+        }
+
+        _isScanning = true;
+        Logger.Info<LibraryPageViewModel>("Starting auto-scan of Games directory");
+
+        try
+        {
+            // Get the first installed Xenia version for adding games
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+            if (installedVersions.Count == 0)
+            {
+                Logger.Warning<LibraryPageViewModel>("No Xenia installed, cannot auto-scan games");
+                return;
+            }
+
+            XeniaVersion xeniaVersion = installedVersions[0];
+            Logger.Debug<LibraryPageViewModel>($"Using Xenia {xeniaVersion} for auto-scan");
+
+            // Ensure the Games directory exists
+            if (!Directory.Exists(AppPaths.GamesDirectory))
+            {
+                Logger.Warning<LibraryPageViewModel>($"Games directory does not exist: {AppPaths.GamesDirectory}");
+                return;
+            }
+
+            // Phase 1: Discover game files in the Games directory
+            Logger.Debug<LibraryPageViewModel>("Starting game file discovery phase");
+
+            EventManager.Instance.DisableWindow();
+
+            List<string> discoveredGameFiles;
+            bool scanCancelled;
+
+            try
+            {
+                (discoveredGameFiles, scanCancelled) = await FolderScanProgressDialog.ShowAsync(async (cancellationToken, progressReporter) =>
+                {
+                    return await Task.Run(() =>
+                        GameManager.DiscoverGameFiles(
+                            AppPaths.GamesDirectory,
+                            cancellationToken,
+                            progressReporter), cancellationToken);
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<LibraryPageViewModel>($"Failed to scan Games directory: {ex.Message}");
+                Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                return;
+            }
+            finally
+            {
+                EventManager.Instance.EnableWindow();
+            }
+
+            // Check if the scan was canceled or found no files
+            if (scanCancelled)
+            {
+                Logger.Info<LibraryPageViewModel>("Auto-scan was cancelled by user");
+                return;
+            }
+
+            if (discoveredGameFiles.Count == 0)
+            {
+                Logger.Info<LibraryPageViewModel>("No new game files found in Games directory");
+                return;
+            }
+
+            Logger.Info<LibraryPageViewModel>($"Discovered {discoveredGameFiles.Count} potential game files");
+
+            // Phase 2: Process and add each discovered game file
+            Logger.Debug<LibraryPageViewModel>("Starting game import phase");
+
+            EventManager.Instance.DisableWindow();
+
+            try
+            {
+                (int gamesAdded, int gamesSkipped, int gamesFailed) = await AddGamesProgressDialog.ShowAsync(async (progressReporter) =>
+                {
+                    int added = 0;
+                    int skipped = 0;
+                    int failed = 0;
+                    int totalGames = discoveredGameFiles.Count;
+                    int processed = 0;
+
+                    foreach (string gameFile in discoveredGameFiles)
+                    {
+                        processed++;
+                        int progress = (processed * 100) / totalGames;
+
+                        // Check for duplicates before processing
+                        if (GameManager.IsDuplicateGame(gameFile))
+                        {
+                            Logger.Trace<LibraryPageViewModel>($"Skipping duplicate game: {gameFile}");
+                            skipped++;
+                            progressReporter(
+                                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate"), Path.GetFileName(gameFile)),
+                                gameFile, processed, totalGames, added, skipped, failed, progress);
+                            continue;
+                        }
+
+                        progressReporter(
+                            string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.Processing"), Path.GetFileName(gameFile)),
+                            gameFile, processed, totalGames, added, skipped, failed, progress);
+
+                        // Parse game details from the file
+                        Logger.Debug<LibraryPageViewModel>($"Parsing game details for: {gameFile}");
+                        ParsedGameDetails details = GameManager.GetGameDetails(gameFile);
+
+                        // Fall back to Xenia-based parsing if details are invalid and setting is enabled
+                        if (!details.IsValid && _settings.Settings.General.ParseGameDetailsWithXenia)
+                        {
+                            Logger.Debug<LibraryPageViewModel>("Falling back to Xenia-based game details parsing");
+                            details = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
+                        }
+
+                        // Skip if we still can't identify the game
+                        if (!details.IsValid)
+                        {
+                            Logger.Warning<LibraryPageViewModel>($"Game details are invalid, skipping: {gameFile}");
+                            skipped++;
+                            progressReporter(
+                                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingInvalid"), Path.GetFileName(gameFile)),
+                                gameFile, processed, totalGames, added, skipped, failed, progress);
+                            continue;
+                        }
+
+                        // Try to add the game to the library
+                        try
+                        {
+                            await XboxDatabase.LoadAsync();
+                            Logger.Debug<LibraryPageViewModel>($"Searching database by title_id {details.TitleId}");
+                            await Task.WhenAll(XboxDatabase.SearchDatabase(details.TitleId));
+
+                            if (XboxDatabase.FilteredDatabase.Count == 1)
+                            {
+                                GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
+                                await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle);
+                            }
+                            else
+                            {
+                                await GameManager.AddUnknownGame(xeniaVersion, details, gameFile);
+                            }
+
+                            added++;
+                            Logger.Info<LibraryPageViewModel>($"Successfully added game: {details.Title} ({details.TitleId})");
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error<LibraryPageViewModel>($"Failed to add game {gameFile}: {ex.Message}");
+                            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                            failed++;
+                        }
+
+                        progressReporter(
+                            string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.Processed"), Path.GetFileName(gameFile)),
+                            gameFile, processed, totalGames, added, skipped, failed, progress);
+                    }
+
+                    Logger.Info<LibraryPageViewModel>($"Auto-scan completed. Games added: {added}, Skipped: {skipped}, Failed: {failed}");
+                    return (added, skipped, failed);
+                });
+
+                // Refresh the library to show newly added games
+                RefreshLibrary();
+
+                // Show result notification
+                if (gamesAdded > 0)
+                {
+                    Logger.Info<LibraryPageViewModel>($"Auto-scan added {gamesAdded} games to the library");
+                    _notificationService.ShowSuccess(
+                        string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Success.Message"), gamesAdded));
+                }
+            }
+            finally
+            {
+                EventManager.Instance.EnableWindow();
+            }
+        }
+        finally
+        {
+            _isScanning = false;
+            _lastNotificationTime = DateTime.MinValue;
+            Logger.Debug<LibraryPageViewModel>("Auto-scan completed, notification cooldown reset");
+        }
     }
 
     [RelayCommand]

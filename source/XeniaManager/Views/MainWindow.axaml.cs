@@ -25,6 +25,7 @@ public partial class MainWindow : AppWindow
     private IReleaseService _releaseService { get; set; }
     private INotificationService _notificationService { get; set; }
     private Settings _settings { get; set; }
+    private GameDirectoryWatcherService _watcherService { get; set; }
 
     // Constructor
     public MainWindow()
@@ -34,6 +35,7 @@ public partial class MainWindow : AppWindow
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
         _notificationService = App.Services.GetRequiredService<INotificationService>();
         _settings = App.Services.GetRequiredService<Settings>();
+        _watcherService = App.Services.GetRequiredService<GameDirectoryWatcherService>();
         DataContext = _viewModel;
 
         // Subscribe to EventManager for window state changes
@@ -53,6 +55,13 @@ public partial class MainWindow : AppWindow
             {
                 await CheckForEmulatorUpdates();
                 await CheckForManagerUpdates();
+            }
+
+            // Start the directory watcher if auto-detection is enabled
+            if (_settings.Settings.General.AutoDetectNewGames)
+            {
+                Logger.Debug<MainWindow>("Auto-detect new games is enabled, starting directory watcher");
+                _watcherService.Start();
             }
         }
         catch

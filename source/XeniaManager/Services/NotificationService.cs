@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Threading;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using XeniaManager.Core.Logging;
 using XeniaManager.Views;
 
 namespace XeniaManager.Services;
@@ -57,6 +59,16 @@ public interface INotificationService
     /// <param name="severity">The severity level of the notification</param>
     /// <param name="durationSeconds">How long to display the notification in seconds (default: 5)</param>
     void Show(string message, InfoBarSeverity severity, double durationSeconds = 5);
+
+    /// <summary>
+    /// Shows a notification with an action button.
+    /// Clears the queue and shows immediately.
+    /// </summary>
+    /// <param name="message">The message to display</param>
+    /// <param name="severity">The severity level of the notification</param>
+    /// <param name="actionText">The text for the action button</param>
+    /// <param name="onAction">The action to execute when the button is clicked</param>
+    void ShowAction(string message, InfoBarSeverity severity, string actionText, Action onAction);
 
     /// <summary>
     /// Clears all pending notifications in the queue.
@@ -156,6 +168,47 @@ public class NotificationService : INotificationService
     }
 
     /// <summary>
+    /// Shows a notification with an action button.
+    /// Clears the queue and shows immediately on the UI thread.
+    /// </summary>
+    /// <param name="message">The message to display</param>
+    /// <param name="severity">The severity level of the notification</param>
+    /// <param name="actionText">The text for the action button</param>
+    /// <param name="onAction">The action to execute when the button is clicked</param>
+    public void ShowAction(string message, InfoBarSeverity severity, string actionText, Action onAction)
+    {
+        Logger.Debug<NotificationService>($"Showing action notification: {message} (severity: {severity})");
+
+        ClearQueue();
+
+        // Dispatch to UI thread since this may be called from background threads
+        // All InfoBar access (including the getter which calls FindControl) must happen on the UI thread
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (InfoBar == null)
+            {
+                Logger.Warning<NotificationService>("InfoBar control not found, cannot show action notification");
+                return;
+            }
+
+            Button button = new Button { Content = actionText };
+            button.Click += (_, _) =>
+            {
+                Logger.Trace<NotificationService>("Action button clicked, executing action");
+                onAction();
+                InfoBar.IsOpen = false;
+            };
+
+            InfoBar.Message = message;
+            InfoBar.Severity = severity;
+            InfoBar.ActionButton = button;
+            InfoBar.IsOpen = true;
+
+            Logger.Debug<NotificationService>("Action notification displayed successfully");
+        });
+    }
+
+    /// <summary>
     /// Clears all pending notifications in the queue.
     /// </summary>
     public void ClearQueue()
@@ -211,6 +264,7 @@ public class NotificationService : INotificationService
         // Set the message and severity directly on the InfoBar
         InfoBar.Message = notification.Message;
         InfoBar.Severity = notification.Severity;
+        InfoBar.ActionButton = null;
         InfoBar.IsOpen = true;
 
         // Animate in
