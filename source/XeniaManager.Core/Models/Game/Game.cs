@@ -60,4 +60,11 @@ public class Game
     /// </summary>
     [JsonPropertyName("file_locations")]
     public GameFiles FileLocations { get; set; } = new GameFiles();
+
+    /// <summary>
+    /// Disc number (1-based) that was last launched. Used to pre-select the
+    /// disc in the disc selection popup for multi-disc games.
+    /// </summary>
+    [JsonPropertyName("last_played_disc")]
+    public int LastPlayedDisc { get; set; } = 1;
 }

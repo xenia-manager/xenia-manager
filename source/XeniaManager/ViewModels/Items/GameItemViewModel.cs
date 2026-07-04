@@ -46,6 +46,8 @@ public partial class GameItemViewModel : ViewModelBase
     public bool IsXeniaMousehook => Game.XeniaVersion == XeniaVersion.Mousehook;
 
     public bool InstalledPatches => !string.IsNullOrEmpty(Game.FileLocations.Patch);
+    public bool IsMultiDisc => Game.FileLocations.IsMultiDisc;
+    public int DiscCount => Game.FileLocations.DiscCount;
 
     // Cached result to avoid repeated platform checks
     private static readonly bool _supportsShortcuts = PlatformUtilities.IsNativeWindows();
@@ -72,10 +74,25 @@ public partial class GameItemViewModel : ViewModelBase
             return;
         }
 
+        // For multi-disc games, ask the user which disc to launch before proceeding
+        int discNumber = 1;
+        if (Game.FileLocations.IsMultiDisc)
+        {
+            Logger.Info<GameItemViewModel>($"{Game.Title} has {Game.FileLocations.DiscCount} discs, showing disc selection dialog");
+            int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+            if (selectedDisc == null)
+            {
+                Logger.Info<GameItemViewModel>("Disc selection cancelled, aborting launch");
+                return;
+            }
+
+            discNumber = selectedDisc.Value;
+        }
+
         LoadingScreenWindow? loadingScreen = null;
         try
         {
-            Logger.Info<GameItemViewModel>($"Launching {Game.Title}...");
+            Logger.Info<GameItemViewModel>($"Launching {Game.Title} (Disc {discNumber}/{Game.FileLocations.DiscCount})...");
 
             // Check if the loading screen should be shown
             bool showLoadingScreen = _settings.Settings.Ui.Window.LoadingScreen;
@@ -108,7 +125,7 @@ public partial class GameItemViewModel : ViewModelBase
             }
 
             EventManager.Instance.DisableWindow();
-            await Launcher.LaunchGameASync(Game, _settings, onGameLoadingStarted: onGameLoadingStarted);
+            await Launcher.LaunchGameASync(Game, _settings, onGameLoadingStarted: onGameLoadingStarted, discNumber: discNumber);
             EventManager.Instance.EnableWindow();
         }
         catch (Exception ex)
@@ -738,6 +755,35 @@ public partial class GameItemViewModel : ViewModelBase
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Information.Error.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Information.Error.Message"), ex.Message));
+        }
+    }
+
+    [RelayCommand]
+    private async Task ManageDiscs()
+    {
+        Logger.Info<GameItemViewModel>($"Opening Manage Discs dialog for: '{Game.Title}'");
+
+        try
+        {
+            await ManageDiscsDialog.ShowAsync(Game);
+
+            // Persist any disc additions/removals/relabeling made in the dialog
+            GameManager.SaveLibrary();
+
+            // Refresh derived properties (IsMultiDisc, DiscCount) and the library UI
+            OnPropertyChanged(nameof(IsMultiDisc));
+            OnPropertyChanged(nameof(DiscCount));
+            _library.RefreshLibrary();
+
+            Logger.Info<GameItemViewModel>($"Manage Discs dialog closed for: '{Game.Title}', now has {Game.FileLocations.DiscCount} disc(s)");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to manage discs for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.ManageDiscs.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.ManageDiscs.Error.Message"), ex.Message));
         }
     }
 

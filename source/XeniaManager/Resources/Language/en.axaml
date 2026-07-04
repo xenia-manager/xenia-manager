@@ -1229,4 +1229,36 @@
     <!-- Library Page - Drag & Drop -->
     <sys:String x:Key="LibraryPage.DragDrop.Title">Drop files to add games</sys:String>
     <sys:String x:Key="LibraryPage.DragDrop.Subtitle">.iso, .xex, .zar files are supported</sys:String>
+
+    <!-- Multi-Disc Support -->
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">Manage Discs</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">Add, rename, or remove discs for multi-disc games</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">Failed to Manage Discs</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">An error occurred while managing discs.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">{0} Discs</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">Add as Additional Disc?</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">This file appears to be another disc of '{0}', which is already in your library.&#10;&#10;Would you like to add it as an additional disc of '{0}' instead of creating a separate library entry?</sys:String>
+
+    <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
+    <sys:String x:Key="DiscSelectionDialog.Header">Select Disc</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">This game has multiple discs. Choose which one to launch.</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">Disc 1</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">Disc {0}</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">(Last Played)</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(File Missing)</sys:String>
+
+    <!-- Manage Discs Dialog -->
+    <sys:String x:Key="ManageDiscsDialog.Title">{0} - Manage Discs</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">Add, rename, or remove discs. The disc you launch will be remembered for next time.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">Close</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">Disc 1</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">Disc {0}</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">Add Disc</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">Remove this disc</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">File not found</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">Select Disc File</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Disc Already Added</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">This file is already associated with this game.</sys:String>
 </ResourceDictionary>
