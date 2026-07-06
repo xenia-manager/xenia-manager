@@ -99,33 +99,29 @@ public class GameDirectoryWatcherService : IDisposable
     }
 
     /// <summary>
-    /// Handles file system events by filtering ignored extensions and resetting the debounce timer.
-    /// Created events fire for new files and directories. Changed events fire for file writes
-    /// (extending the debounce during copies) and directory metadata (filtered out below).
+    /// Handles file system events by filtering directories and unsupported extensions,
+    /// then resetting the debounce timer.
     /// </summary>
     private void OnFileSystemEvent(object sender, FileSystemEventArgs e)
     {
-        // Skip Changed events that are for directories (metadata updates, saves, content)
-        if (e.ChangeType == WatcherChangeTypes.Changed)
+        // Skip events that are for directories (folder creation, metadata updates)
+        try
         {
-            try
+            FileAttributes attr = File.GetAttributes(e.FullPath);
+            if (attr.HasFlag(FileAttributes.Directory))
             {
-                FileAttributes attr = File.GetAttributes(e.FullPath);
-                if (attr.HasFlag(FileAttributes.Directory))
-                {
-                    Logger.Trace<GameDirectoryWatcherService>($"Ignoring directory Changed event: {e.Name}");
-                    return;
-                }
-            }
-            catch
-            {
+                Logger.Trace<GameDirectoryWatcherService>($"Ignoring directory event: {e.ChangeType} - {e.Name}");
                 return;
             }
         }
+        catch
+        {
+            return;
+        }
 
-        // Skip files with extensions that are never game files
+        // Skip files with extensions that are not supported game file types
         string ext = Path.GetExtension(e.Name ?? "").ToLowerInvariant();
-        if (IsIgnoredExtension(ext))
+        if (!IsSupportedExtension(ext))
         {
             Logger.Trace<GameDirectoryWatcherService>($"Ignoring file change for non-game file: {e.Name} (extension: {ext})");
             return;
@@ -152,16 +148,11 @@ public class GameDirectoryWatcherService : IDisposable
     }
 
     /// <summary>
-    /// Determines whether a file extension should be ignored by the watcher.
-    /// Prevents false positives from temporary files, logs, images, and other non-game files.
+    /// Determines whether a file extension is a supported game file type.
     /// </summary>
-    /// <param name="ext">The lowercase file extension to check.</param>
-    /// <returns>True if the extension should be ignored, false otherwise.</returns>
-    private static bool IsIgnoredExtension(string ext) => ext switch
+    private static bool IsSupportedExtension(string ext) => ext switch
     {
-        ".tmp" or ".temp" or ".part" or ".download" or ".txt" or ".md"
-            or ".log" or ".dll" or ".exe" or ".cfg" or ".ini" or ".toml"
-            or ".png" or ".jpg" or ".jpeg" or ".bmp" or ".gif" => true,
+        ".iso" or ".xiso" or ".zar" or ".xex" or "" => true,
         _ => false
     };
 
