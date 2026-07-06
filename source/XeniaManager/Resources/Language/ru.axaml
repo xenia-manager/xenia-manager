@@ -46,6 +46,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Не удалось выполнить сканирование</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Ошибка при сканировании папки:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Ошибка сканирования</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Поиск игр</sys:String>
@@ -324,6 +329,9 @@
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Проверка наличия обновлений при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Автоматическая проверка обновлений Xenia и Xenia Manager при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Отключите эту опцию, чтобы пропускать проверку обновлений при запуске программы</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Загрузка {0}</sys:String>
@@ -713,6 +721,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Доступны обновления: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Доступны обновления для Xenia Manager</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Редактор настроек</sys:String>

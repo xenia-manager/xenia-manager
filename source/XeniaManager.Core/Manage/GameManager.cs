@@ -86,6 +86,32 @@ public class GameManager
             }
 
             Logger.Info<GameManager>($"Successfully loaded {Games.Count} games from the library");
+
+            // Migrate absolute game paths under Games directory to relative paths for portability
+            bool migrated = false;
+            foreach (Game game in Games)
+            {
+                string currentPath = game.FileLocations.Game;
+                if (!string.IsNullOrEmpty(currentPath) && Path.IsPathRooted(currentPath))
+                {
+                    string relativePath = GetRelativeGamePath(currentPath);
+                    if (relativePath != currentPath)
+                    {
+                        Logger.Debug<GameManager>($"Migrating game path for '{game.Title}': '{currentPath}' -> '{relativePath}'");
+                        game.FileLocations.Game = relativePath;
+                        migrated = true;
+                    }
+                }
+            }
+
+            if (migrated)
+            {
+                Logger.Info<GameManager>("Migrated game paths to relative format for portability");
+                SaveLibrary();
+            }
+
+            // Ensure Games directory exists for users to drop game files into
+            Directory.CreateDirectory(AppPaths.GamesDirectory);
         }
         catch (JsonException jsonEx)
         {
@@ -570,7 +596,7 @@ public class GameManager
             XeniaVersion = xeniaVersion,
             FileLocations =
             {
-                Game = gamePath
+                Game = Path.IsPathRooted(gamePath) ? GetRelativeGamePath(gamePath) : gamePath
             }
         };
 
@@ -711,7 +737,7 @@ public class GameManager
             XeniaVersion = xeniaVersion,
             FileLocations =
             {
-                Game = gamePath
+                Game = Path.IsPathRooted(gamePath) ? GetRelativeGamePath(gamePath) : gamePath
             }
         };
 
@@ -803,7 +829,16 @@ public class GameManager
     /// <returns>True if a game with the same file path exists, false otherwise.</returns>
     public static bool IsDuplicateGame(string gamePath)
     {
-        bool isDuplicate = Games.Any(game => game.FileLocations.Game == gamePath);
+        // Resolve incoming path to absolute for comparison (handles both relative and absolute input)
+        string resolvedPath = Path.IsPathRooted(gamePath)
+            ? gamePath
+            : Path.Combine(AppPaths.GamesDirectory, gamePath);
+
+        bool isDuplicate = Games.Any(game => string.Equals(
+            game.FileLocations.ResolvedGamePath,
+            resolvedPath,
+            StringComparison.OrdinalIgnoreCase));
+
         if (isDuplicate)
         {
             Logger.Debug<GameManager>($"Duplicate game detected for path: {gamePath}");
@@ -1193,5 +1228,25 @@ public class GameManager
             Logger.Warning<GameManager>($"Failed to clean up temporary file at {tempPath}: {ex.Message}");
             Logger.LogExceptionDetails<GameManager>(ex);
         }
+    }
+
+    /// <summary>
+    /// Converts an absolute path to a relative path if it resides within the Games directory.
+    /// Used for portable game storage alongside the application.
+    /// </summary>
+    /// <param name="absolutePath">The absolute path to the game file.</param>
+    /// <returns>A relative path if under Games directory; otherwise, the original absolute path.</returns>
+    public static string GetRelativeGamePath(string absolutePath)
+    {
+        string gamesDir = AppPaths.GamesDirectory;
+
+        if (absolutePath.StartsWith(gamesDir, StringComparison.OrdinalIgnoreCase))
+        {
+            string relative = Path.GetRelativePath(gamesDir, absolutePath);
+            Logger.Trace<GameManager>($"Converted absolute path '{absolutePath}' to relative path '{relative}'");
+            return relative;
+        }
+
+        return absolutePath;
     }
 }

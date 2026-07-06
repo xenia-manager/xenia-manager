@@ -202,8 +202,8 @@ public class Launcher
 
         if (!game.FileLocations.IsGamePathValid)
         {
-            Logger.Error<Launcher>($"Invalid game path: {game.FileLocations.Game}");
-            throw new Exception($"Invalid game path: {game.FileLocations.Game}");
+            Logger.Error<Launcher>($"Invalid game path: {game.FileLocations.ResolvedGamePath}");
+            throw new Exception($"Invalid game path: {game.FileLocations.ResolvedGamePath}");
         }
 
         Logger.Info<Launcher>($"Launching game: {game.Title} using Xenia version: {game.XeniaVersion}");
@@ -248,12 +248,12 @@ public class Launcher
         if (configOverridesFromArgs == null || configOverridesFromArgs.Length == 0)
         {
             // Set the game file path as a command-line argument
-            xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}""";
+            xenia.StartInfo.Arguments = $@"""{game.FileLocations.ResolvedGamePath}""";
         }
         else
         {
             // Set the game file path as a command-line argument
-            xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}"" {configOverridesFromArgs}";
+            xenia.StartInfo.Arguments = $@"""{game.FileLocations.ResolvedGamePath}"" {configOverridesFromArgs}";
         }
 
         Logger.Trace<Launcher>($"Process configuration - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");

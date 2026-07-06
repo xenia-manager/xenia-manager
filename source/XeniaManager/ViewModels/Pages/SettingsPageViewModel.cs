@@ -8,6 +8,7 @@ using NLog;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Items;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -58,6 +59,28 @@ public partial class SettingsPageViewModel : ViewModelBase
         Logger.Info<SettingsPageViewModel>($"Use MediaId for Title changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.General.UseMediaIdForTitle = newValue;
         _settings.SaveSettings();
+    }
+
+    [ObservableProperty] private bool autoDetectNewGames;
+    partial void OnAutoDetectNewGamesChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Auto Detect New Games changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.AutoDetectNewGames = newValue;
+        _settings.SaveSettings();
+
+        GameDirectoryWatcherService watcher = App.Services.GetRequiredService<GameDirectoryWatcherService>();
+        if (newValue)
+        {
+            watcher.Start();
+        }
+        else
+        {
+            watcher.Stop();
+        }
     }
 
     // UI Settings
@@ -229,6 +252,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         ParseGameDetailsWithXenia = _settings.Settings.General.ParseGameDetailsWithXenia;
         CheckForUpdatesOnStartup = _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup;
         UseMediaIdForTitle = _settings.Settings.General.UseMediaIdForTitle;
+        AutoDetectNewGames = _settings.Settings.General.AutoDetectNewGames;
 
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();

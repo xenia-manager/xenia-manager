@@ -33,6 +33,9 @@ public class AppPaths
     // GameData
     public static readonly string GameDataDirectory = AppPathResolver.GetFullPath("GameData");
 
+    // Games
+    public static readonly string GamesDirectory = AppPathResolver.GetFullPath("Games");
+
     // Logging
     public static readonly string LogsDirectory = AppPathResolver.GetFullPath("Logs");
 

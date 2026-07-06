@@ -46,6 +46,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Scan Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">An error occurred while scanning the directory:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Scan Error</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Scan Directory</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Select the source for scanning:</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Scan Games folder</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Scan custom folder</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">Cancel</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Scanning for Games</sys:String>
@@ -324,6 +329,9 @@
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Check for Updates on Startup</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatically check for Xenia and Xenia Manager updates when the application starts</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Disable this to skip update checks during application startup</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Auto-Detect New Games</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Automatically detect when new games are added to the Games folder</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Shows a notification when new game files are detected in the Games directory</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>
@@ -713,6 +721,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Updates available: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Updates available for Xenia Manager</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">New games detected. Rescan games directory to update your game library.</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">Rescan</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Configuration Editor</sys:String>

@@ -769,7 +769,9 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             _game.Artwork.Icon = IconPath;
             _game.Artwork.Boxart = BoxartPath;
             _game.Artwork.Background = BackgroundPath;
-            _game.FileLocations.Game = GamePath;
+            _game.FileLocations.Game = Path.IsPathRooted(GamePath)
+                ? GameManager.GetRelativeGamePath(GamePath)
+                : GamePath;
             _game.XeniaVersion = SelectedXeniaVersion.Version;
             _game.FileLocations.CustomEmulatorExecutable = SelectedXeniaVersion.Version == XeniaVersion.Custom ? CustomExecutablePath : null;
             _game.AlternativeIDs = [.. AlternativeIds];

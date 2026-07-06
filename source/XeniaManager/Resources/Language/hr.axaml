@@ -46,6 +46,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Skeniranje nije uspjelo</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Došlo je do greške prilikom skeniranja mape:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Greška pri skeniranju</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Skeniraj mapu</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Odaberite izvor za skeniranje:</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Skeniraj mapu Igre</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Skeniraj prilagođenu mapu</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">Odustani</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Traženje igara</sys:String>
@@ -324,6 +329,9 @@
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Provjeri ažuriranja pri pokretanju</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatski provjerava ažuriranja za Xenia i Xenia Manager prilikom pokretanja aplikacije</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Onemogućite ovo da biste preskočili provjeru ažuriranja tijekom pokretanja aplikacije</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Automatski otkrij nove igre</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Automatski otkrij kada se nove igre dodaju u mapu Igre</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Prikazuje obavijest kada se u mapi Igre otkriju nove datoteke igara</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Učitavanje {0}</sys:String>
@@ -713,6 +721,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Dostupna ažuriranja: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Dostupna ažuriranja za Xenia Manager</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">Otkrivene su nove igre. Ponovno skenirajte mapu s igrama kako biste ažurirali svoju biblioteku igara.</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">Ponovno skeniraj</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Uređivač konfiguracije</sys:String>

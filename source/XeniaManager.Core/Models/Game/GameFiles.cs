@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Core.Models.Game;
 
@@ -32,9 +33,17 @@ public class GameFiles
     public string? CustomEmulatorExecutable { get; set; }
 
     /// <summary>
+    /// Gets the resolved game file path, converting relative paths to absolute using the Games directory.
+    /// </summary>
+    [JsonIgnore]
+    public string ResolvedGamePath => Path.IsPathRooted(Game)
+        ? Game
+        : Path.Combine(AppPaths.GamesDirectory, Game);
+
+    /// <summary>
     /// Whether the game's path is valid
     /// </summary>
     [JsonIgnore]
     public bool IsGamePathValid => !string.IsNullOrEmpty(Game)
-                                   && File.Exists(Game);
+                                   && File.Exists(ResolvedGamePath);
 }
