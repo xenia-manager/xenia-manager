@@ -209,7 +209,7 @@ public class Launcher
         if (string.IsNullOrEmpty(discPath) || !File.Exists(discPath))
         {
             discNumber = 1;
-            discPath = game.FileLocations.Game;
+            discPath = game.FileLocations.ResolvedGamePath;
         }
 
         if (string.IsNullOrEmpty(discPath) || !File.Exists(discPath))

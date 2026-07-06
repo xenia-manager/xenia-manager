@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.Json.Serialization;
 using XeniaManager.Core.Constants;
 
@@ -67,15 +68,16 @@ public class GameFiles
                                    && File.Exists(ResolvedGamePath);
 
     /// <summary>
-    /// Returns the file path for the given disc number (1-based).
-    /// Disc 1 returns <see cref="Game"/>; Disc 2+ returns the matching entry in <see cref="AdditionalDiscs"/>.
+    /// Returns the file path for the given disc number (1-based), with relative paths
+    /// resolved to absolute using the Games directory. Disc 1 returns <see cref="ResolvedGamePath"/>;
+    /// Disc 2+ returns the matching entry's <see cref="GameDisc.ResolvedPath"/>.
     /// Returns null if the disc number doesn't exist.
     /// </summary>
     public string? GetDiscPath(int discNumber)
     {
         if (discNumber <= 1)
         {
-            return Game;
+            return ResolvedGamePath;
         }
 
         int index = discNumber - 2;
@@ -84,7 +86,7 @@ public class GameFiles
             return null;
         }
 
-        return AdditionalDiscs[index].Path;
+        return AdditionalDiscs[index].ResolvedPath;
     }
 }
 
@@ -100,7 +102,7 @@ public class GameDisc
     public int DiscNumber { get; set; }
 
     /// <summary>
-    /// Path to this disc's game file
+    /// Path to this disc's game file (may be relative for portability).
     /// </summary>
     [JsonPropertyName("path")]
     public string Path { get; set; } = string.Empty;
@@ -113,8 +115,16 @@ public class GameDisc
     public string? Label { get; set; }
 
     /// <summary>
+    /// Gets the resolved absolute path, converting relative paths to absolute using the Games directory.
+    /// </summary>
+    [JsonIgnore]
+    public string ResolvedPath => System.IO.Path.IsPathRooted(Path)
+        ? Path
+        : System.IO.Path.Combine(AppPaths.GamesDirectory, Path);
+
+    /// <summary>
     /// Whether this disc's path currently points to an existing file
     /// </summary>
     [JsonIgnore]
-    public bool IsPathValid => !string.IsNullOrEmpty(Path) && File.Exists(Path);
+    public bool IsPathValid => !string.IsNullOrEmpty(Path) && File.Exists(ResolvedPath);
 }

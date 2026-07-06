@@ -28,5 +28,8 @@
       <Compile Update="Controls\EditXConfigDialog.axaml.cs">
         <DependentUpon>EditXConfigDialog.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Controls\ManageDiscsDialog.axaml.cs">
+        <DependentUpon>ManageDiscsDialog.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

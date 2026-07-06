@@ -442,7 +442,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                             if (XboxDatabase.FilteredDatabase.Count == 1)
                             {
                                 GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                                await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle);
+                                await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details,
+                                    _settings.Settings.General.UseMediaIdForTitle,
+                                    confirmMultiDiscMerge: _ => Task.FromResult(true));
                             }
                             else
                             {
@@ -888,11 +890,11 @@ public partial class LibraryPageViewModel : ViewModelBase
     private async Task<bool> ConfirmMultiDiscMergeAsync(Game existingGame)
     {
         Logger.Info<LibraryPageViewModel>($"Prompting user to confirm multi-disc merge into '{existingGame.Title}'");
-
+        EventManager.Instance.EnableWindow();
         bool confirmed = await _messageBoxService.ShowConfirmationAsync(
             LocalizationHelper.GetText("LibraryPage.MultiDisc.MergePrompt.Title"),
             string.Format(LocalizationHelper.GetText("LibraryPage.MultiDisc.MergePrompt.Message"), existingGame.Title));
-
+        EventManager.Instance.DisableWindow();
         Logger.Info<LibraryPageViewModel>(confirmed
             ? $"User confirmed merging into '{existingGame.Title}'"
             : $"User declined merging into '{existingGame.Title}', will add as separate entry");

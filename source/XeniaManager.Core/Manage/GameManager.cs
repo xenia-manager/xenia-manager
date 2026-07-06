@@ -102,6 +102,20 @@ public class GameManager
                         migrated = true;
                     }
                 }
+
+                foreach (GameDisc disc in game.FileLocations.AdditionalDiscs)
+                {
+                    if (!string.IsNullOrEmpty(disc.Path) && Path.IsPathRooted(disc.Path))
+                    {
+                        string relativeDiscPath = GetRelativeGamePath(disc.Path);
+                        if (relativeDiscPath != disc.Path)
+                        {
+                            Logger.Debug<GameManager>($"Migrating additional disc path for '{game.Title}' (Disc {disc.DiscNumber}): '{disc.Path}' -> '{relativeDiscPath}'");
+                            disc.Path = relativeDiscPath;
+                            migrated = true;
+                        }
+                    }
+                }
             }
 
             // Migrate empty Config fields for games added in older versions
@@ -877,7 +891,7 @@ public class GameManager
             resolvedPath,
             StringComparison.OrdinalIgnoreCase))
             || Games.Any(game => game.FileLocations.AdditionalDiscs.Any(d => string.Equals(
-                d.Path,
+                d.ResolvedPath,
                 resolvedPath,
                 StringComparison.OrdinalIgnoreCase)));
         if (isDuplicate)
@@ -903,10 +917,14 @@ public class GameManager
             return null;
         }
 
+        string resolvedPath = Path.IsPathRooted(gamePath)
+            ? gamePath
+            : Path.Combine(AppPaths.GamesDirectory, gamePath);
+
         Game? match = Games.FirstOrDefault(game =>
             game.GameId == gameId
-            && game.FileLocations.Game != gamePath
-            && game.FileLocations.AdditionalDiscs.All(d => d.Path != gamePath));
+            && game.FileLocations.ResolvedGamePath != resolvedPath
+            && game.FileLocations.AdditionalDiscs.All(d => d.ResolvedPath != resolvedPath));
 
         if (match != null)
         {
@@ -933,7 +951,7 @@ public class GameManager
         existingGame.FileLocations.AdditionalDiscs.Add(new GameDisc
         {
             DiscNumber = newDiscNumber,
-            Path = gamePath,
+            Path = Path.IsPathRooted(gamePath) ? GetRelativeGamePath(gamePath) : gamePath,
             Label = label
         });
 

@@ -7,6 +7,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
@@ -68,7 +69,7 @@ public partial class ManageDiscsViewModel : ObservableObject
         {
             DiscNumber = 1,
             Label = LocalizationHelper.GetText("ManageDiscsDialog.Disc1Label"),
-            Path = _game.FileLocations.Game,
+            Path = _game.FileLocations.ResolvedGamePath,
             IsPathValid = _game.FileLocations.IsGamePathValid
         });
 
@@ -80,7 +81,7 @@ public partial class ManageDiscsViewModel : ObservableObject
                 Label = string.IsNullOrWhiteSpace(disc.Label)
                     ? string.Format(LocalizationHelper.GetText("ManageDiscsDialog.DiscNLabel"), disc.DiscNumber)
                     : disc.Label!,
-                Path = disc.Path,
+                Path = disc.ResolvedPath,
                 IsPathValid = disc.IsPathValid
             });
         }
@@ -127,10 +128,13 @@ public partial class ManageDiscsViewModel : ObservableObject
         }
 
         string selectedPath = files[0].Path.LocalPath;
+        string resolvedSelectedPath = Path.IsPathRooted(selectedPath)
+            ? selectedPath
+            : Path.Combine(AppPaths.GamesDirectory, selectedPath);
 
         // Avoid adding the same file twice (as Disc 1 or as an existing additional disc)
-        bool alreadyAdded = _game.FileLocations.Game == selectedPath
-                            || _game.FileLocations.AdditionalDiscs.Exists(d => d.Path == selectedPath);
+        bool alreadyAdded = _game.FileLocations.ResolvedGamePath == resolvedSelectedPath
+                            || _game.FileLocations.AdditionalDiscs.Exists(d => d.ResolvedPath == resolvedSelectedPath);
         if (alreadyAdded)
         {
             Logger.Warning<ManageDiscsViewModel>($"'{selectedPath}' is already associated with '{_game.Title}'");
@@ -146,7 +150,7 @@ public partial class ManageDiscsViewModel : ObservableObject
         _game.FileLocations.AdditionalDiscs.Add(new GameDisc
         {
             DiscNumber = newDiscNumber,
-            Path = selectedPath
+            Path = Core.Manage.GameManager.GetRelativeGamePath(selectedPath)
         });
 
         LoadDiscs();
@@ -167,7 +171,7 @@ public partial class ManageDiscsViewModel : ObservableObject
 
         Logger.Info<ManageDiscsViewModel>($"Removing Disc {disc.DiscNumber} from '{_game.Title}'");
 
-        _game.FileLocations.AdditionalDiscs.RemoveAll(d => d.Path == disc.Path);
+        _game.FileLocations.AdditionalDiscs.RemoveAll(d => d.DiscNumber == disc.DiscNumber);
 
         // Renumber remaining additional discs so they stay contiguous
         for (int i = 0; i < _game.FileLocations.AdditionalDiscs.Count; i++)
