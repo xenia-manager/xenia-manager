@@ -46,6 +46,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Tarama Başarısız</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Dizini tararken bir hata oluştu:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Tarama Hatası</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Oyunlar Taranıyor</sys:String>
@@ -324,6 +329,9 @@
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Başlangıçta Güncellemeleri Denetle</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Uygulama başlatıldığında Xenia ve Xenia Manager güncellemelerini otomatik olarak denetler</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Uygulama başlatılırken güncelleme denetimlerini atlamak için bunu devre dışı bırakın</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">{0} yükleniyor</sys:String>
@@ -713,6 +721,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Güncellemeler mevcut: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Xenia Manager için güncellemeler mevcut</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Yapılandırma Düzenleyicisi</sys:String>
