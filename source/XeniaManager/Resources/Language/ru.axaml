@@ -968,6 +968,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Асинхронная компиляция шейдеров</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Включает фоновую компиляцию шейдеров - игра не будет зависать, но могут мелькать артефакты, пока пайплайны создаются.&#10;Если выключить, игра будет подтормаживать, зато артефактов не будет.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">#NOTTRANSLATED#</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Система ввода</sys:String>

@@ -968,6 +968,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">异步着色器编译</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">在后台线程中异步编译着色器并创建管线&#10;消除着色器编译卡顿，但在管线创建期间可能会导致短暂的渲染伪影&#10;禁用时，管线同步创建，会导致卡顿但无视觉伪影</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">#NOTTRANSLATED#</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">输入系统</sys:String>

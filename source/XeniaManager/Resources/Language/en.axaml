@@ -968,6 +968,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Async Shader Compilation</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Compile shaders and create pipelines asynchronously in background threads&#10;Eliminates shader compilation stutter but may cause brief rendering artifacts while pipelines are being created&#10;When disabled, pipelines are created synchronously which causes stutter but no visual artifacts</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Occlusion Query</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">Controls hardware occlusion query behavior for EVENT_WRITE_ZPD&#10;Used for effects like lens flares, object culling, and auto-exposure&#10;fake: Write a fake result without asking the GPU. Safe for most games&#10;fast: Ask the GPU but don't wait. Writes cached result, updates when GPU catches up. (Default)&#10;fast-alt: Like fast but keeps cached zero results for unresolved reports&#10;strict: Ask the GPU and wait for the real result. Most accurate, less performant</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">Fake</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">Fast (Default)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">Fast-Alt</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">Strict</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Input System</sys:String>

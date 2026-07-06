@@ -239,6 +239,14 @@ public static class ConfigUiSettings
                 LocalizationHelper.GetText("ConfigUiSettings.GPU.gpu_allow_invalid_fetch_constants.Comment"))
             .AddToggle("gamma_render_target_as_srgb", LocalizationHelper.GetText("ConfigUiSettings.GPU.gamma_render_target_as_srgb.Title"),
                 LocalizationHelper.GetText("ConfigUiSettings.GPU.gamma_render_target_as_srgb.Comment"))
+            .AddComboBox("occlusion_query", new Dictionary<object, string>
+                {
+                    { "fake", LocalizationHelper.GetText("ConfigUiSettings.GPU.occlusion_query.option.fake") },
+                    { "fast", LocalizationHelper.GetText("ConfigUiSettings.GPU.occlusion_query.option.fast") },
+                    { "fast-alt", LocalizationHelper.GetText("ConfigUiSettings.GPU.occlusion_query.option.fast-alt") },
+                    { "strict", LocalizationHelper.GetText("ConfigUiSettings.GPU.occlusion_query.option.strict") }
+                }, LocalizationHelper.GetText("ConfigUiSettings.GPU.occlusion_query.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.GPU.occlusion_query.Comment"))
             .AddNumberBox("query_occlusion_sample_lower_threshold", -1, int.MaxValue, LocalizationHelper.GetText("ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Title"),
                 LocalizationHelper.GetText("ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Comment"))
             .AddNumberBox("query_occlusion_sample_upper_threshold", -1, int.MaxValue, LocalizationHelper.GetText("ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Title"),

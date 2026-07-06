@@ -968,6 +968,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Asinkrona kompilacija shadera</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Kompiliraj shadere i stvaraj pipeline-ove asinkrono u pozadinskim nitima&#10;Eliminira zastajkivanje zbog kompilacije shadera, ali može uzrokovati kratke artefakte renderiranja dok se pipeline-ovi stvaraju&#10;Kada je onemogućeno, pipeline-ovi se stvaraju sinkrono što uzrokuje zastajkivanje ali bez vizualnih artefakata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Upit okluzije</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">Kontrolira način rada hardverskih upita okluzije za EVENT_WRITE_ZPD&#10;Koristi se za efekte poput odbljesaka leće, uklanjanja nevidljivih objekata (culling) i automatske ekspozicije&#10;lažno: Upisuje lažni rezultat bez ispitivanja GPU-a. Sigurno za većinu igara&#10;brzo: Ispituje GPU, ali ne čeka odgovor. Upisuje predmemorirani rezultat i ažurira ga kada GPU završi. (Zadano)&#10;brzo-alt: Kao "brzo", ali zadržava predmemorirane rezultate nule za neriješene upite&#10;strogo: Ispituje GPU i čeka stvarni rezultat. Najtočnije, ali s manjim performansama</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">Lažno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">Brzo (Zadano)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">Brzo-Alt</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">Strogo</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Ulazni sustav</sys:String>
