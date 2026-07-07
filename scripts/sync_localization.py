@@ -5,9 +5,10 @@
 - Preserves comment section headers and all key ordering from en.axaml
 
 Usage:
-    python scripts/sync_localization.py          # normal output
-    python scripts/sync_localization.py -v       # verbose (per-key debug)
-    python scripts/sync_localization.py -n       # dry-run (log only, no writes)
+    python scripts/sync_localization.py              # normal output
+    python scripts/sync_localization.py -v           # verbose (per-key debug)
+    python scripts/sync_localization.py -n           # dry-run (log only, no writes)
+    python scripts/sync_localization.py -l <path>    # custom language directory
 """
 
 import argparse
@@ -18,7 +19,7 @@ import sys
 
 logger = logging.getLogger("sync_localization")
 
-LANG_DIR = os.path.join(
+DEFAULT_LANG_DIR = os.path.join(
     os.path.dirname(__file__),
     "..",
     "source",
@@ -27,7 +28,6 @@ LANG_DIR = os.path.join(
     "Language",
 )
 REFERENCE = "en.axaml"
-LOCALES = ["hr.axaml", "pt-BR.axaml", "ru.axaml", "tr.axaml", "zh-CN.axaml"]
 
 KEY_RE = re.compile(r'(\s*)<sys:String x:Key="([^"]*)">(.*)</sys:String>')
 COMMENT_RE = re.compile(r"^\s*<!--")
@@ -143,10 +143,21 @@ def main():
         action="store_true",
         help="Log changes without writing to files",
     )
+    parser.add_argument(
+        "-l",
+        "--lang-dir",
+        default=DEFAULT_LANG_DIR,
+        help="Path to the language directory (default: ../source/XeniaManager/Resources/Language)",
+    )
     args = parser.parse_args()
     setup_logging(args.verbose)
 
-    ref_path = os.path.join(LANG_DIR, REFERENCE)
+    lang_dir = args.lang_dir
+    locales = sorted(
+        f for f in os.listdir(lang_dir)
+        if f.endswith(".axaml") and f != REFERENCE
+    )
+    ref_path = os.path.join(lang_dir, REFERENCE)
     if not os.path.exists(ref_path):
         logger.error("Reference file not found: %s", ref_path)
         sys.exit(1)
@@ -157,8 +168,8 @@ def main():
     total_added = 0
     total_removed = 0
 
-    for locale in LOCALES:
-        path = os.path.join(LANG_DIR, locale)
+    for locale in locales:
+        path = os.path.join(lang_dir, locale)
         if not os.path.exists(path):
             logger.warning("Locale file not found, skipping: %s", locale)
             continue
@@ -206,7 +217,7 @@ def main():
     logger.info(
         "Done. %d/%d locales %s (+%d added, -%d removed)",
         total_ok,
-        len(LOCALES),
+        len(locales),
         "checked (dry-run)" if args.dry_run else "synced",
         total_added,
         total_removed,
