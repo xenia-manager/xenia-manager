@@ -144,6 +144,27 @@ public class ArgumentParser
     }
 
     /// <summary>
+    /// Checks if the desktop arguments specify a disc number to launch for a multi-disc game.
+    /// Accepts the value via the <see cref="ArgumentFlags.Disc"/> flag (e.g. "--disc 2").
+    /// </summary>
+    /// <param name="args">The array of string arguments from the desktop shortcut.</param>
+    /// <returns>The 1-based disc number if a valid value was provided, null otherwise.</returns>
+    public static int? GetDiscFromArgs(string[]? args)
+    {
+        Logger.Debug<ArgumentParser>($"Checking if desktop arguments specify a disc number");
+
+        (int discFlagIndex, string? discFlagValue) = TryGetFlagValue(args, ArgumentFlags.Disc);
+        if (!string.IsNullOrWhiteSpace(discFlagValue) && int.TryParse(discFlagValue, out int discNumber) && discNumber >= 1)
+        {
+            Logger.Debug<ArgumentParser>($"Found disc number {discNumber} via disc flag");
+            return discNumber;
+        }
+
+        Logger.Debug<ArgumentParser>("No valid disc number found in desktop arguments");
+        return null;
+    }
+
+    /// <summary>
     /// Helper to retrieve flag value
     /// </summary>
     /// <param name="args">Launch Arguments</param>

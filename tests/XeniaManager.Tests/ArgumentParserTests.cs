@@ -71,4 +71,46 @@ public class ArgumentParserTests
         // Result may have trailing space; trim for assertion
         Assert.AreEqual("--fullscreen --debug", result!.Trim());
     }
+
+    [Test]
+    public void GetDiscFromArgs_Flag_ReturnsDiscNumber()
+    {
+        string[] args = ["--game", "\"TestGame\"", "--disc", "2"];
+        int? result = ArgumentParser.GetDiscFromArgs(args);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result);
+    }
+
+    [Test]
+    public void GetDiscFromArgs_ShortAlias_ReturnsDiscNumber()
+    {
+        string[] args = ["-d", "3"];
+        int? result = ArgumentParser.GetDiscFromArgs(args);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(3, result);
+    }
+
+    [Test]
+    public void GetDiscFromArgs_Missing_ReturnsNull()
+    {
+        string[] args = ["--game", "\"TestGame\""];
+        int? result = ArgumentParser.GetDiscFromArgs(args);
+        Assert.IsNull(result);
+    }
+
+    [Test]
+    public void GetDiscFromArgs_InvalidValue_ReturnsNull()
+    {
+        string[] args = ["--disc", "notanumber"];
+        int? result = ArgumentParser.GetDiscFromArgs(args);
+        Assert.IsNull(result);
+    }
+
+    [Test]
+    public void GetDiscFromArgs_ZeroOrNegative_ReturnsNull()
+    {
+        string[] args = ["--disc", "0"];
+        int? result = ArgumentParser.GetDiscFromArgs(args);
+        Assert.IsNull(result);
+    }
 }

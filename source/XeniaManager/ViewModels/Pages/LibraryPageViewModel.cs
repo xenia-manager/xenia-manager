@@ -444,7 +444,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                                 GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
                                 await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details,
                                     _settings.Settings.General.UseMediaIdForTitle,
-                                    confirmMultiDiscMerge: _ => Task.FromResult(true));
+                                    confirmMultiDiscMerge: ConfirmMultiDiscMergeAsync);
                             }
                             else
                             {
