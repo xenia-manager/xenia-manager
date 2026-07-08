@@ -444,7 +444,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                                 GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
                                 await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details,
                                     _settings.Settings.General.UseMediaIdForTitle,
-                                    confirmMultiDiscMerge: ConfirmMultiDiscMergeAsync);
+                                    confirmMultiDiscMerge: _ => Task.FromResult(true));
                             }
                             else
                             {
@@ -755,7 +755,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
             // Refresh the library to update the UI with newly added games
             RefreshLibrary();
-
+            EventManager.Instance.EnableWindow();
             // Show results
             if (gamesAdded > 0)
             {
