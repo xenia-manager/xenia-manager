@@ -48,6 +48,19 @@ public class ConfigManager
     /// <exception cref="Exception">Thrown when an error occurs during the file operations</exception>
     public static bool ChangeConfigurationFile(string configurationFile, XeniaVersion xeniaVersion)
     {
+        // Validate the configuration file path is not empty or a directory
+        if (string.IsNullOrEmpty(configurationFile))
+        {
+            Logger.Error<ConfigManager>("Configuration file path is null or empty");
+            throw new ArgumentException("Configuration file path cannot be null or empty", nameof(configurationFile));
+        }
+
+        if (Directory.Exists(configurationFile))
+        {
+            Logger.Error<ConfigManager>($"Configuration file path '{configurationFile}' is a directory, not a file");
+            throw new ArgumentException($"Configuration file path '{configurationFile}' is a directory, not a file", nameof(configurationFile));
+        }
+
         // Attempt to retrieve the configuration paths for the specified Xenia version
         if (!_configLocations.TryGetValue(xeniaVersion, out (string DefaultConfigLocation, string ConfigLocation) configPaths))
         {

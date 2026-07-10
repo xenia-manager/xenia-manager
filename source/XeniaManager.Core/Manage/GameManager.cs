@@ -104,6 +104,27 @@ public class GameManager
                 }
             }
 
+            // Migrate empty Config fields for games added in older versions
+            bool configMigrated = false;
+            foreach (Game game in Games)
+            {
+                if (string.IsNullOrEmpty(game.FileLocations.Config))
+                {
+                    string newConfigPath = Path.Combine(
+                        XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion).ConfigFolderLocation,
+                        $"{game.Title}.config.toml");
+                    Logger.Debug<GameManager>($"Migrating empty config path for '{game.Title}': '{newConfigPath}'");
+                    game.FileLocations.Config = newConfigPath;
+                    configMigrated = true;
+                }
+            }
+
+            if (configMigrated)
+            {
+                Logger.Info<GameManager>("Migrated empty config paths to populated format");
+                SaveLibrary();
+            }
+
             if (migrated)
             {
                 Logger.Info<GameManager>("Migrated game paths to relative format for portability");

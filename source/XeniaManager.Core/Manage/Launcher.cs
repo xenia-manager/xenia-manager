@@ -264,6 +264,18 @@ public class Launcher
             if (game.XeniaVersion != XeniaVersion.Custom)
             {
                 Logger.Debug<Launcher>($"Non-custom Xenia version detected, applying configuration file for {game.XeniaVersion}");
+
+                // Regenerate config path if empty
+                if (string.IsNullOrEmpty(game.FileLocations.Config))
+                {
+                    Logger.Warning<Launcher>($"No configuration file set for game '{game.Title}', generating one");
+                    string configPath = Path.Combine(
+                        XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion).ConfigFolderLocation,
+                        $"{game.Title}.config.toml");
+                    ConfigManager.CreateConfigurationFile(AppPathResolver.GetFullPath(configPath), game.XeniaVersion);
+                    game.FileLocations.Config = configPath;
+                }
+
                 changedConfig = ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
                 Logger.Info<Launcher>($"Configuration file change status: {changedConfig}");
 
