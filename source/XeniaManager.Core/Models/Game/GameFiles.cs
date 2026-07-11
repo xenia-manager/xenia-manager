@@ -75,7 +75,12 @@ public class GameFiles
     /// </summary>
     public string? GetDiscPath(int discNumber)
     {
-        if (discNumber <= 1)
+        if (discNumber <= 0)
+        {
+            return null;
+        }
+
+        if (discNumber == 1)
         {
             return ResolvedGamePath;
         }

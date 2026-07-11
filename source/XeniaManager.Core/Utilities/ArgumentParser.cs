@@ -128,7 +128,8 @@ public class ArgumentParser
             string trimmedArg = arg.Trim('"');
             if (trimmedArg.StartsWith("--") &&
                 !ArgumentFlags.Game.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)) &&
-                !ArgumentFlags.XeniaArgs.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)))
+                !ArgumentFlags.XeniaArgs.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)) &&
+                !ArgumentFlags.Disc.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)))
             {
                 configOverrideArgs += trimmedArg + " ";
             }

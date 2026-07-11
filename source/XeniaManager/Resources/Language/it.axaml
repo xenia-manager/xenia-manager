@@ -46,6 +46,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Scansione Fallita</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Si è verificato un errore durante la scansione della cartella:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Errore di Scansione</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Scansione in Corso</sys:String>
@@ -226,9 +231,11 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">Gestisci Profili</sys:String>
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Consente all'utente di modificare i Profili Xenia</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">Gestisci</sys:String>
+
     <sys:String x:Key="ManagePage.Content.EditXConfig.Title">Modifica Impostazioni XConfig</sys:String>
     <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Modifica le impostazioni della dashboard Xbox 360 (risoluzione, lingua, paese, profilo predefinito)</sys:String>
     <sys:String x:Key="ManagePage.EditXConfig.Button">Modifica</sys:String>
+
     <sys:String x:Key="ManagePage.Content.Install.Title">Installa Contenuti</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Installa DLC, aggiornamenti e altri contenuti per Xenia</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Button">Installa Contenuti</sys:String>
@@ -322,6 +329,12 @@
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Controlla Aggiornamenti all'Avvio</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Controlla automaticamente gli aggiornamenti di Xenia e Xenia Manager all'avvio</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Disabilita per saltare il controllo aggiornamenti all'avvio</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Caricamento {0}</sys:String>
@@ -659,6 +672,7 @@
     <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Apertura Cartella Fallita</sys:String>
     <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Impossibile aprire la cartella dei contenuti.&#10;Errore: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements">Obiettivi</sys:String>
+
     <sys:String x:Key="InstalledContentDialog.SelectAll">Seleziona Tutto</sys:String>
     <sys:String x:Key="InstalledContentDialog.UnselectAll">Deseleziona Tutto</sys:String>
     <sys:String x:Key="InstalledContentDialog.UnlockSelected">Sblocca Selezionati</sys:String>
@@ -710,6 +724,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Aggiornamenti disponibili: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Aggiornamenti disponibili per Xenia Manager</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Editor di Configurazione</sys:String>
@@ -1213,7 +1229,39 @@
     <sys:String x:Key="AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message">È disponibile una versione più recente di Xenia Manager.</sys:String>
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">Stai attualmente usando l'ultima versione di Xenia Manager.</sys:String>
 
-    <!-- Library Page - Drag and Drop -->
+    <!-- Library Page - Drag & Drop -->
     <sys:String x:Key="LibraryPage.DragDrop.Title">Trascina i file per aggiungere giochi</sys:String>
     <sys:String x:Key="LibraryPage.DragDrop.Subtitle">Sono supportati i file .iso, .xex, .zar</sys:String>
+
+    <!-- Multi-Disc Support -->
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">#NOTTRANSLATED#</sys:String>
+
+    <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
+    <sys:String x:Key="DiscSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">#NOTTRANSLATED#</sys:String>
+
+    <!-- Manage Discs Dialog -->
+    <sys:String x:Key="ManageDiscsDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>

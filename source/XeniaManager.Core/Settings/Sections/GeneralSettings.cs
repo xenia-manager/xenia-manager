@@ -30,4 +30,11 @@ public class GeneralSettings
     /// </summary>
     [JsonPropertyName("auto_detect_new_games")]
     public bool AutoDetectNewGames { get; set; } = true;
+
+    /// <summary>
+    /// Whether to automatically merge detected multi-disc games during library scan
+    /// instead of prompting the user for confirmation each time
+    /// </summary>
+    [JsonPropertyName("auto_merge_multi_disc")]
+    public bool AutoMergeMultiDisc { get; set; } = false;
 }

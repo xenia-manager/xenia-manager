@@ -444,7 +444,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                                 GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
                                 await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details,
                                     _settings.Settings.General.UseMediaIdForTitle,
-                                    confirmMultiDiscMerge: _ => Task.FromResult(true));
+                                    confirmMultiDiscMerge: _settings.Settings.General.AutoMergeMultiDisc
+                                        ? _ => Task.FromResult(true)
+                                        : ConfirmMultiDiscMergeAsync);
                             }
                             else
                             {
@@ -721,7 +723,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                         {
                             // Add the game using fetched GameInfo
                             GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle, confirmMultiDiscMerge: ConfirmMultiDiscMergeAsync);
+                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle, confirmMultiDiscMerge: _settings.Settings.General.AutoMergeMultiDisc
+                                ? _ => Task.FromResult(true)
+                                : ConfirmMultiDiscMergeAsync);
                         }
                         else
                         {

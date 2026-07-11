@@ -332,6 +332,9 @@
     <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Auto-Detect New Games</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Automatically detect when new games are added to the Games folder</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Shows a notification when new game files are detected in the Games directory</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Auto-Merge Multi-Disc Games</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Automatically merge detected discs of the same game during library scan</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">When enabled, additional discs matching an existing game in the library are merged automatically without prompting</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>

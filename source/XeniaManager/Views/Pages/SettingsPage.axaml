@@ -47,6 +47,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.AutoDetectNewGames.ToolTip}"
                                             Icon="Scan"
                                             IsChecked="{Binding AutoDetectNewGames, Mode=TwoWay}" />
+                    <!-- Auto Merge Multi-Disc -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.AutoMergeMultiDisc}"
+                                            Description="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.ToolTip}"
+                                            Icon="Games"
+                                            IsChecked="{Binding AutoMergeMultiDisc, Mode=TwoWay}" />
                 </StackPanel>
             </Expander>
             <!-- UI Settings -->
