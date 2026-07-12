@@ -46,11 +46,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Scansione Fallita</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Si è verificato un errore durante la scansione della cartella:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Errore di Scansione</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Scansiona Cartella</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Seleziona la sorgente per la scansione:</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Scansiona la cartella Games</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Scansiona una cartella personalizzata</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">Annulla</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Scansione in Corso</sys:String>
@@ -329,12 +329,12 @@
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Controlla Aggiornamenti all'Avvio</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Controlla automaticamente gli aggiornamenti di Xenia e Xenia Manager all'avvio</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Disabilita per saltare il controllo aggiornamenti all'avvio</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Rileva Automaticamente Nuovi Giochi</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Rileva automaticamente quando nuovi giochi vengono aggiunti alla cartella Games</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Mostra una notifica quando vengono rilevati nuovi file di gioco nella cartella Games</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Unisci Automaticamente Giochi Multi-Disco</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Unisce automaticamente i dischi rilevati dello stesso gioco durante la scansione della libreria</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Se abilitato, i dischi aggiuntivi che corrispondono a un gioco già presente in libreria vengono uniti automaticamente senza chiedere conferma</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Caricamento {0}</sys:String>
@@ -724,8 +724,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Aggiornamenti disponibili: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Aggiornamenti disponibili per Xenia Manager</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">Nuovi giochi rilevati. Riscansiona la cartella giochi per aggiornare la tua libreria.</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">Riscansiona</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Editor di Configurazione</sys:String>
@@ -971,12 +971,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Compilazione Shader Asincrona</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Compila shader in background eliminando gli stutter&#10;Può causare brevi artefatti visivi durante la creazione delle pipeline</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Occlusion Query</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">Controlla il comportamento dell'occlusion query hardware per EVENT_WRITE_ZPD&#10;Usato per effetti come lens flare, culling degli oggetti e auto-esposizione&#10;fake: Scrive un risultato fittizio senza interpellare la GPU. Sicuro per la maggior parte dei giochi&#10;fast: Interpella la GPU ma non attende. Scrive il risultato in cache, aggiornandolo quando la GPU è pronta. (Predefinito)&#10;fast-alt: Come fast ma mantiene risultati zero in cache per i report non risolti&#10;strict: Interpella la GPU e attende il risultato reale. Più accurato, meno performante</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">Fake</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">Fast (Predefinito)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">Fast-Alt</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">Strict</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Sistema di Input</sys:String>
@@ -1234,34 +1234,34 @@
     <sys:String x:Key="LibraryPage.DragDrop.Subtitle">Sono supportati i file .iso, .xex, .zar</sys:String>
 
     <!-- Multi-Disc Support -->
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.GameButton.DiscCount">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">Gestisci Dischi</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">Aggiungi, rinomina o rimuovi dischi per i giochi multi-disco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">Gestione Dischi Fallita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">Si è verificato un errore durante la gestione dei dischi.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">{0} Dischi</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">Aggiungere come Disco Aggiuntivo?</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">Questo file sembra essere un altro disco di '{0}', già presente nella tua libreria.&#10;&#10;Vuoi aggiungerlo come disco aggiuntivo di '{0}' invece di creare una voce separata in libreria?</sys:String>
 
     <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
-    <sys:String x:Key="DiscSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.Disc1">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.DiscN">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Header">Seleziona Disco</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">Questo gioco ha più dischi. Scegli quale avviare.</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">Disco 1</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">Disco {0}</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">(Ultimo Giocato)</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(File Mancante)</sys:String>
 
     <!-- Manage Discs Dialog -->
-    <sys:String x:Key="ManageDiscsDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Subtitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Disc1Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingFile">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Title">{0} - Gestisci Dischi</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">Aggiungi, rinomina o rimuovi dischi. Il disco che avvii verrà ricordato per la prossima volta.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">Chiudi</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">Disco 1</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">Disco {0}</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">Aggiungi Disco</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">Rimuovi questo disco</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">File non trovato</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">Seleziona File Disco</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">Il provider di archiviazione non è disponibile.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Disco Già Aggiunto</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">Questo file è già associato a questo gioco.</sys:String>
 </ResourceDictionary>
