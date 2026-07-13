@@ -48,8 +48,8 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Errore di Scansione</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Scansiona Cartella</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Seleziona la sorgente per la scansione:</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Scansiona la cartella Games</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Scansiona una cartella personalizzata</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Cartella Games</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Cartella Personalizzata</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">Annulla</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
