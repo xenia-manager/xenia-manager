@@ -29,7 +29,7 @@ public partial class WelcomeDialogViewModel : ViewModelBase
     /// <summary>
     /// The list of available themes for selection.
     /// </summary>
-    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
+    public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
 
     /// <summary>
     /// The currently selected theme.

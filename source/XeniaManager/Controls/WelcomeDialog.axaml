@@ -13,14 +13,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <cards:CustomCard>
         <StackPanel Spacing="16">
-            <TextBlock
-                FontSize="14"
-                Text="{DynamicResource WelcomeDialog.Description}"
-                TextWrapping="Wrap" />
-            <ComboBox
-                HorizontalAlignment="Stretch"
-                ItemsSource="{Binding AppThemeOptions}"
-                SelectedIndex="{Binding SelectedThemeIndex, Mode=TwoWay}" />
+            <TextBlock Text="{DynamicResource WelcomeDialog.Description}"
+                       TextWrapping="Wrap"
+                       FontSize="14" />
+            <ComboBox ItemsSource="{Binding AppThemeOptions}"
+                      SelectedIndex="{Binding SelectedThemeIndex, Mode=TwoWay}"
+                      HorizontalAlignment="Stretch" />
         </StackPanel>
     </cards:CustomCard>
 </UserControl>

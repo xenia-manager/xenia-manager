@@ -125,7 +125,7 @@ public partial class SettingsPageViewModel : ViewModelBase
     }
 
     // Theme Settings
-    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
+    public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
 
     [ObservableProperty] private Theme selectedTheme;
     partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)

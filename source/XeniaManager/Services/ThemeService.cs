@@ -19,7 +19,7 @@ public class ThemeService
 {
     private Theme _currentTheme = Theme.Dark;
     private FluentAvaloniaTheme? _faTheme;
-    private ObservableCollection<ThemeDisplayItem>? _themeDisplayItems;
+    private ReadOnlyObservableCollection<ThemeDisplayItem>? _themeDisplayItems;
     private readonly Dictionary<Theme, ResourceInclude?> _themeResources = new Dictionary<Theme, ResourceInclude?>();
 
     private readonly Dictionary<Theme, ThemeConfiguration> _themeConfigs = new Dictionary<Theme, ThemeConfiguration>
@@ -35,10 +35,12 @@ public class ThemeService
             BaseTheme = ThemeVariant.Dark,
             ResourcePath = "avares://XeniaManager/Resources/Themes/Dark.axaml",
             FallbackTheme = null
-        },
+        }
         // New themes need to be added here
     };
-    public ObservableCollection<ThemeDisplayItem> ThemeDisplayItems => _themeDisplayItems ??= CreateThemeDisplayItems();
+    
+    public ReadOnlyObservableCollection<ThemeDisplayItem> ThemeDisplayItems => _themeDisplayItems ??= CreateThemeDisplayItems();
+
 
     private class ThemeConfiguration
     {
@@ -72,11 +74,14 @@ public class ThemeService
     /// <summary>
     /// Create the observable collection accessed by dropdown menus for theme selection in the application
     /// </summary>
-    /// <returns>Observable List of all available Theme Display Items</returns>
-    private ObservableCollection<ThemeDisplayItem> CreateThemeDisplayItems()
+    /// <returns>Read Only Observable List of all available Theme Display Items</returns>
+    private ReadOnlyObservableCollection<ThemeDisplayItem> CreateThemeDisplayItems()
     {
-        var items = new ObservableCollection<ThemeDisplayItem>();
-        foreach (var theme in _themeConfigs.Keys)
+        ObservableCollection<ThemeDisplayItem> items = new ObservableCollection<ThemeDisplayItem>();
+        List<Theme> themes = new List<Theme>(_themeConfigs.Keys);
+        themes.Sort();
+        
+        foreach (Theme theme in themes)
         {
             items.Add(new ThemeDisplayItem
             {
@@ -84,7 +89,8 @@ public class ThemeService
                 ThemeValue = theme
             });
         }
-        return items;
+        _themeDisplayItems = new ReadOnlyObservableCollection<ThemeDisplayItem>(items);    
+        return _themeDisplayItems;
     }
 
     /// <summary>
