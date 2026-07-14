@@ -1,16 +1,13 @@
-<UserControl
-    Width="400"
-    d:DesignHeight="150"
-    d:DesignWidth="400"
-    mc:Ignorable="d"
-    x:Class="XeniaManager.Controls.WelcomeDialog"
-    x:DataType="vm:WelcomeDialogViewModel"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:cards="using:XeniaManager.Controls.Cards"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:XeniaManager.ViewModels.Controls"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="150"
+             x:Class="XeniaManager.Controls.WelcomeDialog"
+             x:DataType="vm:WelcomeDialogViewModel"
+             Width="400">
     <cards:CustomCard>
         <StackPanel Spacing="16">
             <TextBlock Text="{DynamicResource WelcomeDialog.Description}"
