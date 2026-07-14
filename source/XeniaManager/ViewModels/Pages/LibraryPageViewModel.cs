@@ -442,7 +442,11 @@ public partial class LibraryPageViewModel : ViewModelBase
                             if (XboxDatabase.FilteredDatabase.Count == 1)
                             {
                                 GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                                await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle);
+                                await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details,
+                                    _settings.Settings.General.UseMediaIdForTitle,
+                                    confirmMultiDiscMerge: _settings.Settings.General.AutoMergeMultiDisc
+                                        ? _ => Task.FromResult(true)
+                                        : ConfirmMultiDiscMergeAsync);
                             }
                             else
                             {
@@ -719,7 +723,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                         {
                             // Add the game using fetched GameInfo
                             GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle);
+                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle, confirmMultiDiscMerge: _settings.Settings.General.AutoMergeMultiDisc
+                                ? _ => Task.FromResult(true)
+                                : ConfirmMultiDiscMergeAsync);
                         }
                         else
                         {
@@ -753,7 +759,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
             // Refresh the library to update the UI with newly added games
             RefreshLibrary();
-
+            EventManager.Instance.EnableWindow();
             // Show results
             if (gamesAdded > 0)
             {
@@ -879,6 +885,28 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Asks the user whether a newly detected game file should be merged into an existing
+    /// library entry as an additional disc, since it shares the same Title ID (e.g. Disc 2 of a
+    /// multi-disc game like Blue Dragon).
+    /// </summary>
+    /// <param name="existingGame">The existing library entry the new file could be merged into.</param>
+    /// <returns>True if the user confirmed the merge, false to add it as a separate entry instead.</returns>
+    private async Task<bool> ConfirmMultiDiscMergeAsync(Game existingGame)
+    {
+        Logger.Info<LibraryPageViewModel>($"Prompting user to confirm multi-disc merge into '{existingGame.Title}'");
+        EventManager.Instance.EnableWindow();
+        bool confirmed = await _messageBoxService.ShowConfirmationAsync(
+            LocalizationHelper.GetText("LibraryPage.MultiDisc.MergePrompt.Title"),
+            string.Format(LocalizationHelper.GetText("LibraryPage.MultiDisc.MergePrompt.Message"), existingGame.Title));
+        EventManager.Instance.DisableWindow();
+        Logger.Info<LibraryPageViewModel>(confirmed
+            ? $"User confirmed merging into '{existingGame.Title}'"
+            : $"User declined merging into '{existingGame.Title}', will add as separate entry");
+
+        return confirmed;
+    }
+
+    /// <summary>
     /// Processes a list of file paths and adds them as games to the library.
     /// </summary>
     private async Task ProcessAndAddGamesAsync(List<string> filePaths, XeniaVersion xeniaVersion)
@@ -932,7 +960,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                     if (XboxDatabase.FilteredDatabase.Count == 1)
                     {
                         GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                        await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details, _settings.Settings.General.UseMediaIdForTitle);
+                        await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details, _settings.Settings.General.UseMediaIdForTitle, confirmMultiDiscMerge: ConfirmMultiDiscMergeAsync);
                     }
                     else
                     {

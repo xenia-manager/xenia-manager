@@ -90,6 +90,7 @@ public partial class App : Application
             // Check for arguments first (before showing MainWindow)
             Game? gameFromArgs = ArgumentParser.GetGameFromArgs(desktop.Args);
             string? configOverridesFromArgs = ArgumentParser.GetConfigOverridesFromArgs(desktop.Args);
+            int? discFromArgs = ArgumentParser.GetDiscFromArgs(desktop.Args);
 
             if (gameFromArgs != null)
             {
@@ -109,7 +110,7 @@ public partial class App : Application
                 };
 
                 // Launch the game with a loading screen
-                ArgumentChecker(gameFromArgs, settings, mainWindow, configOverridesFromArgs);
+                ArgumentChecker(gameFromArgs, settings, mainWindow, configOverridesFromArgs, discFromArgs);
             }
             else
             {
@@ -256,7 +257,7 @@ public partial class App : Application
         }
     }
 
-    private async void ArgumentChecker(Game game, Settings settings, MainWindow mainWindow, string? configOverridesFromArgs = null)
+    private async void ArgumentChecker(Game game, Settings settings, MainWindow mainWindow, string? configOverridesFromArgs = null, int? discFromArgs = null)
     {
         Logger.Info<App>($"Launching game '{game.Title}' directly from desktop shortcut.");
 
@@ -287,6 +288,28 @@ public partial class App : Application
                 }
             };
 
+            // For multi-disc games, pick the disc to launch.
+            // Prefer an explicit --disc argument; otherwise default to Disc 1.
+            int discNumber = 1;
+            if (game.FileLocations.IsMultiDisc)
+            {
+                if (discFromArgs.HasValue && discFromArgs.Value >= 1 && discFromArgs.Value <= game.FileLocations.DiscCount)
+                {
+                    discNumber = discFromArgs.Value;
+                    Logger.Info<App>($"'{game.Title}' launched via --disc argument, using Disc {discNumber}");
+                }
+                else
+                {
+                    if (discFromArgs.HasValue)
+                    {
+                        Logger.Warning<App>($"--disc value {discFromArgs.Value} out of range for '{game.Title}', defaulting to Disc 1");
+                    }
+
+                    Logger.Info<App>($"'{game.Title}' has {game.FileLocations.DiscCount} discs, no --disc argument provided, defaulting to Disc 1");
+                    discNumber = 1;
+                }
+            }
+
             // Show the loading screen before launching the game
             if (loadingScreen != null)
             {
@@ -295,7 +318,7 @@ public partial class App : Application
             }
 
             // Launch the game asynchronously
-            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted, configOverridesFromArgs: configOverridesFromArgs);
+            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted, configOverridesFromArgs: configOverridesFromArgs, discNumber: discNumber);
             Logger.Info<App>($"Game session ended for '{game.Title}'");
         }
         catch (Exception ex)

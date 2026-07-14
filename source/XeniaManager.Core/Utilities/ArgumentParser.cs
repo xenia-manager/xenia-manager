@@ -128,7 +128,8 @@ public class ArgumentParser
             string trimmedArg = arg.Trim('"');
             if (trimmedArg.StartsWith("--") &&
                 !ArgumentFlags.Game.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)) &&
-                !ArgumentFlags.XeniaArgs.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)))
+                !ArgumentFlags.XeniaArgs.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)) &&
+                !ArgumentFlags.Disc.Any(f => trimmedArg.Equals(f, StringComparison.OrdinalIgnoreCase)))
             {
                 configOverrideArgs += trimmedArg + " ";
             }
@@ -141,6 +142,27 @@ public class ArgumentParser
         }
         Logger.Debug<ArgumentParser>($"Found overrides '{configOverrideArgs}' in desktop arguments");
         return configOverrideArgs;
+    }
+
+    /// <summary>
+    /// Checks if the desktop arguments specify a disc number to launch for a multi-disc game.
+    /// Accepts the value via the <see cref="ArgumentFlags.Disc"/> flag (e.g. "--disc 2").
+    /// </summary>
+    /// <param name="args">The array of string arguments from the desktop shortcut.</param>
+    /// <returns>The 1-based disc number if a valid value was provided, null otherwise.</returns>
+    public static int? GetDiscFromArgs(string[]? args)
+    {
+        Logger.Debug<ArgumentParser>($"Checking if desktop arguments specify a disc number");
+
+        (int discFlagIndex, string? discFlagValue) = TryGetFlagValue(args, ArgumentFlags.Disc);
+        if (!string.IsNullOrWhiteSpace(discFlagValue) && int.TryParse(discFlagValue, out int discNumber) && discNumber >= 1)
+        {
+            Logger.Debug<ArgumentParser>($"Found disc number {discNumber} via disc flag");
+            return discNumber;
+        }
+
+        Logger.Debug<ArgumentParser>("No valid disc number found in desktop arguments");
+        return null;
     }
 
     /// <summary>

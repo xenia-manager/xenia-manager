@@ -83,6 +83,18 @@ public partial class SettingsPageViewModel : ViewModelBase
         }
     }
 
+    [ObservableProperty] private bool autoMergeMultiDisc;
+    partial void OnAutoMergeMultiDiscChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Auto Merge Multi-Disc changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.AutoMergeMultiDisc = newValue;
+        _settings.SaveSettings();
+    }
+
     // UI Settings
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
@@ -253,6 +265,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         CheckForUpdatesOnStartup = _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup;
         UseMediaIdForTitle = _settings.Settings.General.UseMediaIdForTitle;
         AutoDetectNewGames = _settings.Settings.General.AutoDetectNewGames;
+        AutoMergeMultiDisc = _settings.Settings.General.AutoMergeMultiDisc;
 
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();

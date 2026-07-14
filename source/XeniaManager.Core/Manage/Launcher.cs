@@ -156,10 +156,11 @@ public class Launcher
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
     /// <param name="configOverridesFromArgs">Optional config string when game loading starts</param>
+    /// <param name="discNumber">Which disc to launch (1-based). Defaults to Disc 1.</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null)
+    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null, int discNumber = 1)
     {
-        await LaunchGameCoreAsync(game, async: true, settings, outputHandler, onGameLoadingStarted, configOverridesFromArgs);
+        await LaunchGameCoreAsync(game, async: true, settings, outputHandler, onGameLoadingStarted, configOverridesFromArgs, discNumber);
     }
 
     /// <summary>
@@ -177,9 +178,10 @@ public class Launcher
     /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
-    public static void LaunchGame(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null)
+    /// <param name="discNumber">Which disc to launch (1-based). Defaults to Disc 1.</param>
+    public static void LaunchGame(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, int discNumber = 1)
     {
-        LaunchGameCoreAsync(game, async: false, settings, outputHandler, onGameLoadingStarted).GetAwaiter().GetResult();
+        LaunchGameCoreAsync(game, async: false, settings, outputHandler, onGameLoadingStarted, discNumber: discNumber).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -191,8 +193,9 @@ public class Launcher
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
     /// <param name="configOverridesFromArgs">Optional config string when game loading starts</param>
+    /// <param name="discNumber">Which disc to launch (1-based). Defaults to Disc 1.</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null)
+    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null, int discNumber = 1)
     {
         if (XeniaUpdating)
         {
@@ -200,13 +203,25 @@ public class Launcher
             throw new Exception("Xenia is updating, please wait for it to finish updating before launching the emulator");
         }
 
-        if (!game.FileLocations.IsGamePathValid)
+        // Resolve which disc's file path to launch. Falls back to Disc 1 if the
+        // requested disc number doesn't exist (e.g. stale LastPlayedDisc value).
+        string? discPath = game.FileLocations.GetDiscPath(discNumber);
+        if (string.IsNullOrEmpty(discPath) || !File.Exists(discPath))
         {
-            Logger.Error<Launcher>($"Invalid game path: {game.FileLocations.ResolvedGamePath}");
-            throw new Exception($"Invalid game path: {game.FileLocations.ResolvedGamePath}");
+            discNumber = 1;
+            discPath = game.FileLocations.ResolvedGamePath;
         }
 
-        Logger.Info<Launcher>($"Launching game: {game.Title} using Xenia version: {game.XeniaVersion}");
+        if (string.IsNullOrEmpty(discPath) || !File.Exists(discPath))
+        {
+            Logger.Error<Launcher>($"Invalid game path: {discPath}");
+            throw new Exception($"Invalid game path: {discPath}");
+        }
+
+        Logger.Info<Launcher>($"Launching game: {game.Title} (Disc {discNumber}/{game.FileLocations.DiscCount}) using Xenia version: {game.XeniaVersion}");
+
+        // Remember which disc was launched so the disc-selection popup can default to it next time
+        game.LastPlayedDisc = discNumber;
 
         // Load settings to check automatic save backup configuration
         bool automaticSaveBackup = settings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup;
@@ -247,13 +262,13 @@ public class Launcher
 
         if (configOverridesFromArgs == null || configOverridesFromArgs.Length == 0)
         {
-            // Set the game file path as a command-line argument
-            xenia.StartInfo.Arguments = $@"""{game.FileLocations.ResolvedGamePath}""";
+            // Set the selected disc's file path as a command-line argument
+            xenia.StartInfo.Arguments = $@"""{discPath}""";
         }
         else
         {
-            // Set the game file path as a command-line argument
-            xenia.StartInfo.Arguments = $@"""{game.FileLocations.ResolvedGamePath}"" {configOverridesFromArgs}";
+            // Set the selected disc's file path as a command-line argument
+            xenia.StartInfo.Arguments = $@"""{discPath}"" {configOverridesFromArgs}";
         }
 
         Logger.Trace<Launcher>($"Process configuration - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");

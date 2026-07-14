@@ -24,4 +24,10 @@ public static class ArgumentFlags
     /// Supports "--xenia_args" and short alias "-x".
     /// </summary>
     public static readonly string[] XeniaArgs = ["--xenia_args"];
+
+    /// <summary>
+    /// Flag(s) to explicitly specify which disc of a multi-disc game to launch (1-based).
+    /// Supports "--disc" and short alias "-d". When omitted, the disc selection dialog is shown.
+    /// </summary>
+    public static readonly string[] Disc = ["--disc", "-d"];
 }

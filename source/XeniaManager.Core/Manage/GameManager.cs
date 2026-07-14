@@ -102,6 +102,20 @@ public class GameManager
                         migrated = true;
                     }
                 }
+
+                foreach (GameDisc disc in game.FileLocations.AdditionalDiscs)
+                {
+                    if (!string.IsNullOrEmpty(disc.Path) && Path.IsPathRooted(disc.Path))
+                    {
+                        string relativeDiscPath = GetRelativeGamePath(disc.Path);
+                        if (relativeDiscPath != disc.Path)
+                        {
+                            Logger.Debug<GameManager>($"Migrating additional disc path for '{game.Title}' (Disc {disc.DiscNumber}): '{disc.Path}' -> '{relativeDiscPath}'");
+                            disc.Path = relativeDiscPath;
+                            migrated = true;
+                        }
+                    }
+                }
             }
 
             // Migrate empty Config fields for games added in older versions
@@ -571,12 +585,29 @@ public class GameManager
     /// <param name="useMediaIdForTitle">Whether to use MediaId to find a matching media entry title.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
-    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details, bool useMediaIdForTitle = false)
+    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details, bool useMediaIdForTitle = false, Func<Game, Task<bool>>? confirmMultiDiscMerge = null)
     {
         // Use GameInfo's Id if titleId is "00000000"
         string actualTitleId = details.TitleId == "00000000" ? selectedGame.Id ?? details.TitleId : details.TitleId;
 
         Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+
+        // Check whether this file is likely another disc of a game already in the library
+        // (same Title ID). If the caller supplied a confirmation callback and the user agrees,
+        // attach it as an additional disc instead of creating a separate library entry.
+        Game? multiDiscMatch = FindPotentialMultiDiscMatch(actualTitleId, gamePath);
+        if (multiDiscMatch != null && confirmMultiDiscMerge != null)
+        {
+            bool shouldMerge = await confirmMultiDiscMerge(multiDiscMatch);
+            if (shouldMerge)
+            {
+                AddDiscToExistingGame(multiDiscMatch, gamePath);
+                Logger.Info<GameManager>($"'{gamePath}' merged into existing game '{multiDiscMatch.Title}' as an additional disc, skipping separate library entry");
+                return;
+            }
+
+            Logger.Info<GameManager>($"User declined multi-disc merge for '{gamePath}', adding as a separate library entry");
+        }
 
         // Grab full game information
         Logger.Info<GameManager>($"Fetching detailed game information from Xbox database for TitleId: {actualTitleId}");
@@ -858,13 +889,78 @@ public class GameManager
         bool isDuplicate = Games.Any(game => string.Equals(
             game.FileLocations.ResolvedGamePath,
             resolvedPath,
-            StringComparison.OrdinalIgnoreCase));
-
+            StringComparison.OrdinalIgnoreCase))
+            || Games.Any(game => game.FileLocations.AdditionalDiscs.Any(d => string.Equals(
+                d.ResolvedPath,
+                resolvedPath,
+                StringComparison.OrdinalIgnoreCase)));
         if (isDuplicate)
         {
             Logger.Debug<GameManager>($"Duplicate game detected for path: {gamePath}");
         }
         return isDuplicate;
+    }
+
+    /// <summary>
+    /// Looks for an existing game in the library that shares the same GameId (Title ID) as the
+    /// one being added, but doesn't already reference the given file path. Used to detect that a
+    /// newly added/discovered file is likely another disc of a game already in the library
+    /// (e.g. Disc 2 of a multi-disc game like Blue Dragon).
+    /// </summary>
+    /// <param name="gameId">The Title ID of the game being added.</param>
+    /// <param name="gamePath">The file path of the game being added.</param>
+    /// <returns>The matching existing <see cref="Game"/>, or null if no candidate was found.</returns>
+    public static Game? FindPotentialMultiDiscMatch(string gameId, string gamePath)
+    {
+        if (string.IsNullOrEmpty(gameId) || gameId == "00000000")
+        {
+            return null;
+        }
+
+        string resolvedPath = Path.IsPathRooted(gamePath)
+            ? gamePath
+            : Path.Combine(AppPaths.GamesDirectory, gamePath);
+
+        Game? match = Games.FirstOrDefault(game =>
+            game.GameId == gameId
+            && game.FileLocations.ResolvedGamePath != resolvedPath
+            && game.FileLocations.AdditionalDiscs.All(d => d.ResolvedPath != resolvedPath));
+
+        if (match != null)
+        {
+            Logger.Info<GameManager>($"Potential multi-disc match found: '{match.Title}' (GameId: {gameId}) for new file '{gamePath}'");
+        }
+
+        return match;
+    }
+
+    /// <summary>
+    /// Adds a game file as an additional disc of an existing game already in the library,
+    /// instead of creating a brand-new library entry for it.
+    /// </summary>
+    /// <param name="existingGame">The game already in the library to attach the new disc to.</param>
+    /// <param name="gamePath">The file path of the new disc.</param>
+    /// <param name="label">Optional custom label for the disc (e.g. "Disco 2"). Auto-generated when null.</param>
+    /// <returns>The disc number (1-based) that was assigned to the new disc.</returns>
+    public static int AddDiscToExistingGame(Game existingGame, string gamePath, string? label = null)
+    {
+        int newDiscNumber = existingGame.FileLocations.DiscCount + 1;
+
+        Logger.Info<GameManager>($"Adding '{gamePath}' as Disc {newDiscNumber} of '{existingGame.Title}'");
+
+        existingGame.FileLocations.AdditionalDiscs.Add(new GameDisc
+        {
+            DiscNumber = newDiscNumber,
+            Path = Path.IsPathRooted(gamePath) ? GetRelativeGamePath(gamePath) : gamePath,
+            Label = label
+        });
+
+        SaveLibrary();
+        EventManager.Instance.OnGameLibraryChanged();
+
+        Logger.Info<GameManager>($"'{existingGame.Title}' now has {existingGame.FileLocations.DiscCount} discs");
+
+        return newDiscNumber;
     }
 
     /// <summary>

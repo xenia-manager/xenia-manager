@@ -332,6 +332,9 @@
     <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Automatski otkrij nove igre</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Automatski otkrij kada se nove igre dodaju u mapu Igre</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Prikazuje obavijest kada se u mapi Igre otkriju nove datoteke igara</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Automatski spoji igre s više diskova</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Tijekom skeniranja biblioteke automatski spoji prepoznate diskove iste igre</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Kada je omogućeno, dodatni diskovi koji odgovaraju postojećoj igri u biblioteci automatski se spajaju bez traženja potvrde</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Učitavanje {0}</sys:String>
@@ -1229,4 +1232,36 @@
     <!-- Library Page - Drag & Drop -->
     <sys:String x:Key="LibraryPage.DragDrop.Title">Ispustite datoteke za dodavanje igara</sys:String>
     <sys:String x:Key="LibraryPage.DragDrop.Subtitle">Podržane su .iso, .xex, .zar datoteke</sys:String>
+
+    <!-- Multi-Disc Support -->
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">Upravljanje diskovima</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">Dodajte, preimenujte ili uklonite diskove za igre s više diskova</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">Upravljanje diskovima nije uspjelo</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">Došlo je do pogreške tijekom upravljanja diskovima.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">{0} diskova</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">Dodati kao dodatni disk?</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">Čini se da je ova datoteka još jedan disk igre „{0}”, koja se već nalazi u vašoj biblioteci.&#10;&#10;Želite li je dodati kao dodatni disk igre „{0}” umjesto stvaranja zasebnog unosa u biblioteci?</sys:String>
+
+    <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
+    <sys:String x:Key="DiscSelectionDialog.Header">Odaberite disk</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">Ova igra ima više diskova. Odaberite koji želite pokrenuti.</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">Disk 1</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">Disk {0}</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">(Zadnji korišten)</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(Datoteka nedostaje)</sys:String>
+
+    <!-- Manage Discs Dialog -->
+    <sys:String x:Key="ManageDiscsDialog.Title">{0} – Upravljanje diskovima</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">Dodajte, preimenujte ili uklonite diskove. Disk koji pokrenete bit će zapamćen za sljedeći put.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">Zatvori</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">Disk 1</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">Disk {0}</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">Dodaj disk</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">Ukloni ovaj disk</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">Datoteka nije pronađena</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">Odaberite datoteku diska</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">Nedostaje pružatelj pohrane</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">Pružatelj pohrane nije dostupan.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Disk je već dodan</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">Ova je datoteka već povezana s ovom igrom.</sys:String>
 </ResourceDictionary>

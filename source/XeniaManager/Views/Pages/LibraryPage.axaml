@@ -264,6 +264,20 @@
                                                        FontWeight="Bold"
                                                        Margin="4,0,0,0" />
                                         </StackPanel>
+
+                                        <!-- Multi-Disc Indicator -->
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0,4,0,0"
+                                                    IsVisible="{Binding IsMultiDisc}">
+                                            <icons:SymbolIcon Symbol="Games"
+                                                               FontSize="14"
+                                                               VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding DiscCount, Converter={StaticResource DiscCountConverter}}"
+                                                       FontWeight="Bold"
+                                                       VerticalAlignment="Center"
+                                                       Margin="4,0,0,0" />
+                                        </StackPanel>
                                     </StackPanel>
                                 </ToolTip>
                             </ToolTip.Tip>
@@ -443,6 +457,16 @@
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Manage Discs -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.ManageDiscs.Header}"
+                                                  Command="{Binding ManageDiscsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Games" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
