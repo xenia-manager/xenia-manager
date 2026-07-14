@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Items;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Services;
 
@@ -16,6 +19,7 @@ public class ThemeService
 {
     private Theme _currentTheme = Theme.Dark;
     private FluentAvaloniaTheme? _faTheme;
+    private ReadOnlyObservableCollection<ThemeDisplayItem>? _themeDisplayItems;
     private readonly Dictionary<Theme, ResourceInclude?> _themeResources = new Dictionary<Theme, ResourceInclude?>();
 
     private readonly Dictionary<Theme, ThemeConfiguration> _themeConfigs = new Dictionary<Theme, ThemeConfiguration>
@@ -34,6 +38,9 @@ public class ThemeService
         }
         // New themes need to be added here
     };
+    
+    public ReadOnlyObservableCollection<ThemeDisplayItem> ThemeDisplayItems => _themeDisplayItems ??= CreateThemeDisplayItems();
+
 
     private class ThemeConfiguration
     {
@@ -62,6 +69,28 @@ public class ThemeService
             _faTheme = faTheme;
             break;
         }
+    }
+    
+    /// <summary>
+    /// Create the observable collection accessed by dropdown menus for theme selection in the application
+    /// </summary>
+    /// <returns>Read Only Observable List of all available Theme Display Items</returns>
+    private ReadOnlyObservableCollection<ThemeDisplayItem> CreateThemeDisplayItems()
+    {
+        ObservableCollection<ThemeDisplayItem> items = new ObservableCollection<ThemeDisplayItem>();
+        List<Theme> themes = new List<Theme>(_themeConfigs.Keys);
+        themes.Sort();
+        
+        foreach (Theme theme in themes)
+        {
+            items.Add(new ThemeDisplayItem
+            {
+                DisplayName = LocalizationHelper.GetText($"SettingsPage.Ui.Theme.Option.{theme}"),
+                ThemeValue = theme
+            });
+        }
+        _themeDisplayItems = new ReadOnlyObservableCollection<ThemeDisplayItem>(items);    
+        return _themeDisplayItems;
     }
 
     /// <summary>

@@ -29,19 +29,7 @@ public partial class WelcomeDialogViewModel : ViewModelBase
     /// <summary>
     /// The list of available themes for selection.
     /// </summary>
-    public ObservableCollection<ThemeDisplayItem> ThemeOptions { get; set; } =
-    [
-        new ThemeDisplayItem
-        {
-            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Light"),
-            ThemeValue = Theme.Light
-        },
-        new ThemeDisplayItem
-        {
-            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Dark"),
-            ThemeValue = Theme.Dark
-        }
-    ];
+    public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
 
     /// <summary>
     /// The currently selected theme.
@@ -55,12 +43,12 @@ public partial class WelcomeDialogViewModel : ViewModelBase
 
     partial void OnSelectedThemeIndexChanged(int oldValue, int newValue)
     {
-        if (newValue < 0 || newValue >= ThemeOptions.Count || newValue == oldValue)
+        if (newValue < 0 || newValue >= AppThemeOptions.Count || newValue == oldValue)
         {
             return;
         }
 
-        SelectedTheme = ThemeOptions[newValue].ThemeValue;
+        SelectedTheme = AppThemeOptions[newValue].ThemeValue;
         _themeService.SetTheme(SelectedTheme);
         Logger.Info<WelcomeDialogViewModel>($"Theme preview changed to {SelectedTheme}");
     }
@@ -73,10 +61,12 @@ public partial class WelcomeDialogViewModel : ViewModelBase
         _themeService = App.Services.GetRequiredService<ThemeService>();
         _settings = App.Services.GetRequiredService<Settings>();
 
+        AppThemeOptions = _themeService.ThemeDisplayItems;
+
         SelectedTheme = _settings.Settings.Ui.Theme;
-        for (int i = 0; i < ThemeOptions.Count; i++)
+        for (int i = 0; i < AppThemeOptions.Count; i++)
         {
-            if (ThemeOptions[i].ThemeValue == SelectedTheme)
+            if (AppThemeOptions[i].ThemeValue == SelectedTheme)
             {
                 SelectedThemeIndex = i;
                 break;

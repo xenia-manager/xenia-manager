@@ -13,7 +13,7 @@
             <TextBlock Text="{DynamicResource WelcomeDialog.Description}"
                        TextWrapping="Wrap"
                        FontSize="14" />
-            <ComboBox ItemsSource="{Binding ThemeOptions}"
+            <ComboBox ItemsSource="{Binding AppThemeOptions}"
                       SelectedIndex="{Binding SelectedThemeIndex, Mode=TwoWay}"
                       HorizontalAlignment="Stretch" />
         </StackPanel>
