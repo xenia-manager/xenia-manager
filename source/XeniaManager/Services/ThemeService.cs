@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Items;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Services;
 
@@ -16,6 +19,7 @@ public class ThemeService
 {
     private Theme _currentTheme = Theme.Dark;
     private FluentAvaloniaTheme? _faTheme;
+    private ObservableCollection<ThemeDisplayItem>? _themeDisplayItems;
     private readonly Dictionary<Theme, ResourceInclude?> _themeResources = new Dictionary<Theme, ResourceInclude?>();
 
     private readonly Dictionary<Theme, ThemeConfiguration> _themeConfigs = new Dictionary<Theme, ThemeConfiguration>
@@ -31,9 +35,10 @@ public class ThemeService
             BaseTheme = ThemeVariant.Dark,
             ResourcePath = "avares://XeniaManager/Resources/Themes/Dark.axaml",
             FallbackTheme = null
-        }
+        },
         // New themes need to be added here
     };
+    public ObservableCollection<ThemeDisplayItem> ThemeDisplayItems => _themeDisplayItems ??= CreateThemeDisplayItems();
 
     private class ThemeConfiguration
     {
@@ -62,6 +67,24 @@ public class ThemeService
             _faTheme = faTheme;
             break;
         }
+    }
+    
+    /// <summary>
+    /// Create the observable collection accessed by dropdown menus for theme selection in the application
+    /// </summary>
+    /// <returns>Observable List of all available Theme Display Items</returns>
+    private ObservableCollection<ThemeDisplayItem> CreateThemeDisplayItems()
+    {
+        var items = new ObservableCollection<ThemeDisplayItem>();
+        foreach (var theme in _themeConfigs.Keys)
+        {
+            items.Add(new ThemeDisplayItem
+            {
+                DisplayName = LocalizationHelper.GetText($"SettingsPage.Ui.Theme.Option.{theme}"),
+                ThemeValue = theme
+            });
+        }
+        return items;
     }
 
     /// <summary>

@@ -125,20 +125,7 @@ public partial class SettingsPageViewModel : ViewModelBase
     }
 
     // Theme Settings
-    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; set; } =
-    [
-        new ThemeDisplayItem
-        {
-            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Light"),
-            ThemeValue = Theme.Light
-        },
-
-        new ThemeDisplayItem
-        {
-            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Dark"),
-            ThemeValue = Theme.Dark
-        }
-    ];
+    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
 
     [ObservableProperty] private Theme selectedTheme;
     partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
@@ -252,6 +239,7 @@ public partial class SettingsPageViewModel : ViewModelBase
     {
         _settings = App.Services.GetRequiredService<Settings>();
         _themeService = App.Services.GetRequiredService<ThemeService>();
+        AppThemeOptions = _themeService.ThemeDisplayItems;
         LoadUISettings();
     }
 
