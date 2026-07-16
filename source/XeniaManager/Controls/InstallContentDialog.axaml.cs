@@ -54,14 +54,14 @@ public partial class InstallContentDialog : UserControl
             }
         };
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.Title"),
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.InstallButton.Text"),
             CloseButtonText = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.CancelButton.Text"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Controlling ContentDialog
@@ -83,7 +83,7 @@ public partial class InstallContentDialog : UserControl
         // Handle primary button (Install) using deferral to properly handle async operation
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            Deferral? deferral = e.GetDeferral();
+            FADeferral? deferral = e.GetDeferral();
             try
             {
                 // Start the installation

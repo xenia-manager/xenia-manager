@@ -51,14 +51,14 @@ public partial class FolderScanProgressDialog : UserControl
     {
         FolderScanProgressDialog dialog = new FolderScanProgressDialog();
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = null, // Title is in the UserControl
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("FolderScanProgressDialog.Button.Cancel"),
             SecondaryButtonText = LocalizationHelper.GetText("FolderScanProgressDialog.Button.Close"),
             FullSizeDesired = false,
-            DefaultButton = ContentDialogButton.Secondary
+            DefaultButton = FAContentDialogButton.Secondary
         };
 
         // Controlling ContentDialog
@@ -94,7 +94,7 @@ public partial class FolderScanProgressDialog : UserControl
         try
         {
             // Show the dialog and wait for completion
-            Task<ContentDialogResult>? showTask = contentDialog.ShowAsync();
+            Task<FAContentDialogResult>? showTask = contentDialog.ShowAsync();
 
             // Wait for the scan to complete
             TResult result = await scanTask;

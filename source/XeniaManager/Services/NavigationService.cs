@@ -23,12 +23,12 @@ public class NavigationService
     /// <summary>
     /// Content Frame where all Avalonia Pages are loaded
     /// </summary>
-    private Frame? _contentFrame;
+    private FAFrame? _contentFrame;
 
     /// <summary>
     /// NavigationView used by the NavigationService to show different Avalonia Pages in ContentFrame
     /// </summary>
-    private NavigationView? _navigationView;
+    private FANavigationView? _navigationView;
 
     /// <summary>
     /// Tag of the currently shown Avalonia Page
@@ -52,7 +52,7 @@ public class NavigationService
     /// Sets the ContentFrame used by the NavigationService
     /// </summary>
     /// <param name="frame">Frame the NavigationService will use</param>
-    public void SetContentFrame(Frame frame)
+    public void SetContentFrame(FAFrame frame)
     {
         Logger.Debug<NavigationService>($"Setting content frame");
         _contentFrame = frame;
@@ -63,7 +63,7 @@ public class NavigationService
     /// Sets the NavigationView used by the NavigationService
     /// </summary>
     /// <param name="navigationView">NavigationView the NavigationService will use</param>
-    public void SetNavigationView(NavigationView navigationView)
+    public void SetNavigationView(FANavigationView navigationView)
     {
         Logger.Debug<NavigationService>($"Setting navigation view");
         _navigationView = navigationView;
@@ -75,7 +75,7 @@ public class NavigationService
     /// </summary>
     /// <param name="navigationViewItem"></param>
     /// <param name="contentFrame"></param>
-    public async Task Navigate(NavigationViewItem navigationViewItem, Frame? contentFrame = null)
+    public async Task Navigate(FANavigationViewItem navigationViewItem, FAFrame? contentFrame = null)
     {
         string tag = navigationViewItem.Tag?.ToString() ?? string.Empty;
         Logger.Debug<NavigationService>($"Navigate called to: {tag}");
@@ -87,9 +87,9 @@ public class NavigationService
     /// </summary>
     /// <param name="tag">Tag of the page we're trying to navigate to</param>
     /// <param name="contentFrame">ContentFrame where we want to show the Avalonia Page, optional param and uses _contentFrame if it's null</param>
-    public async Task NavigateToTag(string tag, Frame? contentFrame = null)
+    public async Task NavigateToTag(string tag, FAFrame? contentFrame = null)
     {
-        Frame? frame = contentFrame ?? _contentFrame;
+        FAFrame? frame = contentFrame ?? _contentFrame;
 
         if (frame == null)
         {
@@ -154,24 +154,24 @@ public class NavigationService
                 break;
             case "Library":
                 Logger.Debug<NavigationService>("Navigating to Library page");
-                frame.Navigate(typeof(LibraryPage), null, new EntranceNavigationTransitionInfo());
+                frame.Navigate(typeof(LibraryPage), null, new FAEntranceNavigationTransitionInfo());
                 break;
             case "XeniaSettings":
                 Logger.Debug<NavigationService>("Navigating to Xenia Settings page");
                 Logger.Info<NavigationService>($"Found {installedVersions.Count} installed Xenia versions, allowing navigation to Xenia Settings");
-                frame.Navigate(typeof(XeniaSettingsPage), null, new EntranceNavigationTransitionInfo());
+                frame.Navigate(typeof(XeniaSettingsPage), null, new FAEntranceNavigationTransitionInfo());
                 break;
             case "Manage":
                 Logger.Debug<NavigationService>("Navigating to Manage page");
-                frame.Navigate(typeof(ManagePage), null, new EntranceNavigationTransitionInfo());
+                frame.Navigate(typeof(ManagePage), null, new FAEntranceNavigationTransitionInfo());
                 break;
             case "About":
                 Logger.Debug<NavigationService>("Navigating to About page");
-                frame.Navigate(typeof(AboutPage), null, new EntranceNavigationTransitionInfo());
+                frame.Navigate(typeof(AboutPage), null, new FAEntranceNavigationTransitionInfo());
                 break;
             case "Settings":
                 Logger.Debug<NavigationService>("Navigating to Settings page");
-                frame.Navigate(typeof(SettingsPage), null, new EntranceNavigationTransitionInfo());
+                frame.Navigate(typeof(SettingsPage), null, new FAEntranceNavigationTransitionInfo());
                 break;
             default:
                 Logger.Warning<NavigationService>($"Unknown navigation tag requested: {tag}");
@@ -181,7 +181,7 @@ public class NavigationService
         // Update the icon if navigating by tag
         if (_navigationView != null)
         {
-            NavigationViewItem? item = FindNavigationItemByTag(tag);
+            FANavigationViewItem? item = FindNavigationItemByTag(tag);
             if (item != null)
             {
                 Logger.Trace<NavigationService>($"Found navigation item for tag '{tag}', updating icon");
@@ -211,7 +211,7 @@ public class NavigationService
             return;
         }
 
-        NavigationViewItem? item = FindNavigationItemByTag(tag);
+        FANavigationViewItem? item = FindNavigationItemByTag(tag);
         if (item != null)
         {
             _navigationView.SelectedItem = item;
@@ -228,7 +228,7 @@ public class NavigationService
     /// Updates the icon variant (filled/regular) for navigation items to show which item is currently selected
     /// </summary>
     /// <param name="selectedItem">The NavigationViewItem that is currently selected</param>
-    private void SetSelectedIcon(NavigationViewItem? selectedItem)
+    private void SetSelectedIcon(FANavigationViewItem? selectedItem)
     {
         if (_navigationView == null)
         {
@@ -239,7 +239,7 @@ public class NavigationService
         Logger.Trace<NavigationService>("Updating icon variants for selected item");
 
         // Reset menu icons
-        foreach (NavigationViewItem item in _navigationView.MenuItems.OfType<NavigationViewItem>())
+        foreach (FANavigationViewItem item in _navigationView.MenuItems.OfType<FANavigationViewItem>())
         {
             if (item.Content is FluentIcons.Avalonia.Fluent.SymbolIcon icon)
             {
@@ -248,7 +248,7 @@ public class NavigationService
         }
 
         // Reset footer icons
-        foreach (NavigationViewItem item in _navigationView.FooterMenuItems.OfType<NavigationViewItem>())
+        foreach (FANavigationViewItem item in _navigationView.FooterMenuItems.OfType<FANavigationViewItem>())
         {
             if (item.Content is FluentIcons.Avalonia.Fluent.SymbolIcon icon)
             {
@@ -262,7 +262,7 @@ public class NavigationService
     /// </summary>
     /// <param name="tag">The tag to search for in the NavigationView items</param>
     /// <returns>The NavigationViewItem with the matching tag, or null if not found</returns>
-    private NavigationViewItem? FindNavigationItemByTag(string tag)
+    private FANavigationViewItem? FindNavigationItemByTag(string tag)
     {
         if (_navigationView == null)
         {
@@ -271,7 +271,7 @@ public class NavigationService
         }
 
         // Search in menu items
-        NavigationViewItem? menuItem = _navigationView.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(x => x.Tag?.ToString() == tag);
+        FANavigationViewItem? menuItem = _navigationView.MenuItems.OfType<FANavigationViewItem>().FirstOrDefault(x => x.Tag?.ToString() == tag);
 
         if (menuItem != null)
         {
@@ -280,7 +280,7 @@ public class NavigationService
         }
 
         // Search in footer items
-        NavigationViewItem? footerItem = _navigationView.FooterMenuItems.OfType<NavigationViewItem>().FirstOrDefault(x => x.Tag?.ToString() == tag);
+        FANavigationViewItem? footerItem = _navigationView.FooterMenuItems.OfType<FANavigationViewItem>().FirstOrDefault(x => x.Tag?.ToString() == tag);
         Logger.Trace<NavigationService>(footerItem != null ? $"Found item '{tag}' in footer items" : $"Item '{tag}' not found in menu or footer");
 
         return footerItem;

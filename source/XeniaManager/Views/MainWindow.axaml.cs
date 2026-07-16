@@ -18,7 +18,7 @@ using XeniaManager.ViewModels;
 
 namespace XeniaManager.Views;
 
-public partial class MainWindow : AppWindow
+public partial class MainWindow : FAAppWindow
 {
     // Properties
     private MainWindowViewModel _viewModel { get; set; }
@@ -144,7 +144,7 @@ public partial class MainWindow : AppWindow
             string xeniaVersions = string.Join(", ", updatesAvailable);
             Logger.Info<MainWindow>($"Updates available for: {xeniaVersions}");
             string message = string.Format(LocalizationHelper.GetText("InfoBar.UpdatesAvailable"), xeniaVersions);
-            _notificationService.Show(message, InfoBarSeverity.Informational);
+            _notificationService.Show(message, FAInfoBarSeverity.Informational);
         }
         else
         {
@@ -195,7 +195,7 @@ public partial class MainWindow : AppWindow
             if (updateAvailable)
             {
                 Logger.Info<MainWindow>($"Xenia Manager update available (current: {currentVersion})");
-                _notificationService.Show(LocalizationHelper.GetText("InfoBar.XeniaManagerUpdateAvailable"), InfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("InfoBar.XeniaManagerUpdateAvailable"), FAInfoBarSeverity.Informational);
             }
             else
             {

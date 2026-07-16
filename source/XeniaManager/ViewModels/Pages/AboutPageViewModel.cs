@@ -128,12 +128,12 @@ public partial class AboutPageViewModel : ViewModelBase
             if (updateAvailable)
             {
                 Logger.Info<AboutPageViewModel>($"Xenia Manager update available (current: {currentVersion})");
-                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message"), InfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message"), FAInfoBarSeverity.Informational);
             }
             else
             {
                 Logger.Debug<AboutPageViewModel>("Xenia Manager is up to date");
-                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message"), InfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message"), FAInfoBarSeverity.Informational);
             }
         }
         catch (Exception ex)

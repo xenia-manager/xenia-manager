@@ -69,14 +69,14 @@ public partial class ConfigEditorDialog : UserControl
             viewModel.Title = title;
         }
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.Title"),
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.SaveButton.Text"),
             CloseButtonText = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.CancelButton.Text"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Controlling ContentDialog

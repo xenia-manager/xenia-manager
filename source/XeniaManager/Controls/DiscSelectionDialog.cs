@@ -25,7 +25,7 @@ public abstract class DiscSelectionDialog
     {
         Logger.Info<DiscSelectionDialog>($"Showing disc selection dialog for '{game.Title}' ({game.FileLocations.DiscCount} discs)");
 
-        TaskDialog taskDialog = new TaskDialog
+        FATaskDialog taskDialog = new FATaskDialog
         {
             Title = game.Title,
             Header = LocalizationHelper.GetText("DiscSelectionDialog.Header"),
@@ -34,7 +34,7 @@ public abstract class DiscSelectionDialog
             XamlRoot = App.MainWindow
         };
 
-        List<TaskDialogCommand> commands = [];
+        List<FATaskDialogCommand> commands = [];
 
         for (int discNumber = 1; discNumber <= game.FileLocations.DiscCount; discNumber++)
         {
@@ -56,7 +56,7 @@ public abstract class DiscSelectionDialog
                 label = $"{label} {LocalizationHelper.GetText("DiscSelectionDialog.MissingSuffix")}";
             }
 
-            TaskDialogCommand discCommand = new TaskDialogCommand
+            FATaskDialogCommand discCommand = new FATaskDialogCommand
             {
                 Text = label,
                 IconSource = new SymbolIconSource { Symbol = Symbol.Games },
@@ -75,9 +75,9 @@ public abstract class DiscSelectionDialog
         }
 
         taskDialog.Commands = commands;
-        taskDialog.Buttons = new List<TaskDialogButton>
+        taskDialog.Buttons = new List<FATaskDialogButton>
         {
-            TaskDialogButton.CloseButton
+            FATaskDialogButton.CloseButton
         };
 
         object result = await taskDialog.ShowAsync(true);

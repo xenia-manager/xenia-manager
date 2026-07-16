@@ -49,21 +49,21 @@ public partial class GameDetailsEditor : UserControl
 
         string dialogTitle = string.Format(LocalizationHelper.GetText("GameDetailsEditor.DialogTitle"), game.Title);
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = dialogTitle,
             Content = editor,
             PrimaryButtonText = LocalizationHelper.GetText("GameDetailsEditor.SaveButton"),
             CloseButtonText = LocalizationHelper.GetText("GameDetailsEditor.CancelButton"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Handle the primary button (Save) using deferral to properly handle async operation
         bool saveSuccessful = false;
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            Deferral? deferral = e.GetDeferral();
+            FADeferral? deferral = e.GetDeferral();
             try
             {
                 saveSuccessful = await editor._viewModel!.SaveAsync();
@@ -78,7 +78,7 @@ public partial class GameDetailsEditor : UserControl
             }
         };
 
-        ContentDialogResult result = await contentDialog.ShowAsync();
-        return result == ContentDialogResult.Primary && saveSuccessful;
+        FAContentDialogResult result = await contentDialog.ShowAsync();
+        return result == FAContentDialogResult.Primary && saveSuccessful;
     }
 }

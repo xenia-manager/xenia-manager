@@ -48,13 +48,13 @@ public partial class AddGamesProgressDialog : UserControl
     {
         AddGamesProgressDialog dialog = new AddGamesProgressDialog();
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = null, // Title is in the UserControl
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("AddGamesProgressDialog.Button.Close"),
             FullSizeDesired = false,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Controlling ContentDialog
@@ -78,7 +78,7 @@ public partial class AddGamesProgressDialog : UserControl
         try
         {
             // Show the dialog and wait for completion
-            Task<ContentDialogResult>? showTask = contentDialog.ShowAsync();
+            Task<FAContentDialogResult>? showTask = contentDialog.ShowAsync();
 
             // Wait for the operation to complete
             (int, int, int) result = await addTask;

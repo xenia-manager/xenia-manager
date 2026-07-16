@@ -290,7 +290,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
         _notificationService.ShowAction(
             LocalizationHelper.GetText("InfoBar.NewGamesDetected.Message"),
-            InfoBarSeverity.Informational,
+            FAInfoBarSeverity.Informational,
             LocalizationHelper.GetText("InfoBar.NewGamesDetected.Action"),
             async void () => await ScanGamesDirectoryAsync());
     }
@@ -587,7 +587,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         // Choose scan source (Games folder or custom folder)
         try
         {
-            ContentDialogResult scanChoice = await _messageBoxService.ShowCustomDialogAsync(
+            FAContentDialogResult scanChoice = await _messageBoxService.ShowCustomDialogAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Title"),
                 LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Message"),
                 primaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder"),
@@ -596,13 +596,13 @@ public partial class LibraryPageViewModel : ViewModelBase
 
             string folderPath;
 
-            if (scanChoice == ContentDialogResult.None)
+            if (scanChoice == FAContentDialogResult.None)
             {
                 Logger.Info<LibraryPageViewModel>("User cancelled scan directory");
                 return;
             }
 
-            if (scanChoice == ContentDialogResult.Primary)
+            if (scanChoice == FAContentDialogResult.Primary)
             {
                 folderPath = AppPaths.GamesDirectory;
                 Logger.Info<LibraryPageViewModel>($"User selected Games folder: {folderPath}");
@@ -1010,20 +1010,20 @@ public partial class LibraryPageViewModel : ViewModelBase
         try
         {
             // Ask user to choose export target: Folder, Steam, or Cancel
-            ContentDialogResult result = await _messageBoxService.ShowCustomDialogAsync(
+            FAContentDialogResult result = await _messageBoxService.ShowCustomDialogAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Title"),
                 LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Message"),
                 primaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder"),
                 secondaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam"),
                 closeButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel"));
 
-            if (result == ContentDialogResult.None)
+            if (result == FAContentDialogResult.None)
             {
                 Logger.Info<LibraryPageViewModel>("Export game shortcuts canceled by user");
                 return;
             }
 
-            if (result == ContentDialogResult.Secondary)
+            if (result == FAContentDialogResult.Secondary)
             {
                 // Export to Steam
                 await ExportToSteamAsync();

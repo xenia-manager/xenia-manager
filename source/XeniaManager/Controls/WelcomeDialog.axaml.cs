@@ -41,12 +41,12 @@ public partial class WelcomeDialog : UserControl
 
         WelcomeDialog dialog = new WelcomeDialog();
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("WelcomeDialog.Title"),
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("WelcomeDialog.ContinueButton"),
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         Theme? selectedTheme = null;
