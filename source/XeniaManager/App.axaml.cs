@@ -1,7 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -47,11 +46,6 @@ public partial class App : Application
     {
         if (Desktop is { } desktop)
         {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit.
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-            Logger.Trace<App>("Disabling Avalonia data annotation validation");
-            DisableAvaloniaDataAnnotationValidation();
-
             // Global exception handlers
             Logger.Trace<App>("Registering global exception handlers");
             RegisterGlobalExceptionHandlers();
@@ -242,18 +236,6 @@ public partial class App : Application
         {
             // If logging fails, we can do little about it
             // Just ensure we don't throw from the exception handler
-        }
-    }
-
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        DataAnnotationsValidationPlugin[] dataValidationPluginsToRemove = BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-        // remove each entry found
-        foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove)
-        {
-            BindingPlugins.DataValidators.Remove(plugin);
         }
     }
 
