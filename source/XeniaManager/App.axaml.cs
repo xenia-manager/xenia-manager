@@ -39,6 +39,9 @@ public partial class App : Application
     {
         Logger.Debug<App>("Initializing Avalonia application");
         AvaloniaXamlLoader.Load(this);
+#if DEBUG
+        this.AttachDeveloperTools();
+#endif
         Logger.Debug<App>("Avalonia XAML loaded successfully");
     }
 
