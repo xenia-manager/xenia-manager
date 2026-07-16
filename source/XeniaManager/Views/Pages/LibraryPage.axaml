@@ -645,7 +645,6 @@
 
     <!-- Key Bindings -->
     <UserControl.KeyBindings>
-        <KeyBinding Gesture="Ctrl+A" Command="{Binding SelectAllGamesCommand}" />
         <KeyBinding Gesture="Delete" Command="{Binding PromptDeleteSelectedGamesCommand}" />
     </UserControl.KeyBindings>
 </UserControl>
