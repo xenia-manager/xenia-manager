@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
@@ -37,13 +38,8 @@
                               VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding Settings}"
                                   Margin="16">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Spacing="8" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="itemsvm:OptimizedSettingOptionViewModel">
                                 <cards:CustomCard>
                                     <Grid ColumnDefinitions="*,Auto"
                                           RowDefinitions="Auto,Auto,Auto">

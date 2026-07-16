@@ -120,16 +120,16 @@ public partial class LibraryPageViewModel : ViewModelBase
     private List<GameItemViewModel> _allGames = [];
 
     // Selection properties for multiselect
-    public bool HasSelectedGames => _allGames.Any(g => g.IsSelected);
+    private int _selectedGamesCount;
+    public bool HasSelectedGames => _selectedGamesCount > 0;
 
     public string SelectedGamesCountText
     {
         get
         {
-            int count = _allGames.Count(g => g.IsSelected);
-            return count == 1
+            return _selectedGamesCount == 1
                 ? LocalizationHelper.GetText("LibraryPage.DeleteSelected.OneGameSelected")
-                : string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.MultipleGamesSelected"), count);
+                : string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.MultipleGamesSelected"), _selectedGamesCount);
         }
     }
 
@@ -143,6 +143,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         // Debounce search to avoid filtering on every keystroke
         _debounceCts?.Cancel();
+        _debounceCts?.Dispose();
         _debounceCts = new CancellationTokenSource();
         CancellationToken token = _debounceCts.Token;
 
@@ -180,6 +181,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         {
             if (e.PropertyName == nameof(GameItemViewModel.IsSelected))
             {
+                _selectedGamesCount += gameItem.IsSelected ? 1 : -1;
                 OnPropertyChanged(nameof(HasSelectedGames));
                 OnPropertyChanged(nameof(SelectedGamesCountText));
             }
@@ -212,6 +214,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         }
 
         _allGames.Clear();
+        _selectedGamesCount = 0;
         foreach (Game game in GameManager.Games)
         {
             GameItemViewModel gameVm = new GameItemViewModel(game, this);
@@ -231,27 +234,25 @@ public partial class LibraryPageViewModel : ViewModelBase
     /// </summary>
     private void FilterGames()
     {
-        Games.Clear();
-
+        List<GameItemViewModel> filtered;
         if (string.IsNullOrWhiteSpace(SearchQuery))
         {
-            // Show all games when the search is empty
-            foreach (GameItemViewModel item in _allGames)
-            {
-                Games.Add(item);
-            }
+            filtered = [.. _allGames];
         }
         else
         {
             string query = SearchQuery.ToLowerInvariant();
-            foreach (GameItemViewModel item in _allGames)
-            {
-                if (item.Title.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
+            filtered = _allGames
+                .Where(item =>
+                    item.Title.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
                     item.Game.GameId.Contains(query, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    Games.Add(item);
-                }
-            }
+                .ToList();
+        }
+
+        Games.Clear();
+        foreach (GameItemViewModel item in filtered)
+        {
+            Games.Add(item);
         }
     }
 

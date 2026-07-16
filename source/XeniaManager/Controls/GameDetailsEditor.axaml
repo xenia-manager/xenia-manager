@@ -334,7 +334,7 @@
                                     <!-- ID List -->
                                     <ItemsControl ItemsSource="{Binding AlternativeIds}">
                                         <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="x:String">
                                                 <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                                         BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                         BorderThickness="1"
@@ -468,7 +468,7 @@
                                       SelectedValue="{Binding SelectedXeniaVersion}"
                                       MinWidth="150">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="vm:XeniaVersionItem">
                                         <TextBlock Text="{Binding DisplayName}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
@@ -547,7 +547,7 @@
                                           SelectedValue="{Binding SelectedCompatibilityRating}"
                                           MinWidth="150">
                                     <ComboBox.ItemTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate x:DataType="vm:CompatibilityRatingItem">
                                             <TextBlock Text="{Binding DisplayName}" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>

@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
+             xmlns:core="using:XeniaManager.Core.Models.Files.Bindings"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550"
@@ -32,7 +34,7 @@
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Center">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="core:BindingsSection">
                         <!-- Section Type -->
                         <TextBlock Text="{Binding Type}"
                                    FontWeight="SemiBold"
@@ -81,7 +83,7 @@
                                   BorderThickness="0"
                                   ItemsSource="{Binding BindingsEntries}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="itemsvm:BindingsEntryViewModel">
                                 <Border Padding="12,8" Margin="4,2">
                                     <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,Auto">
                                         <!-- Comment CheckBox -->
@@ -126,7 +128,7 @@
                                                                       VerticalScrollBarVisibility="Auto">
                                                             <ItemsControl ItemsSource="{Binding MultibindOptions}">
                                                                 <ItemsControl.ItemTemplate>
-                                                                    <DataTemplate>
+                                                                    <DataTemplate x:DataType="itemsvm:BindingsOptionItem">
                                                                         <CheckBox Content="{Binding Name}"
                                                                                   IsChecked="{Binding IsChecked}"
                                                                                   Margin="0,2" />

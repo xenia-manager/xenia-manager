@@ -43,10 +43,9 @@
                                 Margin="0,0,0,8" />
         <!-- Patch List -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
                 <ItemsControl x:Name="PatchesItemsControl" ItemsSource="{Binding Patches}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="vm:PatchEntryViewModel">
                             <Expander IsExpanded="{Binding IsExpanded}" Margin="0,4">
                                 <Expander.Header>
                                     <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,4">
@@ -108,7 +107,7 @@
 
                                         <ItemsControl x:Name="CommandsItemsControl" ItemsSource="{Binding Commands}" Margin="0,0,0,8">
                                             <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
+                                                <DataTemplate x:DataType="vm:PatchCommandViewModel">
                                                     <Border Classes="commandItem">
                                                         <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
                                                             <TextBlock Grid.Row="0" Grid.Column="0"
@@ -231,7 +230,6 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </StackPanel>
         </ScrollViewer>
 
         <!-- Add Patch Button -->
