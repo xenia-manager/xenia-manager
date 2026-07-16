@@ -12,7 +12,7 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <controls:NavigationView x:Name="NavigationView"
+    <controls:FANavigationView x:Name="NavigationView"
                              AlwaysShowHeader="False"
                              IsBackButtonVisible="False"
                              IsSettingsVisible="False"
@@ -21,58 +21,58 @@
                              IsPaneToggleButtonVisible="True"
                               ItemInvoked="NavigationView_OnItemInvoked">
         <!-- Navigation Items -->
-        <controls:NavigationView.MenuItems>
+        <controls:FANavigationView.MenuItems>
             <!-- Open Xenia -->
-            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.OpenXenia}"
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.OpenXenia}"
                                          Tag="Open">
-                <controls:NavigationViewItem.IconSource>
+                <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Play" />
-                </controls:NavigationViewItem.IconSource>
-            </controls:NavigationViewItem>
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
 
             <!-- Game Library -->
-            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.Library}"
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.Library}"
                                          Tag="Library">
-                <controls:NavigationViewItem.IconSource>
+                <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Archive" />
-                </controls:NavigationViewItem.IconSource>
-            </controls:NavigationViewItem>
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
 
             <!-- Xenia Settings -->
-            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.XeniaSettings}"
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.XeniaSettings}"
                                          Tag="XeniaSettings">
-                <controls:NavigationViewItem.IconSource>
+                <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="PlaySettings" />
-                </controls:NavigationViewItem.IconSource>
-            </controls:NavigationViewItem>
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
 
             <!-- Manage Page -->
-            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.ManagePage}"
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.ManagePage}"
                                          Tag="Manage">
-                <controls:NavigationViewItem.IconSource>
+                <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="AppsAddIn" />
-                </controls:NavigationViewItem.IconSource>
-            </controls:NavigationViewItem>
-        </controls:NavigationView.MenuItems>
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
+        </controls:FANavigationView.MenuItems>
 
-        <controls:NavigationView.FooterMenuItems>
+        <controls:FANavigationView.FooterMenuItems>
             <!-- Xenia Manager Settings -->
-            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.Settings}"
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.Settings}"
                                          Tag="Settings">
-                <controls:NavigationViewItem.IconSource>
+                <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Settings" />
-                </controls:NavigationViewItem.IconSource>
-            </controls:NavigationViewItem>
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
 
             <!-- About -->
-            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.About}"
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.About}"
                                          Tag="About">
-                <controls:NavigationViewItem.IconSource>
+                <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Info" />
-                </controls:NavigationViewItem.IconSource>
-            </controls:NavigationViewItem>
-        </controls:NavigationView.FooterMenuItems>
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
+        </controls:FANavigationView.FooterMenuItems>
 
-        <controls:Frame x:Name="ContentFrame" CacheSize="0" />
-    </controls:NavigationView>
+        <controls:FAFrame x:Name="ContentFrame" CacheSize="0" />
+    </controls:FANavigationView>
 </UserControl>

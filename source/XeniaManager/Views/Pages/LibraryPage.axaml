@@ -198,17 +198,17 @@
                       Padding="8"
                       IsVisible="{Binding IsGridView}"
                       PointerReleased="OnScrollViewerPointerReleased">
-            <controls:ItemsRepeater Margin="0,0,10,0"
+            <controls:FAItemsRepeater Margin="0,0,10,0"
                                     ItemsSource="{Binding Games}">
-                <controls:ItemsRepeater.Layout>
-                    <controls:UniformGridLayout MinItemWidth="{Binding MinItemWidth}"
+                <controls:FAItemsRepeater.Layout>
+                    <controls:FAUniformGridLayout MinItemWidth="{Binding MinItemWidth}"
                                                 MinItemHeight="{Binding MinItemHeight}"
                                                 MinRowSpacing="{Binding ItemSpacing}"
                                                 MinColumnSpacing="{Binding ItemSpacing}"
                                                 ItemsStretch="Uniform" />
-                </controls:ItemsRepeater.Layout>
+                </controls:FAItemsRepeater.Layout>
 
-                <controls:ItemsRepeater.ItemTemplate>
+                <controls:FAItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="itemVm:GameItemViewModel">
                         <Button Padding="0"
                                 BorderThickness="3"
@@ -577,8 +577,8 @@
                             </Border>
                         </Button>
                     </DataTemplate>
-                </controls:ItemsRepeater.ItemTemplate>
-            </controls:ItemsRepeater>
+                </controls:FAItemsRepeater.ItemTemplate>
+            </controls:FAItemsRepeater>
         </ScrollViewer>
 
         <!-- Bulk Delete Toolbar (shown when games are selected) -->
