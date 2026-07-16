@@ -20,7 +20,7 @@
     <sys:String x:Key="MainView.Navigation.Error.Message">Belirtilen sayfaya yönlendirilemedi.&#10;{0}</sys:String>
 
     <!-- Library Page -->
-    <sys:String x:Key="LibraryPage.Search.Watermark">Ara...</sys:String>
+    <sys:String x:Key="LibraryPage.Search.PlaceholderText">Ara...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Izgara Görünümünü Düzenle</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Kutu kapaklarındaki ek bilgileri göster/gizle</sys:String>
@@ -342,7 +342,7 @@
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">İndirme Durumu</sys:String>
     <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">İndirme İlerlemesi:</sys:String>
-    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Bölüm veya ayar adına göre ara...</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.PlaceholderText">Bölüm veya ayar adına göre ara...</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">İçerik</sys:String>
@@ -478,19 +478,19 @@
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Yeni Yama Ekle</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Yamayı Sil</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Yama Detayları</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Yama Adı</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Yazar</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Açıklama (isteğe bağlı)</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Başlık Açıklaması (isteğe bağlı)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.PlaceholderText">Yama Adı</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.PlaceholderText">Yazar</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.PlaceholderText">Açıklama (isteğe bağlı)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.PlaceholderText">Başlık Açıklaması (isteğe bağlı)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Yama Komutları</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Tür:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Tür açıklaması</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.PlaceholderText">Tür açıklaması</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddressComment">Açıklama:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.ValueComment">Açıklama:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Açıklama (isteğe bağlı)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.PlaceholderText">Açıklama (isteğe bağlı)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Adres:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Değer:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.PlaceholderText">0x00000000</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddCommand.ToolTip">Komut Ekle</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.ToolTip">Komutu Sil</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.SaveButton">Kaydet</sys:String>
@@ -510,7 +510,7 @@
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Yama Veritabanı</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">İndir</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">İptal</sys:String>
-    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Yamalarda ara...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.PlaceholderText">Yamalarda ara...</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Arama Başarısız</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">Yamalar aranırken bir hata oluştu.&#10;Hata: {0}</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">Daha fazla yama mevcut...</sys:String>
@@ -536,14 +536,14 @@
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.AlternativeIds">Alternatif ID'ler</sys:String>
-    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Alternatif ID girin...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsPlaceholderText">Alternatif ID girin...</sys:String>
     <sys:String x:Key="GameDetailsEditor.Add">Ekle</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Oyun Başlığı</sys:String>
-    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Oyun başlığını girin</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitlePlaceholderText">Oyun başlığını girin</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Oyun Yolu</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Uyumluluk Derecesi</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">Uyumluluk Sayfası URL'si</sys:String>
-    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Uyumluluk sayfası URL'sini girin</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Uyumluluk sayfası URL'sini girin</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Oyun yolunu değiştir</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Oyun Dosyasını Seçin</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Depolama Sağlayıcısı Eksik</sys:String>

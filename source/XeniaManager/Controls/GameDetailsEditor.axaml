@@ -314,7 +314,7 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBox Grid.Column="0"
                                                  Text="{Binding NewAlternativeId}"
-                                                 PlaceholderText="{DynamicResource GameDetailsEditor.AlternativeIdsWatermark}"
+                                                 PlaceholderText="{DynamicResource GameDetailsEditor.AlternativeIdsPlaceholderText}"
                                                  MaxLength="8"
                                                  FontFamily="Cascadia Code, Consolas, monospace"
                                                  Margin="0,0,8,0" />
@@ -393,7 +393,7 @@
                                            Text="*" />
                             </Grid>
                             <TextBox Text="{Binding GameTitle}"
-                                     PlaceholderText="{DynamicResource GameDetailsEditor.GameTitleWatermark}"
+                                     PlaceholderText="{DynamicResource GameDetailsEditor.GameTitlePlaceholderText}"
                                      MaxLength="100" />
                         </StackPanel>
 
@@ -573,7 +573,7 @@
                                            Text="{DynamicResource GameDetailsEditor.CompatibilityPage}" />
                             </Grid>
                             <TextBox Text="{Binding CompatibilityPageUrl}"
-                                     PlaceholderText="{DynamicResource GameDetailsEditor.CompatibilityPageWatermark}"
+                                     PlaceholderText="{DynamicResource GameDetailsEditor.CompatibilityPagePlaceholderText}"
                                      MaxLength="500" />
                         </StackPanel>
                     </StackPanel>

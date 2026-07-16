@@ -20,7 +20,7 @@
     <sys:String x:Key="MainView.Navigation.Error.Message">Falha ao navegar para página designada.&#10;{0}</sys:String>
 
     <!-- Library Page -->
-    <sys:String x:Key="LibraryPage.Search.Watermark">Buscar...</sys:String>
+    <sys:String x:Key="LibraryPage.Search.PlaceholderText">Buscar...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Editar Visão de Grade</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Exibir/Ocultar informação adicional na arte da caixa</sys:String>
@@ -342,7 +342,7 @@
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Progresso do Backup</sys:String>
     <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Progresso do Backup:</sys:String>
-    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Pesquisar por seção ou nome da configuração...</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.PlaceholderText">Pesquisar por seção ou nome da configuração...</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Conteúdo</sys:String>
@@ -478,19 +478,19 @@
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Adicionar novo Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Excluir Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Detalhes do Patch</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Nome do Patch</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Autor</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Descrição (opcional)</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Comentário do cabeçalho (opcional)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.PlaceholderText">Nome do Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.PlaceholderText">Autor</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.PlaceholderText">Descrição (opcional)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.PlaceholderText">Comentário do cabeçalho (opcional)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Comandos do Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Tipo:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Digite o comentário</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.PlaceholderText">Digite o comentário</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddressComment">Comentário:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.ValueComment">Comentário:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Comentário (opcional)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.PlaceholderText">Comentário (opcional)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Endereço:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Valor:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.PlaceholderText">0x00000000</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddCommand.ToolTip">Adicionar comando</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.ToolTip">Excluir comando</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.SaveButton">Salvar</sys:String>
@@ -510,7 +510,7 @@
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Banco de Dados de Patches</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">Baixar</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">Cancelar</sys:String>
-    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Buscar patches...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.PlaceholderText">Buscar patches...</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Falha na busca</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">Ocorreu um erro ao tentar buscar patches. &#10;Erro: {0}</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">Mais patches disponíveis...</sys:String>
@@ -536,14 +536,14 @@
     <sys:String x:Key="GameDetailsEditor.TitleId">ID do Título</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">ID da Mídia</sys:String>
     <sys:String x:Key="GameDetailsEditor.AlternativeIds">IDs Alternativos</sys:String>
-    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Insira o ID alternativo...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsPlaceholderText">Insira o ID alternativo...</sys:String>
     <sys:String x:Key="GameDetailsEditor.Add">Adicionar</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Título do Jogo</sys:String>
-    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Insira o título do jogo</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitlePlaceholderText">Insira o título do jogo</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Caminho do jogo</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Classificação de Compatibilidade</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL da Página de Compatibilidade</sys:String>
-    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Insira a URL da página de compatibilidade</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Insira a URL da página de compatibilidade</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Alterar caminho do jogo</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Selecionar arquivo do jogo</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Provedor de Armazenamento Ausente</sys:String>
