@@ -36,7 +36,7 @@
                      VerticalContentAlignment="Center"
                      BorderThickness="0"
                      FontSize="24"
-                     PlaceholderText="{DynamicResource LibraryPage.Search.PlaceholderText}"
+                     PlaceholderText="{DynamicResource LibraryPage.Search.Watermark}"
                      Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
 

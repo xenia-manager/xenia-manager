@@ -23,7 +23,7 @@
         <!-- Search Box Section -->
         <cards:CustomCard Grid.Row="0"
                           Margin="0,0,0,16">
-            <TextBox PlaceholderText="{DynamicResource PatchSelectionDialog.SearchBox.PlaceholderText}"
+            <TextBox PlaceholderText="{DynamicResource PatchSelectionDialog.SearchBox.Watermark}"
                      Text="{Binding SearchText, Mode=TwoWay}"
                      TextChanged="TextBox_OnTextChanged"
                      BorderThickness="0"

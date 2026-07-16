@@ -36,7 +36,7 @@
                                VerticalAlignment="Center" />
                 <TextBox Grid.Column="1"
                          Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         PlaceholderText="{DynamicResource Controls.ConfigEditorControl.Search.PlaceholderText}"
+                         PlaceholderText="{DynamicResource Controls.ConfigEditorControl.Search.Watermark}"
                          HorizontalAlignment="Stretch" />
             </Grid>
         </Border>
