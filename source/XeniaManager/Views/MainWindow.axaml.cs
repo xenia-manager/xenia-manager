@@ -223,6 +223,7 @@ public partial class MainWindow : FAAppWindow
         if (selectedTheme.HasValue)
         {
             _settings.Settings.Ui.Theme = selectedTheme.Value;
+            App.Services.GetRequiredService<ThemeService>().SetTheme(selectedTheme.Value);
             Logger.Info<MainWindow>($"Theme set to {selectedTheme.Value} on first startup");
         }
 

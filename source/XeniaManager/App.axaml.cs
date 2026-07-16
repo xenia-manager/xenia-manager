@@ -167,13 +167,13 @@ public partial class App : Application
         // Restore window properties
         settings.RestoreWindowProperties(settings, mainWindow);
 
-        // Apply the Xbox 360 green accent color and restore the saved theme
+        // Apply the Xbox 360 green accent color
         if (Styles.OfType<FluentAvaloniaTheme>().FirstOrDefault() is { } faTheme)
         {
             faTheme.CustomAccentColor = Color.Parse("#FF107C10");
         }
 
-        ThemeResourceLoader.Instance.ApplyTheme(settings.Settings.Ui.Theme);
+        // The saved theme is applied when ThemeService is initialized during service registration.
 
         // Wire up window events
         mainWindow.Opened += (_, _) =>

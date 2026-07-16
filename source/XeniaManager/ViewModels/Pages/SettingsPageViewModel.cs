@@ -21,6 +21,7 @@ public partial class SettingsPageViewModel : ViewModelBase
 {
     // Variables
     private Settings _settings { get; set; }
+    private ThemeService _themeService { get; set; }
     private bool _firstStartup = true;
     private bool _suppressUpdates = false;
 
@@ -125,7 +126,7 @@ public partial class SettingsPageViewModel : ViewModelBase
     }
 
     // Theme Settings
-    public IReadOnlyList<Theme> AppThemeOptions { get; } = [Theme.System, Theme.Light, Theme.Dark];
+    public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
 
     [ObservableProperty] private Theme selectedTheme;
     partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
@@ -135,14 +136,6 @@ public partial class SettingsPageViewModel : ViewModelBase
             return;
         }
         Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
-
-        // Apply the theme (resource swap + variant change, ordered inside the loader)
-        ThemeResourceLoader.Instance.ApplyTheme(newValue);
-
-        // Persist the selection
-        _settings.Settings.Ui.Theme = newValue;
-        _settings.SaveSettings();
-
         OnPropertyChanged(nameof(SelectedThemeIndex));
     }
 
@@ -152,12 +145,12 @@ public partial class SettingsPageViewModel : ViewModelBase
         {
             for (int i = 0; i < AppThemeOptions.Count; i++)
             {
-                if (AppThemeOptions[i] == SelectedTheme)
+                if (AppThemeOptions[i].ThemeValue == SelectedTheme)
                 {
                     return i;
                 }
             }
-            return 0;
+            return 0; // Default to the first theme if not found
         }
         set
         {
@@ -165,11 +158,17 @@ public partial class SettingsPageViewModel : ViewModelBase
             {
                 return;
             }
-            if (SelectedTheme == AppThemeOptions[value])
+            if (SelectedTheme == AppThemeOptions[value].ThemeValue)
             {
                 return;
             }
-            SelectedTheme = AppThemeOptions[value];
+            SelectedTheme = AppThemeOptions[value].ThemeValue;
+
+            // Update settings when the theme changes
+            _settings.Settings.Ui.Theme = SelectedTheme;
+            _settings.SaveSettings();
+
+            _themeService.SetTheme(SelectedTheme);
         }
     }
 
@@ -240,6 +239,8 @@ public partial class SettingsPageViewModel : ViewModelBase
     public SettingsPageViewModel()
     {
         _settings = App.Services.GetRequiredService<Settings>();
+        _themeService = App.Services.GetRequiredService<ThemeService>();
+        AppThemeOptions = _themeService.ThemeDisplayItems;
         LoadUISettings();
     }
 

@@ -2,9 +2,11 @@ using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -23,9 +25,14 @@ public partial class WelcomeDialogViewModel : ViewModelBase
     private readonly Settings _settings;
 
     /// <summary>
+    /// The theme service used to apply theme changes.
+    /// </summary>
+    private readonly ThemeService _themeService;
+
+    /// <summary>
     /// The list of available themes for selection.
     /// </summary>
-    public IReadOnlyList<Theme> AppThemeOptions { get; } = [Theme.System, Theme.Light, Theme.Dark];
+    public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
 
     /// <summary>
     /// The currently selected theme.
@@ -44,8 +51,8 @@ public partial class WelcomeDialogViewModel : ViewModelBase
             return;
         }
 
-        SelectedTheme = AppThemeOptions[newValue];
-        ThemeResourceLoader.Instance.ApplyTheme(SelectedTheme);
+        SelectedTheme = AppThemeOptions[newValue].ThemeValue;
+        _themeService.SetTheme(SelectedTheme);
         Logger.Info<WelcomeDialogViewModel>($"Theme preview changed to {SelectedTheme}");
     }
 
@@ -55,11 +62,14 @@ public partial class WelcomeDialogViewModel : ViewModelBase
     public WelcomeDialogViewModel()
     {
         _settings = App.Services.GetRequiredService<Settings>();
+        _themeService = App.Services.GetRequiredService<ThemeService>();
+
+        AppThemeOptions = _themeService.ThemeDisplayItems;
 
         SelectedTheme = _settings!.Settings.Ui.Theme;
         for (int i = 0; i < AppThemeOptions.Count; i++)
         {
-            if (AppThemeOptions[i] == SelectedTheme)
+            if (AppThemeOptions[i].ThemeValue == SelectedTheme)
             {
                 SelectedThemeIndex = i;
                 break;

@@ -22,7 +22,6 @@
             <converters:ZoomScaleConverter x:Key="ZoomScaleConverter" />
             <converters:XeniaVersionToIconConverter x:Key="XeniaVersionToIconConverter" />
             <converters:XeniaVersionToStringConverter x:Key="XeniaVersionToStringConverter" />
-            <converters:ThemeToStringConverter x:Key="ThemeToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>

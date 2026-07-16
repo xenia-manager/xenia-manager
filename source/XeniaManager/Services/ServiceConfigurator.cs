@@ -48,6 +48,23 @@ public class ServiceConfigurator
         });
         // NavigationService
         services.AddSingleton<NavigationService>();
+        // ThemeService
+        services.AddSingleton<ThemeService>(provider =>
+        {
+            ThemeService themeService = new ThemeService();
+            Settings settings = provider.GetRequiredService<Settings>();
+            try
+            {
+                Theme savedTheme = settings.Settings.Ui.Theme;
+                themeService.SetTheme(savedTheme);
+                Logger.Info<ServiceConfigurator>($"Applied saved theme during service initialization: {savedTheme}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<ServiceConfigurator>($"Failed to apply saved theme: {ex.Message}");
+            }
+            return themeService;
+        });
         // MessageBoxService
         services.AddSingleton<IMessageBoxService, MessageBoxService>();
         // NotificationService
@@ -75,6 +92,8 @@ public class ServiceConfigurator
 
         // Initialize services
         IServiceProvider serviceProvider = services.BuildServiceProvider();
+        // Initialize ThemeService
+        _ = serviceProvider.GetRequiredService<ThemeService>();
         return serviceProvider;
     }
 }
