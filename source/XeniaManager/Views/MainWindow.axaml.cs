@@ -218,14 +218,11 @@ public partial class MainWindow : FAAppWindow
     {
         Logger.Info<MainWindow>("First startup detected, showing welcome dialog");
 
-        ThemeService? themeService = App.Services.GetService<ThemeService>();
-
         Theme? selectedTheme = await WelcomeDialog.ShowAsync();
 
         if (selectedTheme.HasValue)
         {
             _settings.Settings.Ui.Theme = selectedTheme.Value;
-            themeService?.SetTheme(selectedTheme.Value);
             Logger.Info<MainWindow>($"Theme set to {selectedTheme.Value} on first startup");
         }
 

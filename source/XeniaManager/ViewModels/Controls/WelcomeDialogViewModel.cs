@@ -1,9 +1,10 @@
-using System.Collections.ObjectModel;
-using Microsoft.Extensions.DependencyInjection;
+using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -17,11 +18,6 @@ namespace XeniaManager.ViewModels.Controls;
 public partial class WelcomeDialogViewModel : ViewModelBase
 {
     /// <summary>
-    /// The theme service used to apply theme changes.
-    /// </summary>
-    private readonly ThemeService _themeService;
-
-    /// <summary>
     /// The settings used to load the saved theme preference.
     /// </summary>
     private readonly Settings _settings;
@@ -29,7 +25,7 @@ public partial class WelcomeDialogViewModel : ViewModelBase
     /// <summary>
     /// The list of available themes for selection.
     /// </summary>
-    public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
+    public IReadOnlyList<Theme> AppThemeOptions { get; } = [Theme.System, Theme.Light, Theme.Dark];
 
     /// <summary>
     /// The currently selected theme.
@@ -48,8 +44,8 @@ public partial class WelcomeDialogViewModel : ViewModelBase
             return;
         }
 
-        SelectedTheme = AppThemeOptions[newValue].ThemeValue;
-        _themeService.SetTheme(SelectedTheme);
+        SelectedTheme = AppThemeOptions[newValue];
+        ThemeResourceLoader.Instance.ApplyTheme(SelectedTheme);
         Logger.Info<WelcomeDialogViewModel>($"Theme preview changed to {SelectedTheme}");
     }
 
@@ -58,15 +54,12 @@ public partial class WelcomeDialogViewModel : ViewModelBase
     /// </summary>
     public WelcomeDialogViewModel()
     {
-        _themeService = App.Services.GetRequiredService<ThemeService>();
         _settings = App.Services.GetRequiredService<Settings>();
 
-        AppThemeOptions = _themeService.ThemeDisplayItems;
-
-        SelectedTheme = _settings.Settings.Ui.Theme;
+        SelectedTheme = _settings!.Settings.Ui.Theme;
         for (int i = 0; i < AppThemeOptions.Count; i++)
         {
-            if (AppThemeOptions[i].ThemeValue == SelectedTheme)
+            if (AppThemeOptions[i] == SelectedTheme)
             {
                 SelectedThemeIndex = i;
                 break;

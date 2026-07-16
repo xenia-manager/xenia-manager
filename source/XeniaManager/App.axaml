@@ -22,10 +22,11 @@
             <converters:ZoomScaleConverter x:Key="ZoomScaleConverter" />
             <converters:XeniaVersionToIconConverter x:Key="XeniaVersionToIconConverter" />
             <converters:XeniaVersionToStringConverter x:Key="XeniaVersionToStringConverter" />
+            <converters:ThemeToStringConverter x:Key="ThemeToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
-        <style:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
+        <style:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="False" />
         <!-- Custom Controls -->
         <StyleInclude Source="/Controls/Controls.axaml" />
     </Application.Styles>

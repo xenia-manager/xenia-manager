@@ -311,6 +311,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Выбор темы Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Светлая</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Тёмная</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Системная</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Заставка при загрузке</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Показывать фоновое изображение игры во время её запуска в эмуляторе</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Отображение фонового изображения игры во время её запуска в эмуляторе</sys:String>

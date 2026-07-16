@@ -5,10 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Threading;
+using FluentAvalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -163,6 +166,14 @@ public partial class App : Application
     {
         // Restore window properties
         settings.RestoreWindowProperties(settings, mainWindow);
+
+        // Apply the Xbox 360 green accent color and restore the saved theme
+        if (Styles.OfType<FluentAvaloniaTheme>().FirstOrDefault() is { } faTheme)
+        {
+            faTheme.CustomAccentColor = Color.Parse("#FF107C10");
+        }
+
+        ThemeResourceLoader.Instance.ApplyTheme(settings.Settings.Ui.Theme);
 
         // Wire up window events
         mainWindow.Opened += (_, _) =>

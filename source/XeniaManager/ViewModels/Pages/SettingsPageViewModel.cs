@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -20,7 +21,6 @@ public partial class SettingsPageViewModel : ViewModelBase
 {
     // Variables
     private Settings _settings { get; set; }
-    private ThemeService _themeService { get; set; }
     private bool _firstStartup = true;
     private bool _suppressUpdates = false;
 
@@ -125,7 +125,7 @@ public partial class SettingsPageViewModel : ViewModelBase
     }
 
     // Theme Settings
-    public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
+    public IReadOnlyList<Theme> AppThemeOptions { get; } = [Theme.System, Theme.Light, Theme.Dark];
 
     [ObservableProperty] private Theme selectedTheme;
     partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
@@ -135,6 +135,14 @@ public partial class SettingsPageViewModel : ViewModelBase
             return;
         }
         Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
+
+        // Apply the theme (resource swap + variant change, ordered inside the loader)
+        ThemeResourceLoader.Instance.ApplyTheme(newValue);
+
+        // Persist the selection
+        _settings.Settings.Ui.Theme = newValue;
+        _settings.SaveSettings();
+
         OnPropertyChanged(nameof(SelectedThemeIndex));
     }
 
@@ -144,12 +152,12 @@ public partial class SettingsPageViewModel : ViewModelBase
         {
             for (int i = 0; i < AppThemeOptions.Count; i++)
             {
-                if (AppThemeOptions[i].ThemeValue == SelectedTheme)
+                if (AppThemeOptions[i] == SelectedTheme)
                 {
                     return i;
                 }
             }
-            return 0; // Default to the first theme if not found
+            return 0;
         }
         set
         {
@@ -157,17 +165,11 @@ public partial class SettingsPageViewModel : ViewModelBase
             {
                 return;
             }
-            if (SelectedTheme == AppThemeOptions[value].ThemeValue)
+            if (SelectedTheme == AppThemeOptions[value])
             {
                 return;
             }
-            SelectedTheme = AppThemeOptions[value].ThemeValue;
-
-            // Update settings when the theme changes
-            _settings.Settings.Ui.Theme = SelectedTheme;
-            _settings.SaveSettings();
-
-            _themeService.SetTheme(SelectedTheme);
+            SelectedTheme = AppThemeOptions[value];
         }
     }
 
@@ -238,8 +240,6 @@ public partial class SettingsPageViewModel : ViewModelBase
     public SettingsPageViewModel()
     {
         _settings = App.Services.GetRequiredService<Settings>();
-        _themeService = App.Services.GetRequiredService<ThemeService>();
-        AppThemeOptions = _themeService.ThemeDisplayItems;
         LoadUISettings();
     }
 

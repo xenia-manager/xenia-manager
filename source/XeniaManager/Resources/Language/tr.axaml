@@ -311,6 +311,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Xenia Manager'ın arayüz temasını değiştirin</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Açık</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Koyu</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistem</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Yükleme Ekranı</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Oyunlar başlatılırken oyunun yükleme ekranı arka planını gösterir</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Oyunlar başlatılırken yükleme animasyonunu gösterir</sys:String>

@@ -311,6 +311,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Altere o tema da interface do Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Claro</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Escuro</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Tela de Carregamento</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Exibe a tela de carregamento do jogo ao iniciá-lo</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Exibe uma animação de tela de carregamento enquanto os jogos são iniciados</sys:String>

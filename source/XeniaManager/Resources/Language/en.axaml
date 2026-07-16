@@ -311,6 +311,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Change the theme of Xenia Manager User Interface</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Light</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Dark</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">System</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Loading Screen</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Show game loading screen background when launching games</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Displays a loading screen animation while games are starting up</sys:String>
