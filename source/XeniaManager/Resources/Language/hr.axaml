@@ -22,6 +22,13 @@
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Pretraži...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ponovno učitava biblioteku igara</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">Sortiraj igre</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">Smjer sortiranja</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">Naslov</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">Kompatibilnost</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">Vrijeme igranja</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Verzija Xenije</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">Zadnje igrano</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Uredi mrežni prikaz</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Prikaži/sakrij dodatne informacije na omotima igara</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Naziv igre</sys:String>

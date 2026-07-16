@@ -6,6 +6,7 @@
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:itemVm="clr-namespace:XeniaManager.ViewModels.Items"
+             xmlns:models="clr-namespace:XeniaManager.Core.Models.Game;assembly=XeniaManager.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.LibraryPage"
              x:DataType="vm:LibraryPageViewModel"
@@ -25,6 +26,7 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -52,8 +54,77 @@
                 <icons:SymbolIcon Symbol="ArrowSync" />
             </Button>
 
-            <!-- Menu -->
+            <!-- Sort -->
             <Button Grid.Column="2"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    ToolTip.Tip="{DynamicResource LibraryPage.Sort.ToolTip}">
+                <icons:SymbolIcon Symbol="ArrowSort" />
+                <Button.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <!-- Sort Direction Toggle -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Direction}"
+                                  Command="{Binding ToggleSortDirectionCommand}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="{Binding SortDirectionIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Sort Options -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Title}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.Title}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Title}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="TextSortAscending" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Compatibility}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.Compatibility}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Compatibility}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="HeartPulse" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Playtime}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.Playtime}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Playtime}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Timer" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.XeniaVersion}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.XeniaVersion}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=XeniaVersion}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="AppFolder" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.LastPlayed}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.LastPlayed}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=LastPlayed}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="History" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+            <!-- Menu -->
+            <Button Grid.Column="3"
                     Background="Transparent"
                     BorderThickness="0"
                     Cursor="Hand"
@@ -199,13 +270,13 @@
                       IsVisible="{Binding IsGridView}"
                       PointerReleased="OnScrollViewerPointerReleased">
             <controls:FAItemsRepeater Margin="0,0,10,0"
-                                    ItemsSource="{Binding Games}">
+                                      ItemsSource="{Binding Games}">
                 <controls:FAItemsRepeater.Layout>
                     <controls:FAUniformGridLayout MinItemWidth="{Binding MinItemWidth}"
-                                                MinItemHeight="{Binding MinItemHeight}"
-                                                MinRowSpacing="{Binding ItemSpacing}"
-                                                MinColumnSpacing="{Binding ItemSpacing}"
-                                                ItemsStretch="Uniform" />
+                                                  MinItemHeight="{Binding MinItemHeight}"
+                                                  MinRowSpacing="{Binding ItemSpacing}"
+                                                  MinColumnSpacing="{Binding ItemSpacing}"
+                                                  ItemsStretch="Uniform" />
                 </controls:FAItemsRepeater.Layout>
 
                 <controls:FAItemsRepeater.ItemTemplate>
@@ -271,8 +342,8 @@
                                                     Margin="0,4,0,0"
                                                     IsVisible="{Binding IsMultiDisc}">
                                             <icons:SymbolIcon Symbol="Games"
-                                                               FontSize="14"
-                                                               VerticalAlignment="Center" />
+                                                              FontSize="14"
+                                                              VerticalAlignment="Center" />
                                             <TextBlock Text="{Binding DiscCount, Converter={StaticResource DiscCountConverter}}"
                                                        FontWeight="Bold"
                                                        VerticalAlignment="Center"

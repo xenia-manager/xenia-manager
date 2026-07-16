@@ -33,5 +33,10 @@ public enum GameSortOption
     /// <summary>
     /// Sort games by the Xenia emulator version.
     /// </summary>
-    XeniaVersion
+    XeniaVersion,
+
+    /// <summary>
+    /// Sort games by when they were last played.
+    /// </summary>
+    LastPlayed
 }

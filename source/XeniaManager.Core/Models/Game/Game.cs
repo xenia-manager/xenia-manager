@@ -67,4 +67,10 @@ public class Game
     /// </summary>
     [JsonPropertyName("last_played_disc")]
     public int LastPlayedDisc { get; set; } = 1;
+
+    /// <summary>
+    /// Timestamp of the last time the game was launched. Null if never played.
+    /// </summary>
+    [JsonPropertyName("last_played")]
+    public DateTime? LastPlayed { get; set; } = null;
 }

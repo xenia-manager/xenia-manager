@@ -5,6 +5,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Manage;
@@ -223,6 +224,9 @@ public class Launcher
         // Remember which disc was launched so the disc-selection popup can default to it next time
         game.LastPlayedDisc = discNumber;
 
+        // Record when the game was last played
+        game.LastPlayed = DateTime.Now;
+
         // Load settings to check automatic save backup configuration
         bool automaticSaveBackup = settings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup;
         string profileXuid = settings.Settings.Emulator.Settings.Profile.ProfileXuid;
@@ -397,6 +401,7 @@ public class Launcher
             }
 
             GameManager.SaveLibrary();
+            EventManager.Instance.OnGameLibraryChanged();
         }
         finally
         {

@@ -49,6 +49,59 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     // Library properties
     [ObservableProperty] private bool _isGridView = true;
+    [ObservableProperty] private GameSortOption _sortOption = GameSortOption.Title;
+    [ObservableProperty] private bool _sortDescending = false;
+
+    partial void OnSortOptionChanged(GameSortOption value)
+    {
+        _settings.Settings.Ui.Window.Library.SortOption = (int)value;
+        _settings.SaveSettings();
+        FilterGames();
+    }
+
+    partial void OnSortDescendingChanged(bool value)
+    {
+        _settings.Settings.Ui.Window.Library.SortDescending = SortDescending;
+        _settings.SaveSettings();
+        FilterGames();
+    }
+
+    /// <summary>
+    /// Returns the display name for the current sort option.
+    /// </summary>
+    public string SortOptionDisplay => SortOption switch
+    {
+        GameSortOption.Title => LocalizationHelper.GetText("LibraryPage.Sort.Title"),
+        GameSortOption.Playtime => LocalizationHelper.GetText("LibraryPage.Sort.Playtime"),
+        GameSortOption.Compatibility => LocalizationHelper.GetText("LibraryPage.Sort.Compatibility"),
+        GameSortOption.XeniaVersion => LocalizationHelper.GetText("LibraryPage.Sort.XeniaVersion"),
+        GameSortOption.LastPlayed => LocalizationHelper.GetText("LibraryPage.Sort.LastPlayed"),
+        _ => SortOption.ToString()
+    };
+
+    /// <summary>
+    /// Command that accepts a GameSortOption parameter and sets it as the active sort option.
+    /// Used by the sort flyout MenuItems via CommandParameter.
+    /// </summary>
+    [RelayCommand]
+    private void SetSortOption(GameSortOption sortOption)
+    {
+        SortOption = sortOption;
+        OnPropertyChanged(nameof(SortOptionDisplay));
+    }
+
+    [RelayCommand]
+    private void ToggleSortDirection()
+    {
+        SortDescending = !SortDescending;
+        OnPropertyChanged(nameof(SortDirectionIcon));
+    }
+
+    /// <summary>
+    /// Returns the icon for the current sort direction.
+    /// </summary>
+    public FluentIcons.Common.Symbol SortDirectionIcon => SortDescending ? FluentIcons.Common.Symbol.ArrowDown : FluentIcons.Common.Symbol.ArrowUp;
+
     [ObservableProperty] private bool _showGameTitle = false;
     partial void OnShowGameTitleChanged(bool value)
     {
@@ -170,6 +223,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         RefreshLibrary();
 
         _watcherService.NewGameFilesDetected += OnNewGameFilesDetected;
+        EventManager.Instance.GameLibraryChanged += OnGameLibraryChanged;
     }
 
     /// <summary>
@@ -189,6 +243,20 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Re-applies sort/filter when the game library changes (e.g. after a game finishes launching).
+    /// </summary>
+    private void OnGameLibraryChanged()
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(() => OnGameLibraryChanged());
+            return;
+        }
+
+        FilterGames();
+    }
+
+    /// <summary>
     /// Loads UI settings from the settings file
     /// </summary>
     private void LoadUiSettings()
@@ -199,6 +267,8 @@ public partial class LibraryPageViewModel : ViewModelBase
         ShowXeniaVersion = librarySettings.XeniaVersion;
         ZoomValue = librarySettings.Zoom * 100; // Convert from 1.0 scale to percentage
         DoubleClickLaunch = librarySettings.DoubleClickLaunch;
+        SortOption = (GameSortOption)librarySettings.SortOption;
+        SortDescending = librarySettings.SortDescending;
     }
 
     /// <summary>
@@ -248,6 +318,27 @@ public partial class LibraryPageViewModel : ViewModelBase
                     item.Game.GameId.Contains(query, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
         }
+
+        // Apply sorting
+        filtered = SortOption switch
+        {
+            GameSortOption.Title => SortDescending
+                ? filtered.OrderByDescending(x => x.Title).ToList()
+                : filtered.OrderBy(x => x.Title).ToList(),
+            GameSortOption.Playtime => SortDescending
+                ? filtered.OrderByDescending(x => x.Game.Playtime).ToList()
+                : filtered.OrderBy(x => x.Game.Playtime).ToList(),
+            GameSortOption.Compatibility => SortDescending
+                ? filtered.OrderByDescending(x => x.Game.Compatibility.Rating).ToList()
+                : filtered.OrderBy(x => x.Game.Compatibility.Rating).ToList(),
+            GameSortOption.XeniaVersion => SortDescending
+                ? filtered.OrderByDescending(x => x.Game.XeniaVersion).ToList()
+                : filtered.OrderBy(x => x.Game.XeniaVersion).ToList(),
+            GameSortOption.LastPlayed => SortDescending
+                ? filtered.OrderByDescending(x => x.Game.LastPlayed).ToList()
+                : filtered.OrderBy(x => x.Game.LastPlayed).ToList(),
+            _ => filtered
+        };
 
         Games.Clear();
         foreach (GameItemViewModel item in filtered)

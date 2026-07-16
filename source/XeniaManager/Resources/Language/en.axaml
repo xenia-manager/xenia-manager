@@ -22,6 +22,13 @@
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Search...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Reloads game library</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">Sort games</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">Sort Direction</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">Title</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">Compatibility</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">Playtime</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Xenia Version</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">Last Played</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Edit Grid View</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Show/Hide extra information on box arts</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Game Title</sys:String>

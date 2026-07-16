@@ -92,6 +92,12 @@ public class UiSettings
 
             [JsonPropertyName("double_click_open")]
             public bool DoubleClickLaunch { get; set; } = false;
+
+            [JsonPropertyName("sort_option")]
+            public int SortOption { get; set; } = 0;
+
+            [JsonPropertyName("sort_descending")]
+            public bool SortDescending { get; set; } = false;
         }
 
         /// <summary>

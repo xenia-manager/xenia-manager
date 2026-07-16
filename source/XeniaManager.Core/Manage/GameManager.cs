@@ -266,6 +266,7 @@ public class GameManager
             GameSortOption.GameId => (x, y) => string.Compare(x.GameId, y.GameId, StringComparison.OrdinalIgnoreCase),
             GameSortOption.MediaId => (x, y) => string.Compare(x.MediaId, y.MediaId, StringComparison.OrdinalIgnoreCase),
             GameSortOption.XeniaVersion => (x, y) => x.XeniaVersion.CompareTo(y.XeniaVersion),
+            GameSortOption.LastPlayed => (x, y) => Nullable.Compare(x.LastPlayed, y.LastPlayed),
             _ => throw new ArgumentOutOfRangeException(nameof(sortOption), $"Unsupported sort field: {sortOption}")
         };
 

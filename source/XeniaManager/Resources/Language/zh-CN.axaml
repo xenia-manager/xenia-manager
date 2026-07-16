@@ -22,6 +22,13 @@
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">搜索...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">重新加载游戏库</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">编辑网格视图</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">显示/隐藏封面上的额外信息</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">游戏标题</sys:String>

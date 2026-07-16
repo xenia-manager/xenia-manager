@@ -22,6 +22,13 @@
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Поиск…</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Отображение элементов обложки</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Показать/скрыть дополнительную информацию на обложках игр</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Название игры</sys:String>
