@@ -9,7 +9,7 @@
                      x:Class="XeniaManager.Views.LoadingScreenWindow"
                      x:DataType="vm:LoadingScreenWindowViewModel"
                      WindowStartupLocation="CenterScreen"
-                     SystemDecorations="None"
+                     WindowDecorations="None"
                      CanResize="false"
                      ShowAsDialog="false"
                      Topmost="True"
