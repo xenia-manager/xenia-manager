@@ -17,7 +17,7 @@ namespace XeniaManager.Services;
 /// <summary>
 /// Service responsible for managing and applying themes to the application.
 ///
-/// Custom theme resource overrides (AMOLED dark / Xbox-green light) are loaded into
+/// Custom theme resource overrides (Dark / AMOLED / Light) are loaded into
 /// FluentAvalonia 3's MergedDictionaries. The <see cref="Theme.System"/> option clears the
 /// override and follows FluentAvalonia's built-in palette.
 ///
@@ -142,9 +142,12 @@ public class ThemeService
             return;
         }
 
-        string resourcePath = theme == Theme.Dark
-            ? "avares://XeniaManager/Resources/Themes/Dark.axaml"
-            : "avares://XeniaManager/Resources/Themes/Light.axaml";
+        string resourcePath = theme switch
+        {
+            Theme.Amoled => "avares://XeniaManager/Resources/Themes/Amoled.axaml",
+            Theme.Dark => "avares://XeniaManager/Resources/Themes/Dark.axaml",
+            _ => "avares://XeniaManager/Resources/Themes/Light.axaml"
+        };
 
         try
         {

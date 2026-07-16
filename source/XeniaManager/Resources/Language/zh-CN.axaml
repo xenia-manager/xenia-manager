@@ -310,6 +310,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Title">主题</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">更改 Xenia Manager 用户界面的主题</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">浅色</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">纯黑</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">深色</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">系统</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">加载屏幕</sys:String>

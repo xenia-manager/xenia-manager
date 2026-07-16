@@ -310,6 +310,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Title">Tema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Altere o tema da interface do Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Claro</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Escuro</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Tela de Carregamento</sys:String>
