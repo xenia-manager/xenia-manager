@@ -29,6 +29,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!-- Search -->
@@ -67,8 +68,28 @@
                 <icons:SymbolIcon Symbol="ArrowSync" />
             </Button>
 
-            <!-- Sort -->
+            <!-- Toggle Grid/List View -->
             <Button Grid.Column="2"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Command="{Binding ToggleGridViewCommand}">
+                <Panel>
+                    <!-- Show List icon when in Grid view (click to switch to list) -->
+                    <icons:SymbolIcon Symbol="List"
+                                      IsVisible="{Binding IsGridView}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.ToggleView.ToolTip.ListView}" />
+                    <!-- Show Grid icon when in List view (click to switch to grid) -->
+                    <icons:SymbolIcon Symbol="Grid"
+                                      IsVisible="{Binding !IsGridView}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.ToggleView.ToolTip.GridView}" />
+                </Panel>
+            </Button>
+
+            <!-- Sort -->
+            <Button Grid.Column="3"
                     Background="Transparent"
                     BorderThickness="0"
                     Cursor="Hand"
@@ -137,7 +158,7 @@
             </Button>
 
             <!-- Menu -->
-            <Button Grid.Column="3"
+            <Button Grid.Column="4"
                     Background="Transparent"
                     BorderThickness="0"
                     Cursor="Hand"
@@ -148,7 +169,8 @@
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
                         <!-- Edit Grid View -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Header}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.ToolTip}">
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.ToolTip}"
+                                  IsVisible="{Binding IsGridView}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="Eye" />
                             </MenuItem.Icon>
@@ -188,6 +210,60 @@
                                       IsChecked="{Binding DoubleClickLaunch}">
                                 <MenuItem.Icon>
                                     <icons:SymbolIcon Symbol="CursorClick" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <!-- Edit List View -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Header}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditListView.ToolTip}"
+                                  IsVisible="{Binding !IsGridView}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="List" />
+                            </MenuItem.Icon>
+                            <!-- Compatibility Rating -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.CompatibilityRating.Header}"
+                                      Command="{Binding ToggleListCompatibilityRatingCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListCompatibilityRating}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="WindowDevTools" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Icon -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Icon.Header}"
+                                      Command="{Binding ToggleListIconCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListIcon}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Image" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Playtime -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Playtime.Header}"
+                                      Command="{Binding ToggleListPlaytimeCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListPlaytime}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Timer" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Last Played -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.LastPlayed.Header}"
+                                      Command="{Binding ToggleListLastPlayedCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListLastPlayed}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Clock" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Xenia Version -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.XeniaVersion.Header}"
+                                      Command="{Binding ToggleListXeniaVersionCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListXeniaVersion}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.EditListView.XeniaVersion.ToolTip}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Apps" />
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
@@ -660,6 +736,321 @@
                                 </Grid>
                             </Border>
                         </Button>
+                    </DataTemplate>
+                </controls:FAItemsRepeater.ItemTemplate>
+            </controls:FAItemsRepeater>
+        </ScrollViewer>
+
+        <!-- Games (List View) -->
+        <ScrollViewer Grid.Row="2"
+                      Padding="8,8,18,8"
+                      Background="Transparent"
+                      IsVisible="{Binding !IsGridView}"
+                      PointerReleased="OnListPointerReleased"
+                      HorizontalScrollBarVisibility="Disabled">
+            <controls:FAItemsRepeater ItemsSource="{Binding Games}">
+                <controls:FAItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="itemVm:GameItemViewModel">
+                        <Border Background="Transparent"
+                                Padding="8,6"
+                                Margin="0,0"
+                                CornerRadius="0"
+                                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                                BorderThickness="0,0,0,1"
+                                Cursor="Hand"
+                                Tag="{Binding}"
+                                Tapped="OnListItemTapped"
+                                DoubleTapped="OnListItemDoubleTapped"
+                                Classes.selected="{Binding IsSelected}">
+                            <Border.Styles>
+                                <Style Selector="Border.selected">
+                                    <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                    <Setter Property="BorderThickness" Value="2,0,0,1" />
+                                </Style>
+                            </Border.Styles>
+                            <Border.ContextFlyout>
+                                <MenuFlyout>
+                                    <!-- Content -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Header}"
+                                              IsVisible="{Binding !IsCustomXenia}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="ContentView" />
+                                        </MenuItem.Icon>
+                                        <!-- View Installed Content -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.InstalledContent.Header}"
+                                                  Command="{Binding ViewInstalledContentCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ContentView" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Screenshots -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Screenshots.Header}"
+                                                  Command="{Binding ViewScreenshotsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Screenshot" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.Screenshots.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Open Save Backup -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.SaveBackup.Header}"
+                                                  Command="{Binding OpenSaveBackupFolderCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="SaveArrowRight" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.SaveBackup.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <!-- Patches -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Header}"
+                                              IsVisible="{Binding !IsCustomXenia}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="Patch" />
+                                        </MenuItem.Icon>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Download.Header}"
+                                                  IsVisible="{Binding !InstalledPatches}"
+                                                  Command="{Binding DownloadPatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Download.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Header}"
+                                                  IsVisible="{Binding !InstalledPatches}"
+                                                  Command="{Binding InstallLocalPatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="AddStarburst" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Header}"
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding AddAdditionalPatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="AddStarburst" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Header}"
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding ConfigurePatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="EditSettings" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Configure.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.ExportPatch.Header}"
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding ExportPatchCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Save" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.ExportPatch.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Header}"
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding RemovePatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Delete" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Remove.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <!-- Create Shortcut -->
+                                    <!-- TODO: Add support for Linux/Proton/Wine-->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Header}"
+                                              IsVisible="{Binding SupportsShortcuts}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="ArrowHookUpLeft" />
+                                        </MenuItem.Icon>
+                                        <!-- Desktop -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Desktop.Header}"
+                                                  Command="{Binding CreateDesktopShortcutCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Desktop" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Desktop.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Steam -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Steam.Header}"
+                                                  Command="{Binding CreateSteamShortcutCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Games" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Steam.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <!-- Open Compatibility Page -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.OpenCompatibilityPage.Header}"
+                                              Command="{Binding OpenCompatibilityPageCommand}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="WindowDevTools" />
+                                        </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip}" />
+                                        </ToolTip.Tip>
+                                    </MenuItem>
+                                    <!-- Edit Game -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.Header}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="WindowDevTools" />
+                                        </MenuItem.Icon>
+                                        <!-- Information -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.Information.Header}"
+                                                  Command="{Binding EditGameInformationCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="SlideTextTitleEdit" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Information.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Mousehook Controls -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.MousehookControls.Header}"
+                                                  Command="{Binding EditMousehookControlsCommand}"
+                                                  IsVisible="{Binding IsXeniaMousehook}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="DesktopKeyboard" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.MousehookControls.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Settings -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.Header}"
+                                                  Command="{Binding EditGameSettingsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="EditSettings" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Manage Discs -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.ManageDiscs.Header}"
+                                                  Command="{Binding ManageDiscsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Games" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <!-- Remove Game Command-->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
+                                              Command="{Binding RemoveGameCommand}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="Delete" />
+                                        </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.RemoveGame.ToolTip}" />
+                                        </ToolTip.Tip>
+                                    </MenuItem>
+                                </MenuFlyout>
+                            </Border.ContextFlyout>
+                            <Grid ColumnDefinitions="*,Auto"
+                                  VerticalAlignment="Center">
+                                <!-- Left: Compatibility, Icon, Title -->
+                                <StackPanel Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            Spacing="8"
+                                            VerticalAlignment="Center">
+                                    <!-- Compatibility Rating -->
+                                    <Ellipse Width="16"
+                                             Height="16"
+                                             Stroke="Black"
+                                             StrokeThickness="0.5"
+                                             Fill="{Binding Game.Compatibility.Rating, Converter={StaticResource CompatibilityRatingColorConverter}}"
+                                             VerticalAlignment="Center"
+                                             IsVisible="{Binding DataContext.ShowListCompatibilityRating, ElementName=Root}">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{Binding Game.Compatibility.Rating, Converter={StaticResource CompatibilityRatingToStringConverter}}" />
+                                        </ToolTip.Tip>
+                                    </Ellipse>
+
+                                    <!-- Thumbnail -->
+                                    <Border Width="48" Height="48"
+                                            CornerRadius="4"
+                                            ClipToBounds="True"
+                                            IsVisible="{Binding DataContext.ShowListIcon, ElementName=Root}"
+                                            Background="{DynamicResource ControlFillColorDefaultBrush}">
+                                        <Panel>
+                                            <Image Source="{Binding Game.Artwork.CachedIcon}"
+                                                   Stretch="UniformToFill"
+                                                   IsVisible="{Binding HasIcon}" />
+                                            <icons:SymbolIcon Symbol="XboxController"
+                                                              FontSize="24"
+                                                              HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"
+                                                              IsVisible="{Binding !HasIcon}">
+                                                <icons:SymbolIcon.Foreground>
+                                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                                </icons:SymbolIcon.Foreground>
+                                            </icons:SymbolIcon>
+                                        </Panel>
+                                    </Border>
+
+                                    <!-- Title -->
+                                    <TextBlock Text="{Binding Title}"
+                                               FontWeight="SemiBold"
+                                               FontSize="14"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+
+                                <!-- Right: Extra columns -->
+                                <StackPanel Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            Spacing="12"
+                                            VerticalAlignment="Center">
+                                    <!-- Playtime -->
+                                    <TextBlock Text="{Binding Game.Playtime, Converter={StaticResource PlaytimeConverter}}"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               IsVisible="{Binding DataContext.ShowListPlaytime, ElementName=Root}" />
+
+                                    <!-- Last Played -->
+                                    <TextBlock Text="{Binding Game.LastPlayed, Converter={StaticResource DateTimeToRelativeConverter}}"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               IsVisible="{Binding DataContext.ShowListLastPlayed, ElementName=Root}" />
+
+                                    <!-- Xenia Version -->
+                                    <icons:SymbolIcon Symbol="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToIconConverter}}"
+                                                      FontSize="16"
+                                                      VerticalAlignment="Center"
+                                                      Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                      IsVisible="{Binding DataContext.ShowListXeniaVersion, ElementName=Root}">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToStringConverter}}" />
+                                        </ToolTip.Tip>
+                                    </icons:SymbolIcon>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </controls:FAItemsRepeater.ItemTemplate>
             </controls:FAItemsRepeater>
