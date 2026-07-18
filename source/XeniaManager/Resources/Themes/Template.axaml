@@ -464,14 +464,14 @@ not raw colors.
     <SolidColorBrush x:Key="ToggleSwitchFillOnDisabled" Color="#33107C10" />
 
     <!-- CheckBox Brushes -->
-    <SolidColorBrush x:Key="CheckBoxBackgroundUnchecked" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPointerOver" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPressed" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedDisabled" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundChecked" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPointerOver" Color="{StaticResource SystemAccentColorLight1}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPressed" Color="{StaticResource SystemAccentColorDark1}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedDisabled" Color="#33107C10" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUnchecked" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPointerOver" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPressed" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedDisabled" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundChecked" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPointerOver" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPressed" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedDisabled" Color="#00000000" />
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#CCFFFFFF" />

@@ -384,14 +384,14 @@
     <SolidColorBrush x:Key="ToggleSwitchFillOnDisabled" Color="#330E6A0E" />
 
     <!-- CheckBox Specific - Xbox 360 Dark Style -->
-    <SolidColorBrush x:Key="CheckBoxBackgroundUnchecked" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPointerOver" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPressed" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedDisabled" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundChecked" Color="{StaticResource SystemAccentColorLight1}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPointerOver" Color="{StaticResource SystemAccentColorLight2}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPressed" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedDisabled" Color="#330E6A0E" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUnchecked" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPointerOver" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPressed" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedDisabled" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundChecked" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPointerOver" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPressed" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedDisabled" Color="#00000000" />
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{StaticResource TextFillColorPrimary}" />
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{StaticResource TextFillColorPrimary}" />
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#CCFFFFFF" />
