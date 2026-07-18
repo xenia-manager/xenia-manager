@@ -93,6 +93,24 @@ public class UiSettings
             [JsonPropertyName("double_click_open")]
             public bool DoubleClickLaunch { get; set; } = false;
 
+            [JsonPropertyName("is_grid_view")]
+            public bool IsGridView { get; set; } = true;
+
+            [JsonPropertyName("list_compatibility_rating")]
+            public bool ListCompatibilityRating { get; set; } = true;
+
+            [JsonPropertyName("list_playtime")]
+            public bool ListPlaytime { get; set; } = true;
+
+            [JsonPropertyName("list_xenia_version")]
+            public bool ListXeniaVersion { get; set; } = true;
+
+            [JsonPropertyName("list_last_played")]
+            public bool ListLastPlayed { get; set; } = true;
+
+            [JsonPropertyName("list_show_icon")]
+            public bool ListShowIcon { get; set; } = true;
+
             [JsonPropertyName("sort_option")]
             public int SortOption { get; set; } = 0;
 
