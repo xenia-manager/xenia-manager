@@ -23,6 +23,7 @@
             <converters:XeniaVersionToIconConverter x:Key="XeniaVersionToIconConverter" />
             <converters:XeniaVersionToStringConverter x:Key="XeniaVersionToStringConverter" />
             <converters:EnumToValueConverter x:Key="EnumToValueConverter" />
+            <converters:DateTimeToRelativeConverter x:Key="DateTimeToRelativeConverter" />
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
