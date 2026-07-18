@@ -29,7 +29,7 @@ public abstract class XeniaSelectionDialog
 
         Logger.Debug<XeniaSelectionDialog>($"Available versions - Canary: {canaryInstalled}, Mousehook: {mousehookInstalled}, Netplay: {netplayInstalled}");
 
-        TaskDialog taskDialog = new TaskDialog
+        FATaskDialog taskDialog = new FATaskDialog
         {
             Title = LocalizationHelper.GetText("XeniaSelectionDialog.Title"),
             Header = LocalizationHelper.GetText("XeniaSelectionDialog.Header"),
@@ -38,12 +38,12 @@ public abstract class XeniaSelectionDialog
             XamlRoot = App.MainWindow
         };
 
-        List<TaskDialogCommand> commands = [];
+        List<FATaskDialogCommand> commands = [];
 
         if (canaryInstalled)
         {
             Logger.Trace<XeniaSelectionDialog>("Adding Canary command to dialog");
-            TaskDialogCommand canaryCommand = new TaskDialogCommand
+            FATaskDialogCommand canaryCommand = new FATaskDialogCommand
             {
                 Text = LocalizationHelper.GetText("XeniaSelectionDialog.Canary.Title"),
                 IconSource = new SymbolIconSource { Symbol = Symbol.Rocket },
@@ -60,7 +60,7 @@ public abstract class XeniaSelectionDialog
         if (mousehookInstalled)
         {
             Logger.Trace<XeniaSelectionDialog>("Adding Mousehook command to dialog");
-            TaskDialogCommand mousehookCommand = new TaskDialogCommand
+            FATaskDialogCommand mousehookCommand = new FATaskDialogCommand
             {
                 Text = LocalizationHelper.GetText("XeniaSelectionDialog.Mousehook.Title"),
                 IconSource = new SymbolIconSource { Symbol = Symbol.DesktopKeyboard },
@@ -77,7 +77,7 @@ public abstract class XeniaSelectionDialog
         if (netplayInstalled)
         {
             Logger.Trace<XeniaSelectionDialog>("Adding Netplay command to dialog");
-            TaskDialogCommand netplayCommand = new TaskDialogCommand
+            FATaskDialogCommand netplayCommand = new FATaskDialogCommand
             {
                 Text = LocalizationHelper.GetText("XeniaSelectionDialog.Netplay.Title"),
                 IconSource = new SymbolIconSource { Symbol = Symbol.People },
@@ -93,9 +93,9 @@ public abstract class XeniaSelectionDialog
 
         taskDialog.Commands = commands;
 
-        taskDialog.Buttons = new List<TaskDialogButton>
+        taskDialog.Buttons = new List<FATaskDialogButton>
         {
-            TaskDialogButton.CloseButton
+            FATaskDialogButton.CloseButton
         };
 
         Logger.Debug<XeniaSelectionDialog>("Showing Xenia selection dialog with available options");

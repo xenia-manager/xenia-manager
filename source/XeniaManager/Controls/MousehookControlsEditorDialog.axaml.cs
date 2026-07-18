@@ -54,14 +54,14 @@ public partial class MousehookControlsEditorDialog : UserControl
     {
         MousehookControlsEditorDialog dialog = new MousehookControlsEditorDialog(bindingsFile, gameBindingsSections);
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("MousehookControlsEditorDialog.ContentDialog.Title"),
             Content = dialog,
             CloseButtonText = LocalizationHelper.GetText("MousehookControlsEditorDialog.ContentDialog.CloseButton.Text"),
             PrimaryButtonText = LocalizationHelper.GetText("MousehookControlsEditorDialog.ContentDialog.SaveButton.Text"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Controlling ContentDialog
@@ -74,7 +74,7 @@ public partial class MousehookControlsEditorDialog : UserControl
         bool saveSuccessful = false;
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            Deferral? deferral = e.GetDeferral();
+            FADeferral? deferral = e.GetDeferral();
             try
             {
                 // Validate and save changes

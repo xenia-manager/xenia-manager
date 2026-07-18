@@ -42,7 +42,7 @@ public partial class MainView : UserControl
     }
 
     // Functions
-    private void NavigationView_OnPaneOpening(NavigationView sender, EventArgs args)
+    private void NavigationView_OnPaneOpening(FANavigationView sender, EventArgs args)
     {
         try
         {
@@ -59,16 +59,16 @@ public partial class MainView : UserControl
 
     private double CalculateRequiredPaneWidth()
     {
-        IEnumerable<NavigationViewItem> items = NavigationView.MenuItems
+        IEnumerable<FANavigationViewItem> items = NavigationView.MenuItems
             .Concat(NavigationView.FooterMenuItems)
-            .OfType<NavigationViewItem>()
+            .OfType<FANavigationViewItem>()
             .Where(i => i.Content is string text && !string.IsNullOrEmpty(text));
 
         double maxTextWidth = 0;
         double fontSize = NavigationView.FontSize > 0 ? NavigationView.FontSize : 14;
         Typeface typeface = new Typeface(NavigationView.FontFamily ?? FontFamily.Default);
 
-        foreach (NavigationViewItem item in items)
+        foreach (FANavigationViewItem item in items)
         {
             FormattedText formattedText = new FormattedText(
                 (string)item.Content!,
@@ -92,11 +92,11 @@ public partial class MainView : UserControl
         return clampedWidth;
     }
 
-    private async void NavigationView_OnItemInvoked(object? sender, NavigationViewItemInvokedEventArgs e)
+    private async void NavigationView_OnItemInvoked(object? sender, FANavigationViewItemInvokedEventArgs e)
     {
         try
         {
-            if (e.InvokedItemContainer is NavigationViewItem selectedItem)
+            if (e.InvokedItemContainer is FANavigationViewItem selectedItem)
             {
                 await _navigationService.Navigate(selectedItem, ContentFrame);
             }

@@ -106,13 +106,13 @@ public partial class PatchSelectionDialog : UserControl
     {
         PatchSelectionDialog dialog = new PatchSelectionDialog(searchQuery);
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("PatchSelectionDialog.ContentDialog.Title"),
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("PatchSelectionDialog.ContentDialog.PrimaryButton.Text"),
             CloseButtonText = LocalizationHelper.GetText("PatchSelectionDialog.ContentDialog.CloseButton.Text"),
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Set the initial button state (disabled if no patch is selected)
@@ -131,7 +131,7 @@ public partial class PatchSelectionDialog : UserControl
         bool selectSuccessful = false;
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            Deferral? deferral = e.GetDeferral();
+            FADeferral? deferral = e.GetDeferral();
             try
             {
                 // Validate that a patch is selected
@@ -153,9 +153,9 @@ public partial class PatchSelectionDialog : UserControl
             }
         };
 
-        ContentDialogResult result = await contentDialog.ShowAsync();
+        FAContentDialogResult result = await contentDialog.ShowAsync();
 
-        return result == ContentDialogResult.Primary && selectSuccessful ? dialog._viewModel.SelectedPatch?.PatchInfo : null;
+        return result == FAContentDialogResult.Primary && selectSuccessful ? dialog._viewModel.SelectedPatch?.PatchInfo : null;
     }
 
     /// <summary>

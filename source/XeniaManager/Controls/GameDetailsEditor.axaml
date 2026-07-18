@@ -314,7 +314,7 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBox Grid.Column="0"
                                                  Text="{Binding NewAlternativeId}"
-                                                 Watermark="{DynamicResource GameDetailsEditor.AlternativeIdsWatermark}"
+                                                 PlaceholderText="{DynamicResource GameDetailsEditor.AlternativeIdsPlaceholderText}"
                                                  MaxLength="8"
                                                  FontFamily="Cascadia Code, Consolas, monospace"
                                                  Margin="0,0,8,0" />
@@ -334,7 +334,7 @@
                                     <!-- ID List -->
                                     <ItemsControl ItemsSource="{Binding AlternativeIds}">
                                         <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="x:String">
                                                 <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                                         BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                         BorderThickness="1"
@@ -393,7 +393,7 @@
                                            Text="*" />
                             </Grid>
                             <TextBox Text="{Binding GameTitle}"
-                                     Watermark="{DynamicResource GameDetailsEditor.GameTitleWatermark}"
+                                     PlaceholderText="{DynamicResource GameDetailsEditor.GameTitlePlaceholderText}"
                                      MaxLength="100" />
                         </StackPanel>
 
@@ -468,7 +468,7 @@
                                       SelectedValue="{Binding SelectedXeniaVersion}"
                                       MinWidth="150">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="vm:XeniaVersionItem">
                                         <TextBlock Text="{Binding DisplayName}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
@@ -547,7 +547,7 @@
                                           SelectedValue="{Binding SelectedCompatibilityRating}"
                                           MinWidth="150">
                                     <ComboBox.ItemTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate x:DataType="vm:CompatibilityRatingItem">
                                             <TextBlock Text="{Binding DisplayName}" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
@@ -573,7 +573,7 @@
                                            Text="{DynamicResource GameDetailsEditor.CompatibilityPage}" />
                             </Grid>
                             <TextBox Text="{Binding CompatibilityPageUrl}"
-                                     Watermark="{DynamicResource GameDetailsEditor.CompatibilityPageWatermark}"
+                                     PlaceholderText="{DynamicResource GameDetailsEditor.CompatibilityPagePlaceholderText}"
                                      MaxLength="500" />
                         </StackPanel>
                     </StackPanel>

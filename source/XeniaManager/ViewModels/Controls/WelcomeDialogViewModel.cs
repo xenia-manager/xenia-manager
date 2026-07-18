@@ -1,6 +1,9 @@
-using System.Collections.ObjectModel;
-using Microsoft.Extensions.DependencyInjection;
+using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Items;
@@ -17,14 +20,14 @@ namespace XeniaManager.ViewModels.Controls;
 public partial class WelcomeDialogViewModel : ViewModelBase
 {
     /// <summary>
-    /// The theme service used to apply theme changes.
-    /// </summary>
-    private readonly ThemeService _themeService;
-
-    /// <summary>
     /// The settings used to load the saved theme preference.
     /// </summary>
     private readonly Settings _settings;
+
+    /// <summary>
+    /// The theme service used to apply theme changes.
+    /// </summary>
+    private readonly ThemeService _themeService;
 
     /// <summary>
     /// The list of available themes for selection.
@@ -58,12 +61,12 @@ public partial class WelcomeDialogViewModel : ViewModelBase
     /// </summary>
     public WelcomeDialogViewModel()
     {
-        _themeService = App.Services.GetRequiredService<ThemeService>();
         _settings = App.Services.GetRequiredService<Settings>();
+        _themeService = App.Services.GetRequiredService<ThemeService>();
 
         AppThemeOptions = _themeService.ThemeDisplayItems;
 
-        SelectedTheme = _settings.Settings.Ui.Theme;
+        SelectedTheme = _settings!.Settings.Ui.Theme;
         for (int i = 0; i < AppThemeOptions.Count; i++)
         {
             if (AppThemeOptions[i].ThemeValue == SelectedTheme)

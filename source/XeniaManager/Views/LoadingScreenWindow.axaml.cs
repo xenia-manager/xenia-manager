@@ -9,7 +9,7 @@ using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Views;
 
-public partial class LoadingScreenWindow : AppWindow
+public partial class LoadingScreenWindow : FAAppWindow
 {
     private const double FadeDurationMs = 300;
 

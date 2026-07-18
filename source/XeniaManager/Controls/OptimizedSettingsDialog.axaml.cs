@@ -63,14 +63,14 @@ public partial class OptimizedSettingsDialog : UserControl
         OptimizedSettingsDialog dialog = new OptimizedSettingsDialog(currentConfigFile, optimizedConfigFile, gameName);
         OptimizedSettingsDialogViewModel viewModel = dialog._viewModel;
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("OptimizedSettingsDialog.ContentDialog.Title"),
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("OptimizedSettingsDialog.ContentDialog.ApplyButton.Text"),
             CloseButtonText = LocalizationHelper.GetText("OptimizedSettingsDialog.ContentDialog.CancelButton.Text"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Controlling ContentDialog

@@ -173,7 +173,7 @@
                      Classes="log-list"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="x:String">
                         <TextBlock Text="{Binding}"
                                    TextWrapping="Wrap"
                                    TextTrimming="CharacterEllipsis" />

@@ -23,9 +23,30 @@ public partial class LibraryPage : UserControl
         InitializeComponent();
         _viewModel = App.Services.GetRequiredService<LibraryPageViewModel>();
         DataContext = _viewModel;
+        KeyDown += OnKeyDown;
     }
 
     // Events
+    // TODO: Find a better solution for this in case we want to have keybindings
+    private void OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.A && e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            // Let the search box handle Ctrl+A when it has focus
+            if (SearchTextBox.IsFocused)
+            {
+                return;
+            }
+
+            // Otherwise, select all games
+            if (_viewModel.SelectAllGamesCommand.CanExecute(null))
+            {
+                _viewModel.SelectAllGamesCommand.Execute(null);
+            }
+            e.Handled = true;
+        }
+    }
+
     private void OnGameButtonTapped(object? sender, TappedEventArgs e)
     {
         if (sender is Button { DataContext: GameItemViewModel vm })

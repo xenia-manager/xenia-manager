@@ -43,13 +43,13 @@ public partial class ContentViewerDialog : UserControl
         // Initialize the ViewModel with the account contents
         dialog._viewModel.Initialize(accountContents, game);
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.Title"),
             Content = dialog,
             CloseButtonText = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.CloseButton.Text"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Close
+            DefaultButton = FAContentDialogButton.Close
         };
 
         // Controlling ContentDialog

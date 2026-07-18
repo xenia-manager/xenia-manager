@@ -17,10 +17,10 @@ namespace XeniaManager.Services;
 /// <summary>
 /// Represents a notification to be displayed.
 /// </summary>
-internal record NotificationItem(string Message, InfoBarSeverity Severity, double DurationSeconds);
+internal record NotificationItem(string Message, FAInfoBarSeverity Severity, double DurationSeconds);
 
 /// <summary>
-/// Provides a service for displaying notification messages using InfoBar.
+/// Provides a service for displaying notification messages using FAInfoBar.
 /// </summary>
 public interface INotificationService
 {
@@ -58,7 +58,7 @@ public interface INotificationService
     /// <param name="message">The message to display</param>
     /// <param name="severity">The severity level of the notification</param>
     /// <param name="durationSeconds">How long to display the notification in seconds (default: 5)</param>
-    void Show(string message, InfoBarSeverity severity, double durationSeconds = 5);
+    void Show(string message, FAInfoBarSeverity severity, double durationSeconds = 5);
 
     /// <summary>
     /// Shows a notification with an action button.
@@ -68,7 +68,7 @@ public interface INotificationService
     /// <param name="severity">The severity level of the notification</param>
     /// <param name="actionText">The text for the action button</param>
     /// <param name="onAction">The action to execute when the button is clicked</param>
-    void ShowAction(string message, InfoBarSeverity severity, string actionText, Action onAction);
+    void ShowAction(string message, FAInfoBarSeverity severity, string actionText, Action onAction);
 
     /// <summary>
     /// Clears all pending notifications in the queue.
@@ -82,11 +82,11 @@ public interface INotificationService
 }
 
 /// <summary>
-/// Implementation of the notification service using InfoBar.
+/// Implementation of the notification service using FAInfoBar.
 /// </summary>
 public class NotificationService : INotificationService
 {
-    private InfoBar? _infoBar;
+    private FAInfoBar? _infoBar;
     private int _animationFps = 120;
     private readonly ConcurrentQueue<NotificationItem> _notificationQueue = new();
     private readonly SemaphoreSlim _queueSemaphore = new(1, 1);
@@ -108,15 +108,15 @@ public class NotificationService : INotificationService
     public int PendingCount => _notificationQueue.Count;
 
     /// <summary>
-    /// Gets the InfoBar control from the MainWindow.
+    /// Gets the FAInfoBar control from the MainWindow.
     /// </summary>
-    private InfoBar? InfoBar
+    private FAInfoBar? FAInfoBar
     {
         get
         {
             if (_infoBar == null && App.MainWindow is MainWindow mainWindow)
             {
-                _infoBar = mainWindow.FindControl<InfoBar>("InfoBar");
+                _infoBar = mainWindow.FindControl<FAInfoBar>("InfoBar");
             }
             return _infoBar;
         }
@@ -127,7 +127,7 @@ public class NotificationService : INotificationService
     /// </summary>
     public void ShowInfo(string message, double durationSeconds = 5)
     {
-        Show(message, InfoBarSeverity.Informational, durationSeconds);
+        Show(message, FAInfoBarSeverity.Informational, durationSeconds);
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class NotificationService : INotificationService
     /// </summary>
     public void ShowSuccess(string message, double durationSeconds = 5)
     {
-        Show(message, InfoBarSeverity.Success, durationSeconds);
+        Show(message, FAInfoBarSeverity.Success, durationSeconds);
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public class NotificationService : INotificationService
     /// </summary>
     public void ShowWarning(string message, double durationSeconds = 5)
     {
-        Show(message, InfoBarSeverity.Warning, durationSeconds);
+        Show(message, FAInfoBarSeverity.Warning, durationSeconds);
     }
 
     /// <summary>
@@ -151,13 +151,13 @@ public class NotificationService : INotificationService
     /// </summary>
     public void ShowError(string message, double durationSeconds = 5)
     {
-        Show(message, InfoBarSeverity.Error, durationSeconds);
+        Show(message, FAInfoBarSeverity.Error, durationSeconds);
     }
 
     /// <summary>
     /// Shows a notification with custom severity.
     /// </summary>
-    public void Show(string message, InfoBarSeverity severity, double durationSeconds = 5)
+    public void Show(string message, FAInfoBarSeverity severity, double durationSeconds = 5)
     {
         // Enqueue the notification
         NotificationItem notification = new NotificationItem(message, severity, durationSeconds);
@@ -175,19 +175,19 @@ public class NotificationService : INotificationService
     /// <param name="severity">The severity level of the notification</param>
     /// <param name="actionText">The text for the action button</param>
     /// <param name="onAction">The action to execute when the button is clicked</param>
-    public void ShowAction(string message, InfoBarSeverity severity, string actionText, Action onAction)
+    public void ShowAction(string message, FAInfoBarSeverity severity, string actionText, Action onAction)
     {
         Logger.Debug<NotificationService>($"Showing action notification: {message} (severity: {severity})");
 
         ClearQueue();
 
         // Dispatch to UI thread since this may be called from background threads
-        // All InfoBar access (including the getter which calls FindControl) must happen on the UI thread
+        // All FAInfoBar access (including the getter which calls FindControl) must happen on the UI thread
         Dispatcher.UIThread.Post(() =>
         {
-            if (InfoBar == null)
+            if (FAInfoBar == null)
             {
-                Logger.Warning<NotificationService>("InfoBar control not found, cannot show action notification");
+                Logger.Warning<NotificationService>("FAInfoBar control not found, cannot show action notification");
                 return;
             }
 
@@ -196,13 +196,13 @@ public class NotificationService : INotificationService
             {
                 Logger.Trace<NotificationService>("Action button clicked, executing action");
                 onAction();
-                InfoBar.IsOpen = false;
+                FAInfoBar.IsOpen = false;
             };
 
-            InfoBar.Message = message;
-            InfoBar.Severity = severity;
-            InfoBar.ActionButton = button;
-            InfoBar.IsOpen = true;
+            FAInfoBar.Message = message;
+            FAInfoBar.Severity = severity;
+            FAInfoBar.ActionButton = button;
+            FAInfoBar.IsOpen = true;
 
             Logger.Debug<NotificationService>("Action notification displayed successfully");
         });
@@ -256,23 +256,23 @@ public class NotificationService : INotificationService
     /// </summary>
     private async Task DisplayNotificationAsync(NotificationItem notification)
     {
-        if (InfoBar == null)
+        if (FAInfoBar == null)
         {
             return;
         }
 
-        // Set the message and severity directly on the InfoBar
-        InfoBar.Message = notification.Message;
-        InfoBar.Severity = notification.Severity;
-        InfoBar.ActionButton = null;
-        InfoBar.IsOpen = true;
+        // Set the message and severity directly on the FAInfoBar
+        FAInfoBar.Message = notification.Message;
+        FAInfoBar.Severity = notification.Severity;
+        FAInfoBar.ActionButton = null;
+        FAInfoBar.IsOpen = true;
 
         // Animate in
-        await SlideInInfoBar();
+        await SlideInFAInfoBar();
 
-        // Wait for either the duration to expire or the user to close the InfoBar
+        // Wait for either the duration to expire or the user to close the FAInfoBar
         TaskCompletionSource<bool> closeTcs = new TaskCompletionSource<bool>();
-        TypedEventHandler<InfoBar, InfoBarClosedEventArgs>? closedHandler = null;
+        TypedEventHandler<FAInfoBar, FAInfoBarClosedEventArgs>? closedHandler = null;
         closedHandler = (sender, args) =>
         {
             closeTcs.TrySetResult(true);
@@ -280,7 +280,7 @@ public class NotificationService : INotificationService
 
         try
         {
-            InfoBar.Closed += closedHandler;
+            FAInfoBar.Closed += closedHandler;
 
             Task delayTask = Task.Delay(TimeSpan.FromSeconds(notification.DurationSeconds));
             Task completedTask = await Task.WhenAny(delayTask, closeTcs.Task);
@@ -293,52 +293,52 @@ public class NotificationService : INotificationService
         }
         finally
         {
-            InfoBar.Closed -= closedHandler;
+            FAInfoBar.Closed -= closedHandler;
         }
 
         // Animate out
-        await SlideOutInfoBar();
+        await SlideOutFAInfoBar();
 
-        InfoBar.IsOpen = false;
+        FAInfoBar.IsOpen = false;
     }
 
     /// <summary>
-    /// Animates the InfoBar sliding in from the top.
+    /// Animates the FAInfoBar sliding in from the top.
     /// </summary>
-    private async Task SlideInInfoBar()
+    private async Task SlideInFAInfoBar()
     {
-        if (InfoBar == null)
+        if (FAInfoBar == null)
         {
             return;
         }
 
         // Set the initial state
-        InfoBar.Opacity = 0;
+        FAInfoBar.Opacity = 0;
         TranslateTransform transform = new TranslateTransform(0, -20);
-        InfoBar.RenderTransform = transform;
+        FAInfoBar.RenderTransform = transform;
 
         // Animate both opacity and translation
         await Task.WhenAll(
-            AnimateOpacity(InfoBar, 0.0, 1.0, TimeSpan.FromMilliseconds(300), new QuadraticEaseOut()),
+            AnimateOpacity(FAInfoBar, 0.0, 1.0, TimeSpan.FromMilliseconds(300), new QuadraticEaseOut()),
             AnimateTranslateY(transform, -20, 0, TimeSpan.FromMilliseconds(300), new QuadraticEaseOut())
         );
     }
 
     /// <summary>
-    /// Animates the InfoBar sliding out to the top.
+    /// Animates the FAInfoBar sliding out to the top.
     /// </summary>
-    private async Task SlideOutInfoBar()
+    private async Task SlideOutFAInfoBar()
     {
-        if (InfoBar == null)
+        if (FAInfoBar == null)
         {
             return;
         }
 
-        TranslateTransform transform = InfoBar.RenderTransform as TranslateTransform ?? new TranslateTransform(0, 0);
+        TranslateTransform transform = FAInfoBar.RenderTransform as TranslateTransform ?? new TranslateTransform(0, 0);
 
         // Animate both opacity and translation
         await Task.WhenAll(
-            AnimateOpacity(InfoBar, 1.0, 0.0, TimeSpan.FromMilliseconds(300), new QuadraticEaseIn()),
+            AnimateOpacity(FAInfoBar, 1.0, 0.0, TimeSpan.FromMilliseconds(300), new QuadraticEaseIn()),
             AnimateTranslateY(transform, transform.Y, -20, TimeSpan.FromMilliseconds(300), new QuadraticEaseIn())
         );
     }

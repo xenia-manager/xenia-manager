@@ -1,15 +1,17 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Threading;
+using FluentAvalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -40,6 +42,9 @@ public partial class App : Application
     {
         Logger.Debug<App>("Initializing Avalonia application");
         AvaloniaXamlLoader.Load(this);
+#if DEBUG
+        this.AttachDeveloperTools();
+#endif
         Logger.Debug<App>("Avalonia XAML loaded successfully");
     }
 
@@ -47,11 +52,6 @@ public partial class App : Application
     {
         if (Desktop is { } desktop)
         {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit.
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-            Logger.Trace<App>("Disabling Avalonia data annotation validation");
-            DisableAvaloniaDataAnnotationValidation();
-
             // Global exception handlers
             Logger.Trace<App>("Registering global exception handlers");
             RegisterGlobalExceptionHandlers();
@@ -167,6 +167,14 @@ public partial class App : Application
         // Restore window properties
         settings.RestoreWindowProperties(settings, mainWindow);
 
+        // Apply the Xbox 360 green accent color
+        if (Styles.OfType<FluentAvaloniaTheme>().FirstOrDefault() is { } faTheme)
+        {
+            faTheme.CustomAccentColor = Color.Parse("#FF107C10");
+        }
+
+        // The saved theme is applied when ThemeService is initialized during service registration.
+
         // Wire up window events
         mainWindow.Opened += (_, _) =>
         {
@@ -242,18 +250,6 @@ public partial class App : Application
         {
             // If logging fails, we can do little about it
             // Just ensure we don't throw from the exception handler
-        }
-    }
-
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        DataAnnotationsValidationPlugin[] dataValidationPluginsToRemove = BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-        // remove each entry found
-        foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove)
-        {
-            BindingPlugins.DataValidators.Remove(plugin);
         }
     }
 

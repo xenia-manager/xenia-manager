@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
+             xmlns:models="using:XeniaManager.Core.Models.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
@@ -27,7 +29,7 @@
                       SelectedItem="{Binding SelectedAccountContent, Mode=TwoWay}"
                       HorizontalAlignment="Stretch">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="models:AccountContent">
                         <TextBlock>
                             <Run Text="{Binding AccountInfo.Gamertag}" />
                             <Run Text=" (" />
@@ -90,7 +92,7 @@
                         </MenuFlyout>
                     </ListBox.ContextFlyout>
                     <ListBox.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="itemsvm:HeaderFileViewModel">
                             <Border Padding="12,8" Margin="4,2">
                                 <Grid ColumnDefinitions="Auto,*,Auto">
                                     <!-- Icon -->
@@ -234,7 +236,7 @@
                                 </MenuFlyout>
                             </ItemsControl.ContextFlyout>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="itemsvm:AchievementViewModel">
                                     <Border Padding="12,8" Margin="4,2">
                                         <Grid ColumnDefinitions="Auto,*,Auto">
                                             <!-- Achievement Image or Unlock Status Icon -->

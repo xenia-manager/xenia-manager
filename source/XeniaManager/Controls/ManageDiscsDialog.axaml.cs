@@ -58,12 +58,12 @@ public partial class ManageDiscsDialog : UserControl
 
         string dialogTitle = string.Format(LocalizationHelper.GetText("ManageDiscsDialog.Title"), game.Title);
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = dialogTitle,
             Content = dialogContent,
             CloseButtonText = LocalizationHelper.GetText("ManageDiscsDialog.CloseButton"),
-            DefaultButton = ContentDialogButton.Close
+            DefaultButton = FAContentDialogButton.Close
         };
 
         await contentDialog.ShowAsync();

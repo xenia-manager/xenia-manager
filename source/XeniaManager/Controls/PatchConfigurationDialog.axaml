@@ -43,10 +43,9 @@
                                 Margin="0,0,0,8" />
         <!-- Patch List -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
                 <ItemsControl x:Name="PatchesItemsControl" ItemsSource="{Binding Patches}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="vm:PatchEntryViewModel">
                             <Expander IsExpanded="{Binding IsExpanded}" Margin="0,4">
                                 <Expander.Header>
                                     <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,4">
@@ -85,21 +84,21 @@
                                         <!-- Patch Metadata -->
                                         <TextBlock Text="{DynamicResource PatchConfigurationDialog.PatchDetails}" Classes="sectionHeader" />
                                         <TextBox Text="{Binding Name}"
-                                                 Watermark="{DynamicResource PatchConfigurationDialog.PatchName.Watermark}"
+                                                 PlaceholderText="{DynamicResource PatchConfigurationDialog.PatchName.PlaceholderText}"
                                                  Margin="0,4,0,12"
                                                  IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
                                         <TextBox Text="{Binding Author}"
-                                                 Watermark="{DynamicResource PatchConfigurationDialog.Author.Watermark}"
+                                                 PlaceholderText="{DynamicResource PatchConfigurationDialog.Author.PlaceholderText}"
                                                  Margin="0,4,0,12"
                                                  IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
 <TextBox Text="{Binding Description}"
-                                                  Watermark="{DynamicResource PatchConfigurationDialog.Description.Watermark}"
+                                                  PlaceholderText="{DynamicResource PatchConfigurationDialog.Description.PlaceholderText}"
                                                   AcceptsReturn="True"
                                                   TextWrapping="Wrap"
                                                   Margin="0,4,0,12"
                                                   IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
                                         <TextBox Text="{Binding HeaderComment}"
-                                                  Watermark="{DynamicResource PatchConfigurationDialog.HeaderComment.Watermark}"
+                                                  PlaceholderText="{DynamicResource PatchConfigurationDialog.HeaderComment.PlaceholderText}"
                                                   Margin="0,4,0,12"
                                                   IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
 
@@ -108,7 +107,7 @@
 
                                         <ItemsControl x:Name="CommandsItemsControl" ItemsSource="{Binding Commands}" Margin="0,0,0,8">
                                             <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
+                                                <DataTemplate x:DataType="vm:PatchCommandViewModel">
                                                     <Border Classes="commandItem">
                                                         <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
                                                             <TextBlock Grid.Row="0" Grid.Column="0"
@@ -135,7 +134,7 @@
 
                                                             <TextBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
                                                                      Text="{Binding TypeComment}"
-                                                                     Watermark="{DynamicResource PatchConfigurationDialog.TypeComment.Watermark}"
+                                                                     PlaceholderText="{DynamicResource PatchConfigurationDialog.TypeComment.PlaceholderText}"
                                                                      Margin="0,0,8,0"
                                                                      IsEnabled="{Binding ParentViewModel.IsEditingEnabled}"
                                                                      VerticalAlignment="Center" />
@@ -159,7 +158,7 @@
                                                                        Margin="0,8,8,0" />
                                                             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
                                                                      Text="{Binding Address, StringFormat='0x{0:X8}'}"
-                                                                     Watermark="{DynamicResource PatchConfigurationDialog.CommandAddress.Watermark}"
+                                                                     PlaceholderText="{DynamicResource PatchConfigurationDialog.CommandAddress.PlaceholderText}"
                                                                      Margin="0,8,0,0"
                                                                      IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
 
@@ -168,9 +167,9 @@
                                                                        VerticalAlignment="Center"
                                                                        Margin="0,4,8,0"
                                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+                                                             <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
                                                                      Text="{Binding AddressComment}"
-                                                                     Watermark="{DynamicResource PatchConfigurationDialog.Comment.Watermark}"
+                                                                     PlaceholderText="{DynamicResource PatchConfigurationDialog.Comment.PlaceholderText}"
                                                                      Margin="0,4,0,0"
                                                                      IsEnabled="{Binding ParentViewModel.IsEditingEnabled}"
                                                                      FontSize="11" />
@@ -181,7 +180,7 @@
                                                                        Margin="0,8,8,0" />
                                                             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
                                                                      Text="{Binding Value}"
-                                                                     Watermark="{DynamicResource PatchConfigurationDialog.CommandValue}"
+                                                                     PlaceholderText="{DynamicResource PatchConfigurationDialog.CommandValue}"
                                                                      Margin="0,8,0,0"
                                                                      Tag="{Binding IsValid}"
                                                                      IsEnabled="{Binding ParentViewModel.IsEditingEnabled}">
@@ -203,9 +202,9 @@
                                                                        VerticalAlignment="Center"
                                                                        Margin="0,4,8,0"
                                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                                            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+                                                             <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
                                                                      Text="{Binding ValueComment}"
-                                                                     Watermark="{DynamicResource PatchConfigurationDialog.Comment.Watermark}"
+                                                                     PlaceholderText="{DynamicResource PatchConfigurationDialog.Comment.PlaceholderText}"
                                                                      Margin="0,4,0,0"
                                                                      IsEnabled="{Binding ParentViewModel.IsEditingEnabled}"
                                                                      FontSize="11" />
@@ -231,7 +230,6 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </StackPanel>
         </ScrollViewer>
 
         <!-- Add Patch Button -->

@@ -56,14 +56,14 @@ public partial class ManageProfilesDialog : UserControl
         // Load profiles into the dialog
         dialog._viewModel.LoadProfiles(profiles, xeniaVersion);
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.Title"),
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.SaveButton.Text"),
             CloseButtonText = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.CancelButton.Text"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Controlling ContentDialog
@@ -89,7 +89,7 @@ public partial class ManageProfilesDialog : UserControl
         // Handle primary button (Save) using deferral to properly handle async operation
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            Deferral? deferral = e.GetDeferral();
+            FADeferral? deferral = e.GetDeferral();
             try
             {
                 // First, apply any pending edits to the selected profile

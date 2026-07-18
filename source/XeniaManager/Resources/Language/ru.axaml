@@ -20,7 +20,7 @@
     <sys:String x:Key="MainView.Navigation.Error.Message">Не удалось перейти на указанную страницу.&#10;{0}</sys:String>
 
     <!-- Library Page -->
-    <sys:String x:Key="LibraryPage.Search.Watermark">Поиск…</sys:String>
+    <sys:String x:Key="LibraryPage.Search.PlaceholderText">Поиск…</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Отображение элементов обложки</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Показать/скрыть дополнительную информацию на обложках игр</sys:String>
@@ -310,7 +310,9 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Title">Тема</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Выбор темы Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Светлая</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Тёмная</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Системная</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Заставка при загрузке</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Показывать фоновое изображение игры во время её запуска в эмуляторе</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Отображение фонового изображения игры во время её запуска в эмуляторе</sys:String>
@@ -342,7 +344,7 @@
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Прогресс загрузки</sys:String>
     <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Прогресс загрузки:</sys:String>
-    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Поиск по названию раздела или параметра...</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.PlaceholderText">Поиск по названию раздела или параметра...</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Игровые данные</sys:String>
@@ -478,19 +480,19 @@
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Добавить новый патч</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Удалить патч</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Название патча</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Название патча</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Автор</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Описание (необязательно)</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.PlaceholderText">Название патча</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.PlaceholderText">Автор</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.PlaceholderText">Описание (необязательно)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.PlaceholderText">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Действия патча</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Тип:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.PlaceholderText">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddressComment">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.ValueComment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.PlaceholderText">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Адрес:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Значение:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.PlaceholderText">0x00000000</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddCommand.ToolTip">Добавить команду</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.ToolTip">Удалить команду</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.SaveButton">Сохранить</sys:String>
@@ -510,7 +512,7 @@
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Репозиторий патчей</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">Скачать</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">Отменить</sys:String>
-    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Поиск патчей...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.PlaceholderText">Поиск патчей...</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Ошибка при поиске</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">Ошибка при поиске патчей.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">Доступно больше патчей...</sys:String>
@@ -536,14 +538,14 @@
     <sys:String x:Key="GameDetailsEditor.TitleId">ID игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">ID диска</sys:String>
     <sys:String x:Key="GameDetailsEditor.AlternativeIds">Альтернативные ID игры</sys:String>
-    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Введите альтернативный ID игры...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsPlaceholderText">Введите альтернативный ID игры...</sys:String>
     <sys:String x:Key="GameDetailsEditor.Add">Добавить</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Название игры</sys:String>
-    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Введите название игры</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitlePlaceholderText">Введите название игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Путь к игре</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Рейтинг совместимости</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL страницы совместимости</sys:String>
-    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Введите URL страницы совместимости игры</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Введите URL страницы совместимости игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Изменить путь к игре</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Выберите файл игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Отсутствует поставщик услуг хранения данных</sys:String>

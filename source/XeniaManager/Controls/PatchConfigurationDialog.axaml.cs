@@ -100,20 +100,20 @@ public partial class PatchConfigurationDialog : UserControl
 
         string dialogTitle = string.Format(LocalizationHelper.GetText("PatchConfigurationDialog.Title"), gameTitle);
 
-        ContentDialog contentDialog = new ContentDialog
+        FAContentDialog contentDialog = new FAContentDialog
         {
             Title = dialogTitle,
             Content = dialog,
             PrimaryButtonText = LocalizationHelper.GetText("PatchConfigurationDialog.SaveButton"),
             CloseButtonText = LocalizationHelper.GetText("PatchConfigurationDialog.CancelButton"),
             FullSizeDesired = true,
-            DefaultButton = ContentDialogButton.Primary
+            DefaultButton = FAContentDialogButton.Primary
         };
 
         // Handle the primary button (Save) using deferral to properly handle async operation
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            Deferral? deferral = e.GetDeferral();
+            FADeferral? deferral = e.GetDeferral();
             try
             {
                 bool success = await dialog._viewModel.SaveAsync();

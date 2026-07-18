@@ -25,7 +25,7 @@
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
-        <style:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
+        <style:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="False" />
         <!-- Custom Controls -->
         <StyleInclude Source="/Controls/Controls.axaml" />
     </Application.Styles>

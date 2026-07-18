@@ -77,7 +77,8 @@
                                         Title="{DynamicResource SettingsPage.Ui.Theme.Title}"
                                         Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
                                         ItemsSource="{Binding AppThemeOptions}"
-                                        SelectedIndex="{Binding SelectedThemeIndex}" />
+                                        SelectedIndex="{Binding SelectedThemeIndex}">
+                    </cards:ComboBoxCard>
                     <!-- Loading Screen -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.Ui.LoadingScreen.Title}"
                                             Description="{DynamicResource SettingsPage.Ui.LoadingScreen.Description}"

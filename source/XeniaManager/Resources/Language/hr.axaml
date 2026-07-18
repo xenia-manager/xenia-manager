@@ -20,7 +20,7 @@
     <sys:String x:Key="MainView.Navigation.Error.Message">Nije moguće navigirati na odredišnu stranicu.&#10;{0}</sys:String>
 
     <!-- Library Page -->
-    <sys:String x:Key="LibraryPage.Search.Watermark">Pretraži...</sys:String>
+    <sys:String x:Key="LibraryPage.Search.PlaceholderText">Pretraži...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ponovno učitava biblioteku igara</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Uredi mrežni prikaz</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Prikaži/sakrij dodatne informacije na omotima igara</sys:String>
@@ -310,7 +310,9 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Title">Tema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Promijenite temu korisničkog sučelja Xenia Managera</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Svijetla</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Tamna</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sustav</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Zaslon učitavanja</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Prikaži pozadinu zaslona učitavanja prilikom pokretanja igara</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Prikazuje animaciju zaslona učitavanja dok se igre pokreću</sys:String>
@@ -342,7 +344,7 @@
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Napredak preuzimanja</sys:String>
     <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Napredak preuzimanja:</sys:String>
-    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Pretraži po sekciji ili nazivu postavke...</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.PlaceholderText">Pretraži po sekciji ili nazivu postavke...</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Sadržaj</sys:String>
@@ -478,19 +480,19 @@
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Dodaj novu zakrpu</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Izbriši zakrpu</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Detalji zakrpe</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Naziv zakrpe</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Autor</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Opis (neobavezno)</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Koment zaglavlja (neobavezno)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.PlaceholderText">Naziv zakrpe</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.PlaceholderText">Autor</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.PlaceholderText">Opis (neobavezno)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.PlaceholderText">Koment zaglavlja (neobavezno)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Naredbe zakrpe</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Tip:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Koment tipa</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.PlaceholderText">Koment tipa</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddressComment">Koment:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.ValueComment">Koment:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Koment (neobavezno)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.PlaceholderText">Koment (neobavezno)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Adresa:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Vrijednost:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.PlaceholderText">0x00000000</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddCommand.ToolTip">Dodaj naredbu</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.ToolTip">Izbriši naredbu</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.SaveButton">Spremi</sys:String>
@@ -510,7 +512,7 @@
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Baza podataka zakrpa</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">Preuzmi</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">Otkaži</sys:String>
-    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Pretraži zakrpe...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.PlaceholderText">Pretraži zakrpe...</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Pretraživanje nije uspjelo</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">Došlo je do greške prilikom pretraživanja zakrpa.&#10;Greška: {0}</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">Dostupno je više zakrpa...</sys:String>
@@ -536,14 +538,14 @@
     <sys:String x:Key="GameDetailsEditor.TitleId">ID naslova</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Medijski ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.AlternativeIds">Alternativni ID-evi</sys:String>
-    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Unesite alternativni ID...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsPlaceholderText">Unesite alternativni ID...</sys:String>
     <sys:String x:Key="GameDetailsEditor.Add">Dodaj</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Naziv igre</sys:String>
-    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Unesite naziv igre</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitlePlaceholderText">Unesite naziv igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Putanja igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Ocjena kompatibilnosti</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL stranice kompatibilnosti</sys:String>
-    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Unesite URL stranice kompatibilnosti</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Unesite URL stranice kompatibilnosti</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Promijeni putanju igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Odaberite datoteku igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Nedostaje pružatelj pohrane</sys:String>

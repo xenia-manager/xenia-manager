@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="550"
@@ -23,7 +24,7 @@
         <!-- Search Box Section -->
         <cards:CustomCard Grid.Row="0"
                           Margin="0,0,0,16">
-            <TextBox Watermark="{DynamicResource PatchSelectionDialog.SearchBox.Watermark}"
+            <TextBox PlaceholderText="{DynamicResource PatchSelectionDialog.SearchBox.PlaceholderText}"
                      Text="{Binding SearchText, Mode=TwoWay}"
                      TextChanged="TextBox_OnTextChanged"
                      BorderThickness="0"
@@ -40,16 +41,16 @@
 
         <!-- Patches List Section -->
         <cards:CustomCard Grid.Row="1">
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-                <StackPanel>
+            <Grid RowDefinitions="*,Auto">
                     <!-- Patch Items ListBox -->
-                    <ListBox Background="Transparent"
+                    <ListBox Grid.Row="0"
+                             Background="Transparent"
                              BorderThickness="0"
                              SelectionMode="Single"
                              ItemsSource="{Binding Patches}"
                              SelectedItem="{Binding SelectedPatch, Mode=TwoWay}">
                         <ListBox.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="itemsvm:PatchItemViewModel">
                                 <!-- Individual patch item card -->
                                 <cards:CustomCard Classes="patch-item">
                                     <Grid ColumnDefinitions="Auto,*">
@@ -99,7 +100,8 @@
                     </ListBox>
 
                     <!-- More patches indicator -->
-                    <Border Padding="8"
+                    <Border Grid.Row="1"
+                            Padding="8"
                             IsVisible="{Binding HasMoreItems}">
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center"
@@ -118,8 +120,7 @@
                             </TextBlock>
                         </StackPanel>
                     </Border>
-                </StackPanel>
-            </ScrollViewer>
+            </Grid>
         </cards:CustomCard>
     </Grid>
 </UserControl>

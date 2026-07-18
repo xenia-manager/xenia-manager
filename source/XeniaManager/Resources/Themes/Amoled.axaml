@@ -1,151 +1,145 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
-    <!-- ============================================================ -->
     <!-- Colors -->
-    <!-- ============================================================ -->
-
-    <!-- Primary Background Colors - Xbox 360 Clean Whites/Light Grays -->
-    <Color x:Key="SolidBackgroundFillColorBase">#FFFFFFFF</Color>
-    <Color x:Key="SolidBackgroundFillColorSecondary">#FFF8F8F8</Color>
-    <Color x:Key="SolidBackgroundFillColorTertiary">#FFF2F2F2</Color>
-    <Color x:Key="SolidBackgroundFillColorQuarternary">#FFECECEC</Color>
-    <Color x:Key="SolidBackgroundFillColorTransparent">#00FFFFFF</Color>
+    <!-- Primary Background Colors - AMOLED / Xbox 360 Dark -->
+    <Color x:Key="SolidBackgroundFillColorBase">#FF000000</Color>
+    <Color x:Key="SolidBackgroundFillColorSecondary">#FF0A0A0A</Color>
+    <Color x:Key="SolidBackgroundFillColorTertiary">#FF141414</Color>
+    <Color x:Key="SolidBackgroundFillColorQuarternary">#FF1E1E1E</Color>
+    <Color x:Key="SolidBackgroundFillColorTransparent">#00000000</Color>
 
     <!-- Xbox Green Accent Colors -->
     <Color x:Key="SystemAccentColor">#FF107C10</Color>
-    <Color x:Key="SystemAccentColorLight1">#FF2D9B2D</Color>
-    <Color x:Key="SystemAccentColorLight2">#FF52B043</Color>
-    <Color x:Key="SystemAccentColorLight3">#FF7BC67B</Color>
-    <Color x:Key="SystemAccentColorDark1">#FF0E6B0E</Color>
-    <Color x:Key="SystemAccentColorDark2">#FF0C5A0C</Color>
-    <Color x:Key="SystemAccentColorDark3">#FF0A4A0A</Color>
+    <Color x:Key="SystemAccentColorLight1">#FF1FA21F</Color>
+    <Color x:Key="SystemAccentColorLight2">#FF46C746</Color>
+    <Color x:Key="SystemAccentColorLight3">#FF7EE27E</Color>
+    <Color x:Key="SystemAccentColorDark1">#FF0E6A0E</Color>
+    <Color x:Key="SystemAccentColorDark2">#FF0B580B</Color>
+    <Color x:Key="SystemAccentColorDark3">#FF094609</Color>
 
-    <!-- Text Colors - Dark on Light -->
-    <Color x:Key="TextFillColorPrimary">#FF000000</Color>
-    <Color x:Key="TextFillColorSecondary">#CC000000</Color>
-    <Color x:Key="TextFillColorTertiary">#99000000</Color>
-    <Color x:Key="TextFillColorDisabled">#4D000000</Color>
+    <!-- Text Colors - Light on Dark -->
+    <Color x:Key="TextFillColorPrimary">#FFFFFFFF</Color>
+    <Color x:Key="TextFillColorSecondary">#B3FFFFFF</Color>
+    <Color x:Key="TextFillColorTertiary">#80FFFFFF</Color>
+    <Color x:Key="TextFillColorDisabled">#4DFFFFFF</Color>
     <Color x:Key="TextFillColorInverse">#FF000000</Color>
-    <Color x:Key="AccentTextFillColorPrimary">#FF107C10</Color>
-    <Color x:Key="AccentTextFillColorSecondary">#FF0E6B0E</Color>
-    <Color x:Key="AccentTextFillColorTertiary">#FF2D9B2D</Color>
-    <Color x:Key="AccentTextFillColorDisabled">#66107C10</Color>
 
-    <Color x:Key="TextOnAccentFillColorSelectedText">#FFFFFF</Color>
-    <Color x:Key="TextOnAccentFillColorPrimary">#000000</Color>
+    <Color x:Key="AccentTextFillColorPrimary">#FF46C746</Color>
+    <Color x:Key="AccentTextFillColorSecondary">#FF7EE27E</Color>
+    <Color x:Key="AccentTextFillColorTertiary">#FF1FA21F</Color>
+    <Color x:Key="AccentTextFillColorDisabled">#660E6A0E</Color>
+
+    <Color x:Key="TextOnAccentFillColorSelectedText">#FFFFFFFF</Color>
+    <Color x:Key="TextOnAccentFillColorPrimary">#FF000000</Color>
     <Color x:Key="TextOnAccentFillColorSecondary">#80000000</Color>
-    <Color x:Key="TextOnAccentFillColorDisabled">#66000000</Color>
+    <Color x:Key="TextOnAccentFillColorDisabled">#80FFFFFF</Color>
 
-    <!-- Control Fill Colors - Xbox 360 Light Style -->
-    <Color x:Key="ControlFillColorDefault">#0D000000</Color>
-    <Color x:Key="ControlFillColorSecondary">#0A000000</Color>
-    <Color x:Key="ControlFillColorTertiary">#08000000</Color>
-    <Color x:Key="ControlFillColorDisabled">#05000000</Color>
+    <!-- Control Fill Colors - Xbox 360 Dark Style -->
+    <Color x:Key="ControlFillColorDefault">#14FFFFFF</Color>
+    <Color x:Key="ControlFillColorSecondary">#1FFFFFFF</Color>
+    <Color x:Key="ControlFillColorTertiary">#29FFFFFF</Color>
+    <Color x:Key="ControlFillColorDisabled">#0AFFFFFF</Color>
     <Color x:Key="ControlFillColorTransparent">#00000000</Color>
-    <Color x:Key="ControlFillColorInputActive">#FFFFFFFF</Color>
+    <Color x:Key="ControlFillColorInputActive">#FF0A0A0A</Color>
 
     <!-- Control Strong Fill -->
-    <Color x:Key="ControlStrongFillColorDefault">#66000000</Color>
-    <Color x:Key="ControlStrongFillColorDisabled">#33000000</Color>
-    <Color x:Key="ControlSolidFillColorDefault">#FF000000</Color>
+    <Color x:Key="ControlStrongFillColorDefault">#8BFFFFFF</Color>
+    <Color x:Key="ControlStrongFillColorDisabled">#3FFFFFFF</Color>
+    <Color x:Key="ControlSolidFillColorDefault">#FF454545</Color>
 
     <!-- Control Alt Fill Colors -->
     <Color x:Key="ControlAltFillColorTransparent">#00000000</Color>
-    <Color x:Key="ControlAltFillColorSecondary">#05000000</Color>
-    <Color x:Key="ControlAltFillColorTertiary">#0A000000</Color>
-    <Color x:Key="ControlAltFillColorQuarternary">#1A000000</Color>
-    <Color x:Key="ControlAltFillColorDisabled">#00000000</Color>
+    <Color x:Key="ControlAltFillColorSecondary">#19FFFFFF</Color>
+    <Color x:Key="ControlAltFillColorTertiary">#0BFFFFFF</Color>
+    <Color x:Key="ControlAltFillColorQuarternary">#12FFFFFF</Color>
+    <Color x:Key="ControlAltFillColorDisabled">#00FFFFFF</Color>
 
     <!-- Subtle Fill Colors -->
     <Color x:Key="SubtleFillColorTransparent">#00000000</Color>
-    <Color x:Key="SubtleFillColorSecondary">#08000000</Color>
-    <Color x:Key="SubtleFillColorTertiary">#05000000</Color>
-    <Color x:Key="SubtleFillColorDisabled">#00000000</Color>
+    <Color x:Key="SubtleFillColorSecondary">#0FFFFFFF</Color>
+    <Color x:Key="SubtleFillColorTertiary">#0AFFFFFF</Color>
+    <Color x:Key="SubtleFillColorDisabled">#00FFFFFF</Color>
 
     <!-- Control Stroke Colors - Subtle Borders -->
-    <Color x:Key="ControlStrokeColorDefault">#0D000000</Color>
-    <Color x:Key="ControlStrokeColorSecondary">#1A000000</Color>
-    <Color x:Key="ControlStrokeColorOnAccentDefault">#1AFFFFFF</Color>
-    <Color x:Key="ControlStrokeColorOnAccentSecondary">#40FFFFFF</Color>
-    <Color x:Key="ControlStrokeColorOnAccentTertiary">#33FFFFFF</Color>
-    <Color x:Key="ControlStrokeColorOnAccentDisabled">#1AFFFFFF</Color>
+    <Color x:Key="ControlStrokeColorDefault">#12FFFFFF</Color>
+    <Color x:Key="ControlStrokeColorSecondary">#18FFFFFF</Color>
+    <Color x:Key="ControlStrokeColorOnAccentDefault">#14FFFFFF</Color>
+    <Color x:Key="ControlStrokeColorOnAccentSecondary">#23000000</Color>
+    <Color x:Key="ControlStrokeColorOnAccentTertiary">#37000000</Color>
+    <Color x:Key="ControlStrokeColorOnAccentDisabled">#33000000</Color>
 
-    <Color x:Key="ControlStrokeColorForStrongFillWhenOnImage">#59FFFFFF</Color>
+    <Color x:Key="ControlStrokeColorForStrongFillWhenOnImage">#6B000000</Color>
 
     <!-- Control Strong Stroke -->
-    <Color x:Key="ControlStrongStrokeColorDefault">#66000000</Color>
-    <Color x:Key="ControlStrongStrokeColorDisabled">#26000000</Color>
+    <Color x:Key="ControlStrongStrokeColorDefault">#8BFFFFFF</Color>
+    <Color x:Key="ControlStrongStrokeColorDisabled">#28FFFFFF</Color>
 
     <!-- Card Colors - Xbox 360 Elevated Cards -->
-    <Color x:Key="CardBackgroundFillColorDefault">#FFFFFFFF</Color>
-    <Color x:Key="CardBackgroundFillColorSecondary">#FFF8F8F8</Color>
-    <Color x:Key="CardStrokeColorDefault">#0D000000</Color>
-    <Color x:Key="CardStrokeColorDefaultSolid">#FFE6E6E6</Color>
+    <Color x:Key="CardBackgroundFillColorDefault">#0DFFFFFF</Color>
+    <Color x:Key="CardBackgroundFillColorSecondary">#08FFFFFF</Color>
+    <Color x:Key="CardStrokeColorDefault">#19000000</Color>
+    <Color x:Key="CardStrokeColorDefaultSolid">#FF1C1C1C</Color>
 
     <!-- Surface Stroke Colors -->
-    <Color x:Key="SurfaceStrokeColorDefault">#33CCCCCC</Color>
-    <Color x:Key="SurfaceStrokeColorFlyout">#0D000000</Color>
-    <Color x:Key="SurfaceStrokeColorInverse">#1A000000</Color>
+    <Color x:Key="SurfaceStrokeColorDefault">#66757575</Color>
+    <Color x:Key="SurfaceStrokeColorFlyout">#33000000</Color>
+    <Color x:Key="SurfaceStrokeColorInverse">#0F000000</Color>
 
     <!-- Divider -->
-    <Color x:Key="DividerStrokeColorDefault">#0D000000</Color>
+    <Color x:Key="DividerStrokeColorDefault">#15FFFFFF</Color>
 
     <!-- Layer Colors -->
-    <Color x:Key="LayerFillColorDefault">#CCFFFFFF</Color>
-    <Color x:Key="LayerFillColorAlt">#FFF8F8F8</Color>
-    <Color x:Key="LayerOnAcrylicFillColorDefault">#66FFFFFF</Color>
-    <Color x:Key="LayerOnAccentAcrylicFillColorDefault">#33000000</Color>
-    <Color x:Key="LayerOnMicaBaseAltFillColorDefault">#E6FFFFFF</Color>
-    <Color x:Key="LayerOnMicaBaseAltFillColorSecondary">#0DFFFFFF</Color>
-    <Color x:Key="LayerOnMicaBaseAltFillColorTertiary">#FFF8F8F8</Color>
+    <Color x:Key="LayerFillColorDefault">#4C0A0A0A</Color>
+    <Color x:Key="LayerFillColorAlt">#0DFFFFFF</Color>
+    <Color x:Key="LayerOnAcrylicFillColorDefault">#09FFFFFF</Color>
+    <Color x:Key="LayerOnAccentAcrylicFillColorDefault">#09FFFFFF</Color>
+    <Color x:Key="LayerOnMicaBaseAltFillColorDefault">#733A3A3A</Color>
+    <Color x:Key="LayerOnMicaBaseAltFillColorSecondary">#0FFFFFFF</Color>
+    <Color x:Key="LayerOnMicaBaseAltFillColorTertiary">#FF2C2C2C</Color>
     <Color x:Key="LayerOnMicaBaseAltFillColorTransparent">#00FFFFFF</Color>
 
     <!-- Smoke Fill -->
-    <Color x:Key="SmokeFillColorDefault">#80FFFFFF</Color>
+    <Color x:Key="SmokeFillColorDefault">#4D000000</Color>
 
     <!-- System Fill Colors -->
-    <Color x:Key="SystemFillColorSuccess">#FF107C10</Color>
-    <Color x:Key="SystemFillColorCaution">#FFE68A00</Color>
-    <Color x:Key="SystemFillColorCritical">#FFE63946</Color>
-    <Color x:Key="SystemFillColorNeutral">#66000000</Color>
-    <Color x:Key="SystemFillColorSolidNeutral">#FF666666</Color>
-    <Color x:Key="SystemFillColorAttentionBackground">#CCFFFFFF</Color>
-    <Color x:Key="SystemFillColorSuccessBackground">#FFE6F5E6</Color>
-    <Color x:Key="SystemFillColorCautionBackground">#FFFFF4E6</Color>
-    <Color x:Key="SystemFillColorCriticalBackground">#FFFFEAEA</Color>
-    <Color x:Key="SystemFillColorNeutralBackground">#08000000</Color>
-    <Color x:Key="SystemFillColorSolidAttentionBackground">#FFF8F8F8</Color>
-    <Color x:Key="SystemFillColorSolidNeutralBackground">#FFF2F2F2</Color>
+    <Color x:Key="SystemFillColorSuccess">#FF46C746</Color>
+    <Color x:Key="SystemFillColorCaution">#FFF2C037</Color>
+    <Color x:Key="SystemFillColorCritical">#FFE53935</Color>
+    <Color x:Key="SystemFillColorNeutral">#66FFFFFF</Color>
+    <Color x:Key="SystemFillColorSolidNeutral">#FF9D9D9D</Color>
+    <Color x:Key="SystemFillColorAttentionBackground">#08FFFFFF</Color>
+    <Color x:Key="SystemFillColorSuccessBackground">#FF393D1B</Color>
+    <Color x:Key="SystemFillColorCautionBackground">#FF433519</Color>
+    <Color x:Key="SystemFillColorCriticalBackground">#FF442726</Color>
+    <Color x:Key="SystemFillColorNeutralBackground">#08FFFFFF</Color>
+    <Color x:Key="SystemFillColorSolidAttentionBackground">#FF2E2E2E</Color>
+    <Color x:Key="SystemFillColorSolidNeutralBackground">#FF2E2E2E</Color>
 
-    <Color x:Key="AccentFillColorDisabled">#37000000</Color>
+    <Color x:Key="AccentFillColorDisabled">#28FFFFFF</Color>
 
     <!-- Acrylic Colors -->
-    <Color x:Key="AcrylicBackgroundFillColorDefault">#FFF9F9F9</Color>
-    <Color x:Key="AcrylicInAppFillColorDefault">#FFF9F9F9</Color>
-    <Color x:Key="AcrylicBackgroundFillColorDefaultInverse">#FF2C2C2C</Color>
-    <Color x:Key="AcrylicInAppFillColorDefaultInverse">#FF2C2C2C</Color>
-    <Color x:Key="AcrylicBackgroundFillColorBase">#FFEEEEEE</Color>
-    <Color x:Key="AcrylicInAppFillColorBase">#FFEEEEEE</Color>
-    <Color x:Key="AccentAcrylicBackgroundFillColorDefault">#FF7BC67B</Color>
-    <Color x:Key="AccentAcrylicInAppFillColorDefault">#FF7BC67B</Color>
-    <Color x:Key="AccentAcrylicBackgroundFillColorBase">#FF7BC67B</Color>
-    <Color x:Key="AccentAcrylicInAppFillColorBase">#FF7BC67B</Color>
+    <Color x:Key="AcrylicBackgroundFillColorDefault">#FF2C2C2C</Color>
+    <Color x:Key="AcrylicInAppFillColorDefault">#FF2C2C2C</Color>
+    <Color x:Key="AcrylicBackgroundFillColorDefaultInverse">#FFF9F9F9</Color>
+    <Color x:Key="AcrylicInAppFillColorDefaultInverse">#FFF9F9F9</Color>
+    <Color x:Key="AcrylicBackgroundFillColorBase">#FF1C1C1C</Color>
+    <Color x:Key="AcrylicInAppFillColorBase">#FF1C1C1C</Color>
+    <Color x:Key="AccentAcrylicBackgroundFillColorDefault">#FF0E6A0E</Color>
+    <Color x:Key="AccentAcrylicInAppFillColorDefault">#FF0E6A0E</Color>
+    <Color x:Key="AccentAcrylicBackgroundFillColorBase">#FF0E6A0E</Color>
+    <Color x:Key="AccentAcrylicInAppFillColorBase">#FF0E6A0E</Color>
 
     <!-- Focus Colors - Xbox 360 Green Glow -->
-    <Color x:Key="FocusStrokeColorOuter">#FF107C10</Color>
-    <Color x:Key="FocusStrokeColorInner">#33107C10</Color>
+    <Color x:Key="FocusStrokeColorOuter">#FF46C746</Color>
+    <Color x:Key="FocusStrokeColorInner">#6646C746</Color>
 
     <!-- Control On Image Fill Colors -->
-    <Color x:Key="ControlOnImageFillColorDefault">#E6FFFFFF</Color>
-    <Color x:Key="ControlOnImageFillColorSecondary">#FFF8F8F8</Color>
-    <Color x:Key="ControlOnImageFillColorTertiary">#FFFAFAFA</Color>
-    <Color x:Key="ControlOnImageFillColorDisabled">#00000000</Color>
-
-    <!-- ============================================================ -->
+    <Color x:Key="ControlOnImageFillColorDefault">#B31C1C1C</Color>
+    <Color x:Key="ControlOnImageFillColorSecondary">#FF1A1A1A</Color>
+    <Color x:Key="ControlOnImageFillColorTertiary">#FF131313</Color>
+    <Color x:Key="ControlOnImageFillColorDisabled">#FF1E1E1E</Color>
+    
     <!-- Brushes -->
-    <!-- ============================================================ -->
-
     <!-- Primary Backgrounds -->
     <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="{StaticResource SolidBackgroundFillColorBase}" />
     <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="{StaticResource SolidBackgroundFillColorBase}" />
@@ -171,9 +165,6 @@
     <SolidColorBrush x:Key="TextFillColorInverseBrush" Color="{StaticResource TextFillColorInverse}" />
     <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="{StaticResource AccentTextFillColorPrimary}" />
     <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="{StaticResource AccentTextFillColorSecondary}" />
-    <!-- FIX: this was previously declared alone in a stray "Accent Text" comment block far
-         below, separated from its siblings. Moved up next to Primary/Secondary/Disabled so the
-         full Accent Text set lives in one place. -->
     <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush" Color="{StaticResource AccentTextFillColorTertiary}" />
     <SolidColorBrush x:Key="AccentTextFillColorDisabledBrush" Color="{StaticResource AccentTextFillColorDisabled}" />
 
@@ -256,194 +247,7 @@
     <SolidColorBrush x:Key="SystemFillColorSolidAttentionBackgroundBrush" Color="{StaticResource SystemFillColorSolidAttentionBackground}" />
     <SolidColorBrush x:Key="SystemFillColorSolidNeutralBackgroundBrush" Color="{StaticResource SystemFillColorSolidNeutralBackground}" />
 
-    <!-- Focus Brushes -->
-    <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="{StaticResource FocusStrokeColorOuter}" />
-    <SolidColorBrush x:Key="FocusStrokeColorInnerBrush" Color="{StaticResource FocusStrokeColorInner}" />
-
-    <!-- Control On Image Fill Brushes -->
-    <SolidColorBrush x:Key="ControlOnImageFillColorDefaultBrush" Color="{StaticResource ControlOnImageFillColorDefault}" />
-    <SolidColorBrush x:Key="ControlOnImageFillColorSecondaryBrush" Color="{StaticResource ControlOnImageFillColorSecondary}" />
-    <SolidColorBrush x:Key="ControlOnImageFillColorTertiaryBrush" Color="{StaticResource ControlOnImageFillColorTertiary}" />
-    <SolidColorBrush x:Key="ControlOnImageFillColorDisabledBrush" Color="{StaticResource ControlOnImageFillColorDisabled}" />
-
-    <!-- Additional System Brushes -->
-    <!-- FIX: now reference existing color resources instead of restating hex, so palette edits propagate -->
-    <SolidColorBrush x:Key="SystemControlBackgroundAltHighBrush" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="SystemControlBackgroundBaseMediumLowBrush" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="SystemControlBackgroundChromeMediumLowBrush" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
-    <SolidColorBrush x:Key="SystemControlTransparentBrush" Color="Transparent" />
-
-    <!-- Navigation View Specific - Xbox 360 Light Style -->
-    <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="NavigationViewContentBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
-    <SolidColorBrush x:Key="NavigationViewItemForeground" Color="{StaticResource TextFillColorSecondary}" />
-    <SolidColorBrush x:Key="NavigationViewItemForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="NavigationViewItemForegroundPressed" Color="{StaticResource TextFillColorTertiary}" />
-    <SolidColorBrush x:Key="NavigationViewItemForegroundSelected" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="{StaticResource SystemAccentColor}" />
-
-    <!-- Flyout Specific -->
-    <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="{StaticResource ControlStrokeColorDefault}" />
-
-    <!-- ContentDialog Specific -->
-    <SolidColorBrush x:Key="ContentDialogBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="ContentDialogBackgroundBrush" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="ContentDialogBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
-    <SolidColorBrush x:Key="ContentDialogDimmingThemeBrush" Color="#E6FFFFFF" />
-
-    <!-- TabView Specific -->
-    <SolidColorBrush x:Key="TabViewBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="TabViewItemHeaderBackground" Color="Transparent" />
-    <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
-    <SolidColorBrush x:Key="TabViewItemHeaderBackgroundPointerOver" Color="{StaticResource SubtleFillColorSecondary}" />
-    <SolidColorBrush x:Key="TabViewItemHeaderBackgroundPressed" Color="{StaticResource ControlStrokeColorDefault}" />
-    <SolidColorBrush x:Key="TabViewItemHeaderForeground" Color="{StaticResource TextFillColorTertiary}" />
-    <SolidColorBrush x:Key="TabViewItemHeaderForegroundSelected" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="TabViewItemHeaderForegroundPointerOver" Color="{StaticResource TextFillColorSecondary}" />
-    <SolidColorBrush x:Key="TabViewItemHeaderForegroundPressed" Color="{StaticResource TextFillColorTertiary}" />
-
-    <!-- ComboBox Dropdown -->
-    <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="ComboBoxDropDownBackgroundPointerOver" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="ComboBoxDropDownBackgroundPressed" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
-    <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
-
-    <!-- ListBox/ListView Item Backgrounds - Xbox 360 Selection Style -->
-    <SolidColorBrush x:Key="ListViewItemBackground" Color="Transparent" />
-    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="{StaticResource SubtleFillColorSecondary}" />
-    <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="{StaticResource ControlStrokeColorDefault}" />
-    <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#1A107C10" />
-    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#26107C10" />
-    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPressed" Color="#33107C10" />
-    <SolidColorBrush x:Key="ListViewItemForeground" Color="{StaticResource TextFillColorSecondary}" />
-    <SolidColorBrush x:Key="ListViewItemForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="ListViewItemForegroundSelected" Color="{StaticResource TextFillColorPrimary}" />
-
-    <!-- Button Specific - Xbox 360 Light Style -->
-    <SolidColorBrush x:Key="ButtonBackground" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
-    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
-    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FFE6E6E6" />
-    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="ButtonForeground" Color="{StaticResource TextFillColorSecondary}" />
-    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{StaticResource TextFillColorTertiary}" />
-    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
-    <SolidColorBrush x:Key="ButtonBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
-    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource ControlStrokeColorSecondary}" />
-    <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{StaticResource ControlStrokeColorDefault}" />
-    <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{StaticResource SubtleFillColorTertiary}" />
-
-    <!-- Accent Button - Xbox Green -->
-    <SolidColorBrush x:Key="AccentButtonBackground" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="{StaticResource SystemAccentColorLight1}" />
-    <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="{StaticResource SystemAccentColorDark1}" />
-    <SolidColorBrush x:Key="AccentButtonBackgroundDisabled" Color="#33107C10" />
-    <SolidColorBrush x:Key="AccentButtonForeground" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
-    <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
-    <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#CCFFFFFF" />
-    <SolidColorBrush x:Key="AccentButtonForegroundDisabled" Color="#66FFFFFF" />
-
-    <!-- TextBox Specific - Xbox 360 Light Style -->
-    <SolidColorBrush x:Key="TextControlBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="{StaticResource SolidBackgroundFillColorBase}" />
-    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="TextControlForeground" Color="{StaticResource TextFillColorSecondary}" />
-    <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="TextControlForegroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
-    <SolidColorBrush x:Key="TextControlBorderBrush" Color="{StaticResource ControlStrokeColorSecondary}" />
-    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#26000000" />
-    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="{StaticResource ControlStrokeColorDefault}" />
-    <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#66000000" />
-
-    <!-- ToggleSwitch Specific - Xbox 360 Light Style -->
-    <SolidColorBrush x:Key="ToggleSwitchContentForeground" Color="{StaticResource TextFillColorSecondary}" />
-    <SolidColorBrush x:Key="ToggleSwitchContentForegroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOff" Color="#26000000" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOffPointerOver" Color="#33000000" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOffPressed" Color="#1A000000" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOffDisabled" Color="#0D000000" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="{StaticResource SystemAccentColorLight1}" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="{StaticResource SystemAccentColorDark1}" />
-    <SolidColorBrush x:Key="ToggleSwitchFillOnDisabled" Color="#33107C10" />
-
-    <!-- CheckBox Specific - Xbox 360 Light Style -->
-    <SolidColorBrush x:Key="CheckBoxBackgroundUnchecked" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPointerOver" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPressed" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedDisabled" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundChecked" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPointerOver" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPressed" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedDisabled" Color="#00000000" />
-    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
-    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
-    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#CCFFFFFF" />
-    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#66FFFFFF" />
-
-    <!-- ProgressBar/Ring Specific - Xbox Green -->
-    <SolidColorBrush x:Key="ProgressBarBackground" Color="{StaticResource SubtleFillColorTertiary}" />
-    <SolidColorBrush x:Key="ProgressBarForeground" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="ProgressRingForeground" Color="{StaticResource SystemAccentColor}" />
-
-    <!-- Slider Specific - Xbox 360 Light Style -->
-    <SolidColorBrush x:Key="SliderTrackFill" Color="{StaticResource SubtleFillColorTertiary}" />
-    <SolidColorBrush x:Key="SliderTrackFillPointerOver" Color="#1A000000" />
-    <SolidColorBrush x:Key="SliderTrackFillPressed" Color="{StaticResource SubtleFillColorTertiary}" />
-    <SolidColorBrush x:Key="SliderTrackFillDisabled" Color="#08000000" />
-    <SolidColorBrush x:Key="SliderTrackValueFill" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="{StaticResource SystemAccentColorLight1}" />
-    <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="{StaticResource SystemAccentColorDark1}" />
-    <SolidColorBrush x:Key="SliderTrackValueFillDisabled" Color="#33107C10" />
-    <SolidColorBrush x:Key="SliderThumbBackground" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="{StaticResource TextFillColorSecondary}" />
-    <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
-
-    <!-- Region Brush -->
-    <SolidColorBrush x:Key="RegionBrush" Color="{StaticResource SolidBackgroundFillColorBase}" />
-
-    <!-- ScrollBar Specific - Xbox 360 Minimal Style -->
-    <SolidColorBrush x:Key="ScrollBarBackground" Color="Transparent" />
-    <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#1A000000" />
-    <SolidColorBrush x:Key="ScrollBarThumbFill" Color="#1A000000" />
-    <SolidColorBrush x:Key="ScrollBarThumbFillPointerOver" Color="#33000000" />
-    <SolidColorBrush x:Key="ScrollBarThumbFillPressed" Color="#4D000000" />
-    <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="Transparent" />
-    <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="{StaticResource SubtleFillColorSecondary}" />
-    <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="{StaticResource ControlStrokeColorDefault}" />
-
-    <!-- ToolTip Specific - Xbox 360 Light Style -->
-    <SolidColorBrush x:Key="ToolTipBackground" Color="#F2F2F2F2" />
-    <SolidColorBrush x:Key="ToolTipForeground" Color="{StaticResource TextFillColorPrimary}" />
-    <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#1A000000" />
-
-    <!-- Text On Accent -->
-    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
-    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="{StaticResource TextOnAccentFillColorPrimary}" />
-    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="{StaticResource TextOnAccentFillColorSecondary}" />
-    <SolidColorBrush x:Key="TextOnAccentFillColorDisabledBrush" Color="{StaticResource TextOnAccentFillColorDisabled}" />
-
-    <!-- Accent Fill -->
-    <!-- NOTE: unlike the AMOLED dark theme, Default=Dark1 here IS the correct WinUI convention
-         for a LIGHT theme (dark accent tint reads clearly against a white/light-gray surface),
-         so this mapping is left as-is - no fix needed. -->
-    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="{StaticResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="{StaticResource SystemAccentColorDark1}" />
-    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="{StaticResource SystemAccentColorDark1}" Opacity="0.9" />
-    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="{StaticResource SystemAccentColorDark1}" Opacity="0.8" />
     <SolidColorBrush x:Key="AccentFillColorDisabledBrush" Color="{StaticResource AccentFillColorDisabled}" />
-
-    <!-- Control Stroke -->
-    <SolidColorBrush x:Key="ControlStrokeColorForStrongFillWhenOnImageBrush" Color="{StaticResource ControlStrokeColorForStrongFillWhenOnImage}" />
 
     <!-- Acrylic -->
     <SolidColorBrush x:Key="AcrylicBackgroundFillColorDefaultBrush" Color="{StaticResource AcrylicBackgroundFillColorDefault}" />
@@ -457,6 +261,197 @@
     <SolidColorBrush x:Key="AccentAcrylicBackgroundFillColorBaseBrush" Color="{StaticResource AccentAcrylicBackgroundFillColorBase}" />
     <SolidColorBrush x:Key="AccentAcrylicInAppFillColorBaseBrush" Color="{StaticResource AccentAcrylicInAppFillColorBase}" />
 
+    <!-- Focus Brushes -->
+    <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="{StaticResource FocusStrokeColorOuter}" />
+    <SolidColorBrush x:Key="FocusStrokeColorInnerBrush" Color="{StaticResource FocusStrokeColorInner}" />
+
+    <!-- Control On Image Fill Brushes -->
+    <SolidColorBrush x:Key="ControlOnImageFillColorDefaultBrush" Color="{StaticResource ControlOnImageFillColorDefault}" />
+    <SolidColorBrush x:Key="ControlOnImageFillColorSecondaryBrush" Color="{StaticResource ControlOnImageFillColorSecondary}" />
+    <SolidColorBrush x:Key="ControlOnImageFillColorTertiaryBrush" Color="{StaticResource ControlOnImageFillColorTertiary}" />
+    <SolidColorBrush x:Key="ControlOnImageFillColorDisabledBrush" Color="{StaticResource ControlOnImageFillColorDisabled}" />
+
+    <!-- Additional System Brushes -->
+    <!-- FIX: now reference existing color resources instead of restating hex, so palette edits propagate -->
+    <SolidColorBrush x:Key="SystemControlBackgroundAltHighBrush" Color="{StaticResource SolidBackgroundFillColorBase}" />
+    <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
+    <SolidColorBrush x:Key="SystemControlBackgroundBaseMediumLowBrush" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
+    <SolidColorBrush x:Key="SystemControlBackgroundChromeMediumLowBrush" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
+    <SolidColorBrush x:Key="SystemControlTransparentBrush" Color="Transparent" />
+
+    <!-- Navigation View Specific - Xbox 360 Dark Style -->
+    <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
+    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
+    <SolidColorBrush x:Key="NavigationViewContentBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
+    <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
+    <SolidColorBrush x:Key="NavigationViewItemForeground" Color="{StaticResource TextFillColorSecondary}" />
+    <SolidColorBrush x:Key="NavigationViewItemForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="NavigationViewItemForegroundPressed" Color="{StaticResource TextFillColorTertiary}" />
+    <SolidColorBrush x:Key="NavigationViewItemForegroundSelected" Color="{StaticResource SystemAccentColorLight2}" />
+    <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="{StaticResource SystemAccentColorLight2}" />
+
+    <!-- Flyout Specific -->
+    <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
+    <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
+    <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="{StaticResource ControlStrokeColorDefault}" />
+
+    <!-- ContentDialog Specific -->
+    <SolidColorBrush x:Key="ContentDialogBackground" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
+    <SolidColorBrush x:Key="ContentDialogBackgroundBrush" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
+    <SolidColorBrush x:Key="ContentDialogBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
+    <SolidColorBrush x:Key="ContentDialogDimmingThemeBrush" Color="#99000000" />
+
+    <!-- TabView Specific -->
+    <SolidColorBrush x:Key="TabViewBackground" Color="{StaticResource SolidBackgroundFillColorBase}" />
+    <SolidColorBrush x:Key="TabViewItemHeaderBackground" Color="Transparent" />
+    <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
+    <SolidColorBrush x:Key="TabViewItemHeaderBackgroundPointerOver" Color="{StaticResource SubtleFillColorSecondary}" />
+    <SolidColorBrush x:Key="TabViewItemHeaderBackgroundPressed" Color="{StaticResource ControlStrokeColorDefault}" />
+    <SolidColorBrush x:Key="TabViewItemHeaderForeground" Color="{StaticResource TextFillColorTertiary}" />
+    <SolidColorBrush x:Key="TabViewItemHeaderForegroundSelected" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="TabViewItemHeaderForegroundPointerOver" Color="{StaticResource TextFillColorSecondary}" />
+    <SolidColorBrush x:Key="TabViewItemHeaderForegroundPressed" Color="{StaticResource TextFillColorTertiary}" />
+
+    <!-- ComboBox Dropdown -->
+    <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{StaticResource SolidBackgroundFillColorQuarternary}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBackgroundPointerOver" Color="#FF242424" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBackgroundPressed" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
+
+    <!-- ListBox/ListView Item Backgrounds - Xbox 360 Selection Style -->
+    <SolidColorBrush x:Key="ListViewItemBackground" Color="Transparent" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="{StaticResource SubtleFillColorSecondary}" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="{StaticResource ControlStrokeColorDefault}" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#26107C10" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#33107C10" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPressed" Color="#3D107C10" />
+    <SolidColorBrush x:Key="ListViewItemForeground" Color="{StaticResource TextFillColorSecondary}" />
+    <SolidColorBrush x:Key="ListViewItemForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="ListViewItemForegroundSelected" Color="{StaticResource TextFillColorPrimary}" />
+
+    <!-- Button Specific - Xbox 360 Dark Style -->
+    <SolidColorBrush x:Key="ButtonBackground" Color="{StaticResource ControlFillColorDefault}" />
+    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource ControlFillColorSecondary}" />
+    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource ControlFillColorDisabled}" />
+    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{StaticResource ControlFillColorDisabled}" />
+    <SolidColorBrush x:Key="ButtonForeground" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{StaticResource TextFillColorSecondary}" />
+    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
+    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource ControlStrokeColorSecondary}" />
+    <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{StaticResource ControlStrokeColorDefault}" />
+    <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{StaticResource ControlFillColorDisabled}" />
+
+    <!-- Accent Button - Xbox Green -->
+    <SolidColorBrush x:Key="AccentButtonBackground" Color="{StaticResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="{StaticResource SystemAccentColorLight1}" />
+    <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="{StaticResource SystemAccentColorDark1}" />
+    <SolidColorBrush x:Key="AccentButtonBackgroundDisabled" Color="#330E6A0E" />
+    <SolidColorBrush x:Key="AccentButtonForeground" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#CCFFFFFF" />
+    <SolidColorBrush x:Key="AccentButtonForegroundDisabled" Color="#66FFFFFF" />
+
+    <!-- TextBox Specific - Xbox 360 Dark Style -->
+    <SolidColorBrush x:Key="TextControlBackground" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
+    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="{StaticResource SolidBackgroundFillColorTertiary}" />
+    <SolidColorBrush x:Key="TextControlForeground" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="TextControlForegroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="{StaticResource ControlStrokeColorDefault}" />
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource ControlStrokeColorSecondary}" />
+    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{StaticResource SystemAccentColorLight2}" />
+    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="{StaticResource ControlFillColorDisabled}" />
+    <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#66FFFFFF" />
+
+    <!-- ToggleSwitch Specific - Xbox 360 Dark Style -->
+    <SolidColorBrush x:Key="ToggleSwitchContentForeground" Color="{StaticResource TextFillColorSecondary}" />
+    <SolidColorBrush x:Key="ToggleSwitchContentForegroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOff" Color="#26FFFFFF" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOffPointerOver" Color="#33FFFFFF" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOffPressed" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOffDisabled" Color="#0DFFFFFF" />
+    <!-- FIX: bumped default "on" fill to Light1 - base SystemAccentColor is only ~3.9:1 against
+         true black, which clears WCAG's 3:1 UI-component floor with little margin. Light1 gives
+         a safer, more legible margin for a control people glance at rather than read. -->
+    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="{StaticResource SystemAccentColorLight1}" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="{StaticResource SystemAccentColorLight2}" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="{StaticResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOnDisabled" Color="#330E6A0E" />
+
+    <!-- CheckBox Specific - Xbox 360 Dark Style -->
+    <SolidColorBrush x:Key="CheckBoxBackgroundUnchecked" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPointerOver" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPressed" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedDisabled" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundChecked" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPointerOver" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPressed" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxBackgroundCheckedDisabled" Color="#00000000" />
+    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#CCFFFFFF" />
+    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#66FFFFFF" />
+
+    <!-- ProgressBar/Ring Specific - Xbox Green -->
+    <SolidColorBrush x:Key="ProgressBarBackground" Color="{StaticResource SubtleFillColorTertiary}" />
+    <SolidColorBrush x:Key="ProgressBarForeground" Color="{StaticResource SystemAccentColorLight1}" />
+    <SolidColorBrush x:Key="ProgressRingForeground" Color="{StaticResource SystemAccentColorLight1}" />
+
+    <!-- Slider Specific - Xbox 360 Dark Style -->
+    <SolidColorBrush x:Key="SliderTrackFill" Color="{StaticResource SubtleFillColorTertiary}" />
+    <SolidColorBrush x:Key="SliderTrackFillPointerOver" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="SliderTrackFillPressed" Color="{StaticResource SubtleFillColorTertiary}" />
+    <SolidColorBrush x:Key="SliderTrackFillDisabled" Color="#08FFFFFF" />
+    <SolidColorBrush x:Key="SliderTrackValueFill" Color="{StaticResource SystemAccentColorLight1}" />
+    <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="{StaticResource SystemAccentColorLight2}" />
+    <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="{StaticResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="SliderTrackValueFillDisabled" Color="#330E6A0E" />
+    <SolidColorBrush x:Key="SliderThumbBackground" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="#CCFFFFFF" />
+    <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="{StaticResource TextFillColorDisabled}" />
+
+    <!-- Region Brush -->
+    <SolidColorBrush x:Key="RegionBrush" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
+
+    <!-- ScrollBar Specific - Xbox 360 Minimal Style -->
+    <SolidColorBrush x:Key="ScrollBarBackground" Color="Transparent" />
+    <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="ScrollBarThumbFill" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="ScrollBarThumbFillPointerOver" Color="#33FFFFFF" />
+    <SolidColorBrush x:Key="ScrollBarThumbFillPressed" Color="#4DFFFFFF" />
+    <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="Transparent" />
+    <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="{StaticResource SubtleFillColorSecondary}" />
+    <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="{StaticResource ControlStrokeColorDefault}" />
+
+    <!-- ToolTip Specific - Xbox 360 Dark Style -->
+    <SolidColorBrush x:Key="ToolTipBackground" Color="#F21E1E1E" />
+    <SolidColorBrush x:Key="ToolTipForeground" Color="{StaticResource TextFillColorPrimary}" />
+    <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#33107C10" />
+
+    <!-- Text On Accent -->
+    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="{StaticResource TextOnAccentFillColorPrimary}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="{StaticResource TextOnAccentFillColorSecondary}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorDisabledBrush" Color="{StaticResource TextOnAccentFillColorDisabled}" />
+
+    <!-- Accent Fill -->
+    <!-- FIX: WinUI's dark-theme convention is AccentFillColorDefault = Light2, stepping DOWN in
+         opacity for Secondary/Tertiary - not Dark1. The old values used Dark1, which is the
+         *light-theme* mapping and reads muddy/low-contrast against an AMOLED-black surface. -->
+    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="{StaticResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="{StaticResource SystemAccentColorLight2}" />
+    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="{StaticResource SystemAccentColorLight2}" Opacity="0.9" />
+    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="{StaticResource SystemAccentColorLight2}" Opacity="0.8" />
+
+    <!-- Control Stroke -->
+    <SolidColorBrush x:Key="ControlStrokeColorForStrongFillWhenOnImageBrush" Color="{StaticResource ControlStrokeColorForStrongFillWhenOnImage}" />
+
     <!-- System Control -->
     <SolidColorBrush x:Key="SystemControlHighlightListAccentVeryHighBrush" Color="{StaticResource SystemAccentColor}" Opacity="0.9" />
     <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumLowBrush" Color="{StaticResource SystemAccentColor}" Opacity="0.75" />
@@ -469,15 +464,15 @@
             <ScaleTransform ScaleY="-1" />
         </LinearGradientBrush.Transform>
         <LinearGradientBrush.GradientStops>
-            <GradientStop Offset="0.33" Color="#1A000000" />
-            <GradientStop Offset="1" Color="#0D000000" />
+            <GradientStop Offset="0.33" Color="#18FFFFFF" />
+            <GradientStop Offset="1" Color="#12FFFFFF" />
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="CircleElevationBorderBrush" StartPoint="0,0" EndPoint="0,1">
         <LinearGradientBrush.GradientStops>
-            <GradientStop Offset="0.50" Color="#0D000000" />
-            <GradientStop Offset="0.70" Color="#1A000000" />
+            <GradientStop Offset="0.50" Color="#12FFFFFF" />
+            <GradientStop Offset="0.70" Color="#18FFFFFF" />
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
 
@@ -486,25 +481,25 @@
             <ScaleTransform ScaleY="-1" />
         </LinearGradientBrush.Transform>
         <LinearGradientBrush.GradientStops>
-            <GradientStop Offset="0.33" Color="#40FFFFFF" />
-            <GradientStop Offset="1.0" Color="#1AFFFFFF" />
+            <GradientStop Offset="0.33" Color="#23000000" />
+            <GradientStop Offset="1.0" Color="#14FFFFFF" />
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
 
     <!-- High Contrast System Brushes -->
-    <!-- FIX: these were hardcoded to magenta (#FF00FF) as a debug placeholder - identical bug to
-         the AMOLED dark theme. Replaced with light-theme-appropriate, legible fallbacks so a
-         high-contrast trigger fails safely instead of flashing hot pink. As with the dark theme,
-         real compliance would bind these to the OS's live high-contrast palette via
-         DynamicResource rather than fixed hex. -->
-    <SolidColorBrush x:Key="SystemColorWindowTextColorBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="SystemColorWindowColorBrush" Color="#FFFFFFFF" />
-    <SolidColorBrush x:Key="SystemColorButtonFaceColorBrush" Color="#FFF2F2F2" />
-    <SolidColorBrush x:Key="SystemColorButtonTextColorBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="SystemColorHighlightColorBrush" Color="#FF0E6B0E" />
-    <SolidColorBrush x:Key="SystemColorHighlightTextColorBrush" Color="#FFFFFFFF" />
-    <SolidColorBrush x:Key="SystemColorHotlightColorBrush" Color="#FF0E6B0E" />
-    <SolidColorBrush x:Key="SystemColorGrayTextColorBrush" Color="#FF666666" />
+    <!-- FIX: these were hardcoded to magenta (#FF00FF) as a debug placeholder. If Windows/Avalonia
+         high-contrast mode is ever triggered, controls bound to these keys would flash hot pink.
+         Replaced with theme-consistent, legible fallbacks. For real accessibility compliance these
+         should ideally bind to the OS's live high-contrast palette rather than fixed hex, but these
+         values at least fail safely instead of looking broken. -->
+    <SolidColorBrush x:Key="SystemColorWindowTextColorBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="SystemColorWindowColorBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="SystemColorButtonFaceColorBrush" Color="#FF1E1E1E" />
+    <SolidColorBrush x:Key="SystemColorButtonTextColorBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="SystemColorHighlightColorBrush" Color="#FF46C746" />
+    <SolidColorBrush x:Key="SystemColorHighlightTextColorBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="SystemColorHotlightColorBrush" Color="#FF46C746" />
+    <SolidColorBrush x:Key="SystemColorGrayTextColorBrush" Color="#FF9D9D9D" />
 
     <!-- Default Text Foreground -->
     <StaticResource x:Key="DefaultTextForegroundThemeBrush" ResourceKey="TextFillColorPrimaryBrush" />

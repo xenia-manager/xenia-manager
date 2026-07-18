@@ -94,7 +94,7 @@ public class ArtworkManager
         switch (mode)
         {
             case ResizeMode.Stretch:
-                source.ScalePixels(resized, SKFilterQuality.High);
+                source.ScalePixels(resized, new SKSamplingOptions(SKFilterMode.Linear));
                 break;
 
             case ResizeMode.Fit:
@@ -108,7 +108,7 @@ public class ArtworkManager
                 int scaledHeight = (int)(source.Height * scale);
 
                 using SKBitmap scaled = new SKBitmap(scaledWidth, scaledHeight);
-                source.ScalePixels(scaled, SKFilterQuality.High);
+                source.ScalePixels(scaled, new SKSamplingOptions(SKFilterMode.Linear));
 
                 // Center the scaled image
                 int offsetX = (width - scaledWidth) / 2;
@@ -131,7 +131,7 @@ public class ArtworkManager
                 int scaledHeight = (int)(source.Height * scale);
 
                 using SKBitmap scaled = new SKBitmap(scaledWidth, scaledHeight);
-                source.ScalePixels(scaled, SKFilterQuality.High);
+                source.ScalePixels(scaled, new SKSamplingOptions(SKFilterMode.Linear));
 
                 // Center and crop
                 int offsetX = (scaledWidth - width) / 2;
@@ -177,7 +177,7 @@ public class ArtworkManager
                 using SKCanvas canvas = new SKCanvas(cropped);
                 canvas.DrawBitmap(source, cropRect, new SKRectI(0, 0, cropWidth, cropHeight));
 
-                cropped.ScalePixels(resized, SKFilterQuality.High);
+                cropped.ScalePixels(resized, new SKSamplingOptions(SKFilterMode.Linear));
                 break;
             }
         }
@@ -975,7 +975,7 @@ public class IcoEncoder
 
             Logger.Debug<IcoEncoder>($"Processing icon size: {size}x{size}");
             using SKBitmap resized = new SKBitmap(size, size, source.ColorType, source.AlphaType);
-            source.ScalePixels(resized, SKFilterQuality.High);
+            source.ScalePixels(resized, new SKSamplingOptions(SKFilterMode.Linear));
 
             using SKImage? image = SKImage.FromBitmap(resized);
             using SKData pngData = image.Encode(SKEncodedImageFormat.Png, 100)

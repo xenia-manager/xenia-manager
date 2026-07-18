@@ -20,7 +20,7 @@
     <sys:String x:Key="MainView.Navigation.Error.Message">Impossibile navigare alla pagina designata.&#10;{0}</sys:String>
 
     <!-- Library Page -->
-    <sys:String x:Key="LibraryPage.Search.Watermark">Cerca...</sys:String>
+    <sys:String x:Key="LibraryPage.Search.PlaceholderText">Cerca...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ricarica la libreria giochi</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Modifica Vista Griglia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Mostra/Nascondi informazioni aggiuntive sulle copertine</sys:String>
@@ -310,7 +310,9 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Title">Tema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Cambia il tema dell'interfaccia di Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Chiaro</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Scuro</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Schermata di Caricamento</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Mostra lo sfondo della schermata di caricamento del gioco all'avvio</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Mostra un'animazione di caricamento mentre i giochi si avviano</sys:String>
@@ -342,7 +344,7 @@
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Progresso Download</sys:String>
     <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Progresso Download:</sys:String>
-    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Cerca per sezione o nome impostazione...</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.PlaceholderText">Cerca per sezione o nome impostazione...</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Contenuti</sys:String>
@@ -478,19 +480,19 @@
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.ToolTip">Aggiungi Nuova Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Elimina Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Dettagli Patch</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Nome Patch</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Autore</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Descrizione (opzionale)</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.Watermark">Commento Intestazione (opzionale)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.PlaceholderText">Nome Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.PlaceholderText">Autore</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.PlaceholderText">Descrizione (opzionale)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.PlaceholderText">Commento Intestazione (opzionale)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Comandi Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Tipo:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.TypeComment.Watermark">Commento tipo</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.PlaceholderText">Commento tipo</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddressComment">Commento:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.ValueComment">Commento:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Comment.Watermark">Commento (opzionale)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.PlaceholderText">Commento (opzionale)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Indirizzo:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Valore:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.PlaceholderText">0x00000000</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddCommand.ToolTip">Aggiungi Comando</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.ToolTip">Elimina Comando</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.SaveButton">Salva</sys:String>
@@ -510,7 +512,7 @@
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Database Patch</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">Scarica</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">Annulla</sys:String>
-    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Cerca patch...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.PlaceholderText">Cerca patch...</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Ricerca Fallita</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">Si è verificato un errore durante la ricerca delle patch.&#10;Errore: {0}</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">Altre patch disponibili...</sys:String>
@@ -536,14 +538,14 @@
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.AlternativeIds">ID Alternativi</sys:String>
-    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Inserisci ID alternativo...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsPlaceholderText">Inserisci ID alternativo...</sys:String>
     <sys:String x:Key="GameDetailsEditor.Add">Aggiungi</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Titolo Gioco</sys:String>
-    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Inserisci titolo del gioco</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitlePlaceholderText">Inserisci titolo del gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Percorso Gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Valutazione Compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL Pagina Compatibilità</sys:String>
-    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Inserisci URL della pagina compatibilità</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Inserisci URL della pagina compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Cambia percorso del gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Seleziona File di Gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>

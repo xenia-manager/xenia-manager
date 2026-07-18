@@ -57,11 +57,11 @@ public class ServiceConfigurator
             {
                 Theme savedTheme = settings.Settings.Ui.Theme;
                 themeService.SetTheme(savedTheme);
-                Logger.Info<ServiceProvider>($"Applied saved theme during service initialization: {savedTheme}");
+                Logger.Info<ServiceConfigurator>($"Applied saved theme during service initialization: {savedTheme}");
             }
             catch (Exception ex)
             {
-                Logger.Error<ServiceProvider>($"Failed to apply saved theme: {ex.Message}");
+                Logger.Error<ServiceConfigurator>($"Failed to apply saved theme: {ex.Message}");
             }
             return themeService;
         });

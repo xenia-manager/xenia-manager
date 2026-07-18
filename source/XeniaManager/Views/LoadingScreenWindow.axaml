@@ -1,4 +1,4 @@
-<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+<windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,7 +9,7 @@
                      x:Class="XeniaManager.Views.LoadingScreenWindow"
                      x:DataType="vm:LoadingScreenWindowViewModel"
                      WindowStartupLocation="CenterScreen"
-                     SystemDecorations="None"
+                     WindowDecorations="None"
                      CanResize="false"
                      ShowAsDialog="false"
                      Topmost="True"
@@ -33,7 +33,7 @@
         <StackPanel HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Spacing="16">
-            <controls:ProgressRing IsIndeterminate="True"
+            <controls:FAProgressRing IsIndeterminate="True"
                                    Width="64"
                                    Height="64" />
             <TextBlock x:Name="LoadingTextBlock"
@@ -42,4 +42,4 @@
                        HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
-</windowing:AppWindow>
+</windowing:FAAppWindow>
