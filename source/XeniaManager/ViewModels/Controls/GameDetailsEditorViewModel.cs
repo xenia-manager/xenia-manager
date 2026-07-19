@@ -67,11 +67,19 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     ];
 
     // Netplay compatibility
-    [ObservableProperty] private string _netplayWorkingPublic;
-    [ObservableProperty] private string _netplayTestedLocally;
-    [ObservableProperty] private string _netplayOnlyLocal;
-    [ObservableProperty] private string _netplaySystemlink;
+    [ObservableProperty] private NetplayStatusItem _selectedNetplayWorkingPublic;
+    [ObservableProperty] private NetplayStatusItem _selectedNetplayTestedLocally;
+    [ObservableProperty] private NetplayStatusItem _selectedNetplayOnlyLocal;
+    [ObservableProperty] private NetplayStatusItem _selectedNetplaySystemlink;
     [ObservableProperty] private string _netplayComments;
+
+    [ObservableProperty] private List<NetplayStatusItem> _netplayStatuses =
+    [
+        new NetplayStatusItem(NetplayStatusValue.Unknown, LocalizationHelper.GetText("NetplayStatus.Unknown")),
+        new NetplayStatusItem(NetplayStatusValue.Ok, LocalizationHelper.GetText("NetplayStatus.Ok")),
+        new NetplayStatusItem(NetplayStatusValue.Partial, LocalizationHelper.GetText("NetplayStatus.Partial")),
+        new NetplayStatusItem(NetplayStatusValue.Fail, LocalizationHelper.GetText("NetplayStatus.Fail"))
+    ];
 
     // Xenia Version selection
     [ObservableProperty] private XeniaVersionItem _selectedXeniaVersion;
@@ -102,10 +110,10 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         MousehookNotes = game.Compatibility.Mousehook.Notes;
 
         // Initialize netplay compatibility
-        NetplayWorkingPublic = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.WorkingPublic);
-        NetplayTestedLocally = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.TestedLocally);
-        NetplayOnlyLocal = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.OnlyLocal);
-        NetplaySystemlink = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.Systemlink);
+        SelectedNetplayWorkingPublic = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.WorkingPublic);
+        SelectedNetplayTestedLocally = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.TestedLocally);
+        SelectedNetplayOnlyLocal = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.OnlyLocal);
+        SelectedNetplaySystemlink = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.Systemlink);
         NetplayComments = game.Compatibility.Netplay.Comments;
 
         IconPath = game.Artwork.Icon;
@@ -186,14 +194,6 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         CachedIcon = _game.Artwork.CachedIcon;
         CachedBoxart = _game.Artwork.CachedBoxart;
         CachedBackground = _game.Artwork.CachedBackground;
-    }
-
-    /// <summary>
-    /// Converts a NetplayStatusValue to its localized display text.
-    /// </summary>
-    private static string GetNetplayStatusDisplayText(NetplayStatusValue status)
-    {
-        return LocalizationHelper.GetText($"NetplayStatus.{status}");
     }
 
     /// <summary>
@@ -278,6 +278,16 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     {
         HasChanges = true;
     }
+
+    /// <summary>
+    /// Handles netplay status property changes.
+    /// </summary>
+    partial void OnSelectedNetplayWorkingPublicChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnSelectedNetplayTestedLocallyChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnSelectedNetplayOnlyLocalChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnSelectedNetplaySystemlinkChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnMousehookNotesChanged(string value) => HasChanges = true;
+    partial void OnNetplayCommentsChanged(string value) => HasChanges = true;
 
     /// <summary>
     /// Handles the selected Xenia version property change.
@@ -814,6 +824,11 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             _game.Compatibility.Rating = SelectedCompatibilityRating.Rating;
             _game.Compatibility.Mousehook.Rating = SelectedMousehookRating.Rating;
             _game.Compatibility.Mousehook.Notes = MousehookNotes;
+            _game.Compatibility.Netplay.Status.WorkingPublic = SelectedNetplayWorkingPublic.Status;
+            _game.Compatibility.Netplay.Status.TestedLocally = SelectedNetplayTestedLocally.Status;
+            _game.Compatibility.Netplay.Status.OnlyLocal = SelectedNetplayOnlyLocal.Status;
+            _game.Compatibility.Netplay.Status.Systemlink = SelectedNetplaySystemlink.Status;
+            _game.Compatibility.Netplay.Comments = NetplayComments;
             _game.Artwork.Icon = IconPath;
             _game.Artwork.Boxart = BoxartPath;
             _game.Artwork.Background = BackgroundPath;
@@ -855,10 +870,10 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         SelectedCompatibilityRating = CompatibilityRatings.First(r => r.Rating == _game.Compatibility.Rating);
         SelectedMousehookRating = MousehookRatings.First(r => r.Rating == _game.Compatibility.Mousehook.Rating);
         MousehookNotes = _game.Compatibility.Mousehook.Notes;
-        NetplayWorkingPublic = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.WorkingPublic);
-        NetplayTestedLocally = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.TestedLocally);
-        NetplayOnlyLocal = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.OnlyLocal);
-        NetplaySystemlink = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.Systemlink);
+        SelectedNetplayWorkingPublic = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.WorkingPublic);
+        SelectedNetplayTestedLocally = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.TestedLocally);
+        SelectedNetplayOnlyLocal = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.OnlyLocal);
+        SelectedNetplaySystemlink = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.Systemlink);
         NetplayComments = _game.Compatibility.Netplay.Comments;
         IconPath = _game.Artwork.Icon;
         BoxartPath = _game.Artwork.Boxart;
@@ -902,3 +917,10 @@ public record MousehookSupportRatingItem(MousehookSupportRating Rating, string D
 /// <param name="Version">The Xenia version enum value.</param>
 /// <param name="DisplayName">The localized display name for the version.</param>
 public record XeniaVersionItem(XeniaVersion Version, string DisplayName);
+
+/// <summary>
+/// Represents a netplay status item with its enum value and localized display name.
+/// </summary>
+/// <param name="Status">The netplay status enum value.</param>
+/// <param name="DisplayName">The localized display name for the status.</param>
+public record NetplayStatusItem(NetplayStatusValue Status, string DisplayName);

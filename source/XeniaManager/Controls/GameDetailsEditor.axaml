@@ -609,8 +609,6 @@
                                 </ComboBox>
                             </Grid>
                             <TextBox Text="{Binding MousehookNotes}"
-                                     Classes="readOnly"
-                                     IsReadOnly="True"
                                      Margin="0,8,0,0"
                                      MaxLines="3"
                                      TextWrapping="Wrap"
@@ -645,16 +643,28 @@
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.WorkingPublic}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                    <TextBlock Text="{Binding NetplayWorkingPublic}"
-                                               FontWeight="Medium" />
+                                    <ComboBox ItemsSource="{Binding NetplayStatuses}"
+                                              SelectedValue="{Binding SelectedNetplayWorkingPublic}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:NetplayStatusItem">
+                                                <TextBlock Text="{Binding DisplayName}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </StackPanel>
                                 <!-- Tested Locally -->
                                 <StackPanel Grid.Column="1" Margin="8,0,0,4">
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.TestedLocally}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                    <TextBlock Text="{Binding NetplayTestedLocally}"
-                                               FontWeight="Medium" />
+                                    <ComboBox ItemsSource="{Binding NetplayStatuses}"
+                                              SelectedValue="{Binding SelectedNetplayTestedLocally}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:NetplayStatusItem">
+                                                <TextBlock Text="{Binding DisplayName}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </StackPanel>
                             </Grid>
                             <Grid ColumnDefinitions="*,*" Margin="0,0,0,8">
@@ -663,23 +673,33 @@
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.OnlyLocal}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                    <TextBlock Text="{Binding NetplayOnlyLocal}"
-                                               FontWeight="Medium" />
+                                    <ComboBox ItemsSource="{Binding NetplayStatuses}"
+                                              SelectedValue="{Binding SelectedNetplayOnlyLocal}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:NetplayStatusItem">
+                                                <TextBlock Text="{Binding DisplayName}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </StackPanel>
                                 <!-- Systemlink -->
                                 <StackPanel Grid.Column="1" Margin="8,0,0,4">
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.Systemlink}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                    <TextBlock Text="{Binding NetplaySystemlink}"
-                                               FontWeight="Medium" />
+                                    <ComboBox ItemsSource="{Binding NetplayStatuses}"
+                                              SelectedValue="{Binding SelectedNetplaySystemlink}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:NetplayStatusItem">
+                                                <TextBlock Text="{Binding DisplayName}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </StackPanel>
                             </Grid>
 
                             <!-- Netplay Comments -->
                             <TextBox Text="{Binding NetplayComments}"
-                                     Classes="readOnly"
-                                     IsReadOnly="True"
                                      MaxLines="3"
                                      TextWrapping="Wrap"
                                      PlaceholderText="{DynamicResource GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder}" />
