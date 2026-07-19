@@ -199,13 +199,11 @@
     <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Notes">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Comments">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">模拟器管理</sys:String>

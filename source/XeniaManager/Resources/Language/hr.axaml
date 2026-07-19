@@ -199,13 +199,11 @@
     <sys:String x:Key="NetplayStatus.Fail">Neuspjeh</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Podrška za Mousehook</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Notes">Bilješke</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Radi Online</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Lokalno testirano</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Samo lokalno</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Comments">Komentari</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Podrška za Mousehook:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Radi Online:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Lokalno testirano:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Samo lokalno:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Upravljanje emulatorom</sys:String>

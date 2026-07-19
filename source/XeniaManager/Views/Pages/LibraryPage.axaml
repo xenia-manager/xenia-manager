@@ -433,59 +433,56 @@
                                         </StackPanel>
 
                                         <!-- Mousehook Compatibility -->
-                                        <StackPanel Orientation="Vertical"
+                                        <StackPanel Orientation="Horizontal"
                                                     IsVisible="{Binding IsXeniaMousehook}"
                                                     Margin="0,4,0,0">
-                                            <Separator Margin="0,0,0,4" />
                                             <TextBlock Text="{DynamicResource CompatibilityTooltip.Mousehook.Rating}"
                                                        FontWeight="Bold"
                                                        FontSize="11" />
                                             <TextBlock Text="{Binding Game.Compatibility.Mousehook.Rating, Converter={StaticResource MousehookSupportRatingToStringConverter}}"
-                                                       Margin="8,0,0,0" />
-                                            <TextBlock Text="{DynamicResource CompatibilityTooltip.Mousehook.Notes}"
-                                                       FontWeight="Bold"
                                                        FontSize="11"
-                                                       Margin="0,2,0,0" />
-                                            <TextBlock Text="{Binding Game.Compatibility.Mousehook.Notes}"
-                                                       TextWrapping="Wrap"
-                                                       Margin="8,0,0,0" />
+                                                       Margin="4,0,0,0" />
                                         </StackPanel>
 
                                         <!-- Netplay Compatibility -->
                                         <StackPanel Orientation="Vertical"
                                                     IsVisible="{Binding IsXeniaNetplay}"
                                                     Margin="0,4,0,0">
-                                            <Separator Margin="0,0,0,4" />
-                                            <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.WorkingPublic}"
-                                                       FontWeight="Bold"
-                                                       FontSize="11" />
-                                            <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.WorkingPublic, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                       Margin="8,0,0,0" />
-                                            <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.TestedLocally}"
-                                                       FontWeight="Bold"
-                                                       FontSize="11"
-                                                       Margin="0,2,0,0" />
-                                            <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.TestedLocally, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                       Margin="8,0,0,0" />
-                                            <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.OnlyLocal}"
-                                                       FontWeight="Bold"
-                                                       FontSize="11"
-                                                       Margin="0,2,0,0" />
-                                            <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.OnlyLocal, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                       Margin="8,0,0,0" />
-                                            <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.Systemlink}"
-                                                       FontWeight="Bold"
-                                                       FontSize="11"
-                                                       Margin="0,2,0,0" />
-                                            <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.Systemlink, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                       Margin="8,0,0,0" />
-                                            <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.Comments}"
-                                                       FontWeight="Bold"
-                                                       FontSize="11"
-                                                       Margin="0,2,0,0" />
-                                            <TextBlock Text="{Binding Game.Compatibility.Netplay.Comments}"
-                                                       TextWrapping="Wrap"
-                                                       Margin="8,0,0,0" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.WorkingPublic}"
+                                                           FontWeight="Bold"
+                                                           FontSize="11" />
+                                                <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.WorkingPublic, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                           FontSize="11"
+                                                           Margin="4,0,0,0" />
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,2,0,0">
+                                                <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.TestedLocally}"
+                                                           FontWeight="Bold"
+                                                           FontSize="11" />
+                                                <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.TestedLocally, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                           FontSize="11"
+                                                           Margin="4,0,0,0" />
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,2,0,0">
+                                                <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.OnlyLocal}"
+                                                           FontWeight="Bold"
+                                                           FontSize="11" />
+                                                <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.OnlyLocal, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                           FontSize="11"
+                                                           Margin="4,0,0,0" />
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,2,0,0">
+                                                <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.Systemlink}"
+                                                           FontWeight="Bold"
+                                                           FontSize="11" />
+                                                <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.Systemlink, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                           FontSize="11"
+                                                           Margin="4,0,0,0" />
+                                            </StackPanel>
                                         </StackPanel>
 
                                         <!-- Playtime -->
@@ -1065,59 +1062,56 @@
                                                            FontWeight="Bold" />
 
                                                 <!-- Mousehook Compatibility -->
-                                                <StackPanel Orientation="Vertical"
+                                                <StackPanel Orientation="Horizontal"
                                                             IsVisible="{Binding IsXeniaMousehook}"
                                                             Margin="0,4,0,0">
-                                                    <Separator Margin="0,0,0,4" />
                                                     <TextBlock Text="{DynamicResource CompatibilityTooltip.Mousehook.Rating}"
                                                                FontWeight="Bold"
                                                                FontSize="11" />
                                                     <TextBlock Text="{Binding Game.Compatibility.Mousehook.Rating, Converter={StaticResource MousehookSupportRatingToStringConverter}}"
-                                                               Margin="8,0,0,0" />
-                                                    <TextBlock Text="{DynamicResource CompatibilityTooltip.Mousehook.Notes}"
-                                                               FontWeight="Bold"
                                                                FontSize="11"
-                                                               Margin="0,2,0,0" />
-                                                    <TextBlock Text="{Binding Game.Compatibility.Mousehook.Notes}"
-                                                               TextWrapping="Wrap"
-                                                               Margin="8,0,0,0" />
+                                                               Margin="4,0,0,0" />
                                                 </StackPanel>
 
                                                 <!-- Netplay Compatibility -->
                                                 <StackPanel Orientation="Vertical"
                                                             IsVisible="{Binding IsXeniaNetplay}"
                                                             Margin="0,4,0,0">
-                                                    <Separator Margin="0,0,0,4" />
-                                                    <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.WorkingPublic}"
-                                                               FontWeight="Bold"
-                                                               FontSize="11" />
-                                                    <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.WorkingPublic, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                               Margin="8,0,0,0" />
-                                                    <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.TestedLocally}"
-                                                               FontWeight="Bold"
-                                                               FontSize="11"
-                                                               Margin="0,2,0,0" />
-                                                    <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.TestedLocally, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                               Margin="8,0,0,0" />
-                                                    <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.OnlyLocal}"
-                                                               FontWeight="Bold"
-                                                               FontSize="11"
-                                                               Margin="0,2,0,0" />
-                                                    <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.OnlyLocal, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                               Margin="8,0,0,0" />
-                                                    <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.Systemlink}"
-                                                               FontWeight="Bold"
-                                                               FontSize="11"
-                                                               Margin="0,2,0,0" />
-                                                    <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.Systemlink, Converter={StaticResource NetplayStatusValueToStringConverter}}"
-                                                               Margin="8,0,0,0" />
-                                                    <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.Comments}"
-                                                               FontWeight="Bold"
-                                                               FontSize="11"
-                                                               Margin="0,2,0,0" />
-                                                    <TextBlock Text="{Binding Game.Compatibility.Netplay.Comments}"
-                                                               TextWrapping="Wrap"
-                                                               Margin="8,0,0,0" />
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.WorkingPublic}"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="11" />
+                                                        <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.WorkingPublic, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                                   FontSize="11"
+                                                                   Margin="4,0,0,0" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,2,0,0">
+                                                        <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.TestedLocally}"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="11" />
+                                                        <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.TestedLocally, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                                   FontSize="11"
+                                                                   Margin="4,0,0,0" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,2,0,0">
+                                                        <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.OnlyLocal}"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="11" />
+                                                        <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.OnlyLocal, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                                   FontSize="11"
+                                                                   Margin="4,0,0,0" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,2,0,0">
+                                                        <TextBlock Text="{DynamicResource CompatibilityTooltip.Netplay.Systemlink}"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="11" />
+                                                        <TextBlock Text="{Binding Game.Compatibility.Netplay.Status.Systemlink, Converter={StaticResource NetplayStatusValueToStringConverter}}"
+                                                                   FontSize="11"
+                                                                   Margin="4,0,0,0" />
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
                                         </ToolTip.Tip>

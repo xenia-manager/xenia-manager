@@ -199,13 +199,11 @@
     <sys:String x:Key="NetplayStatus.Fail">Fail</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Mousehook Support</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Notes">Notes</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Working Public</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Tested Locally</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Only Local</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Comments">Comments</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Mousehook Support:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Working Public:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Tested Locally:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Only Local:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emulator Management</sys:String>
