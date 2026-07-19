@@ -23,6 +23,8 @@
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Pretraži...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ponovno učitava biblioteku igara</sys:String>
     <sys:String x:Key="LibraryPage.Sort.ToolTip">Sortiraj igre</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">Prebaci na prikaz popisa</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">Prebaci na mrežni prikaz</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Direction">Smjer sortiranja</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Title">Naslov</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Compatibility">Kompatibilnost</sys:String>
@@ -35,6 +37,16 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Ocjena kompatibilnosti</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Verzija Xenia emulatora</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Prikaži ikonu verzije Xenia emulatora za svaku igru</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">Uredi prikaz popisa</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">Prikaži/sakrij stupce u prikazu popisa</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">Ocjena kompatibilnosti</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">Vrijeme igranja</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Verzija emulatora</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">Prikaži ikonu verzije Xenie za svaku igru</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">Zadnji put igrano</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">Ikona igre</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">Title ID</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">Media ID</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Pokretanje dvostrukim klikom</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Prebacuje između jednostrukog i dvostrukog klika za pokretanje igara</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Skeniraj mapu</sys:String>

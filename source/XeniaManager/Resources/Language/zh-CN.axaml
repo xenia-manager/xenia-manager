@@ -23,6 +23,8 @@
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">搜索...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">重新加载游戏库</sys:String>
     <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
@@ -35,6 +37,16 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">兼容性评级</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Xenia 版本</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">为每个游戏显示 Xenia 版本图标</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">双击启动</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">切换单击或双击启动游戏</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">扫描目录</sys:String>
