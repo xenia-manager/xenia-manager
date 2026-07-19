@@ -209,6 +209,12 @@ public partial class LibraryPageViewModel : ViewModelBase
         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
+    [RelayCommand]
+    private void ClearSearch()
+    {
+        SearchQuery = string.Empty;
+    }
+
     // Constructor
     public LibraryPageViewModel()
     {

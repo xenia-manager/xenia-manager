@@ -16,7 +16,7 @@
     </Design.DataContext>
 
     <!-- UI -->
-    <Grid RowDefinitions="64,Auto,*,Auto"
+    <Grid RowDefinitions="48,Auto,*,Auto"
           DragDrop.AllowDrop="True"
           DragDrop.DragEnter="OnDragEnter"
           DragDrop.DragOver="OnDragOver"
@@ -32,15 +32,28 @@
             </Grid.ColumnDefinitions>
 
             <!-- Search -->
-            <TextBox Grid.Column="0"
-                     x:Name="SearchTextBox"
-                     Padding="12,0"
-                     VerticalContentAlignment="Center"
-                     BorderThickness="0"
-                     FontSize="24"
-                     PlaceholderText="{DynamicResource LibraryPage.Search.PlaceholderText}"
-                     Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            </TextBox>
+            <Panel Grid.Column="0">
+                <TextBox x:Name="SearchTextBox"
+                         Padding="12,0"
+                         VerticalContentAlignment="Center"
+                         BorderThickness="0"
+                         FontSize="24"
+                         PlaceholderText="{DynamicResource LibraryPage.Search.PlaceholderText}"
+                         Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,8,0"
+                        Width="40"
+                        Height="40"
+                        Command="{Binding ClearSearchCommand}"
+                        IsVisible="{Binding SearchQuery, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <icons:SymbolIcon Symbol="PenDismiss"
+                                      FontSize="18" />
+                </Button>
+            </Panel>
 
             <!-- Refresh -->
             <Button Grid.Column="1"
