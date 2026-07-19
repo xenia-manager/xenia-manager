@@ -73,49 +73,130 @@ public class UiSettings
         [JsonPropertyName("state")]
         public WindowState State { get; set; } = WindowState.Normal;
 
+        /// <summary>
+        /// Settings for the game library
+        /// </summary>
         [JsonPropertyName("game_library")]
         public LibraryProperties Library { get; set; } = new LibraryProperties();
 
+        /// <summary>
+        /// Settings for the game library
+        /// </summary>
         public class LibraryProperties
         {
-            [JsonPropertyName("game_title")]
-            public bool GameTitle { get; set; } = true;
-
-            [JsonPropertyName("compatibility_rating")]
-            public bool CompatibilityRating { get; set; } = true;
-
-            [JsonPropertyName("xenia_version")]
-            public bool XeniaVersion { get; set; } = false;
-
-            [JsonPropertyName("zoom")]
-            public double Zoom { get; set; } = 1.0;
-
-            [JsonPropertyName("double_click_open")]
-            public bool DoubleClickLaunch { get; set; } = false;
-
+            /// <summary>
+            /// Current view mode for the game library
+            /// </summary>
             [JsonPropertyName("is_grid_view")]
-            public bool IsGridView { get; set; } = true;
+            public LibraryViewOption ViewOption { get; set; } = LibraryViewOption.Grid;
 
-            [JsonPropertyName("list_compatibility_rating")]
-            public bool ListCompatibilityRating { get; set; } = true;
+            /// <summary>
+            /// Grid view specific settings
+            /// </summary>
+            [JsonPropertyName("grid_view")]
+            public GridViewSettings GridView { get; set; } = new GridViewSettings();
 
-            [JsonPropertyName("list_playtime")]
-            public bool ListPlaytime { get; set; } = true;
+            /// <summary>
+            /// Settings for the grid view
+            /// </summary>
+            public class GridViewSettings
+            {
+                /// <summary>
+                /// Show game title on game tile
+                /// </summary>
+                [JsonPropertyName("game_title")]
+                public bool GameTitle { get; set; } = true;
 
-            [JsonPropertyName("list_xenia_version")]
-            public bool ListXeniaVersion { get; set; } = true;
+                /// <summary>
+                /// Show compatibility rating on game tile
+                /// </summary>
+                [JsonPropertyName("compatibility_rating")]
+                public bool CompatibilityRating { get; set; } = true;
 
-            [JsonPropertyName("list_last_played")]
-            public bool ListLastPlayed { get; set; } = true;
+                /// <summary>
+                /// Show Xenia version on game tile
+                /// </summary>
+                [JsonPropertyName("xenia_version")]
+                public bool XeniaVersion { get; set; } = false;
 
-            [JsonPropertyName("list_show_icon")]
-            public bool ListShowIcon { get; set; } = true;
+                /// <summary>
+                /// Zoom level for grid view (1.0 = 100%)
+                /// </summary>
+                [JsonPropertyName("zoom")]
+                public double Zoom { get; set; } = 1.0;
 
-            [JsonPropertyName("sort_option")]
-            public int SortOption { get; set; } = 0;
+                /// <summary>
+                /// Launch game on double click
+                /// </summary>
+                [JsonPropertyName("double_click_open")]
+                public bool DoubleClickLaunch { get; set; } = false;
+            }
 
-            [JsonPropertyName("sort_descending")]
-            public bool SortDescending { get; set; } = false;
+            /// <summary>
+            /// List view specific settings
+            /// </summary>
+            [JsonPropertyName("list_view")]
+            public ListViewSettings ListView { get; set; } = new ListViewSettings();
+
+            /// <summary>
+            /// Settings for the list view
+            /// </summary>
+            public class ListViewSettings
+            {
+                /// <summary>
+                /// Show compatibility rating column
+                /// </summary>
+                [JsonPropertyName("compatibility_rating")]
+                public bool CompatibilityRating { get; set; } = true;
+
+                /// <summary>
+                /// Show playtime column
+                /// </summary>
+                [JsonPropertyName("playtime")]
+                public bool Playtime { get; set; } = true;
+
+                /// <summary>
+                /// Show Xenia version column
+                /// </summary>
+                [JsonPropertyName("xenia_version")]
+                public bool XeniaVersion { get; set; } = true;
+
+                /// <summary>
+                /// Show last played column
+                /// </summary>
+                [JsonPropertyName("last_played")]
+                public bool LastPlayed { get; set; } = true;
+
+                /// <summary>
+                /// Show game icon column
+                /// </summary>
+                [JsonPropertyName("show_icon")]
+                public bool ShowIcon { get; set; } = true;
+            }
+
+            /// <summary>
+            /// Sorting settings for the game library
+            /// </summary>
+            [JsonPropertyName("sort")]
+            public SortSettings Sort { get; set; } = new SortSettings();
+
+            /// <summary>
+            /// Settings for sorting the game library
+            /// </summary>
+            public class SortSettings
+            {
+                /// <summary>
+                /// Which property to sort by
+                /// </summary>
+                [JsonPropertyName("option")]
+                public int Option { get; set; } = 0;
+
+                /// <summary>
+                /// Whether to sort in descending order
+                /// </summary>
+                [JsonPropertyName("descending")]
+                public bool Descending { get; set; } = false;
+            }
         }
 
         /// <summary>

@@ -48,18 +48,24 @@ public partial class LibraryPageViewModel : ViewModelBase
     private const int DebounceDelayMs = 100;
 
     // Library properties
-    [ObservableProperty] private bool _isGridView = true;
+    [ObservableProperty] private LibraryViewOption _viewOption = LibraryViewOption.Grid;
 
-    partial void OnIsGridViewChanged(bool value)
+    /// <summary>
+    /// Computed property for XAML binding compatibility
+    /// </summary>
+    public bool IsGridView => ViewOption == LibraryViewOption.Grid;
+
+    partial void OnViewOptionChanged(LibraryViewOption value)
     {
-        _settings.Settings.Ui.Window.Library.IsGridView = IsGridView;
+        _settings.Settings.Ui.Window.Library.ViewOption = ViewOption;
         _settings.SaveSettings();
+        OnPropertyChanged(nameof(IsGridView));
     }
 
     [RelayCommand]
     private void ToggleGridView()
     {
-        IsGridView = !IsGridView;
+        ViewOption = ViewOption == LibraryViewOption.Grid ? LibraryViewOption.List : LibraryViewOption.Grid;
     }
 
     [ObservableProperty] private GameSortOption _sortOption = GameSortOption.Title;
@@ -67,14 +73,14 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     partial void OnSortOptionChanged(GameSortOption value)
     {
-        _settings.Settings.Ui.Window.Library.SortOption = (int)value;
+        _settings.Settings.Ui.Window.Library.Sort.Option = (int)value;
         _settings.SaveSettings();
         FilterGames();
     }
 
     partial void OnSortDescendingChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.SortDescending = SortDescending;
+        _settings.Settings.Ui.Window.Library.Sort.Descending = SortDescending;
         _settings.SaveSettings();
         FilterGames();
     }
@@ -118,7 +124,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     [ObservableProperty] private bool _showGameTitle = false;
     partial void OnShowGameTitleChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.GameTitle = ShowGameTitle;
+        _settings.Settings.Ui.Window.Library.GridView.GameTitle = ShowGameTitle;
         _settings.SaveSettings();
     }
 
@@ -134,7 +140,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     partial void OnShowCompatibilityRatingChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.CompatibilityRating = ShowCompatibilityRating;
+        _settings.Settings.Ui.Window.Library.GridView.CompatibilityRating = ShowCompatibilityRating;
         _settings.SaveSettings();
     }
 
@@ -142,7 +148,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     partial void OnShowXeniaVersionChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.XeniaVersion = ShowXeniaVersion;
+        _settings.Settings.Ui.Window.Library.GridView.XeniaVersion = ShowXeniaVersion;
         _settings.SaveSettings();
     }
 
@@ -150,21 +156,21 @@ public partial class LibraryPageViewModel : ViewModelBase
     [ObservableProperty] private bool _showListCompatibilityRating = true;
     partial void OnShowListCompatibilityRatingChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.ListCompatibilityRating = ShowListCompatibilityRating;
+        _settings.Settings.Ui.Window.Library.ListView.CompatibilityRating = ShowListCompatibilityRating;
         _settings.SaveSettings();
     }
 
     [ObservableProperty] private bool _showListPlaytime = true;
     partial void OnShowListPlaytimeChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.ListPlaytime = ShowListPlaytime;
+        _settings.Settings.Ui.Window.Library.ListView.Playtime = ShowListPlaytime;
         _settings.SaveSettings();
     }
 
     [ObservableProperty] private bool _showListXeniaVersion = true;
     partial void OnShowListXeniaVersionChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.ListXeniaVersion = ShowListXeniaVersion;
+        _settings.Settings.Ui.Window.Library.ListView.XeniaVersion = ShowListXeniaVersion;
         _settings.SaveSettings();
     }
 
@@ -189,7 +195,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     [ObservableProperty] private bool _showListLastPlayed = true;
     partial void OnShowListLastPlayedChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.ListLastPlayed = ShowListLastPlayed;
+        _settings.Settings.Ui.Window.Library.ListView.LastPlayed = ShowListLastPlayed;
         _settings.SaveSettings();
     }
 
@@ -202,7 +208,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     [ObservableProperty] private bool _showListIcon = true;
     partial void OnShowListIconChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.ListShowIcon = ShowListIcon;
+        _settings.Settings.Ui.Window.Library.ListView.ShowIcon = ShowListIcon;
         _settings.SaveSettings();
     }
 
@@ -229,7 +235,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         OnPropertyChanged(nameof(MinItemWidth));
         OnPropertyChanged(nameof(MinItemHeight));
         OnPropertyChanged(nameof(ItemSpacing));
-        _settings.Settings.Ui.Window.Library.Zoom = ZoomValue / 100;
+        _settings.Settings.Ui.Window.Library.GridView.Zoom = ZoomValue / 100;
         _settings.SaveSettings();
     }
 
@@ -237,7 +243,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     partial void OnDoubleClickLaunchChanged(bool value)
     {
-        _settings.Settings.Ui.Window.Library.DoubleClickLaunch = value;
+        _settings.Settings.Ui.Window.Library.GridView.DoubleClickLaunch = value;
         _settings.SaveSettings();
     }
 
@@ -347,19 +353,19 @@ public partial class LibraryPageViewModel : ViewModelBase
     private void LoadUiSettings()
     {
         UiSettings.WindowProperties.LibraryProperties librarySettings = _settings.Settings.Ui.Window.Library;
-        ShowGameTitle = librarySettings.GameTitle;
-        ShowCompatibilityRating = librarySettings.CompatibilityRating;
-        ShowXeniaVersion = librarySettings.XeniaVersion;
-        ShowListCompatibilityRating = librarySettings.ListCompatibilityRating;
-        ShowListPlaytime = librarySettings.ListPlaytime;
-        ShowListXeniaVersion = librarySettings.ListXeniaVersion;
-        ShowListLastPlayed = librarySettings.ListLastPlayed;
-        ShowListIcon = librarySettings.ListShowIcon;
-        ZoomValue = librarySettings.Zoom * 100; // Convert from 1.0 scale to percentage
-        DoubleClickLaunch = librarySettings.DoubleClickLaunch;
-        IsGridView = librarySettings.IsGridView;
-        SortOption = (GameSortOption)librarySettings.SortOption;
-        SortDescending = librarySettings.SortDescending;
+        ShowGameTitle = librarySettings.GridView.GameTitle;
+        ShowCompatibilityRating = librarySettings.GridView.CompatibilityRating;
+        ShowXeniaVersion = librarySettings.GridView.XeniaVersion;
+        ShowListCompatibilityRating = librarySettings.ListView.CompatibilityRating;
+        ShowListPlaytime = librarySettings.ListView.Playtime;
+        ShowListXeniaVersion = librarySettings.ListView.XeniaVersion;
+        ShowListLastPlayed = librarySettings.ListView.LastPlayed;
+        ShowListIcon = librarySettings.ListView.ShowIcon;
+        ZoomValue = librarySettings.GridView.Zoom * 100; // Convert from 1.0 scale to percentage
+        DoubleClickLaunch = librarySettings.GridView.DoubleClickLaunch;
+        ViewOption = librarySettings.ViewOption;
+        SortOption = (GameSortOption)librarySettings.Sort.Option;
+        SortDescending = librarySettings.Sort.Descending;
     }
 
     /// <summary>
