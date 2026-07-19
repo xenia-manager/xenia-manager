@@ -23,6 +23,8 @@
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Cerca...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ricarica la libreria giochi</sys:String>
     <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
@@ -35,6 +37,16 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Valutazione Compatibilità</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Versione Xenia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Mostra l'icona della versione Xenia per ogni gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Avvia con Doppio Click</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Passa da singolo a doppio click per avviare i giochi</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scansiona Cartella</sys:String>

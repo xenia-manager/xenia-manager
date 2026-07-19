@@ -51,30 +51,59 @@ public partial class LibraryPage : UserControl
     {
         if (sender is Button { DataContext: GameItemViewModel vm })
         {
-            // Handle multiselect with modifiers
-            if (IsMultiselectModifierPressed(e))
-            {
-                HandleGameSelection(vm, e);
-            }
-            // Launch game if not in multiselect mode and no selection active
-            else if (!_viewModel.DoubleClickLaunch && !_viewModel.HasSelectedGames)
-            {
-                if (vm.LaunchCommand.CanExecute(null))
-                {
-                    vm.LaunchCommand.Execute(null);
-                }
-            }
-            // If there are selected games, single click adds to selection
-            else if (_viewModel.HasSelectedGames)
-            {
-                HandleGameSelection(vm, e);
-            }
+            HandleGameTapped(vm, e);
         }
     }
 
     private void OnGameButtonDoubleTapped(object? sender, TappedEventArgs e)
     {
-        if (_viewModel.DoubleClickLaunch && sender is Button { DataContext: GameItemViewModel vm })
+        if (sender is Button { DataContext: GameItemViewModel vm })
+        {
+            HandleGameDoubleTapped(vm, e);
+        }
+    }
+
+    private void OnListItemTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is Border { DataContext: GameItemViewModel vm })
+        {
+            HandleGameTapped(vm, e);
+        }
+    }
+
+    private void OnListItemDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is Border { DataContext: GameItemViewModel vm })
+        {
+            HandleGameDoubleTapped(vm, e);
+        }
+    }
+
+    private void HandleGameTapped(GameItemViewModel vm, TappedEventArgs e)
+    {
+        // Handle multiselect with modifiers
+        if (IsMultiselectModifierPressed(e))
+        {
+            HandleGameSelection(vm, e);
+        }
+        // Launch game if not in multiselect mode and no selection active
+        else if (!_viewModel.DoubleClickLaunch && !_viewModel.HasSelectedGames)
+        {
+            if (vm.LaunchCommand.CanExecute(null))
+            {
+                vm.LaunchCommand.Execute(null);
+            }
+        }
+        // If there are selected games, single click adds to selection
+        else if (_viewModel.HasSelectedGames)
+        {
+            HandleGameSelection(vm, e);
+        }
+    }
+
+    private void HandleGameDoubleTapped(GameItemViewModel vm, TappedEventArgs e)
+    {
+        if (_viewModel.DoubleClickLaunch)
         {
             // Don't launch on double tap if multiselect modifier is pressed
             if (!IsMultiselectModifierPressed(e) && !_viewModel.HasSelectedGames)
@@ -137,13 +166,25 @@ public partial class LibraryPage : UserControl
         // Check if the click was on the ScrollViewer itself (empty area)
         if (e.InitialPressMouseButton == MouseButton.Left)
         {
-            // Clear all selections
-            foreach (GameItemViewModel game in _viewModel.Games)
-            {
-                game.IsSelected = false;
-            }
-            _lastSelectedGame = null;
+            ClearAllSelections();
         }
+    }
+
+    private void OnListPointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (e.InitialPressMouseButton == MouseButton.Left)
+        {
+            ClearAllSelections();
+        }
+    }
+
+    private void ClearAllSelections()
+    {
+        foreach (GameItemViewModel game in _viewModel.Games)
+        {
+            game.IsSelected = false;
+        }
+        _lastSelectedGame = null;
     }
 
     // Drag & Drop Support

@@ -42,6 +42,7 @@ public partial class GameItemViewModel : ViewModelBase
     public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
     public bool HasBoxart => !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
+    public bool HasIcon => !string.IsNullOrEmpty(Artwork.Icon) && Artwork.CachedIcon != null;
     public bool IsCustomXenia => Game.XeniaVersion == XeniaVersion.Custom;
     public bool IsXeniaMousehook => Game.XeniaVersion == XeniaVersion.Mousehook;
 

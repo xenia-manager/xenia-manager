@@ -23,6 +23,8 @@
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Search...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Reloads game library</sys:String>
     <sys:String x:Key="LibraryPage.Sort.ToolTip">Sort games</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">Switch to list view</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">Switch to grid view</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Direction">Sort Direction</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Title">Title</sys:String>
     <sys:String x:Key="LibraryPage.Sort.Compatibility">Compatibility</sys:String>
@@ -35,6 +37,16 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Compatibility Rating</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Xenia Version</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Show the Xenia version icon for each game</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">Edit List View</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">Show/Hide columns in list view</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">Compatibility Rating</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">Playtime</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Xenia Version</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">Show the Xenia version icon for each game</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">Last Played</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">Game Icon</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">Title ID</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">Media ID</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Launch on Double-Click</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Toggle between single and double-click to launch games</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scan Directory</sys:String>
