@@ -186,6 +186,27 @@
     <sys:String x:Key="CompatibilityRating.Gameplay">可游玩</sys:String>
     <sys:String x:Key="CompatibilityRating.Playable">可通关</sys:String>
 
+    <!-- Mousehook Support Rating -->
+    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+
+    <!-- Netplay Status -->
+    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+
+    <!-- Compatibility Tooltip Labels -->
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Notes">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Comments">#NOTTRANSLATED#</sys:String>
+
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">模拟器管理</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Description">安装和管理不同的 Xenia 模拟器版本</sys:String>
@@ -565,6 +586,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">兼容性评级</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">兼容性页面 URL</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">输入兼容性页面 URL</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">更改游戏路径</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">选择游戏文件</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">缺少存储提供程序</sys:String>
