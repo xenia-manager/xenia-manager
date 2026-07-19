@@ -54,6 +54,25 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     [ObservableProperty] private string _backgroundPath;
     [ObservableProperty] private bool _hasChanges;
 
+    // Mousehook compatibility
+    [ObservableProperty] private MousehookSupportRatingItem _selectedMousehookRating;
+    [ObservableProperty] private string _mousehookNotes;
+
+    [ObservableProperty] private List<MousehookSupportRatingItem> _mousehookRatings =
+    [
+        new MousehookSupportRatingItem(MousehookSupportRating.Unknown, LocalizationHelper.GetText("MousehookSupportRating.Unknown")),
+        new MousehookSupportRatingItem(MousehookSupportRating.Poor, LocalizationHelper.GetText("MousehookSupportRating.Poor")),
+        new MousehookSupportRatingItem(MousehookSupportRating.Fair, LocalizationHelper.GetText("MousehookSupportRating.Fair")),
+        new MousehookSupportRatingItem(MousehookSupportRating.Good, LocalizationHelper.GetText("MousehookSupportRating.Good"))
+    ];
+
+    // Netplay compatibility
+    [ObservableProperty] private string _netplayWorkingPublic;
+    [ObservableProperty] private string _netplayTestedLocally;
+    [ObservableProperty] private string _netplayOnlyLocal;
+    [ObservableProperty] private string _netplaySystemlink;
+    [ObservableProperty] private string _netplayComments;
+
     // Xenia Version selection
     [ObservableProperty] private XeniaVersionItem _selectedXeniaVersion;
     [ObservableProperty] private List<XeniaVersionItem> _xeniaVersions;
@@ -77,6 +96,17 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         GamePath = game.FileLocations.Game;
         CompatibilityPageUrl = game.Compatibility.Url;
         SelectedCompatibilityRating = CompatibilityRatings.First(r => r.Rating == game.Compatibility.Rating);
+
+        // Initialize mousehook compatibility
+        SelectedMousehookRating = MousehookRatings.First(r => r.Rating == game.Compatibility.Mousehook.Rating);
+        MousehookNotes = game.Compatibility.Mousehook.Notes;
+
+        // Initialize netplay compatibility
+        NetplayWorkingPublic = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.WorkingPublic);
+        NetplayTestedLocally = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.TestedLocally);
+        NetplayOnlyLocal = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.OnlyLocal);
+        NetplaySystemlink = GetNetplayStatusDisplayText(game.Compatibility.Netplay.Status.Systemlink);
+        NetplayComments = game.Compatibility.Netplay.Comments;
 
         IconPath = game.Artwork.Icon;
         BoxartPath = game.Artwork.Boxart;
@@ -159,6 +189,14 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     }
 
     /// <summary>
+    /// Converts a NetplayStatusValue to its localized display text.
+    /// </summary>
+    private static string GetNetplayStatusDisplayText(NetplayStatusValue status)
+    {
+        return LocalizationHelper.GetText($"NetplayStatus.{status}");
+    }
+
+    /// <summary>
     /// Refreshes cached images after artwork changes.
     /// Forces the cached values to null so they reload from the disk.
     /// </summary>
@@ -229,6 +267,14 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Handles the selected compatibility rating property change.
     /// </summary>
     partial void OnSelectedCompatibilityRatingChanged(CompatibilityRatingItem value)
+    {
+        HasChanges = true;
+    }
+
+    /// <summary>
+    /// Handles the selected mousehook rating property change.
+    /// </summary>
+    partial void OnSelectedMousehookRatingChanged(MousehookSupportRatingItem value)
     {
         HasChanges = true;
     }
@@ -766,6 +812,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             _game.Title = filteredTitle;
             _game.Compatibility.Url = CompatibilityPageUrl;
             _game.Compatibility.Rating = SelectedCompatibilityRating.Rating;
+            _game.Compatibility.Mousehook.Rating = SelectedMousehookRating.Rating;
+            _game.Compatibility.Mousehook.Notes = MousehookNotes;
             _game.Artwork.Icon = IconPath;
             _game.Artwork.Boxart = BoxartPath;
             _game.Artwork.Background = BackgroundPath;
@@ -805,6 +853,13 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         GameTitle = _game.Title;
         CompatibilityPageUrl = _game.Compatibility.Url;
         SelectedCompatibilityRating = CompatibilityRatings.First(r => r.Rating == _game.Compatibility.Rating);
+        SelectedMousehookRating = MousehookRatings.First(r => r.Rating == _game.Compatibility.Mousehook.Rating);
+        MousehookNotes = _game.Compatibility.Mousehook.Notes;
+        NetplayWorkingPublic = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.WorkingPublic);
+        NetplayTestedLocally = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.TestedLocally);
+        NetplayOnlyLocal = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.OnlyLocal);
+        NetplaySystemlink = GetNetplayStatusDisplayText(_game.Compatibility.Netplay.Status.Systemlink);
+        NetplayComments = _game.Compatibility.Netplay.Comments;
         IconPath = _game.Artwork.Icon;
         BoxartPath = _game.Artwork.Boxart;
         BackgroundPath = _game.Artwork.Background;
@@ -833,6 +888,13 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 /// <param name="Rating">The compatibility rating enum value.</param>
 /// <param name="DisplayName">The localized display name for the rating.</param>
 public record CompatibilityRatingItem(CompatibilityRating Rating, string DisplayName);
+
+/// <summary>
+/// Represents a mousehook support rating item with its enum value and localized display name.
+/// </summary>
+/// <param name="Rating">The mousehook support rating enum value.</param>
+/// <param name="DisplayName">The localized display name for the rating.</param>
+public record MousehookSupportRatingItem(MousehookSupportRating Rating, string DisplayName);
 
 /// <summary>
 /// Represents a Xenia version item with its enum value and localized display name.

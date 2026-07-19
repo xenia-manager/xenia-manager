@@ -18,4 +18,16 @@ public class Compatibility
     /// </summary>
     [JsonPropertyName("rating")]
     public CompatibilityRating Rating { get; set; }
+
+    /// <summary>
+    /// Mousehook compatibility information for the game
+    /// </summary>
+    [JsonPropertyName("mousehook")]
+    public MousehookCompatibility Mousehook { get; set; } = new MousehookCompatibility();
+
+    /// <summary>
+    /// Netplay compatibility information for the game
+    /// </summary>
+    [JsonPropertyName("netplay")]
+    public NetplayCompatibility Netplay { get; set; } = new NetplayCompatibility();
 }

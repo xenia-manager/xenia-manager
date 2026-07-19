@@ -1374,9 +1374,11 @@ public partial class LibraryPageViewModel : ViewModelBase
         {
             Logger.Info<LibraryPageViewModel>("Starting compatibility rating update for all games");
 
-            // Force reload the compatibility database to get fresh data
-            Logger.Info<LibraryPageViewModel>("Force reloading game compatibility database");
+            // Force reload all compatibility databases to get fresh data
+            Logger.Info<LibraryPageViewModel>("Force reloading game compatibility databases");
             await GameCompatibilityDatabase.ForceReloadAsync();
+            await MousehookCompatibilityDatabase.ForceReloadAsync();
+            await NetplayCompatibilityDatabase.ForceReloadAsync();
 
             int updatedCount = 0;
             int failedCount = 0;
@@ -1391,28 +1393,31 @@ public partial class LibraryPageViewModel : ViewModelBase
                 {
                     Game game = gameItem.Game;
                     CompatibilityRating oldRating = game.Compatibility.Rating;
-                    Logger.Debug<LibraryPageViewModel>($"Updating compatibility rating for: '{game.Title}' (ID: {game.GameId})");
+                    MousehookSupportRating oldMousehookRating = game.Compatibility.Mousehook.Rating;
+                    Logger.Debug<LibraryPageViewModel>($"Updating compatibility ratings for: '{game.Title}' (ID: {game.GameId})");
 
                     await GameCompatibilityDatabase.SetCompatibilityRating(game);
+                    await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+                    await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
 
-                    if (oldRating != game.Compatibility.Rating)
+                    if (oldRating != game.Compatibility.Rating || oldMousehookRating != game.Compatibility.Mousehook.Rating)
                     {
                         updatedCount++;
                         updatedGames.Add($"{game.Title} ({oldRating} → {game.Compatibility.Rating})");
-                        Logger.Info<LibraryPageViewModel>($"Updated compatibility rating for: '{game.Title}' from {oldRating} to {game.Compatibility.Rating}");
+                        Logger.Info<LibraryPageViewModel>($"Updated compatibility for: '{game.Title}'");
                     }
                     else
                     {
                         unchangedCount++;
                         unchangedGames.Add(game.Title);
-                        Logger.Debug<LibraryPageViewModel>($"Compatibility rating unchanged for: '{game.Title}' ({oldRating})");
+                        Logger.Debug<LibraryPageViewModel>($"Compatibility unchanged for: '{game.Title}' ({oldRating})");
                     }
                 }
                 catch (Exception ex)
                 {
                     failedCount++;
                     failedGames.Add(gameItem.Title);
-                    Logger.Error<LibraryPageViewModel>($"Failed to update compatibility rating for: '{gameItem.Title}'");
+                    Logger.Error<LibraryPageViewModel>($"Failed to update compatibility for: '{gameItem.Title}'");
                     Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
                 }
             }

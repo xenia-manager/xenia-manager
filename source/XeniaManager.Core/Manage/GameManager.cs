@@ -657,6 +657,8 @@ public class GameManager
 
         // Fetch Compatibility Rating
         await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
+        await MousehookCompatibilityDatabase.SetMousehookCompatibility(newGame);
+        await NetplayCompatibilityDatabase.SetNetplayCompatibility(newGame);
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");
@@ -799,6 +801,8 @@ public class GameManager
 
         // Fetch Compatibility Rating
         await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
+        await MousehookCompatibilityDatabase.SetMousehookCompatibility(newGame);
+        await NetplayCompatibilityDatabase.SetNetplayCompatibility(newGame);
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");

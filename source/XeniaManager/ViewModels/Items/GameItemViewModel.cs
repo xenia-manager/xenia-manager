@@ -45,6 +45,7 @@ public partial class GameItemViewModel : ViewModelBase
     public bool HasIcon => !string.IsNullOrEmpty(Artwork.Icon) && Artwork.CachedIcon != null;
     public bool IsCustomXenia => Game.XeniaVersion == XeniaVersion.Custom;
     public bool IsXeniaMousehook => Game.XeniaVersion == XeniaVersion.Mousehook;
+    public bool IsXeniaNetplay => Game.XeniaVersion == XeniaVersion.Netplay;
 
     public bool InstalledPatches => !string.IsNullOrEmpty(Game.FileLocations.Patch);
     public bool IsMultiDisc => Game.FileLocations.IsMultiDisc;
