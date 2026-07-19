@@ -266,6 +266,24 @@
                                     <icons:SymbolIcon Symbol="Apps" />
                                 </MenuItem.Icon>
                             </MenuItem>
+                            <!-- Title ID -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.TitleId.Header}"
+                                      Command="{Binding ToggleListTitleIdCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListTitleId}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Tag" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Media ID -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.MediaId.Header}"
+                                      Command="{Binding ToggleListMediaIdCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListMediaId}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Bookmark" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </MenuItem>
                         <Separator />
                         <!-- Export Shortcuts -->
@@ -1010,6 +1028,22 @@
                                             </icons:SymbolIcon>
                                         </Panel>
                                     </Border>
+
+                                    <!-- Game ID / Media ID -->
+                                    <StackPanel Orientation="Vertical"
+                                                Spacing="2"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Game.GameId}"
+                                                   FontSize="11"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   IsVisible="{Binding DataContext.ShowListTitleId, ElementName=Root}" />
+                                        <TextBlock Text="{Binding Game.MediaId}"
+                                                   FontSize="11"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   IsVisible="{Binding DataContext.ShowListMediaId, ElementName=Root}" />
+                                    </StackPanel>
 
                                     <!-- Title -->
                                     <TextBlock Text="{Binding Title}"

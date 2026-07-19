@@ -263,7 +263,7 @@ public class GameManager
             GameSortOption.Title => (x, y) => string.Compare(x.Title, y.Title, StringComparison.OrdinalIgnoreCase),
             GameSortOption.Playtime => (x, y) => Nullable.Compare<double>(x.Playtime, y.Playtime),
             GameSortOption.Compatibility => (x, y) => x.Compatibility.Rating.CompareTo(y.Compatibility.Rating),
-            GameSortOption.GameId => (x, y) => string.Compare(x.GameId, y.GameId, StringComparison.OrdinalIgnoreCase),
+            GameSortOption.TitleId => (x, y) => string.Compare(x.GameId, y.GameId, StringComparison.OrdinalIgnoreCase),
             GameSortOption.MediaId => (x, y) => string.Compare(x.MediaId, y.MediaId, StringComparison.OrdinalIgnoreCase),
             GameSortOption.XeniaVersion => (x, y) => x.XeniaVersion.CompareTo(y.XeniaVersion),
             GameSortOption.LastPlayed => (x, y) => Nullable.Compare(x.LastPlayed, y.LastPlayed),

@@ -218,6 +218,32 @@ public partial class LibraryPageViewModel : ViewModelBase
         ShowListIcon = !ShowListIcon;
     }
 
+    [ObservableProperty] private bool _showListTitleId = false;
+    partial void OnShowListTitleIdChanged(bool value)
+    {
+        _settings.Settings.Ui.Window.Library.ListView.ShowTitleId = ShowListTitleId;
+        _settings.SaveSettings();
+    }
+
+    [RelayCommand]
+    private void ToggleListTitleId()
+    {
+        ShowListTitleId = !ShowListTitleId;
+    }
+
+    [ObservableProperty] private bool _showListMediaId = false;
+    partial void OnShowListMediaIdChanged(bool value)
+    {
+        _settings.Settings.Ui.Window.Library.ListView.ShowMediaId = ShowListMediaId;
+        _settings.SaveSettings();
+    }
+
+    [RelayCommand]
+    private void ToggleListMediaId()
+    {
+        ShowListMediaId = !ShowListMediaId;
+    }
+
     // Zoom Properties
     [ObservableProperty] private double _zoomValue = 100;
     public double ZoomMinimum => 50;
@@ -361,6 +387,8 @@ public partial class LibraryPageViewModel : ViewModelBase
         ShowListXeniaVersion = librarySettings.ListView.XeniaVersion;
         ShowListLastPlayed = librarySettings.ListView.LastPlayed;
         ShowListIcon = librarySettings.ListView.ShowIcon;
+        ShowListTitleId = librarySettings.ListView.ShowTitleId;
+        ShowListMediaId = librarySettings.ListView.ShowMediaId;
         ZoomValue = librarySettings.GridView.Zoom * 100; // Convert from 1.0 scale to percentage
         DoubleClickLaunch = librarySettings.GridView.DoubleClickLaunch;
         ViewOption = librarySettings.ViewOption;

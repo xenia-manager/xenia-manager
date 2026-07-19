@@ -172,6 +172,18 @@ public class UiSettings
                 /// </summary>
                 [JsonPropertyName("show_icon")]
                 public bool ShowIcon { get; set; } = true;
+
+                /// <summary>
+                /// Show title ID column
+                /// </summary>
+                [JsonPropertyName("show_title_id")]
+                public bool ShowTitleId { get; set; } = false;
+
+                /// <summary>
+                /// Show media ID column
+                /// </summary>
+                [JsonPropertyName("show_media_id")]
+                public bool ShowMediaId { get; set; } = false;
             }
 
             /// <summary>

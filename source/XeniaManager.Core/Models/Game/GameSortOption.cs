@@ -21,9 +21,9 @@ public enum GameSortOption
     Compatibility,
 
     /// <summary>
-    /// Sort games by their unique game identifier.
+    /// Sort games by their unique title identifier.
     /// </summary>
-    GameId,
+    TitleId,
 
     /// <summary>
     /// Sort games by their media identifier.
