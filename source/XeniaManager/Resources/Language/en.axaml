@@ -133,6 +133,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Successfully updated {0} game(s).&#10;Unchanged: {1}&#10;Failed: {2}&#10;&#10;Updated games:&#10;{3}&#10;&#10;Unchanged games:&#10;{4}&#10;&#10;Failed updates:&#10;{5}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Update Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">There was an error while updating compatibility ratings.&#10;{0}</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Update Compatibility Ratings</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Game Compatibility</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Mousehook Compatibility</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Netplay Compatibility</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Update</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Optimize Games</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Applies optimized settings from the online database to all games in the library</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimization Complete</sys:String>

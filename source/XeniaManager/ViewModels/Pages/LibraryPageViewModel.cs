@@ -1372,13 +1372,31 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         try
         {
-            Logger.Info<LibraryPageViewModel>("Starting compatibility rating update for all games");
+            // Show selection dialog
+            (bool game, bool mousehook, bool netplay)? selection = await CompatibilityRatingSelectionDialog.ShowAsync();
+            if (selection is not { } selectedRatings || (!selectedRatings.game && !selectedRatings.mousehook && !selectedRatings.netplay))
+            {
+                return;
+            }
 
-            // Force reload all compatibility databases to get fresh data
-            Logger.Info<LibraryPageViewModel>("Force reloading game compatibility databases");
-            await GameCompatibilityDatabase.ForceReloadAsync();
-            await MousehookCompatibilityDatabase.ForceReloadAsync();
-            await NetplayCompatibilityDatabase.ForceReloadAsync();
+            Logger.Info<LibraryPageViewModel>($"Starting compatibility rating update (Game: {selectedRatings.game}, Mousehook: {selectedRatings.mousehook}, Netplay: {selectedRatings.netplay})");
+
+            // Force reload selected compatibility databases to get fresh data
+            if (selectedRatings.game)
+            {
+                Logger.Info<LibraryPageViewModel>("Force reloading game compatibility database");
+                await GameCompatibilityDatabase.ForceReloadAsync();
+            }
+            if (selectedRatings.mousehook)
+            {
+                Logger.Info<LibraryPageViewModel>("Force reloading mousehook compatibility database");
+                await MousehookCompatibilityDatabase.ForceReloadAsync();
+            }
+            if (selectedRatings.netplay)
+            {
+                Logger.Info<LibraryPageViewModel>("Force reloading netplay compatibility database");
+                await NetplayCompatibilityDatabase.ForceReloadAsync();
+            }
 
             int updatedCount = 0;
             int failedCount = 0;
@@ -1396,11 +1414,23 @@ public partial class LibraryPageViewModel : ViewModelBase
                     MousehookSupportRating oldMousehookRating = game.Compatibility.Mousehook.Rating;
                     Logger.Debug<LibraryPageViewModel>($"Updating compatibility ratings for: '{game.Title}' (ID: {game.GameId})");
 
-                    await GameCompatibilityDatabase.SetCompatibilityRating(game);
-                    await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
-                    await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+                    if (selectedRatings.game)
+                    {
+                        await GameCompatibilityDatabase.SetCompatibilityRating(game);
+                    }
+                    if (selectedRatings.mousehook)
+                    {
+                        await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+                    }
+                    if (selectedRatings.netplay)
+                    {
+                        await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+                    }
 
-                    if (oldRating != game.Compatibility.Rating || oldMousehookRating != game.Compatibility.Mousehook.Rating)
+                    bool ratingChanged = (selectedRatings.game && oldRating != game.Compatibility.Rating)
+                        || (selectedRatings.mousehook && oldMousehookRating != game.Compatibility.Mousehook.Rating);
+
+                    if (ratingChanged)
                     {
                         updatedCount++;
                         updatedGames.Add($"{game.Title} ({oldRating} → {game.Compatibility.Rating})");

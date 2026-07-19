@@ -133,6 +133,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">{0} oyun başarıyla güncellendi.&#10;Değişmedi: {1}&#10;Başarısız: {2}&#10;&#10;Güncellenen oyunlar:&#10;{3}&#10;&#10;Değişmeyen oyunlar:&#10;{4}&#10;&#10;Güncellenemeyen oyunlar:&#10;{5}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Güncellenemedi</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Uyumluluk derecelendirmeleri güncellenirken bir hata oluştu.&#10;{0}</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Oyunları Optimize Et</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Kütüphanedeki tüm oyunlara çevrimiçi veritabanındaki optimize edilmiş ayarları uygular</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimizasyon Tamamlandı</sys:String>

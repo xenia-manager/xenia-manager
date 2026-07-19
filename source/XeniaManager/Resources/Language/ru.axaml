@@ -133,6 +133,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Успешно обновлено игр: {0}&#10;Без изменений: {1}&#10;Ошибок: {2}&#10;&#10;Обновленные игры:&#10;{3}&#10;&#10;Игры без изменений:&#10;{4}&#10;&#10;Не удалось обновить:&#10;{5}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Не удалось обновить</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Ошибка при обновлении рейтингов совместимости.&#10;{0}</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Оптимизировать игры</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Применение оптимизированных настроек из онлайн-базы ко всем играм в библиотеке</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Оптимизация завершена</sys:String>
