@@ -130,7 +130,7 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Uyumluluk Derecelendirmelerini Güncelle</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Kütüphanedeki tüm oyunların uyumluluk derecelendirmelerini çevrimiçi veritabanından günceller</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Güncelleme Tamamlandı</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">{0} oyun başarıyla güncellendi.&#10;Değişmedi: {1}&#10;Başarısız: {2}&#10;&#10;Güncellenen oyunlar:&#10;{3}&#10;&#10;Değişmeyen oyunlar:&#10;{4}&#10;&#10;Güncellenemeyen oyunlar:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">{0} oyun başarıyla güncellendi.&#10;Değişmedi: {1}&#10;Başarısız: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Güncellenemedi</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Uyumluluk derecelendirmeleri güncellenirken bir hata oluştu.&#10;{0}</sys:String>
     <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>

@@ -130,7 +130,7 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Update Compatibility Ratings</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Updates compatibility ratings for all games in the library from the online database</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Update Complete</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Successfully updated {0} game(s).&#10;Unchanged: {1}&#10;Failed: {2}&#10;&#10;Updated games:&#10;{3}&#10;&#10;Unchanged games:&#10;{4}&#10;&#10;Failed updates:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Successfully updated {0} game(s).&#10;Unchanged: {1}&#10;Failed: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Update Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">There was an error while updating compatibility ratings.&#10;{0}</sys:String>
     <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Update Compatibility Ratings</sys:String>

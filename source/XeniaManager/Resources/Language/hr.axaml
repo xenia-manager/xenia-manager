@@ -130,7 +130,7 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Ažuriraj ocjene kompatibilnosti</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Ažurira ocjene kompatibilnosti za sve igre u biblioteci iz online baze podataka</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Ažuriranje završeno</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Uspješno ažurirano {0} igara.&#10;Nepromijenjeno: {1}&#10;Neuspjelo: {2}&#10;&#10;Ažurirane igre:&#10;{3}&#10;&#10;Nepromijenjene igre:&#10;{4}&#10;&#10;Neuspjela ažuriranja:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Uspješno ažurirano {0} igara.&#10;Nepromijenjeno: {1}&#10;Neuspjelo: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Ažuriranje nije uspjelo</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Došlo je do greške prilikom ažuriranja ocjena kompatibilnosti.&#10;{0}</sys:String>
     <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Ažuriraj ocjene kompatibilnosti</sys:String>

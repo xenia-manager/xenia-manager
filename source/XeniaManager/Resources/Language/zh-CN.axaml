@@ -130,7 +130,7 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">更新兼容性评级</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">从在线数据库更新库中所有游戏的兼容性评级</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">更新完成</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">成功更新 {0} 个游戏。&#10;未更改：{1}&#10;失败：{2}&#10;&#10;已更新游戏：&#10;{3}&#10;&#10;未更改游戏：&#10;{4}&#10;&#10;更新失败项：&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">成功更新 {0} 个游戏。&#10;未更改：{1}&#10;失败：{2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">更新失败</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">更新兼容性评级时出错。&#10;{0}</sys:String>
     <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>

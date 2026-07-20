@@ -130,7 +130,7 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Atualizar Classificações de Compatibilidade</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Atualiza as classificações de compatibilidade para todos os jogos da biblioteca a partir do banco de dados online.</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Atualizar Completo</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Jogos atualizados com sucesso: {0}.&#10;Sem alterações: {1}&#10;Falha: {2}&#10;&#10;Atualizar jogos: &#10;{3}&#10;&#10;Jogos sem alterações: &#10;{4}&#10;&#10;Atualizações com falha: &#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Jogos atualizados com sucesso: {0}.&#10;Sem alterações: {1}&#10;Falha: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Falha ao Atualizar</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Ocorreu um erro ao atualizar as classificações de compatibilidade.&#10;{0}</sys:String>
     <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>

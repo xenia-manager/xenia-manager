@@ -1401,9 +1401,6 @@ public partial class LibraryPageViewModel : ViewModelBase
             int updatedCount = 0;
             int failedCount = 0;
             int unchangedCount = 0;
-            List<string> updatedGames = [];
-            List<string> failedGames = [];
-            List<string> unchangedGames = [];
 
             foreach (GameItemViewModel gameItem in Games)
             {
@@ -1412,6 +1409,13 @@ public partial class LibraryPageViewModel : ViewModelBase
                     Game game = gameItem.Game;
                     CompatibilityRating oldRating = game.Compatibility.Rating;
                     MousehookSupportRating oldMousehookRating = game.Compatibility.Mousehook.Rating;
+                    NetplayStatus oldNetplayStatus = new()
+                    {
+                        WorkingPublic = game.Compatibility.Netplay.Status.WorkingPublic,
+                        TestedLocally = game.Compatibility.Netplay.Status.TestedLocally,
+                        OnlyLocal = game.Compatibility.Netplay.Status.OnlyLocal,
+                        Systemlink = game.Compatibility.Netplay.Status.Systemlink
+                    };
                     Logger.Debug<LibraryPageViewModel>($"Updating compatibility ratings for: '{game.Title}' (ID: {game.GameId})");
 
                     if (selectedRatings.game)
@@ -1427,26 +1431,28 @@ public partial class LibraryPageViewModel : ViewModelBase
                         await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
                     }
 
-                    bool ratingChanged = (selectedRatings.game && oldRating != game.Compatibility.Rating)
-                        || (selectedRatings.mousehook && oldMousehookRating != game.Compatibility.Mousehook.Rating);
+                    bool gameChanged = selectedRatings.game && oldRating != game.Compatibility.Rating;
+                    bool mousehookChanged = selectedRatings.mousehook && oldMousehookRating != game.Compatibility.Mousehook.Rating;
+                    bool netplayChanged = selectedRatings.netplay && (
+                        oldNetplayStatus.WorkingPublic != game.Compatibility.Netplay.Status.WorkingPublic ||
+                        oldNetplayStatus.TestedLocally != game.Compatibility.Netplay.Status.TestedLocally ||
+                        oldNetplayStatus.OnlyLocal != game.Compatibility.Netplay.Status.OnlyLocal ||
+                        oldNetplayStatus.Systemlink != game.Compatibility.Netplay.Status.Systemlink);
 
-                    if (ratingChanged)
+                    if (gameChanged || mousehookChanged || netplayChanged)
                     {
                         updatedCount++;
-                        updatedGames.Add($"{game.Title} ({oldRating} → {game.Compatibility.Rating})");
                         Logger.Info<LibraryPageViewModel>($"Updated compatibility for: '{game.Title}'");
                     }
                     else
                     {
                         unchangedCount++;
-                        unchangedGames.Add(game.Title);
                         Logger.Debug<LibraryPageViewModel>($"Compatibility unchanged for: '{game.Title}' ({oldRating})");
                     }
                 }
                 catch (Exception ex)
                 {
                     failedCount++;
-                    failedGames.Add(gameItem.Title);
                     Logger.Error<LibraryPageViewModel>($"Failed to update compatibility for: '{gameItem.Title}'");
                     Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
                 }
@@ -1460,10 +1466,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             // Show results
             string message = string.Format(
                 LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Success.Message"),
-                updatedCount, unchangedCount, failedCount,
-                updatedCount > 0 ? string.Join("\n", updatedGames.Select(t => $"• {t}")) : "None",
-                unchangedCount > 0 ? string.Join("\n", unchangedGames.Select(t => $"• {t}")) : "None",
-                failedCount > 0 ? string.Join("\n", failedGames.Select(t => $"• {t}")) : "None");
+                updatedCount, unchangedCount, failedCount);
 
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Success.Title"),
