@@ -24,6 +24,8 @@
             <converters:XeniaVersionToStringConverter x:Key="XeniaVersionToStringConverter" />
             <converters:EnumToValueConverter x:Key="EnumToValueConverter" />
             <converters:DateTimeToRelativeConverter x:Key="DateTimeToRelativeConverter" />
+            <converters:MousehookSupportRatingToStringConverter x:Key="MousehookSupportRatingToStringConverter" />
+            <converters:NetplayStatusValueToStringConverter x:Key="NetplayStatusValueToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>

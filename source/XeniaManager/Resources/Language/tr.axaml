@@ -130,9 +130,14 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Uyumluluk Derecelendirmelerini Güncelle</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Kütüphanedeki tüm oyunların uyumluluk derecelendirmelerini çevrimiçi veritabanından günceller</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Güncelleme Tamamlandı</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">{0} oyun başarıyla güncellendi.&#10;Değişmedi: {1}&#10;Başarısız: {2}&#10;&#10;Güncellenen oyunlar:&#10;{3}&#10;&#10;Değişmeyen oyunlar:&#10;{4}&#10;&#10;Güncellenemeyen oyunlar:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">{0} oyun başarıyla güncellendi.&#10;Değişmedi: {1}&#10;Başarısız: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Güncellenemedi</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Uyumluluk derecelendirmeleri güncellenirken bir hata oluştu.&#10;{0}</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Oyunları Optimize Et</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Kütüphanedeki tüm oyunlara çevrimiçi veritabanındaki optimize edilmiş ayarları uygular</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimizasyon Tamamlandı</sys:String>
@@ -185,6 +190,25 @@
     <sys:String x:Key="CompatibilityRating.Loads">Açılıyor</sys:String>
     <sys:String x:Key="CompatibilityRating.Gameplay">Oyuna Giriyor</sys:String>
     <sys:String x:Key="CompatibilityRating.Playable">Oynanabilir</sys:String>
+
+    <!-- Mousehook Support Rating -->
+    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+
+    <!-- Netplay Status -->
+    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+
+    <!-- Compatibility Tooltip Labels -->
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emülatör Yönetimi</sys:String>
@@ -565,6 +589,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Uyumluluk Derecesi</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">Uyumluluk Sayfası URL'si</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Uyumluluk sayfası URL'sini girin</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Oyun yolunu değiştir</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Oyun Dosyasını Seçin</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Depolama Sağlayıcısı Eksik</sys:String>

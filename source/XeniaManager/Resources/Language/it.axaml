@@ -130,9 +130,14 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Aggiorna Valutazioni Compatibilità</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Aggiorna le valutazioni di compatibilità per tutti i giochi della libreria dal database online</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Aggiornamento Completato</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Aggiornati con successo {0} gioco/i.&#10;Invariati: {1}&#10;Falliti: {2}&#10;&#10;Giochi aggiornati:&#10;{3}&#10;&#10;Giochi invariati:&#10;{4}&#10;&#10;Aggiornamenti falliti:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Aggiornati con successo {0} gioco/i.&#10;Invariati: {1}&#10;Falliti: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Aggiornamento Fallito</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Si è verificato un errore durante l'aggiornamento delle valutazioni.&#10;{0}</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Ottimizza Giochi</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Applica le impostazioni ottimizzate dal database online a tutti i giochi della libreria</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Ottimizzazione Completata</sys:String>
@@ -185,6 +190,25 @@
     <sys:String x:Key="CompatibilityRating.Loads">Si avvia</sys:String>
     <sys:String x:Key="CompatibilityRating.Gameplay">Gameplay</sys:String>
     <sys:String x:Key="CompatibilityRating.Playable">Giocabile</sys:String>
+
+    <!-- Mousehook Support Rating -->
+    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+
+    <!-- Netplay Status -->
+    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+
+    <!-- Compatibility Tooltip Labels -->
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Gestione Emulatore</sys:String>
@@ -565,6 +589,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Valutazione Compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL Pagina Compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Inserisci URL della pagina compatibilità</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Cambia percorso del gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Seleziona File di Gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>

@@ -130,9 +130,14 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Ažuriraj ocjene kompatibilnosti</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Ažurira ocjene kompatibilnosti za sve igre u biblioteci iz online baze podataka</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Ažuriranje završeno</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Uspješno ažurirano {0} igara.&#10;Nepromijenjeno: {1}&#10;Neuspjelo: {2}&#10;&#10;Ažurirane igre:&#10;{3}&#10;&#10;Nepromijenjene igre:&#10;{4}&#10;&#10;Neuspjela ažuriranja:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Uspješno ažurirano {0} igara.&#10;Nepromijenjeno: {1}&#10;Neuspjelo: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Ažuriranje nije uspjelo</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Došlo je do greške prilikom ažuriranja ocjena kompatibilnosti.&#10;{0}</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Ažuriraj ocjene kompatibilnosti</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Kompatibilnost igre</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Mousehook kompatibilnost</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Netplay Kompatibilnost</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Ažuriraj</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Optimiziraj igre</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Primjenjuje optimizirane postavke iz online baze podataka na sve igre u biblioteci</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimizacija završena</sys:String>
@@ -185,6 +190,25 @@
     <sys:String x:Key="CompatibilityRating.Loads">Učitava se</sys:String>
     <sys:String x:Key="CompatibilityRating.Gameplay">Djelomično igrivo</sys:String>
     <sys:String x:Key="CompatibilityRating.Playable">Igrivo</sys:String>
+
+    <!-- Mousehook Support Rating -->
+    <sys:String x:Key="MousehookSupportRating.Unknown">Nepoznato</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">Loše</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Dovoljno</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">Dobro</sys:String>
+
+    <!-- Netplay Status -->
+    <sys:String x:Key="NetplayStatus.Unknown">Nepoznato</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">Dobro</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">Djelomično</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">Neuspjeh</sys:String>
+
+    <!-- Compatibility Tooltip Labels -->
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Podrška za Mousehook:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Radi Online:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Lokalno testirano:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Samo lokalno:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Upravljanje emulatorom</sys:String>
@@ -565,6 +589,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Ocjena kompatibilnosti</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL stranice kompatibilnosti</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Unesite URL stranice kompatibilnosti</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Mousehook kompatibilnost</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">Nema dostupnih bilješki o mousehooku</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Netplay kompatibilnost</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Javno radi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Testirano lokalno</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Samo lokalno</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">Systemlink</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">Nema dostupnih komentara o netplayu</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Promijeni putanju igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Odaberite datoteku igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Nedostaje pružatelj pohrane</sys:String>

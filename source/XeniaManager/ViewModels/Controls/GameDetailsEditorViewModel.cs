@@ -54,6 +54,33 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     [ObservableProperty] private string _backgroundPath;
     [ObservableProperty] private bool _hasChanges;
 
+    // Mousehook compatibility
+    [ObservableProperty] private MousehookSupportRatingItem _selectedMousehookRating;
+    [ObservableProperty] private string _mousehookNotes;
+
+    [ObservableProperty] private List<MousehookSupportRatingItem> _mousehookRatings =
+    [
+        new MousehookSupportRatingItem(MousehookSupportRating.Unknown, LocalizationHelper.GetText("MousehookSupportRating.Unknown")),
+        new MousehookSupportRatingItem(MousehookSupportRating.Poor, LocalizationHelper.GetText("MousehookSupportRating.Poor")),
+        new MousehookSupportRatingItem(MousehookSupportRating.Fair, LocalizationHelper.GetText("MousehookSupportRating.Fair")),
+        new MousehookSupportRatingItem(MousehookSupportRating.Good, LocalizationHelper.GetText("MousehookSupportRating.Good"))
+    ];
+
+    // Netplay compatibility
+    [ObservableProperty] private NetplayStatusItem _selectedNetplayWorkingPublic;
+    [ObservableProperty] private NetplayStatusItem _selectedNetplayTestedLocally;
+    [ObservableProperty] private NetplayStatusItem _selectedNetplayOnlyLocal;
+    [ObservableProperty] private NetplayStatusItem _selectedNetplaySystemlink;
+    [ObservableProperty] private string _netplayComments;
+
+    [ObservableProperty] private List<NetplayStatusItem> _netplayStatuses =
+    [
+        new NetplayStatusItem(NetplayStatusValue.Unknown, LocalizationHelper.GetText("NetplayStatus.Unknown")),
+        new NetplayStatusItem(NetplayStatusValue.Ok, LocalizationHelper.GetText("NetplayStatus.Ok")),
+        new NetplayStatusItem(NetplayStatusValue.Partial, LocalizationHelper.GetText("NetplayStatus.Partial")),
+        new NetplayStatusItem(NetplayStatusValue.Fail, LocalizationHelper.GetText("NetplayStatus.Fail"))
+    ];
+
     // Xenia Version selection
     [ObservableProperty] private XeniaVersionItem _selectedXeniaVersion;
     [ObservableProperty] private List<XeniaVersionItem> _xeniaVersions;
@@ -77,6 +104,17 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         GamePath = game.FileLocations.Game;
         CompatibilityPageUrl = game.Compatibility.Url;
         SelectedCompatibilityRating = CompatibilityRatings.First(r => r.Rating == game.Compatibility.Rating);
+
+        // Initialize mousehook compatibility
+        SelectedMousehookRating = MousehookRatings.First(r => r.Rating == game.Compatibility.Mousehook.Rating);
+        MousehookNotes = game.Compatibility.Mousehook.Notes;
+
+        // Initialize netplay compatibility
+        SelectedNetplayWorkingPublic = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.WorkingPublic);
+        SelectedNetplayTestedLocally = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.TestedLocally);
+        SelectedNetplayOnlyLocal = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.OnlyLocal);
+        SelectedNetplaySystemlink = NetplayStatuses.First(s => s.Status == game.Compatibility.Netplay.Status.Systemlink);
+        NetplayComments = game.Compatibility.Netplay.Comments;
 
         IconPath = game.Artwork.Icon;
         BoxartPath = game.Artwork.Boxart;
@@ -232,6 +270,24 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     {
         HasChanges = true;
     }
+
+    /// <summary>
+    /// Handles the selected mousehook rating property change.
+    /// </summary>
+    partial void OnSelectedMousehookRatingChanged(MousehookSupportRatingItem value)
+    {
+        HasChanges = true;
+    }
+
+    /// <summary>
+    /// Handles netplay status property changes.
+    /// </summary>
+    partial void OnSelectedNetplayWorkingPublicChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnSelectedNetplayTestedLocallyChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnSelectedNetplayOnlyLocalChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnSelectedNetplaySystemlinkChanged(NetplayStatusItem value) => HasChanges = true;
+    partial void OnMousehookNotesChanged(string value) => HasChanges = true;
+    partial void OnNetplayCommentsChanged(string value) => HasChanges = true;
 
     /// <summary>
     /// Handles the selected Xenia version property change.
@@ -766,6 +822,13 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             _game.Title = filteredTitle;
             _game.Compatibility.Url = CompatibilityPageUrl;
             _game.Compatibility.Rating = SelectedCompatibilityRating.Rating;
+            _game.Compatibility.Mousehook.Rating = SelectedMousehookRating.Rating;
+            _game.Compatibility.Mousehook.Notes = MousehookNotes;
+            _game.Compatibility.Netplay.Status.WorkingPublic = SelectedNetplayWorkingPublic.Status;
+            _game.Compatibility.Netplay.Status.TestedLocally = SelectedNetplayTestedLocally.Status;
+            _game.Compatibility.Netplay.Status.OnlyLocal = SelectedNetplayOnlyLocal.Status;
+            _game.Compatibility.Netplay.Status.Systemlink = SelectedNetplaySystemlink.Status;
+            _game.Compatibility.Netplay.Comments = NetplayComments;
             _game.Artwork.Icon = IconPath;
             _game.Artwork.Boxart = BoxartPath;
             _game.Artwork.Background = BackgroundPath;
@@ -805,6 +868,13 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         GameTitle = _game.Title;
         CompatibilityPageUrl = _game.Compatibility.Url;
         SelectedCompatibilityRating = CompatibilityRatings.First(r => r.Rating == _game.Compatibility.Rating);
+        SelectedMousehookRating = MousehookRatings.First(r => r.Rating == _game.Compatibility.Mousehook.Rating);
+        MousehookNotes = _game.Compatibility.Mousehook.Notes;
+        SelectedNetplayWorkingPublic = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.WorkingPublic);
+        SelectedNetplayTestedLocally = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.TestedLocally);
+        SelectedNetplayOnlyLocal = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.OnlyLocal);
+        SelectedNetplaySystemlink = NetplayStatuses.First(s => s.Status == _game.Compatibility.Netplay.Status.Systemlink);
+        NetplayComments = _game.Compatibility.Netplay.Comments;
         IconPath = _game.Artwork.Icon;
         BoxartPath = _game.Artwork.Boxart;
         BackgroundPath = _game.Artwork.Background;
@@ -835,8 +905,22 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 public record CompatibilityRatingItem(CompatibilityRating Rating, string DisplayName);
 
 /// <summary>
+/// Represents a mousehook support rating item with its enum value and localized display name.
+/// </summary>
+/// <param name="Rating">The mousehook support rating enum value.</param>
+/// <param name="DisplayName">The localized display name for the rating.</param>
+public record MousehookSupportRatingItem(MousehookSupportRating Rating, string DisplayName);
+
+/// <summary>
 /// Represents a Xenia version item with its enum value and localized display name.
 /// </summary>
 /// <param name="Version">The Xenia version enum value.</param>
 /// <param name="DisplayName">The localized display name for the version.</param>
 public record XeniaVersionItem(XeniaVersion Version, string DisplayName);
+
+/// <summary>
+/// Represents a netplay status item with its enum value and localized display name.
+/// </summary>
+/// <param name="Status">The netplay status enum value.</param>
+/// <param name="DisplayName">The localized display name for the status.</param>
+public record NetplayStatusItem(NetplayStatusValue Status, string DisplayName);

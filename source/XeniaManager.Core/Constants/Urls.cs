@@ -132,6 +132,38 @@ public class Urls
     ];
 
     /// <summary>
+    /// Array of URLs to fetch the Mousehook Compatibility database.
+    /// This database contains information about game mousehook support status
+    /// and is used by the application to retrieve mousehook compatibility details for games.
+    /// Multiple URLs are provided to ensure availability, with fallback options in case
+    /// the primary source is not reachable.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/game-compatibility/mousehook.json)
+    /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/game-compatibility/mousehook.json)
+    /// </summary>
+    public static readonly string[] MousehookCompatibilityDatabase =
+    [
+        Base.GITHUB_PAGES + "/database/data/game-compatibility/mousehook.json",
+        Base.GITHUB_RAW + "/xenia-manager/database/main/data/game-compatibility/mousehook.json"
+    ];
+
+    /// <summary>
+    /// Array of URLs to fetch the Netplay Compatibility database.
+    /// This database contains information about game netplay support status
+    /// and is used by the application to retrieve netplay compatibility details for games.
+    /// Multiple URLs are provided to ensure availability, with fallback options in case
+    /// the primary source is not reachable.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/game-compatibility/netplay.json)
+    /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/game-compatibility/netplay.json)
+    /// </summary>
+    public static readonly string[] NetplayCompatibilityDatabase =
+    [
+        Base.GITHUB_PAGES + "/database/data/game-compatibility/netplay.json",
+        Base.GITHUB_RAW + "/xenia-manager/database/main/data/game-compatibility/netplay.json"
+    ];
+
+    /// <summary>
     /// Array of URLs to fetch list of optimized settings
     /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
     /// The application will attempt to fetch from the first URL, and if that fails,

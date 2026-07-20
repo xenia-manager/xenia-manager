@@ -1372,18 +1372,35 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         try
         {
-            Logger.Info<LibraryPageViewModel>("Starting compatibility rating update for all games");
+            // Show selection dialog
+            (bool game, bool mousehook, bool netplay)? selection = await CompatibilityRatingSelectionDialog.ShowAsync();
+            if (selection is not { } selectedRatings || (!selectedRatings.game && !selectedRatings.mousehook && !selectedRatings.netplay))
+            {
+                return;
+            }
 
-            // Force reload the compatibility database to get fresh data
-            Logger.Info<LibraryPageViewModel>("Force reloading game compatibility database");
-            await GameCompatibilityDatabase.ForceReloadAsync();
+            Logger.Info<LibraryPageViewModel>($"Starting compatibility rating update (Game: {selectedRatings.game}, Mousehook: {selectedRatings.mousehook}, Netplay: {selectedRatings.netplay})");
+
+            // Force reload selected compatibility databases to get fresh data
+            if (selectedRatings.game)
+            {
+                Logger.Info<LibraryPageViewModel>("Force reloading game compatibility database");
+                await GameCompatibilityDatabase.ForceReloadAsync();
+            }
+            if (selectedRatings.mousehook)
+            {
+                Logger.Info<LibraryPageViewModel>("Force reloading mousehook compatibility database");
+                await MousehookCompatibilityDatabase.ForceReloadAsync();
+            }
+            if (selectedRatings.netplay)
+            {
+                Logger.Info<LibraryPageViewModel>("Force reloading netplay compatibility database");
+                await NetplayCompatibilityDatabase.ForceReloadAsync();
+            }
 
             int updatedCount = 0;
             int failedCount = 0;
             int unchangedCount = 0;
-            List<string> updatedGames = [];
-            List<string> failedGames = [];
-            List<string> unchangedGames = [];
 
             foreach (GameItemViewModel gameItem in Games)
             {
@@ -1391,28 +1408,52 @@ public partial class LibraryPageViewModel : ViewModelBase
                 {
                     Game game = gameItem.Game;
                     CompatibilityRating oldRating = game.Compatibility.Rating;
-                    Logger.Debug<LibraryPageViewModel>($"Updating compatibility rating for: '{game.Title}' (ID: {game.GameId})");
+                    MousehookSupportRating oldMousehookRating = game.Compatibility.Mousehook.Rating;
+                    NetplayStatus oldNetplayStatus = new()
+                    {
+                        WorkingPublic = game.Compatibility.Netplay.Status.WorkingPublic,
+                        TestedLocally = game.Compatibility.Netplay.Status.TestedLocally,
+                        OnlyLocal = game.Compatibility.Netplay.Status.OnlyLocal,
+                        Systemlink = game.Compatibility.Netplay.Status.Systemlink
+                    };
+                    Logger.Debug<LibraryPageViewModel>($"Updating compatibility ratings for: '{game.Title}' (ID: {game.GameId})");
 
-                    await GameCompatibilityDatabase.SetCompatibilityRating(game);
+                    if (selectedRatings.game)
+                    {
+                        await GameCompatibilityDatabase.SetCompatibilityRating(game);
+                    }
+                    if (selectedRatings.mousehook)
+                    {
+                        await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+                    }
+                    if (selectedRatings.netplay)
+                    {
+                        await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+                    }
 
-                    if (oldRating != game.Compatibility.Rating)
+                    bool gameChanged = selectedRatings.game && oldRating != game.Compatibility.Rating;
+                    bool mousehookChanged = selectedRatings.mousehook && oldMousehookRating != game.Compatibility.Mousehook.Rating;
+                    bool netplayChanged = selectedRatings.netplay && (
+                        oldNetplayStatus.WorkingPublic != game.Compatibility.Netplay.Status.WorkingPublic ||
+                        oldNetplayStatus.TestedLocally != game.Compatibility.Netplay.Status.TestedLocally ||
+                        oldNetplayStatus.OnlyLocal != game.Compatibility.Netplay.Status.OnlyLocal ||
+                        oldNetplayStatus.Systemlink != game.Compatibility.Netplay.Status.Systemlink);
+
+                    if (gameChanged || mousehookChanged || netplayChanged)
                     {
                         updatedCount++;
-                        updatedGames.Add($"{game.Title} ({oldRating} → {game.Compatibility.Rating})");
-                        Logger.Info<LibraryPageViewModel>($"Updated compatibility rating for: '{game.Title}' from {oldRating} to {game.Compatibility.Rating}");
+                        Logger.Info<LibraryPageViewModel>($"Updated compatibility for: '{game.Title}'");
                     }
                     else
                     {
                         unchangedCount++;
-                        unchangedGames.Add(game.Title);
-                        Logger.Debug<LibraryPageViewModel>($"Compatibility rating unchanged for: '{game.Title}' ({oldRating})");
+                        Logger.Debug<LibraryPageViewModel>($"Compatibility unchanged for: '{game.Title}' ({oldRating})");
                     }
                 }
                 catch (Exception ex)
                 {
                     failedCount++;
-                    failedGames.Add(gameItem.Title);
-                    Logger.Error<LibraryPageViewModel>($"Failed to update compatibility rating for: '{gameItem.Title}'");
+                    Logger.Error<LibraryPageViewModel>($"Failed to update compatibility for: '{gameItem.Title}'");
                     Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
                 }
             }
@@ -1425,10 +1466,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             // Show results
             string message = string.Format(
                 LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Success.Message"),
-                updatedCount, unchangedCount, failedCount,
-                updatedCount > 0 ? string.Join("\n", updatedGames.Select(t => $"• {t}")) : "None",
-                unchangedCount > 0 ? string.Join("\n", unchangedGames.Select(t => $"• {t}")) : "None",
-                failedCount > 0 ? string.Join("\n", failedGames.Select(t => $"• {t}")) : "None");
+                updatedCount, unchangedCount, failedCount);
 
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Success.Title"),

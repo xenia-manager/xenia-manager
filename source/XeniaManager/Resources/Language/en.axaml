@@ -130,9 +130,14 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Update Compatibility Ratings</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Updates compatibility ratings for all games in the library from the online database</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Update Complete</sys:String>
-    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Successfully updated {0} game(s).&#10;Unchanged: {1}&#10;Failed: {2}&#10;&#10;Updated games:&#10;{3}&#10;&#10;Unchanged games:&#10;{4}&#10;&#10;Failed updates:&#10;{5}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Successfully updated {0} game(s).&#10;Unchanged: {1}&#10;Failed: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Update Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">There was an error while updating compatibility ratings.&#10;{0}</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Update Compatibility Ratings</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Game Compatibility</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Mousehook Compatibility</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Netplay Compatibility</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Update</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Optimize Games</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Applies optimized settings from the online database to all games in the library</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimization Complete</sys:String>
@@ -185,6 +190,25 @@
     <sys:String x:Key="CompatibilityRating.Loads">Loads</sys:String>
     <sys:String x:Key="CompatibilityRating.Gameplay">Gameplay</sys:String>
     <sys:String x:Key="CompatibilityRating.Playable">Playable</sys:String>
+
+    <!-- Mousehook Support Rating -->
+    <sys:String x:Key="MousehookSupportRating.Unknown">Unknown</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">Poor</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Fair</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">Good</sys:String>
+
+    <!-- Netplay Status -->
+    <sys:String x:Key="NetplayStatus.Unknown">Unknown</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">OK</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">Partial</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">Fail</sys:String>
+
+    <!-- Compatibility Tooltip Labels -->
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Mousehook Support:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Working Public:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Tested Locally:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Only Local:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emulator Management</sys:String>
@@ -565,6 +589,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Compatibility Rating</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">Compatibility Page URL</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Enter compatibility page URL</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Mousehook Compatibility</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">No mousehook notes available</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Netplay Compatibility</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Working Public</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Tested Locally</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Only Local</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">Systemlink</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">No netplay comments available</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Change game path</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Select Game File</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
