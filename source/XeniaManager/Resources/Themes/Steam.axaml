@@ -233,6 +233,7 @@ FIXES APPLIED IN THIS PASS
     <SolidColorBrush x:Key="SolidBackgroundFillColorTransparentBrush" Color="{StaticResource SolidBackgroundFillColorTransparent}" />
 
     <!-- Accent Brushes -->
+    <!-- HACK: Set as background colour so icons look like they have transparent backgrounds. -->
     <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
     <SolidColorBrush x:Key="SystemAccentColorLight1Brush" Color="{StaticResource SystemAccentColorLight1}" />
     <SolidColorBrush x:Key="SystemAccentColorLight2Brush" Color="{StaticResource SystemAccentColorLight2}" />
@@ -291,8 +292,8 @@ FIXES APPLIED IN THIS PASS
     <SolidColorBrush x:Key="ControlStrongStrokeColorDisabledBrush" Color="{StaticResource ControlStrongStrokeColorDisabled}" />
 
     <!-- Card Brushes -->
-    <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
-    <SolidColorBrush x:Key="CardBackgroundFillColorSecondaryBrush" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
+    <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="{StaticResource CardBackgroundFillColorDefault}" />
+    <SolidColorBrush x:Key="CardBackgroundFillColorSecondaryBrush" Color="{StaticResource CardBackgroundFillColorSecondary}" />
     <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="{StaticResource CardStrokeColorDefault}" />
     <SolidColorBrush x:Key="CardStrokeColorDefaultSolidBrush" Color="{StaticResource CardStrokeColorDefaultSolid}" />
 
