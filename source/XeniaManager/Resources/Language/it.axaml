@@ -356,6 +356,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Scuro</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Steam">Steam</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Schermata di Caricamento</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Mostra lo sfondo della schermata di caricamento del gioco all'avvio</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Mostra un'animazione di caricamento mentre i giochi si avviano</sys:String>

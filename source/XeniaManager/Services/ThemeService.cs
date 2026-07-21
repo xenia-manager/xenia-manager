@@ -146,6 +146,7 @@ public class ThemeService
         {
             Theme.Amoled => "avares://XeniaManager/Resources/Themes/Amoled.axaml",
             Theme.Dark => "avares://XeniaManager/Resources/Themes/Dark.axaml",
+            Theme.Steam =>  "avares://XeniaManager/Resources/Themes/Steam.axaml",
             _ => "avares://XeniaManager/Resources/Themes/Light.axaml"
         };
 
