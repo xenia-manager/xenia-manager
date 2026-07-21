@@ -13,7 +13,7 @@
                             Margin="0,0,12,0"
                             Padding="6"
                             CornerRadius="6"
-                            Background="{DynamicResource SystemAccentColor}"
+                            Background="{DynamicResource SystemAccentColorBrush}"
                             VerticalAlignment="Center"
                             IsVisible="{TemplateBinding Icon, Converter={StaticResource NotNullConverter}}">
                         <fluent:SymbolIcon Symbol="{TemplateBinding Icon}" />
