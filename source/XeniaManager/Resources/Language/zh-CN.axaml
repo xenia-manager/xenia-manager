@@ -356,6 +356,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">纯黑</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">深色</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">系统</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Steam">Steam</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">加载屏幕</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">启动游戏时显示游戏加载屏幕背景</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">在游戏启动时显示加载屏幕动画</sys:String>
