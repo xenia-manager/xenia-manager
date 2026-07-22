@@ -1,81 +1,6 @@
-﻿<!--
-================================================================================
-THEME TEMPLATE FOR XENIA MANAGER
-================================================================================
-
-This file serves as a TEMPLATE for creating new themes in Xenia Manager.
-To create a new theme:
-
-1. Copy this file to a new .axaml file (e.g., "MyCustomTheme.axaml")
-   in the Resources/Themes/ directory.
-
-2. Add a new entry to the Theme enum in XeniaManager.Core/Models/Theme.cs:
-   public enum Theme
-   {
-       System,
-       Light,
-       Dark,
-       Amoled,
-       MyCustom   // add your theme here
-   }
-
-3. Map your theme to its resource file in ThemeService.cs (SwapDictionary method):
-   string resourcePath = theme switch
-   {
-       Theme.Amoled   => "avares://XeniaManager/Resources/Themes/Amoled.axaml",
-       Theme.Dark     => "avares://XeniaManager/Resources/Themes/Dark.axaml",
-       Theme.MyCustom => "avares://XeniaManager/Resources/Themes/MyCustomTheme.axaml",
-       _              => "avares://XeniaManager/Resources/Themes/Light.axaml"
-   };
-
-4. Add a display name for your theme to every language file in
-   Resources/Language/ (the ThemeService uses it in the dropdown):
-   <sys:String x:Key="SettingsPage.Ui.Theme.Option.MyCustom">My Custom Theme</sys:String>
-
-5. Replace all color/brush values below with your theme's colors.
-6. Build and test your theme.
-
-================================================================================
-HOW IT WORKS
-================================================================================
-
-ThemeService loads your ResourceDictionary into FluentAvaloniaTheme.MergedDictionaries
-before changing the theme variant. This means your color and brush keys override
-FluentAvalonia's defaults at runtime.
-
-If you add Theme.System, it clears all overrides and falls back to FluentAvalonia's
-built-in palette — no custom ResourceDictionary is needed for System.
-
-Your theme file must define BOTH <Color> and <SolidColorBrush> / <LinearGradientBrush>
-entries for every key. Controls bind to brushes (e.g. SolidBackgroundFillColorBaseBrush),
-not raw colors.
-
-================================================================================
-FIXES APPLIED IN THIS PASS
-================================================================================
-1. ButtonBackground / TabViewBackground no longer sit on the same near-invisible
-   step as the page background. Buttons now rest one step lighter (Tertiary,
-   #FF223349) so they read as distinct surfaces at rest, not just on hover.
-2. SolidBackgroundFillColorTertiary normalized to 8-digit ARGB (#FF0A1A34) for
-   consistency with every other entry in the file.
-3. Background depth steps reordered so each one is progressively darker/lighter
-   in a single direction: Base > Secondary > Tertiary > Quarternary, matching
-   the convention described in the tips section below. Quarternary (former
-   hover color, #FF2A475E) is now the lightest "raised" surface, used for
-   hover/pressed states, not confused with a "fourth depth" darker step.
-4. TextFillColorTertiary alpha raised from 60% to 80% (#CC8F98A0) so it clears
-   WCAG AA (~4.6:1 against the base background, up from ~2.75:1).
-================================================================================
--->
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
-    <!-- =====================================================================
-         COLORS
-         Do NOT change the x:Key names — they are used by the application.
-         Replace the hex values with your theme's palette.
-         ===================================================================== -->
-
+    
     <!-- Primary Background Colors -->
     <Color x:Key="SolidBackgroundFillColorBase">#FF1B2838</Color>
     <Color x:Key="SolidBackgroundFillColorSecondary">#FF16202D</Color>
@@ -88,7 +13,7 @@ FIXES APPLIED IN THIS PASS
     <Color x:Key="SystemAccentColorLight1">#FFA4D2F7</Color>
     <Color x:Key="SystemAccentColorLight2">#FFC5E1F9</Color>
     <Color x:Key="SystemAccentColorLight3">#FFE0F0FC</Color>
-    <Color x:Key="SystemAccentColorDark1">#FF5498C9</Color>
+    <Color x:Key="SystemAccentColorDark1">#FF5498C9</Color> 
     <Color x:Key="SystemAccentColorDark2">#FF3D7AAD</Color>
     <Color x:Key="SystemAccentColorDark3">#FF2A5A85</Color>
 
@@ -216,13 +141,6 @@ FIXES APPLIED IN THIS PASS
     <Color x:Key="ControlOnImageFillColorSecondary">#FF16202D</Color>
     <Color x:Key="ControlOnImageFillColorTertiary">#FF0E1620</Color>
     <Color x:Key="ControlOnImageFillColorDisabled">#00000000</Color>
-
-    <!-- =====================================================================
-         BRUSHES
-         Every Color above must have a corresponding Brush below.
-         Controls bind to brushes via DynamicResource (e.g.
-         SolidBackgroundFillColorBaseBrush), NOT to raw Color keys.
-         ===================================================================== -->
 
     <!-- Primary Backgrounds -->
     <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="{StaticResource SolidBackgroundFillColorSecondary}" />
@@ -565,8 +483,6 @@ FIXES APPLIED IN THIS PASS
     </LinearGradientBrush>
 
     <!-- High Contrast System Brushes -->
-    <!-- Use legible fallbacks here. For full compliance, bind to the OS's live
-         high-contrast palette via DynamicResource rather than fixed hex. -->
     <SolidColorBrush x:Key="SystemColorWindowTextColorBrush" Color="#FFFFFFFF" />
     <SolidColorBrush x:Key="SystemColorWindowColorBrush" Color="#FF1B2838" />
     <SolidColorBrush x:Key="SystemColorButtonFaceColorBrush" Color="#FF16202D" />
@@ -580,33 +496,3 @@ FIXES APPLIED IN THIS PASS
     <StaticResource x:Key="DefaultTextForegroundThemeBrush" ResourceKey="TextFillColorPrimaryBrush" />
 
 </ResourceDictionary>
-
-<!--
-================================================================================
-TIPS FOR CREATING THEMES
-================================================================================
-
-- For DARK themes: use dark backgrounds (#FF000000) with light text (#FFFFFFFF).
-  Accent control fills (ToggleSwitch, CheckBox, ProgressBar) should use
-  SystemAccentColorLight1/2 instead of SystemAccentColor to maintain
-  sufficient contrast against true black.
-
-- For LIGHT themes: use light backgrounds (#FFFFFFFF) with dark text (#FF000000).
-  AccentFillColorDefault typically maps to SystemAccentColorDark1.
-
-- The AccentFillColorDefaultBrush convention differs by variant:
-    Light  -> SystemAccentColorDark1 (dark tint on light surface is legible)
-    Dark   -> SystemAccentColorLight2 (bright tint on dark surface is legible)
-
-- Keep sufficient contrast ratios for accessibility (WCAG AA minimum 3:1 for
-  UI components, 4.5:1 for normal text).
-
-- Every theme file needs BOTH Color and SolidColorBrush entries. Controls bind
-  to brushes (e.g. SolidBackgroundFillColorBaseBrush), not raw Color keys.
-
-- Theme.System clears all custom overrides and follows FluentAvalonia's built-in
-  palette — no custom ResourceDictionary is needed.
-
-- Test your theme with different controls (buttons, textboxes, lists, toggles,
-  navigation, content dialogs) to catch missing or misaligned resources.
--->
