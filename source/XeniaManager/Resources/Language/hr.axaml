@@ -356,6 +356,7 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Tamna</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sustav</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Steam">Steam</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Zaslon učitavanja</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Prikaži pozadinu zaslona učitavanja prilikom pokretanja igara</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Prikazuje animaciju zaslona učitavanja dok se igre pokreću</sys:String>

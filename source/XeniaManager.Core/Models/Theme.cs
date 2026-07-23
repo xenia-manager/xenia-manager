@@ -5,5 +5,6 @@ public enum Theme
     System,
     Light,
     Dark,
-    Amoled
+    Amoled,
+    Steam
 }
