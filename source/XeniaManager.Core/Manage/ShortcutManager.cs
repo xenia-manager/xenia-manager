@@ -28,8 +28,12 @@ public class ShortcutManager
     /// The directory where the shortcut will be created.
     /// If null or empty, defaults to the user's Desktop folder.
     /// </param>
+    /// <param name="discNumber">
+    /// Optional disc number for multi-disc games (1-based).
+    /// When set, the shortcut will launch the specified disc directly.
+    /// </param>
     /// <exception cref="Exception">Thrown when the shortcut creation fails.</exception>
-    public static void CreateShortcut(Game game, string? directory = null)
+    public static void CreateShortcut(Game game, string? directory = null, int? discNumber = null)
     {
         Logger.Trace<ShortcutManager>($"Starting CreateShortcut operation for game: '{game.Title}' ({game.GameId})");
 
@@ -61,8 +65,12 @@ public class ShortcutManager
         link.SetPath(targetPath);
         Logger.Debug<ShortcutManager>($"Shortcut target path set to: {targetPath}");
 
-        // Set the launch arguments (game title)
+        // Set the launch arguments (game title + optional disc number)
         string arguments = $@"""{game.Title}""";
+        if (discNumber is > 0)
+        {
+            arguments += $" {ArgumentFlags.Disc[0]} {discNumber}";
+        }
         link.SetArguments(arguments);
         Logger.Debug<ShortcutManager>($"Shortcut arguments set to: {arguments}");
 
@@ -88,8 +96,12 @@ public class ShortcutManager
     /// <param name="game">The game to create a Steam shortcut for.</param>
     /// <param name="steamUserId">The SteamID32 (or SteamID64) of the user to create the shortcut for.</param>
     /// <param name="restartSteam">Whether to restart Steam after adding the shortcut. Default is true.</param>
+    /// <param name="discNumber">
+    /// Optional disc number for multi-disc games (1-based).
+    /// When set, the shortcut will launch the specified disc directly.
+    /// </param>
     /// <exception cref="Exception">Thrown when Steam is not found or shortcut creation fails.</exception>
-    public static void CreateSteamShortcut(Game game, string steamUserId, bool restartSteam = true)
+    public static void CreateSteamShortcut(Game game, string steamUserId, bool restartSteam = true, int? discNumber = null)
     {
         Logger.Trace<ShortcutManager>($"Starting CreateSteamShortcut operation for game: '{game.Title}' ({game.GameId}), user: {steamUserId}");
 
@@ -110,13 +122,13 @@ public class ShortcutManager
         Logger.Info<ShortcutManager>("Loading Steam loginusers.vdf file");
         VdfFile loggedUsersFile = VdfFile.Load(loggedInUsersFilePath);
 
-        CreateSteamShortcutInternal(game, steamInstallPath, loggedUsersFile, steamUserId, restartSteam);
+        CreateSteamShortcutInternal(game, steamInstallPath, loggedUsersFile, steamUserId, restartSteam, discNumber);
     }
 
     /// <summary>
     /// Shared logic for creating a Steam shortcut with a known user ID.
     /// </summary>
-    private static void CreateSteamShortcutInternal(Game game, string steamInstallPath, VdfFile loggedUsersFile, string userId, bool restartSteam)
+    private static void CreateSteamShortcutInternal(Game game, string steamInstallPath, VdfFile loggedUsersFile, string userId, bool restartSteam, int? discNumber)
     {
         // Find the userdata directory (try 32-bit ID first, then 64-bit)
         string? userDataDirectory = FindSteamUserDataDirectory(steamInstallPath, loggedUsersFile, userId);
@@ -141,7 +153,7 @@ public class ShortcutManager
         }
 
         // Create and add the game shortcut
-        (SteamShortcut gameShortcut, uint appId) = CreateSteamShortcutFromGame(game);
+        (SteamShortcut gameShortcut, uint appId) = CreateSteamShortcutFromGame(game, discNumber);
         shortcutsFile.AddShortcut(gameShortcut);
         shortcutsFile.Save(shortcutsFilePath);
 
@@ -260,13 +272,17 @@ public class ShortcutManager
     /// </summary>
     /// <param name="game">The game to create a Steam shortcut for.</param>
     /// <returns>A tuple containing the configured SteamShortcut and its AppId.</returns>
-    private static (SteamShortcut shortcut, uint appId) CreateSteamShortcutFromGame(Game game)
+    private static (SteamShortcut shortcut, uint appId) CreateSteamShortcutFromGame(Game game, int? discNumber = null)
     {
         Logger.Trace<ShortcutManager>($"Creating SteamShortcut from game: '{game.Title}'");
 
         string exePath = AppPaths.ManagerExecutable;
         string startDir = AppPathResolver.BaseDirectory();
         string launchOptions = $@"""{game.Title}""";
+        if (discNumber is > 0)
+        {
+            launchOptions += $" {ArgumentFlags.Disc[0]} {discNumber}";
+        }
 
         Logger.Debug<ShortcutManager>($"Executable: {exePath}");
         Logger.Debug<ShortcutManager>($"Start directory: {startDir}");

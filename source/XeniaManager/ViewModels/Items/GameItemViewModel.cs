@@ -669,7 +669,18 @@ public partial class GameItemViewModel : ViewModelBase
     {
         try
         {
-            ShortcutManager.CreateShortcut(Game);
+            int? discNumber = null;
+            if (Game.FileLocations.IsMultiDisc)
+            {
+                int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+                if (selectedDisc == null)
+                {
+                    return;
+                }
+                discNumber = selectedDisc;
+            }
+
+            ShortcutManager.CreateShortcut(Game, discNumber: discNumber);
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Message"),
@@ -692,6 +703,19 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Logger.Info<GameItemViewModel>($"Creating Steam shortcut for: '{Game.Title}'");
+
+            // For multi-disc games, ask which disc to use
+            int? discNumber = null;
+            if (Game.FileLocations.IsMultiDisc)
+            {
+                int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+                if (selectedDisc == null)
+                {
+                    Logger.Info<GameItemViewModel>($"Disc selection cancelled for: '{Game.Title}'");
+                    return;
+                }
+                discNumber = selectedDisc;
+            }
 
             // Get all Steam users and select one
             List<SteamUser> users = await Task.Run(ShortcutManager.GetAllSteamUsers);
@@ -719,7 +743,7 @@ public partial class GameItemViewModel : ViewModelBase
                 Logger.Info<GameItemViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({userId})");
             }
 
-            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game, userId));
+            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game, userId, discNumber: discNumber));
 
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Success.Title"),
