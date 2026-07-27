@@ -692,7 +692,34 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Logger.Info<GameItemViewModel>($"Creating Steam shortcut for: '{Game.Title}'");
-            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game));
+
+            // Get all Steam users and select one
+            List<SteamUser> users = await Task.Run(ShortcutManager.GetAllSteamUsers);
+
+            if (users.Count == 0)
+            {
+                throw new Exception("No Steam users found");
+            }
+
+            string userId;
+            if (users.Count == 1)
+            {
+                userId = users[0].SteamId32 ?? users[0].SteamId64;
+                Logger.Info<GameItemViewModel>($"Using single Steam user: {users[0].PersonaName} ({userId})");
+            }
+            else
+            {
+                SteamUser? selectedUser = await SteamUserSelectionDialog.ShowAsync(users);
+                if (selectedUser == null)
+                {
+                    Logger.Info<GameItemViewModel>($"User cancelled Steam user selection for: '{Game.Title}'");
+                    return;
+                }
+                userId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
+                Logger.Info<GameItemViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({userId})");
+            }
+
+            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game, userId));
 
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Success.Title"),

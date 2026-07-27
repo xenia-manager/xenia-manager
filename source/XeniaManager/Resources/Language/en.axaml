@@ -475,6 +475,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Successfully created a Steam shortcut for '{0}' in your Steam library.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Failed to Create Steam Shortcut</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Failed to create Steam shortcut for '{0}'.&#10;{1}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">Select Steam Account</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">Multiple Steam accounts found</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">Select which account to create the shortcut for:</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">Cancel</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Compatibility Page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Opens the compatibility page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">No Compatibility Page</sys:String>
