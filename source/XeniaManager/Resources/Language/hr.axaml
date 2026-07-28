@@ -475,10 +475,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Steam prečac za '{0}' uspješno je stvoren u vašoj Steam biblioteci.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Stvaranje Steam prečaca nije uspjelo</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Stvaranje Steam prečaca za '{0}' nije uspjelo.&#10;{1}</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">Odaberite Steam račun</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">Pronađeno je više Steam računa</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">Odaberite za koji račun želite stvoriti prečac:</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">Odustani</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Stranica kompatibilnosti</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Otvara stranicu kompatibilnosti</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Nema stranice kompatibilnosti</sys:String>
