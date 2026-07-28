@@ -669,7 +669,18 @@ public partial class GameItemViewModel : ViewModelBase
     {
         try
         {
-            ShortcutManager.CreateShortcut(Game);
+            int? discNumber = null;
+            if (Game.FileLocations.IsMultiDisc)
+            {
+                int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+                if (selectedDisc == null)
+                {
+                    return;
+                }
+                discNumber = selectedDisc;
+            }
+
+            ShortcutManager.CreateShortcut(Game, discNumber: discNumber);
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Message"),
@@ -692,7 +703,47 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Logger.Info<GameItemViewModel>($"Creating Steam shortcut for: '{Game.Title}'");
-            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game));
+
+            // For multi-disc games, ask which disc to use
+            int? discNumber = null;
+            if (Game.FileLocations.IsMultiDisc)
+            {
+                int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+                if (selectedDisc == null)
+                {
+                    Logger.Info<GameItemViewModel>($"Disc selection cancelled for: '{Game.Title}'");
+                    return;
+                }
+                discNumber = selectedDisc;
+            }
+
+            // Get all Steam users and select one
+            List<SteamUser> users = await Task.Run(ShortcutManager.GetAllSteamUsers);
+
+            if (users.Count == 0)
+            {
+                throw new Exception("No Steam users found");
+            }
+
+            string userId;
+            if (users.Count == 1)
+            {
+                userId = users[0].SteamId32 ?? users[0].SteamId64;
+                Logger.Info<GameItemViewModel>($"Using single Steam user: {users[0].PersonaName} ({userId})");
+            }
+            else
+            {
+                SteamUser? selectedUser = await SteamUserSelectionDialog.ShowAsync(users);
+                if (selectedUser == null)
+                {
+                    Logger.Info<GameItemViewModel>($"User cancelled Steam user selection for: '{Game.Title}'");
+                    return;
+                }
+                userId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
+                Logger.Info<GameItemViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({userId})");
+            }
+
+            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game, userId, discNumber: discNumber));
 
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Success.Title"),
