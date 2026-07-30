@@ -991,7 +991,7 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             string? directory = Path.GetDirectoryName(Game.FileLocations.ResolvedGamePath);
-            if (!Directory.Exists(directory))
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
             {
                 await _messageBoxService.ShowInfoAsync(
                     LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title"),
@@ -1012,7 +1012,8 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message")));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message"), 
+                    ex.Message));
         }
     }
 
@@ -1022,7 +1023,14 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Window? mainWindow = App.MainWindow;
-            if(mainWindow?.Clipboard is null) return;
+            if (mainWindow?.Clipboard is null)
+            {
+                _notificationService.ShowError(string.Format(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.CopyGameId.Error.Message"),
+                    Game.Title));
+                Logger.Warning<GameItemViewModel>("Clipboard is not available; cannot copy Game ID.");
+                return;
+            }
 
             await mainWindow.Clipboard.SetTextAsync(Game.GameId);
             _notificationService.ShowSuccess(
