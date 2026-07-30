@@ -558,6 +558,16 @@
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.GameLocation.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
+                                        <!-- Copy Game ID -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.CopyGameId.Header}"
+                                                  Command="{Binding CopyGameIdCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Note" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.CopyGameId.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
                                     </MenuItem>
                                     <!-- Patches -->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Header}"

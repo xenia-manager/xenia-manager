@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -38,6 +39,7 @@ public partial class GameItemViewModel : ViewModelBase
     [ObservableProperty] private bool _isSelected;
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
+    private INotificationService _notificationService;
     private Core.Settings.Settings _settings { get; set; }
     public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
@@ -64,6 +66,7 @@ public partial class GameItemViewModel : ViewModelBase
         Game = game;
         _library = library;
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
+        _notificationService = App.Services.GetRequiredService<INotificationService>();
         _settings = App.Services.GetRequiredService<Core.Settings.Settings>();
     }
 
@@ -1010,6 +1013,32 @@ public partial class GameItemViewModel : ViewModelBase
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message")));
+        }
+    }
+
+    [RelayCommand]
+    private async Task CopyGameId()
+    {
+        try
+        {
+            Window? mainWindow = App.MainWindow;
+            if(mainWindow?.Clipboard is null) return;
+
+            await mainWindow.Clipboard.SetTextAsync(Game.GameId);
+            _notificationService.ShowSuccess(
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.CopyGameId.Success.Message"),
+                Game.GameId));
+            
+            Logger.Info<GameItemViewModel>($"Copied Game ID '{Game.GameId}' for Game '{Game.Title}' to clipboard.");
+        }
+        catch (Exception ex)
+        {
+            _notificationService.ShowError(
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.CopyGameId.Error.Message"),
+                    Game.Title));
+            
+            Logger.Error<GameItemViewModel>($"Failed to copy Game ID for '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
         }
     }
 }
