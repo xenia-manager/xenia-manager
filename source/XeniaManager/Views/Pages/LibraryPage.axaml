@@ -548,6 +548,16 @@
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.SaveBackup.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
+                                        <!-- Open Game Location -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.GameLocation.Header}"
+                                                  Command="{Binding OpenGameLocationCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Folder" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.GameLocation.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
                                     </MenuItem>
                                     <!-- Patches -->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Header}"

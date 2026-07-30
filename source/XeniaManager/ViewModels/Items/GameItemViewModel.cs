@@ -981,4 +981,35 @@ public partial class GameItemViewModel : ViewModelBase
             }
         }
     }
+
+    [RelayCommand]
+    private async Task OpenGameLocation()
+    {
+        try
+        {
+            string? directory = Path.GetDirectoryName(Game.FileLocations.ResolvedGamePath);
+            if (!Directory.Exists(directory))
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message"));   
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = directory,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to open game location for: {Game.Title}");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message")));
+        }
+    }
 }
