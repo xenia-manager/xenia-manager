@@ -1002,6 +1002,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">None</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Fast</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Full</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">Readback Memexport</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">Read data written by memory export in shaders on the CPU.&#10;May be needed by some games, but causes mid-frame synchronization with a huge performance impact</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Draw Resolution Scale X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Integer pixel width scale used for scaling the rendering resolution opaquely to the game</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Draw Resolution Scale Y</sys:String>

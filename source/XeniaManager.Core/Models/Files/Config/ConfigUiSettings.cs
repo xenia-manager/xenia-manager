@@ -214,6 +214,8 @@ public static class ConfigUiSettings
                     { "full", LocalizationHelper.GetText("ConfigUiSettings.GPU.readback_resolve.option.full") }
                 }, LocalizationHelper.GetText("ConfigUiSettings.GPU.readback_resolve.Title"),
                 LocalizationHelper.GetText("ConfigUiSettings.GPU.readback_resolve.Comment"))
+            .AddToggle("readback_memexport", LocalizationHelper.GetText("ConfigUiSettings.GPU.readback_memexport.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.GPU.readback_memexport.Comment"))
             .AddToggle("async_shader_compilation", LocalizationHelper.GetText("ConfigUiSettings.GPU.async_shader_compilation.Title"),
                 LocalizationHelper.GetText("ConfigUiSettings.GPU.async_shader_compilation.Comment"))
             .AddSlider("draw_resolution_scale_x", 1, 7, 1, LocalizationHelper.GetText("ConfigUiSettings.GPU.draw_resolution_scale_x.Title"),

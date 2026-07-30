@@ -1002,6 +1002,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">无</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">快速</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">完整</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">绘制分辨率缩放 X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">用于对游戏不透明地缩放渲染分辨率的整数像素宽度缩放比例</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">绘制分辨率缩放 Y</sys:String>
