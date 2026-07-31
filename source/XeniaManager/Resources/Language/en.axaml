@@ -381,6 +381,14 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Auto-Merge Multi-Disc Games</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Automatically merge detected discs of the same game during library scan</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">When enabled, additional discs matching an existing game in the library are merged automatically without prompting</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation">Controller Navigation (Experimental)</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.Description">Navigate the game library using an Xbox controller</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.ToolTip">Experimental: use the D-Pad or left stick to move between games in the library grid, A to launch, and B to go back. Currently limited to the Library page grid view.</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Confirm">Select</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Back">Back</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Info">Info</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Menu">Menu</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.ToggleView">Switch View</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>

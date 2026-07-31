@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:FluentAvalonia.UI.Controls">
     <!-- Card Controls -->
     <StyleInclude Source="/Controls/Cards/CardHeader.axaml" />
     <StyleInclude Source="/Controls/Cards/CustomCard.axaml" />
@@ -9,6 +10,19 @@
     <StyleInclude Source="/Controls/Cards/SliderCard.axaml" />
     <StyleInclude Source="/Controls/Cards/TextBoxCard.axaml" />
     <StyleInclude Source="/Controls/Cards/ToggleSwitchCard.axaml" />
+
+    <!-- Marks the currently controller-selected item in a context menu (experimental
+         controller navigation), since arrow-key navigation isn't reliably simulatable
+         for MenuFlyout popups, so a manual cursor + this highlight style are used instead -->
+    <Style Selector="MenuItem.controllerCursor">
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+    </Style>
+
+    <!-- Same idea, applied to the side navigation menu items (experimental controller
+         navigation of Open Xenia/Library/Xenia Settings/Manage Xenia) -->
+    <Style Selector="controls|FANavigationViewItem.controllerCursor">
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+    </Style>
 
     <!-- Add other Control Styles here -->
 </Styles>

@@ -96,6 +96,28 @@ public partial class SettingsPageViewModel : ViewModelBase
         _settings.SaveSettings();
     }
 
+    [ObservableProperty] private bool enableControllerNavigation;
+    partial void OnEnableControllerNavigationChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Controller Navigation changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.EnableControllerNavigation = newValue;
+        _settings.SaveSettings();
+
+        XInputService xInputService = App.Services.GetRequiredService<XInputService>();
+        if (newValue)
+        {
+            xInputService.Start();
+        }
+        else
+        {
+            xInputService.Stop();
+        }
+    }
+
     // UI Settings
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
@@ -255,6 +277,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         UseMediaIdForTitle = _settings.Settings.General.UseMediaIdForTitle;
         AutoDetectNewGames = _settings.Settings.General.AutoDetectNewGames;
         AutoMergeMultiDisc = _settings.Settings.General.AutoMergeMultiDisc;
+        EnableControllerNavigation = _settings.Settings.General.EnableControllerNavigation;
 
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();

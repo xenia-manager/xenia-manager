@@ -73,6 +73,8 @@ public class ServiceConfigurator
         services.AddSingleton<IReleaseService, ReleaseService>();
         // GameDirectoryWatcherService
         services.AddSingleton<GameDirectoryWatcherService>();
+        // XInputService (experimental controller navigation)
+        services.AddSingleton<XInputService>();
 
         // Controls
         services.AddSingleton<PatchSelectionDialogViewModel>();

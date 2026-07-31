@@ -53,6 +53,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.ToolTip}"
                                             Icon="Games"
                                             IsChecked="{Binding AutoMergeMultiDisc, Mode=TwoWay}" />
+                    <!-- Controller Navigation (Experimental) -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.EnableControllerNavigation}"
+                                            Description="{DynamicResource SettingsPage.General.EnableControllerNavigation.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.EnableControllerNavigation.ToolTip}"
+                                            Icon="Games"
+                                            IsChecked="{Binding EnableControllerNavigation, Mode=TwoWay}" />
                 </StackPanel>
             </Expander>
             <!-- UI Settings -->

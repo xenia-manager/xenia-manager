@@ -345,25 +345,39 @@ public class Launcher
             Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
             DateTime launchTime = DateTime.Now;
 
-            // Start Xenia
-            xenia.Start();
-
-            // Start capturing output (prioritize save backup handler, then fallback to provided handler)
-            (xeniaOutputHandler ?? outputHandler)?.StartCapture(xenia);
-
-            Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
-
-            Logger.Debug<Launcher>($"Waiting for Xenia process to exit...");
-            if (async)
+            // Pause our own controller polling while Xenia is actually running, so the
+            // controller talks exclusively to the emulator during gameplay instead of also
+            // driving Xenia Manager's navigation in the background. The finally block ensures
+            // polling resumes even if starting/waiting for the process throws.
+            XInputService.Current?.PauseForExternalProcess();
+            try
             {
-                await xenia.WaitForExitAsync();
-            }
-            else
-            {
-                xenia.WaitForExit();
-            }
+                // Start Xenia
+                xenia.Start();
 
-            Logger.Info<Launcher>($"Xenia process has exited with code: {xenia.ExitCode}");
+                // Start capturing output (prioritize save backup handler, then fallback to provided handler)
+                (xeniaOutputHandler ?? outputHandler)?.StartCapture(xenia);
+
+                Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
+
+                Logger.Debug<Launcher>($"Waiting for Xenia process to exit...");
+                if (async)
+                {
+                    await xenia.WaitForExitAsync();
+                }
+                else
+                {
+                    xenia.WaitForExit();
+                }
+
+                Logger.Info<Launcher>($"Xenia process has exited with code: {xenia.ExitCode}");
+            }
+            finally
+            {
+                // Resume controller polling for Xenia Manager's own navigation now that Xenia
+                // has closed (or if launching/waiting for it failed)
+                XInputService.Current?.ResumeAfterExternalProcess();
+            }
 
             game.Playtime += (DateTime.Now - launchTime).TotalMinutes;
 

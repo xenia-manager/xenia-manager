@@ -22,31 +22,31 @@
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Cerca...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ricarica la libreria giochi</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">Ordina giochi</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">Passa alla vista elenco</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">Passa alla vista griglia</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">Direzione Ordinamento</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">Titolo</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">Compatibilità</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">Tempo di Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Versione Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">Ultimo Giocato</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Modifica Vista Griglia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Mostra/Nascondi informazioni aggiuntive sulle copertine</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Titolo Gioco</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Valutazione Compatibilità</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Versione Xenia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Mostra l'icona della versione Xenia per ogni gioco</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">Modifica Vista Elenco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">Mostra/Nascondi colonne nella vista elenco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">Valutazione Compatibilità</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">Tempo di Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Versione Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">Mostra l'icona della versione Xenia per ogni gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">Ultimo Giocato</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">Icona Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">Title ID</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">Media ID</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Avvia con Doppio Click</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Passa da singolo a doppio click per avviare i giochi</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scansiona Cartella</sys:String>
@@ -133,11 +133,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Aggiornati con successo {0} gioco/i.&#10;Invariati: {1}&#10;Falliti: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Aggiornamento Fallito</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Si è verificato un errore durante l'aggiornamento delle valutazioni.&#10;{0}</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Aggiorna Valutazioni Compatibilità</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Compatibilità Gioco</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Compatibilità Mousehook</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Compatibilità Netplay</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Aggiorna</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Ottimizza Giochi</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Applica le impostazioni ottimizzate dal database online a tutti i giochi della libreria</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Ottimizzazione Completata</sys:String>
@@ -192,23 +192,23 @@
     <sys:String x:Key="CompatibilityRating.Playable">Giocabile</sys:String>
 
     <!-- Mousehook Support Rating -->
-    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Unknown">Sconosciuta</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">Scarsa</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Discreta</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">Buona</sys:String>
 
     <!-- Netplay Status -->
-    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Unknown">Sconosciuto</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">OK</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">Parziale</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">Fallito</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Supporto Mousehook:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Funzionante Pubblico:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Testato Localmente:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Solo Locale:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Gestione Emulatore</sys:String>
@@ -381,6 +381,14 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Unisci Automaticamente Giochi Multi-Disco</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Unisce automaticamente i dischi rilevati dello stesso gioco durante la scansione della libreria</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Se abilitato, i dischi aggiuntivi che corrispondono a un gioco già presente in libreria vengono uniti automaticamente senza chiedere conferma</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation">Navigazione con Controller (Sperimentale)</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.Description">Naviga la libreria giochi usando un controller Xbox</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.ToolTip">Sperimentale: usa il D-Pad o lo stick sinistro per spostarti tra i giochi nella griglia della libreria, A per avviare e B per tornare indietro. Attualmente limitato alla vista Griglia della pagina Libreria.</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Confirm">Seleziona</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Back">Indietro</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Info">Informazioni</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Menu">Menu</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.ToggleView">Cambia Vista</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Caricamento {0}</sys:String>
@@ -590,14 +598,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Valutazione Compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL Pagina Compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Inserisci URL della pagina compatibilità</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Compatibilità Mousehook</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">Nessuna nota mousehook disponibile</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Compatibilità Netplay</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Funzionante Pubblico</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Testato Localmente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Solo Locale</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">Systemlink</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">Nessun commento netplay disponibile</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Cambia percorso del gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Seleziona File di Gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>

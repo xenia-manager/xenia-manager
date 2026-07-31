@@ -283,6 +283,133 @@ public partial class LibraryPageViewModel : ViewModelBase
     [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
     private List<GameItemViewModel> _allGames = [];
 
+    // --- Controller navigation (experimental) -----------------------------
+
+    /// <summary>
+    /// Index of the game currently focused via controller navigation within <see cref="Games"/>,
+    /// or -1 if controller navigation hasn't been used yet / there's nothing to focus.
+    /// </summary>
+    private int _controllerFocusIndex = -1;
+
+    /// <summary>
+    /// Public read-only accessor for <see cref="_controllerFocusIndex"/>, used by the view
+    /// to look up the visual container of the currently controller-focused game (e.g. to
+    /// show its info popup or context menu).
+    /// </summary>
+    public int ControllerFocusIndex => _controllerFocusIndex;
+
+    /// <summary>
+    /// Whether experimental controller navigation is currently enabled, used to show/hide
+    /// the button hint bar at the bottom of the library (D-Pad/A/B/X/Y/View legend).
+    /// </summary>
+    public bool IsControllerNavigationEnabled => _settings.Settings.General.EnableControllerNavigation;
+
+    /// <summary>
+    /// Re-reads <see cref="IsControllerNavigationEnabled"/> from settings and notifies the
+    /// view. Called when the Library page becomes visible again, since the setting could
+    /// have been toggled elsewhere (Settings page) since it was last shown.
+    /// </summary>
+    public void RefreshControllerNavigationVisibility()
+    {
+        OnPropertyChanged(nameof(IsControllerNavigationEnabled));
+    }
+
+    /// <summary>
+    /// Moves the controller focus one step in the given direction within the grid,
+    /// wrapping columns based on <paramref name="columnsPerRow"/> (measured by the view,
+    /// since the actual rendered column count depends on window width/zoom).
+    /// If nothing is focused yet, focuses the first game instead of moving.
+    /// </summary>
+    public void MoveControllerFocus(ControllerNavigationAction direction, int columnsPerRow)
+    {
+        if (Games.Count == 0 || columnsPerRow <= 0)
+        {
+            return;
+        }
+
+        if (_controllerFocusIndex < 0)
+        {
+            SetControllerFocus(0);
+            return;
+        }
+
+        int newIndex = _controllerFocusIndex;
+        switch (direction)
+        {
+            case ControllerNavigationAction.Right:
+                newIndex++;
+                break;
+            case ControllerNavigationAction.Left:
+                newIndex--;
+                break;
+            case ControllerNavigationAction.Down:
+                newIndex += columnsPerRow;
+                break;
+            case ControllerNavigationAction.Up:
+                newIndex -= columnsPerRow;
+                break;
+            default:
+                return;
+        }
+
+        // Clamp instead of wrapping around edges, to keep navigation predictable
+        if (newIndex < 0 || newIndex >= Games.Count)
+        {
+            return;
+        }
+
+        SetControllerFocus(newIndex);
+    }
+
+    /// <summary>
+    /// Sets the controller focus to a specific index, updating the previously
+    /// focused item and the newly focused one.
+    /// </summary>
+    private void SetControllerFocus(int index)
+    {
+        if (_controllerFocusIndex >= 0 && _controllerFocusIndex < Games.Count)
+        {
+            Games[_controllerFocusIndex].IsControllerFocused = false;
+        }
+
+        _controllerFocusIndex = index;
+
+        if (_controllerFocusIndex >= 0 && _controllerFocusIndex < Games.Count)
+        {
+            Games[_controllerFocusIndex].IsControllerFocused = true;
+        }
+    }
+
+    /// <summary>
+    /// Launches the currently controller-focused game, if any.
+    /// </summary>
+    public void LaunchControllerFocusedGame()
+    {
+        if (_controllerFocusIndex < 0 || _controllerFocusIndex >= Games.Count)
+        {
+            return;
+        }
+
+        GameItemViewModel focusedGame = Games[_controllerFocusIndex];
+        if (focusedGame.LaunchCommand.CanExecute(null))
+        {
+            focusedGame.LaunchCommand.Execute(null);
+        }
+    }
+
+    /// <summary>
+    /// Clears controller focus, e.g. when the user interacts with the mouse/keyboard instead,
+    /// or when the game list changes (search filter, refresh) and the old index is no longer valid.
+    /// </summary>
+    public void ClearControllerFocus()
+    {
+        if (_controllerFocusIndex >= 0 && _controllerFocusIndex < Games.Count)
+        {
+            Games[_controllerFocusIndex].IsControllerFocused = false;
+        }
+        _controllerFocusIndex = -1;
+    }
+
     // Selection properties for multiselect
     private int _selectedGamesCount;
     public bool HasSelectedGames => _selectedGamesCount > 0;

@@ -210,6 +210,11 @@ public partial class App : Application
             GameDirectoryWatcherService watcher = Services.GetRequiredService<GameDirectoryWatcherService>();
             watcher.Stop();
 
+            // Stop controller navigation polling
+            Logger.Debug<App>("Stopping XInput polling during shutdown");
+            XInputService xInputService = Services.GetRequiredService<XInputService>();
+            xInputService.Stop();
+
             // Save window properties (must happen before the window actually closes)
             settings.SaveWindowProperties(settings, mainWindow);
             Logger.Info<App>("Main window closing");
