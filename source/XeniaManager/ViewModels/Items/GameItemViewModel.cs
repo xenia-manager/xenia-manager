@@ -1016,37 +1016,4 @@ public partial class GameItemViewModel : ViewModelBase
                     ex.Message));
         }
     }
-
-    [RelayCommand]
-    private async Task CopyGameId()
-    {
-        try
-        {
-            Window? mainWindow = App.MainWindow;
-            if (mainWindow?.Clipboard is null)
-            {
-                _notificationService.ShowError(string.Format(
-                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.CopyGameId.Error.Message"),
-                    Game.Title));
-                Logger.Warning<GameItemViewModel>("Clipboard is not available; cannot copy Game ID.");
-                return;
-            }
-
-            await mainWindow.Clipboard.SetTextAsync(Game.GameId);
-            _notificationService.ShowSuccess(
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.CopyGameId.Success.Message"),
-                Game.GameId));
-            
-            Logger.Info<GameItemViewModel>($"Copied Game ID '{Game.GameId}' for Game '{Game.Title}' to clipboard.");
-        }
-        catch (Exception ex)
-        {
-            _notificationService.ShowError(
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.CopyGameId.Error.Message"),
-                    Game.Title));
-            
-            Logger.Error<GameItemViewModel>($"Failed to copy Game ID for '{Game.Title}'");
-            Logger.LogExceptionDetails<GameItemViewModel>(ex);
-        }
-    }
 }
