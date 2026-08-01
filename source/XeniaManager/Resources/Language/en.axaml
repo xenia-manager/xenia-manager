@@ -405,6 +405,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">No screenshots found for {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Failed to Open Folder</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">There was an error while opening the screenshots folder.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">Open Game Location</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">Opens the folder containing the game file</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">Game File Not Found</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">The game file directory could not be found.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">Failed to Open Folder</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">There was an error while opening the game location.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Download</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Download patches from repository</sys:String>
