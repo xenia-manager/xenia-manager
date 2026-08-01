@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -38,6 +39,7 @@ public partial class GameItemViewModel : ViewModelBase
     [ObservableProperty] private bool _isSelected;
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
+    private INotificationService _notificationService;
     private Core.Settings.Settings _settings { get; set; }
     public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
@@ -64,6 +66,7 @@ public partial class GameItemViewModel : ViewModelBase
         Game = game;
         _library = library;
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
+        _notificationService = App.Services.GetRequiredService<INotificationService>();
         _settings = App.Services.GetRequiredService<Core.Settings.Settings>();
     }
 
@@ -979,6 +982,38 @@ public partial class GameItemViewModel : ViewModelBase
                     LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Error.Title"),
                     string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Error.Message"), Game.Title, ex.Message));
             }
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenGameLocation()
+    {
+        try
+        {
+            string? directory = Path.GetDirectoryName(Game.FileLocations.ResolvedGamePath);
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message"));   
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = directory,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to open game location for: {Game.Title}");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message"), 
+                    ex.Message));
         }
     }
 }
