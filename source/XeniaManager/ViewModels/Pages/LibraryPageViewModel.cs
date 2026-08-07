@@ -1451,6 +1451,35 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         try
         {
+            // Get all Steam users and select one
+            List<SteamUser> users = await Task.Run(ShortcutManager.GetAllSteamUsers);
+
+            if (users.Count == 0)
+            {
+                throw new Exception("No Steam users found");
+            }
+
+            string selectedUserId;
+            if (users.Count == 1)
+            {
+                selectedUserId = users[0].SteamId32 ?? users[0].SteamId64;
+                Logger.Info<LibraryPageViewModel>($"Using single Steam user: {users[0].PersonaName} ({selectedUserId})");
+            }
+            else
+            {
+                SteamUser? selectedUser = await SteamUserSelectionDialog.ShowAsync(users);
+                if (selectedUser == null)
+                {
+                    Logger.Info<LibraryPageViewModel>("User cancelled Steam user selection, aborting export");
+                    await _messageBoxService.ShowInfoAsync(
+                        LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Title"),
+                        "Steam user selection was cancelled. No shortcuts were created.");
+                    return;
+                }
+                selectedUserId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
+                Logger.Info<LibraryPageViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({selectedUserId})");
+            }
+
             List<string> successList = [];
             List<string> failList = [];
 
@@ -1458,7 +1487,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             {
                 try
                 {
-                    ShortcutManager.CreateSteamShortcut(game.Game, restartSteam: false);
+                    ShortcutManager.CreateSteamShortcut(game.Game, selectedUserId, restartSteam: false);
                     successList.Add(game.Title);
                 }
                 catch (Exception ex)

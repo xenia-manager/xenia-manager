@@ -355,8 +355,8 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Claro</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Escuro</sys:String>
-    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Steam">Steam</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Tela de Carregamento</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Exibe a tela de carregamento do jogo ao iniciá-lo</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Exibe uma animação de tela de carregamento enquanto os jogos são iniciados</sys:String>
@@ -475,6 +475,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Um atalho do Steam para '{0}' foi criado com sucesso em sua biblioteca do Steam.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Falha ao criar atalho do Steam</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Falha ao criar o atalho do Steam para '{0}'.&#10;{1}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Página de Compatibilidade</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Abre a página de compatibilidade</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Sem página de compatibilidade</sys:String>
@@ -998,6 +1002,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">None</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Fast</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Full</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Draw Resolution Scale X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Escala de largura em pixels (inteiros) usada para dimensionar a resolução de renderização de forma opaca ao jogo</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Draw Resolution Scale Y</sys:String>

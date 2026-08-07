@@ -4,6 +4,7 @@ using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Shortcut;
 using XeniaManager.Core.Models.Files.SteamShortcuts;
 using XeniaManager.Core.Models.Files.Vdf;
@@ -27,8 +28,12 @@ public class ShortcutManager
     /// The directory where the shortcut will be created.
     /// If null or empty, defaults to the user's Desktop folder.
     /// </param>
+    /// <param name="discNumber">
+    /// Optional disc number for multi-disc games (1-based).
+    /// When set, the shortcut will launch the specified disc directly.
+    /// </param>
     /// <exception cref="Exception">Thrown when the shortcut creation fails.</exception>
-    public static void CreateShortcut(Game game, string? directory = null)
+    public static void CreateShortcut(Game game, string? directory = null, int? discNumber = null)
     {
         Logger.Trace<ShortcutManager>($"Starting CreateShortcut operation for game: '{game.Title}' ({game.GameId})");
 
@@ -60,8 +65,12 @@ public class ShortcutManager
         link.SetPath(targetPath);
         Logger.Debug<ShortcutManager>($"Shortcut target path set to: {targetPath}");
 
-        // Set the launch arguments (game title)
+        // Set the launch arguments (game title + optional disc number)
         string arguments = $@"""{game.Title}""";
+        if (discNumber is > 0)
+        {
+            arguments += $" {ArgumentFlags.Disc[0]} {discNumber}";
+        }
         link.SetArguments(arguments);
         Logger.Debug<ShortcutManager>($"Shortcut arguments set to: {arguments}");
 
@@ -82,15 +91,19 @@ public class ShortcutManager
     }
 
     /// <summary>
-    /// Creates a Steam shortcut for the specified game.
-    /// Finds the most recent Steam user and adds the game to their shortcuts.
+    /// Creates a Steam shortcut for the specified game using a specific Steam user ID.
     /// </summary>
     /// <param name="game">The game to create a Steam shortcut for.</param>
+    /// <param name="steamUserId">The SteamID32 (or SteamID64) of the user to create the shortcut for.</param>
     /// <param name="restartSteam">Whether to restart Steam after adding the shortcut. Default is true.</param>
+    /// <param name="discNumber">
+    /// Optional disc number for multi-disc games (1-based).
+    /// When set, the shortcut will launch the specified disc directly.
+    /// </param>
     /// <exception cref="Exception">Thrown when Steam is not found or shortcut creation fails.</exception>
-    public static void CreateSteamShortcut(Game game, bool restartSteam = true)
+    public static void CreateSteamShortcut(Game game, string steamUserId, bool restartSteam = true, int? discNumber = null)
     {
-        Logger.Trace<ShortcutManager>($"Starting CreateSteamShortcut operation for game: '{game.Title}' ({game.GameId})");
+        Logger.Trace<ShortcutManager>($"Starting CreateSteamShortcut operation for game: '{game.Title}' ({game.GameId}), user: {steamUserId}");
 
         // Find Steam installation
         string steamInstallPath = FindSteamInstallPath()
@@ -105,15 +118,20 @@ public class ShortcutManager
         }
         Logger.Debug<ShortcutManager>($"Steam loginusers file found: {loggedInUsersFilePath}");
 
-        // Load loginusers and find the most recent user
+        // Load loginusers
         Logger.Info<ShortcutManager>("Loading Steam loginusers.vdf file");
         VdfFile loggedUsersFile = VdfFile.Load(loggedInUsersFilePath);
-        string mostRecentUserId = FindMostRecentSteamUserId(loggedUsersFile)
-                                  ?? throw new Exception("No Steam user found with MostRecent flag set");
-        Logger.Info<ShortcutManager>($"Most recent Steam user ID: {mostRecentUserId}");
 
+        CreateSteamShortcutInternal(game, steamInstallPath, loggedUsersFile, steamUserId, restartSteam, discNumber);
+    }
+
+    /// <summary>
+    /// Shared logic for creating a Steam shortcut with a known user ID.
+    /// </summary>
+    private static void CreateSteamShortcutInternal(Game game, string steamInstallPath, VdfFile loggedUsersFile, string userId, bool restartSteam, int? discNumber)
+    {
         // Find the userdata directory (try 32-bit ID first, then 64-bit)
-        string? userDataDirectory = FindSteamUserDataDirectory(steamInstallPath, loggedUsersFile, mostRecentUserId);
+        string? userDataDirectory = FindSteamUserDataDirectory(steamInstallPath, loggedUsersFile, userId);
         if (userDataDirectory == null)
         {
             throw new Exception("Steam user data directory not found");
@@ -135,7 +153,7 @@ public class ShortcutManager
         }
 
         // Create and add the game shortcut
-        (SteamShortcut gameShortcut, uint appId) = CreateSteamShortcutFromGame(game);
+        (SteamShortcut gameShortcut, uint appId) = CreateSteamShortcutFromGame(game, discNumber);
         shortcutsFile.AddShortcut(gameShortcut);
         shortcutsFile.Save(shortcutsFilePath);
 
@@ -151,6 +169,67 @@ public class ShortcutManager
         }
 
         Logger.Trace<ShortcutManager>("CreateSteamShortcut operation completed successfully");
+    }
+
+    /// <summary>
+    /// Retrieves all Steam user accounts from the loginusers.vdf file.
+    /// </summary>
+    /// <returns>A list of SteamUser objects representing all accounts found.</returns>
+    /// <exception cref="Exception">Thrown when Steam is not found or loginusers.vdf cannot be loaded.</exception>
+    public static List<SteamUser> GetAllSteamUsers()
+    {
+        Logger.Trace<ShortcutManager>("Starting GetAllSteamUsers");
+
+        // Find Steam installation
+        string steamInstallPath = FindSteamInstallPath()
+                                  ?? throw new Exception("Steam installation not found");
+        Logger.Info<ShortcutManager>($"Steam installation found at: {steamInstallPath}");
+
+        // Find the logged-in users file
+        string loggedInUsersFilePath = Path.Combine(steamInstallPath, "config", "loginusers.vdf");
+        if (!File.Exists(loggedInUsersFilePath))
+        {
+            throw new Exception("Steam loginusers.vdf file not found");
+        }
+
+        // Load loginusers
+        VdfFile loggedUsersFile = VdfFile.Load(loggedInUsersFilePath);
+
+        List<SteamUser> users = ParseSteamUsers(loggedUsersFile);
+        Logger.Info<ShortcutManager>($"Found {users.Count} Steam user(s)");
+        return users;
+    }
+
+    /// <summary>
+    /// Parses Steam user accounts from a loaded VDF file.
+    /// </summary>
+    /// <param name="loginUsersFile">The loaded loginusers.vdf file.</param>
+    /// <returns>A list of SteamUser objects.</returns>
+    private static List<SteamUser> ParseSteamUsers(VdfFile loginUsersFile)
+    {
+        if (loginUsersFile.Root == null)
+        {
+            return [];
+        }
+
+        List<SteamUser> users = [];
+        foreach (VdfNode userNode in loginUsersFile.Root.Children)
+        {
+            string steamId64 = userNode.Key;
+            string? steamId32 = SteamId64To32(steamId64);
+            string personaName = userNode.GetValue("PersonaName") ?? "Unknown";
+            string? accountName = userNode.GetValue("AccountName");
+
+            users.Add(new SteamUser
+            {
+                SteamId64 = steamId64,
+                SteamId32 = steamId32,
+                PersonaName = personaName,
+                AccountName = accountName
+            });
+        }
+
+        return users;
     }
 
     /// <summary>
@@ -193,13 +272,17 @@ public class ShortcutManager
     /// </summary>
     /// <param name="game">The game to create a Steam shortcut for.</param>
     /// <returns>A tuple containing the configured SteamShortcut and its AppId.</returns>
-    private static (SteamShortcut shortcut, uint appId) CreateSteamShortcutFromGame(Game game)
+    private static (SteamShortcut shortcut, uint appId) CreateSteamShortcutFromGame(Game game, int? discNumber = null)
     {
         Logger.Trace<ShortcutManager>($"Creating SteamShortcut from game: '{game.Title}'");
 
         string exePath = AppPaths.ManagerExecutable;
         string startDir = AppPathResolver.BaseDirectory();
         string launchOptions = $@"""{game.Title}""";
+        if (discNumber is > 0)
+        {
+            launchOptions += $" {ArgumentFlags.Disc[0]} {discNumber}";
+        }
 
         Logger.Debug<ShortcutManager>($"Executable: {exePath}");
         Logger.Debug<ShortcutManager>($"Start directory: {startDir}");
@@ -375,51 +458,6 @@ public class ShortcutManager
 
         // TODO: Linux support?
         Logger.Trace<ShortcutManager>("FindSteamInstallPath search completed - no installation found");
-        return null;
-    }
-
-    /// <summary>
-    /// Finds the Steam user ID with the MostRecent flag set to "1".
-    /// Iterates through all user nodes in the loginusers.vdf file.
-    /// Returns the SteamID32 format for use with shortcuts.vdf path.
-    /// </summary>
-    /// <param name="loginUsersFile">The loaded loginusers.vdf file.</param>
-    /// <returns>The most recent user ID (SteamID32) if found; otherwise, null.</returns>
-    private static string? FindMostRecentSteamUserId(VdfFile loginUsersFile)
-    {
-        Logger.Trace<ShortcutManager>("Starting FindMostRecentSteamUserId search");
-
-        if (loginUsersFile.Root == null)
-        {
-            Logger.Debug<ShortcutManager>("VDF file has no root node");
-            return null;
-        }
-
-        // Iterate through all user nodes under the "users" root
-        foreach (VdfNode userNode in loginUsersFile.Root.Children)
-        {
-            Logger.Trace<ShortcutManager>($"Checking user ID: {userNode.Key}");
-
-            // Check if this user has MostRecent set to "1"
-            if (userNode.GetValue("MostRecent") == "1")
-            {
-                string personaName = userNode.GetValue("PersonaName") ?? "Unknown";
-                string steamId64 = userNode.Key;
-
-                // Convert SteamID64 to SteamID32
-                string? steamId32 = SteamId64To32(steamId64);
-                if (steamId32 != null)
-                {
-                    Logger.Info<ShortcutManager>($"Found most recent Steam user: {personaName} (SteamID64: {steamId64}, SteamID32: {steamId32})");
-                    return steamId32;
-                }
-
-                Logger.Warning<ShortcutManager>($"Failed to convert SteamID64 to SteamID32 for user: {personaName}");
-                return steamId64; // Fallback to 64-bit ID
-            }
-        }
-
-        Logger.Debug<ShortcutManager>("No user with MostRecent flag found");
         return null;
     }
 

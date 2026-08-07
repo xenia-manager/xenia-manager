@@ -355,8 +355,8 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Светлая</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Тёмная</sys:String>
-    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Системная</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Steam">Steam</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Системная</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Заставка при загрузке</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Показывать фоновое изображение игры во время её запуска в эмуляторе</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Отображение фонового изображения игры во время её запуска в эмуляторе</sys:String>
@@ -475,6 +475,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Ярлык для {0} успешно создан в вашей библиотеке Steam.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Не удалось создать ярлык в Steam</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Не удалось создать ярлык в библиотеке Steam для '{0}'.&#10;{1}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Страница совместимости</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Открыть страницу совместимости</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Страница совместимости отсутствует</sys:String>
@@ -998,6 +1002,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">Нет</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Быстрая</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Полная</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Разрешение рендеринга по X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Целочисленный коэффициент, изменяющий ширину пикселя для масштабирования разрешения независимо от внутриигрового</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Разрешение рендеринга по Y</sys:String>

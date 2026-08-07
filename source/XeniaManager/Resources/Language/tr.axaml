@@ -355,8 +355,8 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Açık</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Koyu</sys:String>
-    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistem</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Steam">Steam</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistem</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Yükleme Ekranı</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Oyunlar başlatılırken oyunun yükleme ekranı arka planını gösterir</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Oyunlar başlatılırken yükleme animasyonunu gösterir</sys:String>
@@ -475,6 +475,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">'{0}' için Steam kütüphanenizde başarıyla bir Steam kısayolu oluşturuldu.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Steam Kısayolu Oluşturulamadı</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">'{0}' için Steam kısayolu oluşturulamadı.&#10;{1}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Uyumluluk Sayfası</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Uyumluluk sayfasını açar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Uyumluluk Sayfası Yok</sys:String>
@@ -998,6 +1002,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">Hiçbiri</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Hızlı</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Tam</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Çizim Çözünürlük Ölçeği X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Oyun tarafından görülmeden render çözünürlüğünü ölçeklemek için kullanılan tam sayı piksel genişlik ölçeği</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Çizim Çözünürlük Ölçeği Y</sys:String>

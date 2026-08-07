@@ -413,6 +413,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">No screenshots found for {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Failed to Open Folder</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">There was an error while opening the screenshots folder.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">Open Game Location</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">Opens the folder containing the game file</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">Game File Not Found</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">The game file directory could not be found.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">Failed to Open Folder</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">There was an error while opening the game location.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Download</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Download patches from repository</sys:String>
@@ -483,6 +489,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Successfully created a Steam shortcut for '{0}' in your Steam library.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Failed to Create Steam Shortcut</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Failed to create Steam shortcut for '{0}'.&#10;{1}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">Select Steam Account</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">Multiple Steam accounts found</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">Select which account to create the shortcut for:</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">Cancel</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Compatibility Page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Opens the compatibility page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">No Compatibility Page</sys:String>
@@ -1006,6 +1016,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">None</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Fast</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Full</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">Readback Memexport</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">Read data written by memory export in shaders on the CPU.&#10;May be needed by some games, but causes mid-frame synchronization with a huge performance impact</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Draw Resolution Scale X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Integer pixel width scale used for scaling the rendering resolution opaquely to the game</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Draw Resolution Scale Y</sys:String>

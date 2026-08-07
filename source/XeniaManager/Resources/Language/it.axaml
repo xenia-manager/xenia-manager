@@ -355,8 +355,8 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Chiaro</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Amoled">AMOLED</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Scuro</sys:String>
-    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Steam">Steam</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.System">Sistema</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Schermata di Caricamento</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Mostra lo sfondo della schermata di caricamento del gioco all'avvio</sys:String>
     <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Mostra un'animazione di caricamento mentre i giochi si avviano</sys:String>
@@ -483,6 +483,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Collegamento Steam creato con successo per '{0}' nella tua libreria Steam.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Impossibile Creare il Collegamento Steam</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Impossibile creare il collegamento Steam per '{0}'.&#10;{1}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Pagina Compatibilità</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Apre la pagina di compatibilità</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Nessuna Pagina di Compatibilità</sys:String>
@@ -1006,6 +1010,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">Nessuno</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Veloce</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Completo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Scala Risoluzione X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Scala in pixel interi della larghezza per scalare la risoluzione di rendering</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Scala Risoluzione Y</sys:String>

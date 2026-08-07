@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -39,6 +40,7 @@ public partial class GameItemViewModel : ViewModelBase
     [ObservableProperty] private bool _isControllerFocused;
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
+    private INotificationService _notificationService;
     private Core.Settings.Settings _settings { get; set; }
     public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
@@ -65,6 +67,7 @@ public partial class GameItemViewModel : ViewModelBase
         Game = game;
         _library = library;
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
+        _notificationService = App.Services.GetRequiredService<INotificationService>();
         _settings = App.Services.GetRequiredService<Core.Settings.Settings>();
     }
 
@@ -670,7 +673,18 @@ public partial class GameItemViewModel : ViewModelBase
     {
         try
         {
-            ShortcutManager.CreateShortcut(Game);
+            int? discNumber = null;
+            if (Game.FileLocations.IsMultiDisc)
+            {
+                int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+                if (selectedDisc == null)
+                {
+                    return;
+                }
+                discNumber = selectedDisc;
+            }
+
+            ShortcutManager.CreateShortcut(Game, discNumber: discNumber);
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Message"),
@@ -693,7 +707,47 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Logger.Info<GameItemViewModel>($"Creating Steam shortcut for: '{Game.Title}'");
-            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game));
+
+            // For multi-disc games, ask which disc to use
+            int? discNumber = null;
+            if (Game.FileLocations.IsMultiDisc)
+            {
+                int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+                if (selectedDisc == null)
+                {
+                    Logger.Info<GameItemViewModel>($"Disc selection cancelled for: '{Game.Title}'");
+                    return;
+                }
+                discNumber = selectedDisc;
+            }
+
+            // Get all Steam users and select one
+            List<SteamUser> users = await Task.Run(ShortcutManager.GetAllSteamUsers);
+
+            if (users.Count == 0)
+            {
+                throw new Exception("No Steam users found");
+            }
+
+            string userId;
+            if (users.Count == 1)
+            {
+                userId = users[0].SteamId32 ?? users[0].SteamId64;
+                Logger.Info<GameItemViewModel>($"Using single Steam user: {users[0].PersonaName} ({userId})");
+            }
+            else
+            {
+                SteamUser? selectedUser = await SteamUserSelectionDialog.ShowAsync(users);
+                if (selectedUser == null)
+                {
+                    Logger.Info<GameItemViewModel>($"User cancelled Steam user selection for: '{Game.Title}'");
+                    return;
+                }
+                userId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
+                Logger.Info<GameItemViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({userId})");
+            }
+
+            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game, userId, discNumber: discNumber));
 
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Success.Title"),
@@ -929,6 +983,38 @@ public partial class GameItemViewModel : ViewModelBase
                     LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Error.Title"),
                     string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Error.Message"), Game.Title, ex.Message));
             }
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenGameLocation()
+    {
+        try
+        {
+            string? directory = Path.GetDirectoryName(Game.FileLocations.ResolvedGamePath);
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message"));   
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = directory,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to open game location for: {Game.Title}");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message"), 
+                    ex.Message));
         }
     }
 }
