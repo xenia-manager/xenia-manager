@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\source\XeniaManager.Core\XeniaManager.Core.csproj"/>
+        <ProjectReference Include="..\XeniaManager.Core\XeniaManager.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
