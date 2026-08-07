@@ -966,6 +966,13 @@ public partial class GameItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task RemoveFromGroup()
+    {
+        List<GameItemViewModel> games = _library.GetGamesForGroupAction(this);
+        await _library.RemoveGamesFromGroupAsync(games);
+    }
+
+    [RelayCommand]
     private async Task RemoveGame()
     {
         if (await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Title"),

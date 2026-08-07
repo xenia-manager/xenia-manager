@@ -11,383 +11,8 @@
              x:Class="XeniaManager.Views.Pages.LibraryPage"
              x:DataType="vm:LibraryPageViewModel"
              x:Name="Root">
-    <Design.DataContext>
-        <vm:LibraryPageViewModel />
-    </Design.DataContext>
-
-    <!-- UI -->
-    <Grid RowDefinitions="48,Auto,*,Auto"
-          DragDrop.AllowDrop="True"
-          DragDrop.DragEnter="OnDragEnter"
-          DragDrop.DragOver="OnDragOver"
-          DragDrop.DragLeave="OnDragLeave"
-          DragDrop.Drop="OnDrop">
-        <!-- Search & Menu -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <!-- Search -->
-            <Panel Grid.Column="0">
-                <TextBox x:Name="SearchTextBox"
-                         Padding="12,0"
-                         VerticalContentAlignment="Center"
-                         BorderThickness="0"
-                         FontSize="24"
-                         PlaceholderText="{DynamicResource LibraryPage.Search.PlaceholderText}"
-                         Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <Button Background="Transparent"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0,0,8,0"
-                        Width="40"
-                        Height="40"
-                        Command="{Binding ClearSearchCommand}"
-                        IsVisible="{Binding SearchQuery, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                    <icons:SymbolIcon Symbol="PenDismiss"
-                                      FontSize="18" />
-                </Button>
-            </Panel>
-
-            <!-- Refresh -->
-            <Button Grid.Column="1"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Command="{Binding RefreshCommand}"
-                    ToolTip.Tip="{DynamicResource LibraryPage.Refresh.ToolTip}">
-                <icons:SymbolIcon Symbol="ArrowSync" />
-            </Button>
-
-            <!-- Toggle Grid/List View -->
-            <Button Grid.Column="2"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Command="{Binding ToggleGridViewCommand}">
-                <Panel>
-                    <!-- Show List icon when in Grid view (click to switch to list) -->
-                    <icons:SymbolIcon Symbol="List"
-                                      IsVisible="{Binding IsGridView}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.ToggleView.ToolTip.ListView}" />
-                    <!-- Show Grid icon when in List view (click to switch to grid) -->
-                    <icons:SymbolIcon Symbol="Grid"
-                                      IsVisible="{Binding !IsGridView}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.ToggleView.ToolTip.GridView}" />
-                </Panel>
-            </Button>
-
-            <!-- Sort -->
-            <Button Grid.Column="3"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    ToolTip.Tip="{DynamicResource LibraryPage.Sort.ToolTip}">
-                <icons:SymbolIcon Symbol="ArrowSort" />
-                <Button.Flyout>
-                    <MenuFlyout Placement="BottomEdgeAlignedRight">
-                        <!-- Sort Direction Toggle -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Direction}"
-                                  Command="{Binding ToggleSortDirectionCommand}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="{Binding SortDirectionIcon}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <!-- Sort Options -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Title}"
-                                  Command="{Binding SetSortOptionCommand}"
-                                  CommandParameter="{x:Static models:GameSortOption.Title}"
-                                  ToggleType="CheckBox"
-                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Title}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="TextSortAscending" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Compatibility}"
-                                  Command="{Binding SetSortOptionCommand}"
-                                  CommandParameter="{x:Static models:GameSortOption.Compatibility}"
-                                  ToggleType="CheckBox"
-                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Compatibility}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="HeartPulse" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Playtime}"
-                                  Command="{Binding SetSortOptionCommand}"
-                                  CommandParameter="{x:Static models:GameSortOption.Playtime}"
-                                  ToggleType="CheckBox"
-                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Playtime}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="Timer" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="{DynamicResource LibraryPage.Sort.XeniaVersion}"
-                                  Command="{Binding SetSortOptionCommand}"
-                                  CommandParameter="{x:Static models:GameSortOption.XeniaVersion}"
-                                  ToggleType="CheckBox"
-                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=XeniaVersion}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="AppFolder" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="{DynamicResource LibraryPage.Sort.LastPlayed}"
-                                  Command="{Binding SetSortOptionCommand}"
-                                  CommandParameter="{x:Static models:GameSortOption.LastPlayed}"
-                                  ToggleType="CheckBox"
-                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=LastPlayed}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="History" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-
-            <!-- Menu -->
-            <Button Grid.Column="4"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                <icons:SymbolIcon Symbol="MoreVertical" />
-                <Button.Flyout>
-                    <MenuFlyout Placement="BottomEdgeAlignedRight">
-                        <!-- Edit Grid View -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Header}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.ToolTip}"
-                                  IsVisible="{Binding IsGridView}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="Eye" />
-                            </MenuItem.Icon>
-                            <!-- Game Title -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Title.Header}"
-                                      Command="{Binding ToggleGameTitleCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowGameTitle}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="SlideTextTitle" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Compatibility Rating -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.CompatibilityRating.Header}"
-                                      Command="{Binding ToggleCompatibilityRatingCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowCompatibilityRating}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="WindowDevTools" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Xenia Version -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.XeniaVersion.Header}"
-                                      Command="{Binding ToggleXeniaVersionCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowXeniaVersion}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.XeniaVersion.ToolTip}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="Apps" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Double Click Launch -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.DoubleClickLaunch.Header}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.DoubleClickLaunch.ToolTip}"
-                                      Command="{Binding ToggleDoubleClickLaunchCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding DoubleClickLaunch}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="CursorClick" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </MenuItem>
-                        <!-- Edit List View -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Header}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditListView.ToolTip}"
-                                  IsVisible="{Binding !IsGridView}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="List" />
-                            </MenuItem.Icon>
-                            <!-- Compatibility Rating -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.CompatibilityRating.Header}"
-                                      Command="{Binding ToggleListCompatibilityRatingCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowListCompatibilityRating}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="WindowDevTools" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Icon -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Icon.Header}"
-                                      Command="{Binding ToggleListIconCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowListIcon}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="Image" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Playtime -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Playtime.Header}"
-                                      Command="{Binding ToggleListPlaytimeCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowListPlaytime}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="Timer" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Last Played -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.LastPlayed.Header}"
-                                      Command="{Binding ToggleListLastPlayedCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowListLastPlayed}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="Clock" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Xenia Version -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.XeniaVersion.Header}"
-                                      Command="{Binding ToggleListXeniaVersionCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowListXeniaVersion}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.EditListView.XeniaVersion.ToolTip}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="Apps" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Title ID -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.TitleId.Header}"
-                                      Command="{Binding ToggleListTitleIdCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowListTitleId}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="Tag" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <!-- Media ID -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.MediaId.Header}"
-                                      Command="{Binding ToggleListMediaIdCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding ShowListMediaId}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="Bookmark" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </MenuItem>
-                        <Separator />
-                        <!-- Export Shortcuts -->
-                        <!-- TODO: Add support for Linux/Proton/Wine-->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.ExportShortcuts.Header}"
-                                  Command="{Binding ExportGameShortcutsCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.ToolTip}"
-                                  IsVisible="{Binding SupportsShortcuts}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="ArrowExport" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <!-- Update Compatibility Ratings -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.Header}"
-                                  Command="{Binding UpdateCompatibilityRatingsCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.ToolTip}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="ArrowSync" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <!-- Optimize Game Settings -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.OptimizeGameSettings.Header}"
-                                  Command="{Binding UpdateOptimizedSettingsCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.OptimizeGameSettings.ToolTip}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="CloudSync" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <!-- Scan Directory -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.ScanDirectory.Header}"
-                                  Command="{Binding ScanDirectoryCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ScanDirectory.ToolTip}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="FolderAdd" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <!-- Add Game -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.AddGame.Header}"
-                                  Command="{Binding AddGameCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.AddGame.ToolTip}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="Add" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <!-- Remove Invalid Games -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.RemoveInvalidGames.Header}"
-                                  Command="{Binding RemoveInvalidGamesCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.RemoveInvalidGames.ToolTip}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="Delete" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-        </Grid>
-
-        <!-- Zoom Slider -->
-        <Grid Grid.Row="1" Margin="10,0"
-              IsVisible="{Binding IsGridView}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <icons:SymbolIcon Grid.Column="0"
-                              Symbol="ZoomOut"
-                              FontSize="14"
-                              Margin="0,0,8,0" />
-            <Slider Grid.Column="1"
-                    VerticalAlignment="Center"
-                    IsSnapToTickEnabled="True"
-                    Maximum="{Binding ZoomMaximum}"
-                    Minimum="{Binding ZoomMinimum}"
-                    MinHeight="0"
-                    Padding="0"
-                    TickFrequency="{Binding ZoomTickFrequency}"
-                    Value="{Binding ZoomValue}"
-                    ToolTip.Tip="{Binding ZoomToolTip}" />
-            <icons:SymbolIcon Grid.Column="2"
-                              Symbol="ZoomIn"
-                              FontSize="14"
-                              Margin="8,0,0,0" />
-        </Grid>
-
-        <!-- Games (Grid View) -->
-        <ScrollViewer Grid.Row="2"
-                      Padding="8"
-                      IsVisible="{Binding IsGridView}"
-                      PointerReleased="OnScrollViewerPointerReleased">
-            <controls:FAItemsRepeater Margin="0,0,10,0"
-                                      ItemsSource="{Binding Games}">
-                <controls:FAItemsRepeater.Layout>
-                    <controls:FAUniformGridLayout MinItemWidth="{Binding MinItemWidth}"
-                                                  MinItemHeight="{Binding MinItemHeight}"
-                                                  MinRowSpacing="{Binding ItemSpacing}"
-                                                  MinColumnSpacing="{Binding ItemSpacing}"
-                                                  ItemsStretch="Uniform" />
-                </controls:FAItemsRepeater.Layout>
-
-                <controls:FAItemsRepeater.ItemTemplate>
-                    <DataTemplate x:DataType="itemVm:GameItemViewModel">
+    <UserControl.Resources>
+        <DataTemplate x:Key="GameGridItemTemplate" x:DataType="itemVm:GameItemViewModel">
                         <Button Padding="0"
                                 BorderThickness="3"
                                 CornerRadius="8"
@@ -721,6 +346,16 @@
                                             <TextBlock Text="{DynamicResource GameButton.ContextFlyout.AddToGroup.ToolTip}" />
                                         </ToolTip.Tip>
                                     </MenuItem>
+                                    <!-- Remove from Group -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveFromGroup.Header}"
+                                              Command="{Binding RemoveFromGroupCommand}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="FolderArrowRight" />
+                                        </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.RemoveFromGroup.ToolTip}" />
+                                        </ToolTip.Tip>
+                                    </MenuItem>
                                     <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
                                               Command="{Binding RemoveGameCommand}">
@@ -827,21 +462,8 @@
                                 </Grid>
                             </Border>
                         </Button>
-                    </DataTemplate>
-                </controls:FAItemsRepeater.ItemTemplate>
-            </controls:FAItemsRepeater>
-        </ScrollViewer>
-
-        <!-- Games (List View) -->
-        <ScrollViewer Grid.Row="2"
-                      Padding="8,8,18,8"
-                      Background="Transparent"
-                      IsVisible="{Binding !IsGridView}"
-                      PointerReleased="OnListPointerReleased"
-                      HorizontalScrollBarVisibility="Disabled">
-            <controls:FAItemsRepeater ItemsSource="{Binding Games}">
-                <controls:FAItemsRepeater.ItemTemplate>
-                    <DataTemplate x:DataType="itemVm:GameItemViewModel">
+        </DataTemplate>
+        <DataTemplate x:Key="GameListItemTemplate" x:DataType="itemVm:GameItemViewModel">
                         <Border Background="Transparent"
                                 Padding="8,6"
                                 Margin="0,0"
@@ -1068,6 +690,16 @@
                                             <TextBlock Text="{DynamicResource GameButton.ContextFlyout.AddToGroup.ToolTip}" />
                                         </ToolTip.Tip>
                                     </MenuItem>
+                                    <!-- Remove from Group -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveFromGroup.Header}"
+                                              Command="{Binding RemoveFromGroupCommand}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="FolderArrowRight" />
+                                        </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.RemoveFromGroup.ToolTip}" />
+                                        </ToolTip.Tip>
+                                    </MenuItem>
                                     <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
                                               Command="{Binding RemoveGameCommand}">
@@ -1235,9 +867,477 @@
                                 </StackPanel>
                             </Grid>
                         </Border>
-                    </DataTemplate>
-                </controls:FAItemsRepeater.ItemTemplate>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Design.DataContext>
+        <vm:LibraryPageViewModel />
+    </Design.DataContext>
+
+    <!-- UI -->
+    <Grid RowDefinitions="48,Auto,*,Auto"
+          DragDrop.AllowDrop="True"
+          DragDrop.DragEnter="OnDragEnter"
+          DragDrop.DragOver="OnDragOver"
+          DragDrop.DragLeave="OnDragLeave"
+          DragDrop.Drop="OnDrop">
+        <!-- Search & Menu -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Search -->
+            <Panel Grid.Column="0">
+                <TextBox x:Name="SearchTextBox"
+                         Padding="12,0"
+                         VerticalContentAlignment="Center"
+                         BorderThickness="0"
+                         FontSize="24"
+                         PlaceholderText="{DynamicResource LibraryPage.Search.PlaceholderText}"
+                         Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,8,0"
+                        Width="40"
+                        Height="40"
+                        Command="{Binding ClearSearchCommand}"
+                        IsVisible="{Binding SearchQuery, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <icons:SymbolIcon Symbol="PenDismiss"
+                                      FontSize="18" />
+                </Button>
+            </Panel>
+
+
+            <!-- Groups -->
+            <Button Grid.Column="1"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    ToolTip.Tip="{DynamicResource LibraryPage.Groups.ToolTip}">
+                <icons:SymbolIcon Symbol="Folder" />
+                <Button.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <MenuItem Header="{DynamicResource LibraryPage.Groups.New.Header}"
+                                  Command="{Binding CreateGroupCommand}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Add" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+            <!-- Refresh -->
+            <Button Grid.Column="2"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Command="{Binding RefreshCommand}"
+                    ToolTip.Tip="{DynamicResource LibraryPage.Refresh.ToolTip}">
+                <icons:SymbolIcon Symbol="ArrowSync" />
+            </Button>
+
+            <!-- Toggle Grid/List View -->
+            <Button Grid.Column="3"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Command="{Binding ToggleGridViewCommand}">
+                <Panel>
+                    <!-- Show List icon when in Grid view (click to switch to list) -->
+                    <icons:SymbolIcon Symbol="List"
+                                      IsVisible="{Binding IsGridView}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.ToggleView.ToolTip.ListView}" />
+                    <!-- Show Grid icon when in List view (click to switch to grid) -->
+                    <icons:SymbolIcon Symbol="Grid"
+                                      IsVisible="{Binding !IsGridView}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.ToggleView.ToolTip.GridView}" />
+                </Panel>
+            </Button>
+
+            <!-- Sort -->
+            <Button Grid.Column="4"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    ToolTip.Tip="{DynamicResource LibraryPage.Sort.ToolTip}">
+                <icons:SymbolIcon Symbol="ArrowSort" />
+                <Button.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <!-- Sort Direction Toggle -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Direction}"
+                                  Command="{Binding ToggleSortDirectionCommand}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="{Binding SortDirectionIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Sort Options -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Title}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.Title}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Title}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="TextSortAscending" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Compatibility}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.Compatibility}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Compatibility}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="HeartPulse" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.Playtime}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.Playtime}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=Playtime}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Timer" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.XeniaVersion}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.XeniaVersion}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=XeniaVersion}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="AppFolder" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource LibraryPage.Sort.LastPlayed}"
+                                  Command="{Binding SetSortOptionCommand}"
+                                  CommandParameter="{x:Static models:GameSortOption.LastPlayed}"
+                                  ToggleType="CheckBox"
+                                  IsChecked="{Binding SortOption, Converter={StaticResource EnumToValueConverter}, ConverterParameter=LastPlayed}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="History" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+            <!-- Menu -->
+            <Button Grid.Column="5"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <icons:SymbolIcon Symbol="MoreVertical" />
+                <Button.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <!-- Edit Grid View -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Header}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.ToolTip}"
+                                  IsVisible="{Binding IsGridView}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Eye" />
+                            </MenuItem.Icon>
+                            <!-- Game Title -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Title.Header}"
+                                      Command="{Binding ToggleGameTitleCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowGameTitle}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="SlideTextTitle" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Compatibility Rating -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.CompatibilityRating.Header}"
+                                      Command="{Binding ToggleCompatibilityRatingCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowCompatibilityRating}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="WindowDevTools" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Xenia Version -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.XeniaVersion.Header}"
+                                      Command="{Binding ToggleXeniaVersionCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowXeniaVersion}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.XeniaVersion.ToolTip}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Apps" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Double Click Launch -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.DoubleClickLaunch.Header}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.DoubleClickLaunch.ToolTip}"
+                                      Command="{Binding ToggleDoubleClickLaunchCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding DoubleClickLaunch}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="CursorClick" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <!-- Edit List View -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Header}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditListView.ToolTip}"
+                                  IsVisible="{Binding !IsGridView}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="List" />
+                            </MenuItem.Icon>
+                            <!-- Compatibility Rating -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.CompatibilityRating.Header}"
+                                      Command="{Binding ToggleListCompatibilityRatingCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListCompatibilityRating}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="WindowDevTools" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Icon -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Icon.Header}"
+                                      Command="{Binding ToggleListIconCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListIcon}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Image" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Playtime -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.Playtime.Header}"
+                                      Command="{Binding ToggleListPlaytimeCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListPlaytime}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Timer" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Last Played -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.LastPlayed.Header}"
+                                      Command="{Binding ToggleListLastPlayedCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListLastPlayed}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Clock" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Xenia Version -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.XeniaVersion.Header}"
+                                      Command="{Binding ToggleListXeniaVersionCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListXeniaVersion}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.EditListView.XeniaVersion.ToolTip}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Apps" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Title ID -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.TitleId.Header}"
+                                      Command="{Binding ToggleListTitleIdCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListTitleId}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Tag" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Media ID -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditListView.MediaId.Header}"
+                                      Command="{Binding ToggleListMediaIdCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowListMediaId}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Bookmark" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Export Shortcuts -->
+                        <!-- TODO: Add support for Linux/Proton/Wine-->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.ExportShortcuts.Header}"
+                                  Command="{Binding ExportGameShortcutsCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.ToolTip}"
+                                  IsVisible="{Binding SupportsShortcuts}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="ArrowExport" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <!-- Update Compatibility Ratings -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.Header}"
+                                  Command="{Binding UpdateCompatibilityRatingsCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.ToolTip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="ArrowSync" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <!-- Optimize Game Settings -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.OptimizeGameSettings.Header}"
+                                  Command="{Binding UpdateOptimizedSettingsCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.OptimizeGameSettings.ToolTip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="CloudSync" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Scan Directory -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.ScanDirectory.Header}"
+                                  Command="{Binding ScanDirectoryCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ScanDirectory.ToolTip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="FolderAdd" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <!-- Add Game -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.AddGame.Header}"
+                                  Command="{Binding AddGameCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.AddGame.ToolTip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Add" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Remove Invalid Games -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.RemoveInvalidGames.Header}"
+                                  Command="{Binding RemoveInvalidGamesCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.RemoveInvalidGames.ToolTip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Delete" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </Grid>
+
+        <!-- Zoom Slider -->
+        <Grid Grid.Row="1" Margin="10,0"
+              IsVisible="{Binding IsGridView}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <icons:SymbolIcon Grid.Column="0"
+                              Symbol="ZoomOut"
+                              FontSize="14"
+                              Margin="0,0,8,0" />
+            <Slider Grid.Column="1"
+                    VerticalAlignment="Center"
+                    IsSnapToTickEnabled="True"
+                    Maximum="{Binding ZoomMaximum}"
+                    Minimum="{Binding ZoomMinimum}"
+                    MinHeight="0"
+                    Padding="0"
+                    TickFrequency="{Binding ZoomTickFrequency}"
+                    Value="{Binding ZoomValue}"
+                    ToolTip.Tip="{Binding ZoomToolTip}" />
+            <icons:SymbolIcon Grid.Column="2"
+                              Symbol="ZoomIn"
+                              FontSize="14"
+                              Margin="8,0,0,0" />
+        </Grid>
+
+        <!-- Games (Grid View - flat when no groups) -->
+        <ScrollViewer Grid.Row="2"
+                      Padding="8"
+                      IsVisible="{Binding IsFlatGridVisible}"
+                      PointerReleased="OnScrollViewerPointerReleased">
+            <controls:FAItemsRepeater Margin="0,0,10,0"
+                                      ItemsSource="{Binding Games}"
+                                      ItemTemplate="{StaticResource GameGridItemTemplate}">
+                <controls:FAItemsRepeater.Layout>
+                    <controls:FAUniformGridLayout MinItemWidth="{Binding MinItemWidth}"
+                                                  MinItemHeight="{Binding MinItemHeight}"
+                                                  MinRowSpacing="{Binding ItemSpacing}"
+                                                  MinColumnSpacing="{Binding ItemSpacing}"
+                                                  ItemsStretch="Uniform" />
+                </controls:FAItemsRepeater.Layout>
+
             </controls:FAItemsRepeater>
+        </ScrollViewer>
+
+        <!-- Games (List View - flat when no groups) -->
+        <ScrollViewer Grid.Row="2"
+                      Padding="8,8,18,8"
+                      Background="Transparent"
+                      IsVisible="{Binding IsFlatListVisible}"
+                      PointerReleased="OnListPointerReleased"
+                      HorizontalScrollBarVisibility="Disabled">
+            <controls:FAItemsRepeater ItemsSource="{Binding Games}"
+                                      ItemTemplate="{StaticResource GameListItemTemplate}">
+
+            </controls:FAItemsRepeater>
+        </ScrollViewer>
+
+
+        <!-- Games (sectioned by group) -->
+        <ScrollViewer Grid.Row="2"
+                      Padding="8"
+                      IsVisible="{Binding IsSectionedVisible}"
+                      PointerReleased="OnScrollViewerPointerReleased"
+                      HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding GroupSections}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="itemVm:GameGroupSectionViewModel">
+                        <Expander Margin="0,0,0,8"
+                                  IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                            <Expander.Header>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="{Binding HeaderText}"
+                                               FontWeight="SemiBold"
+                                               FontSize="16"
+                                               VerticalAlignment="Center" />
+                                    <Button Grid.Column="1"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            Padding="8,4"
+                                            IsVisible="{Binding IsUserGroup}"
+                                            Command="{Binding DeleteGroupCommand}"
+                                            ToolTip.Tip="{DynamicResource LibraryPage.Groups.Delete.ToolTip}">
+                                        <icons:SymbolIcon Symbol="Delete" FontSize="16" />
+                                    </Button>
+                                </Grid>
+                            </Expander.Header>
+                            <Panel>
+                                <!-- Grid inside section -->
+                                <controls:FAItemsRepeater Margin="0,0,10,0"
+                                                          ItemsSource="{Binding Games}"
+                                                          ItemTemplate="{StaticResource GameGridItemTemplate}"
+                                                          IsVisible="{Binding DataContext.IsGridView, ElementName=Root}">
+                                    <controls:FAItemsRepeater.Layout>
+                                        <controls:FAUniformGridLayout MinItemWidth="{Binding DataContext.MinItemWidth, ElementName=Root}"
+                                                                      MinItemHeight="{Binding DataContext.MinItemHeight, ElementName=Root}"
+                                                                      MinRowSpacing="{Binding DataContext.ItemSpacing, ElementName=Root}"
+                                                                      MinColumnSpacing="{Binding DataContext.ItemSpacing, ElementName=Root}"
+                                                                      ItemsStretch="Uniform" />
+                                    </controls:FAItemsRepeater.Layout>
+                                </controls:FAItemsRepeater>
+                                <!-- List inside section -->
+                                <controls:FAItemsRepeater ItemsSource="{Binding Games}"
+                                                          ItemTemplate="{StaticResource GameListItemTemplate}"
+                                                          IsVisible="{Binding !DataContext.IsGridView, ElementName=Root}" />
+                            </Panel>
+                        </Expander>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
 
         <!-- Bulk Delete Toolbar (shown when games are selected) -->

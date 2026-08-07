@@ -17,11 +17,6 @@ public class GroupManager
     public static List<GameGroup> Groups { get; set; } = [];
 
     /// <summary>
-    /// Currently active group filter for the library. Null means show all games.
-    /// </summary>
-    public static Guid? ActiveFilterGroupId { get; private set; }
-
-    /// <summary>
     /// Builds a stable key used to associate a game with groups.
     /// </summary>
     public static string GetGameKey(Game game)
@@ -218,9 +213,50 @@ public class GroupManager
     }
 
     /// <summary>
+    /// Removes multiple games from the specified group and persists once.
+    /// </summary>
+    /// <returns>Number of games removed.</returns>
+    public static int RemoveGamesFromGroup(Guid groupId, IEnumerable<Game> games)
+    {
+        GameGroup? group = Groups.FirstOrDefault(g => g.Id == groupId);
+        if (group == null)
+        {
+            return 0;
+        }
+
+        int removedCount = 0;
+        foreach (Game game in games)
+        {
+            string key = GetGameKey(game);
+            int removed = group.GameKeys.RemoveAll(k => string.Equals(k, key, StringComparison.OrdinalIgnoreCase));
+            if (removed > 0)
+            {
+                removedCount++;
+                Logger.Info<GroupManager>($"Removed '{game.Title}' from group '{group.Name}'");
+            }
+        }
+
+        if (removedCount > 0)
+        {
+            SaveGroups();
+            EventManager.Instance.OnGameGroupsChanged();
+        }
+
+        return removedCount;
+    }
+
+    /// <summary>
     /// Removes a game from the specified group and persists the change.
     /// </summary>
     public static bool RemoveGameFromGroup(Guid groupId, Game game)
+    {
+        return RemoveGamesFromGroup(groupId, [game]) > 0;
+    }
+
+    /// <summary>
+    /// Deletes a group and persists the change.
+    /// </summary>
+    public static bool DeleteGroup(Guid groupId)
     {
         GameGroup? group = Groups.FirstOrDefault(g => g.Id == groupId);
         if (group == null)
@@ -228,17 +264,23 @@ public class GroupManager
             return false;
         }
 
-        string key = GetGameKey(game);
-        int removed = group.GameKeys.RemoveAll(k => string.Equals(k, key, StringComparison.OrdinalIgnoreCase));
-        if (removed == 0)
-        {
-            return false;
-        }
-
+        Groups.Remove(group);
         SaveGroups();
         EventManager.Instance.OnGameGroupsChanged();
-        Logger.Info<GroupManager>($"Removed '{game.Title}' from group '{group.Name}'");
+        Logger.Info<GroupManager>($"Deleted game group '{group.Name}' ({group.Id})");
         return true;
+    }
+
+    /// <summary>
+    /// Returns all groups that contain the given game.
+    /// </summary>
+    public static List<GameGroup> GetGroupsContaining(Game game)
+    {
+        string key = GetGameKey(game);
+        return Groups
+            .Where(g => g.GameKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
+            .OrderBy(g => g.Name, StringComparer.CurrentCultureIgnoreCase)
+            .ToList();
     }
 
     /// <summary>
@@ -257,21 +299,12 @@ public class GroupManager
     }
 
     /// <summary>
-    /// Sets the active library group filter and notifies listeners.
-    /// Pass null to clear the filter and show all games.
+    /// Returns whether the game belongs to any group.
     /// </summary>
-    public static void SetActiveFilter(Guid? groupId)
+    public static bool IsInAnyGroup(Game game)
     {
-        if (ActiveFilterGroupId == groupId)
-        {
-            return;
-        }
-
-        ActiveFilterGroupId = groupId;
-        Logger.Info<GroupManager>(groupId.HasValue
-            ? $"Active group filter set to {groupId}"
-            : "Active group filter cleared");
-        EventManager.Instance.OnGroupFilterChanged(groupId);
+        string key = GetGameKey(game);
+        return Groups.Any(g => g.GameKeys.Contains(key, StringComparer.OrdinalIgnoreCase));
     }
 
     private static void TryRecoverFromBackup(string backupPath)

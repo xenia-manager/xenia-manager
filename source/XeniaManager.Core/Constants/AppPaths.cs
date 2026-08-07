@@ -24,7 +24,6 @@ public class AppPaths
     public static readonly string GameLibraryPath = Path.Combine(ConfigDirectory, "games.json");
     public static readonly string GameGroupsPath = Path.Combine(ConfigDirectory, "groups.json");
 
-
     // Downloads
     public static readonly string DownloadsDirectory = AppPathResolver.GetFullPath("Downloads");
 

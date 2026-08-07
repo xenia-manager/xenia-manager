@@ -5,15 +5,9 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
-using FluentIcons.Avalonia.Fluent;
-using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Manage;
-using XeniaManager.Core.Models.Game;
-using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels;
@@ -43,63 +37,11 @@ public partial class MainView : UserControl
         // Auto-fit pane width to content when opening
         NavigationView.PaneOpening += NavigationView_OnPaneOpening;
 
-        RefreshGroupNavigationItems();
-        EventManager.Instance.GameGroupsChanged += OnGameGroupsChanged;
-
         // Navigate to Library (Default Page)
         _ = _navigationService.NavigateToTag("Library");
     }
 
     // Functions
-    private void OnGameGroupsChanged()
-    {
-        if (!Dispatcher.UIThread.CheckAccess())
-        {
-            Dispatcher.UIThread.Post(RefreshGroupNavigationItems);
-            return;
-        }
-
-        RefreshGroupNavigationItems();
-    }
-
-    /// <summary>
-    /// Rebuilds nested Library navigation items for each game group plus "New Group".
-    /// </summary>
-    private void RefreshGroupNavigationItems()
-    {
-        try
-        {
-            LibraryNavItem.MenuItems.Clear();
-
-            foreach (GameGroup group in GroupManager.Groups.OrderBy(g => g.Name, StringComparer.CurrentCultureIgnoreCase))
-            {
-                FANavigationViewItem groupItem = new FANavigationViewItem
-                {
-                    Content = group.Name,
-                    Tag = $"Group:{group.Id}",
-                    IconSource = new SymbolIconSource { Symbol = Symbol.Folder }
-                };
-                LibraryNavItem.MenuItems.Add(groupItem);
-            }
-
-            FANavigationViewItem addGroupItem = new FANavigationViewItem
-            {
-                Content = LocalizationHelper.GetText("MainView.Navigation.AddGroup"),
-                Tag = "AddGroup",
-                IconSource = new SymbolIconSource { Symbol = Symbol.Add }
-            };
-            LibraryNavItem.MenuItems.Add(addGroupItem);
-
-            LibraryNavItem.IsExpanded = true;
-            Logger.Debug<MainView>($"Refreshed group navigation items ({GroupManager.Groups.Count} groups)");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<MainView>("Failed to refresh group navigation items");
-            Logger.LogExceptionDetails<MainView>(ex);
-        }
-    }
-
     private void NavigationView_OnPaneOpening(FANavigationView sender, EventArgs args)
     {
         try
@@ -120,7 +62,6 @@ public partial class MainView : UserControl
         IEnumerable<FANavigationViewItem> items = NavigationView.MenuItems
             .Concat(NavigationView.FooterMenuItems)
             .OfType<FANavigationViewItem>()
-            .SelectMany(FlattenNavigationItems)
             .Where(i => i.Content is string text && !string.IsNullOrEmpty(text));
 
         double maxTextWidth = 0;
@@ -149,18 +90,6 @@ public partial class MainView : UserControl
         double clampedWidth = Math.Clamp(maxTextWidth + nonTextWidth, 180, 500);
         Logger.Debug<MainView>($"Max text width: {maxTextWidth:F1}px, total: {maxTextWidth + nonTextWidth:F0}px, clamped: {clampedWidth:F0}px");
         return clampedWidth;
-    }
-
-    private static IEnumerable<FANavigationViewItem> FlattenNavigationItems(FANavigationViewItem item)
-    {
-        yield return item;
-        foreach (FANavigationViewItem child in item.MenuItems.OfType<FANavigationViewItem>())
-        {
-            foreach (FANavigationViewItem nested in FlattenNavigationItems(child))
-            {
-                yield return nested;
-            }
-        }
     }
 
     private async void NavigationView_OnItemInvoked(object? sender, FANavigationViewItemInvokedEventArgs e)

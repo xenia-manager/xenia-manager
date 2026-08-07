@@ -20,7 +20,6 @@ public class EventManager
 
     // Game groups events
     public event Action? GameGroupsChanged;
-    public event Action<Guid?>? GroupFilterChanged;
 
     /// <summary>
     /// Triggers the window disable/enable event on the UI thread.
@@ -75,14 +74,5 @@ public class EventManager
     public void OnGameGroupsChanged()
     {
         GameGroupsChanged?.Invoke();
-    }
-
-    /// <summary>
-    /// Triggers the active group filter changed event.
-    /// </summary>
-    /// <param name="groupId">Selected group id, or null to show all games.</param>
-    public void OnGroupFilterChanged(Guid? groupId)
-    {
-        GroupFilterChanged?.Invoke(groupId);
     }
 }

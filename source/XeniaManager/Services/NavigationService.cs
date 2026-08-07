@@ -10,7 +10,6 @@ using XeniaManager.Controls;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
@@ -155,13 +154,8 @@ public class NavigationService
                 break;
             case "Library":
                 Logger.Debug<NavigationService>("Navigating to Library page");
-                GroupManager.SetActiveFilter(null);
                 frame.Navigate(typeof(LibraryPage), null, new FAEntranceNavigationTransitionInfo());
                 break;
-            case "AddGroup":
-                Logger.Info<NavigationService>("Processing 'AddGroup' tag");
-                await HandleAddGroupAsync(frame);
-                return;
             case "XeniaSettings":
                 Logger.Debug<NavigationService>("Navigating to Xenia Settings page");
                 Logger.Info<NavigationService>($"Found {installedVersions.Count} installed Xenia versions, allowing navigation to Xenia Settings");
@@ -180,12 +174,6 @@ public class NavigationService
                 frame.Navigate(typeof(SettingsPage), null, new FAEntranceNavigationTransitionInfo());
                 break;
             default:
-                if (tag.StartsWith("Group:", StringComparison.Ordinal))
-                {
-                    await HandleGroupFilterAsync(tag, frame);
-                    break;
-                }
-
                 Logger.Warning<NavigationService>($"Unknown navigation tag requested: {tag}");
                 break;
         }
@@ -209,59 +197,6 @@ public class NavigationService
 
         Navigated?.Invoke(this, tag);
         Logger.Info<NavigationService>($"Navigation to tag '{tag}' completed successfully");
-    }
-
-    /// <summary>
-    /// Prompts for a group name, creates the group, then selects it in the library.
-    /// </summary>
-    private async Task HandleAddGroupAsync(FAFrame frame)
-    {
-        string? name = await GroupNameDialog.ShowAsync();
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            Logger.Info<NavigationService>("Add group cancelled or empty name");
-            // Restore previous library selection visually
-            string restoreTag = GroupManager.ActiveFilterGroupId is Guid activeId
-                ? $"Group:{activeId}"
-                : "Library";
-            UpdateSelection(restoreTag);
-            return;
-        }
-
-        GameGroup group = GroupManager.CreateGroup(name);
-        GroupManager.SetActiveFilter(group.Id);
-        frame.Navigate(typeof(LibraryPage), null, new FAEntranceNavigationTransitionInfo());
-        _currentPageTag = $"Group:{group.Id}";
-        UpdateSelection(_currentPageTag);
-        SetSelectedIcon(FindNavigationItemByTag("Library"));
-        Navigated?.Invoke(this, _currentPageTag);
-        Logger.Info<NavigationService>($"Created and selected group '{group.Name}'");
-    }
-
-    /// <summary>
-    /// Navigates to the library and filters it to the selected group.
-    /// </summary>
-    private async Task HandleGroupFilterAsync(string tag, FAFrame frame)
-    {
-        string idText = tag["Group:".Length..];
-        if (!Guid.TryParse(idText, out Guid groupId))
-        {
-            Logger.Warning<NavigationService>($"Invalid group navigation tag: {tag}");
-            await _messageBoxService.ShowWarningAsync(
-                LocalizationHelper.GetText("MainView.Navigation.Error.Title"),
-                $"Invalid group id in tag '{tag}'");
-            return;
-        }
-
-        if (GroupManager.Groups.All(g => g.Id != groupId))
-        {
-            Logger.Warning<NavigationService>($"Group not found for tag: {tag}");
-            return;
-        }
-
-        Logger.Info<NavigationService>($"Filtering library by group {groupId}");
-        GroupManager.SetActiveFilter(groupId);
-        frame.Navigate(typeof(LibraryPage), null, new FAEntranceNavigationTransitionInfo());
     }
 
     /// <summary>
@@ -335,8 +270,8 @@ public class NavigationService
             return null;
         }
 
-        FANavigationViewItem? menuItem = FindNavigationItemByTagRecursive(
-            _navigationView.MenuItems.OfType<FANavigationViewItem>(), tag);
+        // Search in menu items
+        FANavigationViewItem? menuItem = _navigationView.MenuItems.OfType<FANavigationViewItem>().FirstOrDefault(x => x.Tag?.ToString() == tag);
 
         if (menuItem != null)
         {
@@ -344,31 +279,10 @@ public class NavigationService
             return menuItem;
         }
 
-        FANavigationViewItem? footerItem = FindNavigationItemByTagRecursive(
-            _navigationView.FooterMenuItems.OfType<FANavigationViewItem>(), tag);
+        // Search in footer items
+        FANavigationViewItem? footerItem = _navigationView.FooterMenuItems.OfType<FANavigationViewItem>().FirstOrDefault(x => x.Tag?.ToString() == tag);
         Logger.Trace<NavigationService>(footerItem != null ? $"Found item '{tag}' in footer items" : $"Item '{tag}' not found in menu or footer");
 
         return footerItem;
-    }
-
-    private static FANavigationViewItem? FindNavigationItemByTagRecursive(
-        IEnumerable<FANavigationViewItem> items, string tag)
-    {
-        foreach (FANavigationViewItem item in items)
-        {
-            if (item.Tag?.ToString() == tag)
-            {
-                return item;
-            }
-
-            FANavigationViewItem? nested = FindNavigationItemByTagRecursive(
-                item.MenuItems.OfType<FANavigationViewItem>(), tag);
-            if (nested != null)
-            {
-                return nested;
-            }
-        }
-
-        return null;
     }
 }

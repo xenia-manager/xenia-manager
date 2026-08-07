@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Layout;
+using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
-using Symbol = FluentIcons.Common.Symbol;
-using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
@@ -10,16 +14,22 @@ using XeniaManager.Core.Utilities;
 namespace XeniaManager.Controls;
 
 /// <summary>
-/// Dialog for selecting a game group to add a game into.
+/// Dialog for selecting one or more game groups (checklist).
 /// </summary>
 public abstract class GroupSelectionDialog
 {
     /// <summary>
-    /// Shows a dialog listing available groups.
+    /// Shows a checklist dialog of available groups.
     /// </summary>
     /// <param name="groups">Groups the user can choose from.</param>
-    /// <returns>The selected group, or null if cancelled.</returns>
-    public static async Task<GameGroup?> ShowAsync(List<GameGroup> groups)
+    /// <param name="title">Optional dialog title override.</param>
+    /// <param name="message">Optional message override.</param>
+    /// <returns>Selected groups, or null if cancelled / none selected.</returns>
+    public static async Task<List<GameGroup>?> ShowAsync(
+        List<GameGroup> groups,
+        string? title = null,
+        string? message = null,
+        string? confirmButtonText = null)
     {
         Logger.Info<GroupSelectionDialog>($"Showing group selection dialog with {groups.Count} groups");
 
@@ -29,47 +39,74 @@ public abstract class GroupSelectionDialog
             return null;
         }
 
-        FATaskDialog taskDialog = new FATaskDialog
+        ObservableCollection<GroupSelectableItem> items = new(
+            groups.Select(g => new GroupSelectableItem(g)));
+
+        ListBox listBox = new ListBox
         {
-            Title = LocalizationHelper.GetText("GroupSelectionDialog.Title"),
-            Header = LocalizationHelper.GetText("GroupSelectionDialog.Header"),
-            SubHeader = LocalizationHelper.GetText("GroupSelectionDialog.SubHeader"),
-            IconSource = new SymbolIconSource { Symbol = Symbol.Folder },
-            XamlRoot = App.MainWindow
+            ItemsSource = items,
+            MinWidth = 320,
+            MaxHeight = 360,
+            SelectionMode = SelectionMode.Multiple
         };
 
-        List<FATaskDialogCommand> commands = [];
-        foreach (GameGroup group in groups)
+        listBox.ItemTemplate = new FuncDataTemplate<GroupSelectableItem>((item, _) =>
         {
-            FATaskDialogCommand command = new FATaskDialogCommand
+            CheckBox checkBox = new CheckBox
             {
-                Text = group.Name,
-                IconSource = new SymbolIconSource { Symbol = Symbol.Folder },
-                ClosesOnInvoked = false
+                Content = item.Group.Name,
+                IsChecked = item.IsSelected,
+                Margin = new Avalonia.Thickness(4, 2)
             };
+            checkBox.IsCheckedChanged += (_, _) =>
+            {
+                item.IsSelected = checkBox.IsChecked == true;
+            };
+            return checkBox;
+        }, true);
 
-            GameGroup capturedGroup = group;
-            command.Click += (_, _) =>
+        FAContentDialog dialog = new FAContentDialog
+        {
+            Title = title ?? LocalizationHelper.GetText("GroupSelectionDialog.Title"),
+            Content = new StackPanel
             {
-                Logger.Info<GroupSelectionDialog>($"User selected group '{capturedGroup.Name}'");
-                taskDialog.Hide(capturedGroup);
-            };
-            commands.Add(command);
+                Spacing = 8,
+                Children =
+                {
+                    new TextBlock
+                    {
+                        Text = message ?? LocalizationHelper.GetText("GroupSelectionDialog.Message"),
+                        TextWrapping = TextWrapping.Wrap
+                    },
+                    listBox
+                }
+            },
+            PrimaryButtonText = confirmButtonText ?? LocalizationHelper.GetText("GroupSelectionDialog.Confirm"),
+            CloseButtonText = LocalizationHelper.GetText("MessageBox.Cancel"),
+            DefaultButton = FAContentDialogButton.Primary
+        };
+
+        FAContentDialogResult result = await dialog.ShowAsync();
+        if (result != FAContentDialogResult.Primary)
+        {
+            Logger.Info<GroupSelectionDialog>("Group selection cancelled");
+            return null;
         }
 
-        taskDialog.Commands = commands;
-        taskDialog.Buttons =
-        [
-            FATaskDialogButton.CloseButton
-        ];
-
-        object result = await taskDialog.ShowAsync(true);
-        if (result is GameGroup selected)
+        List<GameGroup> selected = items.Where(i => i.IsSelected).Select(i => i.Group).ToList();
+        if (selected.Count == 0)
         {
-            return selected;
+            Logger.Info<GroupSelectionDialog>("No groups selected");
+            return null;
         }
 
-        Logger.Info<GroupSelectionDialog>("User cancelled group selection");
-        return null;
+        Logger.Info<GroupSelectionDialog>($"User selected {selected.Count} group(s)");
+        return selected;
+    }
+
+    private sealed class GroupSelectableItem(GameGroup group)
+    {
+        public GameGroup Group { get; } = group;
+        public bool IsSelected { get; set; }
     }
 }

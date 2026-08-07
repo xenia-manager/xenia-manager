@@ -30,12 +30,9 @@
                 </controls:FANavigationViewItem.IconSource>
             </controls:FANavigationViewItem>
 
-            <!-- Game Library (groups are added as nested items in code-behind) -->
-            <controls:FANavigationViewItem x:Name="LibraryNavItem"
-                                         Content="{DynamicResource MainView.Navigation.Library}"
-                                         Tag="Library"
-                                         SelectsOnInvoked="True"
-                                         IsExpanded="True">
+            <!-- Game Library -->
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.Library}"
+                                         Tag="Library">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Archive" />
                 </controls:FANavigationViewItem.IconSource>

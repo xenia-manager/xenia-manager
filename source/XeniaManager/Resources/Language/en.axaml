@@ -12,7 +12,6 @@
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
-    <sys:String x:Key="MainView.Navigation.AddGroup">New Group</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Settings</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Manage Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.About">About</sys:String>
@@ -25,24 +24,41 @@
     <sys:String x:Key="GroupNameDialog.Message">Enter a name for this group:</sys:String>
     <sys:String x:Key="GroupNameDialog.Watermark">Group name</sys:String>
     <sys:String x:Key="GroupNameDialog.Save">Save</sys:String>
-    <sys:String x:Key="GroupNameDialog.EmptyName.Title">Invalid Group Name</sys:String>
-    <sys:String x:Key="GroupNameDialog.EmptyName.Message">Please enter a name for the group.</sys:String>
     <sys:String x:Key="GroupSelectionDialog.Title">Add to Group</sys:String>
     <sys:String x:Key="GroupSelectionDialog.Header">Select a group</sys:String>
     <sys:String x:Key="GroupSelectionDialog.SubHeader">Choose which group to add this game to</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Message">Select one or more groups:</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Confirm">Add</sys:String>
     <sys:String x:Key="GroupSelectionDialog.NoGroups.Title">No Groups</sys:String>
     <sys:String x:Key="GroupSelectionDialog.NoGroups.Message">You don't have any groups yet. Create one now?</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Header">Add to Group</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.ToolTip">Add this game (or all selected games) to a group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.ToolTip">Add this game (or all selected games) to one or more groups</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Success.Title">Added to Group</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Success.Message">'{0}' was added to '{1}'.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.AlreadyExists.Title">Already in Group</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.AlreadyExists.Message">'{0}' is already in '{1}'.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Multiple.Success.Title">Added to Group</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Multiple.Success.Message">Added {0} game(s) to '{1}'.&#10;{2} were already in the group.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.MultipleGroups.Success.Message">Added {0} game membership(s) across: {1}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Error.Title">Failed to Add to Group</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Error.Message">Failed to add '{0}' to a group: {1}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Header">Remove from Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.ToolTip">Remove this game (or all selected games) from one or more groups</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Message">Select the groups to remove from:</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.None.Title">Not in a Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.None.Message">The selected game(s) are not in any group.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Success.Title">Removed from Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Success.Message">Removed {0} membership(s) from: {1}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Error.Title">Failed to Remove from Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Error.Message">Failed to remove from group: {0}</sys:String>
     <sys:String x:Key="LibraryPage.AddSelectedToGroup.Button">Add to Group</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.ToolTip">Game groups</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.New.Header">New Group</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Ungrouped">Ungrouped</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Delete.ToolTip">Delete group</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Delete.Confirmation.Title">Delete Group</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Delete.Confirmation.Message">Delete group '{0}'? Games will not be removed from your library.</sys:String>
+
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Search...</sys:String>

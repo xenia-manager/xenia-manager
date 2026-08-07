@@ -19,6 +19,47 @@
     <sys:String x:Key="MainView.Navigation.Error.Title">Greška pri navigaciji</sys:String>
     <sys:String x:Key="MainView.Navigation.Error.Message">Nije moguće navigirati na odredišnu stranicu.&#10;{0}</sys:String>
 
+    <!-- Game Groups -->
+    <sys:String x:Key="GroupNameDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupNameDialog.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupNameDialog.Watermark">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupNameDialog.Save">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Confirm">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.NoGroups.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.NoGroups.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.AlreadyExists.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.AlreadyExists.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Multiple.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Multiple.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.MultipleGroups.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.None.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.None.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveFromGroup.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.AddSelectedToGroup.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.New.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Ungrouped">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Delete.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Delete.Confirmation.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Groups.Delete.Confirmation.Message">#NOTTRANSLATED#</sys:String>
+
+
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Pretraži...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ponovno učitava biblioteku igara</sys:String>
@@ -405,6 +446,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nema pronađenih snimaka zaslona za {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Otvaranje mape nije uspjelo</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Došlo je do greške prilikom otvaranja mape sa snimkama zaslona.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Zakrpe</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Preuzmi</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Preuzmite zakrpe iz repozitorija</sys:String>
