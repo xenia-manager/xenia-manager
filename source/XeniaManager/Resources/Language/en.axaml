@@ -12,12 +12,37 @@
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
+    <sys:String x:Key="MainView.Navigation.AddGroup">New Group</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Settings</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Manage Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.About">About</sys:String>
     <sys:String x:Key="MainView.Navigation.Settings">Settings</sys:String>
     <sys:String x:Key="MainView.Navigation.Error.Title">Error Navigating</sys:String>
     <sys:String x:Key="MainView.Navigation.Error.Message">Failed to navigate to designated page.&#10;{0}</sys:String>
+
+    <!-- Game Groups -->
+    <sys:String x:Key="GroupNameDialog.Title">New Group</sys:String>
+    <sys:String x:Key="GroupNameDialog.Message">Enter a name for this group:</sys:String>
+    <sys:String x:Key="GroupNameDialog.Watermark">Group name</sys:String>
+    <sys:String x:Key="GroupNameDialog.Save">Save</sys:String>
+    <sys:String x:Key="GroupNameDialog.EmptyName.Title">Invalid Group Name</sys:String>
+    <sys:String x:Key="GroupNameDialog.EmptyName.Message">Please enter a name for the group.</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Title">Add to Group</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.Header">Select a group</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.SubHeader">Choose which group to add this game to</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.NoGroups.Title">No Groups</sys:String>
+    <sys:String x:Key="GroupSelectionDialog.NoGroups.Message">You don't have any groups yet. Create one now?</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Header">Add to Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.ToolTip">Add this game (or all selected games) to a group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Success.Title">Added to Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Success.Message">'{0}' was added to '{1}'.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.AlreadyExists.Title">Already in Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.AlreadyExists.Message">'{0}' is already in '{1}'.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Multiple.Success.Title">Added to Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Multiple.Success.Message">Added {0} game(s) to '{1}'.&#10;{2} were already in the group.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Error.Title">Failed to Add to Group</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.AddToGroup.Error.Message">Failed to add '{0}' to a group: {1}</sys:String>
+    <sys:String x:Key="LibraryPage.AddSelectedToGroup.Button">Add to Group</sys:String>
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Search...</sys:String>

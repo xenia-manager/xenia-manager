@@ -303,6 +303,11 @@ public partial class LibraryPageViewModel : ViewModelBase
     // Search
     [ObservableProperty] private string _searchQuery = string.Empty;
 
+    /// <summary>
+    /// Active group filter id. Null shows the full library.
+    /// </summary>
+    [ObservableProperty] private Guid? _activeGroupFilterId;
+
     partial void OnSearchQueryChanged(string value)
     {
         // Debounce search to avoid filtering on every keystroke
@@ -318,6 +323,11 @@ public partial class LibraryPageViewModel : ViewModelBase
                 FilterGames();
             }
         }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
+
+    partial void OnActiveGroupFilterIdChanged(Guid? value)
+    {
+        FilterGames();
     }
 
     [RelayCommand]
@@ -337,10 +347,39 @@ public partial class LibraryPageViewModel : ViewModelBase
         // Load UI settings
         LoadUiSettings();
 
+        ActiveGroupFilterId = GroupManager.ActiveFilterGroupId;
         RefreshLibrary();
 
         _watcherService.NewGameFilesDetected += OnNewGameFilesDetected;
         EventManager.Instance.GameLibraryChanged += OnGameLibraryChanged;
+        EventManager.Instance.GroupFilterChanged += OnGroupFilterChanged;
+        EventManager.Instance.GameGroupsChanged += OnGameGroupsChanged;
+    }
+
+    private void OnGroupFilterChanged(Guid? groupId)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(() => OnGroupFilterChanged(groupId));
+            return;
+        }
+
+        ActiveGroupFilterId = groupId;
+    }
+
+    private void OnGameGroupsChanged()
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(OnGameGroupsChanged);
+            return;
+        }
+
+        // Membership may have changed for the active filter
+        if (ActiveGroupFilterId.HasValue)
+        {
+            FilterGames();
+        }
     }
 
     /// <summary>
@@ -424,25 +463,27 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Filters the games collection based on the search query.
+    /// Filters the games collection based on the active group and search query.
     /// Searches by Game.Title and Game.GameId.
     /// </summary>
     private void FilterGames()
     {
-        List<GameItemViewModel> filtered;
-        if (string.IsNullOrWhiteSpace(SearchQuery))
+        IEnumerable<GameItemViewModel> query = _allGames;
+
+        if (ActiveGroupFilterId is Guid groupId)
         {
-            filtered = [.. _allGames];
+            query = query.Where(item => GroupManager.IsInGroup(groupId, item.Game));
         }
-        else
+
+        if (!string.IsNullOrWhiteSpace(SearchQuery))
         {
-            string query = SearchQuery.ToLowerInvariant();
-            filtered = _allGames
-                .Where(item =>
-                    item.Title.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
-                    item.Game.GameId.Contains(query, StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
+            string search = SearchQuery.ToLowerInvariant();
+            query = query.Where(item =>
+                item.Title.Contains(search, StringComparison.InvariantCultureIgnoreCase) ||
+                item.Game.GameId.Contains(search, StringComparison.InvariantCultureIgnoreCase));
         }
+
+        List<GameItemViewModel> filtered = query.ToList();
 
         // Apply sorting
         filtered = SortOption switch
@@ -1782,6 +1823,116 @@ public partial class LibraryPageViewModel : ViewModelBase
         foreach (GameItemViewModel game in _allGames)
         {
             game.IsSelected = false;
+        }
+    }
+
+    /// <summary>
+    /// Returns the games that an Add-to-Group action should target.
+    /// If the clicked game is part of a multi-selection, all selected games are returned;
+    /// otherwise only the clicked game is returned.
+    /// </summary>
+    public List<GameItemViewModel> GetGamesForGroupAction(GameItemViewModel clickedGame)
+    {
+        List<GameItemViewModel> selectedGames = _allGames.Where(g => g.IsSelected).ToList();
+        if (selectedGames.Count > 1 && selectedGames.Contains(clickedGame))
+        {
+            return selectedGames;
+        }
+
+        return [clickedGame];
+    }
+
+    /// <summary>
+    /// Adds the currently selected games to a chosen (or newly created) group.
+    /// </summary>
+    [RelayCommand]
+    private async Task AddSelectedGamesToGroup()
+    {
+        List<GameItemViewModel> selectedGames = _allGames.Where(g => g.IsSelected).ToList();
+        if (selectedGames.Count == 0)
+        {
+            return;
+        }
+
+        await AddGamesToGroupAsync(selectedGames);
+    }
+
+    /// <summary>
+    /// Prompts for a group and adds the given games to it.
+    /// </summary>
+    public async Task AddGamesToGroupAsync(IReadOnlyList<GameItemViewModel> games)
+    {
+        if (games.Count == 0)
+        {
+            return;
+        }
+
+        try
+        {
+            Logger.Info<LibraryPageViewModel>($"Add to group requested for {games.Count} game(s)");
+
+            GameGroup? targetGroup = null;
+
+            if (GroupManager.Groups.Count == 0)
+            {
+                bool createGroup = await _messageBoxService.ShowConfirmationAsync(
+                    LocalizationHelper.GetText("GroupSelectionDialog.NoGroups.Title"),
+                    LocalizationHelper.GetText("GroupSelectionDialog.NoGroups.Message"));
+                if (!createGroup)
+                {
+                    return;
+                }
+
+                string? name = await GroupNameDialog.ShowAsync();
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return;
+                }
+
+                targetGroup = GroupManager.CreateGroup(name);
+            }
+            else
+            {
+                targetGroup = await GroupSelectionDialog.ShowAsync(GroupManager.Groups
+                    .OrderBy(g => g.Name, StringComparer.CurrentCultureIgnoreCase)
+                    .ToList());
+                if (targetGroup == null)
+                {
+                    return;
+                }
+            }
+
+            int addedCount = GroupManager.AddGamesToGroup(targetGroup.Id, games.Select(g => g.Game));
+            int alreadyInGroup = games.Count - addedCount;
+
+            if (games.Count == 1)
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText(addedCount > 0
+                        ? "GameButton.ContextFlyout.AddToGroup.Success.Title"
+                        : "GameButton.ContextFlyout.AddToGroup.AlreadyExists.Title"),
+                    string.Format(LocalizationHelper.GetText(addedCount > 0
+                            ? "GameButton.ContextFlyout.AddToGroup.Success.Message"
+                            : "GameButton.ContextFlyout.AddToGroup.AlreadyExists.Message"),
+                        games[0].Game.Title, targetGroup.Name));
+            }
+            else
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.AddToGroup.Multiple.Success.Title"),
+                    string.Format(
+                        LocalizationHelper.GetText("GameButton.ContextFlyout.AddToGroup.Multiple.Success.Message"),
+                        addedCount, targetGroup.Name, alreadyInGroup));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to add games to a group");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.AddToGroup.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.AddToGroup.Error.Message"),
+                    games.Count == 1 ? games[0].Game.Title : $"{games.Count} games", ex.Message));
         }
     }
 

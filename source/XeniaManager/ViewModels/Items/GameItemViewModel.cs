@@ -958,6 +958,14 @@ public partial class GameItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task AddToGroup()
+    {
+        // If this game is part of a multi-selection, add all selected games
+        List<GameItemViewModel> games = _library.GetGamesForGroupAction(this);
+        await _library.AddGamesToGroupAsync(games);
+    }
+
+    [RelayCommand]
     private async Task RemoveGame()
     {
         if (await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Title"),

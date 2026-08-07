@@ -75,8 +75,9 @@ public partial class App : Application
             Logger.SetLogLevel(settings.Settings.Debug.LogLevel);
             settings.SaveSettings();
 
-            // Load the library
+            // Load the library and game groups
             GameManager.LoadLibrary();
+            GroupManager.LoadGroups();
 
             // Localization initialization
             LocalizationHelper.Initialize("avares://XeniaManager/Resources/Language/");

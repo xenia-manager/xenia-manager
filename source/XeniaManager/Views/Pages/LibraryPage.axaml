@@ -711,6 +711,16 @@
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
+                                    <!-- Add to Group -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.AddToGroup.Header}"
+                                              Command="{Binding AddToGroupCommand}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="FolderAdd" />
+                                        </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.AddToGroup.ToolTip}" />
+                                        </ToolTip.Tip>
+                                    </MenuItem>
                                     <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
                                               Command="{Binding RemoveGameCommand}">
@@ -1048,6 +1058,16 @@
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
+                                    <!-- Add to Group -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.AddToGroup.Header}"
+                                              Command="{Binding AddToGroupCommand}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="FolderAdd" />
+                                        </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.AddToGroup.ToolTip}" />
+                                        </ToolTip.Tip>
+                                    </MenuItem>
                                     <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
                                               Command="{Binding RemoveGameCommand}">
@@ -1231,6 +1251,16 @@
                 <TextBlock Text="{Binding SelectedGamesCountText}"
                            VerticalAlignment="Center"
                            FontWeight="SemiBold" />
+                <Button Command="{Binding AddSelectedGamesToGroupCommand}"
+                        HorizontalAlignment="Right">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="4">
+                            <icons:SymbolIcon Symbol="FolderAdd" />
+                            <TextBlock Text="{DynamicResource LibraryPage.AddSelectedToGroup.Button}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <Button Command="{Binding PromptDeleteSelectedGamesCommand}"
                         HorizontalAlignment="Right">
                     <Button.Content>

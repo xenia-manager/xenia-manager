@@ -18,6 +18,10 @@ public class EventManager
     // Game library events
     public event Action? GameLibraryChanged;
 
+    // Game groups events
+    public event Action? GameGroupsChanged;
+    public event Action<Guid?>? GroupFilterChanged;
+
     /// <summary>
     /// Triggers the window disable/enable event on the UI thread.
     /// </summary>
@@ -63,5 +67,22 @@ public class EventManager
     public void OnGameLibraryChanged()
     {
         GameLibraryChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Triggers the game groups changed event (create/rename/membership updates).
+    /// </summary>
+    public void OnGameGroupsChanged()
+    {
+        GameGroupsChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Triggers the active group filter changed event.
+    /// </summary>
+    /// <param name="groupId">Selected group id, or null to show all games.</param>
+    public void OnGroupFilterChanged(Guid? groupId)
+    {
+        GroupFilterChanged?.Invoke(groupId);
     }
 }
