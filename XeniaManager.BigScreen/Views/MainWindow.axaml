@@ -1,0 +1,140 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+        xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+        xmlns:controls="using:XeniaManager.BigScreen.Controls"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        x:Class="XeniaManager.BigScreen.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="XeniaManager.BigScreen"
+        Width="1920" Height="1080"
+        WindowState="FullScreen"
+        WindowStartupLocation="CenterScreen"
+        Background="{Binding Background}">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.DataTemplates>
+        <DataTemplate DataType="items:GameCardViewModel">
+            <controls:GameCard/>
+        </DataTemplate>
+        <DataTemplate DataType="items:OptionsCardViewModel">
+            <controls:OptionsCard/>
+        </DataTemplate>
+    </Window.DataTemplates>
+
+    <Window.Styles>
+        <!-- Subtle dark halo so header text stays readable over any background image -->
+        <Style Selector="TextBlock.header-text">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="3" OffsetX="0" OffsetY="1" Color="Black" Opacity="0.7" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Styles>
+
+    <!-- Shared centered column so the header margins align with the content rows -->
+    <Grid RowDefinitions="150, *" ColumnDefinitions="*, Auto, *">
+
+        <!-- Vignette overlay over the background (ignores input, images only) -->
+        <Border Grid.RowSpan="2" Grid.ColumnSpan="3"
+                Background="{DynamicResource BackgroundVignette}"
+                IsVisible="{Binding VignetteVisible}"
+                IsHitTestVisible="False" />
+
+        <!-- TOP DASHBOARD HEADER -->
+        <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="Auto, *, Auto" VerticalAlignment="Center">
+
+            <!-- PROFILE (LEFT) -->
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Spacing="12">
+                <Border Width="48" Height="48" CornerRadius="24" Background="{DynamicResource CardBackground}"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <fluent:SymbolIcon Symbol="PersonCircle"
+                                       FontSize="28"
+                                       Foreground="{DynamicResource TextPrimary}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Classes="header-text" Text="{Binding Gamertag}"
+                               Foreground="{DynamicResource TextPrimary}"
+                               FontSize="18"
+                               FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <fluent:SymbolIcon Symbol="Star"
+                                           FontSize="13"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           VerticalAlignment="Center" />
+                        <TextBlock Classes="header-text" Text="{Binding Gamerscore}"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   FontSize="14"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- SYSTEM STATUS (RIGHT) -->
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Spacing="16">
+                <fluent:SymbolIcon Symbol="{Binding WifiIcon}"
+                                   FontSize="24"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                <fluent:SymbolIcon Symbol="{Binding BatteryIcon}"
+                                   FontSize="26"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                <TextBlock Classes="header-text" Text="{Binding Time}"
+                           Foreground="{DynamicResource TextPrimary}"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           MinWidth="70"
+                           TextAlignment="Right" />
+            </StackPanel>
+        </Grid>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="*, 300, 200" Margin="0,0,0,80">
+
+            <!-- GAME CARDS ROW -->
+            <ItemsControl x:Name="GamesRow"
+                          Grid.Row="1"
+                          ItemsSource="{Binding Games}"
+                          VerticalAlignment="Bottom"
+                          Height="300">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="25" VerticalAlignment="Bottom" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- OPTION CARDS ROW -->
+            <ItemsControl x:Name="OptionsRow"
+                          Grid.Row="2"
+                          ItemsSource="{Binding Options}"
+                          VerticalAlignment="Bottom">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Bottom" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+        </Grid>
+    </Grid>
+
+</Window>

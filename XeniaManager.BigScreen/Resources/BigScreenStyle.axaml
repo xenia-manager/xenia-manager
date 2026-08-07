@@ -1,0 +1,77 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:XeniaManager.BigScreen.Controls">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- CARD BASE -->
+    <Style Selector="controls|GameCard, controls|OptionsCard">
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.18" Easing="CubicEaseOut" />
+                <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <!-- GAME CARD -->
+    <Style Selector="controls|GameCard Border#Tile">
+        <Setter Property="BoxShadow" Value="0 4 12 0 #40000000" />
+    </Style>
+
+    <Style Selector="controls|GameCard.selected Border#Tile">
+        <Setter Property="BoxShadow" Value="0 6 20 0 #66000000" />
+    </Style>
+
+    <Style Selector="controls|GameCard">
+        <Setter Property="Width" Value="200" />
+        <Setter Property="Height" Value="200" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+    </Style>
+
+    <Style Selector="controls|GameCard.selected Border#FocusBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderThickness" Value="4" />
+    </Style>
+
+    <!-- Subtle dark halo around card text so it stays readable on any background -->
+    <Style Selector="controls|GameCard TextBlock, controls|OptionsCard TextBlock">
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="2" OffsetX="0" OffsetY="0" Color="Black" Opacity="0.55" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|GameCard.selected">
+        <Setter Property="Width" Value="250" />
+        <Setter Property="Height" Value="250" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+    </Style>
+
+    <!-- OPTION CARD -->
+    <Style Selector="controls|OptionsCard">
+        <Setter Property="Width" Value="333" />
+        <Setter Property="Height" Value="160" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+    </Style>
+
+    <Style Selector="controls|OptionsCard Border#Tile">
+        <Setter Property="BoxShadow" Value="0 4 12 0 #40000000" />
+    </Style>
+
+    <Style Selector="controls|OptionsCard.selected Border#Tile">
+        <Setter Property="BoxShadow" Value="0 6 20 0 #66000000" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+</Styles>

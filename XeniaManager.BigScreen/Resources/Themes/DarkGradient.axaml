@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Card surfaces -->
+    <SolidColorBrush x:Key="CardBackground" Color="#1F232B" />
+    <SolidColorBrush x:Key="CardTitleBar" Color="#101216" />
+
+    <!-- Vignette overlay: transparent center fading to dark at the edges -->
+    <RadialGradientBrush x:Key="BackgroundVignette"
+                         Center="50%,50%"
+                         GradientOrigin="50%,50%">
+        <GradientStop Offset="0" Color="#00000000" />
+        <GradientStop Offset="0.75" Color="#00000000" />
+        <GradientStop Offset="1" Color="#33000000" />
+    </RadialGradientBrush>
+
+    <!-- Selection accents (overridden at runtime by user settings) -->
+    <SolidColorBrush x:Key="AccentColor" Color="#107C41" />
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextSecondary" Color="#A0A0A0" />
+</ResourceDictionary>
