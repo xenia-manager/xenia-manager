@@ -23,7 +23,7 @@ DEFAULT_LANG_DIR = os.path.join(
     os.path.dirname(__file__),
     "..",
     "source",
-    "XeniaManager",
+    "XeniaManager.Core",
     "Resources",
     "Language",
 )
@@ -147,7 +147,7 @@ def main():
         "-l",
         "--lang-dir",
         default=DEFAULT_LANG_DIR,
-        help="Path to the language directory (default: ../source/XeniaManager/Resources/Language)",
+        help="Path to the language directory (default: ../source/XeniaManager.Core/Resources/Language)",
     )
     args = parser.parse_args()
     setup_logging(args.verbose)

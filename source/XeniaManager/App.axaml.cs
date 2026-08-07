@@ -79,7 +79,7 @@ public partial class App : Application
             GameManager.LoadLibrary();
 
             // Localization initialization
-            LocalizationHelper.Initialize("avares://XeniaManager/Resources/Language/");
+            LocalizationHelper.Initialize();
             LocalizationHelper.LoadLanguage(settings.Settings.Ui.Language);
 
             // Get MainWindow

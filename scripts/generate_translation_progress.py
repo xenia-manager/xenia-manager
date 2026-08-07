@@ -12,7 +12,7 @@ Usage:
 
 Examples:
     python generate_translation_progress.py
-    python generate_translation_progress.py --directory "E:\Development\Xenia Manager\Avalonia\source\XeniaManager\Resources\Language"
+    python generate_translation_progress.py --directory "E:\Development\Xenia Manager\Avalonia\source\XeniaManager.Core\Resources\Language"
     python generate_translation_progress.py --verbose
     python generate_translation_progress.py --json
 """
@@ -375,10 +375,10 @@ def main():
         # Try to find the directory relative to the script
         script_dir = Path(__file__).parent
         possible_dirs = [
-            script_dir.parent / "source" / "XeniaManager" / "Resources" / "Language",
+            script_dir.parent / "source" / "XeniaManager.Core" / "Resources" / "Language",
             script_dir.parent.parent
             / "source"
-            / "XeniaManager"
+            / "XeniaManager.Core"
             / "Resources"
             / "Language",
         ]

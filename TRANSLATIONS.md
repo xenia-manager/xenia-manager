@@ -48,7 +48,7 @@ You can find the codes [here](https://azuliadesigns.com/c-sharp-tutorials/list-n
 
 ## Step 3: Locate the Resources File
 
-Navigate to the ***Language*** folder (Located inside of `source\XeniaManager\Resources\Language`) and find the appropriate `.axaml` file:
+Navigate to the ***Language*** folder (Located inside of `source\XeniaManager.Core\Resources\Language`) and find the appropriate `.axaml` file:
 
 - **For new translations**: Copy `en.axaml` and rename it to `CODE.axaml`
   - Example: `es.axaml` for Spanish
@@ -127,7 +127,7 @@ If you can build the project locally:
 
 ### Option 1: Using Git
 ```bash
-git add source/XeniaManager/Resources/Language/CODE.axaml
+git add source/XeniaManager.Core/Resources/Language/CODE.axaml
 git commit -m "Add [Language Name] translation (CODE)"
 ```
 

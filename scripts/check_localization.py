@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 SOURCE_PATH = Path("source")
-LANGUAGE_FILE = SOURCE_PATH / "XeniaManager" / "Resources" / "Language" / "en.axaml"
+LANGUAGE_FILE = SOURCE_PATH / "XeniaManager.Core" / "Resources" / "Language" / "en.axaml"
 IGNORE_FOLDERS = {"Resources", "obj", "bin"}
 
 DYNAMIC_RESOURCE_PATTERN = re.compile(r"\{DynamicResource\s+([^}]+)\}")

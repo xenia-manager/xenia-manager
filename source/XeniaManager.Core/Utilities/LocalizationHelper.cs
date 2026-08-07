@@ -18,6 +18,12 @@ public class LocalizationHelper
     private const string DefaultLanguageCode = "en";
 
     /// <summary>
+    /// Default base URI pointing at the language resource files shipped with XeniaManager.Core.
+    /// Used by <see cref="Initialize()"/> so any application referencing Core gets localization with zero configuration.
+    /// </summary>
+    public const string DefaultBaseUri = "avares://XeniaManager.Core/Resources/Language/";
+
+    /// <summary>
     /// Sentinel value that translators place in resource files to indicate a string has not been translated yet.
     /// The entry is removed at load time so the default language value is used instead.
     /// </summary>
@@ -38,6 +44,15 @@ public class LocalizationHelper
         new CultureInfo("it") // Italiano
         // ... add your language code here
     ];
+
+    /// <summary>
+    /// Initializes the LocalizationHelper using the default base URI (<see cref="DefaultBaseUri"/>)
+    /// where the language resource files shipped with Core are located.
+    /// </summary>
+    public static void Initialize()
+    {
+        Initialize(DefaultBaseUri);
+    }
 
     /// <summary>
     /// Initializes the LocalizationHelper and loads the default language as the permanent fallback.
