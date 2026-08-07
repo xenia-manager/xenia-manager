@@ -211,9 +211,9 @@ public partial class App : Application
             watcher.Stop();
 
             // Stop controller navigation polling
-            Logger.Debug<App>("Stopping XInput polling during shutdown");
-            XInputService xInputService = Services.GetRequiredService<XInputService>();
-            xInputService.Stop();
+            Logger.Debug<App>("Stopping gamepad polling during shutdown");
+            GamepadService gamepadService = Services.GetRequiredService<GamepadService>();
+            gamepadService.Stop();
 
             // Save window properties (must happen before the window actually closes)
             settings.SaveWindowProperties(settings, mainWindow);

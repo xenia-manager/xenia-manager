@@ -107,14 +107,14 @@ public partial class SettingsPageViewModel : ViewModelBase
         _settings.Settings.General.EnableControllerNavigation = newValue;
         _settings.SaveSettings();
 
-        XInputService xInputService = App.Services.GetRequiredService<XInputService>();
+        GamepadService gamepadService = App.Services.GetRequiredService<GamepadService>();
         if (newValue)
         {
-            xInputService.Start();
+            gamepadService.Start();
         }
         else
         {
-            xInputService.Stop();
+            gamepadService.Stop();
         }
     }
 

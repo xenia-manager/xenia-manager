@@ -349,7 +349,7 @@ public class Launcher
             // controller talks exclusively to the emulator during gameplay instead of also
             // driving Xenia Manager's navigation in the background. The finally block ensures
             // polling resumes even if starting/waiting for the process throws.
-            XInputService.Current?.PauseForExternalProcess();
+            GamepadService.Current?.PauseForExternalProcess();
             try
             {
                 // Start Xenia
@@ -376,7 +376,7 @@ public class Launcher
             {
                 // Resume controller polling for Xenia Manager's own navigation now that Xenia
                 // has closed (or if launching/waiting for it failed)
-                XInputService.Current?.ResumeAfterExternalProcess();
+                GamepadService.Current?.ResumeAfterExternalProcess();
             }
 
             game.Playtime += (DateTime.Now - launchTime).TotalMinutes;

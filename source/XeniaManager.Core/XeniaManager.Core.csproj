@@ -5,6 +5,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AssemblyVersion>4.3.0</AssemblyVersion>
+        <!-- Required for GamepadService.cs, which uses SDL2 native pointers (GameController*)
+             via Silk.NET.SDL for controller navigation support -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +26,7 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
       <PackageReference Include="NLog" Version="6.1.4" />
       <PackageReference Include="SharpCompress" Version="0.50.0" />
+      <PackageReference Include="Silk.NET.SDL" Version="2.23.0" />
       <PackageReference Include="System.IO.Hashing" Version="10.0.10" />
       <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
       <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />

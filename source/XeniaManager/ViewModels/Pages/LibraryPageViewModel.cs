@@ -1451,7 +1451,10 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         try
         {
-            // Get all Steam users and select one
+            // Get all Steam users and select one before starting the bulk export, rather
+            // than asking once per game - matches the single-game CreateSteamShortcut flow
+            // in GameItemViewModel, just asked once upfront here since it applies to the
+            // whole batch
             List<SteamUser> users = await Task.Run(ShortcutManager.GetAllSteamUsers);
 
             if (users.Count == 0)
@@ -1459,25 +1462,22 @@ public partial class LibraryPageViewModel : ViewModelBase
                 throw new Exception("No Steam users found");
             }
 
-            string selectedUserId;
+            string userId;
             if (users.Count == 1)
             {
-                selectedUserId = users[0].SteamId32 ?? users[0].SteamId64;
-                Logger.Info<LibraryPageViewModel>($"Using single Steam user: {users[0].PersonaName} ({selectedUserId})");
+                userId = users[0].SteamId32 ?? users[0].SteamId64;
+                Logger.Info<LibraryPageViewModel>($"Using single Steam user: {users[0].PersonaName} ({userId})");
             }
             else
             {
                 SteamUser? selectedUser = await SteamUserSelectionDialog.ShowAsync(users);
                 if (selectedUser == null)
                 {
-                    Logger.Info<LibraryPageViewModel>("User cancelled Steam user selection, aborting export");
-                    await _messageBoxService.ShowInfoAsync(
-                        LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Title"),
-                        "Steam user selection was cancelled. No shortcuts were created.");
+                    Logger.Info<LibraryPageViewModel>("User cancelled Steam user selection for bulk export");
                     return;
                 }
-                selectedUserId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
-                Logger.Info<LibraryPageViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({selectedUserId})");
+                userId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
+                Logger.Info<LibraryPageViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({userId})");
             }
 
             List<string> successList = [];
@@ -1487,7 +1487,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             {
                 try
                 {
-                    ShortcutManager.CreateSteamShortcut(game.Game, selectedUserId, restartSteam: false);
+                    ShortcutManager.CreateSteamShortcut(game.Game, userId, restartSteam: false);
                     successList.Add(game.Title);
                 }
                 catch (Exception ex)

@@ -22,7 +22,7 @@ public partial class MainView : UserControl
     private MainViewModel _viewModel { get; set; }
     private NavigationService _navigationService { get; set; }
     private IMessageBoxService _messageBoxService { get; set; }
-    private XInputService? _xInputService;
+    private GamepadService? _gamepadService;
 
     // Experimental controller navigation of the side menu: tracks the currently
     // highlighted item and whether the menu is the active navigation context
@@ -48,8 +48,8 @@ public partial class MainView : UserControl
         NavigationView.PaneOpening += NavigationView_OnPaneOpening;
 
         // Experimental: controller navigation of the side menu
-        _xInputService = App.Services.GetRequiredService<XInputService>();
-        _xInputService.NavigationActionTriggered += OnControllerNavigationAction;
+        _gamepadService = App.Services.GetRequiredService<GamepadService>();
+        _gamepadService.NavigationActionTriggered += OnControllerNavigationAction;
 
         // Navigate to Library (Default Page)
         _ = _navigationService.NavigateToTag("Library");
@@ -134,7 +134,7 @@ public partial class MainView : UserControl
     /// </summary>
     private void ActivateControllerMenuNavigation()
     {
-        if (_xInputService == null)
+        if (_gamepadService == null)
         {
             return;
         }
@@ -150,7 +150,7 @@ public partial class MainView : UserControl
             return;
         }
 
-        _xInputService.PushNavigationContext(_navigationOwner);
+        _gamepadService.PushNavigationContext(_navigationOwner);
         SetMenuCursor(0);
     }
 
@@ -160,13 +160,13 @@ public partial class MainView : UserControl
     /// </summary>
     private void DeactivateControllerMenuNavigation()
     {
-        if (_xInputService == null || !_xInputService.IsActiveNavigationContext(_navigationOwner))
+        if (_gamepadService == null || !_gamepadService.IsActiveNavigationContext(_navigationOwner))
         {
             return;
         }
 
         SetMenuCursor(-1);
-        _xInputService.PopNavigationContext(_navigationOwner);
+        _gamepadService.PopNavigationContext(_navigationOwner);
     }
 
     private void SetMenuCursor(int newIndex)
@@ -184,7 +184,7 @@ public partial class MainView : UserControl
 
     private async void OnControllerNavigationAction(object? sender, ControllerNavigationAction action)
     {
-        if (_xInputService == null || !_xInputService.IsActiveNavigationContext(_navigationOwner))
+        if (_gamepadService == null || !_gamepadService.IsActiveNavigationContext(_navigationOwner))
         {
             return;
         }

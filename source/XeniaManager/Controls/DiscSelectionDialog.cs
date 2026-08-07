@@ -23,7 +23,7 @@ public abstract class DiscSelectionDialog
     /// Shows a dialog letting the user pick which disc to launch.
     /// The disc that was played last (<see cref="Game.LastPlayedDisc"/>) is highlighted as the default.
     /// Supports controller navigation (D-Pad/left stick Up/Down between discs, A to confirm, B to cancel)
-    /// while this dialog is open, taking over from whatever page opened it (see <see cref="XInputService"/>).
+    /// while this dialog is open, taking over from whatever page opened it (see <see cref="GamepadService"/>).
     /// </summary>
     /// <param name="game">The multi-disc game to show disc options for</param>
     /// <returns>The 1-based disc number the user picked, or null if cancelled</returns>
@@ -119,7 +119,7 @@ public abstract class DiscSelectionDialog
         // FluentAvalonia's internal focus API, which isn't confirmed to be publicly
         // accessible the way we'd need); Confirm invokes the currently-marked option's
         // same Click handler used for mouse/keyboard; Back cancels the dialog.
-        XInputService xInputService = App.Services.GetRequiredService<XInputService>();
+        GamepadService gamepadService = App.Services.GetRequiredService<GamepadService>();
         object navigationOwner = new object();
 
         EventHandler<ControllerNavigationAction>? controllerHandler = null;
@@ -127,7 +127,7 @@ public abstract class DiscSelectionDialog
         {
             Dispatcher.UIThread.Post(() =>
             {
-                if (!xInputService.IsActiveNavigationContext(navigationOwner) || enabledCommands.Count == 0)
+                if (!gamepadService.IsActiveNavigationContext(navigationOwner) || enabledCommands.Count == 0)
                 {
                     return;
                 }
@@ -158,8 +158,8 @@ public abstract class DiscSelectionDialog
             });
         };
 
-        xInputService.PushNavigationContext(navigationOwner);
-        xInputService.NavigationActionTriggered += controllerHandler;
+        gamepadService.PushNavigationContext(navigationOwner);
+        gamepadService.NavigationActionTriggered += controllerHandler;
 
         // Start the controller cursor on the first enabled option so there's a visible
         // starting point as soon as the dialog opens
@@ -175,8 +175,8 @@ public abstract class DiscSelectionDialog
         }
         finally
         {
-            xInputService.NavigationActionTriggered -= controllerHandler;
-            xInputService.PopNavigationContext(navigationOwner);
+            gamepadService.NavigationActionTriggered -= controllerHandler;
+            gamepadService.PopNavigationContext(navigationOwner);
         }
 
         if (result is int discNumberResult)

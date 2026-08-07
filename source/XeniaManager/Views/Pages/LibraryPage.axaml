@@ -803,6 +803,26 @@
                                                               FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=14}"
                                                               Foreground="White" />
                                         </Border>
+
+                                        <!-- Disc Count Badge (multi-disc games only) -->
+                                        <Border Background="#99000000"
+                                                CornerRadius="4"
+                                                Padding="4,2"
+                                                IsVisible="{Binding Game.FileLocations.IsMultiDisc}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{Binding Game.FileLocations.DiscCount, Converter={StaticResource DiscCountConverter}}" />
+                                            </ToolTip.Tip>
+
+                                            <StackPanel Orientation="Horizontal" Spacing="2">
+                                                <icons:SymbolIcon Symbol="Games"
+                                                                  FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=12}"
+                                                                  Foreground="White" />
+                                                <TextBlock Text="{Binding Game.FileLocations.DiscCount}"
+                                                           FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=12}"
+                                                           FontWeight="Bold"
+                                                           Foreground="White" />
+                                            </StackPanel>
+                                        </Border>
                                     </StackPanel>
 
                                     <!-- Game Title Overlay (shown when enabled) -->
@@ -1231,6 +1251,25 @@
                                             <TextBlock Text="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToStringConverter}}" />
                                         </ToolTip.Tip>
                                     </icons:SymbolIcon>
+
+                                    <!-- Disc Count (multi-disc games only) -->
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="4"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{Binding Game.FileLocations.IsMultiDisc}">
+                                        <icons:SymbolIcon Symbol="Games"
+                                                          FontSize="14"
+                                                          VerticalAlignment="Center"
+                                                          Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{Binding Game.FileLocations.DiscCount}"
+                                                   FontSize="12"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{Binding Game.FileLocations.DiscCount, Converter={StaticResource DiscCountConverter}}" />
+                                        </ToolTip.Tip>
+                                    </StackPanel>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -1319,7 +1358,10 @@
                     <TextBlock Text="B" FontWeight="Bold" />
                     <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Back}" Opacity="0.8" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="6">
+                <!-- X (info popup) only works in Grid view (the List view's columns already
+                     show the same details inline), so the hint is hidden in List view to avoid
+                     advertising a button that wouldn't do anything there -->
+                <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsGridView}">
                     <TextBlock Text="X" FontWeight="Bold" />
                     <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Info}" Opacity="0.8" />
                 </StackPanel>

@@ -20,7 +20,7 @@ public partial class LibraryPage : UserControl
     // Variables
     private LibraryPageViewModel _viewModel { get; set; }
     private GameItemViewModel? _lastSelectedGame;
-    private XInputService? _xInputService;
+    private GamepadService? _gamepadService;
     private Control? _infoPopupControl;
 
     // Constructor
@@ -40,19 +40,19 @@ public partial class LibraryPage : UserControl
 
     private void OnAttachedToVisualTree(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)
     {
-        _xInputService = App.Services.GetRequiredService<XInputService>();
-        _xInputService.NavigationActionTriggered += OnControllerNavigationAction;
-        _xInputService.PushNavigationContext(this);
+        _gamepadService = App.Services.GetRequiredService<GamepadService>();
+        _gamepadService.NavigationActionTriggered += OnControllerNavigationAction;
+        _gamepadService.PushNavigationContext(this);
         _viewModel.RefreshControllerNavigationVisibility();
     }
 
     private void OnDetachedFromVisualTree(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)
     {
-        if (_xInputService != null)
+        if (_gamepadService != null)
         {
-            _xInputService.NavigationActionTriggered -= OnControllerNavigationAction;
-            _xInputService.PopNavigationContext(this);
-            _xInputService = null;
+            _gamepadService.NavigationActionTriggered -= OnControllerNavigationAction;
+            _gamepadService.PopNavigationContext(this);
+            _gamepadService = null;
         }
         _viewModel.ClearControllerFocus();
     }
@@ -68,7 +68,7 @@ public partial class LibraryPage : UserControl
             // Only react while this page is the active navigation context. Opening a modal
             // dialog (e.g. DiscSelectionDialog) pushes its own context on top of ours, so
             // this check prevents the grid from also moving underneath the dialog.
-            if (_xInputService == null || !_xInputService.IsActiveNavigationContext(this))
+            if (_gamepadService == null || !_gamepadService.IsActiveNavigationContext(this))
             {
                 return;
             }
@@ -206,7 +206,7 @@ public partial class LibraryPage : UserControl
     private void OpenFocusedGameContextMenu()
     {
         Control? control = GetFocusedGameControl();
-        if (control?.ContextFlyout is not MenuFlyout menuFlyout || _xInputService == null)
+        if (control?.ContextFlyout is not MenuFlyout menuFlyout || _gamepadService == null)
         {
             return;
         }
@@ -243,7 +243,7 @@ public partial class LibraryPage : UserControl
         {
             Dispatcher.UIThread.Post(() =>
             {
-                if (!_xInputService.IsActiveNavigationContext(navigationOwner))
+                if (!_gamepadService.IsActiveNavigationContext(navigationOwner))
                 {
                     return;
                 }
@@ -306,8 +306,8 @@ public partial class LibraryPage : UserControl
 
         void OnOpened(object? s, EventArgs e)
         {
-            _xInputService.PushNavigationContext(navigationOwner);
-            _xInputService.NavigationActionTriggered += controllerHandler;
+            _gamepadService.PushNavigationContext(navigationOwner);
+            _gamepadService.NavigationActionTriggered += controllerHandler;
             SetCursor(0, 0);
         }
 
@@ -321,8 +321,8 @@ public partial class LibraryPage : UserControl
                     items[cursorIndex].Classes.Remove("controllerCursor");
                 }
             }
-            _xInputService.NavigationActionTriggered -= controllerHandler;
-            _xInputService.PopNavigationContext(navigationOwner);
+            _gamepadService.NavigationActionTriggered -= controllerHandler;
+            _gamepadService.PopNavigationContext(navigationOwner);
             menuFlyout.Opened -= OnOpened;
             menuFlyout.Closed -= OnClosed;
         }
