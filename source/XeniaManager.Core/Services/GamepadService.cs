@@ -1,5 +1,5 @@
 using System.Linq;
-using Silk.NET.SDL;
+using SDL;
 using XeniaManager.Core.Logging;
 
 namespace XeniaManager.Core.Services;
@@ -25,7 +25,7 @@ public enum ControllerNavigationAction
 }
 
 /// <summary>
-/// Polls a game controller (via SDL2, through Silk.NET.SDL) and raises navigation events
+/// Polls a game controller (via SDL3, through ppy.SDL3-CS) and raises navigation events
 /// (Up/Down/Left/Right/Confirm/Back/Info/Menu/ToggleView) suitable for driving UI focus,
 /// similar to how a console dashboard is navigated.
 ///
@@ -35,9 +35,9 @@ public enum ControllerNavigationAction
 /// opening a modal dialog should "take over" input from whatever's behind it.
 ///
 /// EXPERIMENTAL: this is a first proof-of-concept limited to the first connected
-/// controller and to D-Pad + left stick + A/B/X/Y/View buttons. Uses SDL2 (via
-/// Silk.NET.SDL) rather than XInput specifically so this also works under
-/// Wine/Proton on Linux, not just native Windows.
+/// controller and to D-Pad + left stick + A/B/X/Y/View buttons. Uses SDL3 (via
+/// ppy.SDL3-CS, switched from the SDL2-based Silk.NET.SDL) so this also works
+/// under Wine/Proton on Linux, not just native Windows, on a non-EOL SDL version.
 /// </summary>
 public unsafe class GamepadService : IDisposable
 {
@@ -55,8 +55,11 @@ public unsafe class GamepadService : IDisposable
     /// </summary>
     public static GamepadService? Current { get; private set; }
 
-    private Sdl? _sdl;
-    private GameController* _controller;
+    // ppy.SDL3-CS exposes SDL as a static class (SDL3) rather than an instance API like
+    // Silk.NET.SDL did, so there's no equivalent of the old "_sdl" handle - this flag tracks
+    // whether SDL_Init succeeded instead.
+    private bool _sdlInitialized;
+    private SDL_Gamepad* _controller;
     private Timer? _pollTimer;
     private bool _isRunning;
     private readonly Lock _lock = new Lock();
@@ -205,10 +208,10 @@ public unsafe class GamepadService : IDisposable
     }
 
     /// <summary>
-    /// Starts polling for controller input. Initializes SDL2's game controller subsystem on
-    /// first use; if initialization fails (e.g. missing native SDL2 library), logs a warning
-    /// and leaves the service inert rather than throwing, so a missing/broken SDL2 doesn't
-    /// crash the app for users who don't use a controller anyway.
+    /// Starts polling for controller input. Initializes SDL3's gamepad subsystem on first use;
+    /// if initialization fails (e.g. missing native SDL3 library), logs a warning and leaves
+    /// the service inert rather than throwing, so a missing/broken SDL3 doesn't crash the app
+    /// for users who don't use a controller anyway.
     /// </summary>
     public void Start()
     {
@@ -220,7 +223,7 @@ public unsafe class GamepadService : IDisposable
                 return;
             }
 
-            if (_sdl == null && !TryInitializeSdl())
+            if (!_sdlInitialized && !TryInitializeSdl())
             {
                 return;
             }
@@ -253,47 +256,36 @@ public unsafe class GamepadService : IDisposable
     }
 
     /// <summary>
-    /// Initializes SDL2's game controller subsystem via Silk.NET.SDL. Returns false (and logs
-    /// a warning, not an error) if it fails, since a missing native SDL2 library shouldn't be
+    /// Initializes SDL3's gamepad subsystem via ppy.SDL3-CS. Returns false (and logs a
+    /// warning, not an error) if it fails, since a missing native SDL3 library shouldn't be
     /// treated as a hard failure - the feature is opt-in and experimental.
     /// </summary>
     private bool TryInitializeSdl()
     {
         try
         {
-            _sdl = Sdl.GetApi();
-
-            if (_sdl.Init(Sdl.InitGamecontroller) < 0)
+            // Unlike SDL2's SDL_INIT_GAMECONTROLLER, SDL3's SDL_INIT_GAMEPAD does NOT imply
+            // SDL_INIT_JOYSTICK - without requesting both explicitly, SDL_GetGamepads() and
+            // SDL_GetJoysticks() silently return zero devices (no error, no exception), which
+            // made the controller appear to simply not exist during the SDL3 migration.
+            if (!SDL3.SDL_Init(SDL_InitFlags.SDL_INIT_GAMEPAD | SDL_InitFlags.SDL_INIT_JOYSTICK))
             {
-                Logger.Warning<GamepadService>($"SDL2 game controller subsystem initialization failed: {GetSdlError()}");
-                _sdl = null;
+                Logger.Warning<GamepadService>($"SDL3 gamepad subsystem initialization failed: {SDL3.SDL_GetError()}");
                 return false;
             }
 
-            Logger.Info<GamepadService>("SDL2 game controller subsystem initialized successfully");
+            _sdlInitialized = true;
+            Logger.Info<GamepadService>("SDL3 gamepad subsystem initialized successfully");
             return true;
         }
         catch (Exception ex)
         {
-            // Most likely cause: the native SDL2 library isn't present/loadable on this system
-            Logger.Warning<GamepadService>("Failed to initialize SDL2 (native library may be missing) - gamepad navigation will be unavailable");
+            // Most likely cause: the native SDL3 library isn't present/loadable on this system
+            Logger.Warning<GamepadService>("Failed to initialize SDL3 (native library may be missing) - gamepad navigation will be unavailable");
             Logger.LogExceptionDetails<GamepadService>(ex);
-            _sdl = null;
+            _sdlInitialized = false;
             return false;
         }
-    }
-
-    private string GetSdlError()
-    {
-        if (_sdl == null)
-        {
-            return "SDL not initialized";
-        }
-
-        byte* errorPtr = _sdl.GetError();
-        return errorPtr != null
-            ? System.Runtime.InteropServices.Marshal.PtrToStringAnsi((nint)errorPtr) ?? "Unknown SDL error"
-            : "Unknown SDL error";
     }
 
     /// <summary>
@@ -303,13 +295,22 @@ public unsafe class GamepadService : IDisposable
     /// </summary>
     private void Poll(object? state)
     {
-        if (_sdl == null)
+        if (!_sdlInitialized)
         {
             return;
         }
 
         try
         {
+            // SDL3 only refreshes gamepad/joystick state (including detecting newly-connected
+            // devices) when the event queue is pumped - unlike SDL2, which kept this working
+            // transparently for polling-style code like ours. Since we poll on a Timer rather
+            // than running an SDL event loop, this has to be done explicitly every poll or
+            // device discovery/button/axis reads below would return stale (usually all-zero,
+            // or "no controller found") state.
+            SDL3.SDL_PumpEvents();
+            SDL3.SDL_UpdateGamepads();
+
             RefreshControllerConnection();
 
             bool isConnected = _controller != null;
@@ -335,15 +336,18 @@ public unsafe class GamepadService : IDisposable
             // Resolve the current directional intent (D-Pad takes priority over the stick)
             ControllerNavigationAction? currentDirection = ResolveDirection();
 
-            // Edge-triggered buttons (fire once per press, not while held)
-            bool aPressed = GetButton(GameControllerButton.A);
-            bool bPressed = GetButton(GameControllerButton.B);
-            bool xPressed = GetButton(GameControllerButton.X);
-            bool yPressed = GetButton(GameControllerButton.Y);
+            // Edge-triggered buttons (fire once per press, not while held). SDL3 renamed the
+            // face buttons from their SDL2 Xbox-labeled names (A/B/X/Y) to layout-agnostic
+            // positional names - SOUTH/EAST/WEST/NORTH map to A/B/X/Y respectively on an
+            // Xbox-style gamepad.
+            bool aPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_SOUTH);
+            bool bPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_EAST);
+            bool xPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_WEST);
+            bool yPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_NORTH);
             // The small button left of center on Xbox One/Series controllers is labeled "View"
             // but SDL (like XInput before it) still calls it "Back" for historical reasons -
             // distinct from our logical ControllerNavigationAction.Back (mapped to the B face button).
-            bool viewPressed = GetButton(GameControllerButton.Back);
+            bool viewPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_BACK);
 
             if (aPressed && !_previousAPressed)
             {
@@ -400,15 +404,15 @@ public unsafe class GamepadService : IDisposable
     /// </summary>
     private void RefreshControllerConnection()
     {
-        if (_sdl == null)
+        if (!_sdlInitialized)
         {
             return;
         }
 
         // Close the current controller if it's no longer attached
-        if (_controller != null && _sdl.GameControllerGetAttached(_controller) == SdlBool.False)
+        if (_controller != null && !SDL3.SDL_GamepadConnected(_controller))
         {
-            _sdl.GameControllerClose(_controller);
+            SDL3.SDL_CloseGamepad(_controller);
             _controller = null;
         }
 
@@ -417,24 +421,20 @@ public unsafe class GamepadService : IDisposable
             return;
         }
 
-        // Look for the first available game controller among connected joysticks
-        int numJoysticks = _sdl.NumJoysticks();
-        for (int deviceIndex = 0; deviceIndex < numJoysticks; deviceIndex++)
+        // SDL_GetGamepads() already returns only gamepad-capable joysticks (unlike SDL2, where
+        // we had to enumerate all joysticks and filter with IsGameController ourselves).
+        using SDLArray<SDL_JoystickID>? gamepads = SDL3.SDL_GetGamepads();
+        if (gamepads == null || gamepads.Count == 0)
         {
-            if (_sdl.IsGameController(deviceIndex) == SdlBool.True)
-            {
-                _controller = _sdl.GameControllerOpen(deviceIndex);
-                if (_controller != null)
-                {
-                    return;
-                }
-            }
+            return;
         }
+
+        _controller = SDL3.SDL_OpenGamepad(gamepads[0]);
     }
 
-    private bool GetButton(GameControllerButton button)
+    private bool GetButton(SDL_GamepadButton button)
     {
-        return _sdl != null && _controller != null && _sdl.GameControllerGetButton(_controller, button) == 1;
+        return _sdlInitialized && _controller != null && SDL3.SDL_GetGamepadButton(_controller, button);
     }
 
     /// <summary>
@@ -529,32 +529,32 @@ public unsafe class GamepadService : IDisposable
 
     private ControllerNavigationAction? ResolveDirection()
     {
-        if (_sdl == null || _controller == null)
+        if (!_sdlInitialized || _controller == null)
         {
             return null;
         }
 
         // D-Pad takes priority over the analog stick
-        if (GetButton(GameControllerButton.DpadUp))
+        if (GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_UP))
         {
             return ControllerNavigationAction.Up;
         }
-        if (GetButton(GameControllerButton.DpadDown))
+        if (GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_DOWN))
         {
             return ControllerNavigationAction.Down;
         }
-        if (GetButton(GameControllerButton.DpadLeft))
+        if (GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_LEFT))
         {
             return ControllerNavigationAction.Left;
         }
-        if (GetButton(GameControllerButton.DpadRight))
+        if (GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_RIGHT))
         {
             return ControllerNavigationAction.Right;
         }
 
         // Fall back to the left analog stick, past the deadzone
-        short x = _sdl.GameControllerGetAxis(_controller, GameControllerAxis.Leftx);
-        short y = _sdl.GameControllerGetAxis(_controller, GameControllerAxis.Lefty);
+        short x = SDL3.SDL_GetGamepadAxis(_controller, SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX);
+        short y = SDL3.SDL_GetGamepadAxis(_controller, SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY);
 
         // Widened to int before Math.Abs: SDL's axis range is the asymmetric short range
         // [-32768, 32767], and a stick pushed fully to one side reports exactly short.MinValue.
@@ -610,23 +610,23 @@ public unsafe class GamepadService : IDisposable
 
     /// <summary>
     /// Disposes the service by stopping polling, closing the open controller (if any), and
-    /// shutting down the SDL2 game controller subsystem.
+    /// shutting down the SDL3 gamepad subsystem.
     /// </summary>
     public void Dispose()
     {
         Logger.Trace<GamepadService>("Disposing GamepadService");
         Stop();
 
-        if (_sdl != null)
+        if (_sdlInitialized)
         {
             if (_controller != null)
             {
-                _sdl.GameControllerClose(_controller);
+                SDL3.SDL_CloseGamepad(_controller);
                 _controller = null;
             }
 
-            _sdl.QuitSubSystem(Sdl.InitGamecontroller);
-            _sdl = null;
+            SDL3.SDL_QuitSubSystem(SDL_InitFlags.SDL_INIT_GAMEPAD | SDL_InitFlags.SDL_INIT_JOYSTICK);
+            _sdlInitialized = false;
         }
 
         if (ReferenceEquals(Current, this))
