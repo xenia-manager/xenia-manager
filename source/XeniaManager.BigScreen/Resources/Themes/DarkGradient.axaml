@@ -1,8 +1,12 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Card surfaces -->
-    <SolidColorBrush x:Key="CardBackground" Color="#1F232B" />
-    <SolidColorBrush x:Key="CardTitleBar" Color="#101216" />
+    <Color x:Key="CardBackgroundColor">#FF1F232B</Color>
+    <Color x:Key="CardTitleBarColor">#FF101216</Color>
+    <Color x:Key="CardBorderColor">#FF191C22</Color>
+    <SolidColorBrush x:Key="CardBackground" Color="{StaticResource CardBackgroundColor}" />
+    <SolidColorBrush x:Key="CardTitleBar" Color="{StaticResource CardTitleBarColor}" />
+    <SolidColorBrush x:Key="CardBorder" Color="{StaticResource CardBorderColor}" />
 
     <!-- Vignette overlay: transparent center fading to dark at the edges -->
     <RadialGradientBrush x:Key="BackgroundVignette"
@@ -17,6 +21,43 @@
     <SolidColorBrush x:Key="AccentColor" Color="#107C41" />
 
     <!-- Text -->
-    <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="TextSecondary" Color="#A0A0A0" />
+    <Color x:Key="TextPrimaryColor">#FFFFFFFF</Color>
+    <Color x:Key="TextSecondaryColor">#FFA0A0A0</Color>
+    <SolidColorBrush x:Key="TextPrimary" Color="{StaticResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="TextSecondary" Color="{StaticResource TextSecondaryColor}" />
+
+    <!-- FLUENTAVALONIA CONTROL OVERRIDES (brush-typed keys) -->
+    <Color x:Key="SystemAccentColor">#FF107C41</Color>
+    <Color x:Key="SystemAccentColorLight1">#FF2D9B41</Color>
+    <Color x:Key="SystemAccentColorLight2">#FF52B061</Color>
+    <Color x:Key="SystemAccentColorLight3">#FF7BC67F</Color>
+    <Color x:Key="SystemAccentColorDark1">#FF0E6B38</Color>
+    <Color x:Key="SystemAccentColorDark2">#FF0C5A30</Color>
+    <Color x:Key="SystemAccentColorDark3">#FF0A4A28</Color>
+    <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="SliderTrackValueFill" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="SliderThumbBackground" Color="{DynamicResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="{DynamicResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="{DynamicResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="ControlOutlineBrush" Color="{DynamicResource CardBorderColor}" />
+    <SolidColorBrush x:Key="ControlOutlineBrushPointerOver" Color="{DynamicResource CardBorderColor}" />
+    <SolidColorBrush x:Key="ControlOutlineBrushFocused" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="ControlOutlineBrushDisabled" Color="{DynamicResource CardBorderColor}" />
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="{DynamicResource CardBorderColor}" />
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{DynamicResource CardBorderColor}" />
+    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="{DynamicResource CardBorderColor}" />
+
+    <!-- ACCENT FILL FAMILY (ComboBoxItem selected bar etc.) -->
+    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="{DynamicResource SystemAccentColorDark1}" />
+    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="{DynamicResource SystemAccentColorDark1}" Opacity="0.9" />
+    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="{DynamicResource SystemAccentColorDark1}" Opacity="0.8" />
+    <SolidColorBrush x:Key="AccentFillColorDisabledBrush" Color="#37000000" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="{DynamicResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="{DynamicResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="{DynamicResource TextPrimaryColor}" Opacity="0.8" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorDisabledBrush" Color="{DynamicResource TextPrimaryColor}" Opacity="0.4" />
 </ResourceDictionary>

@@ -32,6 +32,23 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private BackgroundMode _mode = BackgroundMode.LinearGradient;
 
     /// <summary>
+    /// Options shown in the settings background-type dropdown.
+    /// </summary>
+    public ObservableCollection<BackgroundModeOption> BackgroundModeOptions { get; } =
+    [
+        new(BackgroundMode.Image, "Image"),
+        new(BackgroundMode.Solid, "Solid Colour"),
+        new(BackgroundMode.LinearGradient, "Linear Gradient"),
+        new(BackgroundMode.RadialGradient, "Radial Gradient"),
+        new(BackgroundMode.Dynamic, "Dynamic (Selected Game)"),
+    ];
+
+    /// <summary>
+    /// The selected option in the background-type dropdown.
+    /// </summary>
+    [ObservableProperty] private BackgroundModeOption? _selectedBackgroundMode;
+
+    /// <summary>
     /// The primary color; gradients are derived from it.
     /// </summary>
     [ObservableProperty] private Color _primaryColor;
@@ -51,6 +68,44 @@ public partial class MainWindowViewModel : ViewModelBase
     /// (Image mode, or Dynamic with artwork) - it ruins flat color/gradient backgrounds.
     /// </summary>
     [ObservableProperty] private bool _vignetteVisible;
+
+    /// <summary>
+    /// The currently open overlay screen.
+    /// </summary>
+    [ObservableProperty] private OverlayScreen _currentScreen = OverlayScreen.None;
+
+    /// <summary>
+    /// Whether any overlay is currently open.
+    /// </summary>
+    public bool IsOverlayOpen => CurrentScreen != OverlayScreen.None;
+
+    /// <summary>
+    /// Whether the library overlay is open.
+    /// </summary>
+    public bool IsLibraryScreen => CurrentScreen == OverlayScreen.Library;
+
+    /// <summary>
+    /// Whether the media overlay is open.
+    /// </summary>
+    public bool IsMediaScreen => CurrentScreen == OverlayScreen.Media;
+
+    /// <summary>
+    /// Whether the settings overlay is open.
+    /// </summary>
+    public bool IsSettingsScreen => CurrentScreen == OverlayScreen.Settings;
+
+    /// <summary>
+    /// Raised when the user chooses to quit BigScreen.
+    /// </summary>
+    public event EventHandler? QuitRequested;
+
+    partial void OnCurrentScreenChanged(OverlayScreen value)
+    {
+        OnPropertyChanged(nameof(IsOverlayOpen));
+        OnPropertyChanged(nameof(IsLibraryScreen));
+        OnPropertyChanged(nameof(IsMediaScreen));
+        OnPropertyChanged(nameof(IsSettingsScreen));
+    }
 
     /// <summary>
     /// Gamertag of the active profile (Canary)
@@ -118,6 +173,15 @@ public partial class MainWindowViewModel : ViewModelBase
         _backgroundService.Settings.Mode = value;
         _backgroundService.Save();
         UpdateBackground();
+        SelectedBackgroundMode = BackgroundModeOptions.FirstOrDefault(o => o.Mode == value);
+    }
+
+    partial void OnSelectedBackgroundModeChanged(BackgroundModeOption? value)
+    {
+        if (value != null)
+        {
+            Mode = value.Mode;
+        }
     }
 
     partial void OnPrimaryColorChanged(Color value)
@@ -125,6 +189,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _backgroundService.Settings.PrimaryColor = value;
         _backgroundService.Save();
         UpdateBackground();
+        OnPropertyChanged(nameof(ScreenBackground));
     }
 
     partial void OnAccentColorChanged(Color value)
@@ -137,7 +202,14 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _backgroundService.Settings.VignetteOpacity = value;
         _backgroundService.Save();
+        OnPropertyChanged(nameof(VignetteText));
     }
+
+    /// <summary>
+    /// Brush used as the overlay/menu background, derived from the primary colour
+    /// so menus match the dashboard instead of being pitch black.
+    /// </summary>
+    public IBrush ScreenBackground => new SolidColorBrush(PrimaryColor);
 
     private readonly DispatcherTimer _clockTimer;
 
@@ -153,16 +225,17 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<OptionsCardViewModel> Options { get; } =
     [
-        new("Library", "Games"),
-        new("Media", "Library"),
-        new("Settings", "Settings"),
-        new("Quit", "Power"),
+        new("Library", "Games", OverlayScreen.Library),
+        new("Media", "Library", OverlayScreen.Media),
+        new("Settings", "Settings", OverlayScreen.Settings),
+        new("Quit", "Power", OverlayScreen.None),
     ];
 
     public MainWindowViewModel()
     {
         _backgroundService.Load();
         Mode = _backgroundService.Settings.Mode;
+        SelectedBackgroundMode = BackgroundModeOptions.FirstOrDefault(o => o.Mode == Mode);
         PrimaryColor = _backgroundService.Settings.PrimaryColor;
         AccentColor = _backgroundService.Settings.AccentColor;
         VignetteOpacity = _backgroundService.Settings.VignetteOpacity;
@@ -183,6 +256,99 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Display name of the current background mode.
+    /// </summary>
+    public string ModeText => Mode switch
+    {
+        BackgroundMode.Image => "Image",
+        BackgroundMode.Solid => "Solid Colour",
+        BackgroundMode.LinearGradient => "Linear Gradient",
+        BackgroundMode.RadialGradient => "Radial Gradient",
+        BackgroundMode.Dynamic => "Dynamic (Selected Game)",
+        _ => "Linear Gradient",
+    };
+
+    /// <summary>
+    /// Display text for the vignette opacity as a percentage.
+    /// </summary>
+    public string VignetteText => $"{Math.Round(VignetteOpacity * 100)}%";
+
+    /// <summary>
+    /// Display text for the currently configured background image.
+    /// </summary>
+    public string ImageDisplayText => string.IsNullOrEmpty(_backgroundService.Settings.ImagePath)
+        ? "None"
+        : System.IO.Path.GetFileName(_backgroundService.Settings.ImagePath);
+
+    /// <summary>
+    /// Cycles the background mode by the given step.
+    /// </summary>
+    public void CycleMode(int delta)
+    {
+        BackgroundMode[] modes = Enum.GetValues<BackgroundMode>();
+        int index = Array.IndexOf(modes, Mode);
+        Mode = modes[(index + delta + modes.Length) % modes.Length];
+    }
+
+    /// <summary>
+    /// Cycles the primary color through the given palette by the given step.
+    /// </summary>
+    public void CyclePrimaryColor(int delta, Color[] palette)
+    {
+        int index = Array.IndexOf(palette, PrimaryColor);
+        if (index < 0)
+        {
+            index = 0;
+        }
+        PrimaryColor = palette[(index + delta + palette.Length) % palette.Length];
+    }
+
+    /// <summary>
+    /// Cycles the accent color through the given palette by the given step.
+    /// </summary>
+    public void CycleAccentColor(int delta, Color[] palette)
+    {
+        int index = Array.IndexOf(palette, AccentColor);
+        if (index < 0)
+        {
+            index = 1;
+        }
+        AccentColor = palette[(index + delta + palette.Length) % palette.Length];
+    }
+
+    /// <summary>
+    /// Steps the vignette opacity by the given direction (0.05 per step), clamped to 0-1.
+    /// </summary>
+    public void AdjustVignette(int delta)
+    {
+        VignetteOpacity = Math.Clamp(VignetteOpacity + delta * 0.05, 0, 1);
+    }
+
+    /// <summary>
+    /// Opens the given overlay screen.
+    /// </summary>
+    public void OpenScreen(OverlayScreen screen)
+    {
+        CurrentScreen = screen;
+    }
+
+    /// <summary>
+    /// Closes the currently open overlay screen.
+    /// </summary>
+    public void CloseOverlay()
+    {
+        CurrentScreen = OverlayScreen.None;
+    }
+
+    /// <summary>
+    /// Requests the app to quit (returns to regular Xenia Manager).
+    /// </summary>
+    public void Quit()
+    {
+        QuitRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
     /// Sets a custom image path and switches to image background mode.
     /// </summary>
     public void SetBackgroundImage(string path)
@@ -192,6 +358,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _backgroundService.Save();
         Mode = BackgroundMode.Image;
         UpdateBackground();
+        OnPropertyChanged(nameof(ImageDisplayText));
     }
 
     /// <summary>

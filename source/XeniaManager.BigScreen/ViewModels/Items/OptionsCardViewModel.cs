@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+using XeniaManager.BigScreen.Models;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
@@ -23,17 +23,16 @@ public partial class OptionsCardViewModel : ObservableObject
     /// </summary>
     [ObservableProperty] private bool _isSelected;
 
-    public OptionsCardViewModel(string title, string icon)
+    /// <summary>
+    /// The overlay screen opened when this card is activated, or None for actions
+    /// handled elsewhere (e.g. Quit).
+    /// </summary>
+    public OverlayScreen TargetScreen { get; }
+
+    public OptionsCardViewModel(string title, string icon, OverlayScreen targetScreen)
     {
         _title = title;
         _icon = icon;
-    }
-
-    /// <summary>
-    /// Activates the option. Stub for future wiring.
-    /// </summary>
-    [RelayCommand]
-    private void Select()
-    {
+        TargetScreen = targetScreen;
     }
 }

@@ -88,7 +88,29 @@ public class BackgroundService
         }
 
         resources["AccentColor"] = new SolidColorBrush(Settings.AccentColor);
+        resources["SystemAccentColor"] = Settings.AccentColor;
+        resources["SystemAccentColorBrush"] = new SolidColorBrush(Settings.AccentColor);
+        resources["SystemAccentColorLight1"] = AdjustAccent(0.15);
+        resources["SystemAccentColorLight2"] = AdjustAccent(0.30);
+        resources["SystemAccentColorLight3"] = AdjustAccent(0.45);
+        resources["SystemAccentColorDark1"] = AdjustAccent(-0.15);
+        resources["SystemAccentColorDark2"] = AdjustAccent(-0.30);
+        resources["SystemAccentColorDark3"] = AdjustAccent(-0.45);
         resources["BackgroundVignette"] = CreateVignetteBrush();
+    }
+
+    /// <summary>
+    /// Lightens (positive) or darkens (negative) the accent colour by the given amount.
+    /// </summary>
+    private Color AdjustAccent(double amount)
+    {
+        Color c = Settings.AccentColor;
+        if (amount >= 0)
+        {
+            return Mix(c, Colors.White, amount);
+        }
+
+        return Mix(c, Colors.Black, -amount);
     }
 
     /// <summary>
@@ -163,8 +185,8 @@ public class BackgroundService
     }
 
     /// <summary>
-    /// Creates a vertical linear gradient from shades of the primary color:
-    /// lighter at the top, darker at the bottom.
+    /// Creates a smooth vertical linear gradient from the primary color:
+    /// the colour itself at the top, fading to a slightly darker slate at the bottom.
     /// </summary>
     private IBrush CreateLinearBrush()
     {
@@ -172,46 +194,56 @@ public class BackgroundService
         {
             StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
             EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
+            GradientStops =
+            {
+                new GradientStop(Settings.PrimaryColor, 0),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.12), 0.5),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.25), 1),
+            },
         };
-        AddShades(brush, [1.18, 1.10, 1.02, 0.94, 0.86]);
         return brush;
     }
 
     /// <summary>
-    /// Creates a radial gradient from shades of the primary color:
-    /// lighter at the center, darker at the edges.
+    /// Creates a radial gradient from the primary color:
+    /// the colour itself at the top-left corner fading to a darker slate at the bottom-right.
     /// </summary>
     private IBrush CreateRadialBrush()
     {
         RadialGradientBrush brush = new()
         {
-            Center = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
-            GradientOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
+            Center = new RelativePoint(0, 0, RelativeUnit.Relative),
+            GradientOrigin = new RelativePoint(0, 0, RelativeUnit.Relative),
+            RadiusX = new RelativeScalar(1.5, RelativeUnit.Relative),
+            RadiusY = new RelativeScalar(1.5, RelativeUnit.Relative),
+            GradientStops =
+            {
+                new GradientStop(Settings.PrimaryColor, 0),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.12), 0.55),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.25), 1),
+            },
         };
-        AddShades(brush, [1.12, 1.0, 0.88]);
         return brush;
     }
 
     /// <summary>
-    /// Spreads shade factors of the primary color evenly across the brush's gradient stops.
+    /// Blends the color toward white by the given amount (0-1).
     /// </summary>
-    private void AddShades(GradientBrush brush, double[] factors)
-    {
-        double step = 1.0 / Math.Max(1, factors.Length - 1);
-        for (int i = 0; i < factors.Length; i++)
-        {
-            brush.GradientStops.Add(new GradientStop(Shade(Settings.PrimaryColor, factors[i]), i * step));
-        }
-    }
+    private static Color MixWithWhite(Color color, double amount) => Mix(color, Colors.White, amount);
 
     /// <summary>
-    /// Multiplies the RGB channels of a color by the given factor, clamping to byte range.
+    /// Blends the color toward black by the given amount (0-1).
     /// </summary>
-    private static Color Shade(Color color, double factor)
+    private static Color MixWithBlack(Color color, double amount) => Mix(color, Colors.Black, amount);
+
+    /// <summary>
+    /// Linearly interpolates between two colors.
+    /// </summary>
+    private static Color Mix(Color from, Color to, double amount)
     {
         return Color.FromRgb(
-            (byte)Math.Clamp(Math.Round(color.R * factor), 0, 255),
-            (byte)Math.Clamp(Math.Round(color.G * factor), 0, 255),
-            (byte)Math.Clamp(Math.Round(color.B * factor), 0, 255));
+            (byte)Math.Round(from.R + (to.R - from.R) * amount),
+            (byte)Math.Round(from.G + (to.G - from.G) * amount),
+            (byte)Math.Round(from.B + (to.B - from.B) * amount));
     }
 }

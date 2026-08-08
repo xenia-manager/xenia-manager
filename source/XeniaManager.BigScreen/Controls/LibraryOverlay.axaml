@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="XeniaManager.BigScreen.Controls.LibraryOverlay"
+             x:DataType="vm:MainWindowViewModel"
+             Background="{Binding ScreenBackground}">
+    <Grid RowDefinitions="Auto, *, Auto" Margin="60">
+        <TextBlock Grid.Row="0"
+                   Text="Game Library"
+                   Foreground="{DynamicResource TextPrimary}"
+                   FontSize="48"
+                   FontWeight="Bold"
+                   Margin="0,20,0,30" />
+
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl x:Name="GamesList" ItemsSource="{Binding Games}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="14" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="items:GameCardViewModel">
+                        <Border x:Name="GameRow"
+                                Background="{DynamicResource CardBackground}"
+                                CornerRadius="10"
+                                Padding="24,16"
+                                BoxShadow="0 4 12 0 #40000000"
+                                Focusable="True">
+                            <DockPanel>
+                                <Border Width="72" Height="72"
+                                        CornerRadius="8"
+                                        Background="{DynamicResource CardTitleBar}"
+                                        DockPanel.Dock="Left" />
+                                <TextBlock Text="{Binding Title}"
+                                           Foreground="{DynamicResource TextPrimary}"
+                                           FontSize="26"
+                                           VerticalAlignment="Center"
+                                           Margin="20,0,0,0" />
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <TextBlock Grid.Row="2"
+                   Text="B - Back"
+                   Foreground="{DynamicResource TextSecondary}"
+                   FontSize="20"
+                   Margin="0,16,0,0" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,141 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:controls="using:XeniaManager.BigScreen.Controls"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="XeniaManager.BigScreen.Controls.SettingsOverlay"
+             x:DataType="vm:MainWindowViewModel"
+             Background="{Binding ScreenBackground}">
+    <Grid RowDefinitions="Auto, *, Auto" Margin="60">
+        <TextBlock Grid.Row="0"
+                   Text="Settings"
+                   Foreground="{DynamicResource TextPrimary}"
+                   FontSize="48"
+                   FontWeight="Bold"
+                   Margin="0,20,0,30" />
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Orientation="Vertical" Spacing="14">
+
+                <!-- BACKGROUND TYPE -->
+                <Border Background="{DynamicResource CardBackground}"
+                        CornerRadius="10"
+                        Padding="24,16"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <DockPanel>
+                        <ComboBox x:Name="BackgroundModeCombo"
+                                  DockPanel.Dock="Right"
+                                  Width="420"
+                                  VerticalAlignment="Center"
+                                  ItemsSource="{Binding BackgroundModeOptions}"
+                                  SelectedItem="{Binding SelectedBackgroundMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}"
+                                  FontSize="22"
+                                  Padding="12,8" />
+                        <TextBlock Text="Background Type"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   FontSize="24"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+
+                <!-- PRIMARY COLOUR -->
+                <Border Background="{DynamicResource CardBackground}"
+                        CornerRadius="10"
+                        Padding="24,16"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <DockPanel>
+                        <controls:ColorPickerField x:Name="PrimaryColorField"
+                                                   DockPanel.Dock="Right"
+                                                   VerticalAlignment="Center"
+                                                   Color="{Binding PrimaryColor, Mode=TwoWay}" />
+                        <TextBlock Text="Primary Colour"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   FontSize="24"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+
+                <!-- ACCENT COLOUR -->
+                <Border Background="{DynamicResource CardBackground}"
+                        CornerRadius="10"
+                        Padding="24,16"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <DockPanel>
+                        <controls:ColorPickerField x:Name="AccentColorField"
+                                                   DockPanel.Dock="Right"
+                                                   VerticalAlignment="Center"
+                                                   Color="{Binding AccentColor, Mode=TwoWay}" />
+                        <TextBlock Text="Accent Colour"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   FontSize="24"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+
+                <!-- VIGNETTE OPACITY -->
+                <Border Background="{DynamicResource CardBackground}"
+                        CornerRadius="10"
+                        Padding="24,16"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Right"
+                                   Text="{Binding VignetteText}"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   FontSize="22"
+                                   Width="60"
+                                   TextAlignment="Right"
+                                   VerticalAlignment="Center" />
+                        <Slider DockPanel.Dock="Right"
+                                Width="340"
+                                Margin="0,0,16,0"
+                                Minimum="0"
+                                Maximum="1"
+                                VerticalAlignment="Center"
+                                Value="{Binding VignetteOpacity, Mode=TwoWay}" />
+                        <TextBlock Text="Vignette"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   FontSize="24"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+
+                <!-- BACKGROUND IMAGE -->
+                <Border Background="{DynamicResource CardBackground}"
+                        CornerRadius="10"
+                        Padding="24,16"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <DockPanel>
+                        <Button x:Name="SelectImageButton"
+                                DockPanel.Dock="Right"
+                                Content="Select Image"
+                                FontSize="20"
+                                Padding="20,10"
+                                VerticalAlignment="Center"
+                                Click="OnSelectImageClick" />
+                        <TextBlock DockPanel.Dock="Right"
+                                   Text="{Binding ImageDisplayText}"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   FontSize="22"
+                                   VerticalAlignment="Center"
+                                   TextTrimming="CharacterEllipsis"
+                                   Margin="0,0,16,0" />
+                        <TextBlock Text="Background Image"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   FontSize="24"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <TextBlock Grid.Row="2"
+                   Text="B - Back"
+                   Foreground="{DynamicResource TextSecondary}"
+                   FontSize="20"
+                   Margin="0,16,0,0" />
+    </Grid>
+</UserControl>

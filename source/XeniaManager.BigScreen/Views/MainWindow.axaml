@@ -135,6 +135,19 @@
             </ItemsControl>
 
         </Grid>
+
+        <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
+        <Panel Grid.RowSpan="2" Grid.ColumnSpan="3"
+               IsVisible="{Binding IsOverlayOpen}"
+               IsHitTestVisible="{Binding IsOverlayOpen}">
+            <!-- Full-screen backdrop -->
+            <Border Background="#E60A0C10" />
+            <Grid>
+                <controls:LibraryOverlay IsVisible="{Binding IsLibraryScreen}" />
+                <controls:MediaOverlay IsVisible="{Binding IsMediaScreen}" />
+                <controls:SettingsOverlay IsVisible="{Binding IsSettingsScreen}" />
+            </Grid>
+        </Panel>
     </Grid>
 
 </Window>

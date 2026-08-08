@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="XeniaManager.BigScreen.Controls.MediaOverlay"
+             x:DataType="vm:MainWindowViewModel"
+             Background="{Binding ScreenBackground}">
+    <Grid RowDefinitions="Auto, *, Auto" Margin="60">
+        <TextBlock Grid.Row="0"
+                   Text="Media"
+                   Foreground="{DynamicResource TextPrimary}"
+                   FontSize="48"
+                   FontWeight="Bold"
+                   Margin="0,20,0,30" />
+
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl x:Name="ScreenshotsList">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" ItemSpacing="16" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <TextBlock Grid.Row="2"
+                   Text="B - Back"
+                   Foreground="{DynamicResource TextSecondary}"
+                   FontSize="20"
+                   Margin="0,16,0,0" />
+    </Grid>
+</UserControl>

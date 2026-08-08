@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="XeniaManager.BigScreen.App"
              xmlns:local="using:XeniaManager.BigScreen"
+             xmlns:style="using:FluentAvalonia.Styling"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -13,12 +14,13 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://XeniaManager.BigScreen/Resources/Themes/DarkGradient.axaml" />
+                <ResourceInclude Source="avares://XeniaManager.BigScreen/Resources/Themes/Controls.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
   
     <Application.Styles>
-        <FluentTheme />
+        <style:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="False" />
         <StyleInclude Source="avares://XeniaManager.BigScreen/Resources/BigScreenStyle.axaml"></StyleInclude>
     </Application.Styles>
 </Application>
