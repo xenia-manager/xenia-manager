@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Services;
@@ -67,6 +72,13 @@ public interface IMessageBoxService
 /// </summary>
 public class MessageBoxService : IMessageBoxService
 {
+    private readonly GamepadService _gamepadService;
+
+    public MessageBoxService(GamepadService gamepadService)
+    {
+        _gamepadService = gamepadService;
+    }
+
     /// <summary>
     /// Shows an information message dialog.
     /// </summary>
@@ -144,6 +156,188 @@ public class MessageBoxService : IMessageBoxService
         }
     }
 
+    // --- Experimental controller navigation for dialogs -------------------------------
+    //
+    // Every FAContentDialog/FATaskDialog shown by this service used to be unreachable by
+    // controller: GamepadService's navigation context stack only knew about whatever page
+    // opened the dialog, which kept reacting to D-Pad/stick input underneath the (visually
+    // blocking) dialog, while the dialog's own Ok/Yes/No/etc. buttons couldn't be activated
+    // at all. DiscSelectionDialog hit and fixed the same problem for its own dialog earlier;
+    // this generalizes that same approach (push a navigation context for the dialog's
+    // lifetime, manual cursor via a "▸ " text prefix on whichever button is highlighted,
+    // rather than relying on FluentAvalonia's internal focus API which isn't confirmed to be
+    // reliably reachable from application code) to every dialog this service shows.
+
+    /// <summary>
+    /// Wires up controller navigation for a dialog for as long as it's open: Up/Down/Left/
+    /// Right move a "▸ " text-prefix cursor between <paramref name="buttons"/>, Confirm
+    /// invokes <paramref name="onConfirm"/> for the highlighted one, Back invokes
+    /// <paramref name="onBack"/>. Returns a cleanup action that must be called (in a
+    /// <c>finally</c>, once the dialog's ShowAsync has completed) to restore each button's
+    /// original text and unwind the navigation context.
+    /// </summary>
+    private Action AttachGamepadNavigation(
+        IReadOnlyList<(Func<string?> GetText, Action<string?> SetText)> buttons,
+        int defaultIndex,
+        Action<int> onConfirm,
+        Action onBack)
+    {
+        object owner = new object();
+        int cursorIndex = -1;
+
+        void SetCursor(int newIndex)
+        {
+            if (cursorIndex >= 0 && cursorIndex < buttons.Count)
+            {
+                buttons[cursorIndex].SetText(StripCursorPrefix(buttons[cursorIndex].GetText()));
+            }
+
+            cursorIndex = newIndex;
+
+            if (cursorIndex >= 0 && cursorIndex < buttons.Count)
+            {
+                buttons[cursorIndex].SetText("▸ " + StripCursorPrefix(buttons[cursorIndex].GetText()));
+            }
+        }
+
+        EventHandler<ControllerNavigationAction>? handler = null;
+        handler = (_, action) =>
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (!_gamepadService.IsActiveNavigationContext(owner) || buttons.Count == 0)
+                {
+                    return;
+                }
+
+                switch (action)
+                {
+                    case ControllerNavigationAction.Up:
+                    case ControllerNavigationAction.Left:
+                        SetCursor(cursorIndex <= 0 ? buttons.Count - 1 : cursorIndex - 1);
+                        break;
+                    case ControllerNavigationAction.Down:
+                    case ControllerNavigationAction.Right:
+                        SetCursor(cursorIndex < 0 ? 0 : (cursorIndex + 1) % buttons.Count);
+                        break;
+                    case ControllerNavigationAction.Confirm:
+                        if (cursorIndex >= 0 && cursorIndex < buttons.Count)
+                        {
+                            onConfirm(cursorIndex);
+                        }
+                        break;
+                    case ControllerNavigationAction.Back:
+                        onBack();
+                        break;
+                }
+            });
+        };
+
+        _gamepadService.PushNavigationContext(owner);
+        _gamepadService.NavigationActionTriggered += handler;
+        if (buttons.Count > 0)
+        {
+            Dispatcher.UIThread.Post(() => SetCursor(defaultIndex));
+        }
+
+        return () =>
+        {
+            foreach ((Func<string?> getText, Action<string?> setText) in buttons)
+            {
+                setText(StripCursorPrefix(getText()));
+            }
+
+            _gamepadService.NavigationActionTriggered -= handler;
+            _gamepadService.PopNavigationContext(owner);
+        };
+    }
+
+    private static string StripCursorPrefix(string? text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return string.Empty;
+        }
+
+        return text.StartsWith("▸ ") ? text[2..] : text;
+    }
+
+    /// <summary>
+    /// Builds the button list for <see cref="AttachGamepadNavigation"/> from an FAContentDialog's
+    /// Primary/Secondary/Close buttons (whichever have text set), and shows it. Confirm invokes
+    /// the highlighted button's result; Back always closes with <see cref="FAContentDialogResult.None"/>.
+    /// </summary>
+    private async Task<FAContentDialogResult> ShowContentDialogAsync(FAContentDialog dialog)
+    {
+        List<(FAContentDialogResult Result, Func<string?> GetText, Action<string?> SetText)> entries = [];
+        if (!string.IsNullOrEmpty(dialog.PrimaryButtonText))
+        {
+            entries.Add((FAContentDialogResult.Primary, () => dialog.PrimaryButtonText, t => dialog.PrimaryButtonText = t));
+        }
+        if (!string.IsNullOrEmpty(dialog.SecondaryButtonText))
+        {
+            entries.Add((FAContentDialogResult.Secondary, () => dialog.SecondaryButtonText, t => dialog.SecondaryButtonText = t));
+        }
+        if (!string.IsNullOrEmpty(dialog.CloseButtonText))
+        {
+            entries.Add((FAContentDialogResult.None, () => dialog.CloseButtonText, t => dialog.CloseButtonText = t));
+        }
+
+        int defaultIndex = Math.Max(0, entries.FindIndex(e => e.Result == dialog.DefaultButton switch
+        {
+            FAContentDialogButton.Primary => FAContentDialogResult.Primary,
+            FAContentDialogButton.Secondary => FAContentDialogResult.Secondary,
+            _ => FAContentDialogResult.None
+        }));
+
+        List<(Func<string?> GetText, Action<string?> SetText)> buttons = entries.ConvertAll(e => (e.GetText, e.SetText));
+
+        Action detach = AttachGamepadNavigation(
+            buttons,
+            defaultIndex,
+            confirmedIndex => dialog.Hide(entries[confirmedIndex].Result),
+            () => dialog.Hide(FAContentDialogResult.None));
+
+        try
+        {
+            return await dialog.ShowAsync();
+        }
+        finally
+        {
+            detach();
+        }
+    }
+
+    /// <summary>
+    /// Same idea as <see cref="ShowContentDialogAsync"/>, for FATaskDialog: builds the button
+    /// list from its (already-added) <see cref="FATaskDialogButton"/>s. Confirm hides the
+    /// dialog with the highlighted button's <see cref="FATaskDialogButton.DialogResult"/>
+    /// (matching what clicking it does); Back hides with a null result, same as
+    /// DiscSelectionDialog's cancel behavior.
+    /// </summary>
+    private async Task<object?> ShowTaskDialogAsync(FATaskDialog dialog)
+    {
+        IList<FATaskDialogButton> taskButtons = dialog.Buttons;
+        List<(Func<string?> GetText, Action<string?> SetText)> buttons = taskButtons
+            .Select(b => ((Func<string?>)(() => b.Text), (Action<string?>)(t => b.Text = t)))
+            .ToList();
+
+        Action detach = AttachGamepadNavigation(
+            buttons,
+            0,
+            confirmedIndex => dialog.Hide(taskButtons[confirmedIndex].DialogResult),
+            () => dialog.Hide(null));
+
+        try
+        {
+            return await dialog.ShowAsync(true);
+        }
+        finally
+        {
+            detach();
+        }
+    }
+
     /// <summary>
     /// Shows an information message dialog using FAContentDialog.
     /// </summary>
@@ -160,7 +354,7 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        await dialog.ShowAsync();
+        await ShowContentDialogAsync(dialog);
     }
 
     /// <summary>
@@ -179,7 +373,7 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        await dialog.ShowAsync();
+        await ShowContentDialogAsync(dialog);
     }
 
     /// <summary>
@@ -198,7 +392,7 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        await dialog.ShowAsync();
+        await ShowContentDialogAsync(dialog);
     }
 
     /// <summary>
@@ -218,7 +412,7 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        FAContentDialogResult result = await dialog.ShowAsync();
+        FAContentDialogResult result = await ShowContentDialogAsync(dialog);
         return result == FAContentDialogResult.Primary;
     }
 
@@ -261,7 +455,7 @@ public class MessageBoxService : IMessageBoxService
             dialog.CloseButtonText = LocalizationHelper.GetText("MessageBox.Cancel");
         }
 
-        return await dialog.ShowAsync();
+        return await ShowContentDialogAsync(dialog);
     }
 
     /// <summary>
@@ -286,7 +480,7 @@ public class MessageBoxService : IMessageBoxService
         };
 
         dialog.Buttons.Add(okButton);
-        await dialog.ShowAsync();
+        await ShowTaskDialogAsync(dialog);
     }
 
     /// <summary>
@@ -311,7 +505,7 @@ public class MessageBoxService : IMessageBoxService
         };
 
         dialog.Buttons.Add(okButton);
-        await dialog.ShowAsync();
+        await ShowTaskDialogAsync(dialog);
     }
 
     /// <summary>
@@ -336,7 +530,7 @@ public class MessageBoxService : IMessageBoxService
         };
 
         dialog.Buttons.Add(okButton);
-        await dialog.ShowAsync();
+        await ShowTaskDialogAsync(dialog);
     }
 
     /// <summary>
@@ -369,7 +563,7 @@ public class MessageBoxService : IMessageBoxService
         dialog.Buttons.Add(yesButton);
         dialog.Buttons.Add(noButton);
 
-        object? result = await dialog.ShowAsync();
+        object? result = await ShowTaskDialogAsync(dialog);
         return ReferenceEquals(result, "Yes");
     }
 
@@ -434,7 +628,7 @@ public class MessageBoxService : IMessageBoxService
             dialog.Buttons.Add(cancelButton);
         }
 
-        object? result = await dialog.ShowAsync();
+        object? result = await ShowTaskDialogAsync(dialog);
 
         if (ReferenceEquals(result, "Primary"))
         {

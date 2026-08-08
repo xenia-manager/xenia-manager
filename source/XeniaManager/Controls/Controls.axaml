@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:FluentAvalonia.UI.Controls">
+        xmlns:controls="using:FluentAvalonia.UI.Controls"
+        xmlns:cards="using:XeniaManager.Controls.Cards">
     <!-- Card Controls -->
     <StyleInclude Source="/Controls/Cards/CardHeader.axaml" />
     <StyleInclude Source="/Controls/Cards/CustomCard.axaml" />
@@ -22,6 +23,18 @@
          navigation of Open Xenia/Library/Xenia Settings/Manage Xenia) -->
     <Style Selector="controls|FANavigationViewItem.controllerCursor">
         <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+    </Style>
+
+    <!-- Marks the currently controller-selected control on "form-style" pages (Manage Xenia,
+         Xenia Settings, Settings, About) - see PageGamepadNavigator. Uses a drop-shadow glow
+         via Effect rather than Background: several of the custom Card controls hardcode their
+         own Background in their control template (see CustomCard.axaml), so a Background
+         setter here wouldn't actually be visible on them, while Effect is applied by the
+         renderer on top of a control's whole visual output regardless of its template. -->
+    <Style Selector="Button.controllerCursor, Expander.controllerCursor, ToggleSwitch.controllerCursor, ComboBox.controllerCursor, cards|ToggleSwitchCard.controllerCursor, cards|ComboBoxCard.controllerCursor, cards|NumberBoxCard.controllerCursor, cards|SliderCard.controllerCursor, cards|TextBoxCard.controllerCursor">
+        <Setter Property="Effect">
+            <DropShadowEffect Color="{DynamicResource SystemAccentColor}" BlurRadius="16" OffsetX="0" OffsetY="0" />
+        </Setter>
     </Style>
 
     <!-- Add other Control Styles here -->
