@@ -92,12 +92,12 @@
 
     <Style Selector="controls|LibraryCard > Border">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
-        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <Style Selector="controls|LibraryCard.selected > Border">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <!-- OPTION CARD: reserved 4px border so hover/focus doesn't change size -->

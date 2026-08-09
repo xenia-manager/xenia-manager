@@ -10,10 +10,16 @@
              Classes.selected="{Binding IsSelected}">
     <Grid>
         <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="12" />
-        <Border x:Name="ArtClip" IsVisible="{Binding HasBoxart}">
-            <Image Source="{Binding Boxart}"
-                   Stretch="UniformToFill"
-                   VerticalAlignment="Bottom" />
+        <Border x:Name="ArtClip">
+            <Panel>
+                <Image Source="{Binding Boxart}"
+                       Stretch="UniformToFill"
+                       VerticalAlignment="Bottom"
+                       IsVisible="{Binding HasBoxart}" />
+                <Image Source="{Binding Discart}"
+                       Stretch="UniformToFill"
+                       IsVisible="{Binding HasDiscart}" />
+            </Panel>
         </Border>
         <Border x:Name="TitleBar"
                 VerticalAlignment="Bottom"

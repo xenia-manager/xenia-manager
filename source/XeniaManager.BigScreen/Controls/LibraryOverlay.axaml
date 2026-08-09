@@ -33,7 +33,8 @@
                           VerticalScrollBarVisibility="Disabled">
                 <ItemsControl x:Name="GamesRow"
                               ItemsSource="{Binding Games}"
-                              VerticalAlignment="Center">
+                              VerticalAlignment="Top"
+                              Margin="0,40,0,0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="items:GameCardViewModel">
                             <controls:LibraryCard/>
@@ -41,7 +42,7 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="15" />
+                            <StackPanel Orientation="Horizontal" Spacing="20" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

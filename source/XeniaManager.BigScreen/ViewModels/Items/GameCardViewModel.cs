@@ -43,6 +43,16 @@ public partial class GameCardViewModel : ObservableObject
     public bool HasBoxart => Boxart != null;
 
     /// <summary>
+    /// The game's disc art (icon), or null when missing/unreadable.
+    /// </summary>
+    public Bitmap? Discart => Game.Artwork.CachedIcon;
+
+    /// <summary>
+    /// Whether disc art is available to show.
+    /// </summary>
+    public bool HasDiscart => Discart != null;
+
+    /// <summary>
     /// Achievements unlocked / total, from the profile's GPD. Defaults to 0 / 0 when no profile data exists.
     /// </summary>
     public string AchievementsText { get; } = "0 / 0";
