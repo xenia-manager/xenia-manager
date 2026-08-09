@@ -70,16 +70,7 @@
                                Foreground="{DynamicResource TextPrimary}"
                                FontSize="18"
                                FontWeight="Bold" />
-                    <StackPanel Orientation="Horizontal" Spacing="4">
-                        <fluent:SymbolIcon Symbol="Star"
-                                           FontSize="13"
-                                           Foreground="{DynamicResource TextSecondary}"
-                                           VerticalAlignment="Center" />
-                        <TextBlock Classes="header-text" Text="{Binding Gamerscore}"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   FontSize="14"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
+                    <controls:IconStat Icon="Star" Stat="{Binding Gamerscore}" />
                 </StackPanel>
             </StackPanel>
 
@@ -110,17 +101,39 @@
         <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="*, 300, 200" Margin="0,0,0,80">
 
             <!-- GAME CARDS ROW -->
-            <ItemsControl x:Name="GamesRow"
-                          Grid.Row="1"
-                          ItemsSource="{Binding Games}"
-                          VerticalAlignment="Bottom"
-                          Height="300">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="25" VerticalAlignment="Bottom" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+            <Grid Grid.Row="1" VerticalAlignment="Bottom" Height="300">
+
+                <!-- Empty-library stub: subtle disc card, shown when there are no games -->
+                <Border Width="200" Height="250"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Background="{DynamicResource CardBackground}"
+                        CornerRadius="8"
+                        IsVisible="{Binding ShowEmptyStub}"
+                        IsHitTestVisible="False">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Spacing="12">
+                        <fluent:SymbolIcon Symbol="PlayCircle"
+                                           FontSize="64"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           HorizontalAlignment="Center" />
+                        <TextBlock Text="No games found"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   FontSize="16"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl x:Name="GamesRow"
+                              ItemsSource="{Binding RecentGames}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="25" VerticalAlignment="Bottom" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
 
             <!-- OPTION CARDS ROW -->
             <ItemsControl x:Name="OptionsRow"

@@ -1,0 +1,52 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:controls="using:XeniaManager.BigScreen.Controls"
+             mc:Ignorable="d" d:DesignWidth="355" d:DesignHeight="528"
+             x:Class="XeniaManager.BigScreen.Controls.LibraryCard"
+             x:DataType="vm:GameCardViewModel"
+             Width="355"
+             Height="528"
+             Focusable="True"
+             Classes.selected="{Binding IsSelected}">
+    <Border Background="{DynamicResource CardBackground}"
+            CornerRadius="10"
+            BoxShadow="0 4 12 0 #40000000"
+            ClipToBounds="True">
+        <StackPanel Orientation="Vertical"
+                    Margin="20"
+                    Spacing="14"
+                    VerticalAlignment="Bottom">
+            <Border x:Name="ArtClip"
+                    Height="366"
+                    ClipToBounds="True"
+                    HorizontalAlignment="Stretch">
+                <Image x:Name="GameArt"
+                       Source="{Binding Boxart}"
+                       Stretch="UniformToFill"
+                       Height="435"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Bottom" />
+            </Border>
+            <TextBlock Text="{Binding Title}"
+                       Foreground="{DynamicResource TextPrimary}"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       TextAlignment="Left"
+                       TextTrimming="CharacterEllipsis" />
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Spacing="16">
+                <controls:IconStat Icon="Clock" Stat="{Binding PlaytimeText}" IconSize="22" FontSize="20" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Spacing="16">
+                <controls:IconStat Icon="Trophy" Stat="{Binding AchievementsText}" IconSize="22" FontSize="20" />
+                <controls:IconStat Icon="Star" Stat="{Binding GamerscoreText}" IconSize="22" FontSize="20" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

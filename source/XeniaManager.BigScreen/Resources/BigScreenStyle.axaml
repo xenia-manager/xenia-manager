@@ -38,13 +38,24 @@
         <Setter Property="Background" Value="{DynamicResource CardBackground}" />
     </Style>
 
-    <Style Selector="controls|GameCard.selected Border#FocusBorder">
+    <!-- Border overlay above the box art: carries every card stroke -->
+    <Style Selector="controls|GameCard Border#BorderOverlay">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+
+    <Style Selector="controls|GameCard:pointerover Border#BorderOverlay">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderThickness" Value="3" />
+    </Style>
+
+    <Style Selector="controls|GameCard.selected Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <!-- Subtle dark halo around card text so it stays readable on any background -->
-    <Style Selector="controls|GameCard TextBlock, controls|OptionsCard TextBlock">
+    <Style Selector="controls|GameCard TextBlock, controls|OptionsCard TextBlock, controls|LibraryCard TextBlock, controls|IconStat TextBlock">
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect BlurRadius="2" OffsetX="0" OffsetY="0" Color="Black" Opacity="0.55" />
@@ -67,6 +78,26 @@
         <Setter Property="Width" Value="250" />
         <Setter Property="Height" Value="250" />
         <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+    </Style>
+
+    <!-- LIBRARY CARD (carousel) -->
+    <Style Selector="controls|LibraryCard">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|LibraryCard > Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+
+    <Style Selector="controls|LibraryCard.selected > Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderThickness" Value="2" />
     </Style>
 
     <!-- OPTION CARD: reserved 4px border so hover/focus doesn't change size -->

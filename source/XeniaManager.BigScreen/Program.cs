@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using System;
+using XeniaManager.BigScreen.Services;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen;
 
@@ -9,8 +11,13 @@ sealed class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+    {
+        // Share the base Xenia Manager's data folders (library, games, artwork, profiles)
+        AppPathResolver.SetBaseDirectory(BaseAppLocator.Resolve(args));
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
+    }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()

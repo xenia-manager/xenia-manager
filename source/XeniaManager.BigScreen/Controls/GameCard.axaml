@@ -9,7 +9,12 @@
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
     <Grid>
-        <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="8" />
+        <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="12" />
+        <Border x:Name="ArtClip" IsVisible="{Binding HasBoxart}">
+            <Image Source="{Binding Boxart}"
+                   Stretch="UniformToFill"
+                   VerticalAlignment="Bottom" />
+        </Border>
         <Border x:Name="TitleBar"
                 VerticalAlignment="Bottom"
                 Background="{DynamicResource CardTitleBar}"
@@ -21,6 +26,9 @@
                        Padding="20"
                        TextTrimming="CharacterEllipsis" />
         </Border>
-        <Border x:Name="FocusBorder" CornerRadius="8" IsHitTestVisible="False" />
+        <Border x:Name="BorderOverlay"
+                Margin="-2"
+                CornerRadius="12"
+                IsHitTestVisible="False" />
     </Grid>
 </UserControl>

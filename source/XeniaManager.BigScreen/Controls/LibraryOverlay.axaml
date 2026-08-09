@@ -4,54 +4,80 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
-             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             xmlns:controls="using:XeniaManager.BigScreen.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Controls.LibraryOverlay"
              x:DataType="vm:MainWindowViewModel"
              Background="{Binding ScreenBackground}">
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
-        <TextBlock Grid.Row="0"
-                   Text="Game Library"
-                   Foreground="{DynamicResource TextPrimary}"
-                   FontSize="48"
-                   FontWeight="Bold"
-                   Margin="0,20,0,30" />
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,30">
+            <TextBlock Grid.Column="0"
+                       Text="Game Library"
+                       Foreground="{DynamicResource TextPrimary}"
+                       FontSize="48"
+                       FontWeight="Bold" />
+            <controls:IconStat Grid.Column="1"
+                               Icon="ArrowSort"
+                               Stat="{Binding SortText}"
+                               IconSize="26"
+                               FontSize="24"
+                               Spacing="16"
+                               IconRotation="90"
+                               VerticalAlignment="Center" />
+        </Grid>
 
-        <ScrollViewer Grid.Row="1">
-            <ItemsControl x:Name="GamesList" ItemsSource="{Binding Games}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" Spacing="14" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="items:GameCardViewModel">
-                        <Border x:Name="GameRow"
-                                Background="{DynamicResource CardBackground}"
-                                CornerRadius="10"
-                                Padding="24,16"
-                                BoxShadow="0 4 12 0 #40000000"
-                                Focusable="True">
-                            <DockPanel>
-                                <Border Width="72" Height="72"
-                                        CornerRadius="8"
-                                        Background="{DynamicResource CardTitleBar}"
-                                        DockPanel.Dock="Left" />
-                                <TextBlock Text="{Binding Title}"
-                                           Foreground="{DynamicResource TextPrimary}"
-                                           FontSize="26"
-                                           VerticalAlignment="Center"
-                                           Margin="20,0,0,0" />
-                            </DockPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <Grid Grid.Row="1">
+            <ScrollViewer x:Name="Carousel"
+                          HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Disabled">
+                <ItemsControl x:Name="GamesRow"
+                              ItemsSource="{Binding Games}"
+                              VerticalAlignment="Center">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:GameCardViewModel">
+                            <controls:LibraryCard/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="15" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
 
-        <TextBlock Grid.Row="2"
-                   Text="B - Back"
-                   Foreground="{DynamicResource TextSecondary}"
-                   FontSize="20"
-                   Margin="0,16,0,0" />
+            <!-- Empty-library stub: subtle disc card, shown when there are no games -->
+            <Border Width="320" Height="200"
+                    CornerRadius="10"
+                    Background="{DynamicResource CardBackground}"
+                    BoxShadow="0 4 12 0 #40000000"
+                    IsVisible="{Binding ShowEmptyStub}"
+                    IsHitTestVisible="False"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Spacing="16">
+                    <fluent:SymbolIcon Symbol="PlayCircle"
+                                       FontSize="72"
+                                       Foreground="{DynamicResource TextSecondary}"
+                                       HorizontalAlignment="Center" />
+                    <TextBlock Text="No games found"
+                               Foreground="{DynamicResource TextSecondary}"
+                               FontSize="24"
+                               TextAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    Spacing="36"
+                    Margin="0,16,0,0">
+            <controls:InputHint Char="Y" KeyColour="#E6A817" Text="Sort" />
+            <controls:InputHint Char="A" KeyColour="#107C10" Text="Play" />
+            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
+        </StackPanel>
     </Grid>
 </UserControl>

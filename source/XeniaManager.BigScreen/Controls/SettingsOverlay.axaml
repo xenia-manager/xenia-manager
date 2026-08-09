@@ -132,10 +132,11 @@
             </StackPanel>
         </ScrollViewer>
 
-        <TextBlock Grid.Row="2"
-                   Text="B - Back"
-                   Foreground="{DynamicResource TextSecondary}"
-                   FontSize="20"
-                   Margin="0,16,0,0" />
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    Spacing="36"
+                    Margin="0,16,0,0">
+            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
+        </StackPanel>
     </Grid>
 </UserControl>

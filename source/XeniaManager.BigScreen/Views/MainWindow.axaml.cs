@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Models;
@@ -17,6 +19,7 @@ namespace XeniaManager.BigScreen.Views;
 public partial class MainWindow : Window
 {
     private SettingsOverlay? _settingsOverlay;
+    private LibraryOverlay? _libraryOverlay;
 
     public MainWindow()
     {
@@ -34,9 +37,9 @@ public partial class MainWindow : Window
         if (DataContext is MainWindowViewModel vm)
         {
             vm.QuitRequested += OnQuitRequested;
-            if (vm.Games.Count > 0)
+            if (vm.RecentGames.Count > 0)
             {
-                vm.Games[0].IsSelected = true;
+                vm.RecentGames[0].IsSelected = true;
             }
 
             _settingsOverlay = this.GetVisualDescendants().OfType<SettingsOverlay>().FirstOrDefault();
@@ -44,6 +47,8 @@ public partial class MainWindow : Window
             {
                 _settingsOverlay.PickImageRequested += async (_, _) => await PickBackgroundImageAsync();
             }
+
+            _libraryOverlay = this.GetVisualDescendants().OfType<LibraryOverlay>().FirstOrDefault();
         }
     }
 
@@ -70,6 +75,17 @@ public partial class MainWindow : Window
                 RestoreOptionFocus();
                 e.Handled = true;
             }
+            else if (vm.IsLibraryScreen && e.Key is Key.Left or Key.Right)
+            {
+                MoveGameSelection(e.Key == Key.Right ? 1 : -1);
+                e.Handled = true;
+            }
+            else if (vm.IsLibraryScreen && e.Key == Key.Y)
+            {
+                vm.CycleSort();
+                Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
+                e.Handled = true;
+            }
             return;
         }
 
@@ -82,6 +98,41 @@ public partial class MainWindow : Window
                 e.Handled = true;
             }
         }
+    }
+
+    /// <summary>
+    /// Moves the game selection by the given step, clamped at both ends of the library.
+    /// </summary>
+    private void MoveGameSelection(int delta)
+    {
+        if (DataContext is not MainWindowViewModel vm || vm.Games.Count == 0)
+        {
+            return;
+        }
+
+        int index = 0;
+        for (int i = 0; i < vm.Games.Count; i++)
+        {
+            if (vm.Games[i].IsSelected)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        int target = Math.Clamp(index + delta, 0, vm.Games.Count - 1);
+        if (target == index)
+        {
+            return;
+        }
+
+        GameCardViewModel next = vm.Games[target];
+        foreach (GameCardViewModel game in vm.Games)
+        {
+            game.IsSelected = ReferenceEquals(game, next);
+        }
+
+        _libraryOverlay?.ScrollToSelected();
     }
 
     /// <summary>
@@ -102,6 +153,11 @@ public partial class MainWindow : Window
 
         vm.OpenScreen(option.TargetScreen);
         FocusOverlay();
+        if (option.TargetScreen == OverlayScreen.Library)
+        {
+            // Post so the overlay has been laid out before centering
+            Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
+        }
     }
 
     private bool _lastActivationWasMouse;
@@ -218,7 +274,7 @@ public partial class MainWindow : Window
         switch (control.DataContext)
         {
             case GameCardViewModel focusedGame:
-                foreach (GameCardViewModel game in vm.Games)
+                foreach (GameCardViewModel game in vm.RecentGames)
                 {
                     game.IsSelected = ReferenceEquals(game, focusedGame);
                 }

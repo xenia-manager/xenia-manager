@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:controls="using:XeniaManager.BigScreen.Controls"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="XeniaManager.BigScreen.Controls.MediaOverlay"
              x:DataType="vm:MainWindowViewModel"
@@ -25,10 +26,11 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <TextBlock Grid.Row="2"
-                   Text="B - Back"
-                   Foreground="{DynamicResource TextSecondary}"
-                   FontSize="20"
-                   Margin="0,16,0,0" />
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    Spacing="36"
+                    Margin="0,16,0,0">
+            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
+        </StackPanel>
     </Grid>
 </UserControl>

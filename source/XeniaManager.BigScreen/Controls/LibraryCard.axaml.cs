@@ -5,16 +5,19 @@ using Avalonia.Media;
 
 namespace XeniaManager.BigScreen.Controls;
 
-public partial class GameCard : UserControl
+/// <summary>
+/// A full-size library card: box art, title and per-game stats.
+/// </summary>
+public partial class LibraryCard : UserControl
 {
-    public GameCard()
+    public LibraryCard()
     {
         InitializeComponent();
         ArtClip.SizeChanged += (_, e) => ArtClip.Clip = new RectangleGeometry
         {
             Rect = new Rect(0, 0, e.NewSize.Width, e.NewSize.Height),
-            RadiusX = 12,
-            RadiusY = 12,
+            RadiusX = 14,
+            RadiusY = 14,
         };
     }
 }

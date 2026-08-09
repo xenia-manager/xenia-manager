@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -10,6 +12,8 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Core.Models.Files.Gpd;
+using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
@@ -73,6 +77,67 @@ public partial class MainWindowViewModel : ViewModelBase
     /// The currently open overlay screen.
     /// </summary>
     [ObservableProperty] private OverlayScreen _currentScreen = OverlayScreen.None;
+
+    /// <summary>
+    /// The current library sort mode (cycled with Y).
+    /// </summary>
+    [ObservableProperty] private LibrarySort _sort = LibrarySort.Alphabetical;
+
+    /// <summary>
+    /// Display name of the current library sort mode.
+    /// </summary>
+    public string SortText => Sort switch
+    {
+        LibrarySort.TimePlayed => "Time Played",
+        LibrarySort.LastPlayed => "Last Played",
+        _ => "Alphabetical",
+    };
+
+    partial void OnSortChanged(LibrarySort value)
+    {
+        ApplySort();
+        OnPropertyChanged(nameof(SortText));
+    }
+
+    /// <summary>
+    /// Cycles the library sort mode: Alphabetical → Time Played → Last Played.
+    /// </summary>
+    public void CycleSort()
+    {
+        LibrarySort[] modes = Enum.GetValues<LibrarySort>();
+        int index = Array.IndexOf(modes, Sort);
+        Sort = modes[(index + 1) % modes.Length];
+    }
+
+    /// <summary>
+    /// Re-sorts the game collection, keeping the currently selected game selected.
+    /// </summary>
+    private void ApplySort()
+    {
+        if (Games.Count == 0)
+        {
+            return;
+        }
+
+        GameCardViewModel? selected = Games.FirstOrDefault(g => g.IsSelected);
+        List<GameCardViewModel> sorted = Sort switch
+        {
+            LibrarySort.TimePlayed => Games.OrderByDescending(g => g.Game.Playtime).ToList(),
+            LibrarySort.LastPlayed => Games.OrderByDescending(g => g.Game.LastPlayed).ToList(),
+            _ => Games.OrderBy(g => g.Game.Title, StringComparer.OrdinalIgnoreCase).ToList(),
+        };
+
+        Games.Clear();
+        foreach (GameCardViewModel game in sorted)
+        {
+            Games.Add(game);
+        }
+
+        if (selected != null)
+        {
+            selected.IsSelected = true;
+        }
+    }
 
     /// <summary>
     /// Whether any overlay is currently open.
@@ -213,15 +278,20 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly DispatcherTimer _clockTimer;
 
-    public ObservableCollection<GameCardViewModel> Games { get; } =
-    [
-        new("Halo 3"),
-        new("Forza Motorsport 3"),
-        new("Gears of War 2"),
-        new("Mass Effect 2"),
-        new("Red Dead Redemption"),
-        new("Alan Wake"),
-    ];
+    /// <summary>
+    /// All games in the library (library carousel).
+    /// </summary>
+    public ObservableCollection<GameCardViewModel> Games { get; } = [];
+
+    /// <summary>
+    /// The first 6 games, shown on the dashboard.
+    /// </summary>
+    public ObservableCollection<GameCardViewModel> RecentGames { get; } = [];
+
+    /// <summary>
+    /// Whether the dashboard shows the disc stub (no games in the library).
+    /// </summary>
+    public bool ShowEmptyStub => RecentGames.Count == 0;
 
     public ObservableCollection<OptionsCardViewModel> Options { get; } =
     [
@@ -233,6 +303,10 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
+        LoadProfile();
+        LoadLibrary();
+        Games.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
+
         _backgroundService.Load();
         Mode = _backgroundService.Settings.Mode;
         SelectedBackgroundMode = BackgroundModeOptions.FirstOrDefault(o => o.Mode == Mode);
@@ -241,7 +315,7 @@ public partial class MainWindowViewModel : ViewModelBase
         VignetteOpacity = _backgroundService.Settings.VignetteOpacity;
         UpdateBackground();
 
-        foreach (GameCardViewModel game in Games)
+        foreach (GameCardViewModel game in Games.Concat(RecentGames))
         {
             game.PropertyChanged += OnGameCardPropertyChanged;
         }
@@ -367,7 +441,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void UpdateBackground()
     {
-        Bitmap? art = Games.FirstOrDefault(g => g.IsSelected)?.BackgroundArt;
+        Bitmap? art = RecentGames.FirstOrDefault(g => g.IsSelected)?.BackgroundArt;
         BackgroundMode mode = _backgroundService.Settings.Mode;
         IBrush? brush = _backgroundService.GetBackground(art);
         if (brush == null)
@@ -391,6 +465,43 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Loads the game library from Core and populates the dashboard game cards,
+    /// attaching each game's achievement stats from the loaded profile GPD.
+    /// </summary>
+    private void LoadLibrary()
+    {
+        GameManager.LoadLibrary();
+        foreach (Game game in GameManager.Games)
+        {
+            Games.Add(new GameCardViewModel(game, FindTitleEntry(game)));
+        }
+
+        foreach (Game game in GameManager.Games.Take(6))
+        {
+            RecentGames.Add(new GameCardViewModel(game, FindTitleEntry(game)));
+        }
+    }
+
+    /// <summary>
+    /// Finds the profile GPD title entry (achievements/gamerscore) for the given game.
+    /// </summary>
+    private TitleEntry? FindTitleEntry(Game game)
+    {
+        if (_profileGpd == null ||
+            !uint.TryParse(game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
+        {
+            return null;
+        }
+
+        return _profileGpd.Titles.FirstOrDefault(t => t.TitleId == titleId);
+    }
+
+    /// <summary>
+    /// The profile GPD of the active Canary profile, used for per-game achievement stats.
+    /// </summary>
+    private GpdFile? _profileGpd;
+
+    /// <summary>
     /// Loads the first available Canary profile and its gamerscore from the profile GPD
     /// </summary>
     private void LoadProfile()
@@ -411,6 +522,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 AccountContent content = new(profile, XeniaVersion.Canary, "FFFE07D1");
                 if (content.ProfileGpd != null)
                 {
+                    _profileGpd = content.ProfileGpd;
                     Gamerscore = content.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked).ToString();
                 }
             }
