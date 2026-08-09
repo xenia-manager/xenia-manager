@@ -1,11 +1,15 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Models.Files.Gpd;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
+
+/// <summary>
+/// Achievement and gamerscore counters for a game (unlocked / total).
+/// </summary>
+public record GameStatInfo(int AchievementsUnlocked, int AchievementsTotal, int GamerscoreUnlocked, int GamerscoreTotal);
 
 /// <summary>
 /// ViewModel for a single game tile on the dashboard or library carousel.
@@ -53,29 +57,36 @@ public partial class GameCardViewModel : ObservableObject
     public bool HasDiscArt => DiscArt != null;
 
     /// <summary>
-    /// Achievements unlocked / total, from the profile's GPD. Defaults to 0 / 0 when no profile data exists.
+    /// Achievements unlocked / total, from the profile's GPD or per-game achievement GPD.
+    /// Defaults to 0 / 0 when no data exists.
     /// </summary>
-    public string AchievementsText { get; } = "0 / 0";
+    public string AchievementsText { get; }
 
     /// <summary>
-    /// Gamerscore earned / total, from the profile's GPD. Defaults to 0 / 0 when no profile data exists.
+    /// Gamerscore earned / total, from the profile's GPD or per-game achievement GPD.
+    /// Defaults to 0 / 0 when no data exists.
     /// </summary>
-    public string GamerscoreText { get; } = "0 / 0";
+    public string GamerscoreText { get; }
 
     /// <summary>
     /// Total time played, formatted via <see cref="PlaytimeFormatter"/>.
     /// </summary>
     public string PlaytimeText => PlaytimeFormatter.Format(Game.Playtime);
 
-    public GameCardViewModel(Game game, TitleEntry? titleEntry = null)
+    public GameCardViewModel(Game game, GameStatInfo? stats = null)
     {
         Game = game;
         _title = game.Title;
 
-        if (titleEntry != null)
+        if (stats != null)
         {
-            AchievementsText = $"{titleEntry.AchievementUnlockedCount} / {titleEntry.AchievementCount}";
-            GamerscoreText = $"{titleEntry.GamerscoreUnlocked} / {titleEntry.GamerscoreTotal}";
+            AchievementsText = $"{stats.AchievementsUnlocked} / {stats.AchievementsTotal}";
+            GamerscoreText = $"{stats.GamerscoreUnlocked} / {stats.GamerscoreTotal}";
+        }
+        else
+        {
+            AchievementsText = "0 / 0";
+            GamerscoreText = "0 / 0";
         }
     }
 

@@ -177,7 +177,10 @@ source/XeniaManager.BigScreen/
 - [x] Sort with **Y**: Newest First / Oldest First / By Game (indicator top-right, capture date from file write time)
 
 ### 5.4 Game launch
-- [ ] Launch from the carousel via `Launcher.LaunchGameASync` (needs Core `Settings`)
+- [x] Launch from the carousel via `Launcher.LaunchGameASync` (needs Core `Settings`)
+- [x] **A**/**Enter** launches the selected game (library carousel and dashboard cards)
+- [x] Window disables while the game runs (`EventManager.DisableWindow`) and re-enables on exit
+- [x] Library refreshes after the session (playtime / last played via `GameManager.LoadLibrary()` + card rebuild)
 
 ### 5.5 Dynamic background
 - [ ] Populate `GameCardViewModel.BackgroundArt` from `CachedBackground`

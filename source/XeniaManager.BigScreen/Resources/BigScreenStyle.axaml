@@ -41,7 +41,7 @@
     <!-- Border overlay above the box art: carries every card stroke -->
     <Style Selector="controls|GameCard Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
-        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderThickness" Value="3" />
     </Style>
 
     <Style Selector="controls|GameCard:pointerover Border#BorderOverlay">

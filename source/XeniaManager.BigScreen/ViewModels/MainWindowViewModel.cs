@@ -5,17 +5,22 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.Core.Files;
+using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Files.Gpd;
+using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
+using XeniaManager.Core.Services;
+using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
@@ -570,6 +575,82 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Launches the given game via Core's Launcher. Disables the window while the
+    /// game runs, then re-enables it and refreshes the library (playtime, last played).
+    /// </summary>
+    public async Task LaunchGame(GameCardViewModel card)
+    {
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            Settings settings = new();
+            await Launcher.LaunchGameASync(card.Game, settings, discNumber: card.Game.LastPlayedDisc);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<MainWindowViewModel>($"Failed to launch '{card.Game.Title}'");
+            Logger.LogExceptionDetails<MainWindowViewModel>(ex);
+        }
+        finally
+        {
+            EventManager.Instance.EnableWindow();
+            RefreshLibrary();
+        }
+    }
+
+    /// <summary>
+    /// Reloads the game library from disk and rebuilds the dashboard/library card
+    /// collections so playtime and last-played values reflect the finished session.
+    /// Selection is preserved per row, falling back to the first card so a card is
+    /// always selected after a refresh.
+    /// </summary>
+    private void RefreshLibrary()
+    {
+        string? librarySelectedId = Games.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
+        string? recentSelectedId = RecentGames.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
+
+        GameManager.LoadLibrary();
+        Games.Clear();
+        RecentGames.Clear();
+
+        foreach (Game game in GameManager.Games)
+        {
+            GameCardViewModel card = new(game, ResolveGameStats(game));
+            card.PropertyChanged += OnGameCardPropertyChanged;
+            Games.Add(card);
+        }
+
+        foreach (Game game in GetRecentGames())
+        {
+            GameCardViewModel card = new(game, ResolveGameStats(game));
+            card.PropertyChanged += OnGameCardPropertyChanged;
+            RecentGames.Add(card);
+        }
+
+        (Games.FirstOrDefault(g => g.Game.GameId == librarySelectedId) ?? Games.FirstOrDefault())?.IsSelected = true;
+        (RecentGames.FirstOrDefault(g => g.Game.GameId == recentSelectedId) ?? RecentGames.FirstOrDefault())?.IsSelected = true;
+
+        OnPropertyChanged(nameof(ShowEmptyStub));
+        LibraryRefreshed?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// Raised after the library is reloaded (e.g. after a game session) so views can re-sync.
+    /// </summary>
+    public event EventHandler? LibraryRefreshed;
+
+    /// <summary>
+    /// The 6 most recently played games (never-played games fill the tail, by title).
+    /// </summary>
+    private static IEnumerable<Game> GetRecentGames()
+    {
+        return GameManager.Games
+            .OrderByDescending(g => g.LastPlayed)
+            .ThenBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
+            .Take(6);
+    }
+
+    /// <summary>
     /// Sets a custom image path and switches to image background mode.
     /// </summary>
     public void SetBackgroundImage(string path)
@@ -620,12 +701,12 @@ public partial class MainWindowViewModel : ViewModelBase
         GameManager.LoadLibrary();
         foreach (Game game in GameManager.Games)
         {
-            Games.Add(new GameCardViewModel(game, FindTitleEntry(game)));
+            Games.Add(new GameCardViewModel(game, ResolveGameStats(game)));
         }
 
-        foreach (Game game in GameManager.Games.Take(6))
+        foreach (Game game in GetRecentGames())
         {
-            RecentGames.Add(new GameCardViewModel(game, FindTitleEntry(game)));
+            RecentGames.Add(new GameCardViewModel(game, ResolveGameStats(game)));
         }
     }
 
@@ -700,23 +781,80 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Finds the profile GPD title entry (achievements/gamerscore) for the given game.
+    /// Resolves achievement/gamerscore counters for the given game. Preferred source is the
+    /// profile GPD TitleEntry; falls back to the per-game achievement GPD ({titleId}.gpd).
     /// </summary>
-    private TitleEntry? FindTitleEntry(Game game)
+    private GameStatInfo? ResolveGameStats(Game game)
     {
-        if (_profileGpd == null ||
-            !uint.TryParse(game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
+        // Preferred: profile GPD TitleEntry
+        if (_profileGpd != null &&
+            uint.TryParse(game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
+        {
+            TitleEntry? entry = _profileGpd.Titles.FirstOrDefault(t => t.TitleId == titleId);
+            if (entry != null)
+            {
+                return new GameStatInfo(
+                    entry.AchievementUnlockedCount, entry.AchievementCount,
+                    entry.GamerscoreUnlocked, entry.GamerscoreTotal);
+            }
+        }
+
+        // Fallback: count from the per-game achievement GPD
+        GpdFile? achievementGpd = LoadGameAchievementGpd(game.GameId);
+        if (achievementGpd != null)
+        {
+            return new GameStatInfo(
+                achievementGpd.GetUnlockedAchievementCount(),
+                achievementGpd.GetTotalAchievementCount(),
+                achievementGpd.GetTotalGamerscore(),
+                achievementGpd.GetTotalPossibleGamerscore());
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Loads the per-game achievement GPD ({titleId}.gpd next to the profile GPD) if it exists.
+    /// </summary>
+    private GpdFile? LoadGameAchievementGpd(string gameId)
+    {
+        if (_profileAccount == null || string.IsNullOrEmpty(gameId))
         {
             return null;
         }
 
-        return _profileGpd.Titles.FirstOrDefault(t => t.TitleId == titleId);
+        try
+        {
+            string xuid = (_profileAccount.PathXuid?.Value ?? _profileAccount.Xuid.Value).ToString("X16");
+            string contentFolder = AppPathResolver.GetFullPath(
+                XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion.Canary).ContentFolderLocation);
+            string gpdPath = Path.Combine(contentFolder, xuid, "FFFE07D1",
+                ContentType.Profile.ToHexString(), xuid, $"{gameId.ToUpperInvariant()}.gpd");
+
+            if (!File.Exists(gpdPath))
+            {
+                return null;
+            }
+
+            return GpdFile.Load(gpdPath);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<MainWindowViewModel>($"Failed to load achievement GPD for '{gameId}'");
+            Logger.LogExceptionDetails<MainWindowViewModel>(ex);
+            return null;
+        }
     }
 
     /// <summary>
     /// The profile GPD of the active Canary profile, used for per-game achievement stats.
     /// </summary>
     private GpdFile? _profileGpd;
+
+    /// <summary>
+    /// The active Canary profile, used to locate per-game achievement GPDs.
+    /// </summary>
+    private AccountInfo? _profileAccount;
 
     /// <summary>
     /// Loads the first available Canary profile and its gamerscore from the profile GPD
@@ -733,6 +871,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             Gamertag = profile.Gamertag;
+            _profileAccount = profile;
 
             try
             {

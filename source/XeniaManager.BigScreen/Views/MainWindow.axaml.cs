@@ -13,6 +13,7 @@ using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Views;
 
@@ -34,10 +35,13 @@ public partial class MainWindow : Window
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
+        EventManager.Instance.WindowDisabled += OnWindowDisabled;
+
         // Start with the first card selected
         if (DataContext is MainWindowViewModel vm)
         {
             vm.QuitRequested += OnQuitRequested;
+            vm.LibraryRefreshed += OnLibraryRefreshed;
             if (vm.RecentGames.Count > 0)
             {
                 vm.RecentGames[0].IsSelected = true;
@@ -52,6 +56,22 @@ public partial class MainWindow : Window
             _libraryOverlay = this.GetVisualDescendants().OfType<LibraryOverlay>().FirstOrDefault();
             _mediaOverlay = this.GetVisualDescendants().OfType<MediaOverlay>().FirstOrDefault();
         }
+    }
+
+    /// <summary>
+    /// Disables/enables the window while a game is running (Core's EventManager).
+    /// </summary>
+    private void OnWindowDisabled(bool isDisabled)
+    {
+        IsEnabled = !isDisabled;
+    }
+
+    /// <summary>
+    /// Re-centers the library carousel after the library is refreshed (post-layout).
+    /// </summary>
+    private void OnLibraryRefreshed(object? sender, EventArgs e)
+    {
+        Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
     }
 
     private void OnQuitRequested(object? sender, System.EventArgs e)
@@ -104,6 +124,11 @@ public partial class MainWindow : Window
                 Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
                 e.Handled = true;
             }
+            else if (vm.IsLibraryScreen && e.Key is Key.A or Key.Enter or Key.Space)
+            {
+                LaunchSelectedGame(vm);
+                e.Handled = true;
+            }
             else if (vm.IsMediaScreen && e.Key is Key.Left or Key.Right)
             {
                 MoveScreenshotSelection(e.Key == Key.Right ? 1 : -1);
@@ -137,6 +162,24 @@ public partial class MainWindow : Window
                 ActivateOption(option);
                 e.Handled = true;
             }
+            else if (FocusManager?.GetFocusedElement() is Control { DataContext: GameCardViewModel game })
+            {
+                _lastActivationWasMouse = false;
+                LaunchSelectedGame(vm, game);
+                e.Handled = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Launches the game currently selected in the library carousel.
+    /// </summary>
+    private void LaunchSelectedGame(MainWindowViewModel vm, GameCardViewModel? explicitCard = null)
+    {
+        GameCardViewModel? card = explicitCard ?? vm.Games.FirstOrDefault(g => g.IsSelected);
+        if (card != null)
+        {
+            _ = vm.LaunchGame(card);
         }
     }
 
