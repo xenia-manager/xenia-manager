@@ -39,7 +39,7 @@
         <Grid Margin="60" RowDefinitions="Auto, *, Auto">
 
             <!-- HEADER: title left, sort indicator top right -->
-            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,25">
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,45">
                 <TextBlock Grid.Column="0"
                            Text="Media"
                            Foreground="{DynamicResource TextPrimary}"
@@ -107,7 +107,7 @@
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         Spacing="36"
-                        Margin="-15,16,0,-15">
+                        Margin="-15,36,0,-15">
                 <controls:InputHint Char="Y" KeyColour="#E6A817" Text="Sort" />
                 <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
             </StackPanel>
