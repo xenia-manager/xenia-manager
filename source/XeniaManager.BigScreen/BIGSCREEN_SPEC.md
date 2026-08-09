@@ -28,7 +28,7 @@
 ### Overlay screens
 Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape** closes, focus returns to the option row. Bottom hint bars use the `InputHint` control (coloured circle keycap + label).
 - **Library** — horizontal carousel of all games (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle. **Y** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). Disc stub shown when the library is empty.
-- **Media** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), rendered as rounded 320×180 thumbs (placeholder; see roadmap).
+- **Media** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **Y** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, capture date from file write time). Click/Enter → full-screen **modal viewer** (opaque backdrop, uniform-stretched image, faded chevrons that hide at the ends, B/Escape closes; caption shows game title + parsed capture date). Camera stub shown when the gallery is empty.
 - **Settings** — background type dropdown, primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker.
 - **Quit** — closes the app.
 
@@ -58,6 +58,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **`InputHint`** — keycap + label (`KeyColour`, `Icon`/`Char` glyph, `Text`): transparent circle with coloured 2px outline, glyph coloured to match, white label. Xbox-standard colours per usage (Y amber, A green, B red).
 - **`LibraryCard`** — carousel card: box art (bottom-anchored, top 13% cropped, rounded clip via `RectangleGeometry`), title, playtime row, achievements/gamerscore row; `CardBorder` 2px inactive → accent on selection (outer border only).
 - **`GameCard`** — dashboard tile: box art + title bar on selection, grow 200→250, `BorderOverlay` carries the border strokes above the art.
+- **`ScreenshotCard`** — media tile: GameCard-style layout (Tile / ArtClip / TitleBar / BorderOverlay), 4px stroke grey → accent on hover/selection.
 - **`OptionsCard`** — dashboard option tile.
 
 ### Settings persistence
@@ -75,14 +76,16 @@ source/XeniaManager.BigScreen/
 ├── Views/
 │   └── MainWindow.axaml(.cs)        # Dashboard + overlay layer; focus/selection/keys
 ├── ViewModels/
-│   ├── MainWindowViewModel.cs       # Profile, clock, background, overlay state, settings, sort, RecentGames/Games
+│   ├── MainWindowViewModel.cs       # Profile, clock, background, overlay state, settings, sort, RecentGames/Games, Screenshots/modal
 │   ├── ViewModelBase.cs
 │   └── Items/
 │       ├── GameCardViewModel.cs     # Core Game ref, Title, Boxart, stat strings, IsSelected, BackgroundArt
+│       ├── ScreenshotItemViewModel.cs # Path, Title, CapturedAt (+ text), GameTitle, Image, IsSelected
 │       └── OptionsCardViewModel.cs  # Title, Icon, TargetScreen
 ├── Controls/
 │   ├── GameCard.axaml(.cs)          # Dashboard game tile (art + BorderOverlay strokes)
 │   ├── OptionsCard.axaml(.cs)       # Dashboard option tile
+│   ├── ScreenshotCard.axaml(.cs)    # Media tile (GameCard layout + 4px stroke)
 │   ├── LibraryCard.axaml(.cs)       # Carousel card: box art + title + stat rows (rounded art clip)
 │   ├── IconStat.axaml(.cs)          # Icon + text stat row
 │   ├── InputHint.axaml(.cs)         # Keycap + label hint
@@ -99,6 +102,7 @@ source/XeniaManager.BigScreen/
 │   ├── DashboardSettings.cs         # Persisted user-facing options
 │   ├── BackgroundMode.cs / BackgroundModeOption.cs
 │   ├── LibrarySort.cs               # Alphabetical / TimePlayed / LastPlayed
+│   ├── MediaSort.cs                 # NewestFirst / OldestFirst / ByGame
 │   └── OverlayScreen.cs
 └── Resources/
     ├── BigScreenStyle.axaml
@@ -165,10 +169,12 @@ source/XeniaManager.BigScreen/
 - [ ] Last played (`Game.LastPlayed`) — *removed from the card by request* (playtime row moved above achievements)
 
 ### 5.3 Media gallery
-- [ ] Clean wrap panel with adequate spacing over all screenshots
-- [ ] Click a screenshot → **modal focus**
-- [ ] Subtle chevron arrows in the modal for navigation (visual affordance)
-- [ ] B/Escape closes the modal
+- [x] Clean wrap panel with adequate spacing over all screenshots (4-across 16:9 grid, card size fits the window width)
+- [x] Click a screenshot → **modal focus**
+- [x] Subtle chevron arrows in the modal for navigation (visual affordance, faded 0.45 → full on hover)
+- [x] B/Escape closes the modal (then the overlay)
+- [x] Grid scrolls down like the library scrolls sideways; clamped at both ends, no wrap-back
+- [x] Sort with **Y**: Newest First / Oldest First / By Game (indicator top-right, capture date from file write time)
 
 ### 5.4 Game launch
 - [ ] Launch from the carousel via `Launcher.LaunchGameASync` (needs Core `Settings`)
@@ -186,7 +192,7 @@ source/XeniaManager.BigScreen/
 
 ### 5.7 Empty states
 - [x] **No games:** placeholder with subtle disc icon + "No games found" (dashboard row **and** library screen)
-- [ ] **No screenshots:** placeholder
+- [x] **No screenshots:** placeholder (camera icon + "No screenshots found" in the media gallery)
 - [x] **Fewer than 6 recent games:** dashboard row is capped at 6 via the `RecentGames` collection (fewer games = fewer cards, no empty slots)
 
 ### 5.8 SDL3 gamepad input

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -15,6 +16,7 @@ using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Files.Gpd;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
+using XeniaManager.Core.Utilities;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
@@ -160,6 +162,67 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsSettingsScreen => CurrentScreen == OverlayScreen.Settings;
 
     /// <summary>
+    /// The current media sort mode (cycled with Y).
+    /// </summary>
+    [ObservableProperty] private MediaSort _mediaSort = MediaSort.NewestFirst;
+
+    /// <summary>
+    /// Display name of the current media sort mode.
+    /// </summary>
+    public string MediaSortText => MediaSort switch
+    {
+        MediaSort.OldestFirst => "Oldest First",
+        MediaSort.ByGame => "By Game",
+        _ => "Newest First",
+    };
+
+    partial void OnMediaSortChanged(MediaSort value)
+    {
+        ApplyMediaSort();
+        OnPropertyChanged(nameof(MediaSortText));
+    }
+
+    /// <summary>
+    /// Cycles the media sort mode: Newest First → Oldest First → By Game.
+    /// </summary>
+    public void CycleMediaSort()
+    {
+        MediaSort[] modes = Enum.GetValues<MediaSort>();
+        int index = Array.IndexOf(modes, MediaSort);
+        MediaSort = modes[(index + 1) % modes.Length];
+    }
+
+    /// <summary>
+    /// Re-sorts the screenshot collection, keeping the selected screenshot selected.
+    /// </summary>
+    private void ApplyMediaSort()
+    {
+        if (Screenshots.Count == 0)
+        {
+            return;
+        }
+
+        ScreenshotItemViewModel? selected = Screenshots.FirstOrDefault(s => s.IsSelected);
+        List<ScreenshotItemViewModel> sorted = MediaSort switch
+        {
+            MediaSort.OldestFirst => Screenshots.OrderBy(s => s.CapturedAt).ToList(),
+            MediaSort.ByGame => Screenshots.OrderBy(s => s.GameTitle).ThenByDescending(s => s.CapturedAt).ToList(),
+            _ => Screenshots.OrderByDescending(s => s.CapturedAt).ToList(),
+        };
+
+        Screenshots.Clear();
+        foreach (ScreenshotItemViewModel screenshot in sorted)
+        {
+            Screenshots.Add(screenshot);
+        }
+
+        if (selected != null)
+        {
+            selected.IsSelected = true;
+        }
+    }
+
+    /// <summary>
     /// Raised when the user chooses to quit BigScreen.
     /// </summary>
     public event EventHandler? QuitRequested;
@@ -293,6 +356,84 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public bool ShowEmptyStub => RecentGames.Count == 0;
 
+    /// <summary>
+    /// All screenshots in the media gallery.
+    /// </summary>
+    public ObservableCollection<ScreenshotItemViewModel> Screenshots { get; } = [];
+
+    /// <summary>
+    /// Whether the media overlay shows the "no screenshots" stub.
+    /// </summary>
+    public bool ShowEmptyScreenshots => Screenshots.Count == 0;
+
+    /// <summary>
+    /// The screenshot currently shown in the modal viewer, or null when it is closed.
+    /// </summary>
+    [ObservableProperty] private ScreenshotItemViewModel? _selectedScreenshot;
+
+    /// <summary>
+    /// Whether the full-screen screenshot viewer is open.
+    /// </summary>
+    public bool IsMediaViewerOpen => SelectedScreenshot != null;
+
+    /// <summary>
+    /// Opens the modal viewer for the given screenshot.
+    /// </summary>
+    public void OpenScreenshot(ScreenshotItemViewModel screenshot)
+    {
+        SelectedScreenshot = screenshot;
+    }
+
+    /// <summary>
+    /// Closes the modal screenshot viewer.
+    /// </summary>
+    public void CloseMediaViewer()
+    {
+        SelectedScreenshot = null;
+    }
+
+    /// <summary>
+    /// Moves the modal viewer to the neighbouring screenshot, clamped at both ends.
+    /// </summary>
+    public void StepScreenshot(int delta)
+    {
+        if (SelectedScreenshot == null || Screenshots.Count == 0)
+        {
+            return;
+        }
+
+        int index = Screenshots.IndexOf(SelectedScreenshot);
+        if (index < 0)
+        {
+            return;
+        }
+
+        int target = Math.Clamp(index + delta, 0, Screenshots.Count - 1);
+        if (target != index)
+        {
+            SelectedScreenshot = Screenshots[target];
+        }
+    }
+
+    partial void OnSelectedScreenshotChanged(ScreenshotItemViewModel? value)
+    {
+        OnPropertyChanged(nameof(IsMediaViewerOpen));
+        OnPropertyChanged(nameof(HasPrevious));
+        OnPropertyChanged(nameof(HasNext));
+    }
+
+    /// <summary>
+    /// Whether the modal viewer can step to the previous screenshot.
+    /// </summary>
+    public bool HasPrevious => SelectedScreenshot != null
+                               && Screenshots.IndexOf(SelectedScreenshot) > 0;
+
+    /// <summary>
+    /// Whether the modal viewer can step to the next screenshot.
+    /// </summary>
+    public bool HasNext => SelectedScreenshot != null
+                           && Screenshots.IndexOf(SelectedScreenshot) < Screenshots.Count - 1;
+
     public ObservableCollection<OptionsCardViewModel> Options { get; } =
     [
         new("Library", "Games", OverlayScreen.Library),
@@ -306,6 +447,12 @@ public partial class MainWindowViewModel : ViewModelBase
         LoadProfile();
         LoadLibrary();
         Games.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
+        Screenshots.CollectionChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(ShowEmptyScreenshots));
+            OnPropertyChanged(nameof(HasPrevious));
+            OnPropertyChanged(nameof(HasNext));
+        };
 
         _backgroundService.Load();
         Mode = _backgroundService.Settings.Mode;
@@ -480,6 +627,76 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             RecentGames.Add(new GameCardViewModel(game, FindTitleEntry(game)));
         }
+    }
+
+    /// <summary>
+    /// Image extensions recognized as screenshots.
+    /// </summary>
+    private static readonly string[] ImageExtensions = [".png", ".jpg", ".jpeg", ".bmp", ".webp", ".gif"];
+
+    private bool _screenshotsLoaded;
+
+    /// <summary>
+    /// Scans the Canary screenshots folder once (recursively, per-game subfolders)
+    /// and fills the media gallery, applying the current sort.
+    /// </summary>
+    public void EnsureScreenshotsLoaded()
+    {
+        if (_screenshotsLoaded)
+        {
+            return;
+        }
+
+        _screenshotsLoaded = true;
+        string screenshotsFolder = AppPathResolver.GetFullPath(
+            XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion.Canary).ScreenshotsFolderLocation);
+
+        if (!Directory.Exists(screenshotsFolder))
+        {
+            return;
+        }
+
+        List<ScreenshotItemViewModel> screenshots = [];
+        foreach (string file in Directory.EnumerateFiles(screenshotsFolder, "*", SearchOption.AllDirectories)
+                     .Where(f => ImageExtensions.Contains(Path.GetExtension(f).ToLowerInvariant())))
+        {
+            try
+            {
+                screenshots.Add(new ScreenshotItemViewModel(
+                    file,
+                    Path.GetFileName(file),
+                    File.GetLastWriteTime(file),
+                    ResolveGameTitle(Path.GetFileName(Path.GetDirectoryName(file) ?? string.Empty)),
+                    new Bitmap(file)));
+            }
+            catch (Exception)
+            {
+                // Skip unreadable images
+            }
+        }
+
+        Screenshots.Clear();
+        foreach (ScreenshotItemViewModel screenshot in screenshots)
+        {
+            Screenshots.Add(screenshot);
+        }
+
+        ApplyMediaSort();
+    }
+
+    /// <summary>
+    /// Matches a screenshot's parent folder name (a game ID) to a library game title.
+    /// </summary>
+    private string ResolveGameTitle(string gameId)
+    {
+        if (string.IsNullOrEmpty(gameId))
+        {
+            return "Unknown Game";
+        }
+
+        return GameManager.Games
+            .FirstOrDefault(g => g.GameId.Equals(gameId, StringComparison.OrdinalIgnoreCase))?.Title
+            ?? gameId;
     }
 
     /// <summary>

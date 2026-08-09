@@ -27,11 +27,11 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top">
                 <Image x:Name="GameArt"
-                       Source="{Binding Boxart}"
+                       Source="{Binding BoxArt}"
                        Stretch="Uniform"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Bottom"
-                       IsVisible="{Binding HasBoxart}" />
+                       IsVisible="{Binding HasBoxArt}" />
             </Border>
             <TextBlock Text="{Binding Title}"
                        Foreground="{DynamicResource TextPrimary}"

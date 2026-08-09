@@ -3,34 +3,168 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
-             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Controls.MediaOverlay"
              x:DataType="vm:MainWindowViewModel"
              Background="{Binding ScreenBackground}">
-    <Grid RowDefinitions="Auto, *, Auto" Margin="60">
-        <TextBlock Grid.Row="0"
-                   Text="Media"
-                   Foreground="{DynamicResource TextPrimary}"
-                   FontSize="48"
-                   FontWeight="Bold"
-                   Margin="0,20,0,30" />
 
-        <ScrollViewer Grid.Row="1">
-            <ItemsControl x:Name="ScreenshotsList">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" ItemSpacing="16" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
+    <UserControl.Styles>
+        <!-- Subtle faded chevron buttons for the modal viewer -->
+        <Style Selector="Button.media-chevron">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="#B3FFFFFF" />
+            <Setter Property="Padding" Value="24" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Opacity" Value="0.45" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.media-chevron:pointerover">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="Button.media-chevron:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#26FFFFFF" />
+        </Style>
+    </UserControl.Styles>
 
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    Spacing="36"
-                    Margin="0,16,0,0">
-            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
-        </StackPanel>
+    <Grid>
+        <!-- CONTENT (header + gallery + hints), inset by the screen margin -->
+        <Grid Margin="60" RowDefinitions="Auto, *, Auto">
+
+            <!-- HEADER: title left, sort indicator top right -->
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,25">
+                <TextBlock Grid.Column="0"
+                           Text="Media"
+                           Foreground="{DynamicResource TextPrimary}"
+                           FontSize="48"
+                           FontWeight="Bold" />
+                <controls:IconStat Grid.Column="1"
+                                   Icon="ArrowSort"
+                                   Stat="{Binding MediaSortText}"
+                                   IconSize="26"
+                                   FontSize="24"
+                                   Spacing="16"
+                                   IconRotation="90"
+                                   VerticalAlignment="Center" />
+            </Grid>
+
+            <!-- GALLERY GRID (4 across, scrolls down) -->
+            <Grid Grid.Row="1">
+                <ScrollViewer x:Name="Carousel"
+                              VerticalScrollBarVisibility="Hidden"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl x:Name="ScreenshotsGrid"
+                                  ItemsSource="{Binding Screenshots}"
+                                  Margin="0,0,0,40">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="items:ScreenshotItemViewModel">
+                                <controls:ScreenshotCard />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"
+                                           ItemSpacing="16"
+                                           LineSpacing="16"
+                                           ItemsAlignment="Start" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Empty-gallery stub: shown when there are no screenshots -->
+                <Border Width="360" Height="220"
+                        CornerRadius="10"
+                        Background="{DynamicResource CardBackground}"
+                        BoxShadow="0 4 12 0 #40000000"
+                        IsVisible="{Binding ShowEmptyScreenshots}"
+                        IsHitTestVisible="False"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Spacing="16">
+                        <fluent:SymbolIcon Symbol="Camera"
+                                           FontSize="72"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           HorizontalAlignment="Center" />
+                        <TextBlock Text="No screenshots found"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   FontSize="24"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- HINTS (gallery) -->
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        Spacing="36"
+                        Margin="-15,16,0,-15">
+                <controls:InputHint Char="Y" KeyColour="#E6A817" Text="Sort" />
+                <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
+            </StackPanel>
+        </Grid>
+
+        <!-- MODAL VIEWER (full-bleed, covers the whole screen while open) -->
+        <Panel Background="#FF0A0C10"
+               IsVisible="{Binding IsMediaViewerOpen}"
+               IsHitTestVisible="{Binding IsMediaViewerOpen}">
+
+            <Image Source="{Binding SelectedScreenshot.Image}"
+                   Stretch="Uniform"
+                   Margin="140,60" />
+
+            <Button x:Name="PrevButton"
+                    Classes="media-chevron"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="40,0"
+                    IsVisible="{Binding HasPrevious}">
+                <fluent:SymbolIcon Symbol="ChevronLeft" FontSize="48" />
+            </Button>
+
+            <Button x:Name="NextButton"
+                    Classes="media-chevron"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="40,0"
+                    IsVisible="{Binding HasNext}">
+                <fluent:SymbolIcon Symbol="ChevronRight" FontSize="48" />
+            </Button>
+
+            <!-- Modal footer: close hint bottom left, caption bottom right -->
+            <Grid ColumnDefinitions="*, Auto"
+                  VerticalAlignment="Bottom"
+                  Margin="40,0,40,37">
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Close" />
+                </StackPanel>
+                <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            HorizontalAlignment="Right"
+                            Spacing="4"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding SelectedScreenshot.GameTitle}"
+                               Foreground="{DynamicResource TextPrimary}"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               TextAlignment="Right" />
+                    <TextBlock Text="{Binding SelectedScreenshot.CapturedAtText}"
+                               Foreground="{DynamicResource TextSecondary}"
+                               FontSize="16"
+                               TextAlignment="Right" />
+                </StackPanel>
+            </Grid>
+        </Panel>
     </Grid>
 </UserControl>

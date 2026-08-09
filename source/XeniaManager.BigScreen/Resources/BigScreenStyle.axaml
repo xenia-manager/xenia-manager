@@ -55,7 +55,7 @@
     </Style>
 
     <!-- Subtle dark halo around card text so it stays readable on any background -->
-    <Style Selector="controls|GameCard TextBlock, controls|OptionsCard TextBlock, controls|LibraryCard TextBlock, controls|IconStat TextBlock">
+    <Style Selector="controls|GameCard TextBlock, controls|OptionsCard TextBlock, controls|LibraryCard TextBlock, controls|ScreenshotCard TextBlock, controls|IconStat TextBlock">
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect BlurRadius="2" OffsetX="0" OffsetY="0" Color="Black" Opacity="0.55" />
@@ -98,6 +98,34 @@
     <Style Selector="controls|LibraryCard.selected > Border">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderThickness" Value="4" />
+    </Style>
+
+    <!-- SCREENSHOT CARD (media gallery) -->
+    <Style Selector="controls|ScreenshotCard">
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|ScreenshotCard Border#Tile">
+        <Setter Property="BoxShadow" Value="0 4 12 0 #40000000" />
+    </Style>
+
+    <Style Selector="controls|ScreenshotCard.selected Border#Tile">
+        <Setter Property="BoxShadow" Value="0 6 20 0 #66000000" />
+    </Style>
+
+    <!-- Border overlay above the art: carries every card stroke -->
+    <Style Selector="controls|ScreenshotCard Border#BorderOverlay">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderThickness" Value="8" />
+    </Style>
+
+    <Style Selector="controls|ScreenshotCard:pointerover Border#BorderOverlay, controls|ScreenshotCard.selected Border#BorderOverlay">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderThickness" Value="6" />
     </Style>
 
     <!-- OPTION CARD: reserved 4px border so hover/focus doesn't change size -->

@@ -1,32 +1,27 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200"
-             x:Class="XeniaManager.BigScreen.Controls.GameCard"
-             x:DataType="vm:GameCardViewModel"
+             mc:Ignorable="d" d:DesignWidth="384" d:DesignHeight="216"
+             x:Class="XeniaManager.BigScreen.Controls.ScreenshotCard"
+             x:DataType="vm:ScreenshotItemViewModel"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
     <Grid>
         <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="12" />
-        <Border x:Name="ArtClip">
-            <Panel>
-                <Image Source="{Binding BoxArt}"
-                       Stretch="UniformToFill"
-                       VerticalAlignment="Bottom"
-                       IsVisible="{Binding HasBoxArt}" />
-                <Image Source="{Binding DiscArt}"
-                       Stretch="UniformToFill"
-                       IsVisible="{Binding HasDiscArt}" />
-            </Panel>
+        <Border x:Name="ArtClip" CornerRadius="6" ClipToBounds="True">
+            <Image Source="{Binding Image}"
+                   Stretch="UniformToFill"
+                   VerticalAlignment="Bottom"
+                   IsVisible="{Binding HasImage}" />
         </Border>
         <Border x:Name="TitleBar"
                 VerticalAlignment="Bottom"
                 Background="{DynamicResource CardTitleBar}"
                 CornerRadius="0,0,8,8"
                 IsVisible="{Binding IsSelected}">
-            <TextBlock Text="{Binding Title}"
+            <TextBlock Text="{Binding GameTitle}"
                        Foreground="{DynamicResource TextPrimary}"
                        FontSize="15"
                        Padding="20"
@@ -34,7 +29,7 @@
         </Border>
         <Border x:Name="BorderOverlay"
                 Margin="-2"
-                CornerRadius="12"
+                CornerRadius="6"
                 IsHitTestVisible="False" />
     </Grid>
 </UserControl>

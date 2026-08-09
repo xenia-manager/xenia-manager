@@ -135,7 +135,7 @@
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     Spacing="36"
-                    Margin="0,16,0,0">
+                    Margin="-15,16,0,-15">
             <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
         </StackPanel>
     </Grid>

@@ -20,6 +20,7 @@ public partial class MainWindow : Window
 {
     private SettingsOverlay? _settingsOverlay;
     private LibraryOverlay? _libraryOverlay;
+    private MediaOverlay? _mediaOverlay;
 
     public MainWindow()
     {
@@ -49,6 +50,7 @@ public partial class MainWindow : Window
             }
 
             _libraryOverlay = this.GetVisualDescendants().OfType<LibraryOverlay>().FirstOrDefault();
+            _mediaOverlay = this.GetVisualDescendants().OfType<MediaOverlay>().FirstOrDefault();
         }
     }
 
@@ -69,6 +71,22 @@ public partial class MainWindow : Window
 
         if (vm.IsOverlayOpen)
         {
+            if (vm.IsMediaScreen && vm.IsMediaViewerOpen)
+            {
+                if (e.Key is Key.Left or Key.Right)
+                {
+                    vm.StepScreenshot(e.Key == Key.Right ? 1 : -1);
+                    e.Handled = true;
+                }
+                else if (e.Key is Key.B or Key.Escape)
+                {
+                    vm.CloseMediaViewer();
+                    e.Handled = true;
+                }
+
+                return;
+            }
+
             if (e.Key == Key.B || e.Key == Key.Escape)
             {
                 vm.CloseOverlay();
@@ -86,6 +104,28 @@ public partial class MainWindow : Window
                 Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
                 e.Handled = true;
             }
+            else if (vm.IsMediaScreen && e.Key is Key.Left or Key.Right)
+            {
+                MoveScreenshotSelection(e.Key == Key.Right ? 1 : -1);
+                e.Handled = true;
+            }
+            else if (vm.IsMediaScreen && e.Key is Key.Up or Key.Down)
+            {
+                MoveScreenshotSelection(e.Key == Key.Down ? MediaOverlay.CardsPerRow : -MediaOverlay.CardsPerRow);
+                e.Handled = true;
+            }
+            else if (vm.IsMediaScreen && e.Key == Key.Y)
+            {
+                vm.CycleMediaSort();
+                Dispatcher.UIThread.Post(() => _mediaOverlay?.ScrollToSelected());
+                e.Handled = true;
+            }
+            else if (vm.IsMediaScreen && e.Key is Key.Enter or Key.Space)
+            {
+                OpenSelectedScreenshot(vm);
+                e.Handled = true;
+            }
+
             return;
         }
 
@@ -136,6 +176,60 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
+    /// Moves the screenshot selection by the given step (1 per column, a full row for
+    /// Up/Down), clamped at both ends of the grid - no wrap-around.
+    /// </summary>
+    private void MoveScreenshotSelection(int delta)
+    {
+        if (DataContext is not MainWindowViewModel vm || vm.Screenshots.Count == 0)
+        {
+            return;
+        }
+
+        int index = -1;
+        for (int i = 0; i < vm.Screenshots.Count; i++)
+        {
+            if (vm.Screenshots[i].IsSelected)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        if (index < 0)
+        {
+            index = 0;
+        }
+
+        int target = Math.Clamp(index + delta, 0, vm.Screenshots.Count - 1);
+        if (target == index && index == 0)
+        {
+            vm.Screenshots[0].IsSelected = true;
+            return;
+        }
+
+        ScreenshotItemViewModel next = vm.Screenshots[target];
+        foreach (ScreenshotItemViewModel screenshot in vm.Screenshots)
+        {
+            screenshot.IsSelected = ReferenceEquals(screenshot, next);
+        }
+
+        _mediaOverlay?.ScrollToSelected();
+    }
+
+    /// <summary>
+    /// Opens the modal viewer for the currently selected screenshot (Enter in the gallery).
+    /// </summary>
+    private void OpenSelectedScreenshot(MainWindowViewModel vm)
+    {
+        ScreenshotItemViewModel? selected = vm.Screenshots.FirstOrDefault(s => s.IsSelected);
+        if (selected != null)
+        {
+            vm.OpenScreenshot(selected);
+        }
+    }
+
+    /// <summary>
     /// Opens the screen for the given option card, or quits for the Quit card.
     /// </summary>
     private void ActivateOption(OptionsCardViewModel option)
@@ -157,6 +251,10 @@ public partial class MainWindow : Window
         {
             // Post so the overlay has been laid out before centering
             Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
+        }
+        else if (option.TargetScreen == OverlayScreen.Media)
+        {
+            Dispatcher.UIThread.Post(() => _mediaOverlay?.ScrollToSelected());
         }
     }
 
