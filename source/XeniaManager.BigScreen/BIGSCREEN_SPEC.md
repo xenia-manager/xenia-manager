@@ -13,7 +13,7 @@
 
 **Vision:** a controller-driven, big-screen experience — browse an alphabetical game carousel, pick a game, and launch straight into Xenia. Browse screenshots in a gallery with a focused modal viewer. Configure dashboard visuals (background, accent, vignette) from a settings screen. All choices persist across sessions.
 
-**Non-goals (for now):** localization (deferred), launching BigScreen *from* the main app (deferred — Quit simply exits the process for now).
+**Non-goals (for now):** localization (deferred), launching BigScreen *from* the main app (deferred — the base app is the intended launcher, with a future "big screen by default" toggle; BigScreen's Quit returns to it, launching `XeniaManager.exe` if it isn't running, or closes everything per the 5.6 toggle).
 
 ---
 
@@ -189,11 +189,11 @@ source/XeniaManager.BigScreen/
 - [x] Fade-through-black transition on art swaps (180ms each way, latest-wins on rapid switching); settings changes stay instant
 
 ### 5.6 Quit behaviour toggle
-- [ ] **Classic CheckBox** in Settings
-- [ ] Default **off** = returns to base Xenia
-- [ ] **On** = quits the application
-- [ ] Tagline explaining the behaviour
-- [ ] Persisted in `DashboardSettings`
+- [x] Toggle switch in Settings ("Return to Xenia Manager on Quit") — radio-switch style (track + sliding thumb, accent when on)
+- [x] **On** (default) = Quit returns to Xenia Manager — launches `XeniaManager.exe` from the base dir if it isn't already running, then closes BigScreen
+- [x] **Off** = Quit closes BigScreen only ("Closes Everything")
+- [x] Tagline explaining the behaviour ("On: Returns to Xenia Manager · Off: Closes Everything")
+- [x] Persisted in `DashboardSettings` (`ReturnToXeniaOnQuit`, default true)
 
 ### 5.7 Empty states
 - [x] **No games:** placeholder with subtle disc icon + "No games found" (dashboard row **and** library screen)

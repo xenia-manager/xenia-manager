@@ -8,6 +8,51 @@
              x:Class="XeniaManager.BigScreen.Controls.SettingsOverlay"
              x:DataType="vm:MainWindowViewModel"
              Background="{Binding ScreenBackground}">
+
+    <UserControl.Styles>
+        <!-- Quit-toggle: rendered as a toggle switch (track + sliding thumb), no tick glyph -->
+        <Style Selector="CheckBox.quit-toggle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Width="66" Height="34" VerticalAlignment="Center">
+                            <Border x:Name="Track"
+                                    CornerRadius="17"
+                                    Background="{DynamicResource CardBorder}"
+                                    BorderBrush="{DynamicResource TextSecondary}"
+                                    BorderThickness="2" />
+                            <Ellipse x:Name="Thumb"
+                                     Width="26"
+                                     Height="26"
+                                     Fill="#FFFFFFFF"
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     Margin="4,0,0,0">
+                                <Ellipse.Transitions>
+                                    <Transitions>
+                                        <ThicknessTransition Property="Margin" Duration="0:0:0.15" />
+                                    </Transitions>
+                                </Ellipse.Transitions>
+                            </Ellipse>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="CheckBox.quit-toggle:checked /template/ Border#Track">
+            <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        </Style>
+
+        <Style Selector="CheckBox.quit-toggle:checked /template/ Ellipse#Thumb">
+            <Setter Property="Margin" Value="32,0,4,0" />
+        </Style>
+
+        <Style Selector="CheckBox.quit-toggle:focus-visible /template/ Border#Track">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
         <TextBlock Grid.Row="0"
                    Text="Settings"
@@ -126,6 +171,31 @@
                                    Foreground="{DynamicResource TextPrimary}"
                                    FontSize="24"
                                    VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+
+                <!-- QUIT BEHAVIOUR -->
+                <Border Background="{DynamicResource CardBackground}"
+                        CornerRadius="10"
+                        Padding="24,16"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <DockPanel>
+                        <CheckBox x:Name="QuitBehaviourCheck"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding ReturnToXeniaOnQuit}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="quit-toggle" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Text="Return to Xenia Manager on Quit"
+                                       Foreground="{DynamicResource TextPrimary}"
+                                       FontSize="24" />
+                            <TextBlock Text="On: Returns to Xenia Manager · Off: Closes Everything"
+                                       Foreground="{DynamicResource TextSecondary}"
+                                       FontSize="18" />
+                        </StackPanel>
                     </DockPanel>
                 </Border>
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -499,6 +500,7 @@ public partial class MainWindowViewModel : ViewModelBase
         PrimaryColor = _backgroundService.Settings.PrimaryColor;
         AccentColor = _backgroundService.Settings.AccentColor;
         VignetteOpacity = _backgroundService.Settings.VignetteOpacity;
+        ReturnToXeniaOnQuit = _backgroundService.Settings.ReturnToXeniaOnQuit;
         UpdateBackground();
 
         foreach (GameCardViewModel game in Games.Concat(RecentGames))
@@ -602,10 +604,32 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Requests the app to quit (returns to regular Xenia Manager).
+    /// Whether Quit returns to Xenia Manager (launching it if it isn't running).
+    /// Off = just close BigScreen.
+    /// </summary>
+    [ObservableProperty] private bool _returnToXeniaOnQuit = true;
+
+    partial void OnReturnToXeniaOnQuitChanged(bool value)
+    {
+        _backgroundService.Settings.ReturnToXeniaOnQuit = value;
+        _backgroundService.Save();
+    }
+
+    /// <summary>
+    /// Requests the app to quit. When returning to Xenia Manager is enabled and the
+    /// base app isn't running, it is launched first; BigScreen then closes.
     /// </summary>
     public void Quit()
     {
+        if (ReturnToXeniaOnQuit)
+        {
+            string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), "XeniaManager.exe");
+            if (File.Exists(baseExe) && Process.GetProcessesByName("XeniaManager").Length == 0)
+            {
+                Process.Start(new ProcessStartInfo { FileName = baseExe, UseShellExecute = true });
+            }
+        }
+
         QuitRequested?.Invoke(this, EventArgs.Empty);
     }
 

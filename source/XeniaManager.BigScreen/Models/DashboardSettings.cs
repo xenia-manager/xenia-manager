@@ -38,4 +38,11 @@ public class DashboardSettings
     /// </summary>
     [JsonPropertyName("vignette_opacity")]
     public double VignetteOpacity { get; set; } = 0.2;
+
+    /// <summary>
+    /// Whether Quit returns to Xenia Manager (launching it if it isn't running).
+    /// Off = just close BigScreen.
+    /// </summary>
+    [JsonPropertyName("return_to_xenia")]
+    public bool ReturnToXeniaOnQuit { get; set; } = true;
 }
