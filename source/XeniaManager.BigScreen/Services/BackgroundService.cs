@@ -130,7 +130,7 @@ public class BackgroundService
                 {
                     Stretch = Stretch.UniformToFill,
                 }
-                : CreateLinearBrush(),
+                : CreateRadialBrush(),
             _ => CreateLinearBrush(),
         };
     }

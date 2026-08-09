@@ -49,6 +49,18 @@
                 IsVisible="{Binding VignetteVisible}"
                 IsHitTestVisible="False" />
 
+        <!-- Black fade overlay for background transitions (ignores input) -->
+        <Border Grid.RowSpan="2" Grid.ColumnSpan="3"
+                Background="Black"
+                Opacity="{Binding FadeOpacity}"
+                IsHitTestVisible="False">
+            <Border.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
+                </Transitions>
+            </Border.Transitions>
+        </Border>
+
         <!-- TOP DASHBOARD HEADER -->
         <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="Auto, *, Auto" VerticalAlignment="Center">
 

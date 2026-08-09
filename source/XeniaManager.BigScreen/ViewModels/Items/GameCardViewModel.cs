@@ -91,6 +91,25 @@ public partial class GameCardViewModel : ObservableObject
     }
 
     /// <summary>
+    /// Loads the card's background art from the cached artwork (no-op once loaded).
+    /// </summary>
+    public void EnsureBackgroundLoaded()
+    {
+        if (BackgroundArt == null)
+        {
+            BackgroundArt = Game.Artwork.CachedBackground;
+        }
+    }
+
+    partial void OnIsSelectedChanged(bool value)
+    {
+        if (value)
+        {
+            EnsureBackgroundLoaded();
+        }
+    }
+
+    /// <summary>
     /// Activates the card (launching the game). Stub for future wiring.
     /// </summary>
     [RelayCommand]

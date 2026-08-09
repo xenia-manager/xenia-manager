@@ -81,6 +81,40 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private bool _vignetteVisible;
 
     /// <summary>
+    /// Opacity of the black fade overlay (0 = transparent, 1 = black). Used to
+    /// fade the background out to black and back in when the selected game changes.
+    /// </summary>
+    [ObservableProperty] private double _fadeOpacity;
+
+    /// <summary>
+    /// Cancels in-flight background fades; only the newest request completes.
+    /// </summary>
+    private int _fadeGeneration;
+
+    /// <summary>
+    /// Duration of one fade leg (out to black, or in from black).
+    /// </summary>
+    private static readonly TimeSpan FadeDuration = TimeSpan.FromMilliseconds(180);
+
+    /// <summary>
+    /// Fades the background out to black, swaps the brush, then fades back in.
+    /// Superseded requests (rapid selection changes) abort without swapping.
+    /// </summary>
+    private async Task FadeBackgroundAsync(IBrush brush)
+    {
+        int generation = ++_fadeGeneration;
+        FadeOpacity = 1;
+        await Task.Delay(FadeDuration);
+        if (generation != _fadeGeneration)
+        {
+            return;
+        }
+
+        Background = brush;
+        FadeOpacity = 0;
+    }
+
+    /// <summary>
     /// The currently open overlay screen.
     /// </summary>
     [ObservableProperty] private OverlayScreen _currentScreen = OverlayScreen.None;
@@ -564,6 +598,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public void CloseOverlay()
     {
         CurrentScreen = OverlayScreen.None;
+        UpdateBackground(fade: true);
     }
 
     /// <summary>
@@ -623,6 +658,7 @@ public partial class MainWindowViewModel : ViewModelBase
         foreach (Game game in GetRecentGames())
         {
             GameCardViewModel card = new(game, ResolveGameStats(game));
+            card.EnsureBackgroundLoaded();
             card.PropertyChanged += OnGameCardPropertyChanged;
             RecentGames.Add(card);
         }
@@ -664,12 +700,26 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// The most recently selected game card (dashboard or library row). Drives the
+    /// dynamic background, so selection in either row changes the artwork.
+    /// </summary>
+    private GameCardViewModel? _lastSelectedGame;
+
+    /// <summary>
+    /// The artwork of the currently displayed background, used to skip pointless
+    /// fades when the selection didn't actually change the image.
+    /// </summary>
+    private Bitmap? _currentBackgroundArt;
+
+    /// <summary>
     /// Recomputes the background brush from the current settings and selection.
     /// Falls back to the linear gradient when the requested brush can't be built.
+    /// When <paramref name="fade"/> is set, the swap animates through black
+    /// (used for selection-driven Dynamic changes; settings changes stay instant).
     /// </summary>
-    private void UpdateBackground()
+    private void UpdateBackground(bool fade = false)
     {
-        Bitmap? art = RecentGames.FirstOrDefault(g => g.IsSelected)?.BackgroundArt;
+        Bitmap? art = _lastSelectedGame?.BackgroundArt;
         BackgroundMode mode = _backgroundService.Settings.Mode;
         IBrush? brush = _backgroundService.GetBackground(art);
         if (brush == null)
@@ -681,14 +731,37 @@ public partial class MainWindowViewModel : ViewModelBase
         // Vignette only belongs on image-based backgrounds
         VignetteVisible = mode == BackgroundMode.Image
                           || (mode == BackgroundMode.Dynamic && art != null);
-        Background = brush;
+
+        bool artChanged = !ReferenceEquals(art, _currentBackgroundArt);
+        if (fade && mode == BackgroundMode.Dynamic && artChanged)
+        {
+            // The fallback above always produces a brush (linear gradient)
+            _ = FadeBackgroundAsync(brush!);
+        }
+        else
+        {
+            Background = brush;
+        }
+
+        _currentBackgroundArt = art;
     }
 
     private void OnGameCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is nameof(GameCardViewModel.IsSelected) or nameof(GameCardViewModel.BackgroundArt))
+        if (e.PropertyName == nameof(GameCardViewModel.IsSelected))
         {
-            UpdateBackground();
+            if (sender is GameCardViewModel { IsSelected: true } card)
+            {
+                _lastSelectedGame = card;
+            }
+        }
+
+        // Swap behind closed overlays; the library/media screens cover the
+        // dashboard, so the fade only matters when the dashboard is visible
+        if (e.PropertyName is nameof(GameCardViewModel.IsSelected) or nameof(GameCardViewModel.BackgroundArt)
+            && !IsOverlayOpen)
+        {
+            UpdateBackground(fade: true);
         }
     }
 
@@ -706,7 +779,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
         foreach (Game game in GetRecentGames())
         {
-            RecentGames.Add(new GameCardViewModel(game, ResolveGameStats(game)));
+            GameCardViewModel card = new(game, ResolveGameStats(game));
+            card.EnsureBackgroundLoaded();
+            RecentGames.Add(card);
         }
     }
 

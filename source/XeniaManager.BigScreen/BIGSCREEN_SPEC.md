@@ -38,7 +38,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - `dashboard-settings.json` stays next to the BigScreen executable.
 
 ### Background system (`Services/BackgroundService.cs`)
-- **5 modes** (`Models/BackgroundMode.cs`): `Image`, `Solid`, `LinearGradient`, `RadialGradient`, `Dynamic` (selected game's artwork, falls back to linear).
+- **5 modes** (`Models/BackgroundMode.cs`): `Image`, `Solid`, `LinearGradient`, `RadialGradient`, `Dynamic` (selected game's artwork, falls back to radial).
 - Gradients are **derived from the primary colour** (mix toward black, subtle slate ramp — never near-black or white ends).
 - **Vignette** overlay on image-based backgrounds only (Image mode / Dynamic with art), opacity 0–1.
 - Persisted to **`dashboard-settings.json`** next to the executable (`Models/DashboardSettings.cs`).
@@ -183,8 +183,10 @@ source/XeniaManager.BigScreen/
 - [x] Library refreshes after the session (playtime / last played via `GameManager.LoadLibrary()` + card rebuild)
 
 ### 5.5 Dynamic background
-- [ ] Populate `GameCardViewModel.BackgroundArt` from `CachedBackground`
-- [ ] Dynamic mode works with real art (fallback to linear gradient when missing)
+- [x] Populate `GameCardViewModel.BackgroundArt` from `CachedBackground`
+- [x] Dynamic mode works with real art (fallback to radial gradient when missing)
+- [x] Selection in **either** row (dashboard or library) drives the artwork; library selection reveals on overlay close
+- [x] Fade-through-black transition on art swaps (180ms each way, latest-wins on rapid switching); settings changes stay instant
 
 ### 5.6 Quit behaviour toggle
 - [ ] **Classic CheckBox** in Settings

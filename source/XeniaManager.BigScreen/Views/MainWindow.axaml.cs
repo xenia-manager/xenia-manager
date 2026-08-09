@@ -169,6 +169,44 @@ public partial class MainWindow : Window
                 e.Handled = true;
             }
         }
+        else if (e.Key is Key.Left or Key.Right)
+        {
+            MoveRecentGameSelection(e.Key == Key.Right ? 1 : -1);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// Moves the dashboard game selection by the given step, clamped at both ends.
+    /// </summary>
+    private void MoveRecentGameSelection(int delta)
+    {
+        if (DataContext is not MainWindowViewModel vm || vm.RecentGames.Count == 0)
+        {
+            return;
+        }
+
+        int index = 0;
+        for (int i = 0; i < vm.RecentGames.Count; i++)
+        {
+            if (vm.RecentGames[i].IsSelected)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        int target = Math.Clamp(index + delta, 0, vm.RecentGames.Count - 1);
+        if (target == index)
+        {
+            return;
+        }
+
+        GameCardViewModel next = vm.RecentGames[target];
+        foreach (GameCardViewModel game in vm.RecentGames)
+        {
+            game.IsSelected = ReferenceEquals(game, next);
+        }
     }
 
     /// <summary>
