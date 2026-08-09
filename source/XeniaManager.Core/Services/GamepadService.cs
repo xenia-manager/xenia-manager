@@ -21,13 +21,17 @@ public enum ControllerNavigationAction
     /// <summary>Y button: open the focused item's context menu (same as right-click).</summary>
     Menu,
     /// <summary>View button: toggle between grid and list view.</summary>
-    ToggleView
+    ToggleView,
+    /// <summary>Left shoulder (LB): switch to the previous tab, on pages that have tabs.</summary>
+    PreviousTab,
+    /// <summary>Right shoulder (RB): switch to the next tab, on pages that have tabs.</summary>
+    NextTab
 }
 
 /// <summary>
 /// Polls a game controller (via SDL3, through ppy.SDL3-CS) and raises navigation events
-/// (Up/Down/Left/Right/Confirm/Back/Info/Menu/ToggleView) suitable for driving UI focus,
-/// similar to how a console dashboard is navigated.
+/// (Up/Down/Left/Right/Confirm/Back/Info/Menu/ToggleView/PreviousTab/NextTab) suitable for
+/// driving UI focus, similar to how a console dashboard is navigated.
 ///
 /// Navigation events are only delivered to the current "focus owner" (see
 /// <see cref="PushNavigationContext"/>/<see cref="PopNavigationContext"/>), so
@@ -35,7 +39,7 @@ public enum ControllerNavigationAction
 /// opening a modal dialog should "take over" input from whatever's behind it.
 ///
 /// EXPERIMENTAL: this is a first proof-of-concept limited to the first connected
-/// controller and to D-Pad + left stick + A/B/X/Y/View buttons. Uses SDL3 (via
+/// controller and to D-Pad + left stick + A/B/X/Y/View/LB/RB buttons. Uses SDL3 (via
 /// ppy.SDL3-CS, switched from the SDL2-based Silk.NET.SDL) so this also works
 /// under Wine/Proton on Linux, not just native Windows, on a non-EOL SDL version.
 /// </summary>
@@ -83,6 +87,8 @@ public unsafe class GamepadService : IDisposable
     private bool _previousXPressed;
     private bool _previousYPressed;
     private bool _previousViewPressed;
+    private bool _previousLeftShoulderPressed;
+    private bool _previousRightShoulderPressed;
 
     public GamepadService()
     {
@@ -330,6 +336,8 @@ public unsafe class GamepadService : IDisposable
                 _previousXPressed = false;
                 _previousYPressed = false;
                 _previousViewPressed = false;
+                _previousLeftShoulderPressed = false;
+                _previousRightShoulderPressed = false;
                 return;
             }
 
@@ -348,6 +356,8 @@ public unsafe class GamepadService : IDisposable
             // but SDL (like XInput before it) still calls it "Back" for historical reasons -
             // distinct from our logical ControllerNavigationAction.Back (mapped to the B face button).
             bool viewPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_BACK);
+            bool leftShoulderPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_LEFT_SHOULDER);
+            bool rightShoulderPressed = GetButton(SDL_GamepadButton.SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER);
 
             if (aPressed && !_previousAPressed)
             {
@@ -379,11 +389,25 @@ public unsafe class GamepadService : IDisposable
                 NavigationActionTriggered?.Invoke(this, ControllerNavigationAction.ToggleView);
             }
 
+            if (leftShoulderPressed && !_previousLeftShoulderPressed)
+            {
+                Logger.Debug<GamepadService>("Controller: LB pressed -> PreviousTab");
+                NavigationActionTriggered?.Invoke(this, ControllerNavigationAction.PreviousTab);
+            }
+
+            if (rightShoulderPressed && !_previousRightShoulderPressed)
+            {
+                Logger.Debug<GamepadService>("Controller: RB pressed -> NextTab");
+                NavigationActionTriggered?.Invoke(this, ControllerNavigationAction.NextTab);
+            }
+
             _previousAPressed = aPressed;
             _previousBPressed = bPressed;
             _previousXPressed = xPressed;
             _previousYPressed = yPressed;
             _previousViewPressed = viewPressed;
+            _previousLeftShoulderPressed = leftShoulderPressed;
+            _previousRightShoulderPressed = rightShoulderPressed;
 
             HandleDirectionalRepeat(currentDirection);
         }

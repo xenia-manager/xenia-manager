@@ -49,6 +49,8 @@ public class PageGamepadNavigator
     private readonly NavigationService _navigationService;
     private readonly Control _root;
     private readonly object _owner = new object();
+    private readonly Action<int>? _onCycleTab;
+    private readonly Visual? _tabContentRoot;
 
     private List<Control> _items = [];
     private int _cursorIndex = -1;
@@ -59,11 +61,22 @@ public class PageGamepadNavigator
     // game context menu in LibraryPage, just flattened since there's no nesting here.
     private ComboBox? _openComboBox;
 
-    public PageGamepadNavigator(GamepadService gamepadService, NavigationService navigationService, Control root)
+    /// <param name="onCycleTab">Called with -1/+1 when LB/RB (PreviousTab/NextTab) is pressed,
+    /// for pages with their own tab strip (e.g. Xenia Settings' config editor sections). Null
+    /// on pages without tabs, where LB/RB then has no effect.</param>
+    /// <param name="tabContentRoot">The container whose descendants make up a tab's content
+    /// (e.g. the ConfigEditorControl instance). After LB/RB, the cursor lands on the first
+    /// navigable control inside this container instead of literally the first one on the page
+    /// - otherwise it would land on whatever page-level control (e.g. a config-file picker
+    /// ComboBox) happens to sit above the tab strip, not the newly-selected tab's own content.
+    /// Ignored if <paramref name="onCycleTab"/> is null.</param>
+    public PageGamepadNavigator(GamepadService gamepadService, NavigationService navigationService, Control root, Action<int>? onCycleTab = null, Visual? tabContentRoot = null)
     {
         _gamepadService = gamepadService;
         _navigationService = navigationService;
         _root = root;
+        _onCycleTab = onCycleTab;
+        _tabContentRoot = tabContentRoot;
     }
 
     /// <summary>
@@ -74,8 +87,39 @@ public class PageGamepadNavigator
     {
         _gamepadService.NavigationActionTriggered += OnNavigationAction;
         _gamepadService.PushNavigationContext(_owner);
-        RefreshItems();
-        SetCursor(_items.Count > 0 ? 0 : -1);
+
+        if (_tabContentRoot != null)
+        {
+            // Deferred: on a tabbed page, the active tab's content IsEffectivelyVisible isn't
+            // reliably settled in the visual tree yet at the exact moment this runs - see the
+            // comment on CycleTab for the same issue observed there.
+            Dispatcher.UIThread.Post(() =>
+            {
+                RefreshItems();
+                SetCursorToFirstRelevantItem();
+            });
+        }
+        else
+        {
+            RefreshItems();
+            SetCursorToFirstRelevantItem();
+        }
+    }
+
+    /// <summary>
+    /// Sets the cursor to the first control inside <see cref="_tabContentRoot"/> if the page
+    /// has one (so it starts inside the active tab's content rather than on some page-level
+    /// control above the tab strip, e.g. Xenia Settings' config-file picker ComboBox), or
+    /// literally the first navigable control otherwise. Shared by <see cref="Activate"/> and
+    /// <see cref="CycleTab"/>, since both need to (re-)establish "the first sensible item".
+    /// </summary>
+    private void SetCursorToFirstRelevantItem()
+    {
+        int targetIndex = _tabContentRoot != null
+            ? _items.FindIndex(c => IsDescendantOf(c, _tabContentRoot))
+            : -1;
+
+        SetCursor(targetIndex >= 0 ? targetIndex : (_items.Count > 0 ? 0 : -1));
     }
 
     /// <summary>
@@ -94,7 +138,15 @@ public class PageGamepadNavigator
     {
         foreach (Visual child in visual.GetVisualChildren())
         {
-            if (child is Control control && control.IsEffectivelyVisible && control.IsEffectivelyEnabled &&
+            // RepeatButton derives from Button in this Avalonia version (same surprise as
+            // ToggleSwitch deriving from it - see HandleConfirm), so NavigableTypes' Button
+            // entry would otherwise also match it. It's always a template implementation
+            // detail (ScrollViewer scrollbar arrows, Slider/NumberBox spin buttons), never a
+            // real setting - counting it as a navigable stop broke landing on a tab's actual
+            // first control after LB/RB, since a scrollbar's RepeatButton could be found
+            // before any of the tab's own cards.
+            if (child is Control control && control is not RepeatButton &&
+                control.IsEffectivelyVisible && control.IsEffectivelyEnabled &&
                 NavigableTypes.Any(t => t.IsInstanceOfType(control)))
             {
                 results.Add(control);
@@ -205,8 +257,54 @@ public class PageGamepadNavigator
                 SetCursor(-1);
                 _navigationService.FocusNavigationMenu();
                 break;
+            case ControllerNavigationAction.PreviousTab:
+                CycleTab(-1);
+                break;
+            case ControllerNavigationAction.NextTab:
+                CycleTab(1);
+                break;
             // Info/Menu/ToggleView (X/Y/View) have no meaning on these pages
         }
+    }
+
+    /// <summary>
+    /// Invokes the page's tab-cycling callback (if any) and resets the cursor to the first
+    /// navigable control, since switching tabs changes which controls are visible - the
+    /// previously-highlighted one likely belongs to the tab that's no longer shown.
+    /// </summary>
+    private void CycleTab(int delta)
+    {
+        if (_onCycleTab == null)
+        {
+            return;
+        }
+
+        _onCycleTab(delta);
+
+        // Deferred rather than done immediately: IsContentVisible on the newly-active
+        // section's Border only just changed, and querying IsEffectivelyVisible on its
+        // descendants right away was observed to still reflect the previous tab's state (or
+        // find nothing) until one more UI dispatch cycle had passed - a plain synchronous call
+        // here reliably picked the wrong control (or fell back to the config-file ComboBox
+        // above the tab strip) on the first press after switching tabs.
+        Dispatcher.UIThread.Post(() =>
+        {
+            RefreshItems();
+            SetCursorToFirstRelevantItem();
+        });
+    }
+
+    private static bool IsDescendantOf(Visual descendant, Visual ancestor)
+    {
+        for (Visual? current = descendant; current != null; current = current.GetVisualParent())
+        {
+            if (ReferenceEquals(current, ancestor))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>

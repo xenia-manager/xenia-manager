@@ -24,6 +24,14 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
     [ObservableProperty] private bool _isVisible = true;
     [ObservableProperty] private bool _hasUnsavedChanges;
 
+    /// <summary>
+    /// Whether this section's options should currently be shown in the content area - true
+    /// when it's the selected tab, or (while searching) when it has a matching option. Driven
+    /// externally by <see cref="ConfigEditorViewModel"/>, which is the one that knows both the
+    /// selected tab index and the search state.
+    /// </summary>
+    [ObservableProperty] private bool _isContentVisible = true;
+
     public ConfigSectionViewModel(ConfigSection configSection, ConfigSectionDefinition? definition = null)
     {
         _configSection = configSection;

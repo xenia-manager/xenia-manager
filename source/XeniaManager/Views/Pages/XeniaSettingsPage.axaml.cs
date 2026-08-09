@@ -30,7 +30,14 @@ public partial class XeniaSettingsPage : UserControl
         _gamepadNavigator = new PageGamepadNavigator(
             App.Services.GetRequiredService<GamepadService>(),
             App.Services.GetRequiredService<NavigationService>(),
-            this);
+            this,
+            // LB/RB cycle the config editor's section tabs (Audio/CPU/Display/...), evaluated
+            // fresh each call since ConfigEditorViewModel is replaced whenever the config file
+            // is (re)loaded.
+            direction => _viewModel.ConfigEditorViewModel?.CycleSelectedSection(direction),
+            // After cycling tabs, land the cursor on the new tab's first setting rather than
+            // the config-file picker ComboBox above the tab strip.
+            ConfigEditorControlInstance);
         _gamepadNavigator.Activate();
     }
 
