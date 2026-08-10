@@ -38,7 +38,21 @@ public partial class MainWindow : Window
         if (_gamepadService.IsActive)
         {
             _gamepadService.ButtonPressed += OnGamepadButtonPressed;
+            _gamepadService.StateChanged += OnGamepadStateChanged;
         }
+    }
+
+    /// <summary>
+    /// Forwards the live gamepad connection/battery state to the view model.
+    /// </summary>
+    private void OnGamepadStateChanged()
+    {
+        if (DataContext is not MainWindowViewModel vm)
+        {
+            return;
+        }
+
+        vm.ApplyGamepadState(_gamepadService!.IsConnected, _gamepadService.BatteryPercent, _gamepadService.IsCharging);
     }
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
@@ -50,6 +64,13 @@ public partial class MainWindow : Window
         {
             vm.QuitRequested += OnQuitRequested;
             vm.LibraryRefreshed += OnLibraryRefreshed;
+
+            // Push the gamepad state captured during construction (DataContext wasn't set yet)
+            if (_gamepadService is { IsActive: true })
+            {
+                vm.ApplyGamepadState(_gamepadService.IsConnected, _gamepadService.BatteryPercent, _gamepadService.IsCharging);
+            }
+
             if (vm.RecentGames.Count > 0)
             {
                 _onOptionsRow = false;

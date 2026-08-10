@@ -53,6 +53,33 @@ public class GamepadService : IDisposable
     /// </summary>
     public bool IsActive { get; }
 
+    /// <summary>
+    /// Raised when the connection or battery state changes.
+    /// </summary>
+    public event Action? StateChanged;
+
+    /// <summary>
+    /// Whether a gamepad is currently open.
+    /// </summary>
+    public bool IsConnected { get; private set; }
+
+    /// <summary>
+    /// Battery percentage (0-100), or -1 when unknown/no battery.
+    /// </summary>
+    public int BatteryPercent { get; private set; } = -1;
+
+    /// <summary>
+    /// Whether the gamepad battery is currently charging.
+    /// </summary>
+    public bool IsCharging { get; private set; }
+
+    /// <summary>
+    /// How often the gamepad battery state is queried.
+    /// </summary>
+    private static readonly TimeSpan BatteryPollInterval = TimeSpan.FromSeconds(5);
+
+    private DispatcherTimer? _batteryTimer;
+
     public unsafe GamepadService()
     {
         try
@@ -98,6 +125,12 @@ public class GamepadService : IDisposable
             _pollTimer.Start();
             IsActive = true;
             Logger.Info<GamepadService>($"Poll timer started ({_pollTimer.Interval.TotalMilliseconds}ms)");
+
+            _batteryTimer = new DispatcherTimer { Interval = BatteryPollInterval };
+            _batteryTimer.Tick += (_, _) => PollBattery();
+            _batteryTimer.Start();
+            PollBattery();
+            Logger.Info<GamepadService>($"Battery timer started ({BatteryPollInterval.TotalSeconds}s)");
         }
         catch (Exception ex)
         {
@@ -289,7 +322,10 @@ public class GamepadService : IDisposable
         }
 
         _gamepadWhich = id;
+        IsConnected = true;
+        PollBattery();
         Logger.Info<GamepadService>($"Opened gamepad {id}: {SDL3.SDL_GetGamepadName(_gamepad)}");
+        StateChanged?.Invoke();
     }
 
     /// <summary>
@@ -303,6 +339,41 @@ public class GamepadService : IDisposable
             SDL3.SDL_CloseGamepad(_gamepad);
             _gamepad = null;
             _gamepadWhich = 0;
+            IsConnected = false;
+            BatteryPercent = -1;
+            IsCharging = false;
+            StateChanged?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// Queries the open gamepad's battery state and raises <see cref="StateChanged"/>
+    /// when it changed.
+    /// </summary>
+    private unsafe void PollBattery()
+    {
+        if (_gamepad == null)
+        {
+            return;
+        }
+
+        int percent;
+        SDL_PowerState state = SDL3.SDL_GetGamepadPowerInfo(_gamepad, &percent);
+        Logger.Trace<GamepadService>($"Battery poll: state={state}, percent={percent}");
+
+        int newPercent = percent;
+        bool newCharging = state is SDL_PowerState.SDL_POWERSTATE_CHARGING or SDL_PowerState.SDL_POWERSTATE_CHARGED;
+        if (state is SDL_PowerState.SDL_POWERSTATE_NO_BATTERY or SDL_PowerState.SDL_POWERSTATE_UNKNOWN
+            or SDL_PowerState.SDL_POWERSTATE_ERROR)
+        {
+            newPercent = -1;
+        }
+
+        if (newPercent != BatteryPercent || newCharging != IsCharging)
+        {
+            BatteryPercent = newPercent;
+            IsCharging = newCharging;
+            StateChanged?.Invoke();
         }
     }
 
@@ -313,6 +384,7 @@ public class GamepadService : IDisposable
     {
         Logger.Info<GamepadService>("Shutting down SDL gamepad subsystem");
         _pollTimer?.Stop();
+        _batteryTimer?.Stop();
         CloseGamepad();
         SDL3.SDL_Quit();
         GC.SuppressFinalize(this);

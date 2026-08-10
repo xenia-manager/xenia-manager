@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -299,9 +300,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private bool _controllerConnected = true;
 
     /// <summary>
-    /// Controller battery level in percent
+    /// Controller battery level in percent. -1 when unknown/no controller.
     /// </summary>
-    [ObservableProperty] private int _batteryLevel = 100;
+    [ObservableProperty] private int _batteryLevel = -1;
 
     /// <summary>
     /// Whether the controller battery is charging
@@ -321,28 +322,69 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Fluent icon name for the current wifi state
     /// </summary>
-    public string WifiIcon => IsWifiConnected ? "WiFi3" : "WiFiOff";
+    public string WifiIcon => IsWifiConnected ? "WiFi" : "WiFiOff";
 
     /// <summary>
-    /// Fluent icon name for the current controller battery state
+    /// Fluent icon name for the current controller battery state.
+    /// BatteryWarning when no controller is connected or the level is unknown;
+    /// full battery when wired/charging.
     /// </summary>
-    public string BatteryIcon => IsCharging
-        ? "BatteryCharge"
-        : BatteryLevel switch
-        {
-            <= 0 => "Battery0",
-            <= 20 => "Battery1",
-            <= 40 => "Battery3",
-            <= 60 => "Battery5",
-            <= 80 => "Battery7",
-            _ => "Battery10",
-        };
+    public string BatteryIcon => BatteryLevel < 0
+        ? "BatteryWarning"
+        : IsCharging
+            ? "Battery10"
+            : BatteryLevel switch
+            {
+                <= 0 => "Battery0",
+                <= 20 => "Battery1",
+                <= 40 => "Battery3",
+                <= 60 => "Battery5",
+                <= 80 => "Battery7",
+                _ => "Battery10",
+            };
 
     partial void OnIsWifiConnectedChanged(bool value) => OnPropertyChanged(nameof(WifiIcon));
 
     partial void OnBatteryLevelChanged(int value) => OnPropertyChanged(nameof(BatteryIcon));
 
     partial void OnIsChargingChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    partial void OnControllerConnectedChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    /// <summary>
+    /// Applies the live gamepad connection/battery state from the gamepad service.
+    /// </summary>
+    public void ApplyGamepadState(bool connected, int batteryPercent, bool charging)
+    {
+        ControllerConnected = connected;
+        BatteryLevel = batteryPercent;
+        IsCharging = charging;
+    }
+
+    /// <summary>
+    /// How often the wifi connection state is re-checked.
+    /// </summary>
+    private static readonly TimeSpan WifiPollInterval = TimeSpan.FromSeconds(10);
+
+    private readonly DispatcherTimer _wifiTimer;
+
+    /// <summary>
+    /// Re-checks the wifi connection state from the network interfaces.
+    /// Keeps the last state on failure so the icon doesn't flicker.
+    /// </summary>
+    private void CheckWifi()
+    {
+        try
+        {
+            IsWifiConnected = NetworkInterface.GetAllNetworkInterfaces()
+                .Any(i => i.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
+                          && i.OperationalStatus == OperationalStatus.Up);
+        }
+        catch (Exception)
+        {
+            // Keep the last state on failure
+        }
+    }
 
     partial void OnModeChanged(BackgroundMode value)
     {
@@ -523,6 +565,14 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString("hh:mm tt");
         _clockTimer.Start();
+
+        _wifiTimer = new DispatcherTimer
+        {
+            Interval = WifiPollInterval,
+        };
+        _wifiTimer.Tick += (_, _) => CheckWifi();
+        _wifiTimer.Start();
+        CheckWifi();
     }
 
     /// <summary>

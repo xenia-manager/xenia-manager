@@ -97,12 +97,14 @@ source/XeniaManager.BigScreen/
 ├── Services/
 │   ├── BaseAppLocator.cs            # Resolves the base Xenia Manager folder (--base-dir / side-by-side / sibling)
 │   ├── BackgroundService.cs         # Settings load/save, brush factory, ApplyResources
+│   ├── GamepadService.cs            # SDL3 polling, button/axis normalization, open/close gamepad
 │   └── ColorJsonConverter.cs
 ├── Models/
 │   ├── DashboardSettings.cs         # Persisted user-facing options
 │   ├── BackgroundMode.cs / BackgroundModeOption.cs
 │   ├── LibrarySort.cs               # Alphabetical / TimePlayed / LastPlayed
 │   ├── MediaSort.cs                 # NewestFirst / OldestFirst / ByGame
+│   ├── GamepadButton.cs             # Dpad/ABXY/bumpers (stick normalized onto Dpad)
 │   └── OverlayScreen.cs
 └── Resources/
     ├── BigScreenStyle.axaml
@@ -159,7 +161,7 @@ source/XeniaManager.BigScreen/
 - [x] Per-game achievement stats from the profile's GPDs (reuses the header's loaded `ProfileGpd` → `TitleEntry` per game)
 
 ### 5.2 Library carousel
-- [x] Left-to-right **alphabetical** carousel (sortable with **Y**: Alphabetical / Time Played / Last Played)
+- [x] Left-to-right **alphabetical** carousel (sortable with **Y**: Alphabetical / Time Played / Last Played; selection follows the list index, not the element — viewport stays put)
 - [ ] Selected card **centred** — *decided against*: standard left-to-right list, scrolls once the selection passes the middle, clamped at both ends (no wrap)
 - [x] Card layout: box art on top (`CachedBoxart`, bottom-anchored with a 13% top crop)
 - [x] Game name underneath
@@ -174,7 +176,7 @@ source/XeniaManager.BigScreen/
 - [x] Subtle chevron arrows in the modal for navigation (visual affordance, faded 0.45 → full on hover)
 - [x] B/Escape closes the modal (then the overlay)
 - [x] Grid scrolls down like the library scrolls sideways; clamped at both ends, no wrap-back
-- [x] Sort with **Y**: Newest First / Oldest First / By Game (indicator top-right, capture date from file write time)
+- [x] Sort with **Y**: Newest First / Oldest First / By Game (indicator top-right, capture date from file write time). Selection follows the **list index**, not the element — the viewport stays put and the card at the same position is selected (no fly-across)
 
 ### 5.4 Game launch
 - [x] Launch from the carousel via `Launcher.LaunchGameASync` (needs Core `Settings`)
@@ -201,8 +203,13 @@ source/XeniaManager.BigScreen/
 - [x] **Fewer than 6 recent games:** dashboard row is capped at 6 via the `RecentGames` collection (fewer games = fewer cards, no empty slots)
 
 ### 5.8 SDL3 gamepad input
-- [ ] Add `ppy.SDL3-CS` package (win-x64 native included)
-- [ ] D-pad + A/B navigation mapped to the existing focus/selection model
+- [x] Add `ppy.SDL3-CS` package (win-x64 native included, `AllowUnsafeBlocks` for the pointer API)
+- [x] `GamepadService`: SDL gamepad init (graceful failure), UI-thread 50ms poll of button + left-stick axis events (deadzone edge detection, no hold repeat); D-pad, left stick (X/Y) and bumpers all normalize onto the D-pad values; opens the first gamepad so events flow, handles add/remove; full NLog tracing of raw input
+- [x] D-pad + A/B navigation mapped to the existing focus/selection model
+- [x] Dashboard is **row-state driven** (explicit games/options row, not keyboard focus): D-pad Up/Down switches rows with a fixed column mapping (game 1 → option 1 · games 2-3 → option 2 · games 4-5 → option 3 · game 6 → option 4; up: option 1 → game 1 · 2 → 2 · 3 → 4 · 4 → 6); A acts on the active row only (options never also launch the game); options row clears when returning to games; no games = options row stays active (incl. empty-library startup/refresh)
+- [x] Left/Right via D-pad, left stick and bumpers (library/media/modal); Up/Down via D-pad and stick (media row jumps)
+- [x] Settings remains keyboard-only; input gated while the window is disabled (game running)
+- [x] Sorting keeps the viewport fixed and selection follows the **list index** (not the element), so no fly-across — library and media
 
 ### 5.9 Real controller battery / wifi
 - [ ] Wire header battery icon to live controller state

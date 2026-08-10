@@ -92,14 +92,20 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Spacing="16">
-                <fluent:SymbolIcon Symbol="{Binding WifiIcon}"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}"
-                                   VerticalAlignment="Center" />
-                <fluent:SymbolIcon Symbol="{Binding BatteryIcon}"
-                                   FontSize="26"
-                                   Foreground="{DynamicResource TextPrimary}"
-                                   VerticalAlignment="Center" />
+                <Grid Width="26" Height="26">
+                    <fluent:SymbolIcon Symbol="{Binding WifiIcon}"
+                                       FontSize="24"
+                                       Foreground="{DynamicResource TextPrimary}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                </Grid>
+                <Grid Width="26" Height="26">
+                    <fluent:SymbolIcon Symbol="{Binding BatteryIcon}"
+                                       FontSize="24"
+                                       Foreground="{DynamicResource TextPrimary}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                </Grid>
                 <TextBlock Classes="header-text" Text="{Binding Time}"
                            Foreground="{DynamicResource TextPrimary}"
                            FontSize="18"
