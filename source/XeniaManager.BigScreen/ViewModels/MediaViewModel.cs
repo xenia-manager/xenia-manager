@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
@@ -100,10 +103,13 @@ public partial class MediaViewModel : ScreenViewModel
     public void CycleMediaSort() => MediaSort = EnumCycleHelper.Next(MediaSort, 1);
 
     /// <summary>
-    /// Scans the Canary screenshots folder once (recursively, per-game subfolders)
-    /// and fills the media gallery, applying the current sort.
+    /// Scans the Canary screenshots folder (on a background thread) and fills the
+    /// media gallery, applying the current sort. Part of the boot pipeline so the
+    /// scan happens behind the splash screen.
     /// </summary>
-    public void EnsureScreenshotsLoaded()
+    public async Task LoadScreenshotsAsync(
+        IProgress<(string Status, double Progress)>? progress = null,
+        CancellationToken cancellationToken = default)
     {
         if (_screenshotsLoaded)
         {
@@ -111,11 +117,14 @@ public partial class MediaViewModel : ScreenViewModel
         }
 
         _screenshotsLoaded = true;
-        _screenshotLibraryService.Load();
+        progress?.Report(("Loading Media", 0.75));
+        await Task.Run(() => _screenshotLibraryService.Load(), cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
 
         Screenshots.Clear();
         foreach (ScreenshotItemViewModel screenshot in _screenshotLibraryService.Screenshots)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             Screenshots.Add(screenshot);
         }
 

@@ -14,4 +14,9 @@ public static class AppConstants
     /// How many games the dashboard's recent-games row shows.
     /// </summary>
     public const int RecentGamesLimit = 6;
+
+    /// <summary>
+    /// File name of the persisted dashboard settings (next to the executable).
+    /// </summary>
+    public const string SettingsFileName = "dashboard-settings.json";
 }

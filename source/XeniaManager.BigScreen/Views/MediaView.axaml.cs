@@ -150,7 +150,7 @@ public partial class MediaView : UserControl
             return;
         }
 
-        vm.EnsureScreenshotsLoaded();
+        // Screenshots are loaded by the boot pipeline behind the splash screen
         if (vm.Screenshots.Count > 0 && !vm.Screenshots.Any(s => s.IsSelected))
         {
             vm.Screenshots[0].IsSelected = true;

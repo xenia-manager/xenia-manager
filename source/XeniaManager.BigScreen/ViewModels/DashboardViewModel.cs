@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
@@ -40,11 +41,6 @@ public partial class DashboardViewModel : ViewModelBase
     /// Cancels in-flight background fades; only the newest request completes.
     /// </summary>
     private int _fadeGeneration;
-
-    /// <summary>
-    /// Duration of one fade leg (out to black, or in from black).
-    /// </summary>
-    private static readonly TimeSpan FadeDuration = TimeSpan.FromMilliseconds(180);
 
     /// <summary>
     /// The artwork of the currently displayed background, used to skip pointless
@@ -84,7 +80,7 @@ public partial class DashboardViewModel : ViewModelBase
     {
         int generation = ++_fadeGeneration;
         FadeOpacity = 1;
-        await Task.Delay(FadeDuration);
+        await Task.Delay(TimingConstants.FadeDuration);
         if (generation != _fadeGeneration)
         {
             return;

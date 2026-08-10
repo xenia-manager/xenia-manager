@@ -73,11 +73,6 @@ public class GamepadService : IGamepadService
     /// </summary>
     public bool IsCharging { get; private set; }
 
-    /// <summary>
-    /// How often the gamepad battery state is queried.
-    /// </summary>
-    private static readonly TimeSpan BatteryPollInterval = TimeSpan.FromSeconds(5);
-
     private readonly DispatcherTimer? _batteryTimer;
 
     public unsafe GamepadService()
@@ -126,11 +121,11 @@ public class GamepadService : IGamepadService
             IsActive = true;
             Logger.Info<GamepadService>($"Poll timer started ({_pollTimer.Interval.TotalMilliseconds}ms)");
 
-            _batteryTimer = new DispatcherTimer { Interval = BatteryPollInterval };
+            _batteryTimer = new DispatcherTimer { Interval = TimingConstants.BatteryPollInterval };
             _batteryTimer.Tick += (_, _) => PollBattery();
             _batteryTimer.Start();
             PollBattery();
-            Logger.Info<GamepadService>($"Battery timer started ({BatteryPollInterval.TotalSeconds}s)");
+            Logger.Info<GamepadService>($"Battery timer started ({TimingConstants.BatteryPollInterval.TotalSeconds}s)");
         }
         catch (Exception ex)
         {

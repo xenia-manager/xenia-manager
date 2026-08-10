@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.SplashContent">
+
+    <!-- Background is the dashboard's radial gradient, built from the saved
+         primary color in code (see SplashContent.axaml.cs) -->
+
+    <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="32">
+
+        <fluent:SymbolIcon x:Name="LogoIcon"
+                           Symbol="Tv"
+                           FontSize="96"
+                           HorizontalAlignment="Center" />
+
+        <TextBlock Text="Xenia Manager"
+                   Foreground="{DynamicResource TextPrimary}"
+                   FontSize="40"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center" />
+
+        <TextBlock x:Name="StatusText"
+                   Text="Loading…"
+                   Foreground="{DynamicResource TextSecondary}"
+                   FontSize="20"
+                   HorizontalAlignment="Center" />
+
+        <ProgressBar x:Name="LoadBar"
+                     Width="420"
+                     Height="6"
+                     Minimum="0"
+                     Maximum="100"
+                     Value="0"
+                     Background="#33FFFFFF">
+            <ProgressBar.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Value" Duration="0:0:0.4" />
+                </Transitions>
+            </ProgressBar.Transitions>
+        </ProgressBar>
+    </StackPanel>
+</UserControl>

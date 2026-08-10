@@ -72,6 +72,15 @@ public partial class SettingsViewModel : ViewModelBase
     public SettingsViewModel(IBackgroundService backgroundService)
     {
         _backgroundService = backgroundService;
+    }
+
+    /// <summary>
+    /// Loads the persisted settings and applies them to the bound properties.
+    /// Called during the boot pipeline (Loading Settings stage) - the constructor
+    /// stays cheap so the splash can appear immediately.
+    /// </summary>
+    public void Load()
+    {
         _backgroundService.Load();
         Mode = _backgroundService.Settings.Mode;
         SelectedBackgroundMode = BackgroundModeOptions.FirstOrDefault(o => o.Mode == Mode);

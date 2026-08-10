@@ -85,21 +85,11 @@ public partial class HeaderViewModel : ViewModelBase
 
     partial void OnControllerConnectedChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
 
-    /// <summary>
-    /// How often the wifi connection state is re-checked.
-    /// </summary>
-    private static readonly TimeSpan WifiPollInterval = TimeSpan.FromSeconds(10);
-
     private readonly DispatcherTimer _clockTimer;
     private readonly DispatcherTimer _wifiTimer;
 
-    public HeaderViewModel(IProfileService profileService)
+    public HeaderViewModel()
     {
-        profileService.Load();
-        Gamertag = profileService.Gamertag;
-        Gamerscore = profileService.Gamerscore;
-        Logger.Debug<HeaderViewModel>($"Profile loaded: {Gamertag} ({Gamerscore}G)");
-
         _clockTimer = new DispatcherTimer
         {
             Interval = TimingConstants.ClockUpdateInterval,
@@ -109,11 +99,23 @@ public partial class HeaderViewModel : ViewModelBase
 
         _wifiTimer = new DispatcherTimer
         {
-            Interval = WifiPollInterval,
+            Interval = TimingConstants.WifiPollInterval,
         };
         _wifiTimer.Tick += (_, _) => CheckWifi();
         _wifiTimer.Start();
         CheckWifi();
+    }
+
+    /// <summary>
+    /// Applies the loaded profile's identity. Called once the profile has been
+    /// loaded during the boot pipeline (the constructor stays cheap so the
+    /// splash screen can appear immediately).
+    /// </summary>
+    public void ApplyProfile(IProfileService profileService)
+    {
+        Gamertag = profileService.Gamertag;
+        Gamerscore = profileService.Gamerscore;
+        Logger.Debug<HeaderViewModel>($"Profile loaded: {Gamertag} ({Gamerscore}G)");
     }
 
     /// <summary>

@@ -21,7 +21,7 @@ public class BackgroundService : IBackgroundService
     /// </summary>
     private static readonly string SettingsPath = Path.Combine(
         AppContext.BaseDirectory,
-        "dashboard-settings.json");
+        AppConstants.SettingsFileName);
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {

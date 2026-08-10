@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
@@ -121,28 +122,117 @@ public partial class MainWindowViewModel : ViewModelBase
         _gameLibraryService = gameLibraryService;
         _screenshotLibraryService = screenshotLibraryService;
 
-        Header = new HeaderViewModel(profileService);
+        // The constructor stays cheap: profile, library and screenshot loading
+        // happen in InitializeAsync, behind the splash screen
+        Header = new HeaderViewModel();
         Settings = new SettingsViewModel(backgroundService);
         Library = new LibraryViewModel(Settings);
         Media = new MediaViewModel(Settings, screenshotLibraryService);
         Dashboard = new DashboardViewModel(backgroundService);
         Settings.AppearanceChanged += () => Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt);
-        LoadLibrary();
+    }
 
-        // Pre-warm the first library game's background art so the first library
-        // open doesn't pay a synchronous image decode (the splash screen will
-        // hide this boot-time work)
-        Library.Games.FirstOrDefault()?.EnsureBackgroundLoaded();
+    /// <summary>
+    /// Whether the boot pipeline (profile, library, screenshots) has completed.
+    /// </summary>
+    public bool IsInitialized { get; private set; }
 
-        Dashboard.UpdateBackground(null);
+    /// <summary>
+    /// Raised when the boot pipeline completes, so views can run their initial
+    /// selection logic (which needs the collections to be populated).
+    /// </summary>
+    public event EventHandler? InitializationCompleted;
 
-        foreach (GameCardViewModel game in Library.Games.Concat(Dashboard.RecentGames))
+    /// <summary>
+    /// Runs the boot pipeline behind the splash screen: profile, library and
+    /// screenshot loading with live status/progress, cancellable between steps.
+    /// </summary>
+    /// <summary>
+    /// Reports a stage, runs its work and holds it for the stage dwell.
+    /// </summary>
+    private static async Task StageAsync(
+        IProgress<(string Status, double Progress)>? progress,
+        string status,
+        double value,
+        CancellationToken cancellationToken,
+        Action work)
+    {
+        progress?.Report((status, value));
+        cancellationToken.ThrowIfCancellationRequested();
+        work();
+        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+    }
+
+    /// <summary>
+    /// Runs the boot pipeline behind the splash screen: profile, settings,
+    /// dashboard, library and media loading with live status/progress,
+    /// cancellable between steps.
+    /// </summary>
+    public async Task InitializeAsync(
+        IProgress<(string Status, double Progress)>? progress = null,
+        CancellationToken cancellationToken = default)
+    {
+        // Yield so the splash screen paints its first frame before any work runs
+        await Task.Yield();
+
+        await StageAsync(progress, "Loading Profile", 0.10, cancellationToken, () =>
         {
-            game.PropertyChanged += OnGameCardPropertyChanged;
+            _profileService.Load();
+            Header.ApplyProfile(_profileService);
+        });
+
+        // Loads the persisted settings and builds the background from them
+        // (Image mode decodes the configured image - too slow for the constructor)
+        await StageAsync(progress, "Loading Settings", 0.25, cancellationToken, () =>
+        {
+            Settings.Load();
+            Dashboard.UpdateBackground(null);
+        });
+
+        await StageAsync(progress, "Loading Dashboard", 0.35, cancellationToken, () =>
+        {
+            _gameLibraryService.Load();
+            foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
+            {
+                Dashboard.RecentGames.Add(CreateRecentGameCard(game));
+            }
+        });
+
+        progress?.Report(("Loading Library", 0.45));
+        cancellationToken.ThrowIfCancellationRequested();
+        int totalGames = _gameLibraryService.Games.Count;
+
+        // Per-game achievement stats are resolved off the UI thread (GPD file I/O)
+        (Game Game, GameStatInfo? Stats)[] games = await Task.Run(() =>
+            _gameLibraryService.Games
+                .Select(game => (game, _profileService.GetGameStats(game)))
+                .ToArray(), cancellationToken);
+        int loadedGames = 0;
+        foreach ((Game game, GameStatInfo? stats) in games)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Library.Games.Add(CreateGameCard(game, stats));
+            loadedGames++;
+            if (loadedGames % 10 == 0)
+            {
+                progress?.Report(("Loading Library", 0.45 + 0.30 * (double)loadedGames / Math.Max(1, totalGames)));
+            }
         }
 
+        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+        await Media.LoadScreenshotsAsync(progress, cancellationToken);
+        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+
+        // Pre-warm the first library game's background art so the first library
+        // open doesn't pay a synchronous image decode
+        Library.Games.FirstOrDefault()?.EnsureBackgroundLoaded();
+
+        IsInitialized = true;
+        InitializationCompleted?.Invoke(this, EventArgs.Empty);
         Logger.Info<MainWindowViewModel>(
             $"Dashboard ready: {Library.Games.Count} games in library, {Dashboard.RecentGames.Count} recent");
+        progress?.Report(("Loading Done", 1.0));
+        await Task.Delay(TimingConstants.DoneDwell, cancellationToken);
     }
 
     /// <summary>
@@ -199,9 +289,9 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Creates a game card wired to the shared selection handler.
     /// </summary>
-    private GameCardViewModel CreateGameCard(Game game)
+    private GameCardViewModel CreateGameCard(Game game, GameStatInfo? stats)
     {
-        GameCardViewModel card = new(game, _profileService.GetGameStats(game));
+        GameCardViewModel card = new(game, stats);
         card.PropertyChanged += OnGameCardPropertyChanged;
         return card;
     }
@@ -212,36 +302,18 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private GameCardViewModel CreateRecentGameCard(Game game)
     {
-        GameCardViewModel card = CreateGameCard(game);
+        GameCardViewModel card = CreateGameCard(game, _profileService.GetGameStats(game));
         card.EnsureBackgroundLoaded();
         return card;
-    }
-
-    /// <summary>
-    /// Loads the game library from Core and populates the library and dashboard
-    /// game cards, attaching each game's achievement stats from the loaded profile GPD.
-    /// </summary>
-    private void LoadLibrary()
-    {
-        _gameLibraryService.Load();
-        foreach (Game game in _gameLibraryService.Games)
-        {
-            Library.Games.Add(CreateGameCard(game));
-        }
-
-        foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
-        {
-            Dashboard.RecentGames.Add(CreateRecentGameCard(game));
-        }
     }
 
     /// <summary>
     /// Reloads the game library from disk and rebuilds the dashboard/library card
     /// collections so playtime and last-played values reflect the finished session.
     /// Selection is preserved per row, falling back to the first card so a card is
-    /// always selected after a refresh.
+    /// always selected after a refresh. Stats are resolved off the UI thread.
     /// </summary>
-    private void RefreshLibrary()
+    private async Task RefreshLibrary()
     {
         string? librarySelectedId = Library.Games.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
         string? recentSelectedId = Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
@@ -250,9 +322,14 @@ public partial class MainWindowViewModel : ViewModelBase
         Library.Games.Clear();
         Dashboard.RecentGames.Clear();
 
-        foreach (Game game in _gameLibraryService.Games)
+        (Game Game, GameStatInfo? Stats)[] games = await Task.Run(() =>
+            _gameLibraryService.Games
+                .Select(game => (game, _profileService.GetGameStats(game)))
+                .ToArray());
+
+        foreach ((Game game, GameStatInfo? stats) in games)
         {
-            Library.Games.Add(CreateGameCard(game));
+            Library.Games.Add(CreateGameCard(game, stats));
         }
 
         foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
@@ -290,7 +367,7 @@ public partial class MainWindowViewModel : ViewModelBase
         finally
         {
             EventManager.Instance.EnableWindow();
-            RefreshLibrary();
+            await RefreshLibrary();
         }
     }
 

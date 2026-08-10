@@ -5,6 +5,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using FluentAvalonia.UI.Windowing;
+using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
@@ -15,22 +17,20 @@ using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Views;
 
-public partial class MainWindow : Window
+public partial class MainWindow : FAAppWindow
 {
     private readonly DashboardNavigationController _navigation;
     private readonly InputRouter _router;
     private IGamepadService? _gamepadService;
 
-    public MainWindow(
-        MainWindowViewModel viewModel,
-        DashboardNavigationController navigation,
-        InputRouter router,
-        IGamepadService gamepadService)
+    public MainWindow()
     {
-        DataContext = viewModel;
-        _navigation = navigation;
-        _router = router;
-        _gamepadService = gamepadService;
+        // Resolve the injected services from the container (the XAML loader
+        // requires a public parameterless constructor)
+        DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
+        _navigation = App.Services.GetRequiredService<DashboardNavigationController>();
+        _router = App.Services.GetRequiredService<InputRouter>();
+        _gamepadService = App.Services.GetRequiredService<IGamepadService>();
 
         InitializeComponent();
         Loaded += OnLoaded;
@@ -83,7 +83,8 @@ public partial class MainWindow : Window
         EventManager.Instance.WindowDisabled += OnWindowDisabled;
         Logger.Debug<MainWindow>("Main window loaded");
 
-        // Start with the first card selected
+        // Start with the first card selected (after the boot pipeline, which
+        // runs behind the splash screen - the collections may still be empty)
         if (DataContext is MainWindowViewModel vm)
         {
             vm.QuitRequested += OnQuitRequested;
@@ -95,16 +96,32 @@ public partial class MainWindow : Window
                 vm.ApplyGamepadState(_gamepadService.IsConnected, _gamepadService.BatteryPercent, _gamepadService.IsCharging);
             }
 
-            if (vm.Dashboard.RecentGames.Count > 0)
+            if (vm.IsInitialized)
             {
-                _navigation.IsOnOptionsRow = false;
-                vm.Dashboard.RecentGames[0].IsSelected = true;
+                InitializeDashboardSelection(vm);
             }
             else
             {
-                // No games - the game row isn't available, start on the option row
-                _navigation.SelectOptionRow(vm.Dashboard);
+                vm.InitializationCompleted += (_, _) => InitializeDashboardSelection(vm);
             }
+        }
+    }
+
+    /// <summary>
+    /// Selects the first dashboard card, or falls back to the option row when
+    /// the library is empty.
+    /// </summary>
+    private void InitializeDashboardSelection(MainWindowViewModel vm)
+    {
+        if (vm.Dashboard.RecentGames.Count > 0)
+        {
+            _navigation.IsOnOptionsRow = false;
+            vm.Dashboard.RecentGames[0].IsSelected = true;
+        }
+        else
+        {
+            // No games - the game row isn't available, start on the option row
+            _navigation.SelectOptionRow(vm.Dashboard);
         }
     }
 
@@ -141,23 +158,28 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Routes keyboard input to the input router.
+    /// Routes keyboard input to the input router. Input is ignored until the
+    /// boot pipeline completes (the splash is showing) so a stray key can't
+    /// activate anything before the dashboard is ready.
     /// </summary>
     private void OnWindowKeyDown(object? sender, KeyEventArgs e)
     {
-        if (DataContext is MainWindowViewModel vm)
+        if (DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
         {
-            _router.HandleKey(vm, e, FocusManager);
+            return;
         }
+
+        _router.HandleKey(vm, e, FocusManager);
     }
 
     /// <summary>
     /// Routes gamepad input to the same actions as the keyboard. Input is ignored
-    /// while the window is disabled (game running).
+    /// while the window is disabled (game running) or before the boot pipeline
+    /// completes.
     /// </summary>
     private void OnGamepadButtonPressed(GamepadButton button)
     {
-        if (!IsEnabled || DataContext is not MainWindowViewModel vm)
+        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
         {
             return;
         }
@@ -246,10 +268,16 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Activates an option card on mouse click.
+    /// Activates an option card on mouse click. Ignored until the boot pipeline
+    /// completes so a click can't activate anything during the splash.
     /// </summary>
     private void OnOptionCardPressed(object? sender, PointerPressedEventArgs e)
     {
+        if (DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        {
+            return;
+        }
+
         if (e.Source is not Control control)
         {
             return;
@@ -258,10 +286,7 @@ public partial class MainWindow : Window
         if (control.GetSelfAndVisualAncestors().OfType<OptionsCard>().FirstOrDefault()
             is { DataContext: OptionsCardViewModel option })
         {
-            if (DataContext is MainWindowViewModel vm)
-            {
-                _navigation.HandleOptionCardPressed(vm, vm.Dashboard, option);
-            }
+            _navigation.HandleOptionCardPressed(vm, vm.Dashboard, option);
         }
     }
 }
