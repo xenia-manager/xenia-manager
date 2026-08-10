@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:controls="using:XeniaManager.BigScreen.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.MediaViewerView"
+             x:DataType="vm:MediaViewerViewModel">
+
+    <UserControl.Styles>
+        <!-- Subtle faded chevron buttons for the modal viewer -->
+        <Style Selector="Button.media-chevron">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="#B3FFFFFF" />
+            <Setter Property="Padding" Value="24" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Opacity" Value="0.45" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.media-chevron:pointerover">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="Button.media-chevron:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#26FFFFFF" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- Full-bleed viewer, covers the whole screen while open -->
+    <Panel Background="#FF0A0C10">
+
+        <Image Source="{Binding Image}"
+               Stretch="Uniform"
+               Margin="140,60" />
+
+        <Button x:Name="BtnPrev"
+                Classes="media-chevron"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Margin="40,0"
+                IsVisible="{Binding HasPrevious}"
+                Click="OnPrevClick">
+            <fluent:SymbolIcon Symbol="ChevronLeft" FontSize="48" />
+        </Button>
+
+        <Button x:Name="BtnNext"
+                Classes="media-chevron"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="40,0"
+                IsVisible="{Binding HasNext}"
+                Click="OnNextClick">
+            <fluent:SymbolIcon Symbol="ChevronRight" FontSize="48" />
+        </Button>
+
+        <!-- Modal footer: close hint bottom left, caption bottom right -->
+        <Grid ColumnDefinitions="*, Auto"
+              VerticalAlignment="Bottom"
+              Margin="40,0,40,37">
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Close" />
+            </StackPanel>
+            <StackPanel Grid.Column="1"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Right"
+                        Spacing="4"
+                        VerticalAlignment="Center">
+                <TextBlock Text="{Binding GameTitle}"
+                           Foreground="{DynamicResource TextPrimary}"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           TextAlignment="Right" />
+                <TextBlock Text="{Binding CapturedAtText}"
+                           Foreground="{DynamicResource TextSecondary}"
+                           FontSize="16"
+                           TextAlignment="Right" />
+            </StackPanel>
+        </Grid>
+    </Panel>
+</UserControl>

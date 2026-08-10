@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.Services;
 
@@ -33,71 +34,25 @@ public class BackgroundService
     public DashboardSettings Settings { get; private set; } = new();
 
     /// <summary>
-    /// Loads the persisted settings, falling back to defaults when the file is missing or corrupt,
-    /// then applies the style tokens to the application resources.
+    /// Linearly interpolates between two colors.
     /// </summary>
-    public void Load()
+    private static Color Mix(Color from, Color to, double amount)
     {
-        try
-        {
-            if (File.Exists(SettingsPath))
-            {
-                DashboardSettings? loaded = JsonSerializer.Deserialize<DashboardSettings>(
-                    File.ReadAllText(SettingsPath), JsonOptions);
-                if (loaded != null)
-                {
-                    Settings = loaded;
-                }
-            }
-        }
-        catch (Exception)
-        {
-            // Corrupt settings - fall back to defaults
-        }
-
-        ApplyResources();
+        return Color.FromRgb(
+            (byte)Math.Round(from.R + (to.R - from.R) * amount),
+            (byte)Math.Round(from.G + (to.G - from.G) * amount),
+            (byte)Math.Round(from.B + (to.B - from.B) * amount));
     }
 
     /// <summary>
-    /// Saves the current settings to disk and re-applies the style tokens.
+    /// Blends the color toward white by the given amount (0-1).
     /// </summary>
-    public void Save()
-    {
-        try
-        {
-            File.WriteAllText(SettingsPath, JsonSerializer.Serialize(Settings, JsonOptions));
-        }
-        catch (Exception)
-        {
-            // Ignore save failures - the styling just won't persist
-        }
-
-        ApplyResources();
-    }
+    private static Color MixWithWhite(Color color, double amount) => Mix(color, Colors.White, amount);
 
     /// <summary>
-    /// Pushes the user-facing style tokens into the application resources so
-    /// DynamicResource bindings pick them up. Called on load and after every change.
+    /// Blends the color toward black by the given amount (0-1).
     /// </summary>
-    public void ApplyResources()
-    {
-        IResourceDictionary? resources = Application.Current?.Resources;
-        if (resources == null)
-        {
-            return;
-        }
-
-        resources["AccentColor"] = new SolidColorBrush(Settings.AccentColor);
-        resources["SystemAccentColor"] = Settings.AccentColor;
-        resources["SystemAccentColorBrush"] = new SolidColorBrush(Settings.AccentColor);
-        resources["SystemAccentColorLight1"] = AdjustAccent(0.15);
-        resources["SystemAccentColorLight2"] = AdjustAccent(0.30);
-        resources["SystemAccentColorLight3"] = AdjustAccent(0.45);
-        resources["SystemAccentColorDark1"] = AdjustAccent(-0.15);
-        resources["SystemAccentColorDark2"] = AdjustAccent(-0.30);
-        resources["SystemAccentColorDark3"] = AdjustAccent(-0.45);
-        resources["BackgroundVignette"] = CreateVignetteBrush();
-    }
+    private static Color MixWithBlack(Color color, double amount) => Mix(color, Colors.Black, amount);
 
     /// <summary>
     /// Lightens (positive) or darkens (negative) the accent colour by the given amount.
@@ -111,28 +66,6 @@ public class BackgroundService
         }
 
         return Mix(c, Colors.Black, -amount);
-    }
-
-    /// <summary>
-    /// Builds the brush for the current settings and the optionally selected game artwork.
-    /// </summary>
-    /// <param name="selectedGameArt">Artwork of the currently selected game (Dynamic mode only).</param>
-    public IBrush? GetBackground(Bitmap? selectedGameArt)
-    {
-        return Settings.Mode switch
-        {
-            BackgroundMode.Image => CreateImageBrush(),
-            BackgroundMode.Solid => new SolidColorBrush(Settings.PrimaryColor),
-            BackgroundMode.LinearGradient => CreateLinearBrush(),
-            BackgroundMode.RadialGradient => CreateRadialBrush(),
-            BackgroundMode.Dynamic => selectedGameArt != null
-                ? new ImageBrush(selectedGameArt)
-                {
-                    Stretch = Stretch.UniformToFill,
-                }
-                : CreateRadialBrush(),
-            _ => CreateLinearBrush(),
-        };
     }
 
     /// <summary>
@@ -176,9 +109,11 @@ public class BackgroundService
                 };
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // Unreadable image - fall through to null
+            Logger.Warning<BackgroundService>($"Failed to load background image '{Settings.ImagePath}'");
+            Logger.LogExceptionDetails<BackgroundService>(ex);
         }
 
         return null;
@@ -227,23 +162,95 @@ public class BackgroundService
     }
 
     /// <summary>
-    /// Blends the color toward white by the given amount (0-1).
+    /// Pushes the user-facing style tokens into the application resources so
+    /// DynamicResource bindings pick them up. Called on load and after every change.
     /// </summary>
-    private static Color MixWithWhite(Color color, double amount) => Mix(color, Colors.White, amount);
-
-    /// <summary>
-    /// Blends the color toward black by the given amount (0-1).
-    /// </summary>
-    private static Color MixWithBlack(Color color, double amount) => Mix(color, Colors.Black, amount);
-
-    /// <summary>
-    /// Linearly interpolates between two colors.
-    /// </summary>
-    private static Color Mix(Color from, Color to, double amount)
+    public void ApplyResources()
     {
-        return Color.FromRgb(
-            (byte)Math.Round(from.R + (to.R - from.R) * amount),
-            (byte)Math.Round(from.G + (to.G - from.G) * amount),
-            (byte)Math.Round(from.B + (to.B - from.B) * amount));
+        IResourceDictionary? resources = Application.Current?.Resources;
+        if (resources == null)
+        {
+            return;
+        }
+
+        resources["AccentColor"] = new SolidColorBrush(Settings.AccentColor);
+        resources["SystemAccentColor"] = Settings.AccentColor;
+        resources["SystemAccentColorBrush"] = new SolidColorBrush(Settings.AccentColor);
+        resources["SystemAccentColorLight1"] = AdjustAccent(0.15);
+        resources["SystemAccentColorLight2"] = AdjustAccent(0.30);
+        resources["SystemAccentColorLight3"] = AdjustAccent(0.45);
+        resources["SystemAccentColorDark1"] = AdjustAccent(-0.15);
+        resources["SystemAccentColorDark2"] = AdjustAccent(-0.30);
+        resources["SystemAccentColorDark3"] = AdjustAccent(-0.45);
+        resources["BackgroundVignette"] = CreateVignetteBrush();
+    }
+
+    /// <summary>
+    /// Builds the brush for the current settings and the optionally selected game artwork.
+    /// </summary>
+    /// <param name="selectedGameArt">Artwork of the currently selected game (Dynamic mode only).</param>
+    public IBrush? GetBackground(Bitmap? selectedGameArt)
+    {
+        return Settings.Mode switch
+        {
+            BackgroundMode.Image => CreateImageBrush(),
+            BackgroundMode.Solid => new SolidColorBrush(Settings.PrimaryColor),
+            BackgroundMode.LinearGradient => CreateLinearBrush(),
+            BackgroundMode.RadialGradient => CreateRadialBrush(),
+            BackgroundMode.Dynamic => selectedGameArt != null
+                ? new ImageBrush(selectedGameArt)
+                {
+                    Stretch = Stretch.UniformToFill,
+                }
+                : CreateRadialBrush(),
+            _ => CreateLinearBrush(),
+        };
+    }
+
+    /// <summary>
+    /// Loads the persisted settings, falling back to defaults when the file is missing or corrupt,
+    /// then applies the style tokens to the application resources.
+    /// </summary>
+    public void Load()
+    {
+        try
+        {
+            if (File.Exists(SettingsPath))
+            {
+                DashboardSettings? loaded = JsonSerializer.Deserialize<DashboardSettings>(
+                    File.ReadAllText(SettingsPath), JsonOptions);
+                if (loaded != null)
+                {
+                    Settings = loaded;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Corrupt settings - fall back to defaults
+            Logger.Error<BackgroundService>("Failed to load dashboard settings, falling back to defaults");
+            Logger.LogExceptionDetails<BackgroundService>(ex);
+        }
+
+        ApplyResources();
+    }
+
+    /// <summary>
+    /// Saves the current settings to disk and re-applies the style tokens.
+    /// </summary>
+    public void Save()
+    {
+        try
+        {
+            File.WriteAllText(SettingsPath, JsonSerializer.Serialize(Settings, JsonOptions));
+        }
+        catch (Exception ex)
+        {
+            // Ignore save failures - the styling just won't persist
+            Logger.Error<BackgroundService>("Failed to save dashboard settings");
+            Logger.LogExceptionDetails<BackgroundService>(ex);
+        }
+
+        ApplyResources();
     }
 }

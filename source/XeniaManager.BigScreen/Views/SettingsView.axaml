@@ -5,8 +5,8 @@
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
-             x:Class="XeniaManager.BigScreen.Controls.SettingsOverlay"
-             x:DataType="vm:MainWindowViewModel"
+             x:Class="XeniaManager.BigScreen.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel"
              Background="{Binding ScreenBackground}">
 
     <UserControl.Styles>
@@ -153,7 +153,7 @@
                         Padding="24,16"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
-                        <Button x:Name="SelectImageButton"
+                        <Button x:Name="BtnSelectImage"
                                 DockPanel.Dock="Right"
                                 Content="Select Image"
                                 FontSize="20"
@@ -180,7 +180,7 @@
                         Padding="24,16"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
-                        <CheckBox x:Name="QuitBehaviourCheck"
+                        <CheckBox x:Name="ChkQuitBehaviour"
                                   DockPanel.Dock="Right"
                                   IsChecked="{Binding ReturnToXeniaOnQuit}"
                                   Padding="12,8"

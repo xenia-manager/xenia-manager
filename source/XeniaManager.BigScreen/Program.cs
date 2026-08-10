@@ -1,5 +1,5 @@
-﻿using Avalonia;
-using System;
+﻿using System;
+using Avalonia;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.Core.Utilities;
 
@@ -14,7 +14,7 @@ sealed class Program
     public static void Main(string[] args)
     {
         // Share the base Xenia Manager's data folders (library, games, artwork, profiles)
-        AppPathResolver.SetBaseDirectory(BaseAppLocator.Resolve(args));
+        AppPathResolver.SetBaseDirectory(BaseAppLocator.Resolve(args) ?? string.Empty);
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }

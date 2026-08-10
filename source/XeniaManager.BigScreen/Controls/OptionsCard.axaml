@@ -10,9 +10,17 @@
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
     <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="8">
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="24" Spacing="16">
-            <fluent:SymbolIcon Symbol="{Binding Icon}" FontSize="32" Foreground="{DynamicResource TextPrimary}" />
-            <TextBlock Text="{Binding Title}" Foreground="{DynamicResource TextPrimary}" FontSize="22" VerticalAlignment="Center" />
+        <StackPanel Margin="24"
+                    Orientation="Horizontal"
+                    Spacing="16"
+                    VerticalAlignment="Center">
+            <fluent:SymbolIcon Symbol="{Binding Icon}"
+                               Foreground="{DynamicResource TextPrimary}"
+                               FontSize="32" />
+            <TextBlock Text="{Binding Title}"
+                       Foreground="{DynamicResource TextPrimary}"
+                       VerticalAlignment="Center"
+                       FontSize="22" />
         </StackPanel>
     </Border>
 </UserControl>

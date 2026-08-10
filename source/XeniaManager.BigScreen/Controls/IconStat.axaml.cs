@@ -31,7 +31,7 @@ public partial class IconStat : UserControl
     /// <summary>
     /// Defines the <see cref="FontSize"/> property.
     /// </summary>
-    public static readonly StyledProperty<double> FontSizeProperty =
+    public static new readonly StyledProperty<double> FontSizeProperty =
         AvaloniaProperty.Register<IconStat, double>(nameof(FontSize), 15);
 
     /// <summary>
@@ -76,7 +76,7 @@ public partial class IconStat : UserControl
     /// <summary>
     /// The stat text size in pixels.
     /// </summary>
-    public double FontSize
+    public new double FontSize
     {
         get => GetValue(FontSizeProperty);
         set => SetValue(FontSizeProperty, value);

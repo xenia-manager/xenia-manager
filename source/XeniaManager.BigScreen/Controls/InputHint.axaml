@@ -8,29 +8,29 @@
              x:Name="Root">
     <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
         <Border x:Name="KeyBox"
-                CornerRadius="16"
-                MinWidth="32"
-                MinHeight="32"
                 Background="Transparent"
+                MinHeight="32"
+                MinWidth="32"
                 BorderThickness="2"
-                BoxShadow="0 2 6 0 #40000000">
+                BoxShadow="0 2 6 0 #40000000"
+                CornerRadius="16">
             <Grid>
                 <fluent:SymbolIcon x:Name="IconElement"
-                                   FontSize="18"
                                    HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center"
+                                   FontSize="18" />
                 <TextBlock x:Name="CharElement"
                            Text="{Binding #Root.Char}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
                            FontFamily="Cascadia Mono"
                            FontSize="15"
-                           FontWeight="SemiBold"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
+                           FontWeight="SemiBold" />
             </Grid>
         </Border>
         <TextBlock Text="{Binding #Root.Text}"
                    Foreground="{DynamicResource TextPrimary}"
-                   FontSize="20"
-                   VerticalAlignment="Center" />
+                   VerticalAlignment="Center"
+                   FontSize="20" />
     </StackPanel>
 </UserControl>

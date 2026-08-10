@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+    <Grid RowDefinitions="*, 300, 200">
+
+        <!-- GAME CARDS ROW -->
+        <Grid Grid.Row="1" VerticalAlignment="Bottom" Height="300">
+
+            <!-- Empty-library stub: subtle disc card, shown when there are no games -->
+            <Border Width="200" Height="250"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Background="{DynamicResource CardBackground}"
+                    CornerRadius="8"
+                    IsVisible="{Binding ShowEmptyStub}"
+                    IsHitTestVisible="False">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Spacing="12">
+                    <fluent:SymbolIcon Symbol="PlayCircle"
+                                       FontSize="64"
+                                       Foreground="{DynamicResource TextSecondary}"
+                                       HorizontalAlignment="Center" />
+                    <TextBlock Text="No games found"
+                               Foreground="{DynamicResource TextSecondary}"
+                               FontSize="16"
+                               TextAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <ItemsControl x:Name="GamesRow"
+                          ItemsSource="{Binding RecentGames}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="25" VerticalAlignment="Bottom" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+
+        <!-- OPTION CARDS ROW -->
+        <ItemsControl x:Name="OptionsRow"
+                      Grid.Row="2"
+                      ItemsSource="{Binding Options}"
+                      VerticalAlignment="Bottom">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Bottom" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+    </Grid>
+</UserControl>

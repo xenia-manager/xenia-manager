@@ -12,7 +12,7 @@ namespace XeniaManager.BigScreen.Services;
 /// D-pad, left-stick and bumper input all normalize onto the D-pad values.
 /// Fails gracefully when SDL can't be initialized (e.g. no native runtime).
 /// </summary>
-public class GamepadService : IDisposable
+public class GamepadService : IGamepadService
 {
     /// <summary>
     /// Raised on the UI thread when a navigation-relevant button is pressed.
@@ -36,7 +36,7 @@ public class GamepadService : IDisposable
     private bool _stickUpHeld;
     private bool _stickDownHeld;
 
-    private readonly DispatcherTimer _pollTimer;
+    private readonly DispatcherTimer? _pollTimer;
 
     /// <summary>
     /// The opened gamepad handle; gamepad button/axis events only flow while open.
@@ -99,7 +99,7 @@ public class GamepadService : IDisposable
 
             // Report which gamepads SDL sees right now, opening the first one so
             // button/axis events flow (SDL3 only delivers them for open gamepads)
-            var gamepads = SDL3.SDL_GetGamepads();
+            SDLArray<SDL_JoystickID>? gamepads = SDL3.SDL_GetGamepads();
             if (gamepads != null)
             {
                 int count = 0;
@@ -136,6 +136,176 @@ public class GamepadService : IDisposable
         {
             Logger.Error<GamepadService>("Failed to initialize SDL gamepad input");
             Logger.LogExceptionDetails<GamepadService>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Maps an SDL gamepad button to a BigScreen button and raises it.
+    /// </summary>
+    private void HandleButtonDown(SDL_GamepadButtonEvent e)
+    {
+        SDL_GamepadButton sdlButton = e.Button;
+        Logger.Trace<GamepadService>($"Button down: {sdlButton} (raw {e.button}, gamepad {e.which})");
+
+        GamepadButton? mapped = sdlButton switch
+        {
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_SOUTH => GamepadButton.A,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_EAST => GamepadButton.B,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_WEST => GamepadButton.X,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_NORTH => GamepadButton.Y,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_LEFT => GamepadButton.DpadLeft,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_RIGHT => GamepadButton.DpadRight,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_UP => GamepadButton.DpadUp,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_DOWN => GamepadButton.DpadDown,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_LEFT_SHOULDER => GamepadButton.LeftShoulder,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER => GamepadButton.RightShoulder,
+            _ => null,
+        };
+
+        if (mapped == null)
+        {
+            Logger.Trace<GamepadService>($"Button {sdlButton} not mapped, ignoring");
+            return;
+        }
+
+        Logger.Debug<GamepadService>($"Raising {mapped.Value} (from {sdlButton})");
+        ButtonPressed?.Invoke(mapped.Value);
+    }
+
+    /// <summary>
+    /// Tracks one stick axis, raising a press only when a direction is newly
+    /// entered (no repeat while held, no press when returning to center).
+    /// </summary>
+    private void TrackAxis(
+        ref bool negativeHeld,
+        ref bool positiveHeld,
+        short value,
+        GamepadButton negativeButton,
+        GamepadButton positiveButton)
+    {
+        if (value < -AxisDeadzone)
+        {
+            if (!negativeHeld && !positiveHeld)
+            {
+                Logger.Debug<GamepadService>($"Stick crossed negative deadzone (value {value}), raising {negativeButton}");
+                ButtonPressed?.Invoke(negativeButton);
+            }
+
+            negativeHeld = true;
+            positiveHeld = false;
+        }
+        else if (value > AxisDeadzone)
+        {
+            if (!positiveHeld && !negativeHeld)
+            {
+                Logger.Debug<GamepadService>($"Stick crossed positive deadzone (value {value}), raising {positiveButton}");
+                ButtonPressed?.Invoke(positiveButton);
+            }
+
+            positiveHeld = true;
+            negativeHeld = false;
+        }
+        else
+        {
+            if (negativeHeld || positiveHeld)
+            {
+                Logger.Trace<GamepadService>($"Stick returned to center (value {value})");
+            }
+
+            negativeHeld = false;
+            positiveHeld = false;
+        }
+    }
+
+    /// <summary>
+    /// Tracks the left stick axes, raising a press only when a direction is
+    /// newly entered (no repeat while held, no press when returning to center).
+    /// </summary>
+    private void HandleAxisMotion(SDL_GamepadAxisEvent e)
+    {
+        SDL_GamepadAxis axis = e.Axis;
+        short value = e.value;
+        Logger.Trace<GamepadService>($"Axis motion: {axis} (raw {e.axis}, value {value}, gamepad {e.which})");
+
+        switch (axis)
+        {
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX:
+                TrackAxis(ref _stickLeftHeld, ref _stickRightHeld, value, GamepadButton.DpadLeft, GamepadButton.DpadRight);
+                break;
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY:
+                TrackAxis(ref _stickUpHeld, ref _stickDownHeld, value, GamepadButton.DpadUp, GamepadButton.DpadDown);
+                break;
+            default:
+                Logger.Trace<GamepadService>($"Axis {axis} not tracked, ignoring");
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Queries the open gamepad's battery state and raises <see cref="StateChanged"/>
+    /// when it changed.
+    /// </summary>
+    private unsafe void PollBattery()
+    {
+        if (_gamepad == null)
+        {
+            return;
+        }
+
+        int percent;
+        SDL_PowerState state = SDL3.SDL_GetGamepadPowerInfo(_gamepad, &percent);
+        Logger.Trace<GamepadService>($"Battery poll: state={state}, percent={percent}");
+
+        int newPercent = percent;
+        bool newCharging = state is SDL_PowerState.SDL_POWERSTATE_CHARGING or SDL_PowerState.SDL_POWERSTATE_CHARGED;
+        if (state is SDL_PowerState.SDL_POWERSTATE_NO_BATTERY or SDL_PowerState.SDL_POWERSTATE_UNKNOWN
+            or SDL_PowerState.SDL_POWERSTATE_ERROR)
+        {
+            newPercent = -1;
+        }
+
+        if (newPercent != BatteryPercent || newCharging != IsCharging)
+        {
+            BatteryPercent = newPercent;
+            IsCharging = newCharging;
+            StateChanged?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// Opens a gamepad by joystick ID so SDL delivers its button/axis events.
+    /// </summary>
+    private unsafe void OpenGamepad(SDL_JoystickID id)
+    {
+        _gamepad = SDL3.SDL_OpenGamepad(id);
+        if (_gamepad == null)
+        {
+            Logger.Warning<GamepadService>($"Failed to open gamepad {id}: {SDL3.SDL_GetError()}");
+            return;
+        }
+
+        _gamepadWhich = id;
+        IsConnected = true;
+        PollBattery();
+        Logger.Info<GamepadService>($"Opened gamepad {id}: {SDL3.SDL_GetGamepadName(_gamepad)}");
+        StateChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Closes the currently open gamepad, if any.
+    /// </summary>
+    private unsafe void CloseGamepad()
+    {
+        if (_gamepad != null)
+        {
+            Logger.Info<GamepadService>($"Closing gamepad {_gamepadWhich}");
+            SDL3.SDL_CloseGamepad(_gamepad);
+            _gamepad = null;
+            _gamepadWhich = 0;
+            IsConnected = false;
+            BatteryPercent = -1;
+            IsCharging = false;
+            StateChanged?.Invoke();
         }
     }
 
@@ -185,195 +355,6 @@ public class GamepadService : IDisposable
         if (eventsProcessed > 0)
         {
             Logger.Trace<GamepadService>($"Poll cycle processed {eventsProcessed} event(s)");
-        }
-    }
-
-    /// <summary>
-    /// Maps an SDL gamepad button to a BigScreen button and raises it.
-    /// </summary>
-    private void HandleButtonDown(SDL_GamepadButtonEvent e)
-    {
-        SDL_GamepadButton sdlButton = e.Button;
-        Logger.Trace<GamepadService>($"Button down: {sdlButton} (raw {e.button}, gamepad {e.which})");
-
-        GamepadButton? mapped = sdlButton switch
-        {
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_SOUTH => GamepadButton.A,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_EAST => GamepadButton.B,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_WEST => GamepadButton.X,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_NORTH => GamepadButton.Y,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_LEFT => GamepadButton.DpadLeft,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_RIGHT => GamepadButton.DpadRight,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_UP => GamepadButton.DpadUp,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_DOWN => GamepadButton.DpadDown,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_LEFT_SHOULDER => GamepadButton.LeftShoulder,
-            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER => GamepadButton.RightShoulder,
-            _ => null,
-        };
-
-        if (mapped == null)
-        {
-            Logger.Trace<GamepadService>($"Button {sdlButton} not mapped, ignoring");
-            return;
-        }
-
-        Logger.Debug<GamepadService>($"Raising {mapped.Value} (from {sdlButton})");
-        ButtonPressed?.Invoke(mapped.Value);
-    }
-
-    /// <summary>
-    /// Tracks the left stick axes, raising a press only when a direction is
-    /// newly entered (no repeat while held, no press when returning to center).
-    /// </summary>
-    private void HandleAxisMotion(SDL_GamepadAxisEvent e)
-    {
-        SDL_GamepadAxis axis = e.Axis;
-        short value = e.value;
-        Logger.Trace<GamepadService>($"Axis motion: {axis} (raw {e.axis}, value {value}, gamepad {e.which})");
-
-        switch (axis)
-        {
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX:
-                if (value < -AxisDeadzone)
-                {
-                    if (!_stickLeftHeld && !_stickRightHeld)
-                    {
-                        Logger.Debug<GamepadService>($"Stick X crossed left deadzone (value {value}), raising DpadLeft");
-                        ButtonPressed?.Invoke(GamepadButton.DpadLeft);
-                    }
-
-                    _stickLeftHeld = true;
-                    _stickRightHeld = false;
-                }
-                else if (value > AxisDeadzone)
-                {
-                    if (!_stickRightHeld && !_stickLeftHeld)
-                    {
-                        Logger.Debug<GamepadService>($"Stick X crossed right deadzone (value {value}), raising DpadRight");
-                        ButtonPressed?.Invoke(GamepadButton.DpadRight);
-                    }
-
-                    _stickRightHeld = true;
-                    _stickLeftHeld = false;
-                }
-                else
-                {
-                    if (_stickLeftHeld || _stickRightHeld)
-                    {
-                        Logger.Trace<GamepadService>($"Stick X returned to center (value {value})");
-                    }
-
-                    _stickLeftHeld = false;
-                    _stickRightHeld = false;
-                }
-
-                break;
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY:
-                if (value < -AxisDeadzone)
-                {
-                    if (!_stickUpHeld && !_stickDownHeld)
-                    {
-                        Logger.Debug<GamepadService>($"Stick Y crossed up deadzone (value {value}), raising DpadUp");
-                        ButtonPressed?.Invoke(GamepadButton.DpadUp);
-                    }
-
-                    _stickUpHeld = true;
-                    _stickDownHeld = false;
-                }
-                else if (value > AxisDeadzone)
-                {
-                    if (!_stickDownHeld && !_stickUpHeld)
-                    {
-                        Logger.Debug<GamepadService>($"Stick Y crossed down deadzone (value {value}), raising DpadDown");
-                        ButtonPressed?.Invoke(GamepadButton.DpadDown);
-                    }
-
-                    _stickDownHeld = true;
-                    _stickUpHeld = false;
-                }
-                else
-                {
-                    if (_stickUpHeld || _stickDownHeld)
-                    {
-                        Logger.Trace<GamepadService>($"Stick Y returned to center (value {value})");
-                    }
-
-                    _stickUpHeld = false;
-                    _stickDownHeld = false;
-                }
-
-                break;
-            default:
-                Logger.Trace<GamepadService>($"Axis {axis} not tracked, ignoring");
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Opens a gamepad by joystick ID so SDL delivers its button/axis events.
-    /// </summary>
-    private unsafe void OpenGamepad(SDL_JoystickID id)
-    {
-        _gamepad = SDL3.SDL_OpenGamepad(id);
-        if (_gamepad == null)
-        {
-            Logger.Warning<GamepadService>($"Failed to open gamepad {id}: {SDL3.SDL_GetError()}");
-            return;
-        }
-
-        _gamepadWhich = id;
-        IsConnected = true;
-        PollBattery();
-        Logger.Info<GamepadService>($"Opened gamepad {id}: {SDL3.SDL_GetGamepadName(_gamepad)}");
-        StateChanged?.Invoke();
-    }
-
-    /// <summary>
-    /// Closes the currently open gamepad, if any.
-    /// </summary>
-    private unsafe void CloseGamepad()
-    {
-        if (_gamepad != null)
-        {
-            Logger.Info<GamepadService>($"Closing gamepad {_gamepadWhich}");
-            SDL3.SDL_CloseGamepad(_gamepad);
-            _gamepad = null;
-            _gamepadWhich = 0;
-            IsConnected = false;
-            BatteryPercent = -1;
-            IsCharging = false;
-            StateChanged?.Invoke();
-        }
-    }
-
-    /// <summary>
-    /// Queries the open gamepad's battery state and raises <see cref="StateChanged"/>
-    /// when it changed.
-    /// </summary>
-    private unsafe void PollBattery()
-    {
-        if (_gamepad == null)
-        {
-            return;
-        }
-
-        int percent;
-        SDL_PowerState state = SDL3.SDL_GetGamepadPowerInfo(_gamepad, &percent);
-        Logger.Trace<GamepadService>($"Battery poll: state={state}, percent={percent}");
-
-        int newPercent = percent;
-        bool newCharging = state is SDL_PowerState.SDL_POWERSTATE_CHARGING or SDL_PowerState.SDL_POWERSTATE_CHARGED;
-        if (state is SDL_PowerState.SDL_POWERSTATE_NO_BATTERY or SDL_PowerState.SDL_POWERSTATE_UNKNOWN
-            or SDL_PowerState.SDL_POWERSTATE_ERROR)
-        {
-            newPercent = -1;
-        }
-
-        if (newPercent != BatteryPercent || newCharging != IsCharging)
-        {
-            BatteryPercent = newPercent;
-            IsCharging = newCharging;
-            StateChanged?.Invoke();
         }
     }
 

@@ -3,6 +3,7 @@
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
         xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:controls="using:XeniaManager.BigScreen.Controls"
+        xmlns:views="using:XeniaManager.BigScreen.Views"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,7 +15,7 @@
         Width="1920" Height="1080"
         WindowState="FullScreen"
         WindowStartupLocation="CenterScreen"
-        Background="{Binding Background}">
+        Background="{Binding Dashboard.Background}">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -46,13 +47,13 @@
         <!-- Vignette overlay over the background (ignores input, images only) -->
         <Border Grid.RowSpan="2" Grid.ColumnSpan="3"
                 Background="{DynamicResource BackgroundVignette}"
-                IsVisible="{Binding VignetteVisible}"
+                IsVisible="{Binding Dashboard.VignetteVisible}"
                 IsHitTestVisible="False" />
 
         <!-- Black fade overlay for background transitions (ignores input) -->
-        <Border Grid.RowSpan="2" Grid.ColumnSpan="3"
+        <Border Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Grid.Column="0"
                 Background="Black"
-                Opacity="{Binding FadeOpacity}"
+                Opacity="{Binding Dashboard.FadeOpacity}"
                 IsHitTestVisible="False">
             <Border.Transitions>
                 <Transitions>
@@ -62,7 +63,9 @@
         </Border>
 
         <!-- TOP DASHBOARD HEADER -->
-        <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="Auto, *, Auto" VerticalAlignment="Center">
+        <Grid Grid.Row="0" Grid.Column="1"
+              ColumnDefinitions="Auto, *, Auto"
+              VerticalAlignment="Center">
 
             <!-- PROFILE (LEFT) -->
             <StackPanel Grid.Column="0"
@@ -78,11 +81,11 @@
                                        VerticalAlignment="Center" />
                 </Border>
                 <StackPanel VerticalAlignment="Center" Margin="0,-4,0,0">
-                    <TextBlock Classes="header-text" Text="{Binding Gamertag}"
+                    <TextBlock Classes="header-text" Text="{Binding Header.Gamertag}"
                                Foreground="{DynamicResource TextPrimary}"
                                FontSize="18"
                                FontWeight="Bold" />
-                    <controls:IconStat Icon="Star" Stat="{Binding Gamerscore}" IconSize="13" FontSize="13" />
+                    <controls:IconStat Icon="Star" Stat="{Binding Header.Gamerscore}" IconSize="13" FontSize="13" />
                 </StackPanel>
             </StackPanel>
 
@@ -93,20 +96,20 @@
                         VerticalAlignment="Center"
                         Spacing="16">
                 <Grid Width="26" Height="26">
-                    <fluent:SymbolIcon Symbol="{Binding WifiIcon}"
+                    <fluent:SymbolIcon Symbol="{Binding Header.WifiIcon}"
                                        FontSize="24"
                                        Foreground="{DynamicResource TextPrimary}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center" />
                 </Grid>
                 <Grid Width="26" Height="26">
-                    <fluent:SymbolIcon Symbol="{Binding BatteryIcon}"
+                    <fluent:SymbolIcon Symbol="{Binding Header.BatteryIcon}"
                                        FontSize="24"
                                        Foreground="{DynamicResource TextPrimary}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center" />
                 </Grid>
-                <TextBlock Classes="header-text" Text="{Binding Time}"
+                <TextBlock Classes="header-text" Text="{Binding Header.Time}"
                            Foreground="{DynamicResource TextPrimary}"
                            FontSize="18"
                            VerticalAlignment="Center"
@@ -116,67 +119,25 @@
         </Grid>
 
         <!-- MAIN DASHBOARD CONTENT -->
-        <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="*, 300, 200" Margin="0,0,0,80">
-
-            <!-- GAME CARDS ROW -->
-            <Grid Grid.Row="1" VerticalAlignment="Bottom" Height="300">
-
-                <!-- Empty-library stub: subtle disc card, shown when there are no games -->
-                <Border Width="200" Height="250"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Bottom"
-                        Background="{DynamicResource CardBackground}"
-                        CornerRadius="8"
-                        IsVisible="{Binding ShowEmptyStub}"
-                        IsHitTestVisible="False">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="12">
-                        <fluent:SymbolIcon Symbol="PlayCircle"
-                                           FontSize="64"
-                                           Foreground="{DynamicResource TextSecondary}"
-                                           HorizontalAlignment="Center" />
-                        <TextBlock Text="No games found"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   FontSize="16"
-                                   TextAlignment="Center" />
-                    </StackPanel>
-                </Border>
-
-                <ItemsControl x:Name="GamesRow"
-                              ItemsSource="{Binding RecentGames}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="25" VerticalAlignment="Bottom" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </Grid>
-
-            <!-- OPTION CARDS ROW -->
-            <ItemsControl x:Name="OptionsRow"
-                          Grid.Row="2"
-                          ItemsSource="{Binding Options}"
-                          VerticalAlignment="Bottom">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Bottom" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-
-        </Grid>
+        <ContentControl Grid.Row="1" Grid.Column="1"
+                        Content="{Binding Dashboard}"
+                        Margin="0,0,0,80" />
 
         <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
-        <Panel Grid.RowSpan="2" Grid.ColumnSpan="3"
+        <Panel Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Grid.Column="0"
                IsVisible="{Binding IsOverlayOpen}"
                IsHitTestVisible="{Binding IsOverlayOpen}">
             <!-- Full-screen backdrop -->
             <Border Background="#E60A0C10" />
-            <Grid>
-                <controls:LibraryOverlay IsVisible="{Binding IsLibraryScreen}" />
-                <controls:MediaOverlay IsVisible="{Binding IsMediaScreen}" />
-                <controls:SettingsOverlay IsVisible="{Binding IsSettingsScreen}" />
+            <!-- Screens are created at startup; opening just flips visibility -->
+            <Grid IsVisible="{Binding IsLibraryScreen}">
+                <views:LibraryView DataContext="{Binding Library}" />
+            </Grid>
+            <Grid IsVisible="{Binding IsMediaScreen}">
+                <views:MediaView DataContext="{Binding Media}" />
+            </Grid>
+            <Grid IsVisible="{Binding IsSettingsScreen}">
+                <views:SettingsView DataContext="{Binding Settings}" />
             </Grid>
         </Panel>
     </Grid>

@@ -12,19 +12,19 @@
         <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="12" />
         <Border x:Name="ArtClip" CornerRadius="6" ClipToBounds="True">
             <Image Source="{Binding Image}"
-                   Stretch="UniformToFill"
+                   IsVisible="{Binding HasImage}"
                    VerticalAlignment="Bottom"
-                   IsVisible="{Binding HasImage}" />
+                   Stretch="UniformToFill" />
         </Border>
         <Border x:Name="TitleBar"
-                VerticalAlignment="Bottom"
                 Background="{DynamicResource CardTitleBar}"
-                CornerRadius="0,0,8,8"
-                IsVisible="{Binding IsSelected}">
+                IsVisible="{Binding IsSelected}"
+                VerticalAlignment="Bottom"
+                CornerRadius="0,0,8,8">
             <TextBlock Text="{Binding GameTitle}"
                        Foreground="{DynamicResource TextPrimary}"
-                       FontSize="15"
                        Padding="20"
+                       FontSize="15"
                        TextTrimming="CharacterEllipsis" />
         </Border>
         <Border x:Name="BorderOverlay"

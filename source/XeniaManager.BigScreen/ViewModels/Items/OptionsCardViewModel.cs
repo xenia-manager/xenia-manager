@@ -1,12 +1,13 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
 /// <summary>
 /// ViewModel for a single option/menu tile on the dashboard's bottom row.
 /// </summary>
-public partial class OptionsCardViewModel : ObservableObject
+public partial class OptionsCardViewModel : ObservableObject, ISelectable
 {
     /// <summary>
     /// The option's display title.

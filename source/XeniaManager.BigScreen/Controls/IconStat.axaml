@@ -7,7 +7,9 @@
              x:Class="XeniaManager.BigScreen.Controls.IconStat"
              x:Name="Root">
 
-    <StackPanel Orientation="Horizontal" Spacing="{Binding #Root.Spacing}" VerticalAlignment="Center">
+    <StackPanel Spacing="{Binding #Root.Spacing}"
+                Orientation="Horizontal"
+                VerticalAlignment="Center">
         <fluent:SymbolIcon x:Name="IconSymbol"
                            Symbol="{Binding #Root.Icon}"
                            FontSize="{Binding #Root.IconSize}"

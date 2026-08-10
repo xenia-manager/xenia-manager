@@ -1,20 +1,16 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
 /// <summary>
-/// Achievement and gamerscore counters for a game (unlocked / total).
-/// </summary>
-public record GameStatInfo(int AchievementsUnlocked, int AchievementsTotal, int GamerscoreUnlocked, int GamerscoreTotal);
-
-/// <summary>
 /// ViewModel for a single game tile on the dashboard or library carousel.
 /// </summary>
-public partial class GameCardViewModel : ObservableObject
+public partial class GameCardViewModel : ObservableObject, ISelectable
 {
     /// <summary>
     /// The Core game model this card represents.
@@ -107,13 +103,5 @@ public partial class GameCardViewModel : ObservableObject
         {
             EnsureBackgroundLoaded();
         }
-    }
-
-    /// <summary>
-    /// Activates the card (launching the game). Stub for future wiring.
-    /// </summary>
-    [RelayCommand]
-    private void Select()
-    {
     }
 }

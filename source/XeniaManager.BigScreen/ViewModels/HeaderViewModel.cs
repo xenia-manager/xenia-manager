@@ -1,0 +1,141 @@
+using System;
+using System.Linq;
+using System.Net.NetworkInformation;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Services;
+using XeniaManager.Core.Logging;
+
+namespace XeniaManager.BigScreen.ViewModels;
+
+/// <summary>
+/// Header state: profile identity, live clock, wifi and controller battery status.
+/// </summary>
+public partial class HeaderViewModel : ViewModelBase
+{
+    /// <summary>
+    /// Gamertag of the active profile (Canary)
+    /// </summary>
+    [ObservableProperty] private string _gamertag = "Guest";
+
+    /// <summary>
+    /// Total gamerscore of the active profile
+    /// </summary>
+    [ObservableProperty] private string _gamerscore = "0";
+
+    /// <summary>
+    /// Whether a controller is connected
+    /// </summary>
+    [ObservableProperty] private bool _controllerConnected = true;
+
+    /// <summary>
+    /// Controller battery level in percent. -1 when unknown/no controller.
+    /// </summary>
+    [ObservableProperty] private int _batteryLevel = -1;
+
+    /// <summary>
+    /// Whether the controller battery is charging
+    /// </summary>
+    [ObservableProperty] private bool _isCharging;
+
+    /// <summary>
+    /// Whether wifi is connected
+    /// </summary>
+    [ObservableProperty] private bool _isWifiConnected = true;
+
+    /// <summary>
+    /// Current time string
+    /// </summary>
+    [ObservableProperty] private string _time = DateTime.Now.ToString("hh:mm tt");
+
+    /// <summary>
+    /// Fluent icon name for the current wifi state
+    /// </summary>
+    public string WifiIcon => IsWifiConnected ? "WiFi" : "WiFiOff";
+
+    /// <summary>
+    /// Fluent icon name for the current controller battery state.
+    /// BatteryWarning when no controller is connected or the level is unknown;
+    /// full battery when wired/charging.
+    /// </summary>
+    public string BatteryIcon => BatteryLevel < 0
+        ? "BatteryWarning"
+        : IsCharging
+            ? "Battery10"
+            : BatteryLevel switch
+            {
+                <= 0 => "Battery0",
+                <= 20 => "Battery1",
+                <= 40 => "Battery3",
+                <= 60 => "Battery5",
+                <= 80 => "Battery7",
+                _ => "Battery10",
+            };
+
+    partial void OnIsWifiConnectedChanged(bool value) => OnPropertyChanged(nameof(WifiIcon));
+
+    partial void OnBatteryLevelChanged(int value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    partial void OnIsChargingChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    partial void OnControllerConnectedChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    /// <summary>
+    /// How often the wifi connection state is re-checked.
+    /// </summary>
+    private static readonly TimeSpan WifiPollInterval = TimeSpan.FromSeconds(10);
+
+    private readonly DispatcherTimer _clockTimer;
+    private readonly DispatcherTimer _wifiTimer;
+
+    public HeaderViewModel(ProfileService profileService)
+    {
+        profileService.Load();
+        Gamertag = profileService.Gamertag;
+        Gamerscore = profileService.Gamerscore;
+
+        _clockTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1),
+        };
+        _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString("hh:mm tt");
+        _clockTimer.Start();
+
+        _wifiTimer = new DispatcherTimer
+        {
+            Interval = WifiPollInterval,
+        };
+        _wifiTimer.Tick += (_, _) => CheckWifi();
+        _wifiTimer.Start();
+        CheckWifi();
+    }
+
+    /// <summary>
+    /// Applies the live gamepad connection/battery state from the gamepad service.
+    /// </summary>
+    public void ApplyGamepadState(bool connected, int batteryPercent, bool charging)
+    {
+        ControllerConnected = connected;
+        BatteryLevel = batteryPercent;
+        IsCharging = charging;
+    }
+
+    /// <summary>
+    /// Re-checks the wifi connection state from the network interfaces.
+    /// Keeps the last state on failure so the icon doesn't flicker.
+    /// </summary>
+    private void CheckWifi()
+    {
+        try
+        {
+            IsWifiConnected = NetworkInterface.GetAllNetworkInterfaces()
+                .Any(i => i.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
+                          && i.OperationalStatus == OperationalStatus.Up);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<HeaderViewModel>("Failed to query wifi connection state");
+            Logger.LogExceptionDetails<HeaderViewModel>(ex);
+        }
+    }
+}

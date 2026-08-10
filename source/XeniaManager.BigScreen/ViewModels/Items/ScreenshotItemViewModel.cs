@@ -1,13 +1,14 @@
 using System;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
 /// <summary>
 /// ViewModel for a single screenshot tile in the media gallery.
 /// </summary>
-public partial class ScreenshotItemViewModel : ObservableObject
+public partial class ScreenshotItemViewModel : ObservableObject, ISelectable
 {
     /// <summary>
     /// Whether this tile currently has focus/selection in the gallery.

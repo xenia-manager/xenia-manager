@@ -72,11 +72,23 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 source/XeniaManager.BigScreen/
 ├── App.axaml / App.axaml.cs        # Application shell, theme wiring, localization init, MainWindow + VM setup
 ├── Program.cs                       # Entry point; redirects base dir to the base app's folder
-├── ViewLocator.cs                   # VM → View resolution
+├── ViewLocator.cs                   # VM → View resolution (ViewModels.XViewModel → Views.XView)
 ├── Views/
-│   └── MainWindow.axaml(.cs)        # Dashboard + overlay layer; focus/selection/keys
+│   ├── MainWindow.axaml(.cs)        # Shell: header, background/fade layers, dashboard + overlay ContentControls, input routing
+│   ├── DashboardView.axaml(.cs)     # Recent games row + options row + empty stub
+│   ├── LibraryView.axaml(.cs)       # Library carousel + clamped scroll + empty stub
+│   ├── MediaView.axaml(.cs)         # Media gallery grid + nested viewer sub-screen
+│   ├── MediaViewerView.axaml(.cs)   # Full-screen screenshot viewer (chevrons, caption)
+│   └── SettingsView.axaml(.cs)      # Settings screen (owns the background image picker)
 ├── ViewModels/
-│   ├── MainWindowViewModel.cs       # Profile, clock, background, overlay state, settings, sort, RecentGames/Games, Screenshots/modal
+│   ├── MainWindowViewModel.cs       # Composition root: child VMs, CurrentScreen navigation, launch/quit/refresh
+│   ├── HeaderViewModel.cs           # Profile, clock, wifi + controller battery state
+│   ├── DashboardViewModel.cs        # RecentGames, Options, background brush + fade-through-black
+│   ├── LibraryViewModel.cs          # Games carousel + sort (ScreenViewModel base)
+│   ├── MediaViewModel.cs            # Screenshots + sort + viewer sub-screen (ScreenViewModel base)
+│   ├── MediaViewerViewModel.cs      # Current screenshot, caption, prev/next stepping
+│   ├── SettingsViewModel.cs         # Appearance options + persistence + quit toggle
+│   ├── ScreenViewModel.cs           # Base for overlay screens: ScreenBackground brush
 │   ├── ViewModelBase.cs
 │   └── Items/
 │       ├── GameCardViewModel.cs     # Core Game ref, Title, Boxart, stat strings, IsSelected, BackgroundArt
@@ -89,19 +101,27 @@ source/XeniaManager.BigScreen/
 │   ├── LibraryCard.axaml(.cs)       # Carousel card: box art + title + stat rows (rounded art clip)
 │   ├── IconStat.axaml(.cs)          # Icon + text stat row
 │   ├── InputHint.axaml(.cs)         # Keycap + label hint
-│   ├── LibraryOverlay.axaml(.cs)    # Library carousel + clamped scroll + empty stub
-│   ├── MediaOverlay.axaml(.cs)      # Media gallery (placeholder)
-│   ├── SettingsOverlay.axaml(.cs)   # Settings screen
 │   ├── ColorPickerField.cs          # Swatch + hex + palette popup
 │   └── PalettePicker.cs             # Swatch row
 ├── Services/
 │   ├── BaseAppLocator.cs            # Resolves the base Xenia Manager folder (--base-dir / side-by-side / sibling)
 │   ├── BackgroundService.cs         # Settings load/save, brush factory, ApplyResources
+│   ├── ColorJsonConverter.cs
+│   ├── DashboardNavigationController.cs # Row state machine, selection movement, option activation (view focus/scroll via events)
+│   ├── GameLibraryService.cs        # Wraps Core GameManager: load, game list, recent-games selection
 │   ├── GamepadService.cs            # SDL3 polling, button/axis normalization, open/close gamepad
-│   └── ColorJsonConverter.cs
+│   ├── IGamepadService.cs           # Abstraction over the SDL gamepad subsystem (input + battery state)
+│   ├── InputRouter.cs               # Translates keyboard + gamepad input into navigation actions (one state machine)
+│   ├── ProfileService.cs            # Canary profile, gamertag/gamerscore, per-game achievement/GPD stats
+│   └── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching
+├── Utilities/
+│   ├── SelectionHelper.cs           # ISelectable + single-selection helpers (move/select/resort-preserving)
+│   ├── EnumCycleHelper.cs           # Generic enum + colour palette cycling
+│   └── ImageFormats.cs              # Shared screenshot extensions + file-picker patterns
 ├── Models/
 │   ├── DashboardSettings.cs         # Persisted user-facing options
 │   ├── BackgroundMode.cs / BackgroundModeOption.cs
+│   ├── GameStatInfo.cs              # Achievement/gamerscore counters (unlocked / total)
 │   ├── LibrarySort.cs               # Alphabetical / TimePlayed / LastPlayed
 │   ├── MediaSort.cs                 # NewestFirst / OldestFirst / ByGame
 │   ├── GamepadButton.cs             # Dpad/ABXY/bumpers (stick normalized onto Dpad)
@@ -113,12 +133,15 @@ source/XeniaManager.BigScreen/
     └── Art/                          # Sample wallpapers for testing
 ```
 
+**Navigation:** the shell hosts the dashboard as a `ContentControl` (`MainWindowViewModel.Dashboard`) and the overlay layer as another (`MainWindowViewModel.CurrentScreen`, null = dashboard visible). Both resolve through the `ViewLocator` (registered in `App.axaml`): `LibraryViewModel → LibraryView`, `MediaViewModel → MediaView` (which nests `MediaViewerViewModel → MediaViewerView` as its own sub-screen), `SettingsViewModel → SettingsView`. Overlay views are created per open; the window interacts with them via live visual-tree lookups (focus/scroll requests raised by `DashboardNavigationController`).
+
 **Data flow**
-- Selection: focus/click on a card → `IsSelected` → styled via `.selected` class / pseudo-class → visuals. **Dashboard (`RecentGames`) and library (`Games`) hold separate VM instances with independent selections.**
-- Settings: VM property → `BackgroundService.Settings` → `Save()` + `ApplyResources()` → `Application.Resources` → `DynamicResource` bindings.
-- Overlays: `OptionsCardViewModel.TargetScreen` → `MainWindowViewModel.OpenScreen()` → `CurrentScreen` → per-screen `IsVisible` on the overlay layer.
-- Sorting: **Y** in the library → `MainWindowViewModel.CycleSort()` → re-orders `Games` (title asc, playtime desc, last-played desc), keeps the selection, re-scrolls.
-- Base dir: `Program.Main` → `BaseAppLocator.Resolve(args)` → `AppPathResolver.SetBaseDirectory(...)` → all Core paths (library, games, artwork, profiles, logs) resolve against the base app's folder.
+- Input: keyboard (`OnWindowKeyDown`) and gamepad (`GamepadService.ButtonPressed`) → `InputRouter` → `DashboardNavigationController` actions (move/select/activate) → selection `IsSelected` → styled visuals; the controller raises focus/scroll requests the window fulfills (live visual-tree lookups).
+- Navigation: `OptionsCardViewModel.TargetScreen` → `MainWindowViewModel.OpenScreen()` → `CurrentScreen` (a screen VM) → `ContentControl` → `ViewLocator` resolves the overlay view; null shows the dashboard. Media nests its own viewer sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`).
+- Selection: focus/click on a card → `IsSelected` → styled via `.selected` class / pseudo-class → visuals. **Dashboard (`DashboardViewModel.RecentGames`) and library (`LibraryViewModel.Games`) hold separate VM instances with independent selections.**
+- Settings: VM property → `BackgroundService.Settings` → `Save()` + `ApplyResources()` → `Application.Resources` → `DynamicResource` bindings; `SettingsViewModel.AppearanceChanged` → dashboard rebuilds its background.
+- Sorting: **Y** in the library → `LibraryViewModel.CycleSort()` → re-orders `Games` (title asc, playtime desc, last-played desc), keeps the selection, re-scrolls.
+- Data: `ProfileService` (profile + GPD stats) · `GameLibraryService` (Core `GameManager` wrapper) · `ScreenshotLibraryService` (scan + game-title matching) feed the child VMs; Core paths (library, games, artwork, profiles, logs) resolve against the base app's folder via `Program.Main` → `BaseAppLocator.Resolve(args)` → `AppPathResolver.SetBaseDirectory(...)`.
 
 **Core integration points (available in `XeniaManager.Core`)**
 - `GameManager.LoadLibrary()` / `GameManager.Games` — real library.
@@ -212,19 +235,20 @@ source/XeniaManager.BigScreen/
 - [x] Sorting keeps the viewport fixed and selection follows the **list index** (not the element), so no fly-across — library and media
 
 ### 5.9 Real controller battery / wifi
-- [ ] Wire header battery icon to live controller state
-- [ ] Wire header wifi icon to live state
+- [x] Wire header battery icon to live controller state (`SDL_GetGamepadPowerInfo`, 5s poll; `BatteryWarning` when no controller/unknown, `Battery10` when wired/charging, tier icons otherwise)
+- [x] Wire header wifi icon to live state (`NetworkInterface` Wireless80211 check, 10s poll; `WiFi` full signal / `WiFiOff`)
+- [x] Header icons aligned (fixed-size centred boxes); `ControllerConnected` now live
 
 ### 5.10 Final hardening phase
 - [ ] Manual walkthrough of everything; rewrites where necessary
-- [ ] Maintainability sweep: deduplication, DRY, SOLID
-- [ ] **Codebase compliance sweep** against root `CONTRIBUTING.md`:
-  - [ ] Naming: `_camelCase` private fields, PascalCase methods/properties, Hungarian-prefixed XAML names (`Cmb`, `Txt`, `Btn`, `Tbl`, `Sp`, `Grd`, `Sv`)
-  - [ ] AXAML property order (x:Name → x:DataType → grid placement → bindings → layout → style → events)
-  - [ ] XML doc comments on public/internal members; sparse inline comments
-  - [ ] Logger-based error handling (`Logger.Error<T>`, `Logger.LogExceptionDetails<T>`)
-  - [ ] 4-space indent, braces on new lines, file-scoped namespaces, alphabetical usings
-  - [ ] MVVM: keep code-behind minimal; business logic in Core
+- [x] Maintainability sweep: deduplication, DRY, SOLID
+- [x] **Codebase compliance sweep** against root `CONTRIBUTING.md`:
+  - [x] Naming: `_camelCase` private fields, PascalCase methods/properties, Hungarian-prefixed XAML names (`Cmb`, `Txt`, `Btn`, `Tbl`, `Sp`, `Grd`, `Sv`)
+  - [x] AXAML property order (x:Name → x:DataType → grid placement → bindings → layout → style → events)
+  - [x] XML doc comments on public/internal members; sparse inline comments
+  - [x] Logger-based error handling (`Logger.Error<T>`, `Logger.LogExceptionDetails<T>`)
+  - [x] 4-space indent, braces on new lines, file-scoped namespaces, alphabetical usings
+  - [x] MVVM: keep code-behind minimal; business logic in Core
 
 ---
 

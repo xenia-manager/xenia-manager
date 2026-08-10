@@ -7,8 +7,8 @@
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-             x:Class="XeniaManager.BigScreen.Controls.LibraryOverlay"
-             x:DataType="vm:MainWindowViewModel"
+             x:Class="XeniaManager.BigScreen.Views.LibraryView"
+             x:DataType="vm:LibraryViewModel"
              Background="{Binding ScreenBackground}">
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
         <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,30">
@@ -28,7 +28,7 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <ScrollViewer x:Name="Carousel"
+            <ScrollViewer x:Name="SvCarousel"
                           HorizontalScrollBarVisibility="Hidden"
                           VerticalScrollBarVisibility="Disabled">
                 <ItemsControl x:Name="GamesRow"

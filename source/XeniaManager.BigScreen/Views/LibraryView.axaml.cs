@@ -5,39 +5,21 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 
-namespace XeniaManager.BigScreen.Controls;
+namespace XeniaManager.BigScreen.Views;
 
 /// <summary>
 /// Full-screen library carousel: all games as cards, iterated left/right.
 /// </summary>
-public partial class LibraryOverlay : UserControl
+public partial class LibraryView : UserControl
 {
-    public LibraryOverlay()
+    public LibraryView()
     {
         InitializeComponent();
         GamesRow.AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
-    }
-
-    /// <summary>
-    /// Updates the selection when a card gains focus (controller/keyboard/mouse).
-    /// </summary>
-    private void OnCardGotFocus(object? sender, FocusChangedEventArgs e)
-    {
-        if (e.Source is not Control { DataContext: GameCardViewModel card }
-            || DataContext is not MainWindowViewModel vm)
-        {
-            return;
-        }
-
-        foreach (GameCardViewModel game in vm.Games)
-        {
-            game.IsSelected = ReferenceEquals(game, card);
-        }
-
-        ScrollToSelected();
     }
 
     /// <summary>
@@ -46,27 +28,18 @@ public partial class LibraryOverlay : UserControl
     /// </summary>
     public void ScrollToSelected()
     {
-        if (DataContext is not MainWindowViewModel vm || vm.Games.Count == 0)
+        if (DataContext is not LibraryViewModel vm || vm.Games.Count == 0)
         {
             return;
         }
 
-        int selectedIndex = -1;
-        for (int i = 0; i < vm.Games.Count; i++)
-        {
-            if (vm.Games[i].IsSelected)
-            {
-                selectedIndex = i;
-                break;
-            }
-        }
-
+        int selectedIndex = SelectionHelper.IndexOfSelected(vm.Games);
         if (selectedIndex < 0)
         {
             return;
         }
 
-        double viewport = Carousel.Viewport.Width;
+        double viewport = SvCarousel.Viewport.Width;
         if (viewport <= 0)
         {
             return;
@@ -88,6 +61,22 @@ public partial class LibraryOverlay : UserControl
         double cardCenter = selectedIndex * step + cardWidth / 2;
         double rowWidth = vm.Games.Count * step - spacing;
         double target = cardCenter - viewport / 2;
-        Carousel.Offset = new Vector(Math.Clamp(target, 0, Math.Max(0, rowWidth - viewport)), 0);
+        SvCarousel.Offset = new Vector(Math.Clamp(target, 0, Math.Max(0, rowWidth - viewport)), 0);
+    }
+
+    /// <summary>
+    /// Updates the selection when a card gains focus (controller/keyboard/mouse).
+    /// </summary>
+    private void OnCardGotFocus(object? sender, FocusChangedEventArgs e)
+    {
+        if (e.Source is not Control { DataContext: GameCardViewModel card }
+            || DataContext is not LibraryViewModel vm)
+        {
+            return;
+        }
+
+        SelectionHelper.SelectOnly(vm.Games, card);
+
+        ScrollToSelected();
     }
 }
