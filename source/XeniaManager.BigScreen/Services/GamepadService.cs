@@ -1,0 +1,320 @@
+using System;
+using System.Linq;
+using Avalonia.Threading;
+using SDL;
+using XeniaManager.BigScreen.Models;
+using XeniaManager.Core.Logging;
+
+namespace XeniaManager.BigScreen.Services;
+
+/// <summary>
+/// Polls the SDL3 gamepad subsystem on the UI thread and raises button presses.
+/// D-pad, left-stick and bumper input all normalize onto the D-pad values.
+/// Fails gracefully when SDL can't be initialized (e.g. no native runtime).
+/// </summary>
+public class GamepadService : IDisposable
+{
+    /// <summary>
+    /// Raised on the UI thread when a navigation-relevant button is pressed.
+    /// </summary>
+    public event Action<GamepadButton>? ButtonPressed;
+
+    /// <summary>
+    /// Stick axis magnitude beyond which a direction counts as pressed (0-32767).
+    /// </summary>
+    private const short AxisDeadzone = 16000;
+
+    /// <summary>
+    /// Stick X direction currently held (left or right).
+    /// </summary>
+    private bool _stickLeftHeld;
+    private bool _stickRightHeld;
+
+    /// <summary>
+    /// Stick Y direction currently held (up or down).
+    /// </summary>
+    private bool _stickUpHeld;
+    private bool _stickDownHeld;
+
+    private readonly DispatcherTimer _pollTimer;
+
+    /// <summary>
+    /// The opened gamepad handle; gamepad button/axis events only flow while open.
+    /// </summary>
+    private unsafe SDL_Gamepad* _gamepad;
+
+    /// <summary>
+    /// Joystick ID of the currently open gamepad.
+    /// </summary>
+    private SDL_JoystickID _gamepadWhich;
+
+    /// <summary>
+    /// Whether SDL initialized successfully and polling is active.
+    /// </summary>
+    public bool IsActive { get; }
+
+    public unsafe GamepadService()
+    {
+        try
+        {
+            Logger.Info<GamepadService>("Initializing SDL gamepad subsystem");
+            if (!SDL3.SDL_Init(SDL_InitFlags.SDL_INIT_GAMEPAD))
+            {
+                Logger.Warning<GamepadService>($"SDL gamepad init failed: {SDL3.SDL_GetError()}");
+                return;
+            }
+
+            Logger.Info<GamepadService>("SDL gamepad init succeeded");
+
+            // Deliver gamepad events even while the window isn't focused
+            bool hintSet = SDL3.SDL_SetHint("SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS", "1");
+            Logger.Debug<GamepadService>($"Set SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS hint: {(hintSet ? "ok" : "failed")}");
+
+            // Report which gamepads SDL sees right now, opening the first one so
+            // button/axis events flow (SDL3 only delivers them for open gamepads)
+            var gamepads = SDL3.SDL_GetGamepads();
+            if (gamepads != null)
+            {
+                int count = 0;
+                foreach (SDL_JoystickID id in gamepads)
+                {
+                    Logger.Info<GamepadService>($"Gamepad[{count}] joystick ID: {id}");
+                    count++;
+                    if (_gamepad == null)
+                    {
+                        OpenGamepad(id);
+                    }
+                }
+
+                Logger.Info<GamepadService>($"SDL sees {count} connected gamepad(s)");
+            }
+            else
+            {
+                Logger.Warning<GamepadService>("SDL_GetGamepads returned null");
+            }
+
+            _pollTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+            _pollTimer.Tick += (_, _) => PollEvents();
+            _pollTimer.Start();
+            IsActive = true;
+            Logger.Info<GamepadService>($"Poll timer started ({_pollTimer.Interval.TotalMilliseconds}ms)");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GamepadService>("Failed to initialize SDL gamepad input");
+            Logger.LogExceptionDetails<GamepadService>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Drains all pending SDL events and raises normalized button presses.
+    /// </summary>
+    private unsafe void PollEvents()
+    {
+        int eventsProcessed = 0;
+        SDL_Event ev;
+        while (SDL3.SDL_PollEvent(&ev))
+        {
+            eventsProcessed++;
+            switch (ev.Type)
+            {
+                case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+                    HandleButtonDown(ev.gbutton);
+                    break;
+                case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_UP:
+                    Logger.Trace<GamepadService>($"Button up: {ev.gbutton.Button} (gamepad {ev.gbutton.which})");
+                    break;
+                case SDL_EventType.SDL_EVENT_GAMEPAD_AXIS_MOTION:
+                    HandleAxisMotion(ev.gaxis);
+                    break;
+                case SDL_EventType.SDL_EVENT_GAMEPAD_ADDED:
+                    Logger.Info<GamepadService>($"Gamepad added: joystick ID {ev.gdevice.which}");
+                    if (_gamepad == null)
+                    {
+                        OpenGamepad(ev.gdevice.which);
+                    }
+
+                    break;
+                case SDL_EventType.SDL_EVENT_GAMEPAD_REMOVED:
+                    Logger.Info<GamepadService>($"Gamepad removed: joystick ID {ev.gdevice.which}");
+                    if (ev.gdevice.which == _gamepadWhich)
+                    {
+                        CloseGamepad();
+                    }
+
+                    break;
+                default:
+                    Logger.Trace<GamepadService>($"Ignored event: {ev.Type}");
+                    break;
+            }
+        }
+
+        if (eventsProcessed > 0)
+        {
+            Logger.Trace<GamepadService>($"Poll cycle processed {eventsProcessed} event(s)");
+        }
+    }
+
+    /// <summary>
+    /// Maps an SDL gamepad button to a BigScreen button and raises it.
+    /// </summary>
+    private void HandleButtonDown(SDL_GamepadButtonEvent e)
+    {
+        SDL_GamepadButton sdlButton = e.Button;
+        Logger.Trace<GamepadService>($"Button down: {sdlButton} (raw {e.button}, gamepad {e.which})");
+
+        GamepadButton? mapped = sdlButton switch
+        {
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_SOUTH => GamepadButton.A,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_EAST => GamepadButton.B,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_WEST => GamepadButton.X,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_NORTH => GamepadButton.Y,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_LEFT => GamepadButton.DpadLeft,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_RIGHT => GamepadButton.DpadRight,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_UP => GamepadButton.DpadUp,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_DOWN => GamepadButton.DpadDown,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_LEFT_SHOULDER => GamepadButton.LeftShoulder,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER => GamepadButton.RightShoulder,
+            _ => null,
+        };
+
+        if (mapped == null)
+        {
+            Logger.Trace<GamepadService>($"Button {sdlButton} not mapped, ignoring");
+            return;
+        }
+
+        Logger.Debug<GamepadService>($"Raising {mapped.Value} (from {sdlButton})");
+        ButtonPressed?.Invoke(mapped.Value);
+    }
+
+    /// <summary>
+    /// Tracks the left stick axes, raising a press only when a direction is
+    /// newly entered (no repeat while held, no press when returning to center).
+    /// </summary>
+    private void HandleAxisMotion(SDL_GamepadAxisEvent e)
+    {
+        SDL_GamepadAxis axis = e.Axis;
+        short value = e.value;
+        Logger.Trace<GamepadService>($"Axis motion: {axis} (raw {e.axis}, value {value}, gamepad {e.which})");
+
+        switch (axis)
+        {
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX:
+                if (value < -AxisDeadzone)
+                {
+                    if (!_stickLeftHeld && !_stickRightHeld)
+                    {
+                        Logger.Debug<GamepadService>($"Stick X crossed left deadzone (value {value}), raising DpadLeft");
+                        ButtonPressed?.Invoke(GamepadButton.DpadLeft);
+                    }
+
+                    _stickLeftHeld = true;
+                    _stickRightHeld = false;
+                }
+                else if (value > AxisDeadzone)
+                {
+                    if (!_stickRightHeld && !_stickLeftHeld)
+                    {
+                        Logger.Debug<GamepadService>($"Stick X crossed right deadzone (value {value}), raising DpadRight");
+                        ButtonPressed?.Invoke(GamepadButton.DpadRight);
+                    }
+
+                    _stickRightHeld = true;
+                    _stickLeftHeld = false;
+                }
+                else
+                {
+                    if (_stickLeftHeld || _stickRightHeld)
+                    {
+                        Logger.Trace<GamepadService>($"Stick X returned to center (value {value})");
+                    }
+
+                    _stickLeftHeld = false;
+                    _stickRightHeld = false;
+                }
+
+                break;
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY:
+                if (value < -AxisDeadzone)
+                {
+                    if (!_stickUpHeld && !_stickDownHeld)
+                    {
+                        Logger.Debug<GamepadService>($"Stick Y crossed up deadzone (value {value}), raising DpadUp");
+                        ButtonPressed?.Invoke(GamepadButton.DpadUp);
+                    }
+
+                    _stickUpHeld = true;
+                    _stickDownHeld = false;
+                }
+                else if (value > AxisDeadzone)
+                {
+                    if (!_stickDownHeld && !_stickUpHeld)
+                    {
+                        Logger.Debug<GamepadService>($"Stick Y crossed down deadzone (value {value}), raising DpadDown");
+                        ButtonPressed?.Invoke(GamepadButton.DpadDown);
+                    }
+
+                    _stickDownHeld = true;
+                    _stickUpHeld = false;
+                }
+                else
+                {
+                    if (_stickUpHeld || _stickDownHeld)
+                    {
+                        Logger.Trace<GamepadService>($"Stick Y returned to center (value {value})");
+                    }
+
+                    _stickUpHeld = false;
+                    _stickDownHeld = false;
+                }
+
+                break;
+            default:
+                Logger.Trace<GamepadService>($"Axis {axis} not tracked, ignoring");
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Opens a gamepad by joystick ID so SDL delivers its button/axis events.
+    /// </summary>
+    private unsafe void OpenGamepad(SDL_JoystickID id)
+    {
+        _gamepad = SDL3.SDL_OpenGamepad(id);
+        if (_gamepad == null)
+        {
+            Logger.Warning<GamepadService>($"Failed to open gamepad {id}: {SDL3.SDL_GetError()}");
+            return;
+        }
+
+        _gamepadWhich = id;
+        Logger.Info<GamepadService>($"Opened gamepad {id}: {SDL3.SDL_GetGamepadName(_gamepad)}");
+    }
+
+    /// <summary>
+    /// Closes the currently open gamepad, if any.
+    /// </summary>
+    private unsafe void CloseGamepad()
+    {
+        if (_gamepad != null)
+        {
+            Logger.Info<GamepadService>($"Closing gamepad {_gamepadWhich}");
+            SDL3.SDL_CloseGamepad(_gamepad);
+            _gamepad = null;
+            _gamepadWhich = 0;
+        }
+    }
+
+    /// <summary>
+    /// Shuts down the SDL gamepad subsystem.
+    /// </summary>
+    public void Dispose()
+    {
+        Logger.Info<GamepadService>("Shutting down SDL gamepad subsystem");
+        _pollTimer?.Stop();
+        CloseGamepad();
+        SDL3.SDL_Quit();
+        GC.SuppressFinalize(this);
+    }
+}

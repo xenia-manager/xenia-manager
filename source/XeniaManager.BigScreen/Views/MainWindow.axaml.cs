@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Services;
@@ -22,6 +23,7 @@ public partial class MainWindow : Window
     private SettingsOverlay? _settingsOverlay;
     private LibraryOverlay? _libraryOverlay;
     private MediaOverlay? _mediaOverlay;
+    private GamepadService? _gamepadService;
 
     public MainWindow()
     {
@@ -31,6 +33,12 @@ public partial class MainWindow : Window
         GamesRow.AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
         OptionsRow.AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
         OptionsRow.AddHandler(PointerPressedEvent, OnOptionCardPressed, RoutingStrategies.Bubble, true);
+
+        _gamepadService = new GamepadService();
+        if (_gamepadService.IsActive)
+        {
+            _gamepadService.ButtonPressed += OnGamepadButtonPressed;
+        }
     }
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
@@ -44,7 +52,13 @@ public partial class MainWindow : Window
             vm.LibraryRefreshed += OnLibraryRefreshed;
             if (vm.RecentGames.Count > 0)
             {
+                _onOptionsRow = false;
                 vm.RecentGames[0].IsSelected = true;
+            }
+            else
+            {
+                // No games - the game row isn't available, start on the option row
+                SelectOptionRow();
             }
 
             _settingsOverlay = this.GetVisualDescendants().OfType<SettingsOverlay>().FirstOrDefault();
@@ -71,7 +85,16 @@ public partial class MainWindow : Window
     /// </summary>
     private void OnLibraryRefreshed(object? sender, EventArgs e)
     {
-        Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (DataContext is MainWindowViewModel vm && vm.RecentGames.Count == 0 && !vm.IsOverlayOpen)
+            {
+                // Library became empty - the game row is gone, fall back to options
+                SelectOptionRow();
+            }
+
+            _libraryOverlay?.ScrollToSelected();
+        });
     }
 
     private void OnQuitRequested(object? sender, System.EventArgs e)
@@ -120,8 +143,8 @@ public partial class MainWindow : Window
             }
             else if (vm.IsLibraryScreen && e.Key == Key.Y)
             {
+                // Sort keeps the selection on the same card, but the viewport stays put
                 vm.CycleSort();
-                Dispatcher.UIThread.Post(() => _libraryOverlay?.ScrollToSelected());
                 e.Handled = true;
             }
             else if (vm.IsLibraryScreen && e.Key is Key.A or Key.Enter or Key.Space)
@@ -141,8 +164,8 @@ public partial class MainWindow : Window
             }
             else if (vm.IsMediaScreen && e.Key == Key.Y)
             {
+                // Sort keeps the selection on the same card, but the viewport stays put
                 vm.CycleMediaSort();
-                Dispatcher.UIThread.Post(() => _mediaOverlay?.ScrollToSelected());
                 e.Handled = true;
             }
             else if (vm.IsMediaScreen && e.Key is Key.Enter or Key.Space)
@@ -156,10 +179,9 @@ public partial class MainWindow : Window
 
         if (e.Key is Key.Enter or Key.Space)
         {
-            if (FocusManager?.GetFocusedElement() is Control { DataContext: OptionsCardViewModel option })
+            if (_onOptionsRow)
             {
-                _lastActivationWasMouse = false;
-                ActivateOption(option);
+                ActivateSelectedOption(vm);
                 e.Handled = true;
             }
             else if (FocusManager?.GetFocusedElement() is Control { DataContext: GameCardViewModel game })
@@ -171,8 +193,328 @@ public partial class MainWindow : Window
         }
         else if (e.Key is Key.Left or Key.Right)
         {
-            MoveRecentGameSelection(e.Key == Key.Right ? 1 : -1);
+            if (_onOptionsRow)
+            {
+                MoveOptionSelection(e.Key == Key.Right ? 1 : -1);
+            }
+            else
+            {
+                MoveRecentGameSelection(e.Key == Key.Right ? 1 : -1);
+            }
+
             e.Handled = true;
+        }
+        else if (e.Key is Key.Up or Key.Down)
+        {
+            if (e.Key == Key.Down)
+            {
+                SelectOptionRow();
+            }
+            else
+            {
+                SelectGameRow();
+            }
+
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// Whether the dashboard's active row is the option row (vs the game row).
+    /// The controller model tracks this explicitly instead of relying on keyboard focus,
+    /// since a game card is always focused regardless of the active row.
+    /// </summary>
+    private bool _onOptionsRow;
+
+    /// <summary>
+    /// Routes gamepad input to the same actions as the keyboard. Settings is
+    /// keyboard-only; input is ignored while the window is disabled (game running).
+    /// </summary>
+    private void OnGamepadButtonPressed(GamepadButton button)
+    {
+        if (!IsEnabled || DataContext is not MainWindowViewModel vm)
+        {
+            return;
+        }
+
+        // Modal viewer takes priority within the media screen
+        if (vm.IsMediaScreen && vm.IsMediaViewerOpen)
+        {
+            switch (button)
+            {
+                case GamepadButton.DpadLeft:
+                case GamepadButton.LeftShoulder:
+                    vm.StepScreenshot(-1);
+                    break;
+                case GamepadButton.DpadRight:
+                case GamepadButton.RightShoulder:
+                    vm.StepScreenshot(1);
+                    break;
+                case GamepadButton.B:
+                    vm.CloseMediaViewer();
+                    break;
+            }
+
+            return;
+        }
+
+        if (vm.IsOverlayOpen)
+        {
+            switch (button)
+            {
+                case GamepadButton.DpadLeft:
+                case GamepadButton.LeftShoulder:
+                    if (vm.IsLibraryScreen)
+                    {
+                        MoveGameSelection(-1);
+                    }
+                    else if (vm.IsMediaScreen)
+                    {
+                        MoveScreenshotSelection(-1);
+                    }
+
+                    break;
+                case GamepadButton.DpadRight:
+                case GamepadButton.RightShoulder:
+                    if (vm.IsLibraryScreen)
+                    {
+                        MoveGameSelection(1);
+                    }
+                    else if (vm.IsMediaScreen)
+                    {
+                        MoveScreenshotSelection(1);
+                    }
+
+                    break;
+                case GamepadButton.DpadUp:
+                    if (vm.IsMediaScreen)
+                    {
+                        MoveScreenshotSelection(-MediaOverlay.CardsPerRow);
+                    }
+
+                    break;
+                case GamepadButton.DpadDown:
+                    if (vm.IsMediaScreen)
+                    {
+                        MoveScreenshotSelection(MediaOverlay.CardsPerRow);
+                    }
+
+                    break;
+                case GamepadButton.Y:
+                    if (vm.IsLibraryScreen)
+                    {
+                        vm.CycleSort();
+                    }
+                    else if (vm.IsMediaScreen)
+                    {
+                        vm.CycleMediaSort();
+                    }
+
+                    break;
+                case GamepadButton.A:
+                    if (vm.IsLibraryScreen)
+                    {
+                        LaunchSelectedGame(vm);
+                    }
+                    else if (vm.IsMediaScreen)
+                    {
+                        OpenSelectedScreenshot(vm);
+                    }
+
+                    break;
+                case GamepadButton.B:
+                    vm.CloseOverlay();
+                    RestoreOptionFocus();
+                    break;
+            }
+
+            return;
+        }
+
+        switch (button)
+        {
+            case GamepadButton.DpadLeft:
+            case GamepadButton.LeftShoulder:
+                if (_onOptionsRow)
+                {
+                    MoveOptionSelection(-1);
+                }
+                else
+                {
+                    MoveRecentGameSelection(-1);
+                }
+
+                break;
+            case GamepadButton.DpadRight:
+            case GamepadButton.RightShoulder:
+                if (_onOptionsRow)
+                {
+                    MoveOptionSelection(1);
+                }
+                else
+                {
+                    MoveRecentGameSelection(1);
+                }
+
+                break;
+            case GamepadButton.DpadDown:
+                SelectOptionRow();
+                break;
+            case GamepadButton.DpadUp:
+                SelectGameRow();
+                break;
+            case GamepadButton.A:
+                if (_onOptionsRow)
+                {
+                    ActivateSelectedOption(vm);
+                }
+                else
+                {
+                    LaunchSelectedGame(vm, vm.RecentGames.FirstOrDefault(g => g.IsSelected));
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Column mapping from a game card index to the option card underneath it
+    /// (game 1 → option 1, games 2-3 → option 2, games 4-5 → option 3, game 6 → option 4).
+    /// </summary>
+    private static readonly int[] GameToOptionColumn = [0, 1, 1, 2, 2, 3];
+
+    /// <summary>
+    /// Column mapping from an option card index to the first game card of its
+    /// group (option 1 → game 1, option 2 → game 2, option 3 → game 4, option 4 → game 6).
+    /// </summary>
+    private static readonly int[] OptionToGameColumn = [0, 1, 3, 5];
+
+    /// <summary>
+    /// Switches the dashboard to the option row, selecting the option card in the
+    /// column underneath the current game selection (clamped to the option count).
+    /// </summary>
+    private void SelectOptionRow()
+    {
+        if (DataContext is not MainWindowViewModel vm || vm.Options.Count == 0)
+        {
+            return;
+        }
+
+        _onOptionsRow = true;
+
+        int gameIndex = 0;
+        for (int i = 0; i < vm.RecentGames.Count; i++)
+        {
+            if (vm.RecentGames[i].IsSelected)
+            {
+                gameIndex = i;
+                break;
+            }
+        }
+
+        int mapped = GameToOptionColumn[Math.Clamp(gameIndex, 0, GameToOptionColumn.Length - 1)];
+        int target = Math.Clamp(mapped, 0, vm.Options.Count - 1);
+        foreach (OptionsCardViewModel option in vm.Options)
+        {
+            option.IsSelected = option == vm.Options[target];
+        }
+
+        OptionsCard? card = OptionsRow.GetVisualDescendants().OfType<OptionsCard>()
+            .FirstOrDefault(c => ReferenceEquals(c.DataContext, vm.Options[target]));
+        card?.Focus();
+    }
+
+    /// <summary>
+    /// Switches the dashboard to the game row, selecting the first game card of
+    /// the current option's column group (clamped to the game count). When the
+    /// library is empty there is no game row, so the option row stays active.
+    /// </summary>
+    private void SelectGameRow()
+    {
+        if (DataContext is not MainWindowViewModel vm)
+        {
+            return;
+        }
+
+        // No games - the game row doesn't exist, stay on the option row
+        if (vm.RecentGames.Count == 0)
+        {
+            _onOptionsRow = true;
+            return;
+        }
+
+        _onOptionsRow = false;
+
+        int optionIndex = 0;
+        for (int i = 0; i < vm.Options.Count; i++)
+        {
+            if (vm.Options[i].IsSelected)
+            {
+                optionIndex = i;
+                break;
+            }
+        }
+
+        int mapped = OptionToGameColumn[Math.Clamp(optionIndex, 0, OptionToGameColumn.Length - 1)];
+        int target = Math.Clamp(mapped, 0, vm.RecentGames.Count - 1);
+        foreach (GameCardViewModel game in vm.RecentGames)
+        {
+            game.IsSelected = game == vm.RecentGames[target];
+        }
+
+        foreach (OptionsCardViewModel option in vm.Options)
+        {
+            option.IsSelected = false;
+        }
+
+        GameCard? card = GamesRow.GetVisualDescendants().OfType<GameCard>()
+            .FirstOrDefault(c => ReferenceEquals(c.DataContext, vm.RecentGames[target]));
+        card?.Focus();
+    }
+
+    /// <summary>
+    /// Moves the option row selection by the given step, clamped at both ends.
+    /// </summary>
+    private void MoveOptionSelection(int delta)
+    {
+        if (DataContext is not MainWindowViewModel vm || vm.Options.Count == 0)
+        {
+            return;
+        }
+
+        int index = 0;
+        for (int i = 0; i < vm.Options.Count; i++)
+        {
+            if (vm.Options[i].IsSelected)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        int target = Math.Clamp(index + delta, 0, vm.Options.Count - 1);
+        if (target == index)
+        {
+            return;
+        }
+
+        OptionsCardViewModel next = vm.Options[target];
+        foreach (OptionsCardViewModel option in vm.Options)
+        {
+            option.IsSelected = ReferenceEquals(option, next);
+        }
+    }
+
+    /// <summary>
+    /// Activates the currently selected option card (A on the option row).
+    /// </summary>
+    private void ActivateSelectedOption(MainWindowViewModel vm)
+    {
+        OptionsCardViewModel? option = vm.Options.FirstOrDefault(o => o.IsSelected);
+        if (option != null)
+        {
+            _lastActivationWasMouse = false;
+            ActivateOption(option);
         }
     }
 
@@ -449,16 +791,19 @@ public partial class MainWindow : Window
         }
 
         // Each row keeps its own independent selection; focus/click on one row
-        // never clears the selection of the other
+        // never clears the selection of the other. The active row also tracks the
+        // controller model so A/L-R act on the right row.
         switch (control.DataContext)
         {
             case GameCardViewModel focusedGame:
+                _onOptionsRow = false;
                 foreach (GameCardViewModel game in vm.RecentGames)
                 {
                     game.IsSelected = ReferenceEquals(game, focusedGame);
                 }
                 break;
             case OptionsCardViewModel focusedOption:
+                _onOptionsRow = true;
                 foreach (OptionsCardViewModel option in vm.Options)
                 {
                     option.IsSelected = ReferenceEquals(option, focusedOption);
