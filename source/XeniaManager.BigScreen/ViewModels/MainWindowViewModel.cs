@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
@@ -22,7 +22,6 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly BackgroundService _backgroundService = new();
     private readonly ProfileService _profileService = new();
-    private readonly GameLibraryService _gameLibraryService = new();
     private readonly ScreenshotLibraryService _screenshotLibraryService = new();
 
     /// <summary>
@@ -170,8 +169,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (Settings.ReturnToXeniaOnQuit)
         {
-            string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), "XeniaManager.exe");
-            if (File.Exists(baseExe) && Process.GetProcessesByName("XeniaManager").Length == 0)
+            string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), AppConstants.BaseAppExecutable);
+            if (File.Exists(baseExe) &&
+                Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length == 0)
             {
                 Process.Start(new ProcessStartInfo { FileName = baseExe, UseShellExecute = true });
             }
@@ -207,13 +207,13 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void LoadLibrary()
     {
-        _gameLibraryService.Load();
-        foreach (Game game in _gameLibraryService.Games)
+        GameLibraryService.Load();
+        foreach (Game game in GameLibraryService.Games)
         {
             Library.Games.Add(CreateGameCard(game));
         }
 
-        foreach (Game game in _gameLibraryService.GetRecentGames(6))
+        foreach (Game game in GameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
         {
             Dashboard.RecentGames.Add(CreateRecentGameCard(game));
         }
@@ -230,16 +230,16 @@ public partial class MainWindowViewModel : ViewModelBase
         string? librarySelectedId = Library.Games.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
         string? recentSelectedId = Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
 
-        _gameLibraryService.Load();
+        GameLibraryService.Load();
         Library.Games.Clear();
         Dashboard.RecentGames.Clear();
 
-        foreach (Game game in _gameLibraryService.Games)
+        foreach (Game game in GameLibraryService.Games)
         {
             Library.Games.Add(CreateGameCard(game));
         }
 
-        foreach (Game game in _gameLibraryService.GetRecentGames(6))
+        foreach (Game game in GameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
         {
             Dashboard.RecentGames.Add(CreateRecentGameCard(game));
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.Core.Logging;
 
@@ -46,7 +47,7 @@ public partial class HeaderViewModel : ViewModelBase
     /// <summary>
     /// Current time string
     /// </summary>
-    [ObservableProperty] private string _time = DateTime.Now.ToString("hh:mm tt");
+    [ObservableProperty] private string _time = DateTime.Now.ToString(FormatConstants.ClockFormat);
 
     /// <summary>
     /// Fluent icon name for the current wifi state
@@ -96,9 +97,9 @@ public partial class HeaderViewModel : ViewModelBase
 
         _clockTimer = new DispatcherTimer
         {
-            Interval = TimeSpan.FromSeconds(1),
+            Interval = TimingConstants.ClockUpdateInterval,
         };
-        _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString("hh:mm tt");
+        _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString(FormatConstants.ClockFormat);
         _clockTimer.Start();
 
         _wifiTimer = new DispatcherTimer
@@ -121,7 +122,7 @@ public partial class HeaderViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Re-checks the wifi connection state from the network interfaces.
+    /// Re-checks the Wi-Fi connection state from the network interfaces.
     /// Keeps the last state on failure so the icon doesn't flicker.
     /// </summary>
     private void CheckWifi()
@@ -129,8 +130,7 @@ public partial class HeaderViewModel : ViewModelBase
         try
         {
             IsWifiConnected = NetworkInterface.GetAllNetworkInterfaces()
-                .Any(i => i.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
-                          && i.OperationalStatus == OperationalStatus.Up);
+                .Any(i => i is { NetworkInterfaceType: NetworkInterfaceType.Wireless80211, OperationalStatus: OperationalStatus.Up });
         }
         catch (Exception ex)
         {

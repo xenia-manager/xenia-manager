@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -70,7 +69,7 @@ public partial class MediaViewModel : ScreenViewModel
     /// Re-sorts the screenshot collection. The selection follows the list position,
     /// not the element, so the selected card stays in the same spot on screen.
     /// </summary>
-    public void ApplyMediaSort()
+    private void ApplyMediaSort()
     {
         if (Screenshots.Count == 0)
         {

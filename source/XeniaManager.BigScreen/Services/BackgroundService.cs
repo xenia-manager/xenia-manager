@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.Core.Logging;
 
@@ -45,12 +46,12 @@ public class BackgroundService
     }
 
     /// <summary>
-    /// Blends the color toward white by the given amount (0-1).
+    /// Blends the colour toward white by the given amount (0-1).
     /// </summary>
     private static Color MixWithWhite(Color color, double amount) => Mix(color, Colors.White, amount);
 
     /// <summary>
-    /// Blends the color toward black by the given amount (0-1).
+    /// Blends the colour toward black by the given amount (0-1).
     /// </summary>
     private static Color MixWithBlack(Color color, double amount) => Mix(color, Colors.Black, amount);
 
@@ -89,7 +90,7 @@ public class BackgroundService
         // bright halo in the middle of the screen.
         Color transparent = Color.FromArgb(0, 0, 0, 0);
         brush.GradientStops.Add(new GradientStop(transparent, 0));
-        brush.GradientStops.Add(new GradientStop(transparent, 0.75));
+        brush.GradientStops.Add(new GradientStop(transparent, LayoutConstants.VignetteInnerStop));
         brush.GradientStops.Add(new GradientStop(edge, 1));
         return brush;
     }
@@ -132,16 +133,16 @@ public class BackgroundService
             GradientStops =
             {
                 new GradientStop(Settings.PrimaryColor, 0),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.12), 0.5),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.25), 1),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount), LayoutConstants.LinearMidOffset),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientEndMixAmount), 1),
             },
         };
         return brush;
     }
 
     /// <summary>
-    /// Creates a radial gradient from the primary color:
-    /// the colour itself at the top-left corner fading to a darker slate at the bottom-right.
+    /// Creates a radial gradient from the primary colour:
+    /// the colour itself in the top-left corner fading to a darker slate at the bottom-right.
     /// </summary>
     private IBrush CreateRadialBrush()
     {
@@ -154,8 +155,8 @@ public class BackgroundService
             GradientStops =
             {
                 new GradientStop(Settings.PrimaryColor, 0),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.12), 0.55),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, 0.25), 1),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount), LayoutConstants.RadialMidOffset),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientEndMixAmount), 1),
             },
         };
         return brush;
@@ -176,12 +177,13 @@ public class BackgroundService
         resources["AccentColor"] = new SolidColorBrush(Settings.AccentColor);
         resources["SystemAccentColor"] = Settings.AccentColor;
         resources["SystemAccentColorBrush"] = new SolidColorBrush(Settings.AccentColor);
-        resources["SystemAccentColorLight1"] = AdjustAccent(0.15);
-        resources["SystemAccentColorLight2"] = AdjustAccent(0.30);
-        resources["SystemAccentColorLight3"] = AdjustAccent(0.45);
-        resources["SystemAccentColorDark1"] = AdjustAccent(-0.15);
-        resources["SystemAccentColorDark2"] = AdjustAccent(-0.30);
-        resources["SystemAccentColorDark3"] = AdjustAccent(-0.45);
+        for (int i = 1; i <= 3; i++)
+        {
+            double amount = i * LayoutConstants.AccentTintStep;
+            resources[$"SystemAccentColorLight{i}"] = AdjustAccent(amount);
+            resources[$"SystemAccentColorDark{i}"] = AdjustAccent(-amount);
+        }
+
         resources["BackgroundVignette"] = CreateVignetteBrush();
     }
 

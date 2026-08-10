@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
@@ -62,7 +63,7 @@ public class ProfileService
 
             try
             {
-                AccountContent content = new(profile, XeniaVersion.Canary, "FFFE07D1");
+                AccountContent content = new(profile, XeniaVersion.Canary, XboxConstants.ProfileContentTitleId);
                 if (content.ProfileGpd != null)
                 {
                     _profileGpd = content.ProfileGpd;
@@ -96,10 +97,10 @@ public class ProfileService
 
         try
         {
-            string xuid = (_profileAccount.PathXuid?.Value ?? _profileAccount.Xuid.Value).ToString("X16");
+            string xuid = (_profileAccount.PathXuid?.Value ?? _profileAccount.Xuid.Value).ToString(FormatConstants.XuidFormat);
             string contentFolder = AppPathResolver.GetFullPath(
                 XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion.Canary).ContentFolderLocation);
-            string gpdPath = Path.Combine(contentFolder, xuid, "FFFE07D1",
+            string gpdPath = Path.Combine(contentFolder, xuid, XboxConstants.ProfileContentTitleId,
                 ContentType.Profile.ToHexString(), xuid, $"{gameId.ToUpperInvariant()}.gpd");
 
             if (!File.Exists(gpdPath))

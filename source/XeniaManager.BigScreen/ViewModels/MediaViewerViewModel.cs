@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Avalonia.Media.Imaging;
-using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 
@@ -11,16 +10,12 @@ namespace XeniaManager.BigScreen.ViewModels;
 /// Full-screen screenshot viewer state: the current screenshot, its caption,
 /// and navigation through the media gallery.
 /// </summary>
-public partial class MediaViewerViewModel : ViewModelBase
+public partial class MediaViewerViewModel(
+    ScreenshotItemViewModel screenshot,
+    IList<ScreenshotItemViewModel> screenshots)
+    : ViewModelBase
 {
-    private readonly IList<ScreenshotItemViewModel> _screenshots;
-    private ScreenshotItemViewModel _screenshot;
-
-    public MediaViewerViewModel(ScreenshotItemViewModel screenshot, IList<ScreenshotItemViewModel> screenshots)
-    {
-        _screenshot = screenshot;
-        _screenshots = screenshots;
-    }
+    private ScreenshotItemViewModel _screenshot = screenshot;
 
     /// <summary>
     /// The screenshot image.
@@ -40,32 +35,32 @@ public partial class MediaViewerViewModel : ViewModelBase
     /// <summary>
     /// Whether the viewer can step to the previous screenshot.
     /// </summary>
-    public bool HasPrevious => _screenshots.IndexOf(_screenshot) > 0;
+    public bool HasPrevious => screenshots.IndexOf(_screenshot) > 0;
 
     /// <summary>
     /// Whether the viewer can step to the next screenshot.
     /// </summary>
-    public bool HasNext => _screenshots.IndexOf(_screenshot) < _screenshots.Count - 1;
+    public bool HasNext => screenshots.IndexOf(_screenshot) < screenshots.Count - 1;
 
     /// <summary>
     /// Moves the viewer to the neighbouring screenshot, clamped at both ends.
     /// </summary>
     public void Step(int delta)
     {
-        int index = _screenshots.IndexOf(_screenshot);
+        int index = screenshots.IndexOf(_screenshot);
         if (index < 0)
         {
             return;
         }
 
-        int target = Math.Clamp(index + delta, 0, _screenshots.Count - 1);
+        int target = Math.Clamp(index + delta, 0, screenshots.Count - 1);
         if (target == index)
         {
             return;
         }
 
-        _screenshot = _screenshots[target];
-        SelectionHelper.SelectOnly(_screenshots, _screenshot);
+        _screenshot = screenshots[target];
+        SelectionHelper.SelectOnly(screenshots, _screenshot);
         OnPropertyChanged(nameof(Image));
         OnPropertyChanged(nameof(GameTitle));
         OnPropertyChanged(nameof(CapturedAtText));

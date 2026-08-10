@@ -20,7 +20,7 @@ public interface IGamepadService
     event Action? StateChanged;
 
     /// <summary>
-    /// Whether SDL initialized successfully and polling is active.
+    /// Whether SDL initialised successfully and polling is active.
     /// </summary>
     bool IsActive { get; }
 

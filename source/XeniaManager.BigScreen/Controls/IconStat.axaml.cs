@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using FluentIcons.Common;
 
 namespace XeniaManager.BigScreen.Controls;

@@ -15,12 +15,12 @@ public class GameLibraryService
     /// <summary>
     /// All games in the library (from Core's <see cref="GameManager"/>).
     /// </summary>
-    public IReadOnlyList<Game> Games => GameManager.Games;
+    public static IReadOnlyList<Game> Games => GameManager.Games;
 
     /// <summary>
     /// Reloads the game library from disk.
     /// </summary>
-    public void Load()
+    public static void Load()
     {
         GameManager.LoadLibrary();
     }
@@ -29,7 +29,7 @@ public class GameLibraryService
     /// The <paramref name="count"/> most recently played games; never-played games
     /// fill the tail ordered by title.
     /// </summary>
-    public IEnumerable<Game> GetRecentGames(int count)
+    public static IEnumerable<Game> GetRecentGames(int count)
     {
         return GameManager.Games
             .OrderByDescending(g => g.LastPlayed)

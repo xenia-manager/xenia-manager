@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -11,7 +10,6 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.BigScreen.Views;
 using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Views;
@@ -49,16 +47,15 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Finds the live library view instance in the visual tree.
+    /// Finds the first descendant of the given type in the visual tree,
+    /// optionally matching a predicate.
     /// </summary>
-    private LibraryView? FindLibraryView() =>
-        this.GetVisualDescendants().OfType<LibraryView>().FirstOrDefault();
-
-    /// <summary>
-    /// Finds the live media view instance in the visual tree.
-    /// </summary>
-    private MediaView? FindMediaView() =>
-        this.GetVisualDescendants().OfType<MediaView>().FirstOrDefault();
+    private T? Find<T>(Func<T, bool>? predicate = null) where T : Control
+    {
+        return predicate == null
+            ? this.GetVisualDescendants().OfType<T>().FirstOrDefault()
+            : this.GetVisualDescendants().OfType<T>().FirstOrDefault(predicate);
+    }
 
     /// <summary>
     /// Forwards the live gamepad connection/battery state to the view model.
@@ -123,7 +120,7 @@ public partial class MainWindow : Window
                 _navigation.SelectOptionRow(vm.Dashboard);
             }
 
-            FindLibraryView()?.ScrollToSelected();
+            Find<LibraryView>()?.ScrollToSelected();
         });
     }
 
@@ -162,9 +159,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void OnOptionFocusRequested(OptionsCardViewModel option)
     {
-        OptionsCard? card = this.GetVisualDescendants().OfType<OptionsCard>()
-            .FirstOrDefault(c => ReferenceEquals(c.DataContext, option));
-        card?.Focus();
+        Find<OptionsCard>(c => ReferenceEquals(c.DataContext, option))?.Focus();
     }
 
     /// <summary>
@@ -172,9 +167,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void OnGameFocusRequested(GameCardViewModel game)
     {
-        GameCard? card = this.GetVisualDescendants().OfType<GameCard>()
-            .FirstOrDefault(c => ReferenceEquals(c.DataContext, game));
-        card?.Focus();
+        Find<GameCard>(c => ReferenceEquals(c.DataContext, game))?.Focus();
     }
 
     /// <summary>
@@ -183,7 +176,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void OnScrollLibraryRequested()
     {
-        Dispatcher.UIThread.Post(() => FindLibraryView()?.ScrollToSelected());
+        Dispatcher.UIThread.Post(() => Find<LibraryView>()?.ScrollToSelected());
     }
 
     /// <summary>
@@ -192,7 +185,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void OnScrollMediaRequested()
     {
-        Dispatcher.UIThread.Post(() => FindMediaView()?.ScrollToSelected());
+        Dispatcher.UIThread.Post(() => Find<MediaView>()?.ScrollToSelected());
     }
 
     /// <summary>
@@ -201,7 +194,7 @@ public partial class MainWindow : Window
     private void OnOverlayFocusRequested()
     {
         if (DataContext is MainWindowViewModel vm && vm.IsSettingsScreen
-            && this.GetVisualDescendants().OfType<SettingsView>().FirstOrDefault() is { } settingsView)
+            && Find<SettingsView>() is { } settingsView)
         {
             settingsView.FocusFirst();
         }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using XeniaManager.BigScreen.Constants;
 
 namespace XeniaManager.BigScreen.Services;
 
@@ -9,8 +10,6 @@ namespace XeniaManager.BigScreen.Services;
 /// </summary>
 public static class BaseAppLocator
 {
-    private const string BaseAppExecutable = "XeniaManager.exe";
-
     /// <summary>
     /// Resolves the base app directory, or null when it can't be determined
     /// (the app then falls back to its own folder).
@@ -33,7 +32,7 @@ public static class BaseAppLocator
         }
 
         // 2. Side-by-side deployment: XeniaManager.exe next to BigScreen.exe
-        if (File.Exists(Path.Combine(exeDirectory, BaseAppExecutable)))
+        if (File.Exists(Path.Combine(exeDirectory, AppConstants.BaseAppExecutable)))
         {
             return exeDirectory;
         }
@@ -49,7 +48,7 @@ public static class BaseAppLocator
         for (int i = 0; i < 6 && current != null; i++, current = current.Parent)
         {
             string sibling = Path.Combine(current.FullName, "XeniaManager", "bin", config ?? string.Empty, tfm);
-            if (File.Exists(Path.Combine(sibling, BaseAppExecutable)))
+            if (File.Exists(Path.Combine(sibling, AppConstants.BaseAppExecutable)))
             {
                 return sibling;
             }

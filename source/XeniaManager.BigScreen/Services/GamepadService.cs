@@ -1,7 +1,7 @@
 using System;
-using System.Linq;
 using Avalonia.Threading;
 using SDL;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.Core.Logging;
 
@@ -9,8 +9,8 @@ namespace XeniaManager.BigScreen.Services;
 
 /// <summary>
 /// Polls the SDL3 gamepad subsystem on the UI thread and raises button presses.
-/// D-pad, left-stick and bumper input all normalize onto the D-pad values.
-/// Fails gracefully when SDL can't be initialized (e.g. no native runtime).
+/// D-pad, left-stick and bumper input all normalise onto the D-pad values.
+/// Fails gracefully when SDL can't be initialised (e.g. no native runtime).
 /// </summary>
 public class GamepadService : IGamepadService
 {
@@ -49,7 +49,7 @@ public class GamepadService : IGamepadService
     private SDL_JoystickID _gamepadWhich;
 
     /// <summary>
-    /// Whether SDL initialized successfully and polling is active.
+    /// Whether SDL initialised successfully and polling is active.
     /// </summary>
     public bool IsActive { get; }
 
@@ -78,7 +78,7 @@ public class GamepadService : IGamepadService
     /// </summary>
     private static readonly TimeSpan BatteryPollInterval = TimeSpan.FromSeconds(5);
 
-    private DispatcherTimer? _batteryTimer;
+    private readonly DispatcherTimer? _batteryTimer;
 
     public unsafe GamepadService()
     {
@@ -120,7 +120,7 @@ public class GamepadService : IGamepadService
                 Logger.Warning<GamepadService>("SDL_GetGamepads returned null");
             }
 
-            _pollTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+            _pollTimer = new DispatcherTimer { Interval = TimingConstants.GamepadPollInterval };
             _pollTimer.Tick += (_, _) => PollEvents();
             _pollTimer.Start();
             IsActive = true;
@@ -235,6 +235,12 @@ public class GamepadService : IGamepadService
             case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY:
                 TrackAxis(ref _stickUpHeld, ref _stickDownHeld, value, GamepadButton.DpadUp, GamepadButton.DpadDown);
                 break;
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_INVALID:
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_RIGHTX:
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_RIGHTY:
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFT_TRIGGER:
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_RIGHT_TRIGGER:
+            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_COUNT:
             default:
                 Logger.Trace<GamepadService>($"Axis {axis} not tracked, ignoring");
                 break;
@@ -310,7 +316,7 @@ public class GamepadService : IGamepadService
     }
 
     /// <summary>
-    /// Drains all pending SDL events and raises normalized button presses.
+    /// Drains all pending SDL events and raises normalised button presses.
     /// </summary>
     private unsafe void PollEvents()
     {

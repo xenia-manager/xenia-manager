@@ -3,7 +3,7 @@ using System.Linq;
 namespace XeniaManager.BigScreen.Utilities;
 
 /// <summary>
-/// Image formats recognised by the media gallery and the background image picker.
+/// Image formats recognized by the media gallery and the background image picker.
 /// </summary>
 public static class ImageFormats
 {

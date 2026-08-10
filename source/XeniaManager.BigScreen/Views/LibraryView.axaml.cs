@@ -1,10 +1,9 @@
 using System;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
@@ -45,8 +44,8 @@ public partial class LibraryView : UserControl
             return;
         }
 
-        double cardWidth = 420;
-        double spacing = 25;
+        double cardWidth = LayoutConstants.LibraryCardDefaultWidth;
+        double spacing = LayoutConstants.LibraryCardSpacing;
         if (GamesRow.ItemsPanelRoot is StackPanel panel)
         {
             if (panel.Children.Count > 0 && panel.Children[0].Bounds.Width > 0)

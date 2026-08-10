@@ -2,7 +2,7 @@ namespace XeniaManager.BigScreen.Models;
 
 /// <summary>
 /// Gamepad buttons relevant to BigScreen navigation.
-/// Stick and bumper input is normalized onto the D-pad values by the service.
+/// Stick and bumper input is normalised onto the D-pad values by the service.
 /// </summary>
 public enum GamepadButton
 {

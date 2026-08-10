@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -130,7 +131,8 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// Steps the vignette opacity by the given direction (0.05 per step), clamped to 0-1.
     /// </summary>
-    public void AdjustVignette(int delta) => VignetteOpacity = Math.Clamp(VignetteOpacity + delta * 0.05, 0, 1);
+    public void AdjustVignette(int delta) =>
+        VignetteOpacity = Math.Clamp(VignetteOpacity + delta * LayoutConstants.VignetteStep, 0, 1);
 
     /// <summary>
     /// Sets a custom image path and switches to image background mode.

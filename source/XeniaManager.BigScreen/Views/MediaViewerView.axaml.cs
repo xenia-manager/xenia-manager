@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using XeniaManager.BigScreen.ViewModels;
 
 namespace XeniaManager.BigScreen.Views;

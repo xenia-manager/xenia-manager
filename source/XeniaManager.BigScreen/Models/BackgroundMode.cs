@@ -11,7 +11,7 @@ public enum BackgroundMode
     Image,
 
     /// <summary>
-    /// A single solid color.
+    /// A single solid colour.
     /// </summary>
     Solid,
 

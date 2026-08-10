@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Utilities;
