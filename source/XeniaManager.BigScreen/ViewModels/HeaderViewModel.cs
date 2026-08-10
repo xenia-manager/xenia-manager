@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -17,7 +18,7 @@ public partial class HeaderViewModel : ViewModelBase
     /// <summary>
     /// Gamertag of the active profile (Canary)
     /// </summary>
-    [ObservableProperty] private string _gamertag = "Guest";
+    [ObservableProperty] private string _gamertag = LocalizationHelper.GetText("Header.Guest");
 
     /// <summary>
     /// Total gamerscore of the active profile

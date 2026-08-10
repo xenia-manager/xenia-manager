@@ -30,7 +30,7 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
     {
         if (string.IsNullOrEmpty(gameId))
         {
-            return "Unknown Game";
+            return LocalizationHelper.GetText("Media.UnknownGame");
         }
 
         return GameManager.Games

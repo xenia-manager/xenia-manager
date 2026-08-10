@@ -7,6 +7,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -35,9 +36,9 @@ public partial class LibraryViewModel : ScreenViewModel
     /// </summary>
     public string SortText => Sort switch
     {
-        LibrarySort.TimePlayed => "Time Played",
-        LibrarySort.LastPlayed => "Last Played",
-        _ => "Alphabetical",
+        LibrarySort.TimePlayed => LocalizationHelper.GetText("Library.Sort.TimePlayed"),
+        LibrarySort.LastPlayed => LocalizationHelper.GetText("Library.Sort.LastPlayed"),
+        _ => LocalizationHelper.GetText("Library.Sort.Alphabetical"),
     };
 
     public LibraryViewModel(SettingsViewModel settings) : base(settings)

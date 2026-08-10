@@ -19,14 +19,14 @@
                            FontSize="96"
                            HorizontalAlignment="Center" />
 
-        <TextBlock Text="Xenia Manager"
+        <TextBlock Text="{DynamicResource Splash.Title}"
                    Foreground="{DynamicResource TextPrimary}"
                    FontSize="40"
                    FontWeight="Bold"
                    HorizontalAlignment="Center" />
 
         <TextBlock x:Name="StatusText"
-                   Text="Loading…"
+                   Text="{DynamicResource Splash.Loading}"
                    Foreground="{DynamicResource TextSecondary}"
                    FontSize="20"
                    HorizontalAlignment="Center" />

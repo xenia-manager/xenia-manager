@@ -10,6 +10,7 @@ using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -42,9 +43,9 @@ public partial class MediaViewModel : ScreenViewModel
     /// </summary>
     public string MediaSortText => MediaSort switch
     {
-        MediaSort.OldestFirst => "Oldest First",
-        MediaSort.ByGame => "By Game",
-        _ => "Newest First",
+        MediaSort.OldestFirst => LocalizationHelper.GetText("Media.Sort.OldestFirst"),
+        MediaSort.ByGame => LocalizationHelper.GetText("Media.Sort.ByGame"),
+        _ => LocalizationHelper.GetText("Media.Sort.NewestFirst"),
     };
 
     /// <summary>

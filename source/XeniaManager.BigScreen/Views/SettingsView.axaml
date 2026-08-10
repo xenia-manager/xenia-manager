@@ -55,7 +55,7 @@
 
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
         <TextBlock Grid.Row="0"
-                   Text="Settings"
+                   Text="{DynamicResource Settings.Title}"
                    Foreground="{DynamicResource TextPrimary}"
                    FontSize="48"
                    FontWeight="Bold"
@@ -79,7 +79,7 @@
                                   DisplayMemberBinding="{Binding DisplayName}"
                                   FontSize="22"
                                   Padding="12,8" />
-                        <TextBlock Text="Background Type"
+                        <TextBlock Text="{DynamicResource Settings.BackgroundType}"
                                    Foreground="{DynamicResource TextPrimary}"
                                    FontSize="24"
                                    VerticalAlignment="Center" />
@@ -96,7 +96,7 @@
                                                    DockPanel.Dock="Right"
                                                    VerticalAlignment="Center"
                                                    Color="{Binding PrimaryColor, Mode=TwoWay}" />
-                        <TextBlock Text="Primary Colour"
+                        <TextBlock Text="{DynamicResource Settings.PrimaryColour}"
                                    Foreground="{DynamicResource TextPrimary}"
                                    FontSize="24"
                                    VerticalAlignment="Center" />
@@ -113,7 +113,7 @@
                                                    DockPanel.Dock="Right"
                                                    VerticalAlignment="Center"
                                                    Color="{Binding AccentColor, Mode=TwoWay}" />
-                        <TextBlock Text="Accent Colour"
+                        <TextBlock Text="{DynamicResource Settings.AccentColour}"
                                    Foreground="{DynamicResource TextPrimary}"
                                    FontSize="24"
                                    VerticalAlignment="Center" />
@@ -140,7 +140,7 @@
                                 Maximum="1"
                                 VerticalAlignment="Center"
                                 Value="{Binding VignetteOpacity, Mode=TwoWay}" />
-                        <TextBlock Text="Vignette"
+                        <TextBlock Text="{DynamicResource Settings.Vignette}"
                                    Foreground="{DynamicResource TextPrimary}"
                                    FontSize="24"
                                    VerticalAlignment="Center" />
@@ -155,7 +155,7 @@
                     <DockPanel>
                         <Button x:Name="BtnSelectImage"
                                 DockPanel.Dock="Right"
-                                Content="Select Image"
+                                Content="{DynamicResource Settings.SelectImage}"
                                 FontSize="20"
                                 Padding="20,10"
                                 VerticalAlignment="Center"
@@ -167,7 +167,7 @@
                                    VerticalAlignment="Center"
                                    TextTrimming="CharacterEllipsis"
                                    Margin="0,0,16,0" />
-                        <TextBlock Text="Background Image"
+                        <TextBlock Text="{DynamicResource Settings.BackgroundImage}"
                                    Foreground="{DynamicResource TextPrimary}"
                                    FontSize="24"
                                    VerticalAlignment="Center" />
@@ -189,10 +189,10 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Text="Return to Xenia Manager on Quit"
+                            <TextBlock Text="{DynamicResource Settings.ReturnToXeniaOnQuit}"
                                        Foreground="{DynamicResource TextPrimary}"
                                        FontSize="24" />
-                            <TextBlock Text="On: Returns to Xenia Manager · Off: Closes Everything"
+                            <TextBlock Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}"
                                        Foreground="{DynamicResource TextSecondary}"
                                        FontSize="18" />
                         </StackPanel>
@@ -206,7 +206,7 @@
                     Orientation="Horizontal"
                     Spacing="36"
                     Margin="-15,16,0,-15">
-            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Back" />
+            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="{DynamicResource Settings.Hint.Back}" />
         </StackPanel>
     </Grid>
 </UserControl>

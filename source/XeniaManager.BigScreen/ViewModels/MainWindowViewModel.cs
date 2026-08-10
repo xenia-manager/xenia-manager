@@ -175,7 +175,7 @@ public partial class MainWindowViewModel : ViewModelBase
         // Yield so the splash screen paints its first frame before any work runs
         await Task.Yield();
 
-        await StageAsync(progress, "Loading Profile", 0.10, cancellationToken, () =>
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingProfile"), 0.10, cancellationToken, () =>
         {
             _profileService.Load();
             Header.ApplyProfile(_profileService);
@@ -183,13 +183,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Loads the persisted settings and builds the background from them
         // (Image mode decodes the configured image - too slow for the constructor)
-        await StageAsync(progress, "Loading Settings", 0.25, cancellationToken, () =>
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingSettings"), 0.25, cancellationToken, () =>
         {
             Settings.Load();
             Dashboard.UpdateBackground(null);
         });
 
-        await StageAsync(progress, "Loading Dashboard", 0.35, cancellationToken, () =>
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingDashboard"), 0.35, cancellationToken, () =>
         {
             _gameLibraryService.Load();
             foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
@@ -198,7 +198,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         });
 
-        progress?.Report(("Loading Library", 0.45));
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"), 0.45));
         cancellationToken.ThrowIfCancellationRequested();
         int totalGames = _gameLibraryService.Games.Count;
 
@@ -215,7 +215,8 @@ public partial class MainWindowViewModel : ViewModelBase
             loadedGames++;
             if (loadedGames % 10 == 0)
             {
-                progress?.Report(("Loading Library", 0.45 + 0.30 * (double)loadedGames / Math.Max(1, totalGames)));
+                progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"),
+                    0.45 + 0.30 * (double)loadedGames / Math.Max(1, totalGames)));
             }
         }
 
@@ -231,7 +232,7 @@ public partial class MainWindowViewModel : ViewModelBase
         InitializationCompleted?.Invoke(this, EventArgs.Empty);
         Logger.Info<MainWindowViewModel>(
             $"Dashboard ready: {Library.Games.Count} games in library, {Dashboard.RecentGames.Count} recent");
-        progress?.Report(("Loading Done", 1.0));
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingDone"), 1.0));
         await Task.Delay(TimingConstants.DoneDwell, cancellationToken);
     }
 

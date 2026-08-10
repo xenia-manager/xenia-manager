@@ -6,6 +6,7 @@ using Avalonia.Platform.Storage;
 using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.Views;
 
@@ -55,7 +56,7 @@ public partial class SettingsView : UserControl
 
         FilePickerOpenOptions options = new()
         {
-            Title = "Select Background Image",
+            Title = LocalizationHelper.GetText("Settings.SelectImageDialogTitle"),
             AllowMultiple = false,
             FileTypeFilter =
             [

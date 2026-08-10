@@ -12,7 +12,7 @@
         x:Class="XeniaManager.BigScreen.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="XeniaManager.BigScreen"
+        Title="{DynamicResource MainWindow.Title}"
         Width="1920" Height="1080"
         WindowState="FullScreen"
         WindowStartupLocation="CenterScreen"

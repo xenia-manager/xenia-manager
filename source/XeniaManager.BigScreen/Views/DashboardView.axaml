@@ -28,7 +28,7 @@
                                        FontSize="64"
                                        Foreground="{DynamicResource TextSecondary}"
                                        HorizontalAlignment="Center" />
-                    <TextBlock Text="No games found"
+                    <TextBlock Text="{DynamicResource Dashboard.NoGamesFound}"
                                Foreground="{DynamicResource TextSecondary}"
                                FontSize="16"
                                TextAlignment="Center" />

@@ -66,7 +66,7 @@
             <StackPanel Grid.Column="0"
                         Orientation="Horizontal"
                         VerticalAlignment="Center">
-                <controls:InputHint Char="B" KeyColour="#C50F1F" Text="Close" />
+                <controls:InputHint Char="B" KeyColour="#C50F1F" Text="{DynamicResource Media.Viewer.Close}" />
             </StackPanel>
             <StackPanel Grid.Column="1"
                         Orientation="Vertical"

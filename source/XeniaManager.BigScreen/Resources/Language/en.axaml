@@ -1,8 +1,69 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="using:System">
-    <!-- Library game card playtime (used by Core's PlaytimeFormatter) -->
+    <!-- Core PlaytimeFormatter keys (required by Core's PlaytimeFormatter.Format) -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Never played</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Minutes">{0} min</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Hours">{0} hrs</sys:String>
+
+    <!-- MainWindow -->
+    <sys:String x:Key="MainWindow.Title">Xenia Manager BigScreen</sys:String>
+
+    <!-- Header -->
+    <sys:String x:Key="Header.Guest">Guest</sys:String>
+
+    <!-- Dashboard -->
+    <sys:String x:Key="Dashboard.NoGamesFound">No games found</sys:String>
+
+    <!-- Library screen -->
+    <sys:String x:Key="Library.Title">Game Library</sys:String>
+    <sys:String x:Key="Library.NoGamesFound">No games found</sys:String>
+    <sys:String x:Key="Library.Sort.Alphabetical">Alphabetical</sys:String>
+    <sys:String x:Key="Library.Sort.TimePlayed">Time Played</sys:String>
+    <sys:String x:Key="Library.Sort.LastPlayed">Last Played</sys:String>
+    <sys:String x:Key="Library.Hint.Sort">Sort</sys:String>
+    <sys:String x:Key="Library.Hint.Play">Play</sys:String>
+    <sys:String x:Key="Library.Hint.Back">Back</sys:String>
+
+    <!-- Media screen -->
+    <sys:String x:Key="Media.Title">Media</sys:String>
+    <sys:String x:Key="Media.NoScreenshotsFound">No screenshots found</sys:String>
+    <sys:String x:Key="Media.Sort.NewestFirst">Newest First</sys:String>
+    <sys:String x:Key="Media.Sort.OldestFirst">Oldest First</sys:String>
+    <sys:String x:Key="Media.Sort.ByGame">By Game</sys:String>
+    <sys:String x:Key="Media.UnknownGame">Unknown Game</sys:String>
+    <sys:String x:Key="Media.Hint.Sort">Sort</sys:String>
+    <sys:String x:Key="Media.Hint.Back">Back</sys:String>
+
+    <!-- Media screenshot viewer -->
+    <sys:String x:Key="Media.Viewer.Close">Close</sys:String>
+
+    <!-- Settings screen -->
+    <sys:String x:Key="Settings.Title">Settings</sys:String>
+    <sys:String x:Key="Settings.BackgroundType">Background Type</sys:String>
+    <sys:String x:Key="Settings.BackgroundMode.Image">Image</sys:String>
+    <sys:String x:Key="Settings.BackgroundMode.Solid">Solid Colour</sys:String>
+    <sys:String x:Key="Settings.BackgroundMode.LinearGradient">Linear Gradient</sys:String>
+    <sys:String x:Key="Settings.BackgroundMode.RadialGradient">Radial Gradient</sys:String>
+    <sys:String x:Key="Settings.BackgroundMode.Dynamic">Dynamic (Selected Game)</sys:String>
+    <sys:String x:Key="Settings.PrimaryColour">Primary Colour</sys:String>
+    <sys:String x:Key="Settings.AccentColour">Accent Colour</sys:String>
+    <sys:String x:Key="Settings.Vignette">Vignette</sys:String>
+    <sys:String x:Key="Settings.BackgroundImage">Background Image</sys:String>
+    <sys:String x:Key="Settings.SelectImage">Select Image</sys:String>
+    <sys:String x:Key="Settings.NoImage">None</sys:String>
+    <sys:String x:Key="Settings.SelectImageDialogTitle">Select Background Image</sys:String>
+    <sys:String x:Key="Settings.ReturnToXeniaOnQuit">Return to Xenia Manager on Quit</sys:String>
+    <sys:String x:Key="Settings.ReturnToXeniaOnQuit.Description">On: Returns to Xenia Manager · Off: Closes Everything</sys:String>
+    <sys:String x:Key="Settings.Hint.Back">Back</sys:String>
+
+    <!-- Splash screen -->
+    <sys:String x:Key="Splash.Title">Xenia Big Screen</sys:String>
+    <sys:String x:Key="Splash.Loading">Loading…</sys:String>
+    <sys:String x:Key="Splash.LoadingProfile">Loading Profile</sys:String>
+    <sys:String x:Key="Splash.LoadingSettings">Loading Settings</sys:String>
+    <sys:String x:Key="Splash.LoadingDashboard">Loading Dashboard</sys:String>
+    <sys:String x:Key="Splash.LoadingLibrary">Loading Library</sys:String>
+    <sys:String x:Key="Splash.LoadingMedia">Loading Media</sys:String>
+    <sys:String x:Key="Splash.LoadingDone">Loading Done</sys:String>
 </ResourceDictionary>

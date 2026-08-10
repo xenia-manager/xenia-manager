@@ -9,6 +9,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -31,11 +32,11 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     public ObservableCollection<BackgroundModeOption> BackgroundModeOptions { get; } =
     [
-        new(BackgroundMode.Image, "Image"),
-        new(BackgroundMode.Solid, "Solid Colour"),
-        new(BackgroundMode.LinearGradient, "Linear Gradient"),
-        new(BackgroundMode.RadialGradient, "Radial Gradient"),
-        new(BackgroundMode.Dynamic, "Dynamic (Selected Game)"),
+        new(BackgroundMode.Image, LocalizationHelper.GetText("Settings.BackgroundMode.Image")),
+        new(BackgroundMode.Solid, LocalizationHelper.GetText("Settings.BackgroundMode.Solid")),
+        new(BackgroundMode.LinearGradient, LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")),
+        new(BackgroundMode.RadialGradient, LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient")),
+        new(BackgroundMode.Dynamic, LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic")),
     ];
 
     /// <summary>
@@ -101,12 +102,12 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     public string ModeText => Mode switch
     {
-        BackgroundMode.Image => "Image",
-        BackgroundMode.Solid => "Solid Colour",
-        BackgroundMode.LinearGradient => "Linear Gradient",
-        BackgroundMode.RadialGradient => "Radial Gradient",
-        BackgroundMode.Dynamic => "Dynamic (Selected Game)",
-        _ => "Linear Gradient",
+        BackgroundMode.Image => LocalizationHelper.GetText("Settings.BackgroundMode.Image"),
+        BackgroundMode.Solid => LocalizationHelper.GetText("Settings.BackgroundMode.Solid"),
+        BackgroundMode.LinearGradient => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
+        BackgroundMode.RadialGradient => LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient"),
+        BackgroundMode.Dynamic => LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"),
+        _ => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
     };
 
     /// <summary>
@@ -118,7 +119,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// Display text for the currently configured background image.
     /// </summary>
     public string ImageDisplayText => string.IsNullOrEmpty(_backgroundService.Settings.ImagePath)
-        ? "None"
+        ? LocalizationHelper.GetText("Settings.NoImage")
         : Path.GetFileName(_backgroundService.Settings.ImagePath);
 
     /// <summary>
