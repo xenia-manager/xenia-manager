@@ -5,7 +5,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Models;
@@ -17,7 +16,7 @@ using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Views;
 
-public partial class MainWindow : FAAppWindow
+public partial class MainWindow : Window
 {
     private readonly DashboardNavigationController _navigation;
     private readonly InputRouter _router;
@@ -31,6 +30,8 @@ public partial class MainWindow : FAAppWindow
         _navigation = App.Services.GetRequiredService<DashboardNavigationController>();
         _router = App.Services.GetRequiredService<InputRouter>();
         _gamepadService = App.Services.GetRequiredService<IGamepadService>();
+
+        WindowState = Avalonia.Controls.WindowState.FullScreen;
 
         InitializeComponent();
         Loaded += OnLoaded;

@@ -26,6 +26,15 @@
     <SolidColorBrush x:Key="TextPrimary" Color="{StaticResource TextPrimaryColor}" />
     <SolidColorBrush x:Key="TextSecondary" Color="{StaticResource TextSecondaryColor}" />
 
+    <!-- Input hint keycap colours -->
+    <Color x:Key="HintKeyY">#FFE6A817</Color>
+    <Color x:Key="HintKeyA">#FF107C10</Color>
+    <Color x:Key="HintKeyB">#FFC50F1F</Color>
+
+    <!-- Card shadows -->
+    <BoxShadows x:Key="CardShadow">0 4 12 0 #40000000</BoxShadows>
+    <BoxShadows x:Key="CardShadowSelected">0 6 20 0 #66000000</BoxShadows>
+
     <!-- FLUENTAVALONIA CONTROL OVERRIDES (brush-typed keys) -->
     <Color x:Key="SystemAccentColor">#FF107C41</Color>
     <Color x:Key="SystemAccentColorLight1">#FF2D9B41</Color>

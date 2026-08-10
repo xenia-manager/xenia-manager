@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:XeniaManager.BigScreen.Controls">
+        xmlns:controls="using:XeniaManager.BigScreen.Controls"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent">
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
@@ -25,11 +26,11 @@
 
     <!-- GAME CARD -->
     <Style Selector="controls|GameCard Border#Tile">
-        <Setter Property="BoxShadow" Value="0 4 12 0 #40000000" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
     </Style>
 
     <Style Selector="controls|GameCard.selected Border#Tile">
-        <Setter Property="BoxShadow" Value="0 6 20 0 #66000000" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
     </Style>
 
     <Style Selector="controls|GameCard">
@@ -44,12 +45,7 @@
         <Setter Property="BorderThickness" Value="3" />
     </Style>
 
-    <Style Selector="controls|GameCard:pointerover Border#BorderOverlay">
-        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        <Setter Property="BorderThickness" Value="3" />
-    </Style>
-
-    <Style Selector="controls|GameCard.selected Border#BorderOverlay">
+    <Style Selector="controls|GameCard:pointerover Border#BorderOverlay, controls|GameCard.selected Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
@@ -61,6 +57,55 @@
                 <DropShadowEffect BlurRadius="2" OffsetX="0" OffsetY="0" Color="Black" Opacity="0.55" />
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- Subtle dark halo behind the dashboard header text -->
+    <Style Selector="TextBlock.header-text">
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="3" OffsetX="0" OffsetY="1" Color="Black" Opacity="0.7" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Screen header title (Library / Media / Settings) -->
+    <Style Selector="TextBlock.screen-title">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="FontSize" Value="48" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <!-- Card title-bar text (game + screenshot tiles) -->
+    <Style Selector="TextBlock.card-title">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <!-- Bottom hint bar (keycap + label rows) -->
+    <Style Selector="StackPanel.hint-bar">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Spacing" Value="36" />
+        <Setter Property="Margin" Value="-15,16,0,-15" />
+    </Style>
+
+    <!-- Empty-state stub: card surface, shadow and secondary text -->
+    <Style Selector="Border.empty-state">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style Selector="Border.empty-state TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Border.empty-state fluent|SymbolIcon">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
     <!-- SETTINGS OVERLAY ROWS: reserved border thickness so focus doesn't change size -->
@@ -110,11 +155,11 @@
     </Style>
 
     <Style Selector="controls|ScreenshotCard Border#Tile">
-        <Setter Property="BoxShadow" Value="0 4 12 0 #40000000" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
     </Style>
 
     <Style Selector="controls|ScreenshotCard.selected Border#Tile">
-        <Setter Property="BoxShadow" Value="0 6 20 0 #66000000" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
     </Style>
 
     <!-- Border overlay above the art: carries every card stroke -->
@@ -136,13 +181,13 @@
     </Style>
 
     <Style Selector="controls|OptionsCard Border#Tile">
-        <Setter Property="BoxShadow" Value="0 4 12 0 #40000000" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <Style Selector="controls|OptionsCard:pointerover Border#Tile, controls|OptionsCard.selected Border#Tile">
-        <Setter Property="BoxShadow" Value="0 6 20 0 #66000000" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 

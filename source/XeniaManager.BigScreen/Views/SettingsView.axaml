@@ -55,10 +55,8 @@
 
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
         <TextBlock Grid.Row="0"
+                   Classes="screen-title"
                    Text="{DynamicResource Settings.Title}"
-                   Foreground="{DynamicResource TextPrimary}"
-                   FontSize="48"
-                   FontWeight="Bold"
                    Margin="0,20,0,30" />
 
         <ScrollViewer Grid.Row="1">
@@ -202,11 +200,8 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    Spacing="36"
-                    Margin="-15,16,0,-15">
-            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="{DynamicResource Settings.Hint.Back}" />
+        <StackPanel Grid.Row="2" Classes="hint-bar">
+            <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}" Text="{DynamicResource Settings.Hint.Back}" />
         </StackPanel>
     </Grid>
 </UserControl>

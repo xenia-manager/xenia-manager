@@ -1,10 +1,9 @@
-<windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
         xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:controls="using:XeniaManager.BigScreen.Controls"
         xmlns:views="using:XeniaManager.BigScreen.Views"
-        xmlns:windowing="using:FluentAvalonia.UI.Windowing"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,26 +16,6 @@
         WindowState="FullScreen"
         WindowStartupLocation="CenterScreen"
         Background="{Binding Dashboard.Background}">
-
-    <Window.DataTemplates>
-        <DataTemplate DataType="items:GameCardViewModel">
-            <controls:GameCard/>
-        </DataTemplate>
-        <DataTemplate DataType="items:OptionsCardViewModel">
-            <controls:OptionsCard/>
-        </DataTemplate>
-    </Window.DataTemplates>
-
-    <Window.Styles>
-        <!-- Subtle dark halo so header text stays readable over any background image -->
-        <Style Selector="TextBlock.header-text">
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="3" OffsetX="0" OffsetY="1" Color="Black" Opacity="0.7" />
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Styles>
 
     <!-- Shared centered column so the header margins align with the content rows -->
     <Grid RowDefinitions="150, *" ColumnDefinitions="*, Auto, *">
@@ -139,4 +118,4 @@
         </Panel>
     </Grid>
 
-</windowing:FAAppWindow>
+</Window>

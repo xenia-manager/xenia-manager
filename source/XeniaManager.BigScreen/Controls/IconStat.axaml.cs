@@ -28,12 +28,6 @@ public partial class IconStat : UserControl
         AvaloniaProperty.Register<IconStat, double>(nameof(IconSize), 16);
 
     /// <summary>
-    /// Defines the <see cref="FontSize"/> property.
-    /// </summary>
-    public static new readonly StyledProperty<double> FontSizeProperty =
-        AvaloniaProperty.Register<IconStat, double>(nameof(FontSize), 15);
-
-    /// <summary>
     /// Defines the <see cref="Spacing"/> property.
     /// </summary>
     public static readonly StyledProperty<double> SpacingProperty =
@@ -70,15 +64,6 @@ public partial class IconStat : UserControl
     {
         get => GetValue(IconSizeProperty);
         set => SetValue(IconSizeProperty, value);
-    }
-
-    /// <summary>
-    /// The stat text size in pixels.
-    /// </summary>
-    public new double FontSize
-    {
-        get => GetValue(FontSizeProperty);
-        set => SetValue(FontSizeProperty, value);
     }
 
     /// <summary>

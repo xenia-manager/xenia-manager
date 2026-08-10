@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -42,6 +43,7 @@ public partial class App : Application
             Logger.Info<App>("StartApp: resolving MainWindow");
             MainWindow mainWindow = Services.GetRequiredService<MainWindow>();
             desktop.MainWindow = mainWindow;
+            mainWindow.WindowState = Avalonia.Controls.WindowState.FullScreen;
             mainWindow.Show();
             Logger.Info<App>("StartApp: MainWindow shown");
 

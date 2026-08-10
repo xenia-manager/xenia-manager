@@ -11,6 +11,7 @@ public partial class SplashWindow : FAAppWindow
 {
     public SplashWindow()
     {
+        WindowState = Avalonia.Controls.WindowState.FullScreen;
         InitializeComponent();
     }
 

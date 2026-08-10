@@ -13,10 +13,8 @@
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
         <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,30">
             <TextBlock Grid.Column="0"
-                       Text="{DynamicResource Library.Title}"
-                       Foreground="{DynamicResource TextPrimary}"
-                       FontSize="48"
-                       FontWeight="Bold" />
+                       Classes="screen-title"
+                       Text="{DynamicResource Library.Title}" />
             <controls:IconStat Grid.Column="1"
                                Icon="ArrowSort"
                                Stat="{Binding SortText}"
@@ -50,35 +48,25 @@
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
             <Border Width="320" Height="200"
-                    CornerRadius="10"
-                    Background="{DynamicResource CardBackground}"
-                    BoxShadow="0 4 12 0 #40000000"
+                    Classes="empty-state"
                     IsVisible="{Binding ShowEmptyStub}"
-                    IsHitTestVisible="False"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
                             Spacing="16">
                     <fluent:SymbolIcon Symbol="PlayCircle"
-                                       FontSize="72"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       HorizontalAlignment="Center" />
+                                       FontSize="72" />
                     <TextBlock Text="{DynamicResource Library.NoGamesFound}"
-                               Foreground="{DynamicResource TextSecondary}"
-                               FontSize="24"
-                               TextAlignment="Center" />
+                               FontSize="24" />
                 </StackPanel>
             </Border>
         </Grid>
 
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    Spacing="36"
-                    Margin="-15,16,0,-15">
-            <controls:InputHint Char="Y" KeyColour="#E6A817" Text="{DynamicResource Library.Hint.Sort}" />
-            <controls:InputHint Char="A" KeyColour="#107C10" Text="{DynamicResource Library.Hint.Play}" />
-            <controls:InputHint Char="B" KeyColour="#C50F1F" Text="{DynamicResource Library.Hint.Back}" />
+        <StackPanel Grid.Row="2" Classes="hint-bar">
+            <controls:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}" Text="{DynamicResource Library.Hint.Sort}" />
+            <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}" Text="{DynamicResource Library.Hint.Play}" />
+            <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}" Text="{DynamicResource Library.Hint.Back}" />
         </StackPanel>
     </Grid>
 </UserControl>

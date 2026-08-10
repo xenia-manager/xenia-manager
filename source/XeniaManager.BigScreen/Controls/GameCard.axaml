@@ -3,38 +3,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:controls="using:XeniaManager.BigScreen.Controls"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200"
              x:Class="XeniaManager.BigScreen.Controls.GameCard"
              x:DataType="vm:GameCardViewModel"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
-    <Grid>
-        <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="12" />
-        <Border x:Name="ArtClip">
-            <Panel>
-                <Image Source="{Binding BoxArt}"
-                       IsVisible="{Binding HasBoxArt}"
-                       VerticalAlignment="Bottom"
-                       Stretch="UniformToFill" />
-                <Image Source="{Binding DiscArt}"
-                       IsVisible="{Binding HasDiscArt}"
-                       Stretch="UniformToFill" />
-            </Panel>
-        </Border>
-        <Border x:Name="TitleBar"
-                Background="{DynamicResource CardTitleBar}"
-                IsVisible="{Binding IsSelected}"
-                VerticalAlignment="Bottom"
-                CornerRadius="0,0,8,8">
-            <TextBlock Text="{Binding Title}"
-                       Foreground="{DynamicResource TextPrimary}"
-                       Padding="20"
-                       FontSize="15"
-                       TextTrimming="CharacterEllipsis" />
-        </Border>
-        <Border x:Name="BorderOverlay"
-                Margin="-2"
-                CornerRadius="12"
-                IsHitTestVisible="False" />
-    </Grid>
+    <controls:ArtTile Art="{Binding BoxArt}"
+                      HasArt="{Binding HasBoxArt}"
+                      SecondaryArt="{Binding DiscArt}"
+                      HasSecondaryArt="{Binding HasDiscArt}"
+                      Title="{Binding Title}" />
 </UserControl>

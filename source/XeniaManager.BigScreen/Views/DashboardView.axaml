@@ -15,23 +15,18 @@
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
             <Border Width="200" Height="250"
+                    Classes="empty-state"
+                    CornerRadius="8"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    Background="{DynamicResource CardBackground}"
-                    CornerRadius="8"
-                    IsVisible="{Binding ShowEmptyStub}"
-                    IsHitTestVisible="False">
+                    IsVisible="{Binding ShowEmptyStub}">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
                             Spacing="12">
                     <fluent:SymbolIcon Symbol="PlayCircle"
-                                       FontSize="64"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       HorizontalAlignment="Center" />
+                                       FontSize="64" />
                     <TextBlock Text="{DynamicResource Dashboard.NoGamesFound}"
-                               Foreground="{DynamicResource TextSecondary}"
-                               FontSize="16"
-                               TextAlignment="Center" />
+                               FontSize="16" />
                 </StackPanel>
             </Border>
 
