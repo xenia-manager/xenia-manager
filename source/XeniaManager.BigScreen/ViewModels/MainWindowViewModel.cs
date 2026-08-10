@@ -152,7 +152,8 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Re-sorts the game collection, keeping the currently selected game selected.
+    /// Re-sorts the game collection. The selection follows the list position,
+    /// not the element, so the selected card stays in the same spot on screen.
     /// </summary>
     private void ApplySort()
     {
@@ -161,7 +162,12 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        GameCardViewModel? selected = Games.FirstOrDefault(g => g.IsSelected);
+        int selectedIndex = Games.IndexOf(Games.FirstOrDefault(g => g.IsSelected) ?? Games[0]);
+        if (selectedIndex < 0)
+        {
+            selectedIndex = 0;
+        }
+
         List<GameCardViewModel> sorted = Sort switch
         {
             LibrarySort.TimePlayed => Games.OrderByDescending(g => g.Game.Playtime).ToList(),
@@ -172,13 +178,11 @@ public partial class MainWindowViewModel : ViewModelBase
         Games.Clear();
         foreach (GameCardViewModel game in sorted)
         {
+            game.IsSelected = false;
             Games.Add(game);
         }
 
-        if (selected != null)
-        {
-            selected.IsSelected = true;
-        }
+        Games[Math.Clamp(selectedIndex, 0, Games.Count - 1)].IsSelected = true;
     }
 
     /// <summary>
@@ -233,7 +237,8 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Re-sorts the screenshot collection, keeping the selected screenshot selected.
+    /// Re-sorts the screenshot collection. The selection follows the list position,
+    /// not the element, so the selected card stays in the same spot on screen.
     /// </summary>
     private void ApplyMediaSort()
     {
@@ -242,7 +247,12 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        ScreenshotItemViewModel? selected = Screenshots.FirstOrDefault(s => s.IsSelected);
+        int selectedIndex = Screenshots.IndexOf(Screenshots.FirstOrDefault(s => s.IsSelected) ?? Screenshots[0]);
+        if (selectedIndex < 0)
+        {
+            selectedIndex = 0;
+        }
+
         List<ScreenshotItemViewModel> sorted = MediaSort switch
         {
             MediaSort.OldestFirst => Screenshots.OrderBy(s => s.CapturedAt).ToList(),
@@ -253,13 +263,11 @@ public partial class MainWindowViewModel : ViewModelBase
         Screenshots.Clear();
         foreach (ScreenshotItemViewModel screenshot in sorted)
         {
+            screenshot.IsSelected = false;
             Screenshots.Add(screenshot);
         }
 
-        if (selected != null)
-        {
-            selected.IsSelected = true;
-        }
+        Screenshots[Math.Clamp(selectedIndex, 0, Screenshots.Count - 1)].IsSelected = true;
     }
 
     /// <summary>
