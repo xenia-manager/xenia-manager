@@ -3,7 +3,7 @@
 > **Status:** Living document. Update as the project evolves.
 > **Project:** `source/XeniaManager.BigScreen/`
 > **Branch:** `feature/big-screen`
-> **Stack:** Avalonia 12.1.0 · .NET 10 · CommunityToolkit.Mvvm · FluentAvalonia · SDL3-CS (planned)
+> **Stack:** Avalonia 12.1.0 · .NET 10 · CommunityToolkit.Mvvm · FluentAvalonia · SDL3-CS · Microsoft.Extensions.DependencyInjection (transitive via Core)
 
 ---
 
@@ -70,11 +70,11 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 
 ```
 source/XeniaManager.BigScreen/
-├── App.axaml / App.axaml.cs        # Application shell, theme wiring, localization init, MainWindow + VM setup
+├── App.axaml / App.axaml.cs        # Application shell, theme wiring, localization init, DI container (App.Services) + MainWindow resolution
 ├── Program.cs                       # Entry point; redirects base dir to the base app's folder
 ├── ViewLocator.cs                   # VM → View resolution (ViewModels.XViewModel → Views.XView)
 ├── Views/
-│   ├── MainWindow.axaml(.cs)        # Shell: header, background/fade layers, dashboard + overlay ContentControls, input routing
+│   ├── MainWindow.axaml(.cs)        # Shell: header, background/fade layers, dashboard + overlay screens, input routing
 │   ├── DashboardView.axaml(.cs)     # Recent games row + options row + empty stub
 │   ├── LibraryView.axaml(.cs)       # Library carousel + clamped scroll + empty stub
 │   ├── MediaView.axaml(.cs)         # Media gallery grid + nested viewer sub-screen
@@ -105,15 +105,22 @@ source/XeniaManager.BigScreen/
 │   └── PalettePicker.cs             # Swatch row
 ├── Services/
 │   ├── BaseAppLocator.cs            # Resolves the base Xenia Manager folder (--base-dir / side-by-side / sibling)
-│   ├── BackgroundService.cs         # Settings load/save, brush factory, ApplyResources
+│   ├── BackgroundService.cs         # Settings load/save, brush factory, ApplyResources (IBackgroundService)
 │   ├── ColorJsonConverter.cs
 │   ├── DashboardNavigationController.cs # Row state machine, selection movement, option activation (view focus/scroll via events)
-│   ├── GameLibraryService.cs        # Wraps Core GameManager: load, game list, recent-games selection
-│   ├── GamepadService.cs            # SDL3 polling, button/axis normalization, open/close gamepad
-│   ├── IGamepadService.cs           # Abstraction over the SDL gamepad subsystem (input + battery state)
-│   ├── InputRouter.cs               # Translates keyboard + gamepad input into navigation actions (one state machine)
-│   ├── ProfileService.cs            # Canary profile, gamertag/gamerscore, per-game achievement/GPD stats
-│   └── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching
+│   ├── GameLibraryService.cs        # Wraps Core GameManager: load, game list, recent-games selection (IGameLibraryService)
+│   ├── GamepadService.cs            # SDL3 polling, button/axis normalization, open/close gamepad (IGamepadService)
+│   ├── IBackgroundService.cs / IGamepadService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs
+│   ├── InputRouter.cs               # Command-driven: key/gamepad → Command → per-screen handler (one state machine, no duplicated branching)
+│   ├── ProfileService.cs            # Canary profile, gamertag/gamerscore, per-game achievement/GPD stats (IProfileService)
+│   ├── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching (IScreenshotLibraryService)
+│   └── ServiceConfigurator.cs       # DI registration (mirrors the main app: singleton services + VMs, App.Services)
+├── Constants/
+│   ├── AppConstants.cs              # BaseAppExecutable, RecentGamesLimit
+│   ├── TimingConstants.cs           # Gamepad poll + clock intervals
+│   ├── FormatConstants.cs           # Clock/capture-date formats, XUID format
+│   ├── XboxConstants.cs             # ProfileContentTitleId (FFFE07D1)
+│   └── LayoutConstants.cs           # Vignette step, gradient mixes, accent tint step, carousel fallbacks
 ├── Utilities/
 │   ├── SelectionHelper.cs           # ISelectable + single-selection helpers (move/select/resort-preserving)
 │   ├── EnumCycleHelper.cs           # Generic enum + colour palette cycling
@@ -133,15 +140,16 @@ source/XeniaManager.BigScreen/
     └── Art/                          # Sample wallpapers for testing
 ```
 
-**Navigation:** the shell hosts the dashboard as a `ContentControl` (`MainWindowViewModel.Dashboard`) and the overlay layer as another (`MainWindowViewModel.CurrentScreen`, null = dashboard visible). Both resolve through the `ViewLocator` (registered in `App.axaml`): `LibraryViewModel → LibraryView`, `MediaViewModel → MediaView` (which nests `MediaViewerViewModel → MediaViewerView` as its own sub-screen), `SettingsViewModel → SettingsView`. Overlay views are created per open; the window interacts with them via live visual-tree lookups (focus/scroll requests raised by `DashboardNavigationController`).
+**Navigation:** the shell hosts the dashboard as a `ContentControl` (`MainWindowViewModel.Dashboard`) and the three overlay screens as pre-instantiated `ContentControl`s whose content never changes (`MainWindowViewModel.Library` / `Media` / `Settings`, visibility flipped via `Is*Screen`). Views are created **once at startup** — opening a screen is a pure visibility flip (instant), and all boot-time work (screenshot scan, first layout) happens behind the future splash screen. The viewer nests as a sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`, created per open). The window interacts with the overlay views via live visual-tree lookups (`Find<T>()`) for focus/scroll requests raised by `DashboardNavigationController`.
 
 **Data flow**
-- Input: keyboard (`OnWindowKeyDown`) and gamepad (`GamepadService.ButtonPressed`) → `InputRouter` → `DashboardNavigationController` actions (move/select/activate) → selection `IsSelected` → styled visuals; the controller raises focus/scroll requests the window fulfills (live visual-tree lookups).
-- Navigation: `OptionsCardViewModel.TargetScreen` → `MainWindowViewModel.OpenScreen()` → `CurrentScreen` (a screen VM) → `ContentControl` → `ViewLocator` resolves the overlay view; null shows the dashboard. Media nests its own viewer sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`).
+- DI: `App.Services` (built by `ServiceConfigurator.ConfigureServices()`) → singleton services (`IBackgroundService`, `IProfileService`, `IGameLibraryService`, `IScreenshotLibraryService`, `IGamepadService`, `DashboardNavigationController`, `InputRouter`) + `MainWindowViewModel` + `MainWindow` (ctor-injected, mirrors the main app).
+- Input: keyboard (`OnWindowKeyDown`) and gamepad (`IGamepadService.ButtonPressed`) → `InputRouter` (key/button → `Command` → per-screen handler) → `DashboardNavigationController` actions (move/select/activate) → selection `IsSelected` → styled visuals; the controller raises focus/scroll requests the window fulfills.
+- Navigation: `OptionsCardViewModel.TargetScreen` → `MainWindowViewModel.OpenScreen()` → `CurrentScreen` (a screen VM) → the matching overlay's `IsVisible` flips; null shows the dashboard. Media nests its own viewer sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`).
 - Selection: focus/click on a card → `IsSelected` → styled via `.selected` class / pseudo-class → visuals. **Dashboard (`DashboardViewModel.RecentGames`) and library (`LibraryViewModel.Games`) hold separate VM instances with independent selections.**
-- Settings: VM property → `BackgroundService.Settings` → `Save()` + `ApplyResources()` → `Application.Resources` → `DynamicResource` bindings; `SettingsViewModel.AppearanceChanged` → dashboard rebuilds its background.
+- Settings: VM property → `IBackgroundService.Settings` → `Save()` + `ApplyResources()` → `Application.Resources` → `DynamicResource` bindings; `SettingsViewModel.AppearanceChanged` → dashboard rebuilds its background.
 - Sorting: **Y** in the library → `LibraryViewModel.CycleSort()` → re-orders `Games` (title asc, playtime desc, last-played desc), keeps the selection, re-scrolls.
-- Data: `ProfileService` (profile + GPD stats) · `GameLibraryService` (Core `GameManager` wrapper) · `ScreenshotLibraryService` (scan + game-title matching) feed the child VMs; Core paths (library, games, artwork, profiles, logs) resolve against the base app's folder via `Program.Main` → `BaseAppLocator.Resolve(args)` → `AppPathResolver.SetBaseDirectory(...)`.
+- Data: `IProfileService` (profile + GPD stats) · `IGameLibraryService` (Core `GameManager` wrapper) · `IScreenshotLibraryService` (scan + game-title matching) feed the child VMs; Core paths (library, games, artwork, profiles, logs) resolve against the base app's folder via `Program.Main` → `BaseAppLocator.Resolve(args)` → `AppPathResolver.SetBaseDirectory(...)`.
 
 **Core integration points (available in `XeniaManager.Core`)**
 - `GameManager.LoadLibrary()` / `GameManager.Games` — real library.
@@ -240,7 +248,7 @@ source/XeniaManager.BigScreen/
 - [x] Header icons aligned (fixed-size centred boxes); `ControllerConnected` now live
 
 ### 5.10 Final hardening phase
-- [ ] Manual walkthrough of everything; rewrites where necessary
+- [x] Manual walkthrough of everything; rewrites where necessary
 - [x] Maintainability sweep: deduplication, DRY, SOLID
 - [x] **Codebase compliance sweep** against root `CONTRIBUTING.md`:
   - [x] Naming: `_camelCase` private fields, PascalCase methods/properties, Hungarian-prefixed XAML names (`Cmb`, `Txt`, `Btn`, `Tbl`, `Sp`, `Grd`, `Sv`)
@@ -249,6 +257,14 @@ source/XeniaManager.BigScreen/
   - [x] Logger-based error handling (`Logger.Error<T>`, `Logger.LogExceptionDetails<T>`)
   - [x] 4-space indent, braces on new lines, file-scoped namespaces, alphabetical usings
   - [x] MVVM: keep code-behind minimal; business logic in Core
+
+### 5.11 Post-sweep engineering
+- [x] **Command-driven `InputRouter` rewrite** — key/button → `Command` enum → per-screen handler; kills the duplicated keyboard/gamepad branching; extracted `CloseOverlay`/`MoveDashboard`/`Activate` helpers
+- [x] **DI adoption (mirrors main app)** — `ServiceConfigurator` + `App.Services` (Microsoft.Extensions.DependencyInjection, transitive via Core); interface + impl for all services; `MainWindow` ctor-injected; single `IGamepadService` singleton (the double-instantiation bug that dropped ~half of gamepad input was found and fixed)
+- [x] **Logging alignment** — density raised to ~1 per 58 lines (was 1/113; main app ~1/21): lifecycle milestones, navigation, launches, settings changes (Info), transitions/moves (Debug/Trace), slider values at Debug to avoid spam
+- [x] **Constants extraction** — `Constants/` (App/Timing/Format/Xbox/Layout), mirrors Core's per-domain static classes; zero magic values left in C#
+- [x] **CPP-style declaration order** (repo convention) — fields → properties → constructors → methods; nothing called before it's declared; expression bodies for one-liners; explicit types (no `var`)
+- [x] **Performance fixes** — overlay screens pre-instantiated at startup (open = visibility flip, no per-open view creation); screenshot scan moved to boot; library first-game pre-selected on open (VM-side, avoids startup background clobber); first library game's background art pre-warmed at boot; viewer selection follows the stepped screenshot (grid lands on the last viewed image on close); missing `IsViewerOpen` change notification fixed
 
 ---
 
