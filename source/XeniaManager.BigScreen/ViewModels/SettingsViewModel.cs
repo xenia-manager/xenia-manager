@@ -28,6 +28,11 @@ public partial class SettingsViewModel : ViewModelBase
     public event Action? AppearanceChanged;
 
     /// <summary>
+    /// Raised after the library view mode changed, so the library can switch layouts live.
+    /// </summary>
+    public event Action? LibraryViewModeChanged;
+
+    /// <summary>
     /// Options shown in the settings background-type dropdown.
     /// </summary>
     public ObservableCollection<BackgroundModeOption> BackgroundModeOptions { get; } =
@@ -40,6 +45,15 @@ public partial class SettingsViewModel : ViewModelBase
     ];
 
     /// <summary>
+    /// Options shown in the settings library-view dropdown.
+    /// </summary>
+    public ObservableCollection<LibraryViewModeOption> LibraryViewModeOptions { get; } =
+    [
+        new(LibraryViewMode.Carousel, LocalizationHelper.GetText("Settings.LibraryView.Carousel")),
+        new(LibraryViewMode.List, LocalizationHelper.GetText("Settings.LibraryView.List")),
+    ];
+
+    /// <summary>
     /// The selected option in the background-type dropdown.
     /// </summary>
     [ObservableProperty] private BackgroundModeOption? _selectedBackgroundMode;
@@ -48,6 +62,16 @@ public partial class SettingsViewModel : ViewModelBase
     /// The active background mode.
     /// </summary>
     [ObservableProperty] private BackgroundMode _mode = BackgroundMode.LinearGradient;
+
+    /// <summary>
+    /// The selected option in the library-view dropdown.
+    /// </summary>
+    [ObservableProperty] private LibraryViewModeOption? _selectedLibraryViewMode;
+
+    /// <summary>
+    /// The active library view mode.
+    /// </summary>
+    [ObservableProperty] private LibraryViewMode _libraryViewMode = LibraryViewMode.Carousel;
 
     /// <summary>
     /// The primary color; gradients are derived from it.
@@ -89,6 +113,8 @@ public partial class SettingsViewModel : ViewModelBase
         AccentColor = _backgroundService.Settings.AccentColor;
         VignetteOpacity = _backgroundService.Settings.VignetteOpacity;
         ReturnToXeniaOnQuit = _backgroundService.Settings.ReturnToXeniaOnQuit;
+        LibraryViewMode = _backgroundService.Settings.LibraryViewMode;
+        SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == LibraryViewMode);
     }
 
     /// <summary>
@@ -205,5 +231,22 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService.Settings.ReturnToXeniaOnQuit = value;
         _backgroundService.Save();
         Logger.Info<SettingsViewModel>($"Return to Xenia Manager on quit: {value}");
+    }
+
+    partial void OnLibraryViewModeChanged(LibraryViewMode value)
+    {
+        _backgroundService.Settings.LibraryViewMode = value;
+        _backgroundService.Save();
+        SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == value);
+        LibraryViewModeChanged?.Invoke();
+        Logger.Info<SettingsViewModel>($"Library view mode changed to {value}");
+    }
+
+    partial void OnSelectedLibraryViewModeChanged(LibraryViewModeOption? value)
+    {
+        if (value != null)
+        {
+            LibraryViewMode = value.Mode;
+        }
     }
 }

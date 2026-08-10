@@ -45,4 +45,10 @@ public class DashboardSettings
     /// </summary>
     [JsonPropertyName("return_to_xenia")]
     public bool ReturnToXeniaOnQuit { get; set; } = true;
+
+    /// <summary>
+    /// The layout used by the library screen.
+    /// </summary>
+    [JsonPropertyName("library_view_mode")]
+    public LibraryViewMode LibraryViewMode { get; set; } = LibraryViewMode.Carousel;
 }

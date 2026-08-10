@@ -84,6 +84,28 @@
                     </DockPanel>
                 </Border>
 
+                <!-- LIBRARY VIEW -->
+                <Border CornerRadius="10"
+                        Padding="24,16"
+                        Background="{DynamicResource CardBackground}"
+                        BoxShadow="0 4 12 0 #40000000">
+                    <DockPanel>
+                        <ComboBox x:Name="LibraryViewModeCombo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding LibraryViewModeOptions}"
+                                  SelectedItem="{Binding SelectedLibraryViewMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}"
+                                  VerticalAlignment="Center"
+                                  Width="420"
+                                  FontSize="22"
+                                  Padding="12,8" />
+                        <TextBlock Text="{DynamicResource Settings.LibraryView}"
+                                   VerticalAlignment="Center"
+                                   FontSize="24"
+                                   Foreground="{DynamicResource TextPrimary}" />
+                    </DockPanel>
+                </Border>
+
                 <!-- PRIMARY COLOUR -->
                 <Border CornerRadius="10"
                         Padding="24,16"

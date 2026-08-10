@@ -145,6 +145,28 @@
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
+    <!-- LIBRARY LIST ITEM (list view rows) -->
+    <Style Selector="controls|LibraryListItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|LibraryListItem Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+    </Style>
+
+    <Style Selector="controls|LibraryListItem:pointerover Border#RowBorder, controls|LibraryListItem:focus-visible Border#RowBorder, controls|LibraryListItem.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
     <!-- SCREENSHOT CARD (media gallery) -->
     <Style Selector="controls|ScreenshotCard">
         <Setter Property="Transitions">

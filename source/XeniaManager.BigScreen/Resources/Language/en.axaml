@@ -25,6 +25,14 @@
     <sys:String x:Key="Library.Hint.Play">Play</sys:String>
     <sys:String x:Key="Library.Hint.Back">Back</sys:String>
 
+    <!-- Library list view details pane -->
+    <sys:String x:Key="Library.Details.NoInfo">No information available</sys:String>
+    <sys:String x:Key="Library.Details.Description">Description</sys:String>
+    <sys:String x:Key="Library.Details.Genre">Genre:</sys:String>
+    <sys:String x:Key="Library.Details.Developer">Developer:</sys:String>
+    <sys:String x:Key="Library.Details.Publisher">Publisher:</sys:String>
+    <sys:String x:Key="Library.Details.Released">Released:</sys:String>
+
     <!-- Media screen -->
     <sys:String x:Key="Media.Title">Media</sys:String>
     <sys:String x:Key="Media.NoScreenshotsFound">No screenshots found</sys:String>
@@ -41,6 +49,9 @@
     <!-- Settings screen -->
     <sys:String x:Key="Settings.Title">Settings</sys:String>
     <sys:String x:Key="Settings.BackgroundType">Background Type</sys:String>
+    <sys:String x:Key="Settings.LibraryView">Library View</sys:String>
+    <sys:String x:Key="Settings.LibraryView.Carousel">Carousel</sys:String>
+    <sys:String x:Key="Settings.LibraryView.List">List</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.Image">Image</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.Solid">Solid Colour</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.LinearGradient">Linear Gradient</sys:String>

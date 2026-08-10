@@ -28,6 +28,7 @@ public class InputRouter(DashboardNavigationController navigation)
         Activate,
         Back,
         CycleSort,
+        ToggleView,
     }
 
     /// <summary>
@@ -104,6 +105,12 @@ public class InputRouter(DashboardNavigationController navigation)
                 case Command.MoveRight:
                     navigation.MoveGameSelection(vm.Library, 1);
                     break;
+                case Command.MoveUp:
+                    navigation.MoveGameSelection(vm.Library, -1);
+                    break;
+                case Command.MoveDown:
+                    navigation.MoveGameSelection(vm.Library, 1);
+                    break;
                 case Command.CycleSort:
                     // Sort keeps the selection on the same card, but the viewport stays put
                     vm.Library.CycleSort();
@@ -113,6 +120,9 @@ public class InputRouter(DashboardNavigationController navigation)
                     break;
                 case Command.Back:
                     CloseOverlay(vm);
+                    break;
+                case Command.ToggleView:
+                    vm.Library.ToggleView();
                     break;
             }
         }
@@ -210,6 +220,7 @@ public class InputRouter(DashboardNavigationController navigation)
             Key.Enter or Key.Space => Command.Activate,
             Key.B or Key.Escape => Command.Back,
             Key.Y => Command.CycleSort,
+            Key.V => Command.ToggleView,
             _ => null,
         };
     }
@@ -228,6 +239,7 @@ public class InputRouter(DashboardNavigationController navigation)
             GamepadButton.A => Command.Activate,
             GamepadButton.B => Command.Back,
             GamepadButton.Y => Command.CycleSort,
+            GamepadButton.View => Command.ToggleView,
             _ => null,
         };
     }

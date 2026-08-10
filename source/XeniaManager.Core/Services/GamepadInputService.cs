@@ -162,6 +162,7 @@ public class GamepadInputService : IGamepadInputService
             SDL_GamepadButton.SDL_GAMEPAD_BUTTON_DPAD_DOWN => GamepadButton.DpadDown,
             SDL_GamepadButton.SDL_GAMEPAD_BUTTON_LEFT_SHOULDER => GamepadButton.LeftShoulder,
             SDL_GamepadButton.SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER => GamepadButton.RightShoulder,
+            SDL_GamepadButton.SDL_GAMEPAD_BUTTON_BACK => GamepadButton.View,
             _ => null,
         };
 

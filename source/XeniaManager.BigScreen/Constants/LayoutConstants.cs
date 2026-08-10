@@ -21,6 +21,16 @@ public static class LayoutConstants
     public const double LibraryCardSpacing = 25;
 
     /// <summary>
+    /// Fallback height of a library list row before the first real layout.
+    /// </summary>
+    public const double LibraryListRowHeight = 96;
+
+    /// <summary>
+    /// Fallback spacing between library list rows before the first real layout.
+    /// </summary>
+    public const double LibraryListRowSpacing = 16;
+
+    /// <summary>
     /// How far gradient shades are mixed toward black at the mid stop.
     /// </summary>
     public const double GradientMixAmount = 0.12;

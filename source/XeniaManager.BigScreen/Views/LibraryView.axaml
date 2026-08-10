@@ -5,6 +5,7 @@
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
+             xmlns:conv="using:Avalonia.Data.Converters"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Views.LibraryView"
@@ -25,43 +26,99 @@
                                FontSize="24" />
         </Grid>
 
-        <Grid Grid.Row="1">
-            <ScrollViewer x:Name="SvCarousel"
-                          HorizontalScrollBarVisibility="Hidden"
-                          VerticalScrollBarVisibility="Disabled">
-                <ItemsControl x:Name="GamesRow"
-                              ItemsSource="{Binding Games}"
-                              Margin="0,40,0,0"
-                              VerticalAlignment="Top">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="items:GameCardViewModel">
-                            <controls:LibraryCard/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="20" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
+        <Grid Grid.Row="1" Margin="0,20">
+            <!-- CAROUSEL VIEW: horizontal card row -->
+            <Grid IsVisible="{Binding !IsListView}">
+                <ScrollViewer x:Name="SvCarousel"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl x:Name="GamesRow"
+                                  ItemsSource="{Binding Games}"
+                                  Margin="0,40,0,0"
+                                  VerticalAlignment="Top">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="items:GameCardViewModel">
+                                <controls:LibraryCard/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="20" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
 
-            <!-- Empty-library stub: subtle disc card, shown when there are no games -->
-            <Border IsVisible="{Binding ShowEmptyStub}"
-                    Height="200"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="320"
-                    Classes="empty-state">
-                <StackPanel Orientation="Vertical"
-                            VerticalAlignment="Center"
-                            Spacing="16">
-                    <fluent:SymbolIcon Symbol="PlayCircle"
-                                       FontSize="72" />
-                    <TextBlock Text="{DynamicResource Library.NoGamesFound}"
-                               FontSize="24" />
-                </StackPanel>
-            </Border>
+                <!-- Empty-library stub: subtle disc card, shown when there are no games -->
+                <Border IsVisible="{Binding ShowEmptyStub}"
+                        Height="200"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="320"
+                        Classes="empty-state">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Spacing="16">
+                        <fluent:SymbolIcon Symbol="PlayCircle"
+                                           FontSize="72" />
+                        <TextBlock Text="{DynamicResource Library.NoGamesFound}"
+                                   FontSize="24" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- LIST VIEW: vertical list + details pane -->
+            <Grid ColumnDefinitions="3*,4*" ColumnSpacing="40" IsVisible="{Binding IsListView}">
+                <Border Grid.Column="0"
+                        Padding="14"
+                        Background="{DynamicResource CardBackground}"
+                        BorderBrush="{DynamicResource CardBorder}"
+                        BorderThickness="4"
+                        BoxShadow="0 4 12 0 #40000000"
+                        CornerRadius="12">
+                    <ScrollViewer x:Name="SvList"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <ItemsControl x:Name="GamesList"
+                                      ItemsSource="{Binding Games}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="items:GameCardViewModel">
+                                    <controls:LibraryListItem/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" Spacing="16" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+
+                <Border Grid.Column="1"
+                        IsVisible="{Binding Details, Converter={x:Static conv:ObjectConverters.IsNotNull}}">
+                    <controls:GameDetailsPanel DataContext="{Binding Details}" />
+                </Border>
+
+                <!-- Empty-library stub (list view) -->
+                <Border Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        IsVisible="{Binding ShowEmptyStub}"
+                        Height="200"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="320"
+                        Classes="empty-state">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Spacing="16">
+                        <fluent:SymbolIcon Symbol="PlayCircle"
+                                           FontSize="72" />
+                        <TextBlock Text="{DynamicResource Library.NoGamesFound}"
+                                   FontSize="24" />
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
 
         <StackPanel Grid.Row="2" Classes="hint-bar">
