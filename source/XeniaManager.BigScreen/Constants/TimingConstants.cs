@@ -45,5 +45,5 @@ public static class TimingConstants
     /// <summary>
     /// Minimum total time the splash stays visible.
     /// </summary>
-    public static readonly TimeSpan SplashMinimumShowTime = TimeSpan.FromSeconds(3);
+    public static readonly TimeSpan SplashMinimumShowTime = TimeSpan.FromSeconds(2);
 }

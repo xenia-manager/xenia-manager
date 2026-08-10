@@ -9,18 +9,18 @@
              x:DataType="vm:OptionsCardViewModel"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
-    <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="8">
+    <Border x:Name="Tile" CornerRadius="8" Background="{DynamicResource CardBackground}">
         <StackPanel Margin="24"
                     Orientation="Horizontal"
                     Spacing="16"
                     VerticalAlignment="Center">
             <fluent:SymbolIcon Symbol="{Binding Icon}"
-                               Foreground="{DynamicResource TextPrimary}"
-                               FontSize="32" />
+                               FontSize="32"
+                               Foreground="{DynamicResource TextPrimary}" />
             <TextBlock Text="{Binding Title}"
-                       Foreground="{DynamicResource TextPrimary}"
                        VerticalAlignment="Center"
-                       FontSize="22" />
+                       FontSize="22"
+                       Foreground="{DynamicResource TextPrimary}" />
         </StackPanel>
     </Border>
 </UserControl>

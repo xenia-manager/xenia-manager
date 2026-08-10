@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using XeniaManager.BigScreen.Constants;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.Views;
 
@@ -83,9 +84,11 @@ public partial class SplashContent : UserControl
                 }
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // Unreadable settings - fall back to the default
+            Logger.Warning<SplashContent>("Failed to read saved BigScreen colors, falling back to defaults");
+            Logger.LogExceptionDetails<SplashContent>(ex);
         }
 
         return fallback;

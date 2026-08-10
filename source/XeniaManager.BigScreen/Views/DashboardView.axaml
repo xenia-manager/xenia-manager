@@ -14,12 +14,13 @@
         <Grid Grid.Row="1" VerticalAlignment="Bottom" Height="300">
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
-            <Border Width="200" Height="250"
-                    Classes="empty-state"
+            <Border IsVisible="{Binding ShowEmptyStub}"
                     CornerRadius="8"
+                    Height="250"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    IsVisible="{Binding ShowEmptyStub}">
+                    Width="200"
+                    Classes="empty-state">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
                             Spacing="12">

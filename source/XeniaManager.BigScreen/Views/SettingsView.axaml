@@ -15,19 +15,19 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
-                        <Grid Width="66" Height="34" VerticalAlignment="Center">
+                        <Grid Height="34" VerticalAlignment="Center" Width="66">
                             <Border x:Name="Track"
                                     CornerRadius="17"
                                     Background="{DynamicResource CardBorder}"
                                     BorderBrush="{DynamicResource TextSecondary}"
                                     BorderThickness="2" />
                             <Ellipse x:Name="Thumb"
-                                     Width="26"
                                      Height="26"
-                                     Fill="#FFFFFFFF"
                                      HorizontalAlignment="Left"
+                                     Margin="4,0,0,0"
                                      VerticalAlignment="Center"
-                                     Margin="4,0,0,0">
+                                     Width="26"
+                                     Fill="#FFFFFFFF">
                                 <Ellipse.Transitions>
                                     <Transitions>
                                         <ThicknessTransition Property="Margin" Duration="0:0:0.15" />
@@ -63,119 +63,119 @@
             <StackPanel Orientation="Vertical" Spacing="14">
 
                 <!-- BACKGROUND TYPE -->
-                <Border Background="{DynamicResource CardBackground}"
-                        CornerRadius="10"
+                <Border CornerRadius="10"
                         Padding="24,16"
+                        Background="{DynamicResource CardBackground}"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
                         <ComboBox x:Name="BackgroundModeCombo"
                                   DockPanel.Dock="Right"
-                                  Width="420"
-                                  VerticalAlignment="Center"
                                   ItemsSource="{Binding BackgroundModeOptions}"
                                   SelectedItem="{Binding SelectedBackgroundMode}"
                                   DisplayMemberBinding="{Binding DisplayName}"
+                                  VerticalAlignment="Center"
+                                  Width="420"
                                   FontSize="22"
                                   Padding="12,8" />
                         <TextBlock Text="{DynamicResource Settings.BackgroundType}"
-                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center"
                                    FontSize="24"
-                                   VerticalAlignment="Center" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                     </DockPanel>
                 </Border>
 
                 <!-- PRIMARY COLOUR -->
-                <Border Background="{DynamicResource CardBackground}"
-                        CornerRadius="10"
+                <Border CornerRadius="10"
                         Padding="24,16"
+                        Background="{DynamicResource CardBackground}"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
                         <controls:ColorPickerField x:Name="PrimaryColorField"
                                                    DockPanel.Dock="Right"
-                                                   VerticalAlignment="Center"
-                                                   Color="{Binding PrimaryColor, Mode=TwoWay}" />
+                                                   Color="{Binding PrimaryColor, Mode=TwoWay}"
+                                                   VerticalAlignment="Center" />
                         <TextBlock Text="{DynamicResource Settings.PrimaryColour}"
-                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center"
                                    FontSize="24"
-                                   VerticalAlignment="Center" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                     </DockPanel>
                 </Border>
 
                 <!-- ACCENT COLOUR -->
-                <Border Background="{DynamicResource CardBackground}"
-                        CornerRadius="10"
+                <Border CornerRadius="10"
                         Padding="24,16"
+                        Background="{DynamicResource CardBackground}"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
                         <controls:ColorPickerField x:Name="AccentColorField"
                                                    DockPanel.Dock="Right"
-                                                   VerticalAlignment="Center"
-                                                   Color="{Binding AccentColor, Mode=TwoWay}" />
+                                                   Color="{Binding AccentColor, Mode=TwoWay}"
+                                                   VerticalAlignment="Center" />
                         <TextBlock Text="{DynamicResource Settings.AccentColour}"
-                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center"
                                    FontSize="24"
-                                   VerticalAlignment="Center" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                     </DockPanel>
                 </Border>
 
                 <!-- VIGNETTE OPACITY -->
-                <Border Background="{DynamicResource CardBackground}"
-                        CornerRadius="10"
+                <Border CornerRadius="10"
                         Padding="24,16"
+                        Background="{DynamicResource CardBackground}"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Right"
                                    Text="{Binding VignetteText}"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   FontSize="22"
+                                   VerticalAlignment="Center"
                                    Width="60"
-                                   TextAlignment="Right"
-                                   VerticalAlignment="Center" />
+                                   FontSize="22"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   TextAlignment="Right" />
                         <Slider DockPanel.Dock="Right"
-                                Width="340"
-                                Margin="0,0,16,0"
                                 Minimum="0"
                                 Maximum="1"
+                                Value="{Binding VignetteOpacity, Mode=TwoWay}"
+                                Margin="0,0,16,0"
                                 VerticalAlignment="Center"
-                                Value="{Binding VignetteOpacity, Mode=TwoWay}" />
+                                Width="340" />
                         <TextBlock Text="{DynamicResource Settings.Vignette}"
-                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center"
                                    FontSize="24"
-                                   VerticalAlignment="Center" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                     </DockPanel>
                 </Border>
 
                 <!-- BACKGROUND IMAGE -->
-                <Border Background="{DynamicResource CardBackground}"
-                        CornerRadius="10"
+                <Border CornerRadius="10"
                         Padding="24,16"
+                        Background="{DynamicResource CardBackground}"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
                         <Button x:Name="BtnSelectImage"
                                 DockPanel.Dock="Right"
                                 Content="{DynamicResource Settings.SelectImage}"
-                                FontSize="20"
                                 Padding="20,10"
                                 VerticalAlignment="Center"
+                                FontSize="20"
                                 Click="OnSelectImageClick" />
                         <TextBlock DockPanel.Dock="Right"
                                    Text="{Binding ImageDisplayText}"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   FontSize="22"
+                                   Margin="0,0,16,0"
                                    VerticalAlignment="Center"
-                                   TextTrimming="CharacterEllipsis"
-                                   Margin="0,0,16,0" />
+                                   FontSize="22"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   TextTrimming="CharacterEllipsis" />
                         <TextBlock Text="{DynamicResource Settings.BackgroundImage}"
-                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center"
                                    FontSize="24"
-                                   VerticalAlignment="Center" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                     </DockPanel>
                 </Border>
 
                 <!-- QUIT BEHAVIOUR -->
-                <Border Background="{DynamicResource CardBackground}"
-                        CornerRadius="10"
+                <Border CornerRadius="10"
                         Padding="24,16"
+                        Background="{DynamicResource CardBackground}"
                         BoxShadow="0 4 12 0 #40000000">
                     <DockPanel>
                         <CheckBox x:Name="ChkQuitBehaviour"
@@ -188,11 +188,11 @@
                                     VerticalAlignment="Center"
                                     Spacing="4">
                             <TextBlock Text="{DynamicResource Settings.ReturnToXeniaOnQuit}"
-                                       Foreground="{DynamicResource TextPrimary}"
-                                       FontSize="24" />
+                                       FontSize="24"
+                                       Foreground="{DynamicResource TextPrimary}" />
                             <TextBlock Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       FontSize="18" />
+                                       FontSize="18"
+                                       Foreground="{DynamicResource TextSecondary}" />
                         </StackPanel>
                     </DockPanel>
                 </Border>

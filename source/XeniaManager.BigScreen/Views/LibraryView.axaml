@@ -13,16 +13,16 @@
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
         <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,30">
             <TextBlock Grid.Column="0"
-                       Classes="screen-title"
-                       Text="{DynamicResource Library.Title}" />
+                       Text="{DynamicResource Library.Title}"
+                       Classes="screen-title" />
             <controls:IconStat Grid.Column="1"
                                Icon="ArrowSort"
                                Stat="{Binding SortText}"
-                               IconSize="26"
-                               FontSize="24"
-                               Spacing="16"
                                IconRotation="90"
-                               VerticalAlignment="Center" />
+                               IconSize="26"
+                               Spacing="16"
+                               VerticalAlignment="Center"
+                               FontSize="24" />
         </Grid>
 
         <Grid Grid.Row="1">
@@ -31,8 +31,8 @@
                           VerticalScrollBarVisibility="Disabled">
                 <ItemsControl x:Name="GamesRow"
                               ItemsSource="{Binding Games}"
-                              VerticalAlignment="Top"
-                              Margin="0,40,0,0">
+                              Margin="0,40,0,0"
+                              VerticalAlignment="Top">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="items:GameCardViewModel">
                             <controls:LibraryCard/>
@@ -47,11 +47,12 @@
             </ScrollViewer>
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
-            <Border Width="320" Height="200"
-                    Classes="empty-state"
-                    IsVisible="{Binding ShowEmptyStub}"
+            <Border IsVisible="{Binding ShowEmptyStub}"
+                    Height="200"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    Width="320"
+                    Classes="empty-state">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
                             Spacing="16">

@@ -21,16 +21,16 @@
     <Grid RowDefinitions="150, *" ColumnDefinitions="*, Auto, *">
 
         <!-- Vignette overlay over the background (ignores input, images only) -->
-        <Border Grid.RowSpan="2" Grid.ColumnSpan="3"
-                Background="{DynamicResource BackgroundVignette}"
+        <Border Grid.ColumnSpan="3" Grid.RowSpan="2"
                 IsVisible="{Binding Dashboard.VignetteVisible}"
-                IsHitTestVisible="False" />
+                IsHitTestVisible="False"
+                Background="{DynamicResource BackgroundVignette}" />
 
         <!-- Black fade overlay for background transitions (ignores input) -->
-        <Border Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Grid.Column="0"
-                Background="Black"
+        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
                 Opacity="{Binding Dashboard.FadeOpacity}"
-                IsHitTestVisible="False">
+                IsHitTestVisible="False"
+                Background="Black">
             <Border.Transitions>
                 <Transitions>
                     <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
@@ -48,48 +48,50 @@
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         Spacing="12">
-                <Border Width="44" Height="44" CornerRadius="22" Background="{DynamicResource CardBackground}"
+                <Border CornerRadius="22" Height="44" Width="44" Background="{DynamicResource CardBackground}"
                         BoxShadow="0 4 12 0 #40000000">
                     <fluent:SymbolIcon Symbol="PersonCircle"
-                                       FontSize="24"
-                                       Foreground="{DynamicResource TextPrimary}"
                                        HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Foreground="{DynamicResource TextPrimary}" />
                 </Border>
-                <StackPanel VerticalAlignment="Center" Margin="0,-4,0,0">
-                    <TextBlock Classes="header-text" Text="{Binding Header.Gamertag}"
-                               Foreground="{DynamicResource TextPrimary}"
+                <StackPanel Margin="0,-4,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Header.Gamertag}"
+                               Classes="header-text"
                                FontSize="18"
-                               FontWeight="Bold" />
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource TextPrimary}" />
                     <controls:IconStat Icon="Star" Stat="{Binding Header.Gamerscore}" IconSize="13" FontSize="13" />
                 </StackPanel>
             </StackPanel>
 
             <!-- SYSTEM STATUS (RIGHT) -->
             <StackPanel Grid.Column="2"
-                        Orientation="Horizontal"
                         HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Spacing="16">
-                <Grid Width="26" Height="26">
+                        Orientation="Horizontal"
+                        Spacing="16"
+                        VerticalAlignment="Center">
+                <Grid Height="26" Width="26">
                     <fluent:SymbolIcon Symbol="{Binding Header.WifiIcon}"
-                                       FontSize="24"
-                                       Foreground="{DynamicResource TextPrimary}"
                                        HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Foreground="{DynamicResource TextPrimary}" />
                 </Grid>
-                <Grid Width="26" Height="26">
+                <Grid Height="26" Width="26">
                     <fluent:SymbolIcon Symbol="{Binding Header.BatteryIcon}"
-                                       FontSize="24"
-                                       Foreground="{DynamicResource TextPrimary}"
                                        HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Foreground="{DynamicResource TextPrimary}" />
                 </Grid>
-                <TextBlock Classes="header-text" Text="{Binding Header.Time}"
-                           Foreground="{DynamicResource TextPrimary}"
-                           FontSize="18"
-                           VerticalAlignment="Center"
+                <TextBlock Text="{Binding Header.Time}"
                            MinWidth="70"
+                           VerticalAlignment="Center"
+                           Classes="header-text"
+                           FontSize="18"
+                           Foreground="{DynamicResource TextPrimary}"
                            TextAlignment="Right" />
             </StackPanel>
         </Grid>
@@ -100,7 +102,7 @@
                         Margin="0,0,0,80" />
 
         <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
-        <Panel Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Grid.Column="0"
+        <Panel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
                IsVisible="{Binding IsOverlayOpen}"
                IsHitTestVisible="{Binding IsOverlayOpen}">
             <!-- Full-screen backdrop -->

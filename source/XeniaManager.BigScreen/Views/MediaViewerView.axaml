@@ -36,33 +36,33 @@
     <Panel Background="#FF0A0C10">
 
         <Image Source="{Binding Image}"
-               Stretch="Uniform"
-               Margin="140,60" />
+               Margin="140,60"
+               Stretch="Uniform" />
 
         <Button x:Name="BtnPrev"
-                Classes="media-chevron"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Margin="40,0"
                 IsVisible="{Binding HasPrevious}"
+                HorizontalAlignment="Left"
+                Margin="40,0"
+                VerticalAlignment="Center"
+                Classes="media-chevron"
                 Click="OnPrevClick">
             <fluent:SymbolIcon Symbol="ChevronLeft" FontSize="48" />
         </Button>
 
         <Button x:Name="BtnNext"
-                Classes="media-chevron"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Margin="40,0"
                 IsVisible="{Binding HasNext}"
+                HorizontalAlignment="Right"
+                Margin="40,0"
+                VerticalAlignment="Center"
+                Classes="media-chevron"
                 Click="OnNextClick">
             <fluent:SymbolIcon Symbol="ChevronRight" FontSize="48" />
         </Button>
 
         <!-- Modal footer: close hint bottom left, caption bottom right -->
         <Grid ColumnDefinitions="*, Auto"
-              VerticalAlignment="Bottom"
-              Margin="40,0,40,37">
+              Margin="40,0,40,37"
+              VerticalAlignment="Bottom">
             <StackPanel Grid.Column="0"
                         Orientation="Horizontal"
                         VerticalAlignment="Center">
@@ -74,13 +74,13 @@
                         Spacing="4"
                         VerticalAlignment="Center">
                 <TextBlock Text="{Binding GameTitle}"
-                           Foreground="{DynamicResource TextPrimary}"
                            FontSize="22"
                            FontWeight="Bold"
+                           Foreground="{DynamicResource TextPrimary}"
                            TextAlignment="Right" />
                 <TextBlock Text="{Binding CapturedAtText}"
-                           Foreground="{DynamicResource TextSecondary}"
                            FontSize="16"
+                           Foreground="{DynamicResource TextSecondary}"
                            TextAlignment="Right" />
             </StackPanel>
         </Grid>

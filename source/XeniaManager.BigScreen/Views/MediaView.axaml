@@ -18,23 +18,23 @@
             <!-- HEADER: title left, sort indicator top right -->
             <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,45">
                 <TextBlock Grid.Column="0"
-                           Classes="screen-title"
-                           Text="{DynamicResource Media.Title}" />
+                           Text="{DynamicResource Media.Title}"
+                           Classes="screen-title" />
                 <controls:IconStat Grid.Column="1"
                                    Icon="ArrowSort"
                                    Stat="{Binding MediaSortText}"
-                                   IconSize="26"
-                                   FontSize="24"
-                                   Spacing="16"
                                    IconRotation="90"
-                                   VerticalAlignment="Center" />
+                                   IconSize="26"
+                                   Spacing="16"
+                                   VerticalAlignment="Center"
+                                   FontSize="24" />
             </Grid>
 
             <!-- GALLERY GRID (4 across, scrolls down) -->
             <Grid Grid.Row="1">
                 <ScrollViewer x:Name="SvCarousel"
-                              VerticalScrollBarVisibility="Hidden"
-                              HorizontalScrollBarVisibility="Disabled">
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden">
                     <ItemsControl x:Name="ScreenshotsGrid"
                                   ItemsSource="{Binding Screenshots}"
                                   Margin="0,0,0,40">
@@ -45,21 +45,22 @@
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal"
+                                <WrapPanel ItemsAlignment="Start"
                                            ItemSpacing="16"
                                            LineSpacing="16"
-                                           ItemsAlignment="Start" />
+                                           Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
 
                 <!-- Empty-gallery stub: shown when there are no screenshots -->
-                <Border Width="360" Height="220"
-                        Classes="empty-state"
-                        IsVisible="{Binding ShowEmptyScreenshots}"
+                <Border IsVisible="{Binding ShowEmptyScreenshots}"
+                        Height="220"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        Width="360"
+                        Classes="empty-state">
                     <StackPanel Orientation="Vertical"
                                 VerticalAlignment="Center"
                                 Spacing="16">
@@ -80,7 +81,7 @@
 
         <!-- SCREENSHOT VIEWER (nested sub-screen, covers the whole screen while open) -->
         <ContentControl Content="{Binding Viewer}"
-                        IsVisible="{Binding IsViewerOpen}"
-                        IsHitTestVisible="{Binding IsViewerOpen}" />
+                        IsHitTestVisible="{Binding IsViewerOpen}"
+                        IsVisible="{Binding IsViewerOpen}" />
     </Grid>
 </UserControl>

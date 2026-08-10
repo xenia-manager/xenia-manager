@@ -11,25 +11,25 @@
          differs per card (GameCardViewModel vs ScreenshotItemViewModel), so
          the IsSelected binding is resolved at runtime. -->
     <Grid>
-        <Border x:Name="Tile" Background="{DynamicResource CardBackground}" CornerRadius="12" />
+        <Border x:Name="Tile" CornerRadius="12" Background="{DynamicResource CardBackground}" />
         <Border x:Name="ArtClip"
                 CornerRadius="{Binding #Root.ArtCornerRadius}"
                 ClipToBounds="True">
             <Panel>
                 <Image Source="{Binding #Root.Art}"
                        IsVisible="{Binding #Root.HasArt}"
-                       VerticalAlignment="Bottom"
-                       Stretch="UniformToFill" />
+                       Stretch="UniformToFill"
+                       VerticalAlignment="Bottom" />
                 <Image Source="{Binding #Root.SecondaryArt}"
                        IsVisible="{Binding #Root.HasSecondaryArt}"
                        Stretch="UniformToFill" />
             </Panel>
         </Border>
         <Border x:Name="TitleBar"
-                Background="{DynamicResource CardTitleBar}"
                 IsVisible="{Binding IsSelected}"
+                CornerRadius="0,0,8,8"
                 VerticalAlignment="Bottom"
-                CornerRadius="0,0,8,8">
+                Background="{DynamicResource CardTitleBar}">
             <TextBlock Text="{Binding #Root.Title}"
                        Classes="card-title" />
         </Border>

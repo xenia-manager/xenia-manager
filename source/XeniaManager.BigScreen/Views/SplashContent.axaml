@@ -9,34 +9,34 @@
     <!-- Background is the dashboard's radial gradient, built from the saved
          primary color in code (see SplashContent.axaml.cs) -->
 
-    <StackPanel Orientation="Vertical"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Spacing="32">
+    <StackPanel HorizontalAlignment="Center"
+                Orientation="Vertical"
+                Spacing="32"
+                VerticalAlignment="Center">
 
         <fluent:SymbolIcon x:Name="LogoIcon"
                            Symbol="Tv"
-                           FontSize="96"
-                           HorizontalAlignment="Center" />
+                           HorizontalAlignment="Center"
+                           FontSize="96" />
 
         <TextBlock Text="{DynamicResource Splash.Title}"
-                   Foreground="{DynamicResource TextPrimary}"
+                   HorizontalAlignment="Center"
                    FontSize="40"
                    FontWeight="Bold"
-                   HorizontalAlignment="Center" />
+                   Foreground="{DynamicResource TextPrimary}" />
 
         <TextBlock x:Name="StatusText"
                    Text="{DynamicResource Splash.Loading}"
-                   Foreground="{DynamicResource TextSecondary}"
+                   HorizontalAlignment="Center"
                    FontSize="20"
-                   HorizontalAlignment="Center" />
+                   Foreground="{DynamicResource TextSecondary}" />
 
         <ProgressBar x:Name="LoadBar"
-                     Width="420"
-                     Height="6"
                      Minimum="0"
                      Maximum="100"
                      Value="0"
+                     Height="6"
+                     Width="420"
                      Background="#33FFFFFF">
             <ProgressBar.Transitions>
                 <Transitions>
