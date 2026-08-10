@@ -1,14 +1,22 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using XeniaManager.BigScreen.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Views;
+using XeniaManager.Core.Logging;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen;
 
 public partial class App : Application
 {
+    /// <summary>
+    /// DI Services
+    /// </summary>
+    public static IServiceProvider Services { get; private set; } = null!;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -18,13 +26,26 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            // Configure services
+            Logger.Debug<App>("Configuring dependency injection services");
+            Services = ServiceConfigurator.ConfigureServices();
+            Logger.Info<App>("Services configured successfully");
+
             // Default-language resources so Core's PlaytimeFormatter can localize
             LocalizationHelper.Initialize("avares://XeniaManager.BigScreen/Resources/Language/");
 
-            desktop.MainWindow = new MainWindow
+            // Get MainWindow
+            Logger.Debug<App>("Resolving MainWindow from services");
+            desktop.MainWindow = Services.GetRequiredService<MainWindow>();
+
+            desktop.Exit += (_, _) =>
             {
-                DataContext = new MainWindowViewModel(),
+                Logger.Info<App>("Closing BigScreen");
+                Logger.Debug<App>("Shutting down logger");
+                Logger.Shutdown();
             };
+
+            Logger.Info<App>("Application initialization completed successfully");
         }
 
         base.OnFrameworkInitializationCompleted();

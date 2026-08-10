@@ -14,7 +14,7 @@ namespace XeniaManager.BigScreen.Services;
 /// <summary>
 /// Manages the dashboard styling: persistence, user-facing options, and brush construction.
 /// </summary>
-public class BackgroundService
+public class BackgroundService : IBackgroundService
 {
     /// <summary>
     /// Path of the persisted settings file (next to the executable).

@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -69,6 +70,7 @@ public partial class LibraryViewModel : ScreenViewModel
     {
         ApplySort();
         OnPropertyChanged(nameof(SortText));
+        Logger.Debug<LibraryViewModel>($"Library sort changed to {value}");
     }
 
     /// <summary>

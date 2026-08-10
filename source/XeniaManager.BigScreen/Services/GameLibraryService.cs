@@ -10,17 +10,17 @@ namespace XeniaManager.BigScreen.Services;
 /// Wraps Core's game library: loading, the full game list, and the recent-games
 /// selection used by the dashboard.
 /// </summary>
-public class GameLibraryService
+public class GameLibraryService : IGameLibraryService
 {
     /// <summary>
     /// All games in the library (from Core's <see cref="GameManager"/>).
     /// </summary>
-    public static IReadOnlyList<Game> Games => GameManager.Games;
+    public IReadOnlyList<Game> Games => GameManager.Games;
 
     /// <summary>
     /// Reloads the game library from disk.
     /// </summary>
-    public static void Load()
+    public void Load()
     {
         GameManager.LoadLibrary();
     }
@@ -29,7 +29,7 @@ public class GameLibraryService
     /// The <paramref name="count"/> most recently played games; never-played games
     /// fill the tail ordered by title.
     /// </summary>
-    public static IEnumerable<Game> GetRecentGames(int count)
+    public IEnumerable<Game> GetRecentGames(int count)
     {
         return GameManager.Games
             .OrderByDescending(g => g.LastPlayed)

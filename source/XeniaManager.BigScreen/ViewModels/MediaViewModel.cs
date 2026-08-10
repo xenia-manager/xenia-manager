@@ -6,6 +6,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -15,7 +16,7 @@ namespace XeniaManager.BigScreen.ViewModels;
 /// </summary>
 public partial class MediaViewModel : ScreenViewModel
 {
-    private readonly ScreenshotLibraryService _screenshotLibraryService;
+    private readonly IScreenshotLibraryService _screenshotLibraryService;
     private bool _screenshotsLoaded;
 
     /// <summary>
@@ -58,7 +59,7 @@ public partial class MediaViewModel : ScreenViewModel
         OnPropertyChanged(nameof(IsViewerOpen));
     }
 
-    public MediaViewModel(SettingsViewModel settings, ScreenshotLibraryService screenshotLibraryService)
+    public MediaViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService)
         : base(settings)
     {
         _screenshotLibraryService = screenshotLibraryService;
@@ -90,6 +91,7 @@ public partial class MediaViewModel : ScreenViewModel
     {
         ApplyMediaSort();
         OnPropertyChanged(nameof(MediaSortText));
+        Logger.Debug<MediaViewModel>($"Media sort changed to {value}");
     }
 
     /// <summary>
@@ -118,13 +120,17 @@ public partial class MediaViewModel : ScreenViewModel
         }
 
         ApplyMediaSort();
+        Logger.Info<MediaViewModel>($"Loaded {Screenshots.Count} screenshots");
     }
 
     /// <summary>
     /// Opens the modal viewer for the given screenshot.
     /// </summary>
-    public void OpenScreenshot(ScreenshotItemViewModel screenshot) =>
+    public void OpenScreenshot(ScreenshotItemViewModel screenshot)
+    {
         Viewer = new MediaViewerViewModel(screenshot, Screenshots);
+        Logger.Debug<MediaViewModel>($"Opening screenshot viewer for '{screenshot.Title}'");
+    }
 
     /// <summary>
     /// Closes the modal screenshot viewer.

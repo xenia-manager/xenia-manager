@@ -10,20 +10,29 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Logging;
 using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Views;
 
 public partial class MainWindow : Window
 {
-    private readonly DashboardNavigationController _navigation = new();
+    private readonly DashboardNavigationController _navigation;
     private readonly InputRouter _router;
     private IGamepadService? _gamepadService;
 
-    public MainWindow()
+    public MainWindow(
+        MainWindowViewModel viewModel,
+        DashboardNavigationController navigation,
+        InputRouter router,
+        IGamepadService gamepadService)
     {
+        DataContext = viewModel;
+        _navigation = navigation;
+        _router = router;
+        _gamepadService = gamepadService;
+
         InitializeComponent();
-        _router = new InputRouter(_navigation);
         Loaded += OnLoaded;
         KeyDown += OnWindowKeyDown;
 
@@ -38,7 +47,6 @@ public partial class MainWindow : Window
         _navigation.ScrollMediaRequested += OnScrollMediaRequested;
         _navigation.OverlayFocusRequested += OnOverlayFocusRequested;
 
-        _gamepadService = new GamepadService();
         if (_gamepadService.IsActive)
         {
             _gamepadService.ButtonPressed += OnGamepadButtonPressed;
@@ -73,6 +81,7 @@ public partial class MainWindow : Window
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         EventManager.Instance.WindowDisabled += OnWindowDisabled;
+        Logger.Debug<MainWindow>("Main window loaded");
 
         // Start with the first card selected
         if (DataContext is MainWindowViewModel vm)
@@ -105,6 +114,7 @@ public partial class MainWindow : Window
     private void OnWindowDisabled(bool isDisabled)
     {
         IsEnabled = !isDisabled;
+        Logger.Debug<MainWindow>($"Window {(isDisabled ? "disabled" : "enabled")} (game running)");
     }
 
     /// <summary>
@@ -126,6 +136,7 @@ public partial class MainWindow : Window
 
     private void OnQuitRequested(object? sender, System.EventArgs e)
     {
+        Logger.Info<MainWindow>("Quit requested, closing window");
         Close();
     }
 

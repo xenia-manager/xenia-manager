@@ -73,7 +73,11 @@ public partial class HeaderViewModel : ViewModelBase
                 _ => "Battery10",
             };
 
-    partial void OnIsWifiConnectedChanged(bool value) => OnPropertyChanged(nameof(WifiIcon));
+    partial void OnIsWifiConnectedChanged(bool value)
+    {
+        OnPropertyChanged(nameof(WifiIcon));
+        Logger.Debug<HeaderViewModel>($"Wifi connected: {value}");
+    }
 
     partial void OnBatteryLevelChanged(int value) => OnPropertyChanged(nameof(BatteryIcon));
 
@@ -89,11 +93,12 @@ public partial class HeaderViewModel : ViewModelBase
     private readonly DispatcherTimer _clockTimer;
     private readonly DispatcherTimer _wifiTimer;
 
-    public HeaderViewModel(ProfileService profileService)
+    public HeaderViewModel(IProfileService profileService)
     {
         profileService.Load();
         Gamertag = profileService.Gamertag;
         Gamerscore = profileService.Gamerscore;
+        Logger.Debug<HeaderViewModel>($"Profile loaded: {Gamertag} ({Gamerscore}G)");
 
         _clockTimer = new DispatcherTimer
         {
@@ -119,6 +124,8 @@ public partial class HeaderViewModel : ViewModelBase
         ControllerConnected = connected;
         BatteryLevel = batteryPercent;
         IsCharging = charging;
+        Logger.Debug<HeaderViewModel>(
+            $"Gamepad state: connected={connected}, battery={batteryPercent}%, charging={charging}");
     }
 
     /// <summary>

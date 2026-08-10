@@ -20,9 +20,10 @@ namespace XeniaManager.BigScreen.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly BackgroundService _backgroundService = new();
-    private readonly ProfileService _profileService = new();
-    private readonly ScreenshotLibraryService _screenshotLibraryService = new();
+    private readonly IBackgroundService _backgroundService;
+    private readonly IProfileService _profileService;
+    private readonly IGameLibraryService _gameLibraryService;
+    private readonly IScreenshotLibraryService _screenshotLibraryService;
 
     /// <summary>
     /// The most recently selected game card (dashboard or library row). Drives the
@@ -109,13 +110,22 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(
+        IBackgroundService backgroundService,
+        IProfileService profileService,
+        IGameLibraryService gameLibraryService,
+        IScreenshotLibraryService screenshotLibraryService)
     {
-        Header = new HeaderViewModel(_profileService);
-        Settings = new SettingsViewModel(_backgroundService);
+        _backgroundService = backgroundService;
+        _profileService = profileService;
+        _gameLibraryService = gameLibraryService;
+        _screenshotLibraryService = screenshotLibraryService;
+
+        Header = new HeaderViewModel(profileService);
+        Settings = new SettingsViewModel(backgroundService);
         Library = new LibraryViewModel(Settings);
-        Media = new MediaViewModel(Settings, _screenshotLibraryService);
-        Dashboard = new DashboardViewModel(_backgroundService);
+        Media = new MediaViewModel(Settings, screenshotLibraryService);
+        Dashboard = new DashboardViewModel(backgroundService);
         Settings.AppearanceChanged += () => Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt);
         LoadLibrary();
 
@@ -130,6 +140,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             game.PropertyChanged += OnGameCardPropertyChanged;
         }
+
+        Logger.Info<MainWindowViewModel>(
+            $"Dashboard ready: {Library.Games.Count} games in library, {Dashboard.RecentGames.Count} recent");
     }
 
     /// <summary>
@@ -143,6 +156,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void OpenScreen(OverlayScreen screen)
     {
+        Logger.Info<MainWindowViewModel>($"Opening {screen} screen");
         CurrentScreen = screen switch
         {
             OverlayScreen.Library => Library,
@@ -157,6 +171,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void CloseOverlay()
     {
+        Logger.Info<MainWindowViewModel>("Closing overlay");
         CurrentScreen = null;
         Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, fade: true);
     }
@@ -167,6 +182,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void Quit()
     {
+        Logger.Info<MainWindowViewModel>($"Quitting BigScreen (return to Xenia Manager: {Settings.ReturnToXeniaOnQuit})");
         if (Settings.ReturnToXeniaOnQuit)
         {
             string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), AppConstants.BaseAppExecutable);
@@ -207,13 +223,13 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void LoadLibrary()
     {
-        GameLibraryService.Load();
-        foreach (Game game in GameLibraryService.Games)
+        _gameLibraryService.Load();
+        foreach (Game game in _gameLibraryService.Games)
         {
             Library.Games.Add(CreateGameCard(game));
         }
 
-        foreach (Game game in GameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
+        foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
         {
             Dashboard.RecentGames.Add(CreateRecentGameCard(game));
         }
@@ -230,16 +246,16 @@ public partial class MainWindowViewModel : ViewModelBase
         string? librarySelectedId = Library.Games.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
         string? recentSelectedId = Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
 
-        GameLibraryService.Load();
+        _gameLibraryService.Load();
         Library.Games.Clear();
         Dashboard.RecentGames.Clear();
 
-        foreach (Game game in GameLibraryService.Games)
+        foreach (Game game in _gameLibraryService.Games)
         {
             Library.Games.Add(CreateGameCard(game));
         }
 
-        foreach (Game game in GameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
+        foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
         {
             Dashboard.RecentGames.Add(CreateRecentGameCard(game));
         }
@@ -248,6 +264,8 @@ public partial class MainWindowViewModel : ViewModelBase
         (Dashboard.RecentGames.FirstOrDefault(g => g.Game.GameId == recentSelectedId) ?? Dashboard.RecentGames.FirstOrDefault())?.IsSelected = true;
 
         LibraryRefreshed?.Invoke(this, EventArgs.Empty);
+        Logger.Debug<MainWindowViewModel>(
+            $"Library refreshed: {Library.Games.Count} games, {Dashboard.RecentGames.Count} recent");
     }
 
     /// <summary>
@@ -256,11 +274,13 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public async Task LaunchGame(GameCardViewModel card)
     {
+        Logger.Info<MainWindowViewModel>($"Launching '{card.Game.Title}'");
         try
         {
             EventManager.Instance.DisableWindow();
             Settings settings = new();
             await Launcher.LaunchGameASync(card.Game, settings, discNumber: card.Game.LastPlayedDisc);
+            Logger.Info<MainWindowViewModel>($"Game session ended for '{card.Game.Title}'");
         }
         catch (Exception ex)
         {

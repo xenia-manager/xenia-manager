@@ -16,7 +16,7 @@ namespace XeniaManager.BigScreen.Services;
 /// Scans the Canary screenshots folder (recursively, per-game subfolders) and
 /// builds the media gallery items, matching each screenshot to a library game.
 /// </summary>
-public class ScreenshotLibraryService
+public class ScreenshotLibraryService : IScreenshotLibraryService
 {
     /// <summary>
     /// All screenshots found in the Canary screenshots folder.

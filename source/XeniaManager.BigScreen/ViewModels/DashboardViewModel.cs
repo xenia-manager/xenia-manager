@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -16,7 +17,7 @@ namespace XeniaManager.BigScreen.ViewModels;
 /// </summary>
 public partial class DashboardViewModel : ViewModelBase
 {
-    private readonly BackgroundService _backgroundService;
+    private readonly IBackgroundService _backgroundService;
 
     /// <summary>
     /// The brush currently applied to the dashboard background.
@@ -69,7 +70,7 @@ public partial class DashboardViewModel : ViewModelBase
         new("Quit", "Power", OverlayScreen.None),
     ];
 
-    public DashboardViewModel(BackgroundService backgroundService)
+    public DashboardViewModel(IBackgroundService backgroundService)
     {
         _backgroundService = backgroundService;
         RecentGames.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
@@ -125,5 +126,7 @@ public partial class DashboardViewModel : ViewModelBase
         }
 
         _currentBackgroundArt = selectedArt;
+        Logger.Debug<DashboardViewModel>(
+            $"Background updated: mode={_backgroundService.Settings.Mode}, art={(selectedArt != null ? "game art" : "none")}");
     }
 }

@@ -22,7 +22,7 @@ namespace XeniaManager.BigScreen.Services;
 /// Loads the active Canary profile and resolves per-game achievement/gamerscore
 /// stats from the profile GPD, falling back to each game's achievement GPD.
 /// </summary>
-public class ProfileService
+public class ProfileService : IProfileService
 {
     /// <summary>
     /// Gamertag of the active Canary profile, or "Guest" when none exists.

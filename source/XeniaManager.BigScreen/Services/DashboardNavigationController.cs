@@ -4,6 +4,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.Services;
 
@@ -83,6 +84,7 @@ public class DashboardNavigationController
         SelectionHelper.SelectOnlyAt(dashboard.Options, target);
 
         OptionFocusRequested?.Invoke(dashboard.Options[target]);
+        Logger.Debug<DashboardNavigationController>("Switched to option row");
     }
 
     /// <summary>
@@ -108,6 +110,7 @@ public class DashboardNavigationController
         SelectionHelper.ClearSelection(dashboard.Options);
 
         GameFocusRequested?.Invoke(dashboard.RecentGames[target]);
+        Logger.Debug<DashboardNavigationController>("Switched to game row");
     }
 
     /// <summary>
@@ -121,6 +124,7 @@ public class DashboardNavigationController
         }
 
         SelectionHelper.MoveSelection(dashboard.Options, delta);
+        Logger.Trace<DashboardNavigationController>($"Moved option selection by {delta}");
     }
 
     /// <summary>
@@ -134,6 +138,7 @@ public class DashboardNavigationController
         }
 
         SelectionHelper.MoveSelection(dashboard.RecentGames, delta);
+        Logger.Trace<DashboardNavigationController>($"Moved recent game selection by {delta}");
     }
 
     /// <summary>
@@ -148,6 +153,7 @@ public class DashboardNavigationController
 
         SelectionHelper.MoveSelection(library.Games, delta);
         ScrollLibraryRequested?.Invoke();
+        Logger.Trace<DashboardNavigationController>($"Moved library selection by {delta}");
     }
 
     /// <summary>
@@ -163,6 +169,7 @@ public class DashboardNavigationController
 
         SelectionHelper.MoveSelection(media.Screenshots, delta);
         ScrollMediaRequested?.Invoke();
+        Logger.Trace<DashboardNavigationController>($"Moved media selection by {delta}");
     }
 
     /// <summary>
@@ -182,6 +189,7 @@ public class DashboardNavigationController
     /// </summary>
     public void ActivateOption(MainWindowViewModel vm, OptionsCardViewModel option)
     {
+        Logger.Info<DashboardNavigationController>($"Activating option '{option.Title}'");
         if (option.TargetScreen == OverlayScreen.None)
         {
             vm.Quit();
@@ -245,6 +253,7 @@ public class DashboardNavigationController
         _lastActivationWasMouse = true;
         ActivateOption(vm, option);
         SelectionHelper.ClearSelection(dashboard.Options);
+        Logger.Debug<DashboardNavigationController>($"Option card clicked: '{option.Title}'");
     }
 
     /// <summary>

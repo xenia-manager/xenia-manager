@@ -8,6 +8,7 @@ using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
+using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -17,7 +18,7 @@ namespace XeniaManager.BigScreen.ViewModels;
 /// </summary>
 public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly BackgroundService _backgroundService;
+    private readonly IBackgroundService _backgroundService;
 
     /// <summary>
     /// Raised after a persisted appearance option changed, so the dashboard can
@@ -68,7 +69,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private bool _returnToXeniaOnQuit = true;
 
-    public SettingsViewModel(BackgroundService backgroundService)
+    public SettingsViewModel(IBackgroundService backgroundService)
     {
         _backgroundService = backgroundService;
         _backgroundService.Load();
@@ -145,6 +146,7 @@ public partial class SettingsViewModel : ViewModelBase
         Mode = BackgroundMode.Image;
         OnPropertyChanged(nameof(ImageDisplayText));
         AppearanceChanged?.Invoke();
+        Logger.Info<SettingsViewModel>($"Background image set to '{path}'");
     }
 
     partial void OnModeChanged(BackgroundMode value)
@@ -153,6 +155,7 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService.Save();
         SelectedBackgroundMode = BackgroundModeOptions.FirstOrDefault(o => o.Mode == value);
         AppearanceChanged?.Invoke();
+        Logger.Info<SettingsViewModel>($"Background mode changed to {value}");
     }
 
     partial void OnSelectedBackgroundModeChanged(BackgroundModeOption? value)
@@ -169,12 +172,14 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService.Save();
         OnPropertyChanged(nameof(ScreenBackground));
         AppearanceChanged?.Invoke();
+        Logger.Info<SettingsViewModel>($"Primary color changed to {value}");
     }
 
     partial void OnAccentColorChanged(Color value)
     {
         _backgroundService.Settings.AccentColor = value;
         _backgroundService.Save();
+        Logger.Info<SettingsViewModel>($"Accent color changed to {value}");
     }
 
     partial void OnVignetteOpacityChanged(double value)
@@ -182,11 +187,13 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService.Settings.VignetteOpacity = value;
         _backgroundService.Save();
         OnPropertyChanged(nameof(VignetteText));
+        Logger.Debug<SettingsViewModel>($"Vignette opacity changed to {value:0.00}");
     }
 
     partial void OnReturnToXeniaOnQuitChanged(bool value)
     {
         _backgroundService.Settings.ReturnToXeniaOnQuit = value;
         _backgroundService.Save();
+        Logger.Info<SettingsViewModel>($"Return to Xenia Manager on quit: {value}");
     }
 }

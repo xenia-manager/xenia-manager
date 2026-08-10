@@ -17,10 +17,6 @@
         WindowStartupLocation="CenterScreen"
         Background="{Binding Dashboard.Background}">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
     <Window.DataTemplates>
         <DataTemplate DataType="items:GameCardViewModel">
             <controls:GameCard/>
