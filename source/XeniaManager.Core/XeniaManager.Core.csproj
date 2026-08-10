@@ -4,7 +4,10 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>4.3.2</AssemblyVersion>
+<AssemblyVersion>4.3.2</AssemblyVersion>
+        <!-- Required for GamepadInputService.cs, which uses SDL3 native pointers (SDL_Gamepad*)
+             via ppy.SDL3-CS for gamepad input support -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,6 +25,7 @@
       <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.333" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
       <PackageReference Include="NLog" Version="6.1.4" />
+      <PackageReference Include="ppy.SDL3-CS" Version="2026.722.0" />
       <PackageReference Include="SharpCompress" Version="0.50.0" />
       <PackageReference Include="System.IO.Hashing" Version="10.0.10" />
       <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />

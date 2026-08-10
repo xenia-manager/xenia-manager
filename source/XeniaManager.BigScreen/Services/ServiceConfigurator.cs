@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.Views;
+using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Services;
 
@@ -27,7 +28,7 @@ public class ServiceConfigurator
         services.AddSingleton<IScreenshotLibraryService, ScreenshotLibraryService>();
         services.AddSingleton<DashboardNavigationController>();
         services.AddSingleton<InputRouter>();
-        services.AddSingleton<IGamepadService, GamepadService>();
+        services.AddSingleton<IGamepadInputService, GamepadInputService>();
 
         // ViewModels and views
         services.AddSingleton<MainWindowViewModel>();

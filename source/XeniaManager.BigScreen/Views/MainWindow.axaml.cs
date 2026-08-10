@@ -7,11 +7,11 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Controls;
-using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Views;
@@ -20,7 +20,7 @@ public partial class MainWindow : Window
 {
     private readonly DashboardNavigationController _navigation;
     private readonly InputRouter _router;
-    private IGamepadService? _gamepadService;
+    private IGamepadInputService? _gamepadService;
 
     public MainWindow()
     {
@@ -29,7 +29,7 @@ public partial class MainWindow : Window
         DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
         _navigation = App.Services.GetRequiredService<DashboardNavigationController>();
         _router = App.Services.GetRequiredService<InputRouter>();
-        _gamepadService = App.Services.GetRequiredService<IGamepadService>();
+        _gamepadService = App.Services.GetRequiredService<IGamepadInputService>();
 
         WindowState = Avalonia.Controls.WindowState.FullScreen;
 

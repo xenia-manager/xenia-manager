@@ -1,13 +1,13 @@
 using System;
-using XeniaManager.BigScreen.Models;
+using XeniaManager.Core.Models;
 
-namespace XeniaManager.BigScreen.Services;
+namespace XeniaManager.Core.Services;
 
 /// <summary>
 /// Abstraction over the SDL gamepad subsystem: navigation button presses and
 /// live controller status (connection, battery).
 /// </summary>
-public interface IGamepadService
+public interface IGamepadInputService
 {
     /// <summary>
     /// Raised on the UI thread when a navigation-relevant button is pressed.

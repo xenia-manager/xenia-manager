@@ -8,16 +8,6 @@ namespace XeniaManager.BigScreen.Constants;
 public static class TimingConstants
 {
     /// <summary>
-    /// How often the gamepad event queue is drained.
-    /// </summary>
-    public static readonly TimeSpan GamepadPollInterval = TimeSpan.FromMilliseconds(50);
-
-    /// <summary>
-    /// How often the gamepad battery state is queried.
-    /// </summary>
-    public static readonly TimeSpan BatteryPollInterval = TimeSpan.FromSeconds(5);
-
-    /// <summary>
     /// How often the header clock text is refreshed.
     /// </summary>
     public static readonly TimeSpan ClockUpdateInterval = TimeSpan.FromSeconds(1);

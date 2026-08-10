@@ -1,19 +1,27 @@
 using System;
 using Avalonia.Threading;
 using SDL;
-using XeniaManager.BigScreen.Constants;
-using XeniaManager.BigScreen.Models;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
 
-namespace XeniaManager.BigScreen.Services;
+namespace XeniaManager.Core.Services;
 
 /// <summary>
 /// Polls the SDL3 gamepad subsystem on the UI thread and raises button presses.
 /// D-pad, left-stick and bumper input all normalise onto the D-pad values.
 /// Fails gracefully when SDL can't be initialised (e.g. no native runtime).
 /// </summary>
-public class GamepadService : IGamepadService
+public class GamepadInputService : IGamepadInputService
 {
+    /// <summary>
+    /// How often the gamepad event queue is drained.
+    /// </summary>
+    private static readonly TimeSpan PollInterval = TimeSpan.FromMilliseconds(50);
+
+    /// <summary>
+    /// How often the gamepad battery state is queried.
+    /// </summary>
+    private static readonly TimeSpan BatteryPollInterval = TimeSpan.FromSeconds(5);
     /// <summary>
     /// Raised on the UI thread when a navigation-relevant button is pressed.
     /// </summary>
@@ -75,22 +83,22 @@ public class GamepadService : IGamepadService
 
     private readonly DispatcherTimer? _batteryTimer;
 
-    public unsafe GamepadService()
+    public unsafe GamepadInputService()
     {
         try
         {
-            Logger.Info<GamepadService>("Initializing SDL gamepad subsystem");
+            Logger.Info<GamepadInputService>("Initializing SDL gamepad subsystem");
             if (!SDL3.SDL_Init(SDL_InitFlags.SDL_INIT_GAMEPAD))
             {
-                Logger.Warning<GamepadService>($"SDL gamepad init failed: {SDL3.SDL_GetError()}");
+                Logger.Warning<GamepadInputService>($"SDL gamepad init failed: {SDL3.SDL_GetError()}");
                 return;
             }
 
-            Logger.Info<GamepadService>("SDL gamepad init succeeded");
+            Logger.Info<GamepadInputService>("SDL gamepad init succeeded");
 
             // Deliver gamepad events even while the window isn't focused
             bool hintSet = SDL3.SDL_SetHint("SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS", "1");
-            Logger.Debug<GamepadService>($"Set SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS hint: {(hintSet ? "ok" : "failed")}");
+            Logger.Debug<GamepadInputService>($"Set SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS hint: {(hintSet ? "ok" : "failed")}");
 
             // Report which gamepads SDL sees right now, opening the first one so
             // button/axis events flow (SDL3 only delivers them for open gamepads)
@@ -100,7 +108,7 @@ public class GamepadService : IGamepadService
                 int count = 0;
                 foreach (SDL_JoystickID id in gamepads)
                 {
-                    Logger.Info<GamepadService>($"Gamepad[{count}] joystick ID: {id}");
+                    Logger.Info<GamepadInputService>($"Gamepad[{count}] joystick ID: {id}");
                     count++;
                     if (_gamepad == null)
                     {
@@ -108,39 +116,39 @@ public class GamepadService : IGamepadService
                     }
                 }
 
-                Logger.Info<GamepadService>($"SDL sees {count} connected gamepad(s)");
+                Logger.Info<GamepadInputService>($"SDL sees {count} connected gamepad(s)");
             }
             else
             {
-                Logger.Warning<GamepadService>("SDL_GetGamepads returned null");
+                Logger.Warning<GamepadInputService>("SDL_GetGamepads returned null");
             }
 
-            _pollTimer = new DispatcherTimer { Interval = TimingConstants.GamepadPollInterval };
+            _pollTimer = new DispatcherTimer { Interval = PollInterval };
             _pollTimer.Tick += (_, _) => PollEvents();
             _pollTimer.Start();
             IsActive = true;
-            Logger.Info<GamepadService>($"Poll timer started ({_pollTimer.Interval.TotalMilliseconds}ms)");
+            Logger.Info<GamepadInputService>($"Poll timer started ({_pollTimer.Interval.TotalMilliseconds}ms)");
 
-            _batteryTimer = new DispatcherTimer { Interval = TimingConstants.BatteryPollInterval };
+            _batteryTimer = new DispatcherTimer { Interval = BatteryPollInterval };
             _batteryTimer.Tick += (_, _) => PollBattery();
             _batteryTimer.Start();
             PollBattery();
-            Logger.Info<GamepadService>($"Battery timer started ({TimingConstants.BatteryPollInterval.TotalSeconds}s)");
+            Logger.Info<GamepadInputService>($"Battery timer started ({_batteryTimer.Interval.TotalSeconds}s)");
         }
         catch (Exception ex)
         {
-            Logger.Error<GamepadService>("Failed to initialize SDL gamepad input");
-            Logger.LogExceptionDetails<GamepadService>(ex);
+            Logger.Error<GamepadInputService>("Failed to initialize SDL gamepad input");
+            Logger.LogExceptionDetails<GamepadInputService>(ex);
         }
     }
 
     /// <summary>
-    /// Maps an SDL gamepad button to a BigScreen button and raises it.
+    /// Maps an SDL gamepad button to a navigation button and raises it.
     /// </summary>
     private void HandleButtonDown(SDL_GamepadButtonEvent e)
     {
         SDL_GamepadButton sdlButton = e.Button;
-        Logger.Trace<GamepadService>($"Button down: {sdlButton} (raw {e.button}, gamepad {e.which})");
+        Logger.Trace<GamepadInputService>($"Button down: {sdlButton} (raw {e.button}, gamepad {e.which})");
 
         GamepadButton? mapped = sdlButton switch
         {
@@ -159,11 +167,11 @@ public class GamepadService : IGamepadService
 
         if (mapped == null)
         {
-            Logger.Trace<GamepadService>($"Button {sdlButton} not mapped, ignoring");
+            Logger.Trace<GamepadInputService>($"Button {sdlButton} not mapped, ignoring");
             return;
         }
 
-        Logger.Debug<GamepadService>($"Raising {mapped.Value} (from {sdlButton})");
+        Logger.Debug<GamepadInputService>($"Raising {mapped.Value} (from {sdlButton})");
         ButtonPressed?.Invoke(mapped.Value);
     }
 
@@ -182,7 +190,7 @@ public class GamepadService : IGamepadService
         {
             if (!negativeHeld && !positiveHeld)
             {
-                Logger.Debug<GamepadService>($"Stick crossed negative deadzone (value {value}), raising {negativeButton}");
+                Logger.Debug<GamepadInputService>($"Stick crossed negative deadzone (value {value}), raising {negativeButton}");
                 ButtonPressed?.Invoke(negativeButton);
             }
 
@@ -193,7 +201,7 @@ public class GamepadService : IGamepadService
         {
             if (!positiveHeld && !negativeHeld)
             {
-                Logger.Debug<GamepadService>($"Stick crossed positive deadzone (value {value}), raising {positiveButton}");
+                Logger.Debug<GamepadInputService>($"Stick crossed positive deadzone (value {value}), raising {positiveButton}");
                 ButtonPressed?.Invoke(positiveButton);
             }
 
@@ -204,7 +212,7 @@ public class GamepadService : IGamepadService
         {
             if (negativeHeld || positiveHeld)
             {
-                Logger.Trace<GamepadService>($"Stick returned to center (value {value})");
+                Logger.Trace<GamepadInputService>($"Stick returned to center (value {value})");
             }
 
             negativeHeld = false;
@@ -220,7 +228,7 @@ public class GamepadService : IGamepadService
     {
         SDL_GamepadAxis axis = e.Axis;
         short value = e.value;
-        Logger.Trace<GamepadService>($"Axis motion: {axis} (raw {e.axis}, value {value}, gamepad {e.which})");
+        Logger.Trace<GamepadInputService>($"Axis motion: {axis} (raw {e.axis}, value {value}, gamepad {e.which})");
 
         switch (axis)
         {
@@ -230,14 +238,8 @@ public class GamepadService : IGamepadService
             case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY:
                 TrackAxis(ref _stickUpHeld, ref _stickDownHeld, value, GamepadButton.DpadUp, GamepadButton.DpadDown);
                 break;
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_INVALID:
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_RIGHTX:
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_RIGHTY:
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFT_TRIGGER:
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_RIGHT_TRIGGER:
-            case SDL_GamepadAxis.SDL_GAMEPAD_AXIS_COUNT:
             default:
-                Logger.Trace<GamepadService>($"Axis {axis} not tracked, ignoring");
+                Logger.Trace<GamepadInputService>($"Axis {axis} not tracked, ignoring");
                 break;
         }
     }
@@ -255,7 +257,7 @@ public class GamepadService : IGamepadService
 
         int percent;
         SDL_PowerState state = SDL3.SDL_GetGamepadPowerInfo(_gamepad, &percent);
-        Logger.Trace<GamepadService>($"Battery poll: state={state}, percent={percent}");
+        Logger.Trace<GamepadInputService>($"Battery poll: state={state}, percent={percent}");
 
         int newPercent = percent;
         bool newCharging = state is SDL_PowerState.SDL_POWERSTATE_CHARGING or SDL_PowerState.SDL_POWERSTATE_CHARGED;
@@ -281,14 +283,14 @@ public class GamepadService : IGamepadService
         _gamepad = SDL3.SDL_OpenGamepad(id);
         if (_gamepad == null)
         {
-            Logger.Warning<GamepadService>($"Failed to open gamepad {id}: {SDL3.SDL_GetError()}");
+            Logger.Warning<GamepadInputService>($"Failed to open gamepad {id}: {SDL3.SDL_GetError()}");
             return;
         }
 
         _gamepadWhich = id;
         IsConnected = true;
         PollBattery();
-        Logger.Info<GamepadService>($"Opened gamepad {id}: {SDL3.SDL_GetGamepadName(_gamepad)}");
+        Logger.Info<GamepadInputService>($"Opened gamepad {id}: {SDL3.SDL_GetGamepadName(_gamepad)}");
         StateChanged?.Invoke();
     }
 
@@ -299,7 +301,7 @@ public class GamepadService : IGamepadService
     {
         if (_gamepad != null)
         {
-            Logger.Info<GamepadService>($"Closing gamepad {_gamepadWhich}");
+            Logger.Info<GamepadInputService>($"Closing gamepad {_gamepadWhich}");
             SDL3.SDL_CloseGamepad(_gamepad);
             _gamepad = null;
             _gamepadWhich = 0;
@@ -326,13 +328,13 @@ public class GamepadService : IGamepadService
                     HandleButtonDown(ev.gbutton);
                     break;
                 case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_UP:
-                    Logger.Trace<GamepadService>($"Button up: {ev.gbutton.Button} (gamepad {ev.gbutton.which})");
+                    Logger.Trace<GamepadInputService>($"Button up: {ev.gbutton.Button} (gamepad {ev.gbutton.which})");
                     break;
                 case SDL_EventType.SDL_EVENT_GAMEPAD_AXIS_MOTION:
                     HandleAxisMotion(ev.gaxis);
                     break;
                 case SDL_EventType.SDL_EVENT_GAMEPAD_ADDED:
-                    Logger.Info<GamepadService>($"Gamepad added: joystick ID {ev.gdevice.which}");
+                    Logger.Info<GamepadInputService>($"Gamepad added: joystick ID {ev.gdevice.which}");
                     if (_gamepad == null)
                     {
                         OpenGamepad(ev.gdevice.which);
@@ -340,7 +342,7 @@ public class GamepadService : IGamepadService
 
                     break;
                 case SDL_EventType.SDL_EVENT_GAMEPAD_REMOVED:
-                    Logger.Info<GamepadService>($"Gamepad removed: joystick ID {ev.gdevice.which}");
+                    Logger.Info<GamepadInputService>($"Gamepad removed: joystick ID {ev.gdevice.which}");
                     if (ev.gdevice.which == _gamepadWhich)
                     {
                         CloseGamepad();
@@ -348,14 +350,14 @@ public class GamepadService : IGamepadService
 
                     break;
                 default:
-                    Logger.Trace<GamepadService>($"Ignored event: {ev.Type}");
+                    Logger.Trace<GamepadInputService>($"Ignored event: {ev.Type}");
                     break;
             }
         }
 
         if (eventsProcessed > 0)
         {
-            Logger.Trace<GamepadService>($"Poll cycle processed {eventsProcessed} event(s)");
+            Logger.Trace<GamepadInputService>($"Poll cycle processed {eventsProcessed} event(s)");
         }
     }
 
@@ -364,7 +366,7 @@ public class GamepadService : IGamepadService
     /// </summary>
     public void Dispose()
     {
-        Logger.Info<GamepadService>("Shutting down SDL gamepad subsystem");
+        Logger.Info<GamepadInputService>("Shutting down SDL gamepad subsystem");
         _pollTimer?.Stop();
         _batteryTimer?.Stop();
         CloseGamepad();
