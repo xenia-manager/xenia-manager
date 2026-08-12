@@ -36,18 +36,18 @@
     <Style Selector="controls|GameCard">
         <Setter Property="Width" Value="200" />
         <Setter Property="Height" Value="200" />
-        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="Background" Value="Transparent" />
     </Style>
 
     <!-- Border overlay above the box art: carries every card stroke -->
     <Style Selector="controls|GameCard Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
-        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="BorderThickness" Value="5" />
     </Style>
 
     <Style Selector="controls|GameCard:pointerover Border#BorderOverlay, controls|GameCard.selected Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        <Setter Property="BorderThickness" Value="4" />
+        <Setter Property="BorderThickness" Value="5" />
     </Style>
 
     <!-- Subtle dark halo around card text so it stays readable on any background -->
@@ -122,7 +122,7 @@
     <Style Selector="controls|GameCard.selected">
         <Setter Property="Width" Value="250" />
         <Setter Property="Height" Value="250" />
-        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="Background" Value="Transparent" />
     </Style>
 
     <!-- LIBRARY CARD (carousel) -->
@@ -187,19 +187,18 @@
     <!-- Border overlay above the art: carries every card stroke -->
     <Style Selector="controls|ScreenshotCard Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
-        <Setter Property="BorderThickness" Value="8" />
+        <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <Style Selector="controls|ScreenshotCard:pointerover Border#BorderOverlay, controls|ScreenshotCard.selected Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        <Setter Property="BorderThickness" Value="6" />
+        <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <!-- OPTION CARD: reserved 4px border so hover/focus doesn't change size -->
     <Style Selector="controls|OptionsCard">
         <Setter Property="Width" Value="333" />
         <Setter Property="Height" Value="160" />
-        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
     </Style>
 
     <Style Selector="controls|OptionsCard Border#Tile">

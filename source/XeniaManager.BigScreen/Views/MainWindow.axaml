@@ -49,7 +49,7 @@
                         VerticalAlignment="Center"
                         Spacing="12">
                 <Border CornerRadius="22" Height="44" Width="44" Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <fluent:SymbolIcon Symbol="PersonCircle"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
@@ -106,7 +106,7 @@
                IsVisible="{Binding IsOverlayOpen}"
                IsHitTestVisible="{Binding IsOverlayOpen}">
             <!-- Full-screen backdrop -->
-            <Border Background="#E60A0C10" />
+            <Border Background="{DynamicResource OverlayBackdrop}" />
             <!-- Screens are created at startup; opening just flips visibility -->
             <Grid IsVisible="{Binding IsLibraryScreen}">
                 <views:LibraryView DataContext="{Binding Library}" />

@@ -2,12 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="96"
-        x:Class="XeniaManager.BigScreen.Controls.LibraryListItem"
-        x:DataType="vm:GameCardViewModel"
-        Classes.selected="{Binding IsSelected}">
+         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+         mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="96"
+         x:Class="XeniaManager.BigScreen.Controls.LibraryListItem"
+         x:DataType="vm:GameCardViewModel"
+         Classes.selected="{Binding IsSelected}">
     <Button.Template>
         <ControlTemplate TargetType="Button">
             <Border x:Name="RowBorder"
@@ -15,7 +15,7 @@
                     Background="{DynamicResource CardBackground}"
                     BorderBrush="Transparent"
                     BorderThickness="3"
-                    BoxShadow="0 2 6 0 #33000000"
+                    BoxShadow="{DynamicResource CardShadowFlat}"
                     CornerRadius="10">
                 <ContentPresenter Content="{TemplateBinding Content}"
                                   HorizontalContentAlignment="Stretch"

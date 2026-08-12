@@ -3,15 +3,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-             xmlns:controls="using:XeniaManager.BigScreen.Controls"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200"
              x:Class="XeniaManager.BigScreen.Controls.GameCard"
              x:DataType="vm:GameCardViewModel"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
-    <controls:ArtTile Art="{Binding BoxArt}"
-                      HasArt="{Binding HasBoxArt}"
-                      SecondaryArt="{Binding DiscArt}"
-                      HasSecondaryArt="{Binding HasDiscArt}"
-                      Title="{Binding Title}" />
+    <Grid>
+        <Border x:Name="Tile" CornerRadius="10" Background="{DynamicResource CardBackground}" Margin="2" />
+        <Border x:Name="ArtClip" Background="Transparent" CornerRadius="10" Margin="2">
+            <Panel>
+                <Image Source="{Binding BoxArt}"
+                       IsVisible="{Binding HasBoxArt}"
+                       Stretch="UniformToFill"
+                       VerticalAlignment="Bottom" />
+                <Image Source="{Binding DiscArt}"
+                       IsVisible="{Binding HasDiscArt}"
+                       Stretch="UniformToFill" />
+            </Panel>
+        </Border>
+        <Border x:Name="TitleBar"
+                Background="{DynamicResource CardTitleBar}"
+                CornerRadius="0,0,8,8"
+                VerticalAlignment="Bottom"
+                IsVisible="{Binding IsSelected}">
+            <TextBlock Text="{Binding Title}"
+                       Classes="card-title" />
+        </Border>
+        <Border x:Name="BorderOverlay"
+                CornerRadius="10"
+                IsHitTestVisible="False" />
+    </Grid>
 </UserControl>

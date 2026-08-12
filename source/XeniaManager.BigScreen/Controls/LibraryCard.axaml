@@ -9,13 +9,13 @@
              x:DataType="vm:GameCardViewModel"
              Width="365"
              Height="622"
-             Focusable="True"
-             Classes.selected="{Binding IsSelected}">
+              Focusable="True"
+              Classes.selected="{Binding IsSelected}">
     <Border x:Name="CardBorder"
             ClipToBounds="True"
             CornerRadius="12"
             Background="{DynamicResource CardBackground}"
-            BoxShadow="0 4 12 0 #40000000">
+            BoxShadow="{DynamicResource CardShadow}">
         <StackPanel Margin="25"
                     Orientation="Vertical"
                     Spacing="15"

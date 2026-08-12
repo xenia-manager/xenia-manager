@@ -68,7 +68,8 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **`IconStat`** — icon + text row (`Icon` Symbol, `Stat`, `IconSize`, `FontSize`, `Spacing`, `IconRotation`). Used in the header (gamerscore), library sort indicator, and library cards.
 - **`InputHint`** — keycap + label (`KeyColour`, `Icon`/`Char` glyph, `Text`): transparent circle with coloured 2px outline, glyph coloured to match, white label. Xbox-standard colours per usage (Y amber, A green, B red).
 - **`LibraryCard`** — carousel card: box art (bottom-anchored, top 13% cropped, rounded clip via `RectangleGeometry`), title, playtime row, achievements/gamerscore row; `CardBorder` 2px inactive → accent on selection (outer border only).
-- **`ArtTile`** — shared art tile (Tile / ArtClip / TitleBar / BorderOverlay with `Art`/`SecondaryArt`/`Title`/corner-radius DPs); backs **`GameCard`** (dashboard tile: art + title bar on selection, grow 200→250) and **`ScreenshotCard`** (media tile, 6px corners) — both are thin wrappers now.
+- **`GameCard`** — dashboard game tile: box art (bottom-anchored, rounded clip) + title bar on selection, border overlay strokes; grows 200→250 on selection.
+- **`ScreenshotCard`** — media gallery tile: 16:9 screenshot with 6px rounded clip, title bar on selection, border overlay strokes.
 - **`OptionsCard`** — dashboard option tile.
 
 ### Settings persistence
@@ -107,10 +108,9 @@ source/XeniaManager.BigScreen/
 │       ├── ScreenshotItemViewModel.cs # Path, Title, CapturedAt (+ text), GameTitle, Image, IsSelected
 │       └── OptionsCardViewModel.cs  # Title, Icon, TargetScreen
 ├── Controls/
-│   ├── ArtTile.axaml(.cs)           # Shared art tile (Tile/ArtClip/TitleBar/BorderOverlay) with Art/SecondaryArt/Title/corner DPs
-│   ├── GameCard.axaml(.cs)          # Dashboard game tile — thin wrapper over ArtTile (grow 200→250 on selection)
+│   ├── GameCard.axaml(.cs)          # Dashboard game tile: box art + title bar on selection (grow 200→250)
 │   ├── OptionsCard.axaml(.cs)       # Dashboard option tile
-│   ├── ScreenshotCard.axaml(.cs)    # Media tile — thin wrapper over ArtTile (6px corners)
+│   ├── ScreenshotCard.axaml(.cs)    # Media tile: 16:9 screenshot, 6px corners
 │   ├── LibraryCard.axaml(.cs)       # Carousel card: box art + title + stat rows (rounded art clip)
 │   ├── IconStat.axaml(.cs)          # Icon + text stat row
 │   ├── InputHint.axaml(.cs)         # Keycap + label hint
@@ -284,7 +284,8 @@ source/XeniaManager.BigScreen/
 - [x] **Big Screen launch button (main app)** — "Big Screen" nav item (Tv icon, "Open Big Screen" tooltip) → `NavigationService` launches the exe side-by-side or from the repo-sibling bin folder; missing exe → localized warning; keys in en.axaml
 - [x] **Boot splash screen** — separate `SplashWindow` (paints before any loading via deferred startup), six staged loading statuses with per-stage dwell + tweened bar + 3s minimum + 1s "Loading Done" hold, dashboard-style radial background + saved accent (no green→red flash); input gated until `IsInitialized`; main window is a plain `Window` with fullscreen forced in code
 - [x] **Localization key set + wiring** — every user-facing string keyed in `en.axaml` (main-app naming convention) and wired via `{DynamicResource}` / `LocalizationHelper.GetText`
-- [x] **AXAML/style consolidation** — `ArtTile` base control (GameCard/ScreenshotCard thin wrappers), shared `.screen-title`/`.card-title`/`.hint-bar`/`.empty-state` styles, `HintKeyY/A/B` + `CardShadow`/`CardShadowSelected` tokens, Window.DataTemplates → App.axaml, IconStat FontSize de-hiding, GameCard border selector combine
+- [x] **AXAML/style consolidation** — shared `.screen-title`/`.card-title`/`.hint-bar`/`.empty-state` styles, `HintKeyY/A/B` + `CardShadow`/`CardShadowSelected` tokens, Window.DataTemplates → App.axaml, IconStat FontSize de-hiding, GameCard border selector combine
+- [x] **ArtTile removed** — `ArtTile` abstraction undone; `GameCard`/`ScreenshotCard` are standalone controls again (own Tile / ArtClip / TitleBar / BorderOverlay)
 - [x] **Stability fixes** — `BoxShadow`→`BoxShadows` resource cast crash; FAAppWindow title bar removed (plain Window + code-forced fullscreen); background-image decode moved behind the splash
 - [ ] **"Launch Big Screen by default" settings toggle + auto-launch at startup** (main app) — `UiSettings.Window.LaunchBigScreen` field is ready in Core; add the Settings toggle card, wire the partial, and launch BigScreen at startup when enabled (main app stays open in the background)
 

@@ -66,7 +66,7 @@
                 <Border CornerRadius="10"
                         Padding="24,16"
                         Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <DockPanel>
                         <ComboBox x:Name="BackgroundModeCombo"
                                   DockPanel.Dock="Right"
@@ -88,7 +88,7 @@
                 <Border CornerRadius="10"
                         Padding="24,16"
                         Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <DockPanel>
                         <ComboBox x:Name="LibraryViewModeCombo"
                                   DockPanel.Dock="Right"
@@ -110,7 +110,7 @@
                 <Border CornerRadius="10"
                         Padding="24,16"
                         Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <DockPanel>
                         <controls:ColorPickerField x:Name="PrimaryColorField"
                                                    DockPanel.Dock="Right"
@@ -127,7 +127,7 @@
                 <Border CornerRadius="10"
                         Padding="24,16"
                         Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <DockPanel>
                         <controls:ColorPickerField x:Name="AccentColorField"
                                                    DockPanel.Dock="Right"
@@ -144,7 +144,7 @@
                 <Border CornerRadius="10"
                         Padding="24,16"
                         Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Right"
                                    Text="{Binding VignetteText}"
@@ -171,7 +171,7 @@
                 <Border CornerRadius="10"
                         Padding="24,16"
                         Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <DockPanel>
                         <Button x:Name="BtnSelectImage"
                                 DockPanel.Dock="Right"
@@ -198,7 +198,7 @@
                 <Border CornerRadius="10"
                         Padding="24,16"
                         Background="{DynamicResource CardBackground}"
-                        BoxShadow="0 4 12 0 #40000000">
+                        BoxShadow="{DynamicResource CardShadow}">
                     <DockPanel>
                         <CheckBox x:Name="ChkQuitBehaviour"
                                   DockPanel.Dock="Right"

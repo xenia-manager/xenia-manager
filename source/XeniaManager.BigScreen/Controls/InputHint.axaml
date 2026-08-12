@@ -13,7 +13,7 @@
                 MinWidth="32"
                 Background="Transparent"
                 BorderThickness="2"
-                BoxShadow="0 2 6 0 #40000000">
+                BoxShadow="{DynamicResource CardShadowSoft}">
             <Grid>
                 <fluent:SymbolIcon x:Name="IconElement"
                                    HorizontalAlignment="Center"

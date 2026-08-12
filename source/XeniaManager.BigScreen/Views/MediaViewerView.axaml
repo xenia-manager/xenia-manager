@@ -33,7 +33,7 @@
     </UserControl.Styles>
 
     <!-- Full-bleed viewer, covers the whole screen while open -->
-    <Panel Background="#FF0A0C10">
+    <Panel Background="{DynamicResource ViewerBackdrop}">
 
         <Image Source="{Binding Image}"
                Margin="140,60"
