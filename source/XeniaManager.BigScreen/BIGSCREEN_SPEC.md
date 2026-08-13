@@ -11,9 +11,9 @@
 
 **XeniaManager.BigScreen** is a fullscreen **Xbox Series-style dashboard** ("big screen mode") for Xenia Manager. It runs as its own Avalonia desktop app and references `XeniaManager.Core` for the game library, profiles, artwork and launching.
 
-**Vision:** a controller-driven, big-screen experience — browse an alphabetical game carousel, pick a game, and launch straight into Xenia. Browse screenshots in a gallery with a focused modal viewer. Configure dashboard visuals (background, accent, vignette) from a settings screen. All choices persist across sessions.
+**Vision:** a controller-driven, big-screen experience — browse the game library (carousel or list), pick a game, and launch straight into Xenia. Browse screenshots in a gallery with a focused modal viewer. Configure dashboard visuals (background, accent, vignette) from a settings screen. All choices persist across sessions.
 
-**Non-goals (for now):** other languages beyond the English key set (translations deferred — the app is fully keyed and wired), and the **"Launch Big Screen by default"** settings toggle + auto-launch at startup (queued — see 5.12; the nav launch button is done). BigScreen's Quit returns to Xenia Manager, launching `XeniaManager.exe` if it isn't running, or closes everything per the 5.6 toggle.
+**Non-goals (for now):** other languages beyond the English key set (translations deferred — the app is fully keyed and wired). BigScreen's Quit returns to Xenia Manager, launching `XeniaManager.exe` if it isn't running, or closes everything per the 5.6 toggle.
 
 ---
 
@@ -21,16 +21,17 @@
 
 ### Dashboard shell (`Views/MainWindow.axaml`)
 - **Header:** avatar icon (PersonCircle), gamertag from the **Canary profile** (`ProfileManager.LoadProfiles(XeniaVersion.Canary)` + profile GPD), gamerscore as an `IconStat` (Star), **live** wifi + controller battery icons (10s/5s polls), live clock (1s `DispatcherTimer`).
-- **Game card row:** **max 6 recent games** (`RecentGames`, its own VM instances — independent selection from the library). Each `GameCard` shows its box art (zoom-to-fill, bottom-anchored, rounded clip); the selected card grows (200→250) and shows the title bar. A transparent `BorderOverlay` larger than the card carries **all** border strokes (inactive `CardBorder`, hover/selected accent) so nothing sits on top of the art edges.
+- **Game card row:** **max 6 recent games** (`RecentGames`, its own VM instances — independent selection from the library). Each `GameCard` shows its **box art or disc icon** per the `card_image_mode` setting (default Icon; Box Art mode falls back to the icon when art is missing; zoom-to-fill, bottom-anchored, rounded clip); the selected card grows (200→250) and shows the title bar. A transparent `BorderOverlay` larger than the card carries **all** border strokes (inactive `CardBorder`, hover/selected accent) so nothing sits on top of the art edges.
 - **Option card row:** `Library` · `Media` · `Settings` · `Quit`. Hover shows the accent border; selection is driven by `IsSelected` (controller focus), not by keyboard focus.
 - **Fullscreen:** plain `Window` (no title bar) with `WindowState=FullScreen` **forced in code** at construction and before `Show()` — the XAML attribute is not reliable on the DI creation path; 1920×1080 fallback, centered column layout so header aligns with content rows.
 
 ### Overlay screens
 Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape** closes, focus returns to the option row. Bottom hint bars use the `InputHint` control (coloured circle keycap + label).
-- **Library** — horizontal carousel of all games (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle. **Y** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). Disc stub shown when the library is empty.
-- **Media** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **Y** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, capture date from file write time). Click/Enter → full-screen **modal viewer** (opaque backdrop, uniform-stretched image, faded chevrons that hide at the ends, B/Escape closes; caption shows game title + parsed capture date). Camera stub shown when the gallery is empty.
-- **Settings** — background type dropdown, primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker.
+- **Library** — all games in a horizontal **carousel** (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD) or a vertical **list** with a details pane (`LibraryListItem` + `GameDetailsPanel`). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle; in list mode Up/Down iterates. **Y** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). **View/V** swaps the layout (Carousel ↔ List, persisted via `library_view_mode`); the details pane shows marketplace DB info (bio, genre, developer, publisher, release date — loading/no-info states, stale-fetch guard + negative cache). Disc stub shown when the library is empty.
+- **Media** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **Y** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, capture date from file write time). Click/Enter → full-screen **modal viewer** (opaque backdrop, uniform-stretched image, faded chevrons that hide at the ends, B/Escape closes; caption shows game title + parsed capture date). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (Y).
+- **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker.
 - **Quit** — closes the app.
+- **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (Y amber) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Media = Back → Select (A) → Sort; Viewer/Settings = Back/Close.
 
 ### Base app data sharing (`Program.cs` + `Services/BaseAppLocator.cs`)
 - BigScreen **reads the base Xenia Manager's data folders** (library, games, artwork, profiles): `Program.Main` calls `AppPathResolver.SetBaseDirectory(...)` before anything resolves paths (Core change, base app unaffected).
@@ -53,10 +54,9 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 
 ### Main app integration (Feature 1)
 - **"Big Screen" nav button** in Xenia Manager (`MainView.axaml`, `Tv` icon, tooltip "Open Big Screen") → `NavigationService` `BigScreen` tag → launches `XeniaManager.BigScreen.exe` resolved **side-by-side or via the repo-sibling bin folder** (same config, matching `BaseAppLocator`); missing exe → localized warning box.
-- `UiSettings.Window.LaunchBigScreen` property reserved in Core for the deferred auto-launch toggle (5.12).
 
 ### Theming
-- `Resources/Themes/DarkGradient.axaml` — token dictionary: `CardBackground`, `CardTitleBar`, `CardBorder`, `AccentColor`, `TextPrimary/Secondary`, `HintKeyY/A/B`, `CardShadow`/`CardShadowSelected` (`BoxShadows`!), `SystemAccentColor*` (Color-typed variants), slider/control overrides, accent-fill family.
+- `Resources/Themes/DarkGradient.axaml` — token dictionary: `CardBackground`, `CardTitleBar`, `CardBorder`, `AccentColor`, `TextPrimary/Secondary`, `HintKeyY/A/B/Back`, `CardShadow`/`CardShadowSelected` (`BoxShadows`!), `SystemAccentColor*` (Color-typed variants), slider/control overrides, accent-fill family.
 - `Resources/Themes/Controls.axaml` — `ControlTheme`s for the custom controls (`ColorPickerField`, `PalettePicker`).
 - `Resources/BigScreenStyle.axaml` — global styles (cards, shared `.screen-title`/`.card-title`/`.hint-bar`/`.empty-state` classes, text halos).
 - `Resources/Language/en.axaml` — **full key set for every user-facing string** (main-app naming convention), wired via `{DynamicResource}` in XAML and `LocalizationHelper.GetText` in code; `LocalizationHelper.Initialize(...)` in `App.axaml.cs`. Other languages = new files only.
@@ -66,9 +66,11 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **`ColorPickerField`** — swatch + hex text box; clicking the swatch opens a palette popup. Two palettes: muted slates/greys (primary) and 10 accent colours incl. white/light grey.
 - **`PalettePicker`** — horizontal StackPanel of colour swatches (background card, spacing, margin); raises `SelectedColorChanged`.
 - **`IconStat`** — icon + text row (`Icon` Symbol, `Stat`, `IconSize`, `FontSize`, `Spacing`, `IconRotation`). Used in the header (gamerscore), library sort indicator, and library cards.
-- **`InputHint`** — keycap + label (`KeyColour`, `Icon`/`Char` glyph, `Text`): transparent circle with coloured 2px outline, glyph coloured to match, white label. Xbox-standard colours per usage (Y amber, A green, B red).
+- **`InputHint`** — keycap + label (`KeyColour`, `Icon`/`Char` glyph, `Text`): transparent circle with coloured 2px outline, glyph coloured to match, white label. Xbox-standard colours per usage (Y amber, A green, B red; the back/view button uses a faded-white `CaretLeft` via `HintKeyBack`).
 - **`LibraryCard`** — carousel card: box art (bottom-anchored, top 13% cropped, rounded clip via `RectangleGeometry`), title, playtime row, achievements/gamerscore row; `CardBorder` 2px inactive → accent on selection (outer border only).
-- **`GameCard`** — dashboard game tile: box art (bottom-anchored, rounded clip) + title bar on selection, border overlay strokes; grows 200→250 on selection.
+- **`LibraryListItem`** — list-view row: disc icon + title, accent border on selection/hover.
+- **`GameDetailsPanel`** — list-view details pane: disc art, playtime/achievements/gamerscore, marketplace DB bio + metadata strip (genre, developer, publisher, released), loading bar / no-info states.
+- **`GameCard`** — dashboard game tile: box art or disc icon per `card_image_mode` (bottom-anchored, rounded clip) + title bar on selection, border overlay strokes; grows 200→250 on selection.
 - **`ScreenshotCard`** — media gallery tile: 16:9 screenshot with 6px rounded clip, title bar on selection, border overlay strokes.
 - **`OptionsCard`** — dashboard option tile.
 
@@ -87,7 +89,7 @@ source/XeniaManager.BigScreen/
 ├── Views/
 │   ├── MainWindow.axaml(.cs)        # Shell (plain Window, fullscreen forced in code): header, background/fade layers, dashboard + overlay screens, input routing
 │   ├── DashboardView.axaml(.cs)     # Recent games row + options row + empty stub
-│   ├── LibraryView.axaml(.cs)       # Library carousel + clamped scroll + empty stub
+│   ├── LibraryView.axaml(.cs)       # Library carousel + list, clamped scroll, details pane + empty stub
 │   ├── MediaView.axaml(.cs)         # Media gallery grid + nested viewer sub-screen
 │   ├── MediaViewerView.axaml(.cs)   # Full-screen screenshot viewer (chevrons, caption)
 │   ├── SettingsView.axaml(.cs)      # Settings screen (owns the background image picker)
@@ -100,11 +102,12 @@ source/XeniaManager.BigScreen/
 │   ├── LibraryViewModel.cs          # Games carousel + sort (ScreenViewModel base)
 │   ├── MediaViewModel.cs            # Screenshots + sort + viewer sub-screen (ScreenViewModel base)
 │   ├── MediaViewerViewModel.cs      # Current screenshot, caption, prev/next stepping
-│   ├── SettingsViewModel.cs         # Appearance options + persistence + quit toggle
+│   ├── SettingsViewModel.cs         # Appearance options + persistence + quit toggle + library view + card image
 │   ├── ScreenViewModel.cs           # Base for overlay screens: ScreenBackground brush
 │   ├── ViewModelBase.cs
 │   └── Items/
-│       ├── GameCardViewModel.cs     # Core Game ref, Title, Boxart, stat strings, IsSelected, BackgroundArt
+│       ├── GameCardViewModel.cs     # Core Game ref, Title, Boxart/DiscArt layers (card_image_mode), stat strings, IsSelected, BackgroundArt
+│       ├── GameDetailsViewModel.cs  # Details pane: local card stats + DB info (bio/genre/developer/publisher/released)
 │       ├── ScreenshotItemViewModel.cs # Path, Title, CapturedAt (+ text), GameTitle, Image, IsSelected
 │       └── OptionsCardViewModel.cs  # Title, Icon, TargetScreen
 ├── Controls/
@@ -112,6 +115,8 @@ source/XeniaManager.BigScreen/
 │   ├── OptionsCard.axaml(.cs)       # Dashboard option tile
 │   ├── ScreenshotCard.axaml(.cs)    # Media tile: 16:9 screenshot, 6px corners
 │   ├── LibraryCard.axaml(.cs)       # Carousel card: box art + title + stat rows (rounded art clip)
+│   ├── LibraryListItem.axaml(.cs)   # List row: disc icon + title (accent on select/hover)
+│   ├── GameDetailsPanel.axaml(.cs)  # Details pane: art, local stats, DB bio + metadata strip
 │   ├── IconStat.axaml(.cs)          # Icon + text stat row
 │   ├── InputHint.axaml(.cs)         # Keycap + label hint
 │   ├── ColorPickerField.cs          # Swatch + hex + palette popup
@@ -122,8 +127,7 @@ source/XeniaManager.BigScreen/
 │   ├── ColorJsonConverter.cs
 │   ├── DashboardNavigationController.cs # Row state machine, selection movement, option activation (view focus/scroll via events)
 │   ├── GameLibraryService.cs        # Wraps Core GameManager: load, game list, recent-games selection (IGameLibraryService)
-│   ├── GamepadService.cs            # SDL3 polling, button/axis normalization, open/close gamepad (IGamepadService)
-│   ├── IBackgroundService.cs / IGamepadService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs
+│   ├── IBackgroundService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs
 │   ├── InputRouter.cs               # Command-driven: key/gamepad → Command → per-screen handler (one state machine, no duplicated branching)
 │   ├── ProfileService.cs            # Canary profile, gamertag/gamerscore, per-game achievement/GPD stats (IProfileService)
 │   ├── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching (IScreenshotLibraryService)
@@ -141,11 +145,12 @@ source/XeniaManager.BigScreen/
 ├── Models/
 │   ├── DashboardSettings.cs         # Persisted user-facing options
 │   ├── BackgroundMode.cs / BackgroundModeOption.cs
+│   ├── LibraryViewMode.cs / LibraryViewModeOption.cs
+│   ├── CardImageMode.cs / CardImageModeOption.cs
 │   ├── GameStatInfo.cs              # Achievement/gamerscore counters (unlocked / total)
 │   ├── LibrarySort.cs               # Alphabetical / TimePlayed / LastPlayed
 │   ├── MediaSort.cs                 # NewestFirst / OldestFirst / ByGame
-│   ├── GamepadButton.cs             # Dpad/ABXY/bumpers (stick normalized onto Dpad)
-│   └── OverlayScreen.cs
+│   └── OverlayScreen.cs             # GamepadButton moved to Core (Models/GamepadButton.cs)
 └── Resources/
     ├── BigScreenStyle.axaml        # Shared card/screen-title/hint-bar/empty-state styles
     ├── Language/en.axaml           # Full key set for every user-facing string (+ Core playtime keys)
@@ -158,11 +163,11 @@ source/XeniaManager.BigScreen/
 **Boot:** `Program.Main` → `App` builds DI → `SplashWindow` shown immediately, startup deferred via `Dispatcher.Post(StartApp, Background)` so the splash paints first → `MainWindowViewModel.InitializeAsync` runs the six staged loads (cancellable, per-stage dwell, progress via `IProgress`) → splash closes on completion (3s minimum total) → input un-gated (`IsInitialized`).
 
 **Data flow**
-- DI: `App.Services` (built by `ServiceConfigurator.ConfigureServices()`) → singleton services (`IBackgroundService`, `IProfileService`, `IGameLibraryService`, `IScreenshotLibraryService`, `IGamepadService`, `DashboardNavigationController`, `InputRouter`) + `MainWindowViewModel` + `MainWindow` (parameterless ctor resolving from `App.Services` — the XAML loader requires it).
-- Input: keyboard (`OnWindowKeyDown`) and gamepad (`IGamepadService.ButtonPressed`) → `InputRouter` (key/button → `Command` → per-screen handler) → `DashboardNavigationController` actions (move/select/activate) → selection `IsSelected` → styled visuals; the controller raises focus/scroll requests the window fulfills. All input is gated until the boot pipeline completes.
+- DI: `App.Services` (built by `ServiceConfigurator.ConfigureServices()`) → singleton services (`IBackgroundService`, `IProfileService`, `IGameLibraryService`, `IScreenshotLibraryService`, `IGamepadInputService`, `DashboardNavigationController`, `InputRouter`) + `MainWindowViewModel` + `MainWindow` (parameterless ctor resolving from `App.Services` — the XAML loader requires it).
+- Input: keyboard (`OnWindowKeyDown`) and gamepad (`IGamepadInputService.ButtonPressed`) → `InputRouter` (key/button → `Command` → per-screen handler) → `DashboardNavigationController` actions (move/select/activate) → selection `IsSelected` → styled visuals; the controller raises focus/scroll requests the window fulfills. All input is gated until the boot pipeline completes.
 - Navigation: `OptionsCardViewModel.TargetScreen` → `MainWindowViewModel.OpenScreen()` → `CurrentScreen` (a screen VM) → the matching overlay's `IsVisible` flips; null shows the dashboard. Media nests its own viewer sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`).
 - Selection: focus/click on a card → `IsSelected` → styled via `.selected` class / pseudo-class → visuals. **Dashboard (`DashboardViewModel.RecentGames`) and library (`LibraryViewModel.Games`) hold separate VM instances with independent selections.**
-- Settings: VM property → `IBackgroundService.Settings` → `Save()` + `ApplyResources()` → `Application.Resources` → `DynamicResource` bindings; `SettingsViewModel.AppearanceChanged` → dashboard rebuilds its background.
+- Settings: VM property → `IBackgroundService.Settings` → `Save()` + `ApplyResources()` → `Application.Resources` → `DynamicResource` bindings; `SettingsViewModel.AppearanceChanged` → dashboard rebuilds its background; `LibraryViewModeChanged` / `CardImageChanged` → live layout / card-image swaps.
 - Localization: XAML `{DynamicResource Key}` + C# `LocalizationHelper.GetText("Key")` → `Resources/Language/en.axaml`.
 - Sorting: **Y** in the library → `LibraryViewModel.CycleSort()` → re-orders `Games` (title asc, playtime desc, last-played desc), keeps the selection, re-scrolls.
 - Data: `IProfileService` (profile + GPD stats) · `IGameLibraryService` (Core `GameManager` wrapper) · `IScreenshotLibraryService` (scan + game-title matching) feed the child VMs; Core paths (library, games, artwork, profiles, logs) resolve against the base app's folder via `Program.Main` → `BaseAppLocator.Resolve(args)` → `AppPathResolver.SetBaseDirectory(...)`.
@@ -174,6 +179,8 @@ source/XeniaManager.BigScreen/
 - `AccountContent` + `GpdFile` — per-game achievement counts / gamerscore (`GpdFile.Achievements`, `GetTotalGamerscore()`).
 - `Launcher.LaunchGameASync(Game, Settings, ...)` — game launch (needs Core `Settings`).
 - `ProfileManager.LoadProfiles(XeniaVersion.Canary)` — profile/gamertag.
+- `GamepadInputService` / `IGamepadInputService` — SDL3 gamepad polling (moved from BigScreen; `GamepadButton` enum incl. `View`).
+- `ReleaseDateFormatter.Format(...)` — ordinal release dates (+ unit tests).
 
 ---
 
@@ -186,6 +193,7 @@ source/XeniaManager.BigScreen/
 | `CardBorder` | Reserved 3–4px borders (no layout shift on focus) |
 | `AccentColor` | Selected/hover accent (runtime-configurable) |
 | `TextPrimary` / `TextSecondary` | Text |
+| `HintKeyY` / `HintKeyA` / `HintKeyB` / `HintKeyBack` | Keycap colours (Y amber, A green, B red, back/view faded white) |
 | `SystemAccentColor` + Light1–3 / Dark1–3 | FluentAvalonia accent (Color-typed, runtime variants) |
 | `SliderTrackValueFill` / `SliderThumbBackground` | Slider fill/knob (accent) |
 | `ControlOutlineBrush` / `TextControlBorderBrush` | ComboBox/TextBox borders (+ hover/disabled), focused = accent |
@@ -203,91 +211,151 @@ source/XeniaManager.BigScreen/
 > Tick items off as they land. Progress lives in this list.
 
 ### 5.1 Real library + profile
-- [x] Load actual games via `GameManager.LoadLibrary()`; replace the 6 fake games
-- [x] Real Canary profile behaviour: gamertag + gamerscore in the header from the actual profile
-- [x] Per-game achievement stats from the profile's GPDs (reuses the header's loaded `ProfileGpd` → `TitleEntry` per game)
+- [x] Real library via `GameManager.LoadLibrary()` (6 fake games replaced)
+- [x] Real Canary profile: gamertag + gamerscore in the header
+- [x] Per-game achievement/gamerscore stats from the profile GPD (`TitleEntry`, per-game GPD fallback)
 
 ### 5.2 Library carousel
-- [x] Left-to-right **alphabetical** carousel (sortable with **Y**: Alphabetical / Time Played / Last Played; selection follows the list index, not the element — viewport stays put)
-- [x] Card layout: box art on top (`CachedBoxart`, bottom-anchored with a 13% top crop)
-- [x] Game name underneath
-- [x] Total achievements under the name
-- [x] Gamerscore under the name
-- [x] Total time played (minutes via `PlaytimeFormatter`)
+- [x] Alphabetical carousel, sortable with **Y** (selection follows the list index — viewport stays put)
+- [x] Card: box art (`CachedBoxart`, bottom-anchored, top-cropped), title, playtime, achievements, gamerscore
 
 ### 5.3 Media gallery
-- [x] Clean wrap panel with adequate spacing over all screenshots (4-across 16:9 grid, card size fits the window width)
-- [x] Click a screenshot → **modal focus**
-- [x] Subtle chevron arrows in the modal for navigation (visual affordance, faded 0.45 → full on hover)
-- [x] B/Escape closes the modal (then the overlay)
-- [x] Grid scrolls down like the library scrolls sideways; clamped at both ends, no wrap-back
-- [x] Sort with **Y**: Newest First / Oldest First / By Game (indicator top-right, capture date from file write time). Selection follows the **list index**, not the element — the viewport stays put and the card at the same position is selected (no fly-across)
+- [x] 4-across 16:9 grid, adequate spacing, fits the window width
+- [x] Click/Enter → modal viewer
+- [x] Faded chevrons in the modal (hide at the ends, brighten on hover)
+- [x] B/Escape closes (viewer, then overlay)
+- [x] Grid scrolls down, clamped at both ends, no wrap-back
+- [x] **Y** sorts: Newest First / Oldest First / By Game (indicator top-right, date from file write time); selection follows the list index
 
 ### 5.4 Game launch
-- [x] Launch from the carousel via `Launcher.LaunchGameASync` (needs Core `Settings`)
-- [x] **A**/**Enter** launches the selected game (library carousel and dashboard cards)
-- [x] Window disables while the game runs (`EventManager.DisableWindow`) and re-enables on exit
-- [x] Library refreshes after the session (playtime / last played via `GameManager.LoadLibrary()` + card rebuild)
+- [x] Launch via `Launcher.LaunchGameASync` (Core `Settings`)
+- [x] **A**/**Enter** launches (library carousel + dashboard cards)
+- [x] Window disabled while running (`EventManager.DisableWindow`), re-enabled on exit
+- [x] Library refresh after the session (playtime/last played + card rebuild)
 
 ### 5.5 Dynamic background
-- [x] Populate `GameCardViewModel.BackgroundArt` from `CachedBackground`
-- [x] Dynamic mode works with real art (fallback to radial gradient when missing)
-- [x] Selection in **either** row (dashboard or library) drives the artwork; library selection reveals on overlay close
-- [x] Fade-through-black transition on art swaps (180ms each way, latest-wins on rapid switching); settings changes stay instant
+- [x] `BackgroundArt` from `CachedBackground`
+- [x] Dynamic mode with real art (radial fallback when missing)
+- [x] Selection in either row drives the art; library selection reveals on overlay close
+- [x] Fade-through-black on art swaps (latest-wins); settings changes stay instant
 
 ### 5.6 Quit behaviour toggle
-- [x] Toggle switch in Settings ("Return to Xenia Manager on Quit") — radio-switch style (track + sliding thumb, accent when on)
-- [x] **On** (default) = Quit returns to Xenia Manager — launches `XeniaManager.exe` from the base dir if it isn't already running, then closes BigScreen
-- [x] **Off** = Quit closes BigScreen only ("Closes Everything")
-- [x] Tagline explaining the behaviour ("On: Returns to Xenia Manager · Off: Closes Everything")
-- [x] Persisted in `DashboardSettings` (`ReturnToXeniaOnQuit`, default true)
+- [x] Toggle in Settings ("Return to Xenia Manager on Quit", radio-switch style)
+- [x] **On** = returns to Xenia Manager (launches it if not running), then closes BigScreen
+- [x] **Off** = closes BigScreen only
+- [x] Persisted (`ReturnToXeniaOnQuit`, default true)
 
 ### 5.7 Empty states
-- [x] **No games:** placeholder with subtle disc icon + "No games found" (dashboard row **and** library screen)
-- [x] **No screenshots:** placeholder (camera icon + "No screenshots found" in the media gallery)
-- [x] **Fewer than 6 recent games:** dashboard row is capped at 6 via the `RecentGames` collection (fewer games = fewer cards, no empty slots)
+- [x] No games → disc stub (dashboard row and library screen)
+- [x] No screenshots → camera stub (media gallery)
+- [x] Dashboard row capped at 6 (fewer games = fewer cards, no empty slots)
 
 ### 5.8 SDL3 gamepad input
-- [x] Add `ppy.SDL3-CS` package (win-x64 native included, `AllowUnsafeBlocks` for the pointer API)
-- [x] `GamepadService`: SDL gamepad init (graceful failure), UI-thread 50ms poll of button + left-stick axis events (deadzone edge detection, no hold repeat); D-pad, left stick (X/Y) and bumpers all normalize onto the D-pad values; opens the first gamepad so events flow, handles add/remove; full NLog tracing of raw input
-- [x] D-pad + A/B navigation mapped to the existing focus/selection model
-- [x] Dashboard is **row-state driven** (explicit games/options row, not keyboard focus): D-pad Up/Down switches rows with a fixed column mapping (game 1 → option 1 · games 2-3 → option 2 · games 4-5 → option 3 · game 6 → option 4; up: option 1 → game 1 · 2 → 2 · 3 → 4 · 4 → 6); A acts on the active row only (options never also launch the game); options row clears when returning to games; no games = options row stays active (incl. empty-library startup/refresh)
-- [x] Left/Right via D-pad, left stick and bumpers (library/media/modal); Up/Down via D-pad and stick (media row jumps)
-- [x] Settings remains keyboard-only; input gated while the window is disabled (game running)
-- [x] Sorting keeps the viewport fixed and selection follows the **list index** (not the element), so no fly-across — library and media
+- [x] `ppy.SDL3-CS` + `AllowUnsafeBlocks` for the pointer API
+- [x] `GamepadInputService` (now in Core): graceful init failure, UI-thread poll, deadzone edge detection (no hold repeat); D-pad, left stick and bumpers normalize onto the D-pad values; opens/adds/closes gamepads; raw input traced
+- [x] D-pad + A/B mapped to the selection model
+- [x] Dashboard **row-state driven** (not keyboard focus): Up/Down switches rows with a fixed column mapping (games 2-3 → option 2, 4-5 → option 3, etc.); A acts on the active row only; options cleared when returning to games; no games = options row stays active
+- [x] Left/Right via D-pad, stick and bumpers; Up/Down with row jumps in media
+- [x] Settings stays keyboard-only; input gated while the window is disabled (game running)
+- [x] Sorting keeps the viewport fixed (selection follows the list index) — library and media
 
 ### 5.9 Real controller battery / wifi
-- [x] Wire header battery icon to live controller state (`SDL_GetGamepadPowerInfo`, 5s poll; `BatteryWarning` when no controller/unknown, `Battery10` when wired/charging, tier icons otherwise)
-- [x] Wire header wifi icon to live state (`NetworkInterface` Wireless80211 check, 10s poll; `WiFi` full signal / `WiFiOff`)
-- [x] Header icons aligned (fixed-size centred boxes); `ControllerConnected` now live
+- [x] Battery icon from `SDL_GetGamepadPowerInfo` (5s poll; warning when unknown, full when charging, tiers otherwise)
+- [x] Wifi icon from `NetworkInterface` (10s poll; `WiFi` / `WiFiOff`)
+- [x] Header icons aligned (fixed-size centred boxes)
 
 ### 5.10 Final hardening phase
 - [x] Manual walkthrough of everything; rewrites where necessary
 - [x] Maintainability sweep: deduplication, DRY, SOLID
-- [x] **Codebase compliance sweep** against root `CONTRIBUTING.md`:
-  - [x] Naming: `_camelCase` private fields, PascalCase methods/properties, Hungarian-prefixed XAML names (`Cmb`, `Txt`, `Btn`, `Tbl`, `Sp`, `Grd`, `Sv`)
-  - [x] AXAML property order (x:Name → x:DataType → grid placement → bindings → layout → style → events)
-  - [x] XML doc comments on public/internal members; sparse inline comments
-  - [x] Logger-based error handling (`Logger.Error<T>`, `Logger.LogExceptionDetails<T>`)
-  - [x] 4-space indent, braces on new lines, file-scoped namespaces, alphabetical usings
-  - [x] MVVM: keep code-behind minimal; business logic in Core
+- [x] Compliance sweep against root `CONTRIBUTING.md`: naming (incl. Hungarian XAML names), AXAML property order, XML docs, logger error handling, formatting, MVVM
 
 ### 5.11 Post-sweep engineering
-- [x] **Command-driven `InputRouter` rewrite** — key/button → `Command` enum → per-screen handler; kills the duplicated keyboard/gamepad branching; extracted `CloseOverlay`/`MoveDashboard`/`Activate` helpers
-- [x] **DI adoption (mirrors main app)** — `ServiceConfigurator` + `App.Services` (Microsoft.Extensions.DependencyInjection, transitive via Core); interface + impl for all services; `MainWindow` ctor-injected; single `IGamepadService` singleton (the double-instantiation bug that dropped ~half of gamepad input was found and fixed)
-- [x] **Logging alignment** — density raised to ~1 per 58 lines (was 1/113; main app ~1/21): lifecycle milestones, navigation, launches, settings changes (Info), transitions/moves (Debug/Trace), slider values at Debug to avoid spam
-- [x] **Constants extraction** — `Constants/` (App/Timing/Format/Xbox/Layout), mirrors Core's per-domain static classes; zero magic values left in C#
-- [x] **CPP-style declaration order** (repo convention) — fields → properties → constructors → methods; nothing called before it's declared; expression bodies for one-liners; explicit types (no `var`)
-- [x] **Performance fixes** — overlay screens pre-instantiated at startup (open = visibility flip, no per-open view creation); screenshot scan moved to boot; library first-game pre-selected on open (VM-side, avoids startup background clobber); first library game's background art pre-warmed at boot; viewer selection follows the stepped screenshot (grid lands on the last viewed image on close); missing `IsViewerOpen` change notification fixed
+- [x] Command-driven `InputRouter` (key/button → `Command` → per-screen handler; kills duplicated branching)
+- [x] DI (`ServiceConfigurator` + `App.Services`); single `IGamepadInputService` singleton (double-instantiation was dropping ~half of gamepad input — fixed)
+- [x] Logging density raised (~1/58 lines) with level discipline
+- [x] `Constants/` extraction — zero magic values left in C#
+- [x] Declaration order, expression bodies, explicit types (repo convention)
+- [x] Performance: pre-instantiated overlays, boot-time screenshot scan, first-game pre-selection, pre-warmed background art, viewer↔gallery selection sync, `IsViewerOpen` notification fix
 
 ### 5.12 Main app launch button + splash + localization
-- [x] **Big Screen launch button (main app)** — "Big Screen" nav item (Tv icon, "Open Big Screen" tooltip) → `NavigationService` launches the exe side-by-side or from the repo-sibling bin folder; missing exe → localized warning; keys in en.axaml
-- [x] **Boot splash screen** — separate `SplashWindow` (paints before any loading via deferred startup), six staged loading statuses with per-stage dwell + tweened bar + 3s minimum + 1s "Loading Done" hold, dashboard-style radial background + saved accent (no green→red flash); input gated until `IsInitialized`; main window is a plain `Window` with fullscreen forced in code
-- [x] **Localization key set + wiring** — every user-facing string keyed in `en.axaml` (main-app naming convention) and wired via `{DynamicResource}` / `LocalizationHelper.GetText`
-- [x] **AXAML/style consolidation** — shared `.screen-title`/`.card-title`/`.hint-bar`/`.empty-state` styles, `HintKeyY/A/B` + `CardShadow`/`CardShadowSelected` tokens, Window.DataTemplates → App.axaml, IconStat FontSize de-hiding, GameCard border selector combine
-- [x] **ArtTile removed** — `ArtTile` abstraction undone; `GameCard`/`ScreenshotCard` are standalone controls again (own Tile / ArtClip / TitleBar / BorderOverlay)
-- [x] **Stability fixes** — `BoxShadow`→`BoxShadows` resource cast crash; FAAppWindow title bar removed (plain Window + code-forced fullscreen); background-image decode moved behind the splash
-- [ ] **"Launch Big Screen by default" settings toggle + auto-launch at startup** (main app) — `UiSettings.Window.LaunchBigScreen` field is ready in Core; add the Settings toggle card, wire the partial, and launch BigScreen at startup when enabled (main app stays open in the background)
+- [x] Big Screen launch button (main app): nav item + `NavigationService` launch (side-by-side or repo sibling); missing exe → localized warning
+- [x] Boot splash: separate window, deferred startup, six staged statuses, tweened bar, 3s minimum, saved-colour background (no green→red flash); input gated until `IsInitialized`
+- [x] Localization key set + wiring (main-app naming convention)
+- [x] AXAML/style consolidation (shared classes, `HintKeyY/A/B`, `CardShadow` tokens, App.axaml data templates)
+- [x] `ArtTile` removed (`GameCard`/`ScreenshotCard` standalone again)
+- [x] Stability: `BoxShadows` cast crash, FAAppWindow title bar removed, background-image decode moved behind the splash
+
+### 5.13 Library list view + details pane
+- [x] `LibraryViewMode` (Carousel/List) persisted as `library_view_mode`; Settings dropdown + live swap
+- [x] `LibraryListItem` rows (disc icon + title, accent on select/hover) with vertical clamped scroll
+- [x] `GameDetailsPanel`: disc art, playtime/achievements/gamerscore, DB bio + genre/developer/publisher/released
+- [x] Stale-fetch guard (generation counter) + negative cache around `XboxDatabase.GetFullGameInfo`
+- [x] `ReleaseDateFormatter` in Core (+ unit tests) — ordinal release dates
+- [x] `GamepadButton.View` in Core; **View/V** swaps the view
+- [x] Up/Down navigates the list; scroll-to-selected handles both geometries (layout swaps re-center on the selection)
+
+### 5.14 Card image mode + hint bars
+- [x] `CardImageMode` (Box Art / Icon) persisted as `card_image_mode`, **default Icon**; Settings dropdown; dashboard cards swap live
+- [x] Box Art mode keeps the disc icon as fallback when art is missing
+- [x] Library hint bar: Back (B red) → Play (A green) → Sort (Y amber) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token)
+- [x] Media hint bar: Back → Select (A) → Sort (Y)
+
+### 5.15 Post-review: housekeeping
+- [ ] **T1.** Formatting sweep (JetBrains Rider: Code Cleanup → Reformat on the whole solution; normalizes AI double blank lines). Manual fix of misaligned `en.axaml` entries in both apps (`XeniaManager/Resources/Language/en.axaml` + BigScreen's)
+- [ ] **T2.** Delete test artwork (`Resources/Art/fr65z3.jpg`, `Resources/Art/SL1qfH.jpg`)
+- [ ] **T3.** Move `Services/ColorJsonConverter.cs` → `Converters/` folder (namespace `XeniaManager.BigScreen.Converters`)
+- [ ] **T4.** SplashScreen rewrite — `MainWindow` becomes `FAAppWindow`; boot splash uses FluentAvalonia's built-in `AppWindow.SplashScreen` (`IFAApplicationSplashScreen` + `SplashScreenContent`, `RunTasks` hosts the boot pipeline) per shazzaam7/dotnet-templates pattern; delete `SplashWindow`; fixes the "line at top" splash bug
+
+### 5.16 Controller input: primary controller + rescan (Core)
+- [ ] **T5.** `GamepadInputService` (Core): open **all** gamepads; expose `ConnectedGamepads` (name, battery, charging, isPrimary), `SetPrimary(id)`, `Rescan()`; `IsConnected/BatteryPercent/IsCharging` reflect the primary; `StateChanged` fires on connect/disconnect/rescan. Docs read: CONTRIBUTING.md + repo wiki (SDL database / gamecontrollerdb update pattern on the desktop Manage page)
+
+### 5.17 Profiles & identity
+- [ ] **T6.** Profile switching — `ProfileService` loads all Canary profiles; selected profile persisted (`profile_xuid` in `dashboard-settings.json`); header gamertag/gamerscore + per-game achievement stats follow the selection
+- [ ] **T7.** Manage Profiles popup — port desktop `ManageProfilesDialog` (create / delete / import / export via `ProfileManager`) as a BigScreen overlay
+
+### 5.18 Game actions (right-click menu + popups)
+- [ ] **T8.** Game context menu — `ContextFlyout` on `GameCard`/`LibraryCard`/`LibraryListItem` (right-click) + controller path (**X** on the selected card) opening the same full-screen menu: Achievements · Title Updates · Marketplace Content · Screenshots · Patches · Settings
+- [ ] **T9.** Achievements popup — port `ContentViewerDialogViewModel` achievements: stats header, All/Unlocked/Locked filter, scrollable rows (name, description, gamerscore, unlock date; image only when unlocked)
+- [ ] **T10.** Title Updates popup — `GameContent.InstallerHeaderFiles` (XUID `0000000000000000`) + delete
+- [ ] **T11.** Marketplace Content popup — `GameContent.MarketplaceContentHeaderFiles` + delete
+- [ ] **T12.** Screenshots popup — per-game gallery from `screenshots/<GAMEID_UPPER>`, reusing `ScreenshotCard` + viewer
+- [ ] **T13.** Patches popup — Download (PatchesDatabase + `PatchManager.DownloadPatchAsync`), Modify (PatchFile entries: enable/disable + command edit, port `PatchConfigurationViewModel`), Remove (`PatchManager.RemovePatchAsync`)
+- [ ] **T14.** Game Settings popup — port config editor (`ConfigEditorViewModel` + `ConfigUiSettings.AllSettings`) into an overlay; saves to `Game.FileLocations.Config`
+- [ ] **T15.** Disc selection popup on launch — when `IsMultiDisc`: full-screen disc list (labels, "Last Played" marker), A launches / B cancels (mirror `DiscSelectionDialog`)
+
+### 5.19 Dashboard, header & settings
+- [ ] **T16.** Time format setting — 12h/24h (persisted in `DashboardSettings`); clock + capture dates follow it
+- [ ] **T17.** Controllers section (Settings) — detected gamepads, battery %, primary selection, **Rescan** button
+- [ ] **T18.** Settings controller navigation — rows focusable; Up/Down moves, A activates (ComboBox opens, checkbox toggles, button clicks, palette opens), Left/Right adjusts sliders; `InputRouter.HandleOverlay` extended
+- [ ] **T19.** Media hub — Media becomes two entries: **Screenshots** (existing gallery) + **Installed Content** (per-game browser → title updates / marketplace, XUID `0000000000000000`)
+- [ ] **T20.** Boxart full width/height — in `CardImageMode.BoxArt` show full box art (no 13% top crop); Icon-mode fallback unchanged
+- [ ] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery **% text below** the battery icon
+- [ ] **T22.** Background type default → **Dynamic** (`DashboardSettings.Mode` + settings default)
+- [ ] **T23.** Xenia version indicator — per-game badge/icon on library cards, list rows + details (reuse Core `XeniaVersionToIconConverter`/`XeniaVersionToStringConverter`)
+- [ ] **T24.** Game compatibility indicator — colored rating dot + label on cards (Core `CompatibilityRatingColorConverter`), DB URL as tooltip
+- [ ] **T25.** List-view achievements — scrollable locked/unlocked achievement section in the list-view details pane
+- [ ] **T26.** XConfig editor — port `EditXConfigDialog` (language, country, AV HDMI size, default profile) via `XConfigManager` as a Settings overlay (hidden when `XConfigExists` is false)
+- [ ] **T27.** Input gating while a game runs — gamepad already gated by `IsEnabled`; add the same gate to `OnWindowKeyDown`, `OnCardGotFocus`, `OnOptionCardPressed`
+
+### 5.20 Desktop app integration
+- [ ] **T28.** Hide + disable main window when BigScreen opens — `NavigationService.LaunchBigScreen` keeps the `Process` handle, `EventManager.DisableWindow()` + `Hide()`; restore (`Show()` + `EnableWindow()`) on BigScreen exit
+- [ ] **T29.** BigScreen start by default — `--bigscreen` CLI arg (desktop `Program.cs` launches BigScreen and hides the main window) + Settings toggle "Start in Big Screen" (persisted)
+
+### 5.21 MediaSort expansion (full desktop parity)
+- [ ] **T30.** Expand `MediaSort` with the desktop app's full `GameSortOption` list, sorted by each screenshot's owning game (resolved from the parent folder's game ID): **Title** (alphabetical), **Time Played**, **Compatibility**, **TitleId**, **MediaId**, **XeniaVersion**, **Last Played** — alongside the existing **Newest First / Oldest First / By Game**. Y still cycles; indicator + selection-preserving resort keep working (`MediaViewModel.ApplyMediaSort`)
+
+---
+
+## 5.22 Extra info & conventions (T1–T30)
+
+> **Notes & conventions for the tasks above**
+> - All new user-facing strings go into `en.axaml` (BigScreen + desktop), keys follow the existing naming convention; other languages deferred per spec §1.
+> - Follow `CONTRIBUTING.md` throughout: XML docs, `Logger` usage (no silent catches), Hungarian XAML names, 4-space indent, AXAML property order, file-scoped namespaces, MVVM (thin code-behind).
+> - Cross-cutting behaviour: mouse right-click **and** controller (X button) must reach the same game-action menu; all popups are full-screen overlays consistent with the existing screen system (visibility-flip, `InputRouter` commands, `InputHint` bars); popups exit with B/Escape.
+> - Core work first (`GamepadInputService`, any shared helpers), then BigScreen, then the desktop app.
+> - Verification per task: `dotnet build "Xenia Manager.sln"`, `dotnet test tests/XeniaManager.Tests`, manual smoke run (launch, right-click menu, popups, controller input).
+> - Artwork/icon choices reuse FluentIcons + existing token dictionary (`DarkGradient.axaml`); no new colors without adding tokens.
+> - This roadmap supersedes/supplements §5.14 items; update §3 architecture tree (`Services/`, `Controls/`, `Views/`) as new files land.
 
 ---
 

@@ -7,7 +7,7 @@
              x:Class="XeniaManager.BigScreen.Views.SplashContent">
 
     <!-- Background is the dashboard's radial gradient, built from the saved
-         primary color in code (see SplashContent.axaml.cs) -->
+         primary colour in code (see SplashContent.axaml.cs) -->
 
     <StackPanel HorizontalAlignment="Center"
                 Orientation="Vertical"

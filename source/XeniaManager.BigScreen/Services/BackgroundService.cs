@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using XeniaManager.BigScreen.Constants;
+using XeniaManager.BigScreen.Converters;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.Core.Logging;
 
@@ -133,7 +134,8 @@ public class BackgroundService : IBackgroundService
             GradientStops =
             {
                 new GradientStop(Settings.PrimaryColor, 0),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount), LayoutConstants.LinearMidOffset),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount),
+                    LayoutConstants.LinearMidOffset),
                 new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientEndMixAmount), 1),
             },
         };
@@ -155,7 +157,8 @@ public class BackgroundService : IBackgroundService
             GradientStops =
             {
                 new GradientStop(Settings.PrimaryColor, 0),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount), LayoutConstants.RadialMidOffset),
+                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount),
+                    LayoutConstants.RadialMidOffset),
                 new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientEndMixAmount), 1),
             },
         };

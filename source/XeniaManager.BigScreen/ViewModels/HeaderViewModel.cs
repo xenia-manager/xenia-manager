@@ -140,7 +140,10 @@ public partial class HeaderViewModel : ViewModelBase
         try
         {
             IsWifiConnected = NetworkInterface.GetAllNetworkInterfaces()
-                .Any(i => i is { NetworkInterfaceType: NetworkInterfaceType.Wireless80211, OperationalStatus: OperationalStatus.Up });
+                .Any(i => i is
+                {
+                    NetworkInterfaceType: NetworkInterfaceType.Wireless80211, OperationalStatus: OperationalStatus.Up
+                });
         }
         catch (Exception ex)
         {

@@ -97,7 +97,8 @@ public class ProfileService : IProfileService
 
         try
         {
-            string xuid = (_profileAccount.PathXuid?.Value ?? _profileAccount.Xuid.Value).ToString(FormatConstants.XuidFormat);
+            string xuid =
+                (_profileAccount.PathXuid?.Value ?? _profileAccount.Xuid.Value).ToString(FormatConstants.XuidFormat);
             string contentFolder = AppPathResolver.GetFullPath(
                 XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion.Canary).ContentFolderLocation);
             string gpdPath = Path.Combine(contentFolder, xuid, XboxConstants.ProfileContentTitleId,

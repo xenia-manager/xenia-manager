@@ -14,8 +14,8 @@
             <Image Source="{Binding Image}"
                    IsVisible="{Binding HasImage}"
                    Stretch="UniformToFill"
-                   VerticalAlignment="Bottom" 
-                   Margin="4"/>
+                   VerticalAlignment="Bottom"
+                   Margin="4" />
         </Border>
         <Border x:Name="TitleBar"
                 Background="{DynamicResource CardTitleBar}"

@@ -34,8 +34,8 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
         }
 
         return GameManager.Games
-            .FirstOrDefault(g => g.GameId.Equals(gameId, StringComparison.OrdinalIgnoreCase))?.Title
-            ?? gameId;
+                   .FirstOrDefault(g => g.GameId.Equals(gameId, StringComparison.OrdinalIgnoreCase))?.Title
+               ?? gameId;
     }
 
     /// <summary>
@@ -50,7 +50,8 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
         if (Directory.Exists(screenshotsFolder))
         {
             foreach (string file in Directory.EnumerateFiles(screenshotsFolder, "*", SearchOption.AllDirectories)
-                         .Where(f => ImageFormats.ScreenshotExtensions.Contains(Path.GetExtension(f).ToLowerInvariant())))
+                         .Where(f => ImageFormats.ScreenshotExtensions.Contains(Path.GetExtension(f)
+                             .ToLowerInvariant())))
             {
                 try
                 {

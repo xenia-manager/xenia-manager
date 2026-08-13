@@ -49,7 +49,8 @@
                             VerticalAlignment="Center">
                     <controls:IconStat Icon="Clock" Stat="{Binding Card.PlaytimeText}" IconSize="26" FontSize="22" />
                     <StackPanel Orientation="Horizontal" Spacing="24">
-                        <controls:IconStat Icon="Trophy" Stat="{Binding Card.AchievementsText}" IconSize="26" FontSize="22" />
+                        <controls:IconStat Icon="Trophy" Stat="{Binding Card.AchievementsText}" IconSize="26"
+                                           FontSize="22" />
                         <controls:IconStat Icon="Star" Stat="{Binding Card.GamerscoreText}" IconSize="26" FontSize="22" />
                     </StackPanel>
                 </StackPanel>

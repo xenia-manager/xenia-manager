@@ -280,12 +280,14 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void Quit()
     {
-        Logger.Info<MainWindowViewModel>($"Quitting BigScreen (return to Xenia Manager: {Settings.ReturnToXeniaOnQuit})");
+        Logger.Info<MainWindowViewModel>(
+            $"Quitting BigScreen (return to Xenia Manager: {Settings.ReturnToXeniaOnQuit})");
         if (Settings.ReturnToXeniaOnQuit)
         {
             string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), AppConstants.BaseAppExecutable);
             if (File.Exists(baseExe) &&
-                Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length == 0)
+                Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length ==
+                0)
             {
                 Process.Start(new ProcessStartInfo { FileName = baseExe, UseShellExecute = true });
             }
@@ -346,8 +348,10 @@ public partial class MainWindowViewModel : ViewModelBase
             Dashboard.RecentGames.Add(CreateRecentGameCard(game));
         }
 
-        (Library.Games.FirstOrDefault(g => g.Game.GameId == librarySelectedId) ?? Library.Games.FirstOrDefault())?.IsSelected = true;
-        (Dashboard.RecentGames.FirstOrDefault(g => g.Game.GameId == recentSelectedId) ?? Dashboard.RecentGames.FirstOrDefault())?.IsSelected = true;
+        (Library.Games.FirstOrDefault(g => g.Game.GameId == librarySelectedId) ?? Library.Games.FirstOrDefault())
+            ?.IsSelected = true;
+        (Dashboard.RecentGames.FirstOrDefault(g => g.Game.GameId == recentSelectedId) ??
+         Dashboard.RecentGames.FirstOrDefault())?.IsSelected = true;
 
         LibraryRefreshed?.Invoke(this, EventArgs.Empty);
         Logger.Debug<MainWindowViewModel>(

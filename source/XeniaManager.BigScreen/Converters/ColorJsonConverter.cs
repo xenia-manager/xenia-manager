@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Avalonia.Media;
 
-namespace XeniaManager.BigScreen.Services;
+namespace XeniaManager.BigScreen.Converters;
 
 /// <summary>
 /// Serializes <see cref="Color"/> as an ARGB hex string (e.g. "#FF1C1F25").

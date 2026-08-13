@@ -248,7 +248,8 @@ public class DashboardNavigationController
     /// card focused/selected - only the controller (IsSelected via keyboard focus)
     /// or hover should show it.
     /// </summary>
-    public void HandleOptionCardPressed(MainWindowViewModel vm, DashboardViewModel dashboard, OptionsCardViewModel option)
+    public void HandleOptionCardPressed(MainWindowViewModel vm, DashboardViewModel dashboard,
+        OptionsCardViewModel option)
     {
         _lastActivationWasMouse = true;
         ActivateOption(vm, option);

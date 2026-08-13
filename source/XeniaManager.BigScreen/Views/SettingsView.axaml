@@ -245,7 +245,8 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="2" Classes="hint-bar">
-            <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}" Text="{DynamicResource Settings.Hint.Back}" />
+            <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource Settings.Hint.Back}" />
         </StackPanel>
     </Grid>
 </UserControl>

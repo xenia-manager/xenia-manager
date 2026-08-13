@@ -74,9 +74,12 @@
 
             <!-- HINTS (gallery) -->
             <StackPanel Grid.Row="2" Classes="hint-bar">
-                <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}" Text="{DynamicResource Media.Hint.Back}" />
-                <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}" Text="{DynamicResource Media.Hint.Select}" />
-                <controls:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}" Text="{DynamicResource Media.Hint.Sort}" />
+                <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                    Text="{DynamicResource Media.Hint.Back}" />
+                <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                                    Text="{DynamicResource Media.Hint.Select}" />
+                <controls:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+                                    Text="{DynamicResource Media.Hint.Sort}" />
             </StackPanel>
         </Grid>
 

@@ -10,10 +10,10 @@
     <sys:String x:Key="WelcomeDialog.ContinueButton">Continue</sys:String>
 
     <!-- Main View -->
-<sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
-<sys:String x:Key="MainView.Navigation.BigScreen">Big Screen</sys:String>
-<sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Open Big Screen</sys:String>
-<sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
+    <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Big Screen</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Open Big Screen</sys:String>
+    <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Settings</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Manage Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.About">About</sys:String>
@@ -527,11 +527,11 @@
     <sys:String x:Key="MessageBox.No">No</sys:String>
     <sys:String x:Key="MessageBox.Cancel">Cancel</sys:String>
 
-<!-- NavigationService -->
-<sys:String x:Key="NavigationService.NoXeniaInstalled.Title">No Xenia Installed</sys:String>
-<sys:String x:Key="NavigationService.NoXeniaInstalled.Message">No Xenia installations were found. Please install Xenia first before trying to launch.</sys:String>
-<sys:String x:Key="NavigationService.BigScreenNotFound.Title">Big Screen Not Found</sys:String>
-<sys:String x:Key="NavigationService.BigScreenNotFound.Message">Couldn't find XeniaManager.BigScreen.exe next to Xenia Manager.</sys:String>
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">No Xenia Installed</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">No Xenia installations were found. Please install Xenia first before trying to launch.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">Big Screen Not Found</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">Couldn't find XeniaManager.BigScreen.exe next to Xenia Manager.</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>

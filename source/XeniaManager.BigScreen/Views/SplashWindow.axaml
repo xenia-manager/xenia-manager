@@ -1,17 +1,17 @@
 <windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:views="using:XeniaManager.BigScreen.Views"
-                      xmlns:windowing="using:FluentAvalonia.UI.Windowing"
-                      mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-                      x:Class="XeniaManager.BigScreen.Views.SplashWindow"
-                      WindowState="FullScreen"
-                      WindowDecorations="None"
-                      CanResize="False"
-                      ShowAsDialog="False"
-                      Topmost="True"
-                      ShowInTaskbar="False">
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:views="using:XeniaManager.BigScreen.Views"
+                       xmlns:windowing="using:FluentAvalonia.UI.Windowing"
+                       mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+                       x:Class="XeniaManager.BigScreen.Views.SplashWindow"
+                       WindowState="FullScreen"
+                       WindowDecorations="None"
+                       CanResize="False"
+                       ShowAsDialog="False"
+                       Topmost="True"
+                       ShowInTaskbar="False">
 
     <views:SplashContent x:Name="ContentHost" />
 </windowing:FAAppWindow>

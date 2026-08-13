@@ -53,7 +53,8 @@ public partial class SplashContent : UserControl
             GradientStops =
             {
                 new GradientStop(primary, 0),
-                new GradientStop(Mix(primary, Colors.Black, LayoutConstants.GradientMixAmount), LayoutConstants.RadialMidOffset),
+                new GradientStop(Mix(primary, Colors.Black, LayoutConstants.GradientMixAmount),
+                    LayoutConstants.RadialMidOffset),
                 new GradientStop(Mix(primary, Colors.Black, LayoutConstants.GradientEndMixAmount), 1),
             },
         };

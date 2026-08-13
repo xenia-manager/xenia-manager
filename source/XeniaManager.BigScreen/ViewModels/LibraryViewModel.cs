@@ -161,7 +161,8 @@ public partial class LibraryViewModel : ScreenViewModel
     /// </summary>
     private void OnCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(GameCardViewModel.IsSelected) && sender is GameCardViewModel { IsSelected: true } card)
+        if (e.PropertyName == nameof(GameCardViewModel.IsSelected) &&
+            sender is GameCardViewModel { IsSelected: true } card)
         {
             SelectedCard = card;
         }

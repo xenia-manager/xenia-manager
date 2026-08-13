@@ -94,7 +94,8 @@ public partial class MainWindow : Window
             // Push the gamepad state captured during construction (DataContext wasn't set yet)
             if (_gamepadService is { IsActive: true })
             {
-                vm.ApplyGamepadState(_gamepadService.IsConnected, _gamepadService.BatteryPercent, _gamepadService.IsCharging);
+                vm.ApplyGamepadState(_gamepadService.IsConnected, _gamepadService.BatteryPercent,
+                    _gamepadService.IsCharging);
             }
 
             if (vm.IsInitialized)
@@ -228,7 +229,7 @@ public partial class MainWindow : Window
     private void OnOverlayFocusRequested()
     {
         if (DataContext is MainWindowViewModel vm && vm.IsSettingsScreen
-            && Find<SettingsView>() is { } settingsView)
+                                                  && Find<SettingsView>() is { } settingsView)
         {
             settingsView.FocusFirst();
         }
