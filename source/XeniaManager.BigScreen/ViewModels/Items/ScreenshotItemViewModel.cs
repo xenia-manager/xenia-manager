@@ -2,6 +2,7 @@ using System;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
+using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
@@ -23,6 +24,11 @@ public partial class ScreenshotItemViewModel(
     [ObservableProperty] private bool _isSelected;
 
     /// <summary>
+    /// The hour format used by the capture date, following the persisted setting.
+    /// </summary>
+    [ObservableProperty] private TimeFormat _timeFormat = TimeFormat.TwelveHour;
+
+    /// <summary>
     /// The screenshot file name (shown in the modal as a subtitle).
     /// </summary>
     public string Title { get; } = title;
@@ -35,7 +41,7 @@ public partial class ScreenshotItemViewModel(
     /// <summary>
     /// The capture date formatted for display (e.g. "5 Aug 2026, 14:30").
     /// </summary>
-    public string CapturedAtText => CapturedAt.ToString(FormatConstants.CaptureDateFormat);
+    public string CapturedAtText => CapturedAt.ToString(FormatConstants.GetCaptureDateFormat(TimeFormat));
 
     /// <summary>
     /// The game title the screenshot belongs to, when it can be matched to the library.
@@ -56,4 +62,6 @@ public partial class ScreenshotItemViewModel(
     /// Whether the image loaded successfully.
     /// </summary>
     public bool HasImage => Image != null;
+
+    partial void OnTimeFormatChanged(TimeFormat value) => OnPropertyChanged(nameof(CapturedAtText));
 }

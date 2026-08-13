@@ -44,6 +44,11 @@ public partial class SettingsViewModel : ViewModelBase
     public event Action? CardImageChanged;
 
     /// <summary>
+    /// Raised after the time format changed, so the clock and capture dates reformat.
+    /// </summary>
+    public event Action? TimeFormatChanged;
+
+    /// <summary>
     /// Connected gamepads shown in the Controllers section.
     /// </summary>
     public ObservableCollection<GamepadItemViewModel> Controllers { get; } = [];
@@ -89,6 +94,15 @@ public partial class SettingsViewModel : ViewModelBase
     ];
 
     /// <summary>
+    /// Options shown in the settings time-format dropdown.
+    /// </summary>
+    public ObservableCollection<TimeFormatOption> TimeFormatOptions { get; } =
+    [
+        new(TimeFormat.TwelveHour, LocalizationHelper.GetText("Settings.TimeFormat.TwelveHour")),
+        new(TimeFormat.TwentyFourHour, LocalizationHelper.GetText("Settings.TimeFormat.TwentyFourHour")),
+    ];
+
+    /// <summary>
     /// The selected option in the background-type dropdown.
     /// </summary>
     [ObservableProperty] private BackgroundModeOption? _selectedBackgroundMode;
@@ -117,6 +131,16 @@ public partial class SettingsViewModel : ViewModelBase
     /// The active dashboard card image mode.
     /// </summary>
     [ObservableProperty] private CardImageMode _cardImageMode = CardImageMode.Icon;
+
+    /// <summary>
+    /// The selected option in the time-format dropdown.
+    /// </summary>
+    [ObservableProperty] private TimeFormatOption? _selectedTimeFormat;
+
+    /// <summary>
+    /// The active time format for the clock and capture dates.
+    /// </summary>
+    [ObservableProperty] private TimeFormat _timeFormat = TimeFormat.TwelveHour;
 
     /// <summary>
     /// The primary color; gradients are derived from it.
@@ -222,6 +246,8 @@ public partial class SettingsViewModel : ViewModelBase
         SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == LibraryViewMode);
         CardImageMode = _backgroundService.Settings.CardImageMode;
         SelectedCardImageMode = CardImageModeOptions.FirstOrDefault(o => o.Mode == CardImageMode);
+        TimeFormat = _backgroundService.Settings.TimeFormat;
+        SelectedTimeFormat = TimeFormatOptions.FirstOrDefault(o => o.Format == TimeFormat);
         RefreshControllers();
     }
 
@@ -372,6 +398,23 @@ public partial class SettingsViewModel : ViewModelBase
         if (value != null)
         {
             CardImageMode = value.Mode;
+        }
+    }
+
+    partial void OnTimeFormatChanged(TimeFormat value)
+    {
+        _backgroundService.Settings.TimeFormat = value;
+        _backgroundService.Save();
+        SelectedTimeFormat = TimeFormatOptions.FirstOrDefault(o => o.Format == value);
+        TimeFormatChanged?.Invoke();
+        Logger.Info<SettingsViewModel>($"Time format changed to {value}");
+    }
+
+    partial void OnSelectedTimeFormatChanged(TimeFormatOption? value)
+    {
+        if (value != null)
+        {
+            TimeFormat = value.Format;
         }
     }
 }

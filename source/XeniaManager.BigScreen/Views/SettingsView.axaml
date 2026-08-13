@@ -109,6 +109,19 @@
                     </DockPanel>
                 </Border>
 
+                <!-- TIME FORMAT -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <ComboBox x:Name="TimeFormatCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding TimeFormatOptions}"
+                                  SelectedItem="{Binding SelectedTimeFormat}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.TimeFormat}" />
+                    </DockPanel>
+                </Border>
+
                 <!-- QUIT BEHAVIOUR -->
                 <Border Classes="settings-card">
                     <DockPanel>

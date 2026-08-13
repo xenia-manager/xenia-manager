@@ -161,6 +161,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 card.CardImageMode = Settings.CardImageMode;
             }
         };
+        Settings.TimeFormatChanged += () => Header.ApplyTimeFormat(Settings.TimeFormat);
 
         // A profile switch refreshes the header identity and rebuilds the cards
         // so per-game achievement stats follow the new profile
@@ -230,6 +231,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             Settings.Load();
             Dashboard.UpdateBackground(null);
+            Header.ApplyTimeFormat(Settings.TimeFormat);
 
             // Restore the saved primary controller (falls back to the first pad)
             if (!string.IsNullOrEmpty(_backgroundService.Settings.PrimaryControllerGuid))

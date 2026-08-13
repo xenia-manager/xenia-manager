@@ -59,4 +59,14 @@ public static class LayoutConstants
     /// Per-step tint amount used to derive the accent light/dark variants.
     /// </summary>
     public const double AccentTintStep = 0.15;
+
+    /// <summary>
+    /// Minimum header clock width in 12-hour mode (e.g. "10:45 PM").
+    /// </summary>
+    public const double ClockMinWidth12h = 70;
+
+    /// <summary>
+    /// Minimum header clock width in 24-hour mode (e.g. "22:45").
+    /// </summary>
+    public const double ClockMinWidth24h = 48;
 }

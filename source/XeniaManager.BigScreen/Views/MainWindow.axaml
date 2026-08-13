@@ -71,7 +71,7 @@
                                            Foreground="{DynamicResource TextPrimary}" />
                     </Grid>
                     <TextBlock Text="{Binding Header.Time}"
-                               MinWidth="70"
+                               MinWidth="{Binding Header.ClockMinWidth}"
                                VerticalAlignment="Center"
                                Classes="header-text"
                                FontSize="18"

@@ -81,10 +81,9 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 ### Modal system (push/pop stack with dispose)
 - **`IModalService`/`ModalService`** (DI singleton) — full-screen modal stack: `ShowAsync` (with/without a typed result), `Close` pops the top modal, disposes `IDisposable` VMs and raises `StackChanged`; modals nest naturally (a modal can await another on top of itself). Modals are created fresh per open — no state carries, no stale subscriptions.
 - **`ModalViewModelBase`/`ModalViewModelBase<TResult>`** — result delivery, `HandleInput(NavigationCommand)` (virtual; base closes on Back), `Dispose()` hook, own close `Task`.
-- **`ModalHost`** (topmost MainWindow layer) — dark backdrop (`ModalBackdrop` ~85% dark, **the only "glass" part**) + the top modal's view via the app `ViewLocator`; hidden when the stack is empty.
-- **`ConfirmationModal`** (`Controls/`) — generic A=confirm / B=cancel prompt (title, message, confirm/cancel text); reused by Manage Profiles delete / import-replace / export-saves.
-- Modal cards/screens use the standard card surface (`CardBackground` + popup shadow, `modal-card`/`modal-screen` classes) — only the dark area behind them differs from other cards.
-- Router dispatch order: **modal stack (top modal) → screenshot viewer → overlay screens → dashboard**; modals swallow all input while open.
+- **Modal layer** (MainWindow, sibling of the content grid) — full-window transparent black backdrop (`ModalBackdrop`, 30% `#4D000000`) + **`ModalHost`**, which renders the **whole stack bottom→top as layered entries** (later modals overlay earlier ones — a confirmation sits on top of the view beneath it); only the top entry is hit-testable; the layer hides when the stack is empty (stack-empty also closes any open overlay screen → dashboard).
+- **`ConfirmationModal`** (`Controls/`) — reusable prompt: header, message and **two controller-friendly option buttons** (Left/Right selects, A activates the selection, B cancels); resolves `bool?` — option 1 `true`, option 2 `false`, B `null` (callers decide what cancel means, e.g. "stay put"); fixed 640×300 card centered on its **own 30% black backdrop filling the content area**; card/buttons use the standard card surfaces (`CardBackground`, `CardBorderInner` borders, accent on selection). Reused by Manage Profiles delete / import-replace / export-saves / unsaved-changes prompts.
+- Router dispatch order: **modal stack (top modal) → screenshot viewer → overlay screens → dashboard**; modals swallow all input while open. The router is command-driven: key/gamepad → `NavigationCommand` → per-layer handlers (`HandleLibrary`/`HandleMedia`/`MoveUp`/`MoveDown`/…).
 
 ### Profiles & identity
 - **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first.
@@ -350,8 +349,8 @@ source/XeniaManager.BigScreen/
 - [x] **T5.** `GamepadInputService` (Core): opens **all** gamepads; `ConnectedGamepads` snapshots (name, GUID, battery, charging, isPrimary); `SetPrimary` / `SetPrimaryByGuid` (GUID persisted as `primary_controller_guid` in `dashboard-settings.json`, restored at boot); `Rescan()`; `ReloadMappings()`; **input flows from the primary pad only**; refactored into `GamepadDeviceCollection` + `GamepadButtonMapper` + `StickTracker`
 
 ### 5.17 Profiles & identity
-- [ ] **T6.** Profile switching — `ProfileService` loads all Canary profiles; selected profile persisted (`profile_xuid` in `dashboard-settings.json`); header gamertag/gamerscore + per-game achievement stats follow the selection
-- [ ] **T7.** Manage Profiles popup — port desktop `ManageProfilesDialog` (create / delete / import / export via `ProfileManager`) as a BigScreen overlay
+- [x] **T6.** Profile switching — `ProfileService` loads all Canary profiles; selected profile persisted (`profile_xuid` in `dashboard-settings.json`); header gamertag/gamerscore + per-game achievement stats follow the selection
+- [x] **T7.** Manage Profiles popup — port desktop `ManageProfilesDialog` (create / delete / import / export via `ProfileManager`) as a BigScreen overlay
 
 ### 5.18 Game actions (game dialog)
 - [ ] **T8.** Game dialog — `ContextFlyout` on `GameCard`/`LibraryCard`/`LibraryListItem` (right-click) + controller path (**Y** = Details on the selected card) opening the same full-screen game dialog containing **all** new options: Achievements · Title Updates · Marketplace Content · Screenshots · Patches · Settings
@@ -364,7 +363,7 @@ source/XeniaManager.BigScreen/
 - [ ] **T15.** Disc selection popup on launch — when `IsMultiDisc`: full-screen disc list (labels, "Last Played" marker), A launches / B cancels (mirror `DiscSelectionDialog`)
 
 ### 5.19 Dashboard, header & settings
-- [ ] **T16.** Time format setting — 12h/24h (persisted in `DashboardSettings`); clock + capture dates follow it
+- [x] **T16.** Time format setting — 12h/24h (persisted in `DashboardSettings`); clock + capture dates follow it
 - [x] **T17.** Controllers section (Settings): auto-detected list of `GamepadCard` rows with name, **Status: Primary/Secondary** (primary in accent) and tiered battery icon + % (via `IconFactory`); no UI buttons; SDL controller database updates silently in the background at boot; changing primary is **controller-only** (lands with T18)
 - [ ] **T18.** Settings controller navigation: D-pad moves between rows; **A activates (sets primary controller on a gamepad row, opens dropdowns/checkbox/colour fields on the other rows)**; `GamepadCard` already carries `Classes.selected` + accent border, `SetPrimary` is wired in the VM
 - [ ] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game dialog (T8/T10/T11)
@@ -395,7 +394,9 @@ source/XeniaManager.BigScreen/
 > - All new user-facing strings go into `en.axaml` (BigScreen + desktop), keys follow the existing naming convention; other languages deferred per spec §1.
 > - Follow `CONTRIBUTING.md` throughout: XML docs, `Logger` usage (no silent catches), Hungarian XAML names, 4-space indent, AXAML property order, file-scoped namespaces, MVVM (thin code-behind).
 > - Cross-cutting behaviour: mouse right-click **and** controller (**Y** = Details) must reach the same game dialog; all popups are full-screen overlays consistent with the existing screen system (visibility-flip, `InputRouter` commands, `InputHint` bars); popups exit with B/Escape.
-> - Button conventions follow the **Xbox 360 dashboard**: **X = Sort** (library, gallery and in-dialog lists; remaps from Y), **Y = Details** (opens the game dialog / details), **A = Select/Activate**, **B = Back**, **View = Swap View** (carousel ↔ list). Keycap colours: X blue (`HintKeyX`), Y amber, A green, B red, View faded white.
+> - Button conventions follow the **Xbox 360 dashboard**: **X = Sort** (library, gallery and in-dialog lists; remaps from Y), **Y = Details** (opens the game dialog / details; also opens Manage Profiles from the profile picker), **A = Select/Activate**, **B = Back**, **View = Swap View** (carousel ↔ list). Keycap colours: X blue (`HintKeyX`), Y amber, A green, B red, View faded white.
+> - Condition hygiene: any `if`/`while` condition with **more than 2 checks becomes a clearly named bool property at the top of the class (under the fields)**; conditions depending on event/argument values are split into nested guards of ≤2 checks each; keep conditions raw only when they are a single variable or two short checks. No magic numbers — `0`/`1`/`-1` count/​index idioms excepted; everything else gets a named constant (`Constants/`, e.g. `TimingConstants.ProgressReportInterval`).
+> - Fire-and-forget async work goes through **`TaskUtilities.RunSafely<T>(...)`** — exceptions (including synchronous ones from modal-VM construction) are logged, never silently swallowed. Existing public bool properties (`ShowEmptyStub`, `IsOverlayOpen`, …) are the canonical checks for external code — raw collection `Count` checks in other classes should use them.
 > - Core work first (`GamepadInputService`, any shared helpers), then BigScreen, then the desktop app.
 > - Verification per task: `dotnet build "Xenia Manager.sln"`, `dotnet test tests/XeniaManager.Tests`, manual smoke run (launch, right-click menu, popups, controller input).
 > - Artwork/icon choices reuse FluentIcons + existing token dictionary (`DarkGradient.axaml`); no new colors without adding tokens.

@@ -20,6 +20,7 @@ namespace XeniaManager.BigScreen.ViewModels;
 /// </summary>
 public partial class MediaViewModel : ScreenViewModel
 {
+    private readonly SettingsViewModel _settings;
     private readonly IScreenshotLibraryService _screenshotLibraryService;
     private bool _screenshotsLoaded;
 
@@ -66,8 +67,18 @@ public partial class MediaViewModel : ScreenViewModel
     public MediaViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService)
         : base(settings)
     {
+        _settings = settings;
         _screenshotLibraryService = screenshotLibraryService;
         Screenshots.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyScreenshots));
+
+        // Screenshot captions follow the persisted time format
+        _settings.TimeFormatChanged += () =>
+        {
+            foreach (ScreenshotItemViewModel screenshot in Screenshots)
+            {
+                screenshot.TimeFormat = _settings.TimeFormat;
+            }
+        };
     }
 
     /// <summary>
@@ -126,6 +137,7 @@ public partial class MediaViewModel : ScreenViewModel
         foreach (ScreenshotItemViewModel screenshot in _screenshotLibraryService.Screenshots)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            screenshot.TimeFormat = _settings.TimeFormat;
             Screenshots.Add(screenshot);
         }
 

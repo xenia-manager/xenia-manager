@@ -53,9 +53,20 @@ public partial class HeaderViewModel : ViewModelBase
     [ObservableProperty] private NetworkStatus _networkStatus = NetworkStatus.Wifi;
 
     /// <summary>
+    /// The hour format used by the clock, following the persisted setting.
+    /// </summary>
+    [ObservableProperty] private TimeFormat _timeFormat = TimeFormat.TwelveHour;
+
+    /// <summary>
+    /// Minimum clock width so the status area never jiggles as digits change;
+    /// follows the time format (24-hour is narrower).
+    /// </summary>
+    [ObservableProperty] private double _clockMinWidth = LayoutConstants.ClockMinWidth12h;
+
+    /// <summary>
     /// Current time string
     /// </summary>
-    [ObservableProperty] private string _time = DateTime.Now.ToString(FormatConstants.ClockFormat);
+    [ObservableProperty] private string _time = DateTime.Now.ToString(FormatConstants.ClockFormat12h);
 
     /// <summary>
     /// Fluent icon for the current network state (wifi / wired / off).
@@ -81,6 +92,15 @@ public partial class HeaderViewModel : ViewModelBase
 
     partial void OnControllerConnectedChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
 
+    partial void OnTimeFormatChanged(TimeFormat value)
+    {
+        Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(value));
+        ClockMinWidth = value == TimeFormat.TwentyFourHour
+            ? LayoutConstants.ClockMinWidth24h
+            : LayoutConstants.ClockMinWidth12h;
+        Logger.Debug<HeaderViewModel>($"Clock format: {value}");
+    }
+
     private readonly DispatcherTimer _clockTimer;
     private readonly DispatcherTimer _networkTimer;
 
@@ -90,7 +110,7 @@ public partial class HeaderViewModel : ViewModelBase
         {
             Interval = TimingConstants.ClockUpdateInterval,
         };
-        _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString(FormatConstants.ClockFormat);
+        _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(TimeFormat));
         _clockTimer.Start();
 
         _networkTimer = new DispatcherTimer
@@ -112,6 +132,15 @@ public partial class HeaderViewModel : ViewModelBase
         Gamertag = profileService.Gamertag;
         Gamerscore = profileService.Gamerscore;
         Logger.Debug<HeaderViewModel>($"Profile loaded: {Gamertag} ({Gamerscore}G)");
+    }
+
+    /// <summary>
+    /// Applies the persisted time format to the clock.
+    /// </summary>
+    public void ApplyTimeFormat(TimeFormat timeFormat)
+    {
+        TimeFormat = timeFormat;
+        Logger.Debug<HeaderViewModel>($"Time format applied: {timeFormat}");
     }
 
     /// <summary>

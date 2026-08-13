@@ -59,6 +59,12 @@ public class DashboardSettings
     public CardImageMode CardImageMode { get; set; } = CardImageMode.Icon;
 
     /// <summary>
+    /// The hour format used by the header clock and capture dates.
+    /// </summary>
+    [JsonPropertyName("time_format")]
+    public TimeFormat TimeFormat { get; set; } = TimeFormat.TwelveHour;
+
+    /// <summary>
     /// Device GUID (hex) of the primary gamepad, restored at boot.
     /// </summary>
     [JsonPropertyName("primary_controller_guid")]
