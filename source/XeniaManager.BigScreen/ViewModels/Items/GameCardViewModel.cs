@@ -1,6 +1,7 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;

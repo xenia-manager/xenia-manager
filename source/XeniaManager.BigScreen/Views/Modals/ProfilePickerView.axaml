@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:prof="using:XeniaManager.BigScreen.Controls.Profiles"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.Modals.ProfilePickerView"
+             x:DataType="vm:ProfilePickerViewModel">
+
+    <!-- The modal: regular card background + card border over the transparent black backdrop -->
+    <Border Classes="modal-screen">
+        <Grid Margin="48" RowDefinitions="Auto, *, Auto">
+
+            <!-- HEADER: title -->
+            <TextBlock Grid.Row="0"
+                       Text="{DynamicResource Profiles.Title}"
+                       Classes="screen-title"
+                       Margin="0,10,0,35" />
+
+            <!-- PROFILE LIST -->
+            <Grid Grid.Row="1">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden">
+                    <ItemsControl x:Name="ProfileList" ItemsSource="{Binding Profiles}" Margin="0,0,0,40">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="items:ProfileItemViewModel">
+                                <prof:ProfileRow />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Empty-state stub: no profiles to pick -->
+                <Border IsVisible="{Binding ShowEmpty}"
+                        Height="220"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="520"
+                        Classes="empty-state">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Spacing="16">
+                        <fluent:SymbolIcon Symbol="PersonQuestionMark"
+                                           FontSize="72" />
+                        <TextBlock Text="{DynamicResource Profiles.NoProfilesFound}"
+                                   FontSize="24" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        <!-- HINTS -->
+        <StackPanel Grid.Row="2" Classes="hint-bar">
+            <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource Profiles.Hint.Back}" />
+            <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                                Text="{DynamicResource Profiles.Hint.Select}" />
+            <prim:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+                                Text="{DynamicResource Profiles.Hint.Manage}" />
+        </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="410" d:DesignHeight="220"
+             x:Class="XeniaManager.BigScreen.Controls.Cards.OptionsCard"
+             x:DataType="vm:OptionsCardViewModel"
+             Focusable="True"
+             Classes.selected="{Binding IsSelected}">
+    <Border x:Name="Tile" CornerRadius="8" Background="{DynamicResource CardBackground}">
+        <StackPanel Margin="24"
+                    Orientation="Horizontal"
+                    Spacing="16"
+                    VerticalAlignment="Center">
+            <fluent:SymbolIcon Symbol="{Binding Icon}"
+                               FontSize="32"
+                               Foreground="{DynamicResource TextPrimary}" />
+            <TextBlock Text="{Binding Title}"
+                       VerticalAlignment="Center"
+                       FontSize="22"
+                       Foreground="{DynamicResource TextPrimary}" />
+        </StackPanel>
+    </Border>
+</UserControl>

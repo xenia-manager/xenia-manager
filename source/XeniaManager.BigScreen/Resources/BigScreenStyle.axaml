@@ -1,6 +1,9 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:XeniaManager.BigScreen.Controls"
+        xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
+        xmlns:set="using:XeniaManager.BigScreen.Controls.Settings"
+        xmlns:prof="using:XeniaManager.BigScreen.Controls.Profiles"
+        xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent">
     <Design.PreviewWith>
         <Border Padding="20">
@@ -9,7 +12,7 @@
     </Design.PreviewWith>
 
     <!-- CARD BASE -->
-    <Style Selector="controls|GameCard, controls|OptionsCard">
+    <Style Selector="card|GameCard, card|OptionsCard">
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -25,35 +28,35 @@
     </Style>
 
     <!-- GAME CARD -->
-    <Style Selector="controls|GameCard Border#Tile">
+    <Style Selector="card|GameCard Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
     </Style>
 
-    <Style Selector="controls|GameCard.selected Border#Tile">
+    <Style Selector="card|GameCard.selected Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
     </Style>
 
-    <Style Selector="controls|GameCard">
+    <Style Selector="card|GameCard">
         <Setter Property="Width" Value="200" />
         <Setter Property="Height" Value="200" />
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
     <!-- Border overlay above the box art: carries every card stroke -->
-    <Style Selector="controls|GameCard Border#BorderOverlay">
+    <Style Selector="card|GameCard Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
         <Setter Property="BorderThickness" Value="5" />
     </Style>
 
     <Style
-        Selector="controls|GameCard:pointerover Border#BorderOverlay, controls|GameCard.selected Border#BorderOverlay">
+        Selector="card|GameCard:pointerover Border#BorderOverlay, card|GameCard.selected Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderThickness" Value="5" />
     </Style>
 
     <!-- Subtle dark halo around card text so it stays readable on any background -->
     <Style
-        Selector="controls|GameCard TextBlock, controls|OptionsCard TextBlock, controls|LibraryCard TextBlock, controls|ScreenshotCard TextBlock, controls|IconStat TextBlock">
+        Selector="card|GameCard TextBlock, card|OptionsCard TextBlock, card|LibraryCard TextBlock, card|ScreenshotCard TextBlock, prim|IconStat TextBlock">
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect BlurRadius="2" OffsetX="0" OffsetY="0" Color="Black" Opacity="0.55" />
@@ -130,7 +133,7 @@
 
     <!-- GAMEPAD CARD (settings controller row): subtle black fill,
          reserved border that turns accent on hover/selection -->
-    <Style Selector="controls|GamepadCard">
+    <Style Selector="set|GamepadCard">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -138,46 +141,46 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
 
-    <Style Selector="controls|GamepadCard Border#RowBorder">
+    <Style Selector="set|GamepadCard Border#RowBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
     </Style>
 
     <Style
-        Selector="controls|GamepadCard:pointerover Border#RowBorder, controls|GamepadCard:focus-visible Border#RowBorder, controls|GamepadCard.selected Border#RowBorder">
+        Selector="set|GamepadCard:pointerover Border#RowBorder, set|GamepadCard:focus-visible Border#RowBorder, set|GamepadCard.selected Border#RowBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
-    <Style Selector="controls|GamepadCard TextBlock#NameTextBlock">
+    <Style Selector="set|GamepadCard TextBlock#NameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style Selector="controls|GamepadCard TextBlock#BatteryTextBlock">
+    <Style Selector="set|GamepadCard TextBlock#BatteryTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style Selector="controls|GamepadCard TextBlock#StatusLabelTextBlock">
+    <Style Selector="set|GamepadCard TextBlock#StatusLabelTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style Selector="controls|GamepadCard TextBlock#StatusValueTextBlock">
+    <Style Selector="set|GamepadCard TextBlock#StatusValueTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <!-- The primary gamepad's status value glows in the accent colour -->
-    <Style Selector="controls|GamepadCard TextBlock#StatusValueTextBlock.status-primary">
+    <Style Selector="set|GamepadCard TextBlock#StatusValueTextBlock.status-primary">
         <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
-    <Style Selector="controls|GamepadCard fluent|SymbolIcon#BatteryIconControl">
+    <Style Selector="set|GamepadCard fluent|SymbolIcon#BatteryIconControl">
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -227,14 +230,14 @@
     </Style>
 
     <!-- GAME CARD SELECTED (grows) -->
-    <Style Selector="controls|GameCard.selected">
+    <Style Selector="card|GameCard.selected">
         <Setter Property="Width" Value="250" />
         <Setter Property="Height" Value="250" />
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
     <!-- LIBRARY CARD (carousel) -->
-    <Style Selector="controls|LibraryCard">
+    <Style Selector="card|LibraryCard">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Transitions">
             <Transitions>
@@ -243,18 +246,18 @@
         </Setter>
     </Style>
 
-    <Style Selector="controls|LibraryCard > Border">
+    <Style Selector="card|LibraryCard > Border">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
-    <Style Selector="controls|LibraryCard.selected > Border">
+    <Style Selector="card|LibraryCard.selected > Border">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <!-- LIBRARY LIST ITEM (list view rows) -->
-    <Style Selector="controls|LibraryListItem">
+    <Style Selector="card|LibraryListItem">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -267,17 +270,17 @@
         </Setter>
     </Style>
 
-    <Style Selector="controls|LibraryListItem Border#RowBorder">
+    <Style Selector="card|LibraryListItem Border#RowBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
     </Style>
 
     <Style
-        Selector="controls|LibraryListItem:pointerover Border#RowBorder, controls|LibraryListItem:focus-visible Border#RowBorder, controls|LibraryListItem.selected Border#RowBorder">
+        Selector="card|LibraryListItem:pointerover Border#RowBorder, card|LibraryListItem:focus-visible Border#RowBorder, card|LibraryListItem.selected Border#RowBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
     <!-- SCREENSHOT CARD (gallery) -->
-    <Style Selector="controls|ScreenshotCard">
+    <Style Selector="card|ScreenshotCard">
         <Setter Property="Transitions">
             <Transitions>
                 <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
@@ -285,45 +288,45 @@
         </Setter>
     </Style>
 
-    <Style Selector="controls|ScreenshotCard Border#Tile">
+    <Style Selector="card|ScreenshotCard Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
     </Style>
 
-    <Style Selector="controls|ScreenshotCard.selected Border#Tile">
+    <Style Selector="card|ScreenshotCard.selected Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
     </Style>
 
     <!-- Border overlay above the art: carries every card stroke -->
-    <Style Selector="controls|ScreenshotCard Border#BorderOverlay">
+    <Style Selector="card|ScreenshotCard Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <Style
-        Selector="controls|ScreenshotCard:pointerover Border#BorderOverlay, controls|ScreenshotCard.selected Border#BorderOverlay">
+        Selector="card|ScreenshotCard:pointerover Border#BorderOverlay, card|ScreenshotCard.selected Border#BorderOverlay">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <!-- OPTION CARD: reserved 4px border so hover/focus doesn't change size -->
-    <Style Selector="controls|OptionsCard">
+    <Style Selector="card|OptionsCard">
         <Setter Property="Width" Value="333" />
         <Setter Property="Height" Value="160" />
     </Style>
 
-    <Style Selector="controls|OptionsCard Border#Tile">
+    <Style Selector="card|OptionsCard Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
-    <Style Selector="controls|OptionsCard:pointerover Border#Tile, controls|OptionsCard.selected Border#Tile">
+    <Style Selector="card|OptionsCard:pointerover Border#Tile, card|OptionsCard.selected Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
     <!-- PROFILE BUTTON (header avatar chip): reserved 2px border so focus doesn't change size -->
-    <Style Selector="controls|ProfileButton">
+    <Style Selector="prof|ProfileButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -336,14 +339,14 @@
         </Setter>
     </Style>
 
-    <Style Selector="controls|ProfileButton Border#AvatarCircle">
+    <Style Selector="prof|ProfileButton Border#AvatarCircle">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
     </Style>
 
     <Style
-        Selector="controls|ProfileButton:pointerover Border#AvatarCircle, controls|ProfileButton:focus-visible Border#AvatarCircle, controls|ProfileButton.selected Border#AvatarCircle">
+        Selector="prof|ProfileButton:pointerover Border#AvatarCircle, prof|ProfileButton:focus-visible Border#AvatarCircle, prof|ProfileButton.selected Border#AvatarCircle">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
     </Style>
@@ -414,7 +417,7 @@
     </Style>
 
     <!-- PROFILE ROW (profile picker + manage profiles list) -->
-    <Style Selector="controls|ProfileRow">
+    <Style Selector="prof|ProfileRow">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -428,18 +431,18 @@
         </Setter>
     </Style>
 
-    <Style Selector="controls|ProfileRow Border#RowBorder">
+    <Style Selector="prof|ProfileRow Border#RowBorder">
         <Setter Property="Background" Value="{DynamicResource CardBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
     </Style>
 
     <Style
-        Selector="controls|ProfileRow:pointerover Border#RowBorder, controls|ProfileRow:focus-visible Border#RowBorder, controls|ProfileRow.selected Border#RowBorder">
+        Selector="prof|ProfileRow:pointerover Border#RowBorder, prof|ProfileRow:focus-visible Border#RowBorder, prof|ProfileRow.selected Border#RowBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
     <!-- CREATE PROFILE STUB ROW (manage profiles) -->
-    <Style Selector="controls|CreateProfileRow">
+    <Style Selector="prof|CreateProfileRow">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -453,16 +456,16 @@
         </Setter>
     </Style>
 
-    <Style Selector="controls|CreateProfileRow Border#RowBorder">
+    <Style Selector="prof|CreateProfileRow Border#RowBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
     </Style>
 
     <Style
-        Selector="controls|CreateProfileRow:pointerover Border#RowBorder, controls|CreateProfileRow:focus-visible Border#RowBorder, controls|CreateProfileRow.selected Border#RowBorder">
+        Selector="prof|CreateProfileRow:pointerover Border#RowBorder, prof|CreateProfileRow:focus-visible Border#RowBorder, prof|CreateProfileRow.selected Border#RowBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
-    <Style Selector="controls|CreateProfileRow.selected TextBlock">
+    <Style Selector="prof|CreateProfileRow.selected TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 

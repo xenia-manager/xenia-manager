@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XeniaManager.BigScreen.ViewModels;
+using XeniaManager.BigScreen.ViewModels.Modals;
 
 namespace XeniaManager.BigScreen.Services;
 

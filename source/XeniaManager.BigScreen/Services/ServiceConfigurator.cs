@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.BigScreen.ViewModels;
-using XeniaManager.BigScreen.Views;
+using XeniaManager.BigScreen.ViewModels.Shell;
+using XeniaManager.BigScreen.Views.Shell;
 using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Services;

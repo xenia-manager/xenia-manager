@@ -1,0 +1,249 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Screens"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:set="using:XeniaManager.BigScreen.Controls.Settings"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="XeniaManager.BigScreen.Views.Screens.SettingsView"
+             x:DataType="vm:SettingsViewModel"
+             Background="{Binding ScreenBackground}">
+
+    <UserControl.Styles>
+        <!-- Quit-toggle: rendered as a toggle switch (track + sliding thumb), no tick glyph -->
+        <Style Selector="CheckBox.quit-toggle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Height="34" VerticalAlignment="Center" Width="66">
+                            <Border x:Name="Track"
+                                    CornerRadius="17"
+                                    Background="{DynamicResource CardBorder}"
+                                    BorderBrush="{DynamicResource TextSecondary}"
+                                    BorderThickness="2" />
+                            <Ellipse x:Name="Thumb"
+                                     Height="26"
+                                     HorizontalAlignment="Left"
+                                     Margin="4,0,0,0"
+                                     VerticalAlignment="Center"
+                                     Width="26"
+                                     Fill="#FFFFFFFF">
+                                <Ellipse.Transitions>
+                                    <Transitions>
+                                        <ThicknessTransition Property="Margin" Duration="0:0:0.15" />
+                                    </Transitions>
+                                </Ellipse.Transitions>
+                            </Ellipse>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="CheckBox.quit-toggle:checked /template/ Border#Track">
+            <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        </Style>
+
+        <Style Selector="CheckBox.quit-toggle:checked /template/ Ellipse#Thumb">
+            <Setter Property="Margin" Value="32,0,4,0" />
+        </Style>
+
+        <Style Selector="CheckBox.quit-toggle:focus-visible /template/ Border#Track">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *, Auto" Margin="60">
+        <TextBlock Grid.Row="0"
+                   Classes="screen-title"
+                   Text="{DynamicResource Settings.Title}"
+                   Margin="0,20,0,30" />
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Orientation="Vertical" Spacing="14">
+
+                <!-- PREFERENCES -->
+                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Preferences}" />
+
+                <!-- PROFILES -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <Button x:Name="BtnManageProfiles"
+                                Classes="settings-button"
+                                DockPanel.Dock="Right"
+                                Content="{DynamicResource Settings.ManageProfiles}"
+                                Click="OnManageProfilesClick" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ActiveProfile}" />
+                            <TextBlock Classes="settings-subtitle" Text="{Binding ActiveGamertag}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- LIBRARY VIEW -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <ComboBox x:Name="LibraryViewModeCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding LibraryViewModeOptions}"
+                                  SelectedItem="{Binding SelectedLibraryViewMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.LibraryView}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- CARD IMAGE -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <ComboBox x:Name="CardImageModeCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding CardImageModeOptions}"
+                                  SelectedItem="{Binding SelectedCardImageMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.CardImage}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- TIME FORMAT -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <ComboBox x:Name="TimeFormatCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding TimeFormatOptions}"
+                                  SelectedItem="{Binding SelectedTimeFormat}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.TimeFormat}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- QUIT BEHAVIOUR -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkQuitBehaviour"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding ReturnToXeniaOnQuit}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="quit-toggle" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ReturnToXeniaOnQuit}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- THEME -->
+                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Theme}" />
+
+                <!-- BACKGROUND TYPE -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <ComboBox x:Name="BackgroundModeCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding BackgroundModeOptions}"
+                                  SelectedItem="{Binding SelectedBackgroundMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.BackgroundType}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- PRIMARY COLOUR -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <set:ColorPickerField x:Name="PrimaryColorField"
+                                                   DockPanel.Dock="Right"
+                                                   Color="{Binding PrimaryColor, Mode=TwoWay}"
+                                                   VerticalAlignment="Center" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.PrimaryColour}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- ACCENT COLOUR -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <set:ColorPickerField x:Name="AccentColorField"
+                                                   DockPanel.Dock="Right"
+                                                   Color="{Binding AccentColor, Mode=TwoWay}"
+                                                   VerticalAlignment="Center" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.AccentColour}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- VIGNETTE OPACITY -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <TextBlock Classes="settings-value"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding VignetteText}"
+                                   Width="60"
+                                   TextAlignment="Right" />
+                        <Slider DockPanel.Dock="Right"
+                                Minimum="0"
+                                Maximum="1"
+                                Value="{Binding VignetteOpacity, Mode=TwoWay}"
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center"
+                                Width="340" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.Vignette}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- BACKGROUND IMAGE -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <Button x:Name="BtnSelectImage"
+                                Classes="settings-button"
+                                DockPanel.Dock="Right"
+                                Content="{DynamicResource Settings.SelectImage}"
+                                Click="OnSelectImageClick" />
+                        <TextBlock Classes="settings-value"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding ImageDisplayText}"
+                                   Margin="0,0,16,0"
+                                   TextTrimming="CharacterEllipsis" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.BackgroundImage}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- CONTROLLERS -->
+                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Controllers}" />
+
+                <Border Classes="settings-card">
+                    <StackPanel Orientation="Vertical" Spacing="12">
+                        <Grid>
+                            <ItemsControl ItemsSource="{Binding Controllers}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="items:GamepadItemViewModel">
+                                        <set:GamepadCard />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.Controllers.None}"
+                                       IsVisible="{Binding HasNoControllers}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,16,0,16" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Classes="hint-bar">
+            <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource Settings.Hint.Back}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

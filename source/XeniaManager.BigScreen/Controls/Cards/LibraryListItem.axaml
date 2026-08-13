@@ -1,0 +1,53 @@
+<Button xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="96"
+        x:Class="XeniaManager.BigScreen.Controls.Cards.LibraryListItem"
+        x:DataType="vm:GameCardViewModel"
+        Classes.selected="{Binding IsSelected}">
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <Border x:Name="RowBorder"
+                    Padding="14,10"
+                    Background="{DynamicResource CardBackground}"
+                    BorderBrush="Transparent"
+                    BorderThickness="3"
+                    BoxShadow="{DynamicResource CardShadowFlat}"
+                    CornerRadius="10">
+                <ContentPresenter Content="{TemplateBinding Content}"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Center" />
+            </Border>
+        </ControlTemplate>
+    </Button.Template>
+    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="28">
+        <Border Width="64"
+                Height="64"
+                VerticalAlignment="Center"
+                Background="{DynamicResource CardBorder}"
+                ClipToBounds="True"
+                CornerRadius="8">
+            <Grid>
+                <Image Source="{Binding DiscArt}"
+                       IsVisible="{Binding HasDiscArt}"
+                       Stretch="Uniform" />
+                <fluent:SymbolIcon Symbol="Games"
+                                   IsVisible="{Binding !HasDiscArt}"
+                                   FontSize="28"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+        <TextBlock Grid.Column="1"
+                   Text="{Binding Title}"
+                   TextTrimming="CharacterEllipsis"
+                   VerticalAlignment="Center"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource TextPrimary}" />
+    </Grid>
+</Button>

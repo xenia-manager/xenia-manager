@@ -4,6 +4,9 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.BigScreen.ViewModels.Dashboard;
+using XeniaManager.BigScreen.ViewModels.Screens;
+using XeniaManager.BigScreen.ViewModels.Shell;
 using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.Services;

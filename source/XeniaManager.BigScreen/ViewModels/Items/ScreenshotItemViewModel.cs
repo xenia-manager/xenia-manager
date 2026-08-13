@@ -3,6 +3,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;

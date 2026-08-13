@@ -1,4 +1,4 @@
-using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Models.Settings;
 
 namespace XeniaManager.BigScreen.Constants;
 

@@ -1,13 +1,13 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="using:XeniaManager.BigScreen.Controls">
+                    xmlns:set="using:XeniaManager.BigScreen.Controls.Settings">
 
     <!-- COLOUR PICKER FIELD -->
-    <ControlTheme x:Key="{x:Type controls:ColorPickerField}"
-                  TargetType="controls:ColorPickerField">
+    <ControlTheme x:Key="{x:Type set:ColorPickerField}"
+                  TargetType="set:ColorPickerField">
         <Setter Property="Focusable" Value="True" />
         <Setter Property="Template">
-            <ControlTemplate TargetType="controls:ColorPickerField">
+            <ControlTemplate TargetType="set:ColorPickerField">
                 <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="12">
                     <Border x:Name="PART_Swatch"
                             Grid.Column="0"
@@ -27,7 +27,7 @@
                            IsLightDismissEnabled="True"
                            Placement="Bottom"
                            HorizontalOffset="-140">
-                        <controls:PalettePicker x:Name="PART_Palette" />
+                        <set:PalettePicker x:Name="PART_Palette" />
                     </Popup>
                 </Grid>
             </ControlTemplate>
@@ -35,11 +35,11 @@
     </ControlTheme>
 
     <!-- PALETTE PICKER -->
-    <ControlTheme x:Key="{x:Type controls:PalettePicker}"
-                  TargetType="controls:PalettePicker">
+    <ControlTheme x:Key="{x:Type set:PalettePicker}"
+                  TargetType="set:PalettePicker">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
-            <ControlTemplate TargetType="controls:PalettePicker">
+            <ControlTemplate TargetType="set:PalettePicker">
                 <Border Background="{DynamicResource CardBackground}"
                         CornerRadius="12"
                         BorderBrush="{DynamicResource CardBorder}"

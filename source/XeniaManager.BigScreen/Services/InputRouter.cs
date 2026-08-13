@@ -4,7 +4,8 @@ using Avalonia.Input;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.BigScreen.Views;
+using XeniaManager.BigScreen.Views.Screens;
+using XeniaManager.BigScreen.ViewModels.Shell;
 using XeniaManager.Core.Models;
 
 namespace XeniaManager.BigScreen.Services;

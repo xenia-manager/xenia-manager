@@ -9,6 +9,7 @@ using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Converters;
 using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.Core.Logging;
 
 namespace XeniaManager.BigScreen.Services;
