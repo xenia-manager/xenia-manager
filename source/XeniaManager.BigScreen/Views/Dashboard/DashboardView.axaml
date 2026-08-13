@@ -8,10 +8,10 @@
              x:Class="XeniaManager.BigScreen.Views.Dashboard.DashboardView"
              x:DataType="vm:DashboardViewModel">
 
-    <Grid RowDefinitions="*, 300, 200">
+    <Grid RowDefinitions="*, 360, 200">
 
         <!-- GAME CARDS ROW -->
-        <Grid Grid.Row="1" VerticalAlignment="Bottom" Height="300">
+        <Grid Grid.Row="1" VerticalAlignment="Bottom" Height="360">
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
             <Border IsVisible="{Binding ShowEmptyStub}"

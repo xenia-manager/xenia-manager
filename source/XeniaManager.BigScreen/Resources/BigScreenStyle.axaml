@@ -36,9 +36,9 @@
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
     </Style>
 
+    <!-- Size is bound to the ViewModel (mode + selection), so the tile stays square
+         in Icon mode and turns portrait in Box Art mode -->
     <Style Selector="card|GameCard">
-        <Setter Property="Width" Value="200" />
-        <Setter Property="Height" Value="200" />
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
@@ -229,10 +229,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
-    <!-- GAME CARD SELECTED (grows) -->
+    <!-- GAME CARD SELECTED (grows; size driven by the ViewModel) -->
     <Style Selector="card|GameCard.selected">
-        <Setter Property="Width" Value="250" />
-        <Setter Property="Height" Value="250" />
         <Setter Property="Background" Value="Transparent" />
     </Style>
 

@@ -3,22 +3,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="238"
              x:Class="XeniaManager.BigScreen.Controls.Cards.GameCard"
              x:DataType="vm:GameCardViewModel"
+             Width="{Binding CardWidth}"
+             Height="{Binding CardHeight}"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
-    <Grid>
+    <Panel>
         <Border x:Name="Tile" CornerRadius="10" Background="{DynamicResource CardBackground}" Margin="2" />
         <Border x:Name="ArtClip" Background="Transparent" CornerRadius="10" Margin="2">
             <Panel>
-                <Image Source="{Binding BoxArt}"
-                       IsVisible="{Binding ShowBoxArt}"
-                       Stretch="UniformToFill"
-                       VerticalAlignment="Bottom" />
-                <Image Source="{Binding DiscArt}"
-                       IsVisible="{Binding ShowDiscArt}"
-                       Stretch="UniformToFill" />
+                <Grid IsVisible="{Binding ShowBoxArt}"
+                      Height="{Binding BoxArtFullHeight}"
+                      VerticalAlignment="Bottom">
+                    <Grid.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
+                        </Transitions>
+                    </Grid.Transitions>
+                    <Image Source="{Binding BoxArt}" Stretch="UniformToFill" />
+                </Grid>
+                <Grid IsVisible="{Binding ShowDiscArt}"
+                      VerticalAlignment="Bottom">
+                    <Image Source="{Binding DiscArt}" Stretch="Uniform" />
+                </Grid>
             </Panel>
         </Border>
         <Border x:Name="TitleBar"
@@ -32,5 +41,5 @@
         <Border x:Name="BorderOverlay"
                 CornerRadius="10"
                 IsHitTestVisible="False" />
-    </Grid>
+    </Panel>
 </UserControl>

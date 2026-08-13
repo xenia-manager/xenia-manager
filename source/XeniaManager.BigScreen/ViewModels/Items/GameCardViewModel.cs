@@ -1,5 +1,6 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Utilities;
@@ -85,6 +86,34 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     /// </summary>
     public string PlaytimeText => PlaytimeFormatter.Format(Game.Playtime);
 
+    /// <summary>
+    /// The tile's width; grows on selection.
+    /// </summary>
+    public double CardWidth => IsSelected
+        ? LayoutConstants.DashboardCardSelectedWidth
+        : LayoutConstants.DashboardCardWidth;
+
+    /// <summary>
+    /// The tile's height. Box Art mode uses a portrait tile sized so the art fills
+    /// it bottom-anchored with the top ~12% cropped (Icon mode stays square);
+    /// selection grows both.
+    /// </summary>
+    public double CardHeight => CardImageMode == CardImageMode.BoxArt
+        ? IsSelected
+            ? LayoutConstants.DashboardCardBoxArtSelectedHeight
+            : LayoutConstants.DashboardCardBoxArtHeight
+        : IsSelected
+            ? LayoutConstants.DashboardCardIconSelectedHeight
+            : LayoutConstants.DashboardCardIconHeight;
+
+    /// <summary>
+    /// Full height of the box art at the current tile width; the bottom-anchored
+    /// crop container, so only the art's top ~12% is clipped. 0 without art.
+    /// </summary>
+    public double BoxArtFullHeight => BoxArt != null
+        ? (CardWidth - LayoutConstants.DashboardCardArtMargin) * BoxArt.PixelSize.Height / BoxArt.PixelSize.Width
+        : 0;
+
     public GameCardViewModel(Game game, GameStatInfo? stats = null)
     {
         Game = game;
@@ -119,11 +148,16 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
         {
             EnsureBackgroundLoaded();
         }
+
+        OnPropertyChanged(nameof(CardWidth));
+        OnPropertyChanged(nameof(CardHeight));
+        OnPropertyChanged(nameof(BoxArtFullHeight));
     }
 
     partial void OnCardImageModeChanged(CardImageMode value)
     {
         OnPropertyChanged(nameof(ShowBoxArt));
         OnPropertyChanged(nameof(ShowDiscArt));
+        OnPropertyChanged(nameof(CardHeight));
     }
 }

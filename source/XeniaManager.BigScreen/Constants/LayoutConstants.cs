@@ -69,4 +69,40 @@ public static class LayoutConstants
     /// Minimum header clock width in 24-hour mode (e.g. "22:45").
     /// </summary>
     public const double ClockMinWidth24h = 48;
+
+    /// <summary>
+    /// Dashboard game tile width (unselected).
+    /// </summary>
+    public const double DashboardCardWidth = 200;
+
+    /// <summary>
+    /// Dashboard game tile width when selected (grows).
+    /// </summary>
+    public const double DashboardCardSelectedWidth = 250;
+
+    /// <summary>
+    /// Dashboard game tile height in Icon mode (unselected).
+    /// </summary>
+    public const double DashboardCardIconHeight = 200;
+
+    /// <summary>
+    /// Dashboard game tile height in Icon mode when selected (grows).
+    /// </summary>
+    public const double DashboardCardIconSelectedHeight = 250;
+
+    /// <summary>
+    /// Dashboard game tile height in Box Art mode (unselected). Portrait, sized so
+    /// ~0.73-ratio box art fills the tile bottom-anchored with the top ~12% cropped.
+    /// </summary>
+    public const double DashboardCardBoxArtHeight = 238;
+
+    /// <summary>
+    /// Dashboard game tile height in Box Art mode when selected (grows).
+    /// </summary>
+    public const double DashboardCardBoxArtSelectedHeight = 298;
+
+    /// <summary>
+    /// Dashboard game tile art inset (2px card margin on both sides).
+    /// </summary>
+    public const double DashboardCardArtMargin = 4;
 }
