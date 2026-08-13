@@ -131,7 +131,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void InitializeDashboardSelection(MainWindowViewModel vm)
     {
-        if (vm.Dashboard.RecentGames.Count > 0)
+        if (!vm.Dashboard.ShowEmptyStub)
         {
             _navigation.IsOnOptionsRow = false;
             vm.Dashboard.RecentGames[0].IsSelected = true;
@@ -159,10 +159,13 @@ public partial class MainWindow : FAAppWindow
     {
         Dispatcher.UIThread.Post(() =>
         {
-            if (DataContext is MainWindowViewModel vm && vm.Dashboard.RecentGames.Count == 0 && !vm.IsOverlayOpen)
+            if (DataContext is MainWindowViewModel vm)
             {
-                // Library became empty - the game row is gone, fall back to options
-                _navigation.SelectOptionRow(vm.Dashboard);
+                if (vm.Dashboard.ShowEmptyStub && !vm.IsOverlayOpen)
+                {
+                    // Library became empty - the game row is gone, fall back to options
+                    _navigation.SelectOptionRow(vm.Dashboard);
+                }
             }
 
             Find<LibraryView>()?.ScrollToSelected();
@@ -197,7 +200,12 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnGamepadButtonPressed(GamepadButton button)
     {
-        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        if (!IsEnabled || DataContext is not MainWindowViewModel vm)
+        {
+            return;
+        }
+
+        if (!vm.IsInitialized)
         {
             return;
         }
@@ -268,16 +276,17 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnOverlayFocusRequested()
     {
-        if (DataContext is MainWindowViewModel vm && vm.IsSettingsScreen
-                                                  && Find<SettingsView>() is { } settingsView)
+        if (DataContext is MainWindowViewModel vm && vm.IsSettingsScreen)
         {
-            settingsView.FocusFirst();
+            if (Find<SettingsView>() is { } settingsView)
+            {
+                settingsView.FocusFirst();
+                return;
+            }
         }
-        else
-        {
-            // Focus the overlay panel itself so keys route through the window handler
-            Focus();
-        }
+
+        // Focus the overlay panel itself so keys route through the window handler
+        Focus();
     }
 
     /// <summary>

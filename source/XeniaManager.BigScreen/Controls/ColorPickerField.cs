@@ -15,6 +15,11 @@ namespace XeniaManager.BigScreen.Controls;
 public class ColorPickerField : TemplatedControl
 {
     /// <summary>
+    /// Length of a 24-bit hex colour string (e.g. "1C1F25").
+    /// </summary>
+    private const int HexColorLength = 6;
+
+    /// <summary>
     /// Defines the <see cref="Color"/> property.
     /// </summary>
     public static readonly StyledProperty<Color> ColorProperty =
@@ -175,7 +180,7 @@ public class ColorPickerField : TemplatedControl
         }
 
         string text = _hexBox.Text?.Trim().TrimStart('#') ?? string.Empty;
-        if (text.Length == 6 &&
+        if (text.Length == HexColorLength &&
             uint.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint value))
         {
             Color = Color.FromRgb(

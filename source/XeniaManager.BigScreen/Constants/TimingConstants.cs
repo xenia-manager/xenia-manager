@@ -36,4 +36,10 @@ public static class TimingConstants
     /// Minimum total time the splash stays visible.
     /// </summary>
     public static readonly TimeSpan SplashMinimumShowTime = TimeSpan.FromSeconds(2);
+
+    /// <summary>
+    /// How often the library load progress is reported while cards are built
+    /// (every Nth game).
+    /// </summary>
+    public const int ProgressReportInterval = 10;
 }

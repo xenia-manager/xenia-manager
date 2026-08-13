@@ -49,6 +49,24 @@ public partial class DashboardViewModel : ViewModelBase
     private Bitmap? _currentBackgroundArt;
 
     /// <summary>
+    /// The artwork of the background update in flight (set before the fade check).
+    /// </summary>
+    private Bitmap? _pendingArt;
+
+    /// <summary>
+    /// Whether the in-flight update requested a fade-through-black.
+    /// </summary>
+    private bool _fadeRequested;
+
+    /// <summary>
+    /// Whether the in-flight update should animate through black: a fade was
+    /// requested, the mode is Dynamic and the artwork actually changed.
+    /// </summary>
+    private bool ShouldFadeBackground => _fadeRequested
+        && _backgroundService.Settings.Mode == BackgroundMode.Dynamic
+        && !ReferenceEquals(_pendingArt, _currentBackgroundArt);
+
+    /// <summary>
     /// The first 6 games, shown on the dashboard.
     /// </summary>
     public ObservableCollection<GameCardViewModel> RecentGames { get; } = [];
@@ -98,6 +116,9 @@ public partial class DashboardViewModel : ViewModelBase
     /// </summary>
     public void UpdateBackground(Bitmap? selectedArt, bool fade = false)
     {
+        _pendingArt = selectedArt;
+        _fadeRequested = fade;
+
         BackgroundMode mode = _backgroundService.Settings.Mode;
         IBrush? brush = _backgroundService.GetBackground(selectedArt);
         if (brush == null)
@@ -110,8 +131,7 @@ public partial class DashboardViewModel : ViewModelBase
         VignetteVisible = mode == BackgroundMode.Image
                           || (mode == BackgroundMode.Dynamic && selectedArt != null);
 
-        bool artChanged = !ReferenceEquals(selectedArt, _currentBackgroundArt);
-        if (fade && mode == BackgroundMode.Dynamic && artChanged)
+        if (ShouldFadeBackground)
         {
             // The fallback above always produces a brush (linear gradient)
             _ = FadeBackgroundAsync(brush!);

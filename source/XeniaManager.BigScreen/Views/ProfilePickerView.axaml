@@ -57,7 +57,7 @@
                                 Text="{DynamicResource Profiles.Hint.Back}" />
             <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
                                 Text="{DynamicResource Profiles.Hint.Select}" />
-            <controls:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
+            <controls:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
                                 Text="{DynamicResource Profiles.Hint.Manage}" />
         </StackPanel>
         </Grid>

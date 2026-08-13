@@ -52,6 +52,19 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     private EditBaseline _baseline;
 
     /// <summary>
+    /// Whether the edited profile can be persisted: a profile is selected, the
+    /// gamertag is valid and the country/language combos have a selection.
+    /// </summary>
+    private bool CanSaveProfile =>
+        SelectedProfile != null && CanSave && SelectedCountryIndex >= 0 && SelectedLanguageIndex >= 0;
+
+    /// <summary>
+    /// Whether the subscription tier combo holds a valid selection.
+    /// </summary>
+    private bool HasValidSubscriptionIndex =>
+        SelectedSubscriptionTierIndex >= 0 && SelectedSubscriptionTierIndex < SubscriptionTiers.Count;
+
+    /// <summary>
     /// Raised when View (Import) is pressed - the view runs the file picker.
     /// </summary>
     public event Action? ImportRequested;
@@ -167,7 +180,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// Whether the edit fields differ from the values loaded when the profile
     /// was selected (unsaved edits).
     /// </summary>
-    public bool IsDirty => SelectedProfile != null && (
+    private bool IsDirty => SelectedProfile != null && (
         EditGamertag != _baseline.Gamertag ||
         SelectedCountryIndex != _baseline.CountryIndex ||
         SelectedLanguageIndex != _baseline.LanguageIndex ||
@@ -561,18 +574,23 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// </summary>
     public void Save()
     {
-        if (SelectedProfile == null || !CanSave || SelectedCountryIndex < 0 || SelectedLanguageIndex < 0)
+        if (!CanSaveProfile)
         {
             return;
         }
 
-        SelectedProfile.Gamertag = EditGamertag;
-        SelectedProfile.Country = Countries[SelectedCountryIndex].Value;
-        SelectedProfile.Language = Languages[SelectedLanguageIndex].Value;
-        SelectedProfile.IsLiveEnabled = IsLiveEnabled;
-        if (SelectedSubscriptionTierIndex >= 0 && SelectedSubscriptionTierIndex < SubscriptionTiers.Count)
+        if (SelectedProfile is not { } profile)
         {
-            SelectedProfile.SubscriptionTier = SubscriptionTiers[SelectedSubscriptionTierIndex].Value;
+            return;
+        }
+
+        profile.Gamertag = EditGamertag;
+        profile.Country = Countries[SelectedCountryIndex].Value;
+        profile.Language = Languages[SelectedLanguageIndex].Value;
+        profile.IsLiveEnabled = IsLiveEnabled;
+        if (HasValidSubscriptionIndex)
+        {
+            profile.SubscriptionTier = SubscriptionTiers[SelectedSubscriptionTierIndex].Value;
         }
 
         int savedCount = ProfileManager.SaveProfiles(_profileService.Profiles.ToList(), XeniaVersion.Canary);

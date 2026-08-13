@@ -77,15 +77,9 @@ public partial class SplashScreenView : UserControl
         try
         {
             string path = Path.Combine(AppContext.BaseDirectory, AppConstants.SettingsFileName);
-            if (File.Exists(path))
+            if (File.Exists(path) && TryGetSavedColor(File.ReadAllText(path), propertyName, out Color color))
             {
-                using JsonDocument document = JsonDocument.Parse(File.ReadAllText(path));
-                if (document.RootElement.TryGetProperty(propertyName, out JsonElement element)
-                    && element.ValueKind == JsonValueKind.String
-                    && Color.TryParse(element.GetString(), out Color color))
-                {
-                    return color;
-                }
+                return color;
             }
         }
         catch (Exception ex)
@@ -96,5 +90,24 @@ public partial class SplashScreenView : UserControl
         }
 
         return fallback;
+    }
+
+    /// <summary>
+    /// Reads the saved colour for the given property from the settings JSON,
+    /// returning whether it was found and parsed.
+    /// </summary>
+    private static bool TryGetSavedColor(string json, string propertyName, out Color color)
+    {
+        using JsonDocument document = JsonDocument.Parse(json);
+        if (document.RootElement.TryGetProperty(propertyName, out JsonElement element)
+            && element.ValueKind == JsonValueKind.String
+            && Color.TryParse(element.GetString(), out Color parsed))
+        {
+            color = parsed;
+            return true;
+        }
+
+        color = default;
+        return false;
     }
 }

@@ -71,6 +71,18 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private bool _isModalOpen;
 
     /// <summary>
+    /// Whether the library has games with nothing selected yet (first open).
+    /// </summary>
+    private bool LibraryHasUnselectedGames =>
+        Library.Games.Count > 0 && !Library.Games.Any(g => g.IsSelected);
+
+    /// <summary>
+    /// Whether the base Xenia Manager app is currently running.
+    /// </summary>
+    private bool IsBaseAppRunning =>
+        Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length > 0;
+
+    /// <summary>
     /// Raised when the user chooses to quit BigScreen.
     /// </summary>
     public event EventHandler? QuitRequested;
@@ -113,7 +125,7 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(IsSettingsScreen));
 
         // Start the library on the first game (keeps the previous selection on re-open)
-        if (value == Library && Library.Games.Count > 0 && !Library.Games.Any(g => g.IsSelected))
+        if (value == Library && LibraryHasUnselectedGames)
         {
             Library.Games[0].IsSelected = true;
         }
@@ -256,7 +268,7 @@ public partial class MainWindowViewModel : ViewModelBase
             cancellationToken.ThrowIfCancellationRequested();
             Library.Games.Add(CreateGameCard(game, stats));
             loadedGames++;
-            if (loadedGames % 10 == 0)
+            if (loadedGames % TimingConstants.ProgressReportInterval == 0)
             {
                 progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"),
                     0.45 + 0.30 * (double)loadedGames / Math.Max(1, totalGames)));
@@ -321,9 +333,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (Settings.ReturnToXeniaOnQuit)
         {
             string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), AppConstants.BaseAppExecutable);
-            if (File.Exists(baseExe) &&
-                Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length ==
-                0)
+            if (File.Exists(baseExe) && !IsBaseAppRunning)
             {
                 Process.Start(new ProcessStartInfo { FileName = baseExe, UseShellExecute = true });
             }
@@ -458,10 +468,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Swap behind closed overlays; the library/media screens cover the
         // dashboard, so the fade only matters when the dashboard is visible
-        if (e.PropertyName is nameof(GameCardViewModel.IsSelected) or nameof(GameCardViewModel.BackgroundArt)
-            && !IsOverlayOpen)
+        if (e.PropertyName is nameof(GameCardViewModel.IsSelected) or nameof(GameCardViewModel.BackgroundArt))
         {
-            Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, fade: true);
+            if (!IsOverlayOpen)
+            {
+                Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, fade: true);
+            }
         }
     }
 }

@@ -19,9 +19,12 @@ public static class BaseAppLocator
         // 1. Explicit command-line override: --base-dir <path>
         for (int i = 0; i < args.Length - 1; i++)
         {
-            if (args[i] is "--base-dir" or "-d" && !string.IsNullOrWhiteSpace(args[i + 1]))
+            if (args[i] is "--base-dir" or "-d")
             {
-                return Path.GetFullPath(args[i + 1]);
+                if (!string.IsNullOrWhiteSpace(args[i + 1]))
+                {
+                    return Path.GetFullPath(args[i + 1]);
+                }
             }
         }
 

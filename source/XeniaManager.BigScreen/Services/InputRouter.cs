@@ -43,11 +43,16 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// Activates the selected option card, or launches the given game card.
+    /// Activates the focused/selected element: the profile row opens the profile
+    /// picker, the option row activates its screen, game cards launch.
     /// </summary>
     private void Activate(MainWindowViewModel vm, GameCardViewModel? gameCard)
     {
-        if (navigation.IsOnOptionsRow)
+        if (navigation.IsOnProfileRow)
+        {
+            navigation.ActivateProfileRow(vm);
+        }
+        else if (navigation.IsOnOptionsRow)
         {
             navigation.ActivateSelectedOption(vm, vm.Dashboard);
         }
@@ -55,6 +60,36 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         {
             navigation.ActivateGame(vm, gameCard);
         }
+    }
+
+    /// <summary>
+    /// Moves up a dashboard row: game row → profile row; option row → game row,
+    /// or straight to the profile row when the library is empty.
+    /// </summary>
+    private void MoveUp(MainWindowViewModel vm)
+    {
+        if (!navigation.IsOnOptionsRow || vm.Dashboard.ShowEmptyStub)
+        {
+            navigation.SelectProfileRow(vm.Dashboard);
+            return;
+        }
+
+        navigation.SelectGameRow(vm.Dashboard);
+    }
+
+    /// <summary>
+    /// Moves down a dashboard row: profile row → game row (option row when the
+    /// library is empty); game/option rows → option row.
+    /// </summary>
+    private void MoveDown(MainWindowViewModel vm)
+    {
+        if (navigation.IsOnProfileRow && !vm.Dashboard.ShowEmptyStub)
+        {
+            navigation.SelectGameRow(vm.Dashboard);
+            return;
+        }
+
+        navigation.SelectOptionRow(vm.Dashboard);
     }
 
     /// <summary>
@@ -84,66 +119,78 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     {
         if (vm.IsLibraryScreen)
         {
-            switch (command)
-            {
-                case NavigationCommand.MoveLeft:
-                    navigation.MoveGameSelection(vm.Library, -1);
-                    break;
-                case NavigationCommand.MoveRight:
-                    navigation.MoveGameSelection(vm.Library, 1);
-                    break;
-                case NavigationCommand.MoveUp:
-                    navigation.MoveGameSelection(vm.Library, -1);
-                    break;
-                case NavigationCommand.MoveDown:
-                    navigation.MoveGameSelection(vm.Library, 1);
-                    break;
-                case NavigationCommand.CycleSort:
-                    // Sort keeps the selection on the same card, but the viewport stays put
-                    vm.Library.CycleSort();
-                    break;
-                case NavigationCommand.Activate:
-                    navigation.LaunchSelectedGame(vm);
-                    break;
-                case NavigationCommand.Back:
-                    CloseOverlay(vm);
-                    break;
-                case NavigationCommand.ToggleView:
-                    vm.Library.ToggleView();
-                    break;
-            }
+            HandleLibrary(vm, command);
         }
         else if (vm.IsMediaScreen)
         {
-            switch (command)
-            {
-                case NavigationCommand.MoveLeft:
-                    navigation.MoveScreenshotSelection(vm.Media, -1);
-                    break;
-                case NavigationCommand.MoveRight:
-                    navigation.MoveScreenshotSelection(vm.Media, 1);
-                    break;
-                case NavigationCommand.MoveUp:
-                    navigation.MoveScreenshotSelection(vm.Media, -MediaView.CardsPerRow);
-                    break;
-                case NavigationCommand.MoveDown:
-                    navigation.MoveScreenshotSelection(vm.Media, MediaView.CardsPerRow);
-                    break;
-                case NavigationCommand.CycleSort:
-                    // Sort keeps the selection on the same card, but the viewport stays put
-                    vm.Media.CycleMediaSort();
-                    break;
-                case NavigationCommand.Activate:
-                    navigation.OpenSelectedScreenshot(vm.Media);
-                    break;
-                case NavigationCommand.Back:
-                    CloseOverlay(vm);
-                    break;
-            }
+            HandleMedia(vm, command);
         }
         else if (vm.IsSettingsScreen && command == NavigationCommand.Back)
         {
             CloseOverlay(vm);
+        }
+    }
+
+    /// <summary>
+    /// Commands while the library screen is open.
+    /// </summary>
+    private void HandleLibrary(MainWindowViewModel vm, NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveLeft:
+            case NavigationCommand.MoveUp:
+                navigation.MoveGameSelection(vm.Library, -1);
+                break;
+            case NavigationCommand.MoveRight:
+            case NavigationCommand.MoveDown:
+                navigation.MoveGameSelection(vm.Library, 1);
+                break;
+            case NavigationCommand.CycleSort:
+                // Sort keeps the selection on the same card, but the viewport stays put
+                vm.Library.CycleSort();
+                break;
+            case NavigationCommand.Activate:
+                navigation.LaunchSelectedGame(vm);
+                break;
+            case NavigationCommand.Back:
+                CloseOverlay(vm);
+                break;
+            case NavigationCommand.ToggleView:
+                vm.Library.ToggleView();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Commands while the media screen is open.
+    /// </summary>
+    private void HandleMedia(MainWindowViewModel vm, NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveLeft:
+                navigation.MoveScreenshotSelection(vm.Media, -1);
+                break;
+            case NavigationCommand.MoveRight:
+                navigation.MoveScreenshotSelection(vm.Media, 1);
+                break;
+            case NavigationCommand.MoveUp:
+                navigation.MoveScreenshotSelection(vm.Media, -MediaView.CardsPerRow);
+                break;
+            case NavigationCommand.MoveDown:
+                navigation.MoveScreenshotSelection(vm.Media, MediaView.CardsPerRow);
+                break;
+            case NavigationCommand.CycleSort:
+                // Sort keeps the selection on the same card, but the viewport stays put
+                vm.Media.CycleMediaSort();
+                break;
+            case NavigationCommand.Activate:
+                navigation.OpenSelectedScreenshot(vm.Media);
+                break;
+            case NavigationCommand.Back:
+                CloseOverlay(vm);
+                break;
         }
     }
 
@@ -162,52 +209,13 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
                 MoveDashboard(vm, 1);
                 break;
             case NavigationCommand.MoveUp:
-                // With no games there is no game row - hop straight to the profile row
-                if (navigation.IsOnOptionsRow)
-                {
-                    if (vm.Dashboard.RecentGames.Count > 0)
-                    {
-                        navigation.SelectGameRow(vm.Dashboard);
-                    }
-                    else
-                    {
-                        navigation.SelectProfileRow(vm.Dashboard);
-                    }
-                }
-                else
-                {
-                    navigation.SelectProfileRow(vm.Dashboard);
-                }
-
+                MoveUp(vm);
                 break;
             case NavigationCommand.MoveDown:
-                if (navigation.IsOnProfileRow)
-                {
-                    if (vm.Dashboard.RecentGames.Count > 0)
-                    {
-                        navigation.SelectGameRow(vm.Dashboard);
-                    }
-                    else
-                    {
-                        navigation.SelectOptionRow(vm.Dashboard);
-                    }
-                }
-                else
-                {
-                    navigation.SelectOptionRow(vm.Dashboard);
-                }
-
+                MoveDown(vm);
                 break;
             case NavigationCommand.Activate:
-                if (navigation.IsOnProfileRow)
-                {
-                    navigation.ActivateProfileRow(vm);
-                }
-                else
-                {
-                    Activate(vm, gameCard);
-                }
-
+                Activate(vm, gameCard);
                 break;
         }
     }

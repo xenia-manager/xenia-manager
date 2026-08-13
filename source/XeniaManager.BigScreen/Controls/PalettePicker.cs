@@ -146,10 +146,13 @@ public class PalettePicker : TemplatedControl
     /// </summary>
     private void OnSwatchKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key is Key.Enter or Key.Space && sender is Border { Tag: Color colour })
+        if (e.Key is Key.Enter or Key.Space)
         {
-            PickColour(colour);
-            e.Handled = true;
+            if (sender is Border { Tag: Color colour })
+            {
+                PickColour(colour);
+                e.Handled = true;
+            }
         }
     }
 
