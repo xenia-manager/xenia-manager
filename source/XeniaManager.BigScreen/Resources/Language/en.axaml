@@ -54,6 +54,9 @@
     <sys:String x:Key="Settings.LibraryView">Library View</sys:String>
     <sys:String x:Key="Settings.LibraryView.Carousel">Carousel</sys:String>
     <sys:String x:Key="Settings.LibraryView.List">List</sys:String>
+    <sys:String x:Key="Settings.CardImage">Card Image</sys:String>
+    <sys:String x:Key="Settings.CardImage.BoxArt">Box Art</sys:String>
+    <sys:String x:Key="Settings.CardImage.Icon">Icon</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.Image">Image</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.Solid">Solid Colour</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.LinearGradient">Linear Gradient</sys:String>

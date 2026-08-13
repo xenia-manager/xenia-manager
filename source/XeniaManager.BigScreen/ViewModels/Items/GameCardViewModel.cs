@@ -33,6 +33,11 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     [ObservableProperty] private Bitmap? _backgroundArt;
 
     /// <summary>
+    /// The image shown on this card (box art or disc icon).
+    /// </summary>
+    [ObservableProperty] private CardImageMode _cardImageMode = CardImageMode.Icon;
+
+    /// <summary>
     /// The game's box art, or null when missing/unreadable.
     /// </summary>
     public Bitmap? BoxArt => !string.IsNullOrEmpty(Game.Artwork.Boxart) ? Game.Artwork.CachedBoxart : null;
@@ -51,6 +56,16 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     /// Whether disc art is available to show.
     /// </summary>
     public bool HasDiscArt => DiscArt != null;
+
+    /// <summary>
+    /// Whether the box art layer is shown (Box Art mode only).
+    /// </summary>
+    public bool ShowBoxArt => CardImageMode == CardImageMode.BoxArt && HasBoxArt;
+
+    /// <summary>
+    /// Whether the disc icon layer is shown (always in Icon mode, fallback in Box Art mode).
+    /// </summary>
+    public bool ShowDiscArt => CardImageMode == CardImageMode.Icon || !HasBoxArt;
 
     /// <summary>
     /// Achievements unlocked / total, from the profile's GPD or per-game achievement GPD.
@@ -103,5 +118,11 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
         {
             EnsureBackgroundLoaded();
         }
+    }
+
+    partial void OnCardImageModeChanged(CardImageMode value)
+    {
+        OnPropertyChanged(nameof(ShowBoxArt));
+        OnPropertyChanged(nameof(ShowDiscArt));
     }
 }

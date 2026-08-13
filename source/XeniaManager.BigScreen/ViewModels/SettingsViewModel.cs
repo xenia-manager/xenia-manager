@@ -33,6 +33,11 @@ public partial class SettingsViewModel : ViewModelBase
     public event Action? LibraryViewModeChanged;
 
     /// <summary>
+    /// Raised after the dashboard card image mode changed, so the cards can swap images live.
+    /// </summary>
+    public event Action? CardImageChanged;
+
+    /// <summary>
     /// Options shown in the settings background-type dropdown.
     /// </summary>
     public ObservableCollection<BackgroundModeOption> BackgroundModeOptions { get; } =
@@ -54,6 +59,15 @@ public partial class SettingsViewModel : ViewModelBase
     ];
 
     /// <summary>
+    /// Options shown in the settings card-image dropdown.
+    /// </summary>
+    public ObservableCollection<CardImageModeOption> CardImageModeOptions { get; } =
+    [
+        new(CardImageMode.BoxArt, LocalizationHelper.GetText("Settings.CardImage.BoxArt")),
+        new(CardImageMode.Icon, LocalizationHelper.GetText("Settings.CardImage.Icon")),
+    ];
+
+    /// <summary>
     /// The selected option in the background-type dropdown.
     /// </summary>
     [ObservableProperty] private BackgroundModeOption? _selectedBackgroundMode;
@@ -72,6 +86,16 @@ public partial class SettingsViewModel : ViewModelBase
     /// The active library view mode.
     /// </summary>
     [ObservableProperty] private LibraryViewMode _libraryViewMode = LibraryViewMode.Carousel;
+
+    /// <summary>
+    /// The selected option in the card-image dropdown.
+    /// </summary>
+    [ObservableProperty] private CardImageModeOption? _selectedCardImageMode;
+
+    /// <summary>
+    /// The active dashboard card image mode.
+    /// </summary>
+    [ObservableProperty] private CardImageMode _cardImageMode = CardImageMode.Icon;
 
     /// <summary>
     /// The primary color; gradients are derived from it.
@@ -115,6 +139,8 @@ public partial class SettingsViewModel : ViewModelBase
         ReturnToXeniaOnQuit = _backgroundService.Settings.ReturnToXeniaOnQuit;
         LibraryViewMode = _backgroundService.Settings.LibraryViewMode;
         SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == LibraryViewMode);
+        CardImageMode = _backgroundService.Settings.CardImageMode;
+        SelectedCardImageMode = CardImageModeOptions.FirstOrDefault(o => o.Mode == CardImageMode);
     }
 
     /// <summary>
@@ -247,6 +273,23 @@ public partial class SettingsViewModel : ViewModelBase
         if (value != null)
         {
             LibraryViewMode = value.Mode;
+        }
+    }
+
+    partial void OnCardImageModeChanged(CardImageMode value)
+    {
+        _backgroundService.Settings.CardImageMode = value;
+        _backgroundService.Save();
+        SelectedCardImageMode = CardImageModeOptions.FirstOrDefault(o => o.Mode == value);
+        CardImageChanged?.Invoke();
+        Logger.Info<SettingsViewModel>($"Card image mode changed to {value}");
+    }
+
+    partial void OnSelectedCardImageModeChanged(CardImageModeOption? value)
+    {
+        if (value != null)
+        {
+            CardImageMode = value.Mode;
         }
     }
 }

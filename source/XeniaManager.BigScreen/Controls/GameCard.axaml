@@ -13,11 +13,11 @@
         <Border x:Name="ArtClip" Background="Transparent" CornerRadius="10" Margin="2">
             <Panel>
                 <Image Source="{Binding BoxArt}"
-                       IsVisible="{Binding HasBoxArt}"
+                       IsVisible="{Binding ShowBoxArt}"
                        Stretch="UniformToFill"
                        VerticalAlignment="Bottom" />
                 <Image Source="{Binding DiscArt}"
-                       IsVisible="{Binding HasDiscArt}"
+                       IsVisible="{Binding ShowDiscArt}"
                        Stretch="UniformToFill" />
             </Panel>
         </Border>

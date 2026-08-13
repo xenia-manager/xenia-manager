@@ -130,6 +130,13 @@ public partial class MainWindowViewModel : ViewModelBase
         Media = new MediaViewModel(Settings, screenshotLibraryService);
         Dashboard = new DashboardViewModel(backgroundService);
         Settings.AppearanceChanged += () => Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt);
+        Settings.CardImageChanged += () =>
+        {
+            foreach (GameCardViewModel card in Dashboard.RecentGames)
+            {
+                card.CardImageMode = Settings.CardImageMode;
+            }
+        };
     }
 
     /// <summary>
@@ -304,6 +311,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private GameCardViewModel CreateRecentGameCard(Game game)
     {
         GameCardViewModel card = CreateGameCard(game, _profileService.GetGameStats(game));
+        card.CardImageMode = Settings.CardImageMode;
         card.EnsureBackgroundLoaded();
         return card;
     }

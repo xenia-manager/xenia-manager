@@ -51,4 +51,10 @@ public class DashboardSettings
     /// </summary>
     [JsonPropertyName("library_view_mode")]
     public LibraryViewMode LibraryViewMode { get; set; } = LibraryViewMode.Carousel;
+
+    /// <summary>
+    /// The image shown on dashboard game cards.
+    /// </summary>
+    [JsonPropertyName("card_image_mode")]
+    public CardImageMode CardImageMode { get; set; } = CardImageMode.Icon;
 }
