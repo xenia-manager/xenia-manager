@@ -45,12 +45,13 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - Persisted to **`dashboard-settings.json`** next to the executable (`Models/DashboardSettings.cs`).
 - `ApplyResources()` pushes tokens into `Application.Resources` at load and after every change, so `DynamicResource` bindings update live. Falls back to the linear gradient when a brush can't be built (e.g. missing image).
 
-### Boot splash (Feature 3)
-- **Separate `SplashWindow`** (fullscreen, borderless, Topmost) shown before the main window; startup is deferred via `Dispatcher.UIThread.Post(StartApp, DispatcherPriority.Background)` so the splash **paints before any loading work** (the UniGetUI pattern — an in-window splash cannot cover process/Avalonia startup).
-- Content: TV logo + "Xenia Big Screen" + live status text + tweened progress bar, over the **dashboard's radial background** built from the saved `primary_color` (same stops/constants as `BackgroundService`); logo + bar use the saved `accent_color` so the splash matches the dashboard — no green→red flash.
-- **Boot pipeline** (`MainWindowViewModel.InitializeAsync`, cancellable, per-stage minimum 400ms dwell): Loading Profile → Loading Settings (settings JSON + background brush/image decode) → Loading Dashboard (library JSON + recent cards) → Loading Library (per-game GPD stats off-thread + cards, chunked progress) → Loading Media (screenshot scan in `Task.Run`) → Loading Done (1s hold). Total minimum ~3s.
+### Boot splash (Feature 3, FA built-in)
+- **FluentAvalonia's built-in `AppWindow.SplashScreen`** (`IFAApplicationSplashScreen`): `MainWindow` is an `FAAppWindow` with `SplashScreen = new AppSplashScreen()`; FA shows the splash, runs `RunTasks` (the boot pipeline, dispatched onto the UI thread), then reveals the fullscreen dashboard. No separate splash window — the old standalone `SplashWindow` (and its top-line chrome bug) is gone.
+- The splash window FA creates is **forced fullscreen + borderless** from `SplashScreenView.OnAttachedToVisualTree` (it is centered by default).
+- Content: TV logo + "Xenia Big Screen" + live status text + tweened progress bar, over the **dashboard's radial background** built by `BackgroundBrushFactory.CreateRadial` from the saved `primary_color`; logo + bar use the saved `accent_color` so the splash matches the dashboard — no green→red flash.
+- **Boot pipeline** (`MainWindowViewModel.InitializeAsync`, cancellable, per-stage minimum 400ms dwell): Loading Profile → Loading Settings (settings JSON + background brush/image decode) → Loading Dashboard (library JSON + recent cards) → Loading Library (per-game GPD stats off-thread + cards, chunked progress) → Loading Media (screenshot scan in `Task.Run`) → Loading Done (1s hold). Total minimum ~3s (`MinimumShowTime` 2s + dwells).
 - Input (keyboard, gamepad, mouse activation) is **gated until `IsInitialized`** — no stray input can act during the splash.
-- Main window is created under the splash (fullscreen), revealed when the pipeline completes; boot failures log and still reveal.
+- Boot failures log and the window still reveals.
 
 ### Main app integration (Feature 1)
 - **"Big Screen" nav button** in Xenia Manager (`MainView.axaml`, `Tv` icon, tooltip "Open Big Screen") → `NavigationService` `BigScreen` tag → launches `XeniaManager.BigScreen.exe` resolved **side-by-side or via the repo-sibling bin folder** (same config, matching `BaseAppLocator`); missing exe → localized warning box.
@@ -87,14 +88,12 @@ source/XeniaManager.BigScreen/
 ├── Program.cs                       # Entry point; redirects base dir to the base app's folder
 ├── ViewLocator.cs                   # VM → View resolution (ViewModels.XViewModel → Views.XView)
 ├── Views/
-│   ├── MainWindow.axaml(.cs)        # Shell (plain Window, fullscreen forced in code): header, background/fade layers, dashboard + overlay screens, input routing
+│   ├── MainWindow.axaml(.cs)        # Shell (FAAppWindow, fullscreen forced in code, WindowDecorations=None): header, background/fade layers, dashboard + overlay screens, input routing, built-in splash
 │   ├── DashboardView.axaml(.cs)     # Recent games row + options row + empty stub
 │   ├── LibraryView.axaml(.cs)       # Library carousel + list, clamped scroll, details pane + empty stub
 │   ├── MediaView.axaml(.cs)         # Media gallery grid + nested viewer sub-screen
 │   ├── MediaViewerView.axaml(.cs)   # Full-screen screenshot viewer (chevrons, caption)
-│   ├── SettingsView.axaml(.cs)      # Settings screen (owns the background image picker)
-│   ├── SplashWindow.axaml(.cs)      # Boot splash window (fullscreen, Topmost, shows before the main window)
-│   └── SplashContent.axaml(.cs)     # Splash visuals: logo, live status, tweened bar, radial background from saved primary/accent
+│   └── SettingsView.axaml(.cs)      # Settings screen (owns the background image picker)
 ├── ViewModels/
 │   ├── MainWindowViewModel.cs       # Composition root: child VMs, CurrentScreen navigation, launch/quit/refresh
 │   ├── HeaderViewModel.cs           # Profile, clock, wifi + controller battery state
@@ -120,10 +119,14 @@ source/XeniaManager.BigScreen/
 │   ├── IconStat.axaml(.cs)          # Icon + text stat row
 │   ├── InputHint.axaml(.cs)         # Keycap + label hint
 │   ├── ColorPickerField.cs          # Swatch + hex + palette popup
-│   └── PalettePicker.cs             # Swatch row
+│   ├── PalettePicker.cs             # Swatch row
+│   ├── SplashScreenView.axaml(.cs)  # FA built-in splash visuals: logo, live status, tweened bar, radial background from saved primary/accent; forces the splash window fullscreen
+│   └── AppSplashScreen.cs           # IFAApplicationSplashScreen: hosts the splash view + runs the boot pipeline (RunTasks) on the UI thread
+├── Factories/
+│   └── BackgroundBrushFactory.cs    # Static brush builders: linear/radial/solid from a colour + vignette; single home for Mix math and stop offsets
 ├── Services/
 │   ├── BaseAppLocator.cs            # Resolves the base Xenia Manager folder (--base-dir / side-by-side / sibling)
-│   ├── BackgroundService.cs         # Settings load/save, brush factory, ApplyResources (IBackgroundService)
+│   ├── BackgroundService.cs         # Settings load/save, brushes via BackgroundBrushFactory, ApplyResources (IBackgroundService)
 │   ├── ColorJsonConverter.cs
 │   ├── DashboardNavigationController.cs # Row state machine, selection movement, option activation (view focus/scroll via events)
 │   ├── GameLibraryService.cs        # Wraps Core GameManager: load, game list, recent-games selection (IGameLibraryService)
@@ -158,9 +161,9 @@ source/XeniaManager.BigScreen/
     └── Art/                          # Sample wallpapers for testing
 ```
 
-**Navigation:** the shell hosts the dashboard as a `ContentControl` (`MainWindowViewModel.Dashboard`) and the three overlay screens as pre-instantiated `ContentControl`s whose content never changes (`MainWindowViewModel.Library` / `Media` / `Settings`, visibility flipped via `Is*Screen`). Views are created **once at startup** — opening a screen is a pure visibility flip (instant), and all boot-time work (profile, library, screenshot scan) happens behind the splash window. The viewer nests as a sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`, created per open). The window interacts with the overlay views via live visual-tree lookups (`Find<T>()`) for focus/scroll requests raised by `DashboardNavigationController`.
+**Navigation:** the shell hosts the dashboard as a `ContentControl` (`MainWindowViewModel.Dashboard`) and the three overlay screens as pre-instantiated `ContentControl`s whose content never changes (`MainWindowViewModel.Library` / `Media` / `Settings`, visibility flipped via `Is*Screen`). Views are created **once at startup** — opening a screen is a pure visibility flip (instant), and all boot-time work (profile, library, screenshot scan) happens behind the built-in splash. The viewer nests as a sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`, created per open). The window interacts with the overlay views via live visual-tree lookups (`Find<T>()`) for focus/scroll requests raised by `DashboardNavigationController`.
 
-**Boot:** `Program.Main` → `App` builds DI → `SplashWindow` shown immediately, startup deferred via `Dispatcher.Post(StartApp, Background)` so the splash paints first → `MainWindowViewModel.InitializeAsync` runs the six staged loads (cancellable, per-stage dwell, progress via `IProgress`) → splash closes on completion (3s minimum total) → input un-gated (`IsInitialized`).
+**Boot:** `Program.Main` → `App` builds DI → `desktop.MainWindow = MainWindow` (an `FAAppWindow`) → FluentAvalonia shows its built-in splash (`AppSplashScreen`) → `RunTasks` dispatches `MainWindowViewModel.InitializeAsync` (six staged loads, cancellable, per-stage dwell, progress via `IProgress`) onto the UI thread → splash closes on completion (3s minimum total) → fullscreen dashboard revealed, input un-gated (`IsInitialized`).
 
 **Data flow**
 - DI: `App.Services` (built by `ServiceConfigurator.ConfigureServices()`) → singleton services (`IBackgroundService`, `IProfileService`, `IGameLibraryService`, `IScreenshotLibraryService`, `IGamepadInputService`, `DashboardNavigationController`, `InputRouter`) + `MainWindowViewModel` + `MainWindow` (parameterless ctor resolving from `App.Services` — the XAML loader requires it).
@@ -304,7 +307,7 @@ source/XeniaManager.BigScreen/
 - [x] **T1.** Formatting sweep (JetBrains Rider: Code Cleanup → Reformat on the whole solution; normalizes AI double blank lines). Manual fix of misaligned `en.axaml` entries in both apps (`XeniaManager/Resources/Language/en.axaml` + BigScreen's)
 - [x] **T2.** Delete test artwork (`Resources/Art/fr65z3.jpg`, `Resources/Art/SL1qfH.jpg`)
 - [x] **T3.** Move `Services/ColorJsonConverter.cs` → `Converters/` folder (namespace `XeniaManager.BigScreen.Converters`)
-- [ ] **T4.** SplashScreen rewrite — `MainWindow` becomes `FAAppWindow`; boot splash uses FluentAvalonia's built-in `AppWindow.SplashScreen` (`IFAApplicationSplashScreen` + `SplashScreenContent`, `RunTasks` hosts the boot pipeline) per shazzaam7/dotnet-templates pattern; delete `SplashWindow`; fixes the "line at top" splash bug
+- [x] **T4.** SplashScreen rewrite — `MainWindow` becomes `FAAppWindow`; boot splash uses FluentAvalonia's built-in `AppWindow.SplashScreen` (`IFAApplicationSplashScreen` + `SplashScreenContent`, `RunTasks` hosts the boot pipeline) per shazzaam7/dotnet-templates pattern; delete `SplashWindow`; fixes the "line at top" splash bug. Splash window forced fullscreen from `SplashScreenView.OnAttachedToVisualTree`; gradient math extracted to `Factories/BackgroundBrushFactory.cs`
 
 ### 5.16 Controller input: primary controller + rescan (Core)
 - [ ] **T5.** `GamepadInputService` (Core): open **all** gamepads; expose `ConnectedGamepads` (name, battery, charging, isPrimary), `SetPrimary(id)`, `Rescan()`; `IsConnected/BatteryPercent/IsCharging` reflect the primary; `StateChanged` fires on connect/disconnect/rescan. Docs read: CONTRIBUTING.md + repo wiki (SDL database / gamecontrollerdb update pattern on the desktop Manage page)

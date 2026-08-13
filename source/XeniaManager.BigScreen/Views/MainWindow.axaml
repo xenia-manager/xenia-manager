@@ -1,21 +1,23 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
-        xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
-        xmlns:controls="using:XeniaManager.BigScreen.Controls"
-        xmlns:views="using:XeniaManager.BigScreen.Views"
-        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-        x:Class="XeniaManager.BigScreen.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/icon.ico"
-        Title="{DynamicResource MainWindow.Title}"
-        Width="1920" Height="1080"
-        WindowState="FullScreen"
-        WindowStartupLocation="CenterScreen"
-        Background="{Binding Dashboard.Background}">
+<windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+                       xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+                       xmlns:controls="using:XeniaManager.BigScreen.Controls"
+                       xmlns:views="using:XeniaManager.BigScreen.Views"
+                       xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+                       xmlns:windowing="using:FluentAvalonia.UI.Windowing"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+                       x:Class="XeniaManager.BigScreen.Views.MainWindow"
+                       x:DataType="vm:MainWindowViewModel"
+                       Icon="/Assets/icon.ico"
+                       Title="{DynamicResource MainWindow.Title}"
+                       Width="1920" Height="1080"
+                       WindowState="FullScreen"
+                       WindowDecorations="None"
+                       WindowStartupLocation="CenterScreen"
+                       Background="{Binding Dashboard.Background}">
 
     <!-- Shared centered column so the header margins align with the content rows -->
     <Grid RowDefinitions="150, *" ColumnDefinitions="*, Auto, *">
@@ -120,4 +122,4 @@
         </Panel>
     </Grid>
 
-</Window>
+</windowing:FAAppWindow>

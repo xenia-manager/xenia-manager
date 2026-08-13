@@ -5,21 +5,25 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Threading;
 using XeniaManager.BigScreen.Constants;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.Core.Logging;
 
-namespace XeniaManager.BigScreen.Views;
+namespace XeniaManager.BigScreen.Controls;
 
 /// <summary>
 /// Splash screen content: logo, live boot status text and a progress bar
-/// over the dashboard's radial background.
+/// over the dashboard's radial background. Hosted in FluentAvalonia's
+/// built-in splash window, which is forced fullscreen on attach.
 /// </summary>
-public partial class SplashContent : UserControl
+public partial class SplashScreenView : UserControl
 {
-    public SplashContent()
+    public SplashScreenView()
     {
         InitializeComponent();
-        Background = CreateRadialBackground();
+        Background = BackgroundBrushFactory.CreateRadial(
+            LoadSavedColor("primary_color", Color.FromRgb(0x1C, 0x1F, 0x25)));
 
         // Use the saved BigScreen accent (not the theme default) so the splash
         // matches the dashboard once the settings load
@@ -29,35 +33,34 @@ public partial class SplashContent : UserControl
     }
 
     /// <summary>
-    /// Updates the status text and progress bar (0-1).
+    /// FluentAvalonia shows the splash in a centered window by default;
+    /// force it fullscreen (and borderless) so it covers the screen.
     /// </summary>
-    public void SetProgress(string status, double progress)
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        StatusText.Text = status;
-        LoadBar.Value = progress * 100;
+        base.OnAttachedToVisualTree(e);
+
+        if (TopLevel.GetTopLevel(this) is Window window)
+        {
+            window.WindowState = WindowState.FullScreen;
+            window.WindowDecorations = WindowDecorations.None;
+        }
     }
 
     /// <summary>
-    /// Builds the dashboard-style radial gradient from the saved primary color
-    /// (same stops as the dashboard's radial background).
+    /// Updates the status text and progress bar (0-1). Safe from any thread.
     /// </summary>
-    private static IBrush CreateRadialBackground()
+    public void SetProgress(string status, double progress)
     {
-        Color primary = LoadSavedColor("primary_color", Color.FromRgb(0x1C, 0x1F, 0x25));
-        return new RadialGradientBrush
+        if (Dispatcher.UIThread.CheckAccess())
         {
-            Center = new RelativePoint(0, 0, RelativeUnit.Relative),
-            GradientOrigin = new RelativePoint(0, 0, RelativeUnit.Relative),
-            RadiusX = new RelativeScalar(1.5, RelativeUnit.Relative),
-            RadiusY = new RelativeScalar(1.5, RelativeUnit.Relative),
-            GradientStops =
-            {
-                new GradientStop(primary, 0),
-                new GradientStop(Mix(primary, Colors.Black, LayoutConstants.GradientMixAmount),
-                    LayoutConstants.RadialMidOffset),
-                new GradientStop(Mix(primary, Colors.Black, LayoutConstants.GradientEndMixAmount), 1),
-            },
-        };
+            StatusText.Text = status;
+            LoadBar.Value = progress * 100;
+        }
+        else
+        {
+            Dispatcher.UIThread.Post(() => SetProgress(status, progress));
+        }
     }
 
     /// <summary>
@@ -88,21 +91,10 @@ public partial class SplashContent : UserControl
         catch (Exception ex)
         {
             // Unreadable settings - fall back to the default
-            Logger.Warning<SplashContent>("Failed to read saved BigScreen colors, falling back to defaults");
-            Logger.LogExceptionDetails<SplashContent>(ex);
+            Logger.Warning<SplashScreenView>("Failed to read saved BigScreen colors, falling back to defaults");
+            Logger.LogExceptionDetails<SplashScreenView>(ex);
         }
 
         return fallback;
-    }
-
-    /// <summary>
-    /// Linearly interpolates between two colors.
-    /// </summary>
-    private static Color Mix(Color from, Color to, double amount)
-    {
-        return Color.FromRgb(
-            (byte)Math.Round(from.R + (to.R - from.R) * amount),
-            (byte)Math.Round(from.G + (to.G - from.G) * amount),
-            (byte)Math.Round(from.B + (to.B - from.B) * amount));
     }
 }

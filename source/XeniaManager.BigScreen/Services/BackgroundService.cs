@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Converters;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.Core.Logging;
 
@@ -36,27 +37,6 @@ public class BackgroundService : IBackgroundService
     public DashboardSettings Settings { get; private set; } = new();
 
     /// <summary>
-    /// Linearly interpolates between two colors.
-    /// </summary>
-    private static Color Mix(Color from, Color to, double amount)
-    {
-        return Color.FromRgb(
-            (byte)Math.Round(from.R + (to.R - from.R) * amount),
-            (byte)Math.Round(from.G + (to.G - from.G) * amount),
-            (byte)Math.Round(from.B + (to.B - from.B) * amount));
-    }
-
-    /// <summary>
-    /// Blends the colour toward white by the given amount (0-1).
-    /// </summary>
-    private static Color MixWithWhite(Color color, double amount) => Mix(color, Colors.White, amount);
-
-    /// <summary>
-    /// Blends the colour toward black by the given amount (0-1).
-    /// </summary>
-    private static Color MixWithBlack(Color color, double amount) => Mix(color, Colors.Black, amount);
-
-    /// <summary>
     /// Lightens (positive) or darkens (negative) the accent colour by the given amount.
     /// </summary>
     private Color AdjustAccent(double amount)
@@ -64,36 +44,10 @@ public class BackgroundService : IBackgroundService
         Color c = Settings.AccentColor;
         if (amount >= 0)
         {
-            return Mix(c, Colors.White, amount);
+            return BackgroundBrushFactory.Mix(c, Colors.White, amount);
         }
 
-        return Mix(c, Colors.Black, -amount);
-    }
-
-    /// <summary>
-    /// Creates the vignette brush: transparent center fading to black at the edges,
-    /// with the configured opacity applied to the edge.
-    /// </summary>
-    private IBrush CreateVignetteBrush()
-    {
-        RadialGradientBrush brush = new()
-        {
-            Center = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
-            GradientOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
-        };
-
-        Color edge = Color.FromArgb(
-            (byte)Math.Round(Settings.VignetteOpacity * 255),
-            0, 0, 0);
-
-        // Explicit transparent black (#00000000), NOT Colors.Transparent (#00FFFFFF):
-        // interpolating white-tinted transparency toward the black edge produces a
-        // bright halo in the middle of the screen.
-        Color transparent = Color.FromArgb(0, 0, 0, 0);
-        brush.GradientStops.Add(new GradientStop(transparent, 0));
-        brush.GradientStops.Add(new GradientStop(transparent, LayoutConstants.VignetteInnerStop));
-        brush.GradientStops.Add(new GradientStop(edge, 1));
-        return brush;
+        return BackgroundBrushFactory.Mix(c, Colors.Black, -amount);
     }
 
     /// <summary>
@@ -122,50 +76,6 @@ public class BackgroundService : IBackgroundService
     }
 
     /// <summary>
-    /// Creates a smooth vertical linear gradient from the primary color:
-    /// the colour itself at the top, fading to a slightly darker slate at the bottom.
-    /// </summary>
-    private IBrush CreateLinearBrush()
-    {
-        LinearGradientBrush brush = new()
-        {
-            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-            EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
-            GradientStops =
-            {
-                new GradientStop(Settings.PrimaryColor, 0),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount),
-                    LayoutConstants.LinearMidOffset),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientEndMixAmount), 1),
-            },
-        };
-        return brush;
-    }
-
-    /// <summary>
-    /// Creates a radial gradient from the primary colour:
-    /// the colour itself in the top-left corner fading to a darker slate at the bottom-right.
-    /// </summary>
-    private IBrush CreateRadialBrush()
-    {
-        RadialGradientBrush brush = new()
-        {
-            Center = new RelativePoint(0, 0, RelativeUnit.Relative),
-            GradientOrigin = new RelativePoint(0, 0, RelativeUnit.Relative),
-            RadiusX = new RelativeScalar(1.5, RelativeUnit.Relative),
-            RadiusY = new RelativeScalar(1.5, RelativeUnit.Relative),
-            GradientStops =
-            {
-                new GradientStop(Settings.PrimaryColor, 0),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientMixAmount),
-                    LayoutConstants.RadialMidOffset),
-                new GradientStop(MixWithBlack(Settings.PrimaryColor, LayoutConstants.GradientEndMixAmount), 1),
-            },
-        };
-        return brush;
-    }
-
-    /// <summary>
     /// Pushes the user-facing style tokens into the application resources so
     /// DynamicResource bindings pick them up. Called on load and after every change.
     /// </summary>
@@ -187,7 +97,7 @@ public class BackgroundService : IBackgroundService
             resources[$"SystemAccentColorDark{i}"] = AdjustAccent(-amount);
         }
 
-        resources["BackgroundVignette"] = CreateVignetteBrush();
+        resources["BackgroundVignette"] = BackgroundBrushFactory.CreateVignette(Settings.VignetteOpacity);
     }
 
     /// <summary>
@@ -199,16 +109,16 @@ public class BackgroundService : IBackgroundService
         return Settings.Mode switch
         {
             BackgroundMode.Image => CreateImageBrush(),
-            BackgroundMode.Solid => new SolidColorBrush(Settings.PrimaryColor),
-            BackgroundMode.LinearGradient => CreateLinearBrush(),
-            BackgroundMode.RadialGradient => CreateRadialBrush(),
+            BackgroundMode.Solid => BackgroundBrushFactory.CreateSolid(Settings.PrimaryColor),
+            BackgroundMode.LinearGradient => BackgroundBrushFactory.CreateLinear(Settings.PrimaryColor),
+            BackgroundMode.RadialGradient => BackgroundBrushFactory.CreateRadial(Settings.PrimaryColor),
             BackgroundMode.Dynamic => selectedGameArt != null
                 ? new ImageBrush(selectedGameArt)
                 {
                     Stretch = Stretch.UniformToFill,
                 }
-                : CreateRadialBrush(),
-            _ => CreateLinearBrush(),
+                : BackgroundBrushFactory.CreateRadial(Settings.PrimaryColor),
+            _ => BackgroundBrushFactory.CreateLinear(Settings.PrimaryColor),
         };
     }
 

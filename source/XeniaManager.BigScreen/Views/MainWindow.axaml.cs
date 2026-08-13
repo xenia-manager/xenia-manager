@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Controls;
 using XeniaManager.BigScreen.Services;
@@ -16,7 +17,7 @@ using XeniaManager.Core.Services;
 
 namespace XeniaManager.BigScreen.Views;
 
-public partial class MainWindow : Window
+public partial class MainWindow : FAAppWindow
 {
     private readonly DashboardNavigationController _navigation;
     private readonly InputRouter _router;
@@ -34,6 +35,11 @@ public partial class MainWindow : Window
         WindowState = Avalonia.Controls.WindowState.FullScreen;
 
         InitializeComponent();
+
+        // FluentAvalonia's built-in splash: shows the splash, runs the boot
+        // pipeline, then reveals this window
+        SplashScreen = new AppSplashScreen();
+
         Loaded += OnLoaded;
         KeyDown += OnWindowKeyDown;
 

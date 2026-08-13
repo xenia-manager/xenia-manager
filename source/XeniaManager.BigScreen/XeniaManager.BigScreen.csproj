@@ -9,9 +9,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Folder Include="Factories\" />
         <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
         <Folder Include="Resources\Art\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Controls\AppSplashScreen.cs">
+            <DependentUpon>SplashScreenView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

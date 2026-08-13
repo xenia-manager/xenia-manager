@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-             x:Class="XeniaManager.BigScreen.Views.SplashContent">
+             x:Class="XeniaManager.BigScreen.Controls.SplashScreenView">
 
     <!-- Background is the dashboard's radial gradient, built from the saved
-         primary colour in code (see SplashContent.axaml.cs) -->
+         primary colour in code (see SplashScreenView.axaml.cs) -->
 
     <StackPanel HorizontalAlignment="Center"
                 Orientation="Vertical"
