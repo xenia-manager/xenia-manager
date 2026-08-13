@@ -10,7 +10,7 @@
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="XeniaManager.BigScreen.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/icon.ico"
         Title="{DynamicResource MainWindow.Title}"
         Width="1920" Height="1080"
         WindowState="FullScreen"
