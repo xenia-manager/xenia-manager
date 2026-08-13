@@ -5,10 +5,14 @@ using System.Linq;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
+using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels;
@@ -20,6 +24,7 @@ namespace XeniaManager.BigScreen.ViewModels;
 public partial class SettingsViewModel : ViewModelBase
 {
     private readonly IBackgroundService _backgroundService;
+    private readonly IGamepadInputService _gamepadService;
 
     /// <summary>
     /// Raised after a persisted appearance option changed, so the dashboard can
@@ -36,6 +41,16 @@ public partial class SettingsViewModel : ViewModelBase
     /// Raised after the dashboard card image mode changed, so the cards can swap images live.
     /// </summary>
     public event Action? CardImageChanged;
+
+    /// <summary>
+    /// Connected gamepads shown in the Controllers section.
+    /// </summary>
+    public ObservableCollection<GamepadItemViewModel> Controllers { get; } = [];
+
+    /// <summary>
+    /// Whether no gamepads are currently connected.
+    /// </summary>
+    public bool HasNoControllers => Controllers.Count == 0;
 
     /// <summary>
     /// Options shown in the settings background-type dropdown.
@@ -118,9 +133,47 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private bool _returnToXeniaOnQuit = true;
 
-    public SettingsViewModel(IBackgroundService backgroundService)
+    public SettingsViewModel(IBackgroundService backgroundService, IGamepadInputService gamepadService)
     {
         _backgroundService = backgroundService;
+        _gamepadService = gamepadService;
+
+        if (_gamepadService.IsActive)
+        {
+            _gamepadService.StateChanged += OnGamepadStateChanged;
+        }
+    }
+
+    /// <summary>
+    /// Rebuilds the connected-gamepad list from the gamepad service.
+    /// </summary>
+    public void RefreshControllers()
+    {
+        Controllers.Clear();
+        foreach (GamepadInfo gamepad in _gamepadService.ConnectedGamepads)
+        {
+            Controllers.Add(new GamepadItemViewModel(gamepad));
+        }
+
+        OnPropertyChanged(nameof(HasNoControllers));
+        Logger.Debug<SettingsViewModel>($"Controllers refreshed: {Controllers.Count} connected");
+    }
+
+    /// <summary>
+    /// Refreshes the controller list when the gamepad service state changes
+    /// (connect, disconnect, primary switch, battery).
+    /// </summary>
+    private void OnGamepadStateChanged() => RefreshControllers();
+
+    /// <summary>
+    /// Sets the given gamepad as primary and persists its device GUID.
+    /// </summary>
+    public void SetPrimary(GamepadItemViewModel item)
+    {
+        _gamepadService.SetPrimary(item.Source);
+        _backgroundService.Settings.PrimaryControllerGuid = item.Source.Guid;
+        _backgroundService.Save();
+        Logger.Info<SettingsViewModel>($"Primary controller set to '{item.Name}' ({item.Source.Guid})");
     }
 
     /// <summary>
@@ -141,13 +194,14 @@ public partial class SettingsViewModel : ViewModelBase
         SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == LibraryViewMode);
         CardImageMode = _backgroundService.Settings.CardImageMode;
         SelectedCardImageMode = CardImageModeOptions.FirstOrDefault(o => o.Mode == CardImageMode);
+        RefreshControllers();
     }
 
     /// <summary>
     /// Brush used as the overlay/menu background, derived from the primary colour
     /// so menus match the dashboard instead of being pitch black.
     /// </summary>
-    public IBrush ScreenBackground => new SolidColorBrush(PrimaryColor);
+    public IBrush ScreenBackground => BackgroundBrushFactory.CreateSolid(PrimaryColor);
 
     /// <summary>
     /// Display name of the current background mode.

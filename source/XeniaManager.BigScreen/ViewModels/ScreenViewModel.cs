@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using XeniaManager.BigScreen.Factories;
 
 namespace XeniaManager.BigScreen.ViewModels;
 
@@ -25,5 +26,5 @@ public abstract class ScreenViewModel : ViewModelBase
     /// Brush used as the overlay/menu background, derived from the primary colour
     /// so menus match the dashboard instead of being pitch black.
     /// </summary>
-    public IBrush ScreenBackground => new SolidColorBrush(_settings.PrimaryColor);
+    public IBrush ScreenBackground => BackgroundBrushFactory.CreateSolid(_settings.PrimaryColor);
 }

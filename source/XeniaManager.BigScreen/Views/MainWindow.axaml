@@ -75,7 +75,7 @@
                         Spacing="16"
                         VerticalAlignment="Center">
                 <Grid Height="26" Width="26">
-                    <fluent:SymbolIcon Symbol="{Binding Header.WifiIcon}"
+                    <fluent:SymbolIcon Symbol="{Binding Header.NetworkIcon}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        FontSize="24"

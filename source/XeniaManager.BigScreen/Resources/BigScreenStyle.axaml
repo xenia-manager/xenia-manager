@@ -77,6 +77,112 @@
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
+    <!-- SETTINGS SCREEN: section header between groups of cards -->
+    <Style Selector="TextBlock.settings-section">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Margin" Value="0,24,0,10" />
+    </Style>
+
+    <!-- SETTINGS SCREEN: card surface (row border, background and shadow) -->
+    <Style Selector="Border.settings-card">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="24,16" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
+    </Style>
+
+    <!-- SETTINGS SCREEN: left card label -->
+    <Style Selector="TextBlock.settings-label">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- SETTINGS SCREEN: right-side value text (percentages, image name) -->
+    <Style Selector="TextBlock.settings-value">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- SETTINGS SCREEN: secondary description text -->
+    <Style Selector="TextBlock.settings-subtitle">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
+    <!-- SETTINGS SCREEN: action button -->
+    <Style Selector="Button.settings-button">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Padding" Value="20,10" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- SETTINGS SCREEN: settings dropdown -->
+    <Style Selector="ComboBox.settings-combo">
+        <Setter Property="Width" Value="420" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- GAMEPAD CARD (settings controller row): subtle black fill,
+         reserved border that turns accent on hover/selection -->
+    <Style Selector="controls|GamepadCard">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="controls|GamepadCard Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+    </Style>
+
+    <Style
+        Selector="controls|GamepadCard:pointerover Border#RowBorder, controls|GamepadCard:focus-visible Border#RowBorder, controls|GamepadCard.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="controls|GamepadCard TextBlock#NameTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="controls|GamepadCard TextBlock#BatteryTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="controls|GamepadCard TextBlock#StatusLabelTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="controls|GamepadCard TextBlock#StatusValueTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- The primary gamepad's status value glows in the accent colour -->
+    <Style Selector="controls|GamepadCard TextBlock#StatusValueTextBlock.status-primary">
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="controls|GamepadCard fluent|SymbolIcon#BatteryIconControl">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
     <!-- Card title-bar text (game + screenshot tiles) -->
     <Style Selector="TextBlock.card-title">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />

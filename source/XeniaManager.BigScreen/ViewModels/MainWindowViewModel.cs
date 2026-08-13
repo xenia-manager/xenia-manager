@@ -25,6 +25,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IProfileService _profileService;
     private readonly IGameLibraryService _gameLibraryService;
     private readonly IScreenshotLibraryService _screenshotLibraryService;
+    private readonly IGamepadInputService _gamepadService;
 
     /// <summary>
     /// The most recently selected game card (dashboard or library row). Drives the
@@ -115,17 +116,19 @@ public partial class MainWindowViewModel : ViewModelBase
         IBackgroundService backgroundService,
         IProfileService profileService,
         IGameLibraryService gameLibraryService,
-        IScreenshotLibraryService screenshotLibraryService)
+        IScreenshotLibraryService screenshotLibraryService,
+        IGamepadInputService gamepadService)
     {
         _backgroundService = backgroundService;
         _profileService = profileService;
         _gameLibraryService = gameLibraryService;
         _screenshotLibraryService = screenshotLibraryService;
+        _gamepadService = gamepadService;
 
         // The constructor stays cheap: profile, library and screenshot loading
         // happen in InitializeAsync, behind the splash screen
         Header = new HeaderViewModel();
-        Settings = new SettingsViewModel(backgroundService);
+        Settings = new SettingsViewModel(backgroundService, gamepadService);
         Library = new LibraryViewModel(Settings);
         Media = new MediaViewModel(Settings, screenshotLibraryService);
         Dashboard = new DashboardViewModel(backgroundService);
@@ -194,6 +197,12 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             Settings.Load();
             Dashboard.UpdateBackground(null);
+
+            // Restore the saved primary controller (falls back to the first pad)
+            if (!string.IsNullOrEmpty(_backgroundService.Settings.PrimaryControllerGuid))
+            {
+                _gamepadService.SetPrimaryByGuid(_backgroundService.Settings.PrimaryControllerGuid);
+            }
         });
 
         await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingDashboard"), 0.35, cancellationToken, () =>

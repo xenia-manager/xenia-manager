@@ -1,9 +1,11 @@
 using System;
-using System.Linq;
 using System.Net.NetworkInformation;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FluentIcons.Common;
 using XeniaManager.BigScreen.Constants;
+using XeniaManager.BigScreen.Factories;
+using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Utilities;
@@ -41,9 +43,9 @@ public partial class HeaderViewModel : ViewModelBase
     [ObservableProperty] private bool _isCharging;
 
     /// <summary>
-    /// Whether wifi is connected
+    /// Current network connection status (drives the header network icon).
     /// </summary>
-    [ObservableProperty] private bool _isWifiConnected = true;
+    [ObservableProperty] private NetworkStatus _networkStatus = NetworkStatus.Wifi;
 
     /// <summary>
     /// Current time string
@@ -51,33 +53,21 @@ public partial class HeaderViewModel : ViewModelBase
     [ObservableProperty] private string _time = DateTime.Now.ToString(FormatConstants.ClockFormat);
 
     /// <summary>
-    /// Fluent icon name for the current wifi state
+    /// Fluent icon for the current network state (wifi / wired / off).
     /// </summary>
-    public string WifiIcon => IsWifiConnected ? "WiFi" : "WiFiOff";
+    public Symbol NetworkIcon => IconFactory.GetNetworkIcon(NetworkStatus);
 
     /// <summary>
-    /// Fluent icon name for the current controller battery state.
+    /// Fluent icon for the current controller battery state.
     /// BatteryWarning when no controller is connected or the level is unknown;
-    /// full battery when wired/charging.
+    /// a tiered battery icon otherwise (charging-aware).
     /// </summary>
-    public string BatteryIcon => BatteryLevel < 0
-        ? "BatteryWarning"
-        : IsCharging
-            ? "Battery10"
-            : BatteryLevel switch
-            {
-                <= 0 => "Battery0",
-                <= 20 => "Battery1",
-                <= 40 => "Battery3",
-                <= 60 => "Battery5",
-                <= 80 => "Battery7",
-                _ => "Battery10",
-            };
+    public Symbol BatteryIcon => IconFactory.GetBatteryIcon(BatteryLevel, IsCharging);
 
-    partial void OnIsWifiConnectedChanged(bool value)
+    partial void OnNetworkStatusChanged(NetworkStatus value)
     {
-        OnPropertyChanged(nameof(WifiIcon));
-        Logger.Debug<HeaderViewModel>($"Wifi connected: {value}");
+        OnPropertyChanged(nameof(NetworkIcon));
+        Logger.Debug<HeaderViewModel>($"Network status: {value}");
     }
 
     partial void OnBatteryLevelChanged(int value) => OnPropertyChanged(nameof(BatteryIcon));
@@ -87,7 +77,7 @@ public partial class HeaderViewModel : ViewModelBase
     partial void OnControllerConnectedChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
 
     private readonly DispatcherTimer _clockTimer;
-    private readonly DispatcherTimer _wifiTimer;
+    private readonly DispatcherTimer _networkTimer;
 
     public HeaderViewModel()
     {
@@ -98,13 +88,13 @@ public partial class HeaderViewModel : ViewModelBase
         _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString(FormatConstants.ClockFormat);
         _clockTimer.Start();
 
-        _wifiTimer = new DispatcherTimer
+        _networkTimer = new DispatcherTimer
         {
             Interval = TimingConstants.WifiPollInterval,
         };
-        _wifiTimer.Tick += (_, _) => CheckWifi();
-        _wifiTimer.Start();
-        CheckWifi();
+        _networkTimer.Tick += (_, _) => CheckNetwork();
+        _networkTimer.Start();
+        CheckNetwork();
     }
 
     /// <summary>
@@ -132,22 +122,39 @@ public partial class HeaderViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Re-checks the Wi-Fi connection state from the network interfaces.
+    /// Re-checks the network connection state from the network interfaces:
+    /// wireless-up wins, then ethernet-up, otherwise disconnected.
     /// Keeps the last state on failure so the icon doesn't flicker.
     /// </summary>
-    private void CheckWifi()
+    private void CheckNetwork()
     {
         try
         {
-            IsWifiConnected = NetworkInterface.GetAllNetworkInterfaces()
-                .Any(i => i is
+            foreach (NetworkInterface networkInterface in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (networkInterface.OperationalStatus != OperationalStatus.Up)
                 {
-                    NetworkInterfaceType: NetworkInterfaceType.Wireless80211, OperationalStatus: OperationalStatus.Up
-                });
+                    continue;
+                }
+
+                if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                {
+                    NetworkStatus = NetworkStatus.Wifi;
+                    return;
+                }
+
+                if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                {
+                    NetworkStatus = NetworkStatus.Ethernet;
+                    return;
+                }
+            }
+
+            NetworkStatus = NetworkStatus.Disconnected;
         }
         catch (Exception ex)
         {
-            Logger.Error<HeaderViewModel>("Failed to query wifi connection state");
+            Logger.Error<HeaderViewModel>("Failed to query network connection state");
             Logger.LogExceptionDetails<HeaderViewModel>(ex);
         }
     }

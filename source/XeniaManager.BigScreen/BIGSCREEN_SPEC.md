@@ -120,14 +120,17 @@ source/XeniaManager.BigScreen/
 │   ├── InputHint.axaml(.cs)         # Keycap + label hint
 │   ├── ColorPickerField.cs          # Swatch + hex + palette popup
 │   ├── PalettePicker.cs             # Swatch row
+│   ├── GamepadCard.axaml(.cs)       # Settings controller row: name, status text, battery icon + % (accent on hover/select)
 │   ├── SplashScreenView.axaml(.cs)  # FA built-in splash visuals: logo, live status, tweened bar, radial background from saved primary/accent; forces the splash window fullscreen
 │   └── AppSplashScreen.cs           # IFAApplicationSplashScreen: hosts the splash view + runs the boot pipeline (RunTasks) on the UI thread
+├── Converters/
+│   └── ColorJsonConverter.cs        # ARGB hex JSON converter for Color values
 ├── Factories/
-│   └── BackgroundBrushFactory.cs    # Static brush builders: linear/radial/solid from a colour + vignette; single home for Mix math and stop offsets
+│   ├── BackgroundBrushFactory.cs    # Static brush builders: linear/radial/solid from a colour + vignette; single home for Mix math and stop offsets
+│   └── IconFactory.cs               # Status-to-icon mapping: tiered battery (Battery0-10 / BatteryCharge0-10 / BatteryWarning) + network (WiFi / PlugConnected / WiFiOff)
 ├── Services/
 │   ├── BaseAppLocator.cs            # Resolves the base Xenia Manager folder (--base-dir / side-by-side / sibling)
 │   ├── BackgroundService.cs         # Settings load/save, brushes via BackgroundBrushFactory, ApplyResources (IBackgroundService)
-│   ├── ColorJsonConverter.cs
 │   ├── DashboardNavigationController.cs # Row state machine, selection movement, option activation (view focus/scroll via events)
 │   ├── GameLibraryService.cs        # Wraps Core GameManager: load, game list, recent-games selection (IGameLibraryService)
 │   ├── IBackgroundService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs
@@ -146,13 +149,14 @@ source/XeniaManager.BigScreen/
 │   ├── EnumCycleHelper.cs           # Generic enum + colour palette cycling
 │   └── ImageFormats.cs              # Shared screenshot extensions + file-picker patterns
 ├── Models/
-│   ├── DashboardSettings.cs         # Persisted user-facing options
+│   ├── DashboardSettings.cs         # Persisted user-facing options (incl. primary_controller_guid)
 │   ├── BackgroundMode.cs / BackgroundModeOption.cs
 │   ├── LibraryViewMode.cs / LibraryViewModeOption.cs
 │   ├── CardImageMode.cs / CardImageModeOption.cs
 │   ├── GameStatInfo.cs              # Achievement/gamerscore counters (unlocked / total)
 │   ├── LibrarySort.cs               # Alphabetical / TimePlayed / LastPlayed
 │   ├── MediaSort.cs                 # NewestFirst / OldestFirst / ByGame
+│   ├── NetworkStatus.cs             # Disconnected / Wifi / Ethernet (header network icon)
 │   └── OverlayScreen.cs             # GamepadButton moved to Core (Models/GamepadButton.cs)
 └── Resources/
     ├── BigScreenStyle.axaml        # Shared card/screen-title/hint-bar/empty-state styles
@@ -182,7 +186,7 @@ source/XeniaManager.BigScreen/
 - `AccountContent` + `GpdFile` — per-game achievement counts / gamerscore (`GpdFile.Achievements`, `GetTotalGamerscore()`).
 - `Launcher.LaunchGameASync(Game, Settings, ...)` — game launch (needs Core `Settings`).
 - `ProfileManager.LoadProfiles(XeniaVersion.Canary)` — profile/gamertag.
-- `GamepadInputService` / `IGamepadInputService` — SDL3 gamepad polling (moved from BigScreen; `GamepadButton` enum incl. `View`).
+- `GamepadInputService` / `IGamepadInputService` — SDL3 gamepad polling (moved from BigScreen; `GamepadButton` enum incl. `View`); multi-gamepad tracking via `GamepadDeviceCollection` (all pads open, per-pad battery/GUID, primary selection, `Rescan`/`ReloadMappings`), pure mapping in `GamepadButtonMapper` + `StickTracker`; input flows from the primary pad only.
 - `ReleaseDateFormatter.Format(...)` — ordinal release dates (+ unit tests).
 
 ---
@@ -310,7 +314,7 @@ source/XeniaManager.BigScreen/
 - [x] **T4.** SplashScreen rewrite — `MainWindow` becomes `FAAppWindow`; boot splash uses FluentAvalonia's built-in `AppWindow.SplashScreen` (`IFAApplicationSplashScreen` + `SplashScreenContent`, `RunTasks` hosts the boot pipeline) per shazzaam7/dotnet-templates pattern; delete `SplashWindow`; fixes the "line at top" splash bug. Splash window forced fullscreen from `SplashScreenView.OnAttachedToVisualTree`; gradient math extracted to `Factories/BackgroundBrushFactory.cs`
 
 ### 5.16 Controller input: primary controller + rescan (Core)
-- [ ] **T5.** `GamepadInputService` (Core): open **all** gamepads; expose `ConnectedGamepads` (name, battery, charging, isPrimary), `SetPrimary(id)`, `Rescan()`; `IsConnected/BatteryPercent/IsCharging` reflect the primary; `StateChanged` fires on connect/disconnect/rescan. Docs read: CONTRIBUTING.md + repo wiki (SDL database / gamecontrollerdb update pattern on the desktop Manage page)
+- [x] **T5.** `GamepadInputService` (Core): opens **all** gamepads; `ConnectedGamepads` snapshots (name, GUID, battery, charging, isPrimary); `SetPrimary` / `SetPrimaryByGuid` (GUID persisted as `primary_controller_guid` in `dashboard-settings.json`, restored at boot); `Rescan()`; `ReloadMappings()`; **input flows from the primary pad only**; refactored into `GamepadDeviceCollection` + `GamepadButtonMapper` + `StickTracker`
 
 ### 5.17 Profiles & identity
 - [ ] **T6.** Profile switching — `ProfileService` loads all Canary profiles; selected profile persisted (`profile_xuid` in `dashboard-settings.json`); header gamertag/gamerscore + per-game achievement stats follow the selection
@@ -328,8 +332,8 @@ source/XeniaManager.BigScreen/
 
 ### 5.19 Dashboard, header & settings
 - [ ] **T16.** Time format setting — 12h/24h (persisted in `DashboardSettings`); clock + capture dates follow it
-- [ ] **T17.** Controllers section (Settings) — detected gamepads, battery %, primary selection, **Rescan** button
-- [ ] **T18.** Settings controller navigation — rows focusable; Up/Down moves, A activates (ComboBox opens, checkbox toggles, button clicks, palette opens), Left/Right adjusts sliders; `InputRouter.HandleOverlay` extended
+- [x] **T17.** Controllers section (Settings): auto-detected list of `GamepadCard` rows with name, **Status: Primary/Secondary** (primary in accent) and tiered battery icon + % (via `IconFactory`); no UI buttons; SDL controller database updates silently in the background at boot; changing primary is **controller-only** (lands with T18)
+- [ ] **T18.** Settings controller navigation: D-pad moves between rows; **A activates (sets primary controller on a gamepad row, opens dropdowns/checkbox/colour fields on the other rows)**; `GamepadCard` already carries `Classes.selected` + accent border, `SetPrimary` is wired in the VM
 - [ ] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game dialog (T8/T10/T11)
 - [ ] **T20.** Boxart full width/height — in `CardImageMode.BoxArt` show full box art (no 13% top crop); Icon-mode fallback unchanged
 - [ ] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery **% text below** the battery icon

@@ -50,6 +50,9 @@
 
     <!-- Settings screen -->
     <sys:String x:Key="Settings.Title">Settings</sys:String>
+    <sys:String x:Key="Settings.Section.Preferences">Preferences</sys:String>
+    <sys:String x:Key="Settings.Section.Theme">Theme</sys:String>
+    <sys:String x:Key="Settings.Section.Controllers">Controllers</sys:String>
     <sys:String x:Key="Settings.BackgroundType">Background Type</sys:String>
     <sys:String x:Key="Settings.LibraryView">Library View</sys:String>
     <sys:String x:Key="Settings.LibraryView.Carousel">Carousel</sys:String>
@@ -71,6 +74,11 @@
     <sys:String x:Key="Settings.SelectImageDialogTitle">Select Background Image</sys:String>
     <sys:String x:Key="Settings.ReturnToXeniaOnQuit">Return to Xenia Manager on Quit</sys:String>
     <sys:String x:Key="Settings.ReturnToXeniaOnQuit.Description">On: Returns to Xenia Manager · Off: Closes Everything</sys:String>
+    <sys:String x:Key="Settings.Controllers.None">No controllers connected</sys:String>
+    <sys:String x:Key="Settings.Controllers.Primary">Primary</sys:String>
+    <sys:String x:Key="Settings.Controllers.Secondary">Secondary</sys:String>
+    <sys:String x:Key="Settings.Controllers.StatusLabel">Status:</sys:String>
+    <sys:String x:Key="Settings.Controllers.BatteryUnknown">Unknown</sys:String>
     <sys:String x:Key="Settings.Hint.Back">Back</sys:String>
 
     <!-- Splash screen -->

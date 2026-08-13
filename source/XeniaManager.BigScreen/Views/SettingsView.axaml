@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="XeniaManager.BigScreen.Views.SettingsView"
@@ -62,165 +63,37 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel Orientation="Vertical" Spacing="14">
 
-                <!-- BACKGROUND TYPE -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
-                    <DockPanel>
-                        <ComboBox x:Name="BackgroundModeCombo"
-                                  DockPanel.Dock="Right"
-                                  ItemsSource="{Binding BackgroundModeOptions}"
-                                  SelectedItem="{Binding SelectedBackgroundMode}"
-                                  DisplayMemberBinding="{Binding DisplayName}"
-                                  VerticalAlignment="Center"
-                                  Width="420"
-                                  FontSize="22"
-                                  Padding="12,8" />
-                        <TextBlock Text="{DynamicResource Settings.BackgroundType}"
-                                   VerticalAlignment="Center"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}" />
-                    </DockPanel>
-                </Border>
+                <!-- PREFERENCES -->
+                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Preferences}" />
 
                 <!-- LIBRARY VIEW -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
+                <Border Classes="settings-card">
                     <DockPanel>
                         <ComboBox x:Name="LibraryViewModeCombo"
+                                  Classes="settings-combo"
                                   DockPanel.Dock="Right"
                                   ItemsSource="{Binding LibraryViewModeOptions}"
                                   SelectedItem="{Binding SelectedLibraryViewMode}"
-                                  DisplayMemberBinding="{Binding DisplayName}"
-                                  VerticalAlignment="Center"
-                                  Width="420"
-                                  FontSize="22"
-                                  Padding="12,8" />
-                        <TextBlock Text="{DynamicResource Settings.LibraryView}"
-                                   VerticalAlignment="Center"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}" />
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.LibraryView}" />
                     </DockPanel>
                 </Border>
 
                 <!-- CARD IMAGE -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
+                <Border Classes="settings-card">
                     <DockPanel>
                         <ComboBox x:Name="CardImageModeCombo"
+                                  Classes="settings-combo"
                                   DockPanel.Dock="Right"
                                   ItemsSource="{Binding CardImageModeOptions}"
                                   SelectedItem="{Binding SelectedCardImageMode}"
-                                  DisplayMemberBinding="{Binding DisplayName}"
-                                  VerticalAlignment="Center"
-                                  Width="420"
-                                  FontSize="22"
-                                  Padding="12,8" />
-                        <TextBlock Text="{DynamicResource Settings.CardImage}"
-                                   VerticalAlignment="Center"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}" />
-                    </DockPanel>
-                </Border>
-
-                <!-- PRIMARY COLOUR -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
-                    <DockPanel>
-                        <controls:ColorPickerField x:Name="PrimaryColorField"
-                                                   DockPanel.Dock="Right"
-                                                   Color="{Binding PrimaryColor, Mode=TwoWay}"
-                                                   VerticalAlignment="Center" />
-                        <TextBlock Text="{DynamicResource Settings.PrimaryColour}"
-                                   VerticalAlignment="Center"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}" />
-                    </DockPanel>
-                </Border>
-
-                <!-- ACCENT COLOUR -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
-                    <DockPanel>
-                        <controls:ColorPickerField x:Name="AccentColorField"
-                                                   DockPanel.Dock="Right"
-                                                   Color="{Binding AccentColor, Mode=TwoWay}"
-                                                   VerticalAlignment="Center" />
-                        <TextBlock Text="{DynamicResource Settings.AccentColour}"
-                                   VerticalAlignment="Center"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}" />
-                    </DockPanel>
-                </Border>
-
-                <!-- VIGNETTE OPACITY -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Right"
-                                   Text="{Binding VignetteText}"
-                                   VerticalAlignment="Center"
-                                   Width="60"
-                                   FontSize="22"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   TextAlignment="Right" />
-                        <Slider DockPanel.Dock="Right"
-                                Minimum="0"
-                                Maximum="1"
-                                Value="{Binding VignetteOpacity, Mode=TwoWay}"
-                                Margin="0,0,16,0"
-                                VerticalAlignment="Center"
-                                Width="340" />
-                        <TextBlock Text="{DynamicResource Settings.Vignette}"
-                                   VerticalAlignment="Center"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}" />
-                    </DockPanel>
-                </Border>
-
-                <!-- BACKGROUND IMAGE -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
-                    <DockPanel>
-                        <Button x:Name="BtnSelectImage"
-                                DockPanel.Dock="Right"
-                                Content="{DynamicResource Settings.SelectImage}"
-                                Padding="20,10"
-                                VerticalAlignment="Center"
-                                FontSize="20"
-                                Click="OnSelectImageClick" />
-                        <TextBlock DockPanel.Dock="Right"
-                                   Text="{Binding ImageDisplayText}"
-                                   Margin="0,0,16,0"
-                                   VerticalAlignment="Center"
-                                   FontSize="22"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   TextTrimming="CharacterEllipsis" />
-                        <TextBlock Text="{DynamicResource Settings.BackgroundImage}"
-                                   VerticalAlignment="Center"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource TextPrimary}" />
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.CardImage}" />
                     </DockPanel>
                 </Border>
 
                 <!-- QUIT BEHAVIOUR -->
-                <Border CornerRadius="10"
-                        Padding="24,16"
-                        Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
+                <Border Classes="settings-card">
                     <DockPanel>
                         <CheckBox x:Name="ChkQuitBehaviour"
                                   DockPanel.Dock="Right"
@@ -231,14 +104,106 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Text="{DynamicResource Settings.ReturnToXeniaOnQuit}"
-                                       FontSize="24"
-                                       Foreground="{DynamicResource TextPrimary}" />
-                            <TextBlock Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}"
-                                       FontSize="18"
-                                       Foreground="{DynamicResource TextSecondary}" />
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ReturnToXeniaOnQuit}" />
+                            <TextBlock Classes="settings-subtitle" Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}" />
                         </StackPanel>
                     </DockPanel>
+                </Border>
+
+                <!-- THEME -->
+                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Theme}" />
+
+                <!-- BACKGROUND TYPE -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <ComboBox x:Name="BackgroundModeCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding BackgroundModeOptions}"
+                                  SelectedItem="{Binding SelectedBackgroundMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.BackgroundType}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- PRIMARY COLOUR -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <controls:ColorPickerField x:Name="PrimaryColorField"
+                                                   DockPanel.Dock="Right"
+                                                   Color="{Binding PrimaryColor, Mode=TwoWay}"
+                                                   VerticalAlignment="Center" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.PrimaryColour}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- ACCENT COLOUR -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <controls:ColorPickerField x:Name="AccentColorField"
+                                                   DockPanel.Dock="Right"
+                                                   Color="{Binding AccentColor, Mode=TwoWay}"
+                                                   VerticalAlignment="Center" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.AccentColour}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- VIGNETTE OPACITY -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <TextBlock Classes="settings-value"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding VignetteText}"
+                                   Width="60"
+                                   TextAlignment="Right" />
+                        <Slider DockPanel.Dock="Right"
+                                Minimum="0"
+                                Maximum="1"
+                                Value="{Binding VignetteOpacity, Mode=TwoWay}"
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center"
+                                Width="340" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.Vignette}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- BACKGROUND IMAGE -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <Button x:Name="BtnSelectImage"
+                                Classes="settings-button"
+                                DockPanel.Dock="Right"
+                                Content="{DynamicResource Settings.SelectImage}"
+                                Click="OnSelectImageClick" />
+                        <TextBlock Classes="settings-value"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding ImageDisplayText}"
+                                   Margin="0,0,16,0"
+                                   TextTrimming="CharacterEllipsis" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.BackgroundImage}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- CONTROLLERS -->
+                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Controllers}" />
+
+                <Border Classes="settings-card">
+                    <StackPanel Orientation="Vertical" Spacing="12">
+                        <Grid>
+                            <ItemsControl ItemsSource="{Binding Controllers}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="items:GamepadItemViewModel">
+                                        <controls:GamepadCard />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.Controllers.None}"
+                                       IsVisible="{Binding HasNoControllers}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,16,0,16" />
+                        </Grid>
+                    </StackPanel>
                 </Border>
 
             </StackPanel>

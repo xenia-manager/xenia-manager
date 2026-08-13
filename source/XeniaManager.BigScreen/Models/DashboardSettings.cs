@@ -57,4 +57,10 @@ public class DashboardSettings
     /// </summary>
     [JsonPropertyName("card_image_mode")]
     public CardImageMode CardImageMode { get; set; } = CardImageMode.Icon;
+
+    /// <summary>
+    /// Device GUID (hex) of the primary gamepad, restored at boot.
+    /// </summary>
+    [JsonPropertyName("primary_controller_guid")]
+    public string? PrimaryControllerGuid { get; set; }
 }
