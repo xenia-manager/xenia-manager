@@ -4,7 +4,7 @@ using XeniaManager.BigScreen.Factories;
 namespace XeniaManager.BigScreen.ViewModels;
 
 /// <summary>
-/// Base for the full-screen overlay screens (Library, Media, Settings).
+/// Base for the full-screen overlay screens (Library, Gallery, Settings).
 /// </summary>
 public abstract class ScreenViewModel : ViewModelBase
 {

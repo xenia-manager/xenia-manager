@@ -8,16 +8,16 @@ namespace XeniaManager.BigScreen.Views;
 /// Full-screen screenshot viewer: uniform-stretched image with caption and
 /// chevron navigation through the gallery.
 /// </summary>
-public partial class MediaViewerView : UserControl
+public partial class GalleryViewerView : UserControl
 {
-    public MediaViewerView()
+    public GalleryViewerView()
     {
         InitializeComponent();
     }
 
     private void OnPrevClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is MediaViewerViewModel vm)
+        if (DataContext is GalleryViewerViewModel vm)
         {
             vm.Step(-1);
         }
@@ -25,7 +25,7 @@ public partial class MediaViewerView : UserControl
 
     private void OnNextClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is MediaViewerViewModel vm)
+        if (DataContext is GalleryViewerViewModel vm)
         {
             vm.Step(1);
         }

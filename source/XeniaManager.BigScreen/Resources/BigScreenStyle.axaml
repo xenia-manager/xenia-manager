@@ -70,7 +70,7 @@
         </Setter>
     </Style>
 
-    <!-- Screen header title (Library / Media / Settings) -->
+    <!-- Screen header title (Library / Gallery / Settings) -->
     <Style Selector="TextBlock.screen-title">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
         <Setter Property="FontSize" Value="48" />
@@ -276,7 +276,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
-    <!-- SCREENSHOT CARD (media gallery) -->
+    <!-- SCREENSHOT CARD (gallery) -->
     <Style Selector="controls|ScreenshotCard">
         <Setter Property="Transitions">
             <Transitions>

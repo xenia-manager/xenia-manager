@@ -34,19 +34,19 @@
     <sys:String x:Key="Library.Details.Publisher">Publisher:</sys:String>
     <sys:String x:Key="Library.Details.Released">Released:</sys:String>
 
-    <!-- Media screen -->
-    <sys:String x:Key="Media.Title">Media</sys:String>
-    <sys:String x:Key="Media.NoScreenshotsFound">No screenshots found</sys:String>
-    <sys:String x:Key="Media.Sort.NewestFirst">Newest First</sys:String>
-    <sys:String x:Key="Media.Sort.OldestFirst">Oldest First</sys:String>
-    <sys:String x:Key="Media.Sort.ByGame">By Game</sys:String>
-    <sys:String x:Key="Media.UnknownGame">Unknown Game</sys:String>
-    <sys:String x:Key="Media.Hint.Sort">Sort</sys:String>
-    <sys:String x:Key="Media.Hint.Select">Select</sys:String>
-    <sys:String x:Key="Media.Hint.Back">Back</sys:String>
+    <!-- Gallery screen -->
+    <sys:String x:Key="Gallery.Title">Gallery</sys:String>
+    <sys:String x:Key="Gallery.NoScreenshotsFound">No screenshots found</sys:String>
+    <sys:String x:Key="Gallery.Sort.NewestFirst">Newest First</sys:String>
+    <sys:String x:Key="Gallery.Sort.OldestFirst">Oldest First</sys:String>
+    <sys:String x:Key="Gallery.Sort.ByGame">By Game</sys:String>
+    <sys:String x:Key="Gallery.UnknownGame">Unknown Game</sys:String>
+    <sys:String x:Key="Gallery.Hint.Sort">Sort</sys:String>
+    <sys:String x:Key="Gallery.Hint.Select">Select</sys:String>
+    <sys:String x:Key="Gallery.Hint.Back">Back</sys:String>
 
-    <!-- Media screenshot viewer -->
-    <sys:String x:Key="Media.Viewer.Close">Close</sys:String>
+    <!-- Gallery screenshot viewer -->
+    <sys:String x:Key="Gallery.Viewer.Close">Close</sys:String>
 
     <!-- Settings screen -->
     <sys:String x:Key="Settings.Title">Settings</sys:String>
@@ -93,7 +93,7 @@
     <sys:String x:Key="Splash.LoadingSettings">Loading Settings</sys:String>
     <sys:String x:Key="Splash.LoadingDashboard">Loading Dashboard</sys:String>
     <sys:String x:Key="Splash.LoadingLibrary">Loading Library</sys:String>
-    <sys:String x:Key="Splash.LoadingMedia">Loading Media</sys:String>
+    <sys:String x:Key="Splash.LoadingGallery">Loading Gallery</sys:String>
     <sys:String x:Key="Splash.LoadingDone">Loading Done</sys:String>
 
     <!-- Modal system (generic) -->

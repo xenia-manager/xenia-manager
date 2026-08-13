@@ -13,10 +13,10 @@ using XeniaManager.BigScreen.ViewModels.Items;
 namespace XeniaManager.BigScreen.Views;
 
 /// <summary>
-/// Full-screen media gallery: 4-across screenshot grid that scrolls downward,
+/// Full-screen gallery: 4-across screenshot grid that scrolls downward,
 /// with the screenshot viewer as a nested sub-screen.
 /// </summary>
-public partial class MediaView : UserControl
+public partial class GalleryView : UserControl
 {
     /// <summary>
     /// How many cards fit on one row.
@@ -36,7 +36,7 @@ public partial class MediaView : UserControl
     private double _cardWidth = MaxCardWidth;
     private double _cardHeight = MaxCardWidth * 9 / 16;
 
-    public MediaView()
+    public GalleryView()
     {
         InitializeComponent();
         Loaded += OnLoaded;
@@ -80,7 +80,7 @@ public partial class MediaView : UserControl
     /// </summary>
     public void ScrollToSelected()
     {
-        if (DataContext is not MediaViewModel vm || vm.Screenshots.Count == 0)
+        if (DataContext is not GalleryViewModel vm || vm.Screenshots.Count == 0)
         {
             return;
         }
@@ -112,7 +112,7 @@ public partial class MediaView : UserControl
     private void OnCardGotFocus(object? sender, FocusChangedEventArgs e)
     {
         if (e.Source is not Control { DataContext: ScreenshotItemViewModel card }
-            || DataContext is not MediaViewModel vm)
+            || DataContext is not GalleryViewModel vm)
         {
             return;
         }
@@ -135,7 +135,7 @@ public partial class MediaView : UserControl
         if (control.GetSelfAndVisualAncestors().OfType<ScreenshotCard>().FirstOrDefault()
             is { DataContext: ScreenshotItemViewModel screenshot })
         {
-            if (DataContext is MediaViewModel vm)
+            if (DataContext is GalleryViewModel vm)
             {
                 SelectionHelper.SelectOnly(vm.Screenshots, screenshot);
                 vm.OpenScreenshot(screenshot);
@@ -145,7 +145,7 @@ public partial class MediaView : UserControl
 
     private void OnLoaded(object? sender, EventArgs e)
     {
-        if (DataContext is not MediaViewModel vm)
+        if (DataContext is not GalleryViewModel vm)
         {
             return;
         }

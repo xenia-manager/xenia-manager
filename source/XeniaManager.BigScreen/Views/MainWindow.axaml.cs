@@ -60,7 +60,7 @@ public partial class MainWindow : FAAppWindow
         _navigation.OptionFocusRequested += OnOptionFocusRequested;
         _navigation.GameFocusRequested += OnGameFocusRequested;
         _navigation.ScrollLibraryRequested += OnScrollLibraryRequested;
-        _navigation.ScrollMediaRequested += OnScrollMediaRequested;
+        _navigation.ScrollGalleryRequested += OnScrollGalleryRequested;
         _navigation.OverlayFocusRequested += OnOverlayFocusRequested;
         _navigation.ProfileFocusRequested += OnProfileFocusRequested;
 
@@ -263,12 +263,12 @@ public partial class MainWindow : FAAppWindow
     }
 
     /// <summary>
-    /// Scrolls the media grid to its selected card (posted so a just-opened
+    /// Scrolls the Gallery grid to its selected card (posted so a just-opened
     /// overlay has been laid out before centering).
     /// </summary>
-    private void OnScrollMediaRequested()
+    private void OnScrollGalleryRequested()
     {
-        Dispatcher.UIThread.Post(() => Find<MediaView>()?.ScrollToSelected());
+        Dispatcher.UIThread.Post(() => Find<GalleryView>()?.ScrollToSelected());
     }
 
     /// <summary>

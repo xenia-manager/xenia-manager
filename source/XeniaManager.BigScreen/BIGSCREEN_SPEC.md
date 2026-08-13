@@ -22,16 +22,16 @@
 ### Dashboard shell (`Views/MainWindow.axaml`)
 - **Header:** avatar icon (PersonCircle), gamertag from the **Canary profile** (`ProfileManager.LoadProfiles(XeniaVersion.Canary)` + profile GPD), gamerscore as an `IconStat` (Star), **live** wifi + controller battery icons (10s/5s polls), live clock (1s `DispatcherTimer`).
 - **Game card row:** **max 6 recent games** (`RecentGames`, its own VM instances — independent selection from the library). Each `GameCard` shows its **box art or disc icon** per the `card_image_mode` setting (default Icon; Box Art mode falls back to the icon when art is missing; zoom-to-fill, bottom-anchored, rounded clip); the selected card grows (200→250) and shows the title bar. A transparent `BorderOverlay` larger than the card carries **all** border strokes (inactive `CardBorder`, hover/selected accent) so nothing sits on top of the art edges.
-- **Option card row:** `Library` · `Media` · `Settings` · `Quit`. Hover shows the accent border; selection is driven by `IsSelected` (controller focus), not by keyboard focus.
+- **Option card row:** `Library` · `Gallery` · `Settings` · `Quit`. Hover shows the accent border; selection is driven by `IsSelected` (controller focus), not by keyboard focus.
 - **Fullscreen:** plain `Window` (no title bar) with `WindowState=FullScreen` **forced in code** at construction and before `Show()` — the XAML attribute is not reliable on the DI creation path; 1920×1080 fallback, centered column layout so header aligns with content rows.
 
 ### Overlay screens
 Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape** closes, focus returns to the option row. Bottom hint bars use the `InputHint` control (coloured circle keycap + label).
 - **Library** — all games in a horizontal **carousel** (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD) or a vertical **list** with a details pane (`LibraryListItem` + `GameDetailsPanel`). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle; in list mode Up/Down iterates. **X** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). **View/V** swaps the layout (Carousel ↔ List, persisted via `library_view_mode`); the details pane shows marketplace DB info (bio, genre, developer, publisher, release date — loading/no-info states, stale-fetch guard + negative cache). Disc stub shown when the library is empty.
-- **Media** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, capture date from file write time). Click/Enter → full-screen **modal viewer** (opaque backdrop, uniform-stretched image, faded chevrons that hide at the ends, B/Escape closes; caption shows game title + parsed capture date). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
+- **Gallery** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, capture date from file write time). Click/Enter → full-screen **modal viewer** (opaque backdrop, uniform-stretched image, faded chevrons that hide at the ends, B/Escape closes; caption shows game title + parsed capture date). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
 - **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker.
 - **Quit** — closes the app.
-- **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (X blue) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Media = Back → Select (A) → Sort (X blue); Viewer/Settings = Back/Close.
+- **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (X blue) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Gallery = Back → Select (A) → Sort (X blue); Viewer/Settings = Back/Close.
 
 ### Base app data sharing (`Program.cs` + `Services/BaseAppLocator.cs`)
 - BigScreen **reads the base Xenia Manager's data folders** (library, games, artwork, profiles): `Program.Main` calls `AppPathResolver.SetBaseDirectory(...)` before anything resolves paths (Core change, base app unaffected).
@@ -49,7 +49,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **FluentAvalonia's built-in `AppWindow.SplashScreen`** (`IFAApplicationSplashScreen`): `MainWindow` is an `FAAppWindow` with `SplashScreen = new AppSplashScreen()`; FA shows the splash, runs `RunTasks` (the boot pipeline, dispatched onto the UI thread), then reveals the fullscreen dashboard. No separate splash window — the old standalone `SplashWindow` (and its top-line chrome bug) is gone.
 - The splash window FA creates is **forced fullscreen + borderless** from `SplashScreenView.OnAttachedToVisualTree` (it is centered by default).
 - Content: TV logo + "Xenia Big Screen" + live status text + tweened progress bar, over the **dashboard's radial background** built by `BackgroundBrushFactory.CreateRadial` from the saved `primary_color`; logo + bar use the saved `accent_color` so the splash matches the dashboard — no green→red flash.
-- **Boot pipeline** (`MainWindowViewModel.InitializeAsync`, cancellable, per-stage minimum 400ms dwell): Loading Profile → Loading Settings (settings JSON + background brush/image decode) → Loading Dashboard (library JSON + recent cards) → Loading Library (per-game GPD stats off-thread + cards, chunked progress) → Loading Media (screenshot scan in `Task.Run`) → Loading Done (1s hold). Total minimum ~3s (`MinimumShowTime` 2s + dwells).
+- **Boot pipeline** (`MainWindowViewModel.InitializeAsync`, cancellable, per-stage minimum 400ms dwell): Loading Profile → Loading Settings (settings JSON + background brush/image decode) → Loading Dashboard (library JSON + recent cards) → Loading Library (per-game GPD stats off-thread + cards, chunked progress) → Loading Gallery (screenshot scan in `Task.Run`) → Loading Done (1s hold). Total minimum ~3s (`MinimumShowTime` 2s + dwells).
 - Input (keyboard, gamepad, mouse activation) is **gated until `IsInitialized`** — no stray input can act during the splash.
 - Boot failures log and the window still reveals.
 
@@ -72,7 +72,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **`LibraryListItem`** — list-view row: disc icon + title, accent border on selection/hover.
 - **`GameDetailsPanel`** — list-view details pane: disc art, playtime/achievements/gamerscore, marketplace DB bio + metadata strip (genre, developer, publisher, released), loading bar / no-info states.
 - **`GameCard`** — dashboard game tile: box art or disc icon per `card_image_mode` (bottom-anchored, rounded clip) + title bar on selection, border overlay strokes; grows 200→250 on selection.
-- **`ScreenshotCard`** — media gallery tile: 16:9 screenshot with 6px rounded clip, title bar on selection, border overlay strokes.
+- **`ScreenshotCard`** — gallery tile: 16:9 screenshot with 6px rounded clip, title bar on selection, border overlay strokes.
 - **`OptionsCard`** — dashboard option tile.
 
 ### Settings persistence
@@ -83,7 +83,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **`ModalViewModelBase`/`ModalViewModelBase<TResult>`** — result delivery, `HandleInput(NavigationCommand)` (virtual; base closes on Back), `Dispose()` hook, own close `Task`.
 - **Modal layer** (MainWindow, sibling of the content grid) — full-window transparent black backdrop (`ModalBackdrop`, 30% `#4D000000`) + **`ModalHost`**, which renders the **whole stack bottom→top as layered entries** (later modals overlay earlier ones — a confirmation sits on top of the view beneath it); only the top entry is hit-testable; the layer hides when the stack is empty (stack-empty also closes any open overlay screen → dashboard).
 - **`ConfirmationModal`** (`Controls/`) — reusable prompt: header, message and **two controller-friendly option buttons** (Left/Right selects, A activates the selection, B cancels); resolves `bool?` — option 1 `true`, option 2 `false`, B `null` (callers decide what cancel means, e.g. "stay put"); fixed 640×300 card centered on its **own 30% black backdrop filling the content area**; card/buttons use the standard card surfaces (`CardBackground`, `CardBorderInner` borders, accent on selection). Reused by Manage Profiles delete / import-replace / export-saves / unsaved-changes prompts.
-- Router dispatch order: **modal stack (top modal) → screenshot viewer → overlay screens → dashboard**; modals swallow all input while open. The router is command-driven: key/gamepad → `NavigationCommand` → per-layer handlers (`HandleLibrary`/`HandleMedia`/`MoveUp`/`MoveDown`/…).
+- Router dispatch order: **modal stack (top modal) → screenshot viewer → overlay screens → dashboard**; modals swallow all input while open. The router is command-driven: key/gamepad → `NavigationCommand` → per-layer handlers (`HandleLibrary`/`HandleGallery`/`MoveUp`/`MoveDown`/…).
 
 ### Profiles & identity
 - **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first.
@@ -105,8 +105,8 @@ source/XeniaManager.BigScreen/
 │   ├── MainWindow.axaml(.cs)        # Shell (FAAppWindow, fullscreen forced in code, WindowDecorations=None): header, background/fade layers, dashboard + overlay screens, input routing, built-in splash
 │   ├── DashboardView.axaml(.cs)     # Recent games row + options row + empty stub
 │   ├── LibraryView.axaml(.cs)       # Library carousel + list, clamped scroll, details pane + empty stub
-│   ├── MediaView.axaml(.cs)         # Media gallery grid + nested viewer sub-screen
-│   ├── MediaViewerView.axaml(.cs)   # Full-screen screenshot viewer (chevrons, caption)
+│   ├── GalleryView.axaml(.cs)       # Gallery grid + nested viewer sub-screen
+│   ├── GalleryViewerView.axaml(.cs) # Full-screen screenshot viewer (chevrons, caption)
 │   ├── SettingsView.axaml(.cs)      # Settings screen (owns the background image picker)
 │   ├── ProfilePickerView.axaml(.cs) # Profile picker modal (A switches, Y = Manage, B closes)
 │   └── ManageProfilesView.axaml(.cs) # Manage Profiles modal (rows + anchored create stub + edit panel)
@@ -115,8 +115,8 @@ source/XeniaManager.BigScreen/
 │   ├── HeaderViewModel.cs           # Profile, clock, wifi + controller battery state (+ IsSelected for the avatar chip)
 │   ├── DashboardViewModel.cs        # RecentGames, Options, background brush + fade-through-black
 │   ├── LibraryViewModel.cs          # Games carousel + sort (ScreenViewModel base)
-│   ├── MediaViewModel.cs            # Screenshots + sort + viewer sub-screen (ScreenViewModel base)
-│   ├── MediaViewerViewModel.cs      # Current screenshot, caption, prev/next stepping
+│   ├── GalleryViewModel.cs          # Screenshots + sort + viewer sub-screen (ScreenViewModel base)
+│   ├── GalleryViewerViewModel.cs    # Current screenshot, caption, prev/next stepping
 │   ├── SettingsViewModel.cs         # Appearance options + persistence + quit toggle + library view + card image + Manage Profiles entry
 │   ├── ScreenViewModel.cs           # Base for overlay screens: ScreenBackground brush
 │   ├── ModalViewModelBase.cs(.Generic.cs) # Modal lifecycle: close TCS, HandleInput (Back closes by default), Dispose hook; generic result delivery
@@ -134,7 +134,7 @@ source/XeniaManager.BigScreen/
 ├── Controls/
 │   ├── GameCard.axaml(.cs)          # Dashboard game tile: box art + title bar on selection (grow 200→250)
 │   ├── OptionsCard.axaml(.cs)       # Dashboard option tile
-│   ├── ScreenshotCard.axaml(.cs)    # Media tile: 16:9 screenshot, 6px corners
+│   ├── ScreenshotCard.axaml(.cs)    # Gallery tile: 16:9 screenshot, 6px corners
 │   ├── LibraryCard.axaml(.cs)       # Carousel card: box art + title + stat rows (rounded art clip)
 │   ├── LibraryListItem.axaml(.cs)   # List row: disc icon + title (accent on select/hover)
 │   ├── GameDetailsPanel.axaml(.cs)  # Details pane: art, local stats, DB bio + metadata strip
@@ -187,7 +187,7 @@ source/XeniaManager.BigScreen/
 │   ├── CardImageMode.cs / CardImageModeOption.cs
 │   ├── GameStatInfo.cs              # Achievement/gamerscore counters (unlocked / total)
 │   ├── LibrarySort.cs               # Alphabetical / TimePlayed / LastPlayed
-│   ├── MediaSort.cs                 # NewestFirst / OldestFirst / ByGame
+│   ├── GallerySort.cs               # NewestFirst / OldestFirst / ByGame
 │   ├── NetworkStatus.cs             # Disconnected / Wifi / Ethernet (header network icon)
 │   └── OverlayScreen.cs             # GamepadButton moved to Core (Models/GamepadButton.cs)
 └── Resources/
@@ -197,14 +197,14 @@ source/XeniaManager.BigScreen/
     └── Art/                          # Sample wallpapers for testing
 ```
 
-**Navigation:** the shell hosts the dashboard as a `ContentControl` (`MainWindowViewModel.Dashboard`) and the three overlay screens as pre-instantiated `ContentControl`s whose content never changes (`MainWindowViewModel.Library` / `Media` / `Settings`, visibility flipped via `Is*Screen`). Views are created **once at startup** — opening a screen is a pure visibility flip (instant), and all boot-time work (profile, library, screenshot scan) happens behind the built-in splash. The viewer nests as a sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`, created per open). The window interacts with the overlay views via live visual-tree lookups (`Find<T>()`) for focus/scroll requests raised by `DashboardNavigationController`.
+**Navigation:** the shell hosts the dashboard as a `ContentControl` (`MainWindowViewModel.Dashboard`) and the three overlay screens as pre-instantiated `ContentControl`s whose content never changes (`MainWindowViewModel.Library` / `Gallery` / `Settings`, visibility flipped via `Is*Screen`). Views are created **once at startup** — opening a screen is a pure visibility flip (instant), and all boot-time work (profile, library, screenshot scan) happens behind the built-in splash. The viewer nests as a sub-screen (`GalleryViewModel.Viewer` → `GalleryViewerView`, created per open). The window interacts with the overlay views via live visual-tree lookups (`Find<T>()`) for focus/scroll requests raised by `DashboardNavigationController`.
 
 **Boot:** `Program.Main` → `App` builds DI → `desktop.MainWindow = MainWindow` (an `FAAppWindow`) → FluentAvalonia shows its built-in splash (`AppSplashScreen`) → `RunTasks` dispatches `MainWindowViewModel.InitializeAsync` (six staged loads, cancellable, per-stage dwell, progress via `IProgress`) onto the UI thread → splash closes on completion (3s minimum total) → fullscreen dashboard revealed, input un-gated (`IsInitialized`).
 
 **Data flow**
 - DI: `App.Services` (built by `ServiceConfigurator.ConfigureServices()`) → singleton services (`IBackgroundService`, `IProfileService`, `IGameLibraryService`, `IScreenshotLibraryService`, `IGamepadInputService`, `DashboardNavigationController`, `InputRouter`) + `MainWindowViewModel` + `MainWindow` (parameterless ctor resolving from `App.Services` — the XAML loader requires it).
 - Input: keyboard (`OnWindowKeyDown`) and gamepad (`IGamepadInputService.ButtonPressed`) → `InputRouter` (key/button → `Command` → per-screen handler) → `DashboardNavigationController` actions (move/select/activate) → selection `IsSelected` → styled visuals; the controller raises focus/scroll requests the window fulfills. All input is gated until the boot pipeline completes.
-- Navigation: `OptionsCardViewModel.TargetScreen` → `MainWindowViewModel.OpenScreen()` → `CurrentScreen` (a screen VM) → the matching overlay's `IsVisible` flips; null shows the dashboard. Media nests its own viewer sub-screen (`MediaViewModel.Viewer` → `MediaViewerView`).
+- Navigation: `OptionsCardViewModel.TargetScreen` → `MainWindowViewModel.OpenScreen()` → `CurrentScreen` (a screen VM) → the matching overlay's `IsVisible` flips; null shows the dashboard. Gallery nests its own viewer sub-screen (`GalleryViewModel.Viewer` → `GalleryViewerView`).
 - Selection: focus/click on a card → `IsSelected` → styled via `.selected` class / pseudo-class → visuals. **Dashboard (`DashboardViewModel.RecentGames`) and library (`LibraryViewModel.Games`) hold separate VM instances with independent selections.**
 - Settings: VM property → `IBackgroundService.Settings` → `Save()` + `ApplyResources()` → `Application.Resources` → `DynamicResource` bindings; `SettingsViewModel.AppearanceChanged` → dashboard rebuilds its background; `LibraryViewModeChanged` / `CardImageChanged` → live layout / card-image swaps.
 - Localization: XAML `{DynamicResource Key}` + C# `LocalizationHelper.GetText("Key")` → `Resources/Language/en.axaml`.
@@ -366,7 +366,7 @@ source/XeniaManager.BigScreen/
 - [x] **T16.** Time format setting — 12h/24h (persisted in `DashboardSettings`); clock + capture dates follow it
 - [x] **T17.** Controllers section (Settings): auto-detected list of `GamepadCard` rows with name, **Status: Primary/Secondary** (primary in accent) and tiered battery icon + % (via `IconFactory`); no UI buttons; SDL controller database updates silently in the background at boot; changing primary is **controller-only** (lands with T18)
 - [ ] **T18.** Settings controller navigation: D-pad moves between rows; **A activates (sets primary controller on a gamepad row, opens dropdowns/checkbox/colour fields on the other rows)**; `GamepadCard` already carries `Classes.selected` + accent border, `SetPrimary` is wired in the VM
-- [ ] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game dialog (T8/T10/T11)
+- [x] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game dialog (T8/T10/T11)
 - [ ] **T20.** Boxart full width/height — in `CardImageMode.BoxArt` show full box art (no 13% top crop); Icon-mode fallback unchanged
 - [ ] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery **% text below** the battery icon
 - [ ] **T22.** Background type default → **Dynamic** (`DashboardSettings.Mode` + settings default)
@@ -381,7 +381,7 @@ source/XeniaManager.BigScreen/
 - [ ] **T29.** BigScreen start by default — `--bigscreen` CLI arg (desktop `Program.cs` launches BigScreen and hides the main window) + Settings toggle "Start in Big Screen" (persisted)
 
 ### 5.21 Gallery sort expansion (full desktop parity)
-- [ ] **T30.** Expand `MediaSort` (Gallery, renamed from Media) with the desktop app's full `GameSortOption` list, sorted by each screenshot's owning game (resolved from the parent folder's game ID): **Title** (alphabetical), **Time Played**, **Compatibility**, **TitleId**, **MediaId**, **XeniaVersion**, **Last Played** — alongside the existing **Newest First / Oldest First / By Game**. X still cycles; indicator + selection-preserving resort keep working (`MediaViewModel.ApplyMediaSort`)
+- [ ] **T30.** Expand `GallerySort` (renamed from `MediaSort` in T19) with the desktop app's full `GameSortOption` list, sorted by each screenshot's owning game (resolved from the parent folder's game ID): **Title** (alphabetical), **Time Played**, **Compatibility**, **TitleId**, **MediaId**, **XeniaVersion**, **Last Played** — alongside the existing **Newest First / Oldest First / By Game**. X still cycles; indicator + selection-preserving resort keep working (`GalleryViewModel.ApplyGallerySort`)
 
 ### 5.22 Screen animations
 - [ ] **T31.** Screen animations — overlay screens, the game dialog + popups (T8–T15), the screenshot viewer and dashboard screen swaps must never open statically: very basic, very subtle motion only. Avalonia-native `Transitions`/`DoubleTransition` (opacity, translate, scale), ~150–250ms ease-in-out, one or two properties max; see §7 for full constraints + candidate approaches

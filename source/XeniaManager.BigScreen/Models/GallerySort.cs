@@ -1,9 +1,9 @@
 namespace XeniaManager.BigScreen.Models;
 
 /// <summary>
-/// Sort modes for the media gallery, cycled with Y.
+/// Sort modes for the screenshot gallery.
 /// </summary>
-public enum MediaSort
+public enum GallerySort
 {
     NewestFirst,
     OldestFirst,

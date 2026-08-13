@@ -6,12 +6,12 @@
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-             x:Class="XeniaManager.BigScreen.Views.MediaViewerView"
-             x:DataType="vm:MediaViewerViewModel">
+             x:Class="XeniaManager.BigScreen.Views.GalleryViewerView"
+             x:DataType="vm:GalleryViewerViewModel">
 
     <UserControl.Styles>
         <!-- Subtle faded chevron buttons for the modal viewer -->
-        <Style Selector="Button.media-chevron">
+        <Style Selector="Button.gallery-chevron">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Foreground" Value="#B3FFFFFF" />
@@ -24,10 +24,10 @@
                 </Transitions>
             </Setter>
         </Style>
-        <Style Selector="Button.media-chevron:pointerover">
+        <Style Selector="Button.gallery-chevron:pointerover">
             <Setter Property="Opacity" Value="1" />
         </Style>
-        <Style Selector="Button.media-chevron:pointerover /template/ ContentPresenter">
+        <Style Selector="Button.gallery-chevron:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#26FFFFFF" />
         </Style>
     </UserControl.Styles>
@@ -44,7 +44,7 @@
                 HorizontalAlignment="Left"
                 Margin="40,0"
                 VerticalAlignment="Center"
-                Classes="media-chevron"
+                Classes="gallery-chevron"
                 Click="OnPrevClick">
             <fluent:SymbolIcon Symbol="ChevronLeft" FontSize="48" />
         </Button>
@@ -54,7 +54,7 @@
                 HorizontalAlignment="Right"
                 Margin="40,0"
                 VerticalAlignment="Center"
-                Classes="media-chevron"
+                Classes="gallery-chevron"
                 Click="OnNextClick">
             <fluent:SymbolIcon Symbol="ChevronRight" FontSize="48" />
         </Button>
@@ -67,7 +67,7 @@
                         Orientation="Horizontal"
                         VerticalAlignment="Center">
                 <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource Media.Viewer.Close}" />
+                                    Text="{DynamicResource Gallery.Viewer.Close}" />
             </StackPanel>
             <StackPanel Grid.Column="1"
                         Orientation="Vertical"

@@ -14,7 +14,7 @@ namespace XeniaManager.BigScreen.Services;
 
 /// <summary>
 /// Scans the Canary screenshots folder (recursively, per-game subfolders) and
-/// builds the media gallery items, matching each screenshot to a library game.
+/// builds the gallery items, matching each screenshot to a library game.
 /// </summary>
 public class ScreenshotLibraryService : IScreenshotLibraryService
 {
@@ -30,7 +30,7 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
     {
         if (string.IsNullOrEmpty(gameId))
         {
-            return LocalizationHelper.GetText("Media.UnknownGame");
+            return LocalizationHelper.GetText("Gallery.UnknownGame");
         }
 
         return GameManager.Games

@@ -50,9 +50,9 @@ public class DashboardNavigationController
     public event Action? ScrollLibraryRequested;
 
     /// <summary>
-    /// Raised when the media grid should scroll to its selected card.
+    /// Raised when the gallery grid should scroll to its selected card.
     /// </summary>
-    public event Action? ScrollMediaRequested;
+    public event Action? ScrollGalleryRequested;
 
     /// <summary>
     /// Raised when an overlay just opened and focus should move into it.
@@ -192,16 +192,16 @@ public class DashboardNavigationController
     /// Moves the screenshot selection by the given step (1 per column, a full row
     /// for Up/Down), clamped at both ends of the grid - no wrap-around.
     /// </summary>
-    public void MoveScreenshotSelection(MediaViewModel media, int delta)
+    public void MoveScreenshotSelection(GalleryViewModel gallery, int delta)
     {
-        if (media.Screenshots.Count == 0)
+        if (gallery.Screenshots.Count == 0)
         {
             return;
         }
 
-        SelectionHelper.MoveSelection(media.Screenshots, delta);
-        ScrollMediaRequested?.Invoke();
-        Logger.Trace<DashboardNavigationController>($"Moved media selection by {delta}");
+        SelectionHelper.MoveSelection(gallery.Screenshots, delta);
+        ScrollGalleryRequested?.Invoke();
+        Logger.Trace<DashboardNavigationController>($"Moved gallery selection by {delta}");
     }
 
     /// <summary>
@@ -234,9 +234,9 @@ public class DashboardNavigationController
         {
             ScrollLibraryRequested?.Invoke();
         }
-        else if (option.TargetScreen == OverlayScreen.Media)
+        else if (option.TargetScreen == OverlayScreen.Gallery)
         {
-            ScrollMediaRequested?.Invoke();
+            ScrollGalleryRequested?.Invoke();
         }
     }
 
@@ -266,12 +266,12 @@ public class DashboardNavigationController
     /// <summary>
     /// Opens the modal viewer for the currently selected screenshot (Enter in the gallery).
     /// </summary>
-    public void OpenSelectedScreenshot(MediaViewModel media)
+    public void OpenSelectedScreenshot(GalleryViewModel gallery)
     {
-        ScreenshotItemViewModel? selected = media.Screenshots.FirstOrDefault(s => s.IsSelected);
+        ScreenshotItemViewModel? selected = gallery.Screenshots.FirstOrDefault(s => s.IsSelected);
         if (selected != null)
         {
-            media.OpenScreenshot(selected);
+            gallery.OpenScreenshot(selected);
         }
     }
 

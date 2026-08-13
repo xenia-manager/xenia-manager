@@ -7,8 +7,8 @@
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-             x:Class="XeniaManager.BigScreen.Views.MediaView"
-             x:DataType="vm:MediaViewModel"
+             x:Class="XeniaManager.BigScreen.Views.GalleryView"
+             x:DataType="vm:GalleryViewModel"
              Background="{Binding ScreenBackground}">
 
     <Grid>
@@ -18,11 +18,11 @@
             <!-- HEADER: title left, sort indicator top right -->
             <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,45">
                 <TextBlock Grid.Column="0"
-                           Text="{DynamicResource Media.Title}"
+                           Text="{DynamicResource Gallery.Title}"
                            Classes="screen-title" />
                 <controls:IconStat Grid.Column="1"
                                    Icon="ArrowSort"
-                                   Stat="{Binding MediaSortText}"
+                                   Stat="{Binding GallerySortText}"
                                    IconRotation="90"
                                    IconSize="26"
                                    Spacing="16"
@@ -66,7 +66,7 @@
                                 Spacing="16">
                         <fluent:SymbolIcon Symbol="Camera"
                                            FontSize="72" />
-                        <TextBlock Text="{DynamicResource Media.NoScreenshotsFound}"
+                        <TextBlock Text="{DynamicResource Gallery.NoScreenshotsFound}"
                                    FontSize="24" />
                     </StackPanel>
                 </Border>
@@ -75,11 +75,11 @@
             <!-- HINTS (gallery) -->
             <StackPanel Grid.Row="2" Classes="hint-bar">
                 <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource Media.Hint.Back}" />
+                                    Text="{DynamicResource Gallery.Hint.Back}" />
                 <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
-                                    Text="{DynamicResource Media.Hint.Select}" />
+                                    Text="{DynamicResource Gallery.Hint.Select}" />
                 <controls:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
-                                    Text="{DynamicResource Media.Hint.Sort}" />
+                                    Text="{DynamicResource Gallery.Hint.Sort}" />
             </StackPanel>
         </Grid>
 

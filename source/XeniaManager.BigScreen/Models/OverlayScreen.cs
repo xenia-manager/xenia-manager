@@ -16,9 +16,9 @@ public enum OverlayScreen
     Library,
 
     /// <summary>
-    /// The media/screenshots screen.
+    /// The screenshot gallery screen.
     /// </summary>
-    Media,
+    Gallery,
 
     /// <summary>
     /// The dashboard settings screen.

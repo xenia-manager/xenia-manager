@@ -15,56 +15,56 @@ using XeniaManager.Core.Utilities;
 namespace XeniaManager.BigScreen.ViewModels;
 
 /// <summary>
-/// Media screen state: the screenshot gallery, its sort mode, and the
+/// Gallery screen state: the screenshot gallery, its sort mode, and the
 /// full-screen viewer (nested sub-screen).
 /// </summary>
-public partial class MediaViewModel : ScreenViewModel
+public partial class GalleryViewModel : ScreenViewModel
 {
     private readonly SettingsViewModel _settings;
     private readonly IScreenshotLibraryService _screenshotLibraryService;
     private bool _screenshotsLoaded;
 
     /// <summary>
-    /// All screenshots in the media gallery.
+    /// All screenshots in the gallery.
     /// </summary>
     public ObservableCollection<ScreenshotItemViewModel> Screenshots { get; } = [];
 
     /// <summary>
-    /// Whether the media screen shows the "no screenshots" stub.
+    /// Whether the gallery screen shows the "no screenshots" stub.
     /// </summary>
     public bool ShowEmptyScreenshots => Screenshots.Count == 0;
 
     /// <summary>
-    /// The current media sort mode (cycled with Y).
+    /// The current gallery sort mode (cycled with X).
     /// </summary>
-    [ObservableProperty] private MediaSort _mediaSort = MediaSort.NewestFirst;
+    [ObservableProperty] private GallerySort _gallerySort = GallerySort.NewestFirst;
 
     /// <summary>
-    /// Display name of the current media sort mode.
+    /// Display name of the current gallery sort mode.
     /// </summary>
-    public string MediaSortText => MediaSort switch
+    public string GallerySortText => GallerySort switch
     {
-        MediaSort.OldestFirst => LocalizationHelper.GetText("Media.Sort.OldestFirst"),
-        MediaSort.ByGame => LocalizationHelper.GetText("Media.Sort.ByGame"),
-        _ => LocalizationHelper.GetText("Media.Sort.NewestFirst"),
+        GallerySort.OldestFirst => LocalizationHelper.GetText("Gallery.Sort.OldestFirst"),
+        GallerySort.ByGame => LocalizationHelper.GetText("Gallery.Sort.ByGame"),
+        _ => LocalizationHelper.GetText("Gallery.Sort.NewestFirst"),
     };
 
     /// <summary>
     /// The screenshot viewer sub-screen, or null when it is closed.
     /// </summary>
-    [ObservableProperty] private MediaViewerViewModel? _viewer;
+    [ObservableProperty] private GalleryViewerViewModel? _viewer;
 
     /// <summary>
     /// Whether the full-screen screenshot viewer is open.
     /// </summary>
     public bool IsViewerOpen => Viewer != null;
 
-    partial void OnViewerChanged(MediaViewerViewModel? value)
+    partial void OnViewerChanged(GalleryViewerViewModel? value)
     {
         OnPropertyChanged(nameof(IsViewerOpen));
     }
 
-    public MediaViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService)
+    public GalleryViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService)
         : base(settings)
     {
         _settings = settings;
@@ -85,38 +85,38 @@ public partial class MediaViewModel : ScreenViewModel
     /// Re-sorts the screenshot collection. The selection follows the list position,
     /// not the element, so the selected card stays in the same spot on screen.
     /// </summary>
-    private void ApplyMediaSort()
+    private void ApplyGallerySort()
     {
         if (Screenshots.Count == 0)
         {
             return;
         }
 
-        List<ScreenshotItemViewModel> sorted = MediaSort switch
+        List<ScreenshotItemViewModel> sorted = GallerySort switch
         {
-            MediaSort.OldestFirst => Screenshots.OrderBy(s => s.CapturedAt).ToList(),
-            MediaSort.ByGame => Screenshots.OrderBy(s => s.GameTitle).ThenByDescending(s => s.CapturedAt).ToList(),
+            GallerySort.OldestFirst => Screenshots.OrderBy(s => s.CapturedAt).ToList(),
+            GallerySort.ByGame => Screenshots.OrderBy(s => s.GameTitle).ThenByDescending(s => s.CapturedAt).ToList(),
             _ => Screenshots.OrderByDescending(s => s.CapturedAt).ToList(),
         };
 
         SelectionHelper.ResortPreservingSelection(Screenshots, sorted);
     }
 
-    partial void OnMediaSortChanged(MediaSort value)
+    partial void OnGallerySortChanged(GallerySort value)
     {
-        ApplyMediaSort();
-        OnPropertyChanged(nameof(MediaSortText));
-        Logger.Debug<MediaViewModel>($"Media sort changed to {value}");
+        ApplyGallerySort();
+        OnPropertyChanged(nameof(GallerySortText));
+        Logger.Debug<GalleryViewModel>($"Gallery sort changed to {value}");
     }
 
     /// <summary>
-    /// Cycles the media sort mode: Newest First → Oldest First → By Game.
+    /// Cycles the gallery sort mode: Newest First → Oldest First → By Game.
     /// </summary>
-    public void CycleMediaSort() => MediaSort = EnumCycleHelper.Next(MediaSort, 1);
+    public void CycleGallerySort() => GallerySort = EnumCycleHelper.Next(GallerySort, 1);
 
     /// <summary>
     /// Scans the Canary screenshots folder (on a background thread) and fills the
-    /// media gallery, applying the current sort. Part of the boot pipeline so the
+    /// gallery, applying the current sort. Part of the boot pipeline so the
     /// scan happens behind the splash screen.
     /// </summary>
     public async Task LoadScreenshotsAsync(
@@ -129,7 +129,7 @@ public partial class MediaViewModel : ScreenViewModel
         }
 
         _screenshotsLoaded = true;
-        progress?.Report(("Loading Media", 0.75));
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGallery"), 0.75));
         await Task.Run(() => _screenshotLibraryService.Load(), cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -141,8 +141,8 @@ public partial class MediaViewModel : ScreenViewModel
             Screenshots.Add(screenshot);
         }
 
-        ApplyMediaSort();
-        Logger.Info<MediaViewModel>($"Loaded {Screenshots.Count} screenshots");
+        ApplyGallerySort();
+        Logger.Info<GalleryViewModel>($"Loaded {Screenshots.Count} screenshots");
     }
 
     /// <summary>
@@ -150,12 +150,12 @@ public partial class MediaViewModel : ScreenViewModel
     /// </summary>
     public void OpenScreenshot(ScreenshotItemViewModel screenshot)
     {
-        Viewer = new MediaViewerViewModel(screenshot, Screenshots);
-        Logger.Debug<MediaViewModel>($"Opening screenshot viewer for '{screenshot.Title}'");
+        Viewer = new GalleryViewerViewModel(screenshot, Screenshots);
+        Logger.Debug<GalleryViewModel>($"Opening screenshot viewer for '{screenshot.Title}'");
     }
 
     /// <summary>
     /// Closes the modal screenshot viewer.
     /// </summary>
-    public void CloseMediaViewer() => Viewer = null;
+    public void CloseGalleryViewer() => Viewer = null;
 }

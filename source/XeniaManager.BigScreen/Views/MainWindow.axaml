@@ -95,8 +95,8 @@
                 <Grid IsVisible="{Binding IsLibraryScreen}">
                     <views:LibraryView DataContext="{Binding Library}" />
                 </Grid>
-                <Grid IsVisible="{Binding IsMediaScreen}">
-                    <views:MediaView DataContext="{Binding Media}" />
+                <Grid IsVisible="{Binding IsGalleryScreen}">
+                    <views:GalleryView DataContext="{Binding Gallery}" />
                 </Grid>
                 <Grid IsVisible="{Binding IsSettingsScreen}">
                     <views:SettingsView DataContext="{Binding Settings}" />

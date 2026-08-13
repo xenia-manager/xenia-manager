@@ -79,7 +79,7 @@ public partial class DashboardViewModel : ViewModelBase
     public ObservableCollection<OptionsCardViewModel> Options { get; } =
     [
         new("Library", "Games", OverlayScreen.Library),
-        new("Media", "Library", OverlayScreen.Media),
+        new("Gallery", "Library", OverlayScreen.Gallery),
         new("Settings", "Settings", OverlayScreen.Settings),
         new("Quit", "Power", OverlayScreen.None),
     ];

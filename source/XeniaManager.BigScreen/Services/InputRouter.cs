@@ -100,13 +100,13 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         switch (command)
         {
             case NavigationCommand.MoveLeft:
-                vm.Media.Viewer!.Step(-1);
+                vm.Gallery.Viewer!.Step(-1);
                 break;
             case NavigationCommand.MoveRight:
-                vm.Media.Viewer!.Step(1);
+                vm.Gallery.Viewer!.Step(1);
                 break;
             case NavigationCommand.Back:
-                vm.Media.CloseMediaViewer();
+                vm.Gallery.CloseGalleryViewer();
                 break;
         }
     }
@@ -121,9 +121,9 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         {
             HandleLibrary(vm, command);
         }
-        else if (vm.IsMediaScreen)
+        else if (vm.IsGalleryScreen)
         {
-            HandleMedia(vm, command);
+            HandleGallery(vm, command);
         }
         else if (vm.IsSettingsScreen && command == NavigationCommand.Back)
         {
@@ -163,30 +163,30 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// Commands while the media screen is open.
+    /// Commands while the Gallery screen is open.
     /// </summary>
-    private void HandleMedia(MainWindowViewModel vm, NavigationCommand command)
+    private void HandleGallery(MainWindowViewModel vm, NavigationCommand command)
     {
         switch (command)
         {
             case NavigationCommand.MoveLeft:
-                navigation.MoveScreenshotSelection(vm.Media, -1);
+                navigation.MoveScreenshotSelection(vm.Gallery, -1);
                 break;
             case NavigationCommand.MoveRight:
-                navigation.MoveScreenshotSelection(vm.Media, 1);
+                navigation.MoveScreenshotSelection(vm.Gallery, 1);
                 break;
             case NavigationCommand.MoveUp:
-                navigation.MoveScreenshotSelection(vm.Media, -MediaView.CardsPerRow);
+                navigation.MoveScreenshotSelection(vm.Gallery, -GalleryView.CardsPerRow);
                 break;
             case NavigationCommand.MoveDown:
-                navigation.MoveScreenshotSelection(vm.Media, MediaView.CardsPerRow);
+                navigation.MoveScreenshotSelection(vm.Gallery, GalleryView.CardsPerRow);
                 break;
             case NavigationCommand.CycleSort:
                 // Sort keeps the selection on the same card, but the viewport stays put
-                vm.Media.CycleMediaSort();
+                vm.Gallery.CycleGallerySort();
                 break;
             case NavigationCommand.Activate:
-                navigation.OpenSelectedScreenshot(vm.Media);
+                navigation.OpenSelectedScreenshot(vm.Gallery);
                 break;
             case NavigationCommand.Back:
                 CloseOverlay(vm);
@@ -230,7 +230,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         {
             modal.HandleInput(command);
         }
-        else if (vm is { IsMediaScreen: true, IsMediaViewerOpen: true })
+        else if (vm is { IsGalleryScreen: true, IsGalleryViewerOpen: true })
         {
             HandleViewer(vm, command);
         }

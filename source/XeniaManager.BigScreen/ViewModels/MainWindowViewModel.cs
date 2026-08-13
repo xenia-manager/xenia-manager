@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -51,9 +51,9 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsLibraryScreen => CurrentScreen == Library;
 
     /// <summary>
-    /// Whether the media overlay is open.
+    /// Whether the Gallery overlay is open.
     /// </summary>
-    public bool IsMediaScreen => CurrentScreen == Media;
+    public bool IsGalleryScreen => CurrentScreen == Gallery;
 
     /// <summary>
     /// Whether the settings overlay is open.
@@ -61,9 +61,9 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsSettingsScreen => CurrentScreen == Settings;
 
     /// <summary>
-    /// Whether the media screenshot viewer is open.
+    /// Whether the Gallery screenshot viewer is open.
     /// </summary>
-    public bool IsMediaViewerOpen => CurrentScreen is MediaViewModel { IsViewerOpen: true };
+    public bool IsGalleryViewerOpen => CurrentScreen is GalleryViewModel { IsViewerOpen: true };
 
     /// <summary>
     /// Whether any modal is on the modal stack (drives the full-window modal layer).
@@ -113,15 +113,15 @@ public partial class MainWindowViewModel : ViewModelBase
     public LibraryViewModel Library { get; }
 
     /// <summary>
-    /// Media screen state (screenshot gallery, sort and viewer).
+    /// Gallery screen state (screenshot gallery, sort and viewer).
     /// </summary>
-    public MediaViewModel Media { get; }
+    public GalleryViewModel Gallery { get; }
 
     partial void OnCurrentScreenChanged(ViewModelBase? value)
     {
         OnPropertyChanged(nameof(IsOverlayOpen));
         OnPropertyChanged(nameof(IsLibraryScreen));
-        OnPropertyChanged(nameof(IsMediaScreen));
+        OnPropertyChanged(nameof(IsGalleryScreen));
         OnPropertyChanged(nameof(IsSettingsScreen));
 
         // Start the library on the first game (keeps the previous selection on re-open)
@@ -151,7 +151,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Header = new HeaderViewModel();
         Settings = new SettingsViewModel(backgroundService, gamepadService);
         Library = new LibraryViewModel(Settings);
-        Media = new MediaViewModel(Settings, screenshotLibraryService);
+        Gallery = new GalleryViewModel(Settings, screenshotLibraryService);
         Dashboard = new DashboardViewModel(backgroundService);
         Settings.AppearanceChanged += () => Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt);
         Settings.CardImageChanged += () =>
@@ -216,7 +216,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     /// <summary>
     /// Runs the boot pipeline behind the splash screen: profile, settings,
-    /// dashboard, library and media loading with live status/progress,
+    /// dashboard, library and Gallery loading with live status/progress,
     /// cancellable between steps.
     /// </summary>
     public async Task InitializeAsync(
@@ -278,7 +278,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         await Task.Delay(TimingConstants.StageDwell, cancellationToken);
-        await Media.LoadScreenshotsAsync(progress, cancellationToken);
+        await Gallery.LoadScreenshotsAsync(progress, cancellationToken);
         await Task.Delay(TimingConstants.StageDwell, cancellationToken);
 
         // Pre-warm the first library game's background art so the first library
@@ -308,7 +308,7 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentScreen = screen switch
         {
             OverlayScreen.Library => Library,
-            OverlayScreen.Media => Media,
+            OverlayScreen.Gallery => Gallery,
             OverlayScreen.Settings => Settings,
             _ => null,
         };
@@ -468,7 +468,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
 
-        // Swap behind closed overlays; the library/media screens cover the
+        // Swap behind closed overlays; the library/Gallery screens cover the
         // dashboard, so the fade only matters when the dashboard is visible
         if (e.PropertyName is nameof(GameCardViewModel.IsSelected) or nameof(GameCardViewModel.BackgroundArt))
         {

@@ -13,7 +13,7 @@ namespace XeniaManager.BigScreen.Controls;
 
 /// <summary>
 /// FluentAvalonia's built-in splash screen: hosts the splash visuals and
-/// runs the boot pipeline (profile, settings, library, media) with live
+/// runs the boot pipeline (profile, settings, library, gallery) with live
 /// status/progress while the main window is still hidden.
 /// </summary>
 internal class AppSplashScreen : IFAApplicationSplashScreen

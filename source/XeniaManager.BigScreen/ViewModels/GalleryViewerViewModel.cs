@@ -8,9 +8,9 @@ namespace XeniaManager.BigScreen.ViewModels;
 
 /// <summary>
 /// Full-screen screenshot viewer state: the current screenshot, its caption,
-/// and navigation through the media gallery.
+/// and navigation through the gallery.
 /// </summary>
-public partial class MediaViewerViewModel(
+public partial class GalleryViewerViewModel(
     ScreenshotItemViewModel screenshot,
     IList<ScreenshotItemViewModel> screenshots)
     : ViewModelBase

@@ -8,7 +8,7 @@ using XeniaManager.BigScreen.Utilities;
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
 /// <summary>
-/// ViewModel for a single screenshot tile in the media gallery.
+/// ViewModel for a single screenshot tile in the gallery.
 /// </summary>
 public partial class ScreenshotItemViewModel(
     string path,
