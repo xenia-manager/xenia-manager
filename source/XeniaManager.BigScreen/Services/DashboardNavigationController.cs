@@ -23,6 +23,12 @@ public class DashboardNavigationController
     public bool IsOnOptionsRow { get; set; }
 
     /// <summary>
+    /// Whether the dashboard's active row is the header profile row. It holds a
+    /// single element (the avatar chip), so movement is only vertical.
+    /// </summary>
+    public bool IsOnProfileRow { get; set; }
+
+    /// <summary>
     /// Whether the last option activation came from a mouse click, which skips
     /// focus restoration when the overlay closes.
     /// </summary>
@@ -54,6 +60,11 @@ public class DashboardNavigationController
     public event Action? OverlayFocusRequested;
 
     /// <summary>
+    /// Raised to request focus on the header profile button.
+    /// </summary>
+    public event Action? ProfileFocusRequested;
+
+    /// <summary>
     /// Column mapping from a game card index to the option card underneath it
     /// (game 1 → option 1, games 2-3 → option 2, games 4-5 → option 3, game 6 → option 4).
     /// </summary>
@@ -77,6 +88,7 @@ public class DashboardNavigationController
         }
 
         IsOnOptionsRow = true;
+        IsOnProfileRow = false;
 
         int gameIndex = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
         int mapped = GameToOptionColumn[Math.Clamp(gameIndex, 0, GameToOptionColumn.Length - 1)];
@@ -89,7 +101,8 @@ public class DashboardNavigationController
 
     /// <summary>
     /// Switches the dashboard to the game row, selecting the first game card of
-    /// the current option's column group (clamped to the game count). When the
+    /// the current option's column group (clamped to the game count). Coming from
+    /// the profile row, the single-element header maps to game card 1. When the
     /// library is empty there is no game row, so the option row stays active.
     /// </summary>
     public void SelectGameRow(DashboardViewModel dashboard)
@@ -98,19 +111,38 @@ public class DashboardNavigationController
         if (dashboard.RecentGames.Count == 0)
         {
             IsOnOptionsRow = true;
+            IsOnProfileRow = false;
             return;
         }
 
+        bool fromProfileRow = IsOnProfileRow;
         IsOnOptionsRow = false;
+        IsOnProfileRow = false;
 
         int optionIndex = SelectionHelper.IndexOfSelected(dashboard.Options);
-        int mapped = OptionToGameColumn[Math.Clamp(optionIndex, 0, OptionToGameColumn.Length - 1)];
+        int mapped = fromProfileRow
+            ? 0
+            : OptionToGameColumn[Math.Clamp(optionIndex, 0, OptionToGameColumn.Length - 1)];
         int target = Math.Clamp(mapped, 0, dashboard.RecentGames.Count - 1);
         SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
         SelectionHelper.ClearSelection(dashboard.Options);
 
         GameFocusRequested?.Invoke(dashboard.RecentGames[target]);
         Logger.Debug<DashboardNavigationController>("Switched to game row");
+    }
+
+    /// <summary>
+    /// Switches the dashboard to the header profile row (a single element).
+    /// The game row keeps its selection - a game card must always stay selected
+    /// on the dashboard, so only the header's own state flips.
+    /// </summary>
+    public void SelectProfileRow(DashboardViewModel dashboard)
+    {
+        IsOnProfileRow = true;
+        IsOnOptionsRow = false;
+
+        ProfileFocusRequested?.Invoke();
+        Logger.Debug<DashboardNavigationController>("Switched to profile row");
     }
 
     /// <summary>
@@ -244,6 +276,15 @@ public class DashboardNavigationController
     }
 
     /// <summary>
+    /// Activates the header profile row (A on the profile row): opens the profile picker.
+    /// </summary>
+    public void ActivateProfileRow(MainWindowViewModel vm)
+    {
+        Logger.Info<DashboardNavigationController>("Activating profile row");
+        vm.OpenProfilePicker();
+    }
+
+    /// <summary>
     /// Handles a mouse click on an option card. A mouse click must not leave the
     /// card focused/selected - only the controller (IsSelected via keyboard focus)
     /// or hover should show it.
@@ -283,6 +324,7 @@ public class DashboardNavigationController
     public void OnGameCardFocused(DashboardViewModel dashboard, GameCardViewModel game)
     {
         IsOnOptionsRow = false;
+        IsOnProfileRow = false;
         SelectionHelper.SelectOnly(dashboard.RecentGames, game);
     }
 
@@ -292,6 +334,7 @@ public class DashboardNavigationController
     public void OnOptionCardFocused(DashboardViewModel dashboard, OptionsCardViewModel option)
     {
         IsOnOptionsRow = true;
+        IsOnProfileRow = false;
         SelectionHelper.SelectOnly(dashboard.Options, option);
     }
 }

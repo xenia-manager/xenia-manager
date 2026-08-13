@@ -195,7 +195,7 @@
     <Style Selector="StackPanel.hint-bar">
         <Setter Property="Orientation" Value="Horizontal" />
         <Setter Property="Spacing" Value="36" />
-        <Setter Property="Margin" Value="-15,16,0,-15" />
+        <Setter Property="Margin" Value="-15,36,0,-15" />
     </Style>
 
     <!-- Empty-state stub: card surface, shadow and secondary text -->
@@ -320,6 +320,150 @@
     <Style Selector="controls|OptionsCard:pointerover Border#Tile, controls|OptionsCard.selected Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- PROFILE BUTTON (header avatar chip): reserved 2px border so focus doesn't change size -->
+    <Style Selector="controls|ProfileButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|ProfileButton Border#AvatarCircle">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
+    </Style>
+
+    <Style
+        Selector="controls|ProfileButton:pointerover Border#AvatarCircle, controls|ProfileButton:focus-visible Border#AvatarCircle, controls|ProfileButton.selected Border#AvatarCircle">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
+    </Style>
+
+    <!-- MODAL CARD: regular card background with the regular card border -->
+    <Style Selector="Border.modal-card">
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowPopup}" />
+        <Setter Property="Padding" Value="36" />
+    </Style>
+
+    <!-- MODAL SCREEN: the modal itself is a regular bordered card, inset from the screen edges -->
+    <Style Selector="Border.modal-screen">
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowPopup}" />
+        <Setter Property="Margin" Value="60" />
+    </Style>
+
+    <!-- Modal text -->
+    <Style Selector="TextBlock.modal-title">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style Selector="TextBlock.modal-message">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="LineHeight" Value="30" />
+    </Style>
+
+    <!-- CONFIRMATION OPTION BUTTONS: distinct dark surface, accent border on selection -->
+    <Style Selector="Button.option-button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="MinWidth" Value="170" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="RowBorder"
+                            Background="{DynamicResource CardBorder}"
+                            BorderBrush="{DynamicResource CardBorderInner}"
+                            BorderThickness="3"
+                            CornerRadius="10"
+                            BoxShadow="{DynamicResource CardShadowFlat}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          Padding="24,12" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        Selector="Button.option-button:pointerover /template/ Border#RowBorder, Button.option-button:focus-visible /template/ Border#RowBorder, Button.option-button.selected /template/ Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- PROFILE ROW (profile picker + manage profiles list) -->
+    <Style Selector="controls|ProfileRow">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,0,12" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|ProfileRow Border#RowBorder">
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
+    </Style>
+
+    <Style
+        Selector="controls|ProfileRow:pointerover Border#RowBorder, controls|ProfileRow:focus-visible Border#RowBorder, controls|ProfileRow.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- CREATE PROFILE STUB ROW (manage profiles) -->
+    <Style Selector="controls|CreateProfileRow">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,0,12" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|CreateProfileRow Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
+    </Style>
+
+    <Style
+        Selector="controls|CreateProfileRow:pointerover Border#RowBorder, controls|CreateProfileRow:focus-visible Border#RowBorder, controls|CreateProfileRow.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="controls|CreateProfileRow.selected TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
 </Styles>

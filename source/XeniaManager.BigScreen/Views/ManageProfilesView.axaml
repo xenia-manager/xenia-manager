@@ -1,0 +1,226 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:controls="using:XeniaManager.BigScreen.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.ManageProfilesView"
+             x:DataType="vm:ManageProfilesViewModel">
+
+    <UserControl.Styles>
+        <!-- Live toggle: rendered as a toggle switch (track + sliding thumb), no tick glyph -->
+        <Style Selector="CheckBox.live-toggle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Height="34" VerticalAlignment="Center" Width="66">
+                            <Border x:Name="Track"
+                                    CornerRadius="17"
+                                    Background="{DynamicResource CardBorder}"
+                                    BorderBrush="{DynamicResource TextSecondary}"
+                                    BorderThickness="2" />
+                            <Ellipse x:Name="Thumb"
+                                     Height="26"
+                                     HorizontalAlignment="Left"
+                                     Margin="4,0,0,0"
+                                     VerticalAlignment="Center"
+                                     Width="26"
+                                     Fill="#FFFFFFFF">
+                                <Ellipse.Transitions>
+                                    <Transitions>
+                                        <ThicknessTransition Property="Margin" Duration="0:0:0.15" />
+                                    </Transitions>
+                                </Ellipse.Transitions>
+                            </Ellipse>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="CheckBox.live-toggle:checked /template/ Border#Track">
+            <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        </Style>
+
+        <Style Selector="CheckBox.live-toggle:checked /template/ Ellipse#Thumb">
+            <Setter Property="Margin" Value="32,0,4,0" />
+        </Style>
+
+        <Style Selector="CheckBox.live-toggle:focus-visible /template/ Border#Track">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        </Style>
+
+        <!-- Edit-panel dropdowns (right-aligned, sized to content) -->
+        <Style Selector="ComboBox.edit-combo">
+            <Setter Property="MinWidth" Value="280" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- The modal: regular card background + card border over the transparent black backdrop -->
+    <Border Classes="modal-screen">
+        <Grid Margin="48" RowDefinitions="Auto, *, Auto">
+
+            <!-- HEADER: title + status line -->
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,10,0,30">
+                <TextBlock Grid.Column="0"
+                           Text="{DynamicResource ManageProfiles.Title}"
+                           Classes="screen-title" />
+                <TextBlock Grid.Column="1"
+                           Text="{Binding StatusText}"
+                           IsVisible="{Binding HasStatus}"
+                           Classes="settings-subtitle"
+                           VerticalAlignment="Center" />
+            </Grid>
+
+            <!-- BODY: profile list (left) + edit panel (right) -->
+            <Grid Grid.Row="1" ColumnDefinitions="*, *" ColumnSpacing="48">
+
+                <!-- LEFT: profile rows (scrollable) + create stub anchored below -->
+                <Grid Grid.Column="0" RowDefinitions="*, Auto">
+
+                    <!-- PROFILE ROWS (scrollable) -->
+                    <Grid Grid.Row="0">
+                        <ScrollViewer x:Name="SvList"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Hidden">
+                            <ItemsControl x:Name="RowsList" ItemsSource="{Binding Rows}" Margin="0,0,0,20" />
+                        </ScrollViewer>
+
+                        <!-- Empty-state stub -->
+                        <Border IsVisible="{Binding ShowEmpty}"
+                                Height="200"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Width="520"
+                                Classes="empty-state">
+                            <StackPanel Orientation="Vertical"
+                                        VerticalAlignment="Center"
+                                        Spacing="16">
+                                <fluent:SymbolIcon Symbol="PersonQuestionMark"
+                                                   FontSize="64" />
+                                <TextBlock Text="{DynamicResource ManageProfiles.NoProfilesFound}"
+                                           FontSize="22" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- CREATE NEW PROFILE (anchored row beneath the list) -->
+                    <controls:CreateProfileRow Grid.Row="1"
+                                               Margin="0"
+                                               DataContext="{Binding CreateStub}"
+                                               Click="OnCreateRowClick" />
+                </Grid>
+
+                <!-- RIGHT: edit panel (hidden while the create stub is selected) -->
+                <Border Grid.Column="1"
+                        Classes="settings-card"
+                        BorderBrush="{DynamicResource CardBorderInner}"
+                        BorderThickness="3"
+                        BoxShadow="{DynamicResource CardShadowFlat}"
+                        IsVisible="{Binding ShowEditPanel}"
+                        Padding="28,22">
+                    <StackPanel Orientation="Vertical" Spacing="24">
+
+                        <!-- GAMERTAG -->
+                        <StackPanel Orientation="Vertical" Spacing="8">
+                            <TextBlock Classes="settings-label" Text="{DynamicResource ManageProfiles.Edit.Gamertag}" />
+                            <TextBox x:Name="TxtGamertag"
+                                     Text="{Binding EditGamertag, Mode=TwoWay}"
+                                     FontSize="20"
+                                     Padding="12,10"
+                                     PlaceholderText="{DynamicResource ManageProfiles.Edit.Gamertag.Watermark}" />
+                            <TextBlock Text="{Binding GamertagErrorMessage}"
+                                       IsVisible="{Binding HasGamertagError}"
+                                       Foreground="{DynamicResource TextError}"
+                                       FontSize="16" />
+                        </StackPanel>
+
+                        <!-- COUNTRY -->
+                        <Grid ColumnDefinitions="Auto, *">
+                            <TextBlock Classes="settings-label"
+                                       Grid.Column="0"
+                                       Margin="0,0,28,0"
+                                       Text="{DynamicResource ManageProfiles.Edit.Country}" />
+                            <ComboBox Grid.Column="1"
+                                      Classes="edit-combo"
+                                      ItemsSource="{Binding Countries}"
+                                      SelectedIndex="{Binding SelectedCountryIndex, Mode=TwoWay}"
+                                      DisplayMemberBinding="{Binding DisplayName}" />
+                        </Grid>
+
+                        <!-- LANGUAGE -->
+                        <Grid ColumnDefinitions="Auto, *">
+                            <TextBlock Classes="settings-label"
+                                       Grid.Column="0"
+                                       Margin="0,0,28,0"
+                                       Text="{DynamicResource ManageProfiles.Edit.Language}" />
+                            <ComboBox Grid.Column="1"
+                                      Classes="edit-combo"
+                                      ItemsSource="{Binding Languages}"
+                                      SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"
+                                      DisplayMemberBinding="{Binding DisplayName}" />
+                        </Grid>
+
+                        <!-- XBOX LIVE ENABLED -->
+                        <Grid ColumnDefinitions="Auto, *">
+                            <TextBlock Classes="settings-label"
+                                       Grid.Column="0"
+                                       Margin="0,0,28,0"
+                                       Text="{DynamicResource ManageProfiles.Edit.LiveEnabled}"
+                                       VerticalAlignment="Center" />
+                            <CheckBox Grid.Column="1"
+                                      HorizontalAlignment="Right"
+                                      IsChecked="{Binding IsLiveEnabled, Mode=TwoWay}"
+                                      Padding="12,8"
+                                      VerticalAlignment="Center"
+                                      Classes="live-toggle" />
+                        </Grid>
+
+                        <!-- SUBSCRIPTION TIER -->
+                        <Grid ColumnDefinitions="Auto, *">
+                            <TextBlock Classes="settings-label"
+                                       Grid.Column="0"
+                                       Margin="0,0,28,0"
+                                       Text="{DynamicResource ManageProfiles.Edit.SubscriptionTier}"
+                                       VerticalAlignment="Center" />
+                            <ComboBox Grid.Column="1"
+                                      Classes="edit-combo"
+                                      ItemsSource="{Binding SubscriptionTiers}"
+                                      SelectedIndex="{Binding SelectedSubscriptionTierIndex, Mode=TwoWay}"
+                                      IsEnabled="{Binding IsLiveEnabled}"
+                                      DisplayMemberBinding="{Binding DisplayName}" />
+                        </Grid>
+
+                        <!-- SAVE -->
+                        <Button x:Name="BtnSave"
+                                Content="{DynamicResource ManageProfiles.Save.Button}"
+                                IsEnabled="{Binding CanSave}"
+                                HorizontalAlignment="Right"
+                                Margin="0,12,0,0"
+                                Classes="settings-button"
+                                Click="OnSaveClick" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- HINTS: B back · X delete · View import · Start export -->
+            <StackPanel Grid.Row="2" Classes="hint-bar">
+                <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                    Text="{DynamicResource ManageProfiles.Hint.Back}" />
+                <controls:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
+                                    Text="{DynamicResource ManageProfiles.Hint.Delete}" />
+                <controls:InputHint Icon="CaretLeft" KeyColour="{DynamicResource HintKeyBack}"
+                                    Text="{DynamicResource ManageProfiles.Hint.Import}" />
+                <controls:InputHint Icon="CaretRight" KeyColour="{DynamicResource HintKeyBack}"
+                                    Text="{DynamicResource ManageProfiles.Hint.Export}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

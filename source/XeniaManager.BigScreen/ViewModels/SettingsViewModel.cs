@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
@@ -51,6 +52,11 @@ public partial class SettingsViewModel : ViewModelBase
     /// Whether no gamepads are currently connected.
     /// </summary>
     public bool HasNoControllers => Controllers.Count == 0;
+
+    /// <summary>
+    /// Gamertag of the active profile, shown in the Profiles section.
+    /// </summary>
+    public string ActiveGamertag => App.Services.GetRequiredService<IProfileService>().Gamertag;
 
     /// <summary>
     /// Options shown in the settings background-type dropdown.
@@ -138,6 +144,10 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService = backgroundService;
         _gamepadService = gamepadService;
 
+        // Keep the settings "Active Profile" line in sync with profile switches
+        App.Services.GetRequiredService<IProfileService>().ProfileChanged +=
+            () => OnPropertyChanged(nameof(ActiveGamertag));
+
         if (_gamepadService.IsActive)
         {
             _gamepadService.StateChanged += OnGamepadStateChanged;
@@ -174,6 +184,24 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService.Settings.PrimaryControllerGuid = item.Source.Guid;
         _backgroundService.Save();
         Logger.Info<SettingsViewModel>($"Primary controller set to '{item.Name}' ({item.Source.Guid})");
+    }
+
+    /// <summary>
+    /// Opens the Manage Profiles overlay as a modal on top of the settings screen.
+    /// Skipped when a modal is already open (stray Enter on the still-focused
+    /// button would otherwise double-open the overlay).
+    /// </summary>
+    public void OpenManageProfiles()
+    {
+        IModalService modalService = App.Services.GetRequiredService<IModalService>();
+        if (modalService.IsOpen)
+        {
+            return;
+        }
+
+        Logger.Info<SettingsViewModel>("Opening manage profiles");
+        TaskUtilities.RunSafely<SettingsViewModel>(
+            () => modalService.ShowAsync(new ManageProfilesViewModel()), "Opening manage profiles");
     }
 
     /// <summary>

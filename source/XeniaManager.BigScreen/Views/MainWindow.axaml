@@ -19,107 +19,100 @@
                        WindowStartupLocation="CenterScreen"
                        Background="{Binding Dashboard.Background}">
 
-    <!-- Shared centered column so the header margins align with the content rows -->
-    <Grid RowDefinitions="150, *" ColumnDefinitions="*, Auto, *">
+    <Panel>
+        <!-- Shared centered column so the header margins align with the content rows -->
+        <Grid RowDefinitions="150, *" ColumnDefinitions="*, Auto, *">
 
-        <!-- Vignette overlay over the background (ignores input, images only) -->
-        <Border Grid.ColumnSpan="3" Grid.RowSpan="2"
-                IsVisible="{Binding Dashboard.VignetteVisible}"
-                IsHitTestVisible="False"
-                Background="{DynamicResource BackgroundVignette}" />
+            <!-- Vignette overlay over the background (ignores input, images only) -->
+            <Border Grid.ColumnSpan="3" Grid.RowSpan="2"
+                    IsVisible="{Binding Dashboard.VignetteVisible}"
+                    IsHitTestVisible="False"
+                    Background="{DynamicResource BackgroundVignette}" />
 
-        <!-- Black fade overlay for background transitions (ignores input) -->
-        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
-                Opacity="{Binding Dashboard.FadeOpacity}"
-                IsHitTestVisible="False"
-                Background="Black">
-            <Border.Transitions>
-                <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
-                </Transitions>
-            </Border.Transitions>
-        </Border>
+            <!-- Black fade overlay for background transitions (ignores input) -->
+            <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
+                    Opacity="{Binding Dashboard.FadeOpacity}"
+                    IsHitTestVisible="False"
+                    Background="Black">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
+                    </Transitions>
+                </Border.Transitions>
+            </Border>
 
-        <!-- TOP DASHBOARD HEADER -->
-        <Grid Grid.Row="0" Grid.Column="1"
-              ColumnDefinitions="Auto, *, Auto"
-              VerticalAlignment="Center">
+            <!-- TOP DASHBOARD HEADER -->
+            <Grid Grid.Row="0" Grid.Column="1"
+                  ColumnDefinitions="Auto, *, Auto"
+                  VerticalAlignment="Center">
 
-            <!-- PROFILE (LEFT) -->
-            <StackPanel Grid.Column="0"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        Spacing="12">
-                <Border CornerRadius="22" Height="44" Width="44" Background="{DynamicResource CardBackground}"
-                        BoxShadow="{DynamicResource CardShadow}">
-                    <fluent:SymbolIcon Symbol="PersonCircle"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Foreground="{DynamicResource TextPrimary}" />
-                </Border>
-                <StackPanel Margin="0,-4,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Header.Gamertag}"
+                <!-- PROFILE (LEFT): focusable chip - opens the profile picker -->
+                <controls:ProfileButton Grid.Column="0"
+                                        VerticalAlignment="Center" />
+
+                <!-- SYSTEM STATUS (RIGHT) -->
+                <StackPanel Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Spacing="16"
+                            VerticalAlignment="Center">
+                    <Grid Height="26" Width="26">
+                        <fluent:SymbolIcon Symbol="{Binding Header.NetworkIcon}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="24"
+                                           Foreground="{DynamicResource TextPrimary}" />
+                    </Grid>
+                    <Grid Height="26" Width="26">
+                        <fluent:SymbolIcon Symbol="{Binding Header.BatteryIcon}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="24"
+                                           Foreground="{DynamicResource TextPrimary}" />
+                    </Grid>
+                    <TextBlock Text="{Binding Header.Time}"
+                               MinWidth="70"
+                               VerticalAlignment="Center"
                                Classes="header-text"
                                FontSize="18"
-                               FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimary}" />
-                    <controls:IconStat Icon="Star" Stat="{Binding Header.Gamerscore}" IconSize="13" FontSize="13" />
+                               Foreground="{DynamicResource TextPrimary}"
+                               TextAlignment="Right" />
                 </StackPanel>
-            </StackPanel>
+            </Grid>
 
-            <!-- SYSTEM STATUS (RIGHT) -->
-            <StackPanel Grid.Column="2"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal"
-                        Spacing="16"
-                        VerticalAlignment="Center">
-                <Grid Height="26" Width="26">
-                    <fluent:SymbolIcon Symbol="{Binding Header.NetworkIcon}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Foreground="{DynamicResource TextPrimary}" />
+            <!-- MAIN DASHBOARD CONTENT -->
+            <ContentControl Grid.Row="1" Grid.Column="1"
+                            Content="{Binding Dashboard}"
+                            Margin="0,0,0,80" />
+
+            <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
+            <Panel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
+                   IsVisible="{Binding IsOverlayOpen}"
+                   IsHitTestVisible="{Binding IsOverlayOpen}">
+                <!-- Full-screen backdrop -->
+                <Border Background="{DynamicResource OverlayBackdrop}" />
+                <!-- Screens are created at startup; opening just flips visibility -->
+                <Grid IsVisible="{Binding IsLibraryScreen}">
+                    <views:LibraryView DataContext="{Binding Library}" />
                 </Grid>
-                <Grid Height="26" Width="26">
-                    <fluent:SymbolIcon Symbol="{Binding Header.BatteryIcon}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Foreground="{DynamicResource TextPrimary}" />
+                <Grid IsVisible="{Binding IsMediaScreen}">
+                    <views:MediaView DataContext="{Binding Media}" />
                 </Grid>
-                <TextBlock Text="{Binding Header.Time}"
-                           MinWidth="70"
-                           VerticalAlignment="Center"
-                           Classes="header-text"
-                           FontSize="18"
-                           Foreground="{DynamicResource TextPrimary}"
-                           TextAlignment="Right" />
-            </StackPanel>
+                <Grid IsVisible="{Binding IsSettingsScreen}">
+                    <views:SettingsView DataContext="{Binding Settings}" />
+                </Grid>
+            </Panel>
         </Grid>
 
-        <!-- MAIN DASHBOARD CONTENT -->
-        <ContentControl Grid.Row="1" Grid.Column="1"
-                        Content="{Binding Dashboard}"
-                        Margin="0,0,0,80" />
-
-        <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
-        <Panel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
-               IsVisible="{Binding IsOverlayOpen}"
-               IsHitTestVisible="{Binding IsOverlayOpen}">
-            <!-- Full-screen backdrop -->
-            <Border Background="{DynamicResource OverlayBackdrop}" />
-            <!-- Screens are created at startup; opening just flips visibility -->
-            <Grid IsVisible="{Binding IsLibraryScreen}">
-                <views:LibraryView DataContext="{Binding Library}" />
-            </Grid>
-            <Grid IsVisible="{Binding IsMediaScreen}">
-                <views:MediaView DataContext="{Binding Media}" />
-            </Grid>
-            <Grid IsVisible="{Binding IsSettingsScreen}">
-                <views:SettingsView DataContext="{Binding Settings}" />
-            </Grid>
+        <!-- MODAL LAYER: covers the ENTIRE window - a sibling of the content grid,
+             not a grid child, so the backdrop is always full-screen -->
+        <Panel IsVisible="{Binding IsModalOpen}"
+               IsHitTestVisible="{Binding IsModalOpen}">
+            <!-- Transparent black backdrop over everything -->
+            <Border Background="{DynamicResource ModalBackdrop}" />
+            <!-- The top modal's view, rebuilt on every stack change -->
+            <controls:ModalHost />
         </Panel>
-    </Grid>
+    </Panel>
 
 </windowing:FAAppWindow>

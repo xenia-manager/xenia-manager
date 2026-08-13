@@ -36,6 +36,15 @@ public partial class MainWindow : FAAppWindow
 
         InitializeComponent();
 
+        // FAAppWindow's managed title bar reserves a top strip and insets the
+        // window content below it; extend the content into it so overlays and
+        // the modal layer cover the entire window (like the window background)
+        if (TitleBar != null)
+        {
+            TitleBar.ExtendsContentIntoTitleBar = true;
+            TitleBar.Height = 0;
+        }
+
         // FluentAvalonia's built-in splash: shows the splash, runs the boot
         // pipeline, then reveals this window
         SplashScreen = new AppSplashScreen();
@@ -53,6 +62,7 @@ public partial class MainWindow : FAAppWindow
         _navigation.ScrollLibraryRequested += OnScrollLibraryRequested;
         _navigation.ScrollMediaRequested += OnScrollMediaRequested;
         _navigation.OverlayFocusRequested += OnOverlayFocusRequested;
+        _navigation.ProfileFocusRequested += OnProfileFocusRequested;
 
         if (_gamepadService.IsActive)
         {
@@ -196,19 +206,43 @@ public partial class MainWindow : FAAppWindow
     }
 
     /// <summary>
-    /// Fulfills a focus request on an option card.
+    /// Fulfills a focus request on an option card, deselecting the profile row.
     /// </summary>
     private void OnOptionFocusRequested(OptionsCardViewModel option)
     {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.Header.IsSelected = false;
+        }
+
         Find<OptionsCard>(c => ReferenceEquals(c.DataContext, option))?.Focus();
     }
 
     /// <summary>
-    /// Fulfills a focus request on a game card.
+    /// Fulfills a focus request on a game card, deselecting the profile row.
     /// </summary>
     private void OnGameFocusRequested(GameCardViewModel game)
     {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.Header.IsSelected = false;
+        }
+
         Find<GameCard>(c => ReferenceEquals(c.DataContext, game))?.Focus();
+    }
+
+    /// <summary>
+    /// Fulfills a focus request on the header profile button, marking its row
+    /// as selected so the accent outline shows.
+    /// </summary>
+    private void OnProfileFocusRequested()
+    {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.Header.IsSelected = true;
+        }
+
+        Find<ProfileButton>()?.Focus();
     }
 
     /// <summary>
@@ -267,9 +301,11 @@ public partial class MainWindow : FAAppWindow
         switch (control.DataContext)
         {
             case GameCardViewModel focusedGame:
+                vm.Header.IsSelected = false;
                 _navigation.OnGameCardFocused(vm.Dashboard, focusedGame);
                 break;
             case OptionsCardViewModel focusedOption:
+                vm.Header.IsSelected = false;
                 _navigation.OnOptionCardFocused(vm.Dashboard, focusedOption);
                 break;
         }

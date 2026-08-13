@@ -18,6 +18,11 @@ namespace XeniaManager.BigScreen.ViewModels;
 public partial class HeaderViewModel : ViewModelBase
 {
     /// <summary>
+    /// Whether the profile row (avatar chip) is currently selected.
+    /// </summary>
+    [ObservableProperty] private bool _isSelected;
+
+    /// <summary>
     /// Gamertag of the active profile (Canary)
     /// </summary>
     [ObservableProperty] private string _gamertag = LocalizationHelper.GetText("Header.Guest");

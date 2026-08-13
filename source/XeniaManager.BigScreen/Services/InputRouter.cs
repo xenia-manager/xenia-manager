@@ -1,6 +1,7 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.Views;
@@ -11,26 +12,11 @@ namespace XeniaManager.BigScreen.Services;
 /// <summary>
 /// Translates keyboard and gamepad input into dashboard navigation commands,
 /// routing them through the navigation controller. One command set serves
-/// both input sources; the active screen decides what each command does
-/// (settings stays keyboard-only for its controls).
+/// both input sources; the active screen or modal decides what each command
+/// does (settings stays keyboard-only for its controls).
 /// </summary>
-public class InputRouter(DashboardNavigationController navigation)
+public class InputRouter(DashboardNavigationController navigation, IModalService modalService)
 {
-    /// <summary>
-    /// The navigation-relevant actions produced by either input source.
-    /// </summary>
-    private enum Command
-    {
-        MoveLeft,
-        MoveRight,
-        MoveUp,
-        MoveDown,
-        Activate,
-        Back,
-        CycleSort,
-        ToggleView,
-    }
-
     /// <summary>
     /// Closes the open overlay and restores the option-row focus.
     /// </summary>
@@ -41,7 +27,8 @@ public class InputRouter(DashboardNavigationController navigation)
     }
 
     /// <summary>
-    /// Moves the active dashboard row by the given step.
+    /// Moves the active dashboard row by the given step. The profile row has a
+    /// single element, so horizontal movement there is a no-op.
     /// </summary>
     private void MoveDashboard(MainWindowViewModel vm, int delta)
     {
@@ -49,7 +36,7 @@ public class InputRouter(DashboardNavigationController navigation)
         {
             navigation.MoveOptionSelection(vm.Dashboard, delta);
         }
-        else
+        else if (!navigation.IsOnProfileRow)
         {
             navigation.MoveRecentGameSelection(vm.Dashboard, delta);
         }
@@ -73,17 +60,17 @@ public class InputRouter(DashboardNavigationController navigation)
     /// <summary>
     /// Commands while the screenshot viewer is open: step or close.
     /// </summary>
-    private static void HandleViewer(MainWindowViewModel vm, Command command)
+    private static void HandleViewer(MainWindowViewModel vm, NavigationCommand command)
     {
         switch (command)
         {
-            case Command.MoveLeft:
+            case NavigationCommand.MoveLeft:
                 vm.Media.Viewer!.Step(-1);
                 break;
-            case Command.MoveRight:
+            case NavigationCommand.MoveRight:
                 vm.Media.Viewer!.Step(1);
                 break;
-            case Command.Back:
+            case NavigationCommand.Back:
                 vm.Media.CloseMediaViewer();
                 break;
         }
@@ -93,35 +80,35 @@ public class InputRouter(DashboardNavigationController navigation)
     /// Commands while an overlay screen is open. Settings only responds to Back
     /// (its controls stay keyboard/mouse-driven).
     /// </summary>
-    private void HandleOverlay(MainWindowViewModel vm, Command command)
+    private void HandleOverlay(MainWindowViewModel vm, NavigationCommand command)
     {
         if (vm.IsLibraryScreen)
         {
             switch (command)
             {
-                case Command.MoveLeft:
+                case NavigationCommand.MoveLeft:
                     navigation.MoveGameSelection(vm.Library, -1);
                     break;
-                case Command.MoveRight:
+                case NavigationCommand.MoveRight:
                     navigation.MoveGameSelection(vm.Library, 1);
                     break;
-                case Command.MoveUp:
+                case NavigationCommand.MoveUp:
                     navigation.MoveGameSelection(vm.Library, -1);
                     break;
-                case Command.MoveDown:
+                case NavigationCommand.MoveDown:
                     navigation.MoveGameSelection(vm.Library, 1);
                     break;
-                case Command.CycleSort:
+                case NavigationCommand.CycleSort:
                     // Sort keeps the selection on the same card, but the viewport stays put
                     vm.Library.CycleSort();
                     break;
-                case Command.Activate:
+                case NavigationCommand.Activate:
                     navigation.LaunchSelectedGame(vm);
                     break;
-                case Command.Back:
+                case NavigationCommand.Back:
                     CloseOverlay(vm);
                     break;
-                case Command.ToggleView:
+                case NavigationCommand.ToggleView:
                     vm.Library.ToggleView();
                     break;
             }
@@ -130,31 +117,31 @@ public class InputRouter(DashboardNavigationController navigation)
         {
             switch (command)
             {
-                case Command.MoveLeft:
+                case NavigationCommand.MoveLeft:
                     navigation.MoveScreenshotSelection(vm.Media, -1);
                     break;
-                case Command.MoveRight:
+                case NavigationCommand.MoveRight:
                     navigation.MoveScreenshotSelection(vm.Media, 1);
                     break;
-                case Command.MoveUp:
+                case NavigationCommand.MoveUp:
                     navigation.MoveScreenshotSelection(vm.Media, -MediaView.CardsPerRow);
                     break;
-                case Command.MoveDown:
+                case NavigationCommand.MoveDown:
                     navigation.MoveScreenshotSelection(vm.Media, MediaView.CardsPerRow);
                     break;
-                case Command.CycleSort:
+                case NavigationCommand.CycleSort:
                     // Sort keeps the selection on the same card, but the viewport stays put
                     vm.Media.CycleMediaSort();
                     break;
-                case Command.Activate:
+                case NavigationCommand.Activate:
                     navigation.OpenSelectedScreenshot(vm.Media);
                     break;
-                case Command.Back:
+                case NavigationCommand.Back:
                     CloseOverlay(vm);
                     break;
             }
         }
-        else if (vm.IsSettingsScreen && command == Command.Back)
+        else if (vm.IsSettingsScreen && command == NavigationCommand.Back)
         {
             CloseOverlay(vm);
         }
@@ -164,35 +151,78 @@ public class InputRouter(DashboardNavigationController navigation)
     /// Commands while the dashboard is showing: row movement, row switching
     /// and activation.
     /// </summary>
-    private void HandleDashboard(MainWindowViewModel vm, Command command, GameCardViewModel? gameCard)
+    private void HandleDashboard(MainWindowViewModel vm, NavigationCommand command, GameCardViewModel? gameCard)
     {
         switch (command)
         {
-            case Command.MoveLeft:
+            case NavigationCommand.MoveLeft:
                 MoveDashboard(vm, -1);
                 break;
-            case Command.MoveRight:
+            case NavigationCommand.MoveRight:
                 MoveDashboard(vm, 1);
                 break;
-            case Command.MoveUp:
-                navigation.SelectGameRow(vm.Dashboard);
+            case NavigationCommand.MoveUp:
+                // With no games there is no game row - hop straight to the profile row
+                if (navigation.IsOnOptionsRow)
+                {
+                    if (vm.Dashboard.RecentGames.Count > 0)
+                    {
+                        navigation.SelectGameRow(vm.Dashboard);
+                    }
+                    else
+                    {
+                        navigation.SelectProfileRow(vm.Dashboard);
+                    }
+                }
+                else
+                {
+                    navigation.SelectProfileRow(vm.Dashboard);
+                }
+
                 break;
-            case Command.MoveDown:
-                navigation.SelectOptionRow(vm.Dashboard);
+            case NavigationCommand.MoveDown:
+                if (navigation.IsOnProfileRow)
+                {
+                    if (vm.Dashboard.RecentGames.Count > 0)
+                    {
+                        navigation.SelectGameRow(vm.Dashboard);
+                    }
+                    else
+                    {
+                        navigation.SelectOptionRow(vm.Dashboard);
+                    }
+                }
+                else
+                {
+                    navigation.SelectOptionRow(vm.Dashboard);
+                }
+
                 break;
-            case Command.Activate:
-                Activate(vm, gameCard);
+            case NavigationCommand.Activate:
+                if (navigation.IsOnProfileRow)
+                {
+                    navigation.ActivateProfileRow(vm);
+                }
+                else
+                {
+                    Activate(vm, gameCard);
+                }
+
                 break;
         }
     }
 
     /// <summary>
-    /// Routes a command to the handler for the active screen
-    /// (screenshot viewer, overlay screen, dashboard).
+    /// Routes a command to the handler for the active layer: the modal stack
+    /// (top modal), the screenshot viewer, an overlay screen, or the dashboard.
     /// </summary>
-    private void Dispatch(MainWindowViewModel vm, Command command, GameCardViewModel? gameCard = null)
+    private void Dispatch(MainWindowViewModel vm, NavigationCommand command, GameCardViewModel? gameCard = null)
     {
-        if (vm is { IsMediaScreen: true, IsMediaViewerOpen: true })
+        if (modalService.Top is { } modal)
+        {
+            modal.HandleInput(command);
+        }
+        else if (vm is { IsMediaScreen: true, IsMediaViewerOpen: true })
         {
             HandleViewer(vm, command);
         }
@@ -209,18 +239,18 @@ public class InputRouter(DashboardNavigationController navigation)
     /// <summary>
     /// Maps a keyboard key to a command, or null when it isn't navigation-relevant.
     /// </summary>
-    private static Command? ToCommand(Key key)
+    private static NavigationCommand? ToCommand(Key key)
     {
         return key switch
         {
-            Key.Left => Command.MoveLeft,
-            Key.Right => Command.MoveRight,
-            Key.Up => Command.MoveUp,
-            Key.Down => Command.MoveDown,
-            Key.Enter or Key.Space => Command.Activate,
-            Key.B or Key.Escape => Command.Back,
-            Key.Y => Command.CycleSort,
-            Key.V => Command.ToggleView,
+            Key.Left => NavigationCommand.MoveLeft,
+            Key.Right => NavigationCommand.MoveRight,
+            Key.Up => NavigationCommand.MoveUp,
+            Key.Down => NavigationCommand.MoveDown,
+            Key.Enter or Key.Space => NavigationCommand.Activate,
+            Key.B or Key.Escape => NavigationCommand.Back,
+            Key.X or Key.Y => NavigationCommand.CycleSort,
+            Key.V => NavigationCommand.ToggleView,
             _ => null,
         };
     }
@@ -228,18 +258,19 @@ public class InputRouter(DashboardNavigationController navigation)
     /// <summary>
     /// Maps a gamepad button to a command, or null when it isn't navigation-relevant.
     /// </summary>
-    private static Command? ToCommand(GamepadButton button)
+    private static NavigationCommand? ToCommand(GamepadButton button)
     {
         return button switch
         {
-            GamepadButton.DpadLeft or GamepadButton.LeftShoulder => Command.MoveLeft,
-            GamepadButton.DpadRight or GamepadButton.RightShoulder => Command.MoveRight,
-            GamepadButton.DpadUp => Command.MoveUp,
-            GamepadButton.DpadDown => Command.MoveDown,
-            GamepadButton.A => Command.Activate,
-            GamepadButton.B => Command.Back,
-            GamepadButton.Y => Command.CycleSort,
-            GamepadButton.View => Command.ToggleView,
+            GamepadButton.DpadLeft or GamepadButton.LeftShoulder => NavigationCommand.MoveLeft,
+            GamepadButton.DpadRight or GamepadButton.RightShoulder => NavigationCommand.MoveRight,
+            GamepadButton.DpadUp => NavigationCommand.MoveUp,
+            GamepadButton.DpadDown => NavigationCommand.MoveDown,
+            GamepadButton.A => NavigationCommand.Activate,
+            GamepadButton.B => NavigationCommand.Back,
+            GamepadButton.X or GamepadButton.Y => NavigationCommand.CycleSort,
+            GamepadButton.View => NavigationCommand.ToggleView,
+            GamepadButton.Start => NavigationCommand.Start,
             _ => null,
         };
     }
@@ -249,7 +280,7 @@ public class InputRouter(DashboardNavigationController navigation)
     /// </summary>
     public void HandleKey(MainWindowViewModel vm, KeyEventArgs e, IFocusManager? focusManager)
     {
-        Command? command = ToCommand(e.Key);
+        NavigationCommand? command = ToCommand(e.Key);
         if (command == null)
         {
             return;
@@ -268,7 +299,7 @@ public class InputRouter(DashboardNavigationController navigation)
     /// </summary>
     public void HandleGamepad(MainWindowViewModel vm, GamepadButton button)
     {
-        Command? command = ToCommand(button);
+        NavigationCommand? command = ToCommand(button);
         if (command == null)
         {
             return;

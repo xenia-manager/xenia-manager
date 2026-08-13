@@ -53,6 +53,8 @@
     <sys:String x:Key="Settings.Section.Preferences">Preferences</sys:String>
     <sys:String x:Key="Settings.Section.Theme">Theme</sys:String>
     <sys:String x:Key="Settings.Section.Controllers">Controllers</sys:String>
+    <sys:String x:Key="Settings.ActiveProfile">Active Profile</sys:String>
+    <sys:String x:Key="Settings.ManageProfiles">Manage Profiles</sys:String>
     <sys:String x:Key="Settings.BackgroundType">Background Type</sys:String>
     <sys:String x:Key="Settings.LibraryView">Library View</sys:String>
     <sys:String x:Key="Settings.LibraryView.Carousel">Carousel</sys:String>
@@ -90,4 +92,56 @@
     <sys:String x:Key="Splash.LoadingLibrary">Loading Library</sys:String>
     <sys:String x:Key="Splash.LoadingMedia">Loading Media</sys:String>
     <sys:String x:Key="Splash.LoadingDone">Loading Done</sys:String>
+
+    <!-- Modal system (generic) -->
+    <sys:String x:Key="Modal.Confirm">Confirm</sys:String>
+    <sys:String x:Key="Modal.Cancel">Cancel</sys:String>
+
+    <!-- Profile picker -->
+    <sys:String x:Key="Profiles.Title">Profiles</sys:String>
+    <sys:String x:Key="Profiles.NoProfilesFound">No profiles found - manage them from Settings</sys:String>
+    <sys:String x:Key="Profiles.Hint.Back">Back</sys:String>
+    <sys:String x:Key="Profiles.Hint.Select">Select</sys:String>
+    <sys:String x:Key="Profiles.Hint.Manage">Manage</sys:String>
+
+    <!-- Manage Profiles overlay -->
+    <sys:String x:Key="ManageProfiles.Title">Manage Profiles</sys:String>
+    <sys:String x:Key="ManageProfiles.NoProfilesFound">No profiles found - create one with the + button</sys:String>
+    <sys:String x:Key="ManageProfiles.CreateNewProfile">Create New Profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Hint.Back">Back</sys:String>
+    <sys:String x:Key="ManageProfiles.Hint.Delete">Delete</sys:String>
+    <sys:String x:Key="ManageProfiles.Hint.Import">Import</sys:String>
+    <sys:String x:Key="ManageProfiles.Hint.Export">Export</sys:String>
+    <sys:String x:Key="ManageProfiles.Save.Button">Save</sys:String>
+    <sys:String x:Key="ManageProfiles.Save.Success">{0} profile(s) saved</sys:String>
+    <sys:String x:Key="ManageProfiles.Save.Error">Failed to save profiles</sys:String>
+    <sys:String x:Key="ManageProfiles.Create.Success">Created '{0}' - edit and save to finish</sys:String>
+    <sys:String x:Key="ManageProfiles.Delete.Confirmation.Title">Delete Profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Delete.Confirmation.Message">Delete '{0}'? ALL of its saves, achievements and content will be permanently lost. This cannot be undone.</sys:String>
+    <sys:String x:Key="ManageProfiles.Delete.Success">Profile deleted</sys:String>
+    <sys:String x:Key="ManageProfiles.Delete.Error">Failed to delete profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Unsaved.Title">Unsaved Changes</sys:String>
+    <sys:String x:Key="ManageProfiles.Unsaved.Message">Save changes to '{0}'?</sys:String>
+    <sys:String x:Key="ManageProfiles.Unsaved.Save">Save</sys:String>
+    <sys:String x:Key="ManageProfiles.Unsaved.Discard">Discard</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.Gamertag">Gamertag</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.Gamertag.Watermark">Enter a gamertag</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.Gamertag.Error.Empty">Gamertag cannot be empty</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.Gamertag.Error.TooLong">Gamertag cannot be longer than {0} characters</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.Gamertag.Error.InvalidFormat">Gamertag must start with a letter and contain only letters and numbers</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.Country">Country</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.Language">Language</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.LiveEnabled">Xbox Live</sys:String>
+    <sys:String x:Key="ManageProfiles.Edit.SubscriptionTier">Subscription Tier</sys:String>
+    <sys:String x:Key="ManageProfiles.Import.FilePicker.Title">Import Profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Import.Replace.Confirmation.Title">Replace Profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Import.Replace.Confirmation.Message">A profile named '{0}' ({1}) already exists. Replace it?</sys:String>
+    <sys:String x:Key="ManageProfiles.Import.Success">Imported '{0}'</sys:String>
+    <sys:String x:Key="ManageProfiles.Import.Canceled">Import canceled</sys:String>
+    <sys:String x:Key="ManageProfiles.Import.Failed">Failed to import profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Export.FilePicker.Title">Export Profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Export.Confirmation.Title">Export Saves</sys:String>
+    <sys:String x:Key="ManageProfiles.Export.Confirmation.Message">Include the profile's saves and content in the export?</sys:String>
+    <sys:String x:Key="ManageProfiles.Export.Success">Exported '{0}'</sys:String>
+    <sys:String x:Key="ManageProfiles.Export.Failed">Failed to export profile</sys:String>
 </ResourceDictionary>

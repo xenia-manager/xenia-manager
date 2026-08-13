@@ -17,4 +17,5 @@ public enum GamepadButton
     LeftShoulder,
     RightShoulder,
     View,
+    Start,
 }

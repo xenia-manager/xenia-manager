@@ -26,6 +26,7 @@ public class ServiceConfigurator
         services.AddSingleton<IProfileService, ProfileService>();
         services.AddSingleton<IGameLibraryService, GameLibraryService>();
         services.AddSingleton<IScreenshotLibraryService, ScreenshotLibraryService>();
+        services.AddSingleton<IModalService, ModalService>();
         services.AddSingleton<DashboardNavigationController>();
         services.AddSingleton<InputRouter>();
         services.AddSingleton<IGamepadInputService, GamepadInputService>();

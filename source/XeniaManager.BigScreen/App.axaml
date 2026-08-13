@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="XeniaManager.BigScreen.App"
              xmlns:local="using:XeniaManager.BigScreen"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels"
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:controls="using:XeniaManager.BigScreen.Controls"
              xmlns:style="using:FluentAvalonia.Styling"
@@ -9,13 +10,21 @@
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <local:ViewLocator />
+        <!-- Explicit templates match first; the ViewLocator is the last-resort
+             fallback for view models without a dedicated template -->
+        <DataTemplate DataType="vm:ConfirmationModalViewModel">
+            <controls:ConfirmationModal />
+        </DataTemplate>
+        <DataTemplate DataType="items:ProfileItemViewModel">
+            <controls:ProfileRow />
+        </DataTemplate>
         <DataTemplate DataType="items:GameCardViewModel">
             <controls:GameCard />
         </DataTemplate>
         <DataTemplate DataType="items:OptionsCardViewModel">
             <controls:OptionsCard />
         </DataTemplate>
+        <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Resources>

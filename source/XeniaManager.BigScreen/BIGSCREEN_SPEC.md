@@ -78,6 +78,21 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 ### Settings persistence
 `DashboardSettings` JSON via `BackgroundService` (`Load`/`Save`), `ColorJsonConverter` (ARGB hex) for `Color` values.
 
+### Modal system (push/pop stack with dispose)
+- **`IModalService`/`ModalService`** (DI singleton) — full-screen modal stack: `ShowAsync` (with/without a typed result), `Close` pops the top modal, disposes `IDisposable` VMs and raises `StackChanged`; modals nest naturally (a modal can await another on top of itself). Modals are created fresh per open — no state carries, no stale subscriptions.
+- **`ModalViewModelBase`/`ModalViewModelBase<TResult>`** — result delivery, `HandleInput(NavigationCommand)` (virtual; base closes on Back), `Dispose()` hook, own close `Task`.
+- **`ModalHost`** (topmost MainWindow layer) — dark backdrop (`ModalBackdrop` ~85% dark, **the only "glass" part**) + the top modal's view via the app `ViewLocator`; hidden when the stack is empty.
+- **`ConfirmationModal`** (`Controls/`) — generic A=confirm / B=cancel prompt (title, message, confirm/cancel text); reused by Manage Profiles delete / import-replace / export-saves.
+- Modal cards/screens use the standard card surface (`CardBackground` + popup shadow, `modal-card`/`modal-screen` classes) — only the dark area behind them differs from other cards.
+- Router dispatch order: **modal stack (top modal) → screenshot viewer → overlay screens → dashboard**; modals swallow all input while open.
+
+### Profiles & identity
+- **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first.
+- **Boot reorder:** Settings stage now runs before the Profile stage (the persisted XUID is needed to pick the profile).
+- **Header `ProfileButton`** (avatar chip) — focusable + clickable; controller **Up** from the game row selects it (**Down** returns to game card 1); reserved 2px accent outline on selection/hover (`IsSelected` on `HeaderViewModel`).
+- **Profile picker modal** (`ProfilePickerView`) — opened from the header chip: all profiles (active first, then alphabetical) with gamertag, country · language and per-profile gamerscore; Up/Down + A switches + B closes, **Y opens Manage Profiles** on top of the picker; "no profiles" stub.
+- **Manage Profiles modal** (`ManageProfilesView`) — opened from a Profiles card in Settings or via Y in the picker: profile rows (scrollable) + an anchored **Create New Profile stub row** beneath; full desktop-dialog port (create / delete / import (`ProfileManager.ImportProfileWithReplacement` + replace-confirm, `.xaccount`/`.zip` picker) / export (save picker + "include saves?" confirm) / edit gamertag (regex + 15-char validation, inline error) + country/language/subscription combos + Xbox Live toggle / Save (`SaveProfiles`)); edit panel hidden while the stub is selected; **unsaved edits prompt Save / Discard on exit and row switches (B cancels, staying put)**; deleting the active profile falls back to the first and refreshes the header/stats. Hints: B Back · X Delete · View Import · Start Export.
+
 ---
 
 ## 3. Architecture
@@ -93,22 +108,30 @@ source/XeniaManager.BigScreen/
 │   ├── LibraryView.axaml(.cs)       # Library carousel + list, clamped scroll, details pane + empty stub
 │   ├── MediaView.axaml(.cs)         # Media gallery grid + nested viewer sub-screen
 │   ├── MediaViewerView.axaml(.cs)   # Full-screen screenshot viewer (chevrons, caption)
-│   └── SettingsView.axaml(.cs)      # Settings screen (owns the background image picker)
+│   ├── SettingsView.axaml(.cs)      # Settings screen (owns the background image picker)
+│   ├── ProfilePickerView.axaml(.cs) # Profile picker modal (A switches, Y = Manage, B closes)
+│   └── ManageProfilesView.axaml(.cs) # Manage Profiles modal (rows + anchored create stub + edit panel)
 ├── ViewModels/
-│   ├── MainWindowViewModel.cs       # Composition root: child VMs, CurrentScreen navigation, launch/quit/refresh
-│   ├── HeaderViewModel.cs           # Profile, clock, wifi + controller battery state
+│   ├── MainWindowViewModel.cs       # Composition root: child VMs, CurrentScreen navigation, launch/quit/refresh, IsModalOpen
+│   ├── HeaderViewModel.cs           # Profile, clock, wifi + controller battery state (+ IsSelected for the avatar chip)
 │   ├── DashboardViewModel.cs        # RecentGames, Options, background brush + fade-through-black
 │   ├── LibraryViewModel.cs          # Games carousel + sort (ScreenViewModel base)
 │   ├── MediaViewModel.cs            # Screenshots + sort + viewer sub-screen (ScreenViewModel base)
 │   ├── MediaViewerViewModel.cs      # Current screenshot, caption, prev/next stepping
-│   ├── SettingsViewModel.cs         # Appearance options + persistence + quit toggle + library view + card image
+│   ├── SettingsViewModel.cs         # Appearance options + persistence + quit toggle + library view + card image + Manage Profiles entry
 │   ├── ScreenViewModel.cs           # Base for overlay screens: ScreenBackground brush
+│   ├── ModalViewModelBase.cs(.Generic.cs) # Modal lifecycle: close TCS, HandleInput (Back closes by default), Dispose hook; generic result delivery
+│   ├── ConfirmationModalViewModel.cs # Reusable 2-option prompt (Left/Right + A, B cancels → null; true/false/null result)
+│   ├── ProfilePickerViewModel.cs    # Picker modal: rows, switch-active, Y → Manage Profiles
+│   ├── ManageProfilesViewModel.cs   # Manage modal: rows + stub selection, edit fields + dirty tracking, create/delete/import/export, unsaved prompts
 │   ├── ViewModelBase.cs
 │   └── Items/
 │       ├── GameCardViewModel.cs     # Core Game ref, Title, Boxart/DiscArt layers (card_image_mode), stat strings, IsSelected, BackgroundArt
 │       ├── GameDetailsViewModel.cs  # Details pane: local card stats + DB info (bio/genre/developer/publisher/released)
 │       ├── ScreenshotItemViewModel.cs # Path, Title, CapturedAt (+ text), GameTitle, Image, IsSelected
-│       └── OptionsCardViewModel.cs  # Title, Icon, TargetScreen
+│       ├── OptionsCardViewModel.cs  # Title, Icon, TargetScreen
+│       ├── ProfileItemViewModel.cs  # Profile row: gamertag, country · language, gamerscore (loaded async), IsSelected/IsActive
+│       └── CreateProfileStubViewModel.cs # The anchored "Create New Profile" row (ISelectable)
 ├── Controls/
 │   ├── GameCard.axaml(.cs)          # Dashboard game tile: box art + title bar on selection (grow 200→250)
 │   ├── OptionsCard.axaml(.cs)       # Dashboard option tile
@@ -121,6 +144,11 @@ source/XeniaManager.BigScreen/
 │   ├── ColorPickerField.cs          # Swatch + hex + palette popup
 │   ├── PalettePicker.cs             # Swatch row
 │   ├── GamepadCard.axaml(.cs)       # Settings controller row: name, status text, battery icon + % (accent on hover/select)
+│   ├── ProfileButton.axaml(.cs)     # Header avatar chip: focusable, accent outline on selection/hover, opens the picker
+│   ├── ProfileRow.axaml(.cs)        # Profile list row: avatar, gamertag, country · language, gamerscore
+│   ├── CreateProfileRow.axaml(.cs)  # "+ Create New Profile" row (anchored beneath the list)
+│   ├── ModalHost.axaml(.cs)         # Renders the modal stack bottom→top (later entries overlay; only the top gets input)
+│   ├── ConfirmationModal.axaml(.cs) # Generic prompt: header, message, two Left/Right option buttons (accent on selection)
 │   ├── SplashScreenView.axaml(.cs)  # FA built-in splash visuals: logo, live status, tweened bar, radial background from saved primary/accent; forces the splash window fullscreen
 │   └── AppSplashScreen.cs           # IFAApplicationSplashScreen: hosts the splash view + runs the boot pipeline (RunTasks) on the UI thread
 ├── Converters/
@@ -131,11 +159,12 @@ source/XeniaManager.BigScreen/
 ├── Services/
 │   ├── BaseAppLocator.cs            # Resolves the base Xenia Manager folder (--base-dir / side-by-side / sibling)
 │   ├── BackgroundService.cs         # Settings load/save, brushes via BackgroundBrushFactory, ApplyResources (IBackgroundService)
-│   ├── DashboardNavigationController.cs # Row state machine, selection movement, option activation (view focus/scroll via events)
+│   ├── DashboardNavigationController.cs # Row state machine (incl. profile row), selection movement, option activation (view focus/scroll via events)
 │   ├── GameLibraryService.cs        # Wraps Core GameManager: load, game list, recent-games selection (IGameLibraryService)
-│   ├── IBackgroundService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs
-│   ├── InputRouter.cs               # Command-driven: key/gamepad → Command → per-screen handler (one state machine, no duplicated branching)
-│   ├── ProfileService.cs            # Canary profile, gamertag/gamerscore, per-game achievement/GPD stats (IProfileService)
+│   ├── IBackgroundService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs / IModalService.cs
+│   ├── InputRouter.cs               # Command-driven: key/gamepad → NavigationCommand → dispatcher (modal stack → viewer → overlay → dashboard)
+│   ├── ModalService.cs              # Push/pop modal stack: ShowAsync (typed result), Close pops + disposes, StackChanged (IModalService)
+│   ├── ProfileService.cs            # All Canary profiles, active profile (persisted profile_xuid), switch/refresh, per-game achievement/GPD stats, per-profile gamerscore (IProfileService)
 │   ├── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching (IScreenshotLibraryService)
 │   └── ServiceConfigurator.cs       # DI registration (mirrors the main app: singleton services + VMs, App.Services)
 ├── Constants/
@@ -147,9 +176,13 @@ source/XeniaManager.BigScreen/
 ├── Utilities/
 │   ├── SelectionHelper.cs           # ISelectable + single-selection helpers (move/select/resort-preserving)
 │   ├── EnumCycleHelper.cs           # Generic enum + colour palette cycling
-│   └── ImageFormats.cs              # Shared screenshot extensions + file-picker patterns
+│   ├── ImageFormats.cs              # Shared screenshot extensions + file-picker patterns
+│   ├── ProfileRowsHelper.cs         # Shared profile row building (active-first + alphabetical) + async gamerscore loading
+│   ├── TaskUtilities.cs             # RunSafely<T>: logged fire-and-forget task execution
+│   └── AccountInfoExtensions.cs     # PathXuidText() hex helper
 ├── Models/
-│   ├── DashboardSettings.cs         # Persisted user-facing options (incl. primary_controller_guid)
+│   ├── DashboardSettings.cs         # Persisted user-facing options (incl. primary_controller_guid, profile_xuid)
+│   ├── NavigationCommand.cs         # Public command set (Move/Activate/Back/CycleSort/ToggleView/Start)
 │   ├── BackgroundMode.cs / BackgroundModeOption.cs
 │   ├── LibraryViewMode.cs / LibraryViewModeOption.cs
 │   ├── CardImageMode.cs / CardImageModeOption.cs

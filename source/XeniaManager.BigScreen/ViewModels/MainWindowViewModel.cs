@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
+using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
@@ -26,6 +27,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IGameLibraryService _gameLibraryService;
     private readonly IScreenshotLibraryService _screenshotLibraryService;
     private readonly IGamepadInputService _gamepadService;
+    private readonly IModalService _modalService;
 
     /// <summary>
     /// The most recently selected game card (dashboard or library row). Drives the
@@ -62,6 +64,11 @@ public partial class MainWindowViewModel : ViewModelBase
     /// Whether the media screenshot viewer is open.
     /// </summary>
     public bool IsMediaViewerOpen => CurrentScreen is MediaViewModel { IsViewerOpen: true };
+
+    /// <summary>
+    /// Whether any modal is on the modal stack (drives the full-window modal layer).
+    /// </summary>
+    [ObservableProperty] private bool _isModalOpen;
 
     /// <summary>
     /// Raised when the user chooses to quit BigScreen.
@@ -117,13 +124,15 @@ public partial class MainWindowViewModel : ViewModelBase
         IProfileService profileService,
         IGameLibraryService gameLibraryService,
         IScreenshotLibraryService screenshotLibraryService,
-        IGamepadInputService gamepadService)
+        IGamepadInputService gamepadService,
+        IModalService modalService)
     {
         _backgroundService = backgroundService;
         _profileService = profileService;
         _gameLibraryService = gameLibraryService;
         _screenshotLibraryService = screenshotLibraryService;
         _gamepadService = gamepadService;
+        _modalService = modalService;
 
         // The constructor stays cheap: profile, library and screenshot loading
         // happen in InitializeAsync, behind the splash screen
@@ -138,6 +147,25 @@ public partial class MainWindowViewModel : ViewModelBase
             foreach (GameCardViewModel card in Dashboard.RecentGames)
             {
                 card.CardImageMode = Settings.CardImageMode;
+            }
+        };
+
+        // A profile switch refreshes the header identity and rebuilds the cards
+        // so per-game achievement stats follow the new profile
+        _profileService.ProfileChanged += () =>
+        {
+            Header.ApplyProfile(_profileService);
+            TaskUtilities.RunSafely<MainWindowViewModel>(RebuildCards, "Rebuilding profile cards");
+        };
+
+        // The full-window modal layer follows the modal stack; when the stack
+        // empties the dashboard shows again (any open overlay screen closes)
+        _modalService.StackChanged += () =>
+        {
+            IsModalOpen = _modalService.IsOpen;
+            if (!_modalService.IsOpen && CurrentScreen != null)
+            {
+                CloseOverlay();
             }
         };
     }
@@ -185,15 +213,8 @@ public partial class MainWindowViewModel : ViewModelBase
         // Yield so the splash screen paints its first frame before any work runs
         await Task.Yield();
 
-        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingProfile"), 0.10, cancellationToken, () =>
-        {
-            _profileService.Load();
-            Header.ApplyProfile(_profileService);
-        });
-
-        // Loads the persisted settings and builds the background from them
-        // (Image mode decodes the configured image - too slow for the constructor)
-        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingSettings"), 0.25, cancellationToken, () =>
+        // Settings first: the persisted profile_xuid drives which profile activates
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingSettings"), 0.10, cancellationToken, () =>
         {
             Settings.Load();
             Dashboard.UpdateBackground(null);
@@ -203,6 +224,12 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 _gamepadService.SetPrimaryByGuid(_backgroundService.Settings.PrimaryControllerGuid);
             }
+        });
+
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingProfile"), 0.25, cancellationToken, () =>
+        {
+            _profileService.Load();
+            Header.ApplyProfile(_profileService);
         });
 
         await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingDashboard"), 0.35, cancellationToken, () =>
@@ -328,17 +355,15 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Reloads the game library from disk and rebuilds the dashboard/library card
-    /// collections so playtime and last-played values reflect the finished session.
-    /// Selection is preserved per row, falling back to the first card so a card is
-    /// always selected after a refresh. Stats are resolved off the UI thread.
+    /// Rebuilds the dashboard/library card collections with fresh stats, preserving
+    /// the selection per row (falling back to the first card so a card is always
+    /// selected). Stats are resolved off the UI thread.
     /// </summary>
-    private async Task RefreshLibrary()
+    private async Task RebuildCards()
     {
         string? librarySelectedId = Library.Games.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
         string? recentSelectedId = Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected)?.Game.GameId;
 
-        _gameLibraryService.Load();
         Library.Games.Clear();
         Dashboard.RecentGames.Clear();
 
@@ -364,7 +389,35 @@ public partial class MainWindowViewModel : ViewModelBase
 
         LibraryRefreshed?.Invoke(this, EventArgs.Empty);
         Logger.Debug<MainWindowViewModel>(
-            $"Library refreshed: {Library.Games.Count} games, {Dashboard.RecentGames.Count} recent");
+            $"Cards rebuilt: {Library.Games.Count} games, {Dashboard.RecentGames.Count} recent");
+    }
+
+    /// <summary>
+    /// Reloads the game library from disk and rebuilds the card collections so
+    /// playtime and last-played values reflect the finished session.
+    /// </summary>
+    private async Task RefreshLibrary()
+    {
+        _gameLibraryService.Load();
+        await RebuildCards();
+        Logger.Debug<MainWindowViewModel>("Library refreshed from disk");
+    }
+
+    /// <summary>
+    /// Opens the profile picker modal, where the active profile can be switched.
+    /// Skipped when a modal is already open (e.g. the avatar keeps focus and a
+    /// stray Enter would otherwise double-open the picker).
+    /// </summary>
+    public void OpenProfilePicker()
+    {
+        if (_modalService.IsOpen)
+        {
+            return;
+        }
+
+        Logger.Info<MainWindowViewModel>("Opening profile picker");
+        TaskUtilities.RunSafely<MainWindowViewModel>(
+            () => _modalService.ShowAsync(new ProfilePickerViewModel()), "Opening profile picker");
     }
 
     /// <summary>

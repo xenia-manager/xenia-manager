@@ -39,6 +39,17 @@ public partial class SettingsView : UserControl
     }
 
     /// <summary>
+    /// Opens the Manage Profiles overlay.
+    /// </summary>
+    private void OnManageProfilesClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SettingsViewModel vm)
+        {
+            vm.OpenManageProfiles();
+        }
+    }
+
+    /// <summary>
     /// Opens a file picker and applies the chosen image as the dashboard background.
     /// </summary>
     private async void OnSelectImageClick(object? sender, RoutedEventArgs e)

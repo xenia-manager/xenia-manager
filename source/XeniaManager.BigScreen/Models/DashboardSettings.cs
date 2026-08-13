@@ -63,4 +63,10 @@ public class DashboardSettings
     /// </summary>
     [JsonPropertyName("primary_controller_guid")]
     public string? PrimaryControllerGuid { get; set; }
+
+    /// <summary>
+    /// Hex PathXUID of the active Canary profile, restored at boot.
+    /// </summary>
+    [JsonPropertyName("profile_xuid")]
+    public string? ProfileXuid { get; set; }
 }

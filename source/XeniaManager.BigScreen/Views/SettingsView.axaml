@@ -66,6 +66,23 @@
                 <!-- PREFERENCES -->
                 <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Preferences}" />
 
+                <!-- PROFILES -->
+                <Border Classes="settings-card">
+                    <DockPanel>
+                        <Button x:Name="BtnManageProfiles"
+                                Classes="settings-button"
+                                DockPanel.Dock="Right"
+                                Content="{DynamicResource Settings.ManageProfiles}"
+                                Click="OnManageProfilesClick" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ActiveProfile}" />
+                            <TextBlock Classes="settings-subtitle" Text="{Binding ActiveGamertag}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
                 <!-- LIBRARY VIEW -->
                 <Border Classes="settings-card">
                     <DockPanel>
@@ -105,7 +122,8 @@
                                     VerticalAlignment="Center"
                                     Spacing="4">
                             <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ReturnToXeniaOnQuit}" />
-                            <TextBlock Classes="settings-subtitle" Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}" />
                         </StackPanel>
                     </DockPanel>
                 </Border>
