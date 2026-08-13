@@ -22,6 +22,7 @@
     <sys:String x:Key="Library.Sort.TimePlayed">Time Played</sys:String>
     <sys:String x:Key="Library.Sort.LastPlayed">Last Played</sys:String>
     <sys:String x:Key="Library.Hint.Sort">Sort</sys:String>
+    <sys:String x:Key="Library.Hint.SwapView">Swap View</sys:String>
     <sys:String x:Key="Library.Hint.Play">Play</sys:String>
     <sys:String x:Key="Library.Hint.Back">Back</sys:String>
 
@@ -41,6 +42,7 @@
     <sys:String x:Key="Media.Sort.ByGame">By Game</sys:String>
     <sys:String x:Key="Media.UnknownGame">Unknown Game</sys:String>
     <sys:String x:Key="Media.Hint.Sort">Sort</sys:String>
+    <sys:String x:Key="Media.Hint.Select">Select</sys:String>
     <sys:String x:Key="Media.Hint.Back">Back</sys:String>
 
     <!-- Media screenshot viewer -->
