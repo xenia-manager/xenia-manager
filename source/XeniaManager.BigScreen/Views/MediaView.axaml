@@ -78,7 +78,7 @@
                                     Text="{DynamicResource Media.Hint.Back}" />
                 <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
                                     Text="{DynamicResource Media.Hint.Select}" />
-                <controls:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+                <controls:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
                                     Text="{DynamicResource Media.Hint.Sort}" />
             </StackPanel>
         </Grid>

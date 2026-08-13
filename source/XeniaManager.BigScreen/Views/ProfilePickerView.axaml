@@ -51,15 +51,15 @@
                 </Border>
             </Grid>
 
-            <!-- HINTS -->
-            <StackPanel Grid.Row="2" Classes="hint-bar">
-                <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource Profiles.Hint.Back}" />
-                <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
-                                    Text="{DynamicResource Profiles.Hint.Select}" />
-                <controls:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
-                                    Text="{DynamicResource Profiles.Hint.Manage}" />
-            </StackPanel>
+        <!-- HINTS -->
+        <StackPanel Grid.Row="2" Classes="hint-bar">
+            <controls:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource Profiles.Hint.Back}" />
+            <controls:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                                Text="{DynamicResource Profiles.Hint.Select}" />
+            <controls:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
+                                Text="{DynamicResource Profiles.Hint.Manage}" />
+        </StackPanel>
         </Grid>
     </Border>
 </UserControl>

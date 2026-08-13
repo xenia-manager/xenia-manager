@@ -79,7 +79,7 @@ public class ProfilePickerViewModel : ModalViewModelBase
                 SelectActive();
                 return true;
             case NavigationCommand.CycleSort:
-                // Y (Details) opens the full profile manager on top of the picker
+                // X opens the full profile manager on top of the picker
                 OpenManageProfiles();
                 return true;
             case NavigationCommand.Back:
