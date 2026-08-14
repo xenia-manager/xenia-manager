@@ -86,6 +86,7 @@
     <sys:String x:Key="Settings.Controllers.StatusLabel">Status:</sys:String>
     <sys:String x:Key="Settings.Controllers.BatteryUnknown">Unknown</sys:String>
     <sys:String x:Key="Settings.Hint.Back">Back</sys:String>
+    <sys:String x:Key="Settings.Hint.Select">Select</sys:String>
 
     <!-- Splash screen -->
     <sys:String x:Key="Splash.Title">Xenia Big Screen</sys:String>
@@ -114,6 +115,7 @@
     <sys:String x:Key="ManageProfiles.NoProfilesFound">No profiles found - create one with the + button</sys:String>
     <sys:String x:Key="ManageProfiles.CreateNewProfile">Create New Profile</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Back">Back</sys:String>
+    <sys:String x:Key="ManageProfiles.Hint.Edit">Edit</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Delete">Delete</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Import">Import</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Export">Export</sys:String>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -20,8 +21,10 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 /// <summary>
 /// Full-screen profile management overlay: create, delete, import, export and
 /// edit Canary profiles. B closes (confirming unsaved edits), X deletes the
-/// selected profile, View imports, Start exports. Opened from Settings or the
-/// profile picker.
+/// selected profile, View imports, Start exports, A or Right on a profile row
+/// moves the controller into the edit panel (B or Left returns; A activates
+/// the panel rows - toggles, dropdown editors, gamertag focus, save).
+/// Opened from Settings or the profile picker.
 /// </summary>
 public partial class ManageProfilesViewModel : ModalViewModelBase
 {
@@ -49,6 +52,22 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     private readonly IProfileService _profileService;
     private readonly IModalService _modalService;
     private EditBaseline _baseline;
+
+    /// <summary>
+    /// The edit-panel rows in display order, used for the panel selection movement.
+    /// </summary>
+    private readonly List<ISelectable> _panelRows = [];
+
+    /// <summary>
+    /// The kind of the panel editor currently open (a dropdown), or null when
+    /// the panel rows navigate normally.
+    /// </summary>
+    private ManageProfilesRowKind? _editorKind;
+
+    /// <summary>
+    /// The dropdown index snapshotted when a panel editor opened, restored on cancel.
+    /// </summary>
+    private int _editorOriginalIndex;
 
     /// <summary>
     /// Whether the edited profile can be persisted: a profile is selected, the
@@ -79,6 +98,24 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     public event Action? ScrollRequested;
 
     /// <summary>
+    /// Raised after a panel editor opened (a dropdown), so the view can open
+    /// the matching native control.
+    /// </summary>
+    public event Action<ManageProfilesRowKind>? PanelEditorOpened;
+
+    /// <summary>
+    /// Raised after a panel editor closed (commit or cancel), so the view can
+    /// close the native control.
+    /// </summary>
+    public event Action? PanelEditorClosed;
+
+    /// <summary>
+    /// Raised when the controller activates the gamertag row, so the view can
+    /// focus the text box for keyboard entry.
+    /// </summary>
+    public event Action? GamertagFocusRequested;
+
+    /// <summary>
     /// The profile rows (active first, then alphabetical). Lives in its own
     /// scroll view - the create stub is anchored beneath it, not part of it.
     /// </summary>
@@ -88,6 +125,36 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// The anchored "Create New Profile" row beneath the list.
     /// </summary>
     public CreateProfileStubViewModel CreateStub { get; } = new();
+
+    /// <summary>
+    /// Row for the edit panel's gamertag field.
+    /// </summary>
+    public ManageProfilesRowViewModel RowGamertag { get; } = new(ManageProfilesRowKind.Gamertag);
+
+    /// <summary>
+    /// Row for the edit panel's country dropdown.
+    /// </summary>
+    public ManageProfilesRowViewModel RowCountry { get; } = new(ManageProfilesRowKind.Country);
+
+    /// <summary>
+    /// Row for the edit panel's language dropdown.
+    /// </summary>
+    public ManageProfilesRowViewModel RowLanguage { get; } = new(ManageProfilesRowKind.Language);
+
+    /// <summary>
+    /// Row for the edit panel's Xbox Live toggle.
+    /// </summary>
+    public ManageProfilesRowViewModel RowLiveToggle { get; } = new(ManageProfilesRowKind.LiveToggle);
+
+    /// <summary>
+    /// Row for the edit panel's subscription tier dropdown.
+    /// </summary>
+    public ManageProfilesRowViewModel RowSubscriptionTier { get; } = new(ManageProfilesRowKind.SubscriptionTier);
+
+    /// <summary>
+    /// Row for the edit panel's Save action.
+    /// </summary>
+    public ManageProfilesRowViewModel RowSave { get; } = new(ManageProfilesRowKind.Save);
 
     /// <summary>
     /// The list of available countries for the ComboBox.
@@ -159,11 +226,22 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     public partial bool HasGamertagError { get; set; }
 
     /// <summary>
+    /// Whether the controller is inside the edit panel (panel rows move there
+    /// instead of the profile list).
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsPanelActive { get; set; }
+
+    /// <summary>
+    /// Whether a panel editor (dropdown) is open and takes Up/Down input.
+    /// </summary>
+    public bool IsEditorOpen => _editorKind.HasValue;
+
+    /// <summary>
     /// Whether the status line below the list has a message.
     /// </summary>
     [ObservableProperty]
     public partial bool HasStatus { get; set; }
-
     /// <summary>
     /// The status line text (create/save/import/export feedback).
     /// </summary>
@@ -208,6 +286,14 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         SubscriptionTiers = new ObservableCollection<EnumDisplayItem<SubscriptionTier>>(
             Enum.GetValues<SubscriptionTier>().Select(v => new EnumDisplayItem<SubscriptionTier>(v)));
         CreateStub.PropertyChanged += (_, _) => OnPropertyChanged(nameof(ShowEditPanel));
+
+        _panelRows.Add(RowGamertag);
+        _panelRows.Add(RowCountry);
+        _panelRows.Add(RowLanguage);
+        _panelRows.Add(RowLiveToggle);
+        _panelRows.Add(RowSubscriptionTier);
+        _panelRows.Add(RowSave);
+
         Reload();
     }
 
@@ -335,6 +421,11 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// <inheritdoc />
     public override bool HandleInput(NavigationCommand command)
     {
+        if (IsPanelActive)
+        {
+            return HandlePanelInput(command);
+        }
+
         switch (command)
         {
             case NavigationCommand.MoveUp:
@@ -342,6 +433,11 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
                 return true;
             case NavigationCommand.MoveDown:
                 TaskUtilities.RunSafely<ManageProfilesViewModel>(() => MoveAsync(1), "Moving profile selection");
+                return true;
+            case NavigationCommand.MoveRight:
+                // Right from a profile row enters the edit panel (like the game
+                // modal's A/Right pane entry)
+                EnterPanel();
                 return true;
             case NavigationCommand.Activate:
                 ActivateSelected();
@@ -368,14 +464,249 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
 
     /// <summary>
     /// Activates the selected row: creates a new profile on the stub, otherwise
-    /// keeps the profile loaded in the edit panel.
+    /// moves the controller into the edit panel.
     /// </summary>
     private void ActivateSelected()
     {
         if (CreateStub.IsSelected)
         {
             TaskUtilities.RunSafely<ManageProfilesViewModel>(CreateWithConfirmAsync, "Creating profile");
+            return;
         }
+
+        EnterPanel();
+    }
+
+    /// <summary>
+    /// Moves the controller into the edit panel, clearing the profile-row
+    /// selection (the panel is the active column now).
+    /// </summary>
+    private void EnterPanel()
+    {
+        if (SelectedProfile == null)
+        {
+            return;
+        }
+
+        IsPanelActive = true;
+        SelectionHelper.ClearSelection(Rows);
+        CreateStub.IsSelected = false;
+        Logger.Debug<ManageProfilesViewModel>("Entered edit panel");
+    }
+
+    /// <summary>
+    /// Returns the controller to the profile list, restoring the edited
+    /// profile's row selection.
+    /// </summary>
+    private void LeavePanel()
+    {
+        ResetPanel();
+        ProfileItemViewModel? row = Rows.FirstOrDefault(r => ReferenceEquals(r.Profile, SelectedProfile));
+        if (row != null)
+        {
+            SelectionHelper.SelectOnly(Rows, row);
+        }
+
+        ScrollRequested?.Invoke();
+        Logger.Debug<ManageProfilesViewModel>("Left edit panel");
+    }
+
+    /// <summary>
+    /// Closes the panel state (editor, selection, active flag) after the
+    /// controller left the panel or the selected profile changed.
+    /// </summary>
+    private void ResetPanel()
+    {
+        ClosePanelEditor();
+        IsPanelActive = false;
+        SelectionHelper.ClearSelection(_panelRows);
+    }
+
+    /// <summary>
+    /// Handles controller input while the edit panel is the active column:
+    /// row movement, activation, editor cycling, and returning to the list.
+    /// </summary>
+    private bool HandlePanelInput(NavigationCommand command)
+    {
+        if (IsEditorOpen)
+        {
+            return HandlePanelEditorInput(command);
+        }
+
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                MovePanelSelection(-1);
+                return true;
+            case NavigationCommand.MoveDown:
+                MovePanelSelection(1);
+                return true;
+            case NavigationCommand.MoveLeft:
+            case NavigationCommand.Back:
+                LeavePanel();
+                return true;
+            case NavigationCommand.Activate:
+                ActivatePanelRow();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Moves the panel selection by the given step, clamped at both ends. The
+    /// panel rows start unselected - the first move selects the first row.
+    /// </summary>
+    private void MovePanelSelection(int delta)
+    {
+        SelectionHelper.MoveSelection(_panelRows, delta);
+    }
+
+    /// <summary>
+    /// Activates the selected panel row: toggles the live switch, saves on the
+    /// Save row, opens the editor on the dropdown rows, or focuses the
+    /// gamertag text box for keyboard entry.
+    /// </summary>
+    private void ActivatePanelRow()
+    {
+        switch (_panelRows.FirstOrDefault(r => r.IsSelected))
+        {
+            case ManageProfilesRowViewModel { Kind: ManageProfilesRowKind.LiveToggle }:
+                IsLiveEnabled = !IsLiveEnabled;
+                break;
+            case ManageProfilesRowViewModel { Kind: ManageProfilesRowKind.Save }:
+                Save();
+                break;
+            case ManageProfilesRowViewModel { Kind: ManageProfilesRowKind.Gamertag }:
+                GamertagFocusRequested?.Invoke();
+                break;
+            case ManageProfilesRowViewModel { Kind: ManageProfilesRowKind.Country }:
+                OpenPanelEditor(ManageProfilesRowKind.Country, SelectedCountryIndex);
+                break;
+            case ManageProfilesRowViewModel { Kind: ManageProfilesRowKind.Language }:
+                OpenPanelEditor(ManageProfilesRowKind.Language, SelectedLanguageIndex);
+                break;
+            case ManageProfilesRowViewModel { Kind: ManageProfilesRowKind.SubscriptionTier }:
+                if (IsLiveEnabled)
+                {
+                    OpenPanelEditor(ManageProfilesRowKind.SubscriptionTier, SelectedSubscriptionTierIndex);
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Opens the editor for the given panel dropdown, snapshotting its index
+    /// so a cancel can restore it.
+    /// </summary>
+    private void OpenPanelEditor(ManageProfilesRowKind kind, int originalIndex)
+    {
+        _editorKind = kind;
+        _editorOriginalIndex = originalIndex;
+        PanelEditorOpened?.Invoke(kind);
+        Logger.Debug<ManageProfilesViewModel>($"Opened {kind} editor");
+    }
+
+    /// <summary>
+    /// Handles input while a panel editor is open: Up/Down cycles the dropdown,
+    /// A commits and B cancels (restoring the original selection).
+    /// </summary>
+    private bool HandlePanelEditorInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                CyclePanelEditor(-1);
+                return true;
+            case NavigationCommand.MoveDown:
+                CyclePanelEditor(1);
+                return true;
+            case NavigationCommand.Activate:
+                CommitPanelEditor();
+                return true;
+            case NavigationCommand.Back:
+                CancelPanelEditor();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Cycles the open panel editor's dropdown selection by the given step,
+    /// wrapping at both ends.
+    /// </summary>
+    private void CyclePanelEditor(int delta)
+    {
+        switch (_editorKind)
+        {
+            case ManageProfilesRowKind.Country:
+                SelectedCountryIndex = WrapIndex(SelectedCountryIndex, Countries.Count, delta);
+                break;
+            case ManageProfilesRowKind.Language:
+                SelectedLanguageIndex = WrapIndex(SelectedLanguageIndex, Languages.Count, delta);
+                break;
+            case ManageProfilesRowKind.SubscriptionTier:
+                SelectedSubscriptionTierIndex =
+                    WrapIndex(SelectedSubscriptionTierIndex, SubscriptionTiers.Count, delta);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Steps a dropdown index by the given delta, wrapping at both ends.
+    /// </summary>
+    private static int WrapIndex(int current, int count, int delta)
+    {
+        if (count <= 0)
+        {
+            return current;
+        }
+
+        return (Math.Max(current, 0) + delta + count) % count;
+    }
+
+    /// <summary>
+    /// Commits the open panel editor's selection and closes it.
+    /// </summary>
+    private void CommitPanelEditor()
+    {
+        ManageProfilesRowKind? kind = _editorKind;
+        ClosePanelEditor();
+        Logger.Debug<ManageProfilesViewModel>($"Committed {kind} editor");
+    }
+
+    /// <summary>
+    /// Restores the open panel editor's original selection and closes it.
+    /// </summary>
+    private void CancelPanelEditor()
+    {
+        ManageProfilesRowKind? kind = _editorKind;
+        switch (kind)
+        {
+            case ManageProfilesRowKind.Country:
+                SelectedCountryIndex = _editorOriginalIndex;
+                break;
+            case ManageProfilesRowKind.Language:
+                SelectedLanguageIndex = _editorOriginalIndex;
+                break;
+            case ManageProfilesRowKind.SubscriptionTier:
+                SelectedSubscriptionTierIndex = _editorOriginalIndex;
+                break;
+        }
+
+        ClosePanelEditor();
+        Logger.Debug<ManageProfilesViewModel>($"Cancelled {kind} editor");
+    }
+
+    /// <summary>
+    /// Closes the panel editor and notifies the view to close the native control.
+    /// </summary>
+    private void ClosePanelEditor()
+    {
+        _editorKind = null;
+        PanelEditorClosed?.Invoke();
     }
 
     /// <summary>
@@ -738,6 +1069,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// </summary>
     private void SelectRowOnly(ProfileItemViewModel row)
     {
+        ResetPanel();
         SelectionHelper.SelectOnly(Rows, row);
         CreateStub.IsSelected = false;
         SelectedProfile = row.Profile;
@@ -748,6 +1080,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// </summary>
     private void SelectStub()
     {
+        ResetPanel();
         SelectionHelper.ClearSelection(Rows);
         CreateStub.IsSelected = true;
         SelectedProfile = null;

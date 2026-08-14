@@ -61,14 +61,16 @@
                    Text="{DynamicResource Settings.Title}"
                    Margin="0,20,0,30" />
 
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer x:Name="SvSettings" Grid.Row="1">
             <StackPanel Orientation="Vertical" Spacing="14">
 
                 <!-- PREFERENCES -->
                 <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Preferences}" />
 
                 <!-- PROFILES -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardManageProfiles"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowManageProfiles.IsSelected}">
                     <DockPanel>
                         <Button x:Name="BtnManageProfiles"
                                 Classes="settings-button"
@@ -85,7 +87,9 @@
                 </Border>
 
                 <!-- LIBRARY VIEW -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardLibraryView"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowLibraryView.IsSelected}">
                     <DockPanel>
                         <ComboBox x:Name="LibraryViewModeCombo"
                                   Classes="settings-combo"
@@ -98,7 +102,9 @@
                 </Border>
 
                 <!-- CARD IMAGE -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardCardImage"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowCardImage.IsSelected}">
                     <DockPanel>
                         <ComboBox x:Name="CardImageModeCombo"
                                   Classes="settings-combo"
@@ -111,7 +117,9 @@
                 </Border>
 
                 <!-- TIME FORMAT -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardTimeFormat"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowTimeFormat.IsSelected}">
                     <DockPanel>
                         <ComboBox x:Name="TimeFormatCombo"
                                   Classes="settings-combo"
@@ -124,7 +132,9 @@
                 </Border>
 
                 <!-- QUIT BEHAVIOUR -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardQuitToggle"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowQuitToggle.IsSelected}">
                     <DockPanel>
                         <CheckBox x:Name="ChkQuitBehaviour"
                                   DockPanel.Dock="Right"
@@ -146,7 +156,9 @@
                 <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Theme}" />
 
                 <!-- BACKGROUND TYPE -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardBackgroundMode"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowBackgroundMode.IsSelected}">
                     <DockPanel>
                         <ComboBox x:Name="BackgroundModeCombo"
                                   Classes="settings-combo"
@@ -159,7 +171,9 @@
                 </Border>
 
                 <!-- PRIMARY COLOUR -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardPrimaryColour"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowPrimaryColour.IsSelected}">
                     <DockPanel>
                         <set:ColorPickerField x:Name="PrimaryColorField"
                                               DockPanel.Dock="Right"
@@ -170,7 +184,9 @@
                 </Border>
 
                 <!-- ACCENT COLOUR -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardAccentColour"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowAccentColour.IsSelected}">
                     <DockPanel>
                         <set:ColorPickerField x:Name="AccentColorField"
                                               DockPanel.Dock="Right"
@@ -181,14 +197,17 @@
                 </Border>
 
                 <!-- VIGNETTE OPACITY -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardVignette"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowVignette.IsSelected}">
                     <DockPanel>
                         <TextBlock Classes="settings-value"
                                    DockPanel.Dock="Right"
                                    Text="{Binding VignetteText}"
                                    Width="60"
                                    TextAlignment="Right" />
-                        <Slider DockPanel.Dock="Right"
+                        <Slider x:Name="SldVignette"
+                                DockPanel.Dock="Right"
                                 Minimum="0"
                                 Maximum="1"
                                 Value="{Binding VignetteOpacity, Mode=TwoWay}"
@@ -200,7 +219,9 @@
                 </Border>
 
                 <!-- BACKGROUND IMAGE -->
-                <Border Classes="settings-card">
+                <Border x:Name="CardBackgroundImage"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowBackgroundImage.IsSelected}">
                     <DockPanel>
                         <Button x:Name="BtnSelectImage"
                                 Classes="settings-button"
@@ -244,6 +265,8 @@
         <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
             <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
                             Text="{DynamicResource Settings.Hint.Back}" />
+            <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                            Text="{DynamicResource Settings.Hint.Select}" />
         </StackPanel>
     </Grid>
 </UserControl>

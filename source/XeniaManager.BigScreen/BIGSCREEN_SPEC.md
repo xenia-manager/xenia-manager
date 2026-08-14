@@ -30,9 +30,9 @@
 Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape** closes, focus returns to the option row. Bottom hint bars use the `InputHint` control (coloured circle keycap + label).
 - **Library** — all games in a horizontal **carousel** (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD) or a vertical **list** with a details pane (`LibraryListItem` + `GameDetailsPanel`). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle; in list mode Up/Down iterates. **X** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). **View/V** swaps the layout (Carousel ↔ List, persisted via `library_view_mode`); the details pane shows marketplace DB info (bio, genre, developer, publisher, release date — loading/no-info states, stale-fetch guard + negative cache). Disc stub shown when the library is empty.
 - **Gallery** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, **capture date decoded from the file name** (`{GAMEID} - {yyyy-MM-ddTHH-mm-ss}`, write time as fallback — `ScreenshotFileNameParser`)). Click/Enter → **screenshot viewer modal** (on the modal stack — see the viewer section below). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
-- **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker.
+- **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker. **Controller navigation (T18):** D-pad walks the rows (fixed cards then connected gamepad rows — the `.settings-row` accent border marks the selection, rows start unselected, the first move selects the first row, the selection survives battery-poll rebuilds); **A** activates — gamepad rows set the primary controller, the quit toggle flips, Manage Profiles / Select Image act, dropdown rows open their native dropdown (**Up/Down** cycles, **A** commits, **B** restores the original), colour rows open the palette popup (**Left/Right** cycles), the slider row steps with **Left/Right**; **Back** closes an open editor first, then the screen. Keyboard input stays on the native controls (Tab, arrows, hex typing).
 - **Quit** — closes the app.
-- **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (X blue) → Details (Y amber) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Gallery = Back → Select (A) → Sort (X blue); Settings = Back/Close. **One hint bar at a time:** only the top modal's hint bar shows (`ModalViewModelBase.IsHintBarVisible`), and the overlay screens hide theirs while any modal is open.
+- **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (X blue) → Details (Y amber) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Gallery = Back → Select (A) → Sort (X blue); Settings = Back → Select (A). **One hint bar at a time:** only the top modal's hint bar shows (`ModalViewModelBase.IsHintBarVisible`), and the overlay screens hide theirs while any modal is open.
 
 ### Base app data sharing (`Program.cs` + `Services/BaseAppLocator.cs`)
 - BigScreen **reads the base Xenia Manager's data folders** (library, games, artwork, profiles): `Program.Main` calls `AppPathResolver.SetBaseDirectory(...)` before anything resolves paths (Core change, base app unaffected).
@@ -112,7 +112,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **Boot reorder:** Settings stage now runs before the Profile stage (the persisted XUID is needed to pick the profile).
 - **Header `ProfileButton`** (avatar chip) — focusable + clickable; controller **Up** from the game row selects it (**Down** returns to the previously selected card; **Right** jumps to the next card after the current selection, wrapping from card 8 back to card 1); reserved 4px border that turns accent on selection/hover (no fill, no shadow — the icon floats inside the 40px circle).
 - **Profile picker modal** (`ProfilePickerView`) — opened from the header chip: all profiles (active first, then alphabetical) with gamertag, country · language and per-profile gamerscore; Up/Down + A switches + B closes, **Y opens Manage Profiles** on top of the picker; "no profiles" stub.
-- **Manage Profiles modal** (`ManageProfilesView`) — opened from a Profiles card in Settings or via Y in the picker: profile rows (scrollable) + an anchored **Create New Profile stub row** beneath; full desktop-dialogue port (create / delete / import (`ProfileManager.ImportProfileWithReplacement` + replace-confirm, `.xaccount`/`.zip` picker) / export (save picker + "include saves?" confirm) / edit gamertag (regex + 15-char validation, inline error) + country/language/subscription combos + Xbox Live toggle / Save (`SaveProfiles`)); edit panel hidden while the stub is selected; **unsaved edits prompt Save / Discard on exit and row switches (B cancels, staying put)**; deleting the active profile falls back to the first and refreshes the header/stats. Hints: B Back · X Delete · View Import · Start Export.
+- **Manage Profiles modal** (`ManageProfilesView`) — opened from a Profiles card in Settings or via Y in the picker: profile rows (scrollable) + an anchored **Create New Profile stub row** beneath; full desktop-dialogue port (create / delete / import (`ProfileManager.ImportProfileWithReplacement` + replace-confirm, `.xaccount`/`.zip` picker) / export (save picker + "include saves?" confirm) / edit gamertag (regex + 15-char validation, inline error) + country/language/subscription combos + Xbox Live toggle / Save (`SaveProfiles`)); edit panel hidden while the stub is selected; **unsaved edits prompt Save / Discard on exit and row switches (B cancels, staying put)**; deleting the active profile falls back to the first and refreshes the header/stats. **Controller edit-panel navigation:** **A or Right** on a profile row enters the panel (clears the row accent — game-modal column contract; the panel border turns accent), **B or Left** returns to the list; the panel rows (gamertag, country, language, Xbox Live toggle, subscription tier, Save) are controller-navigable with reserved `.edit-field-row` borders — **A** toggles the live switch, saves on the Save row, focuses the gamertag text box for keyboard entry, or opens a dropdown editor (**Up/Down** cycles, **A** commits, **B** restores; subscription skipped while Xbox Live is off); panel state resets on row/stub switches. Hints: B Back · A Edit · X Delete · View Import · Start Export.
 
 ---
 
@@ -131,7 +131,7 @@ source/XeniaManager.BigScreen/
 │   ├── Screens/
 │   │   ├── LibraryView.axaml(.cs)     # Library carousel + list, clamped scroll, details pane + empty stub
 │   │   ├── GalleryView.axaml(.cs)     # Gallery grid + empty stub (viewer lives in Modals now)
-│   │   └── SettingsView.axaml(.cs)    # Settings screen (owns the background image picker)
+│   │   └── SettingsView.axaml(.cs)    # Settings screen (owns the background image picker; row classes, BringIntoView, editor open/close)
 │   └── Modals/
 │       ├── GameModalView.axaml(.cs)   # Game modal: icon+title, options list (left), live panes (right)
 │       ├── AchievementsPaneView.axaml(.cs)   # Achievements pane (stats, sort, scrollable rows)
@@ -153,7 +153,7 @@ source/XeniaManager.BigScreen/
 │   ├── Screens/
 │   │   ├── LibraryViewModel.cs        # Games carousel + sort (ScreenViewModel base)
 │   │   ├── GalleryViewModel.cs        # Screenshots + sort (ScreenViewModel base)
-│   │   ├── SettingsViewModel.cs       # Appearance options + persistence + quit toggle + library view + card image + Manage Profiles entry
+│   │   ├── SettingsViewModel.cs       # Appearance options + persistence + quit toggle + library view + card image + Manage Profiles entry + controller row navigation (selection, row editors, primary switch)
 │   │   └── ScreenViewModel.cs         # Base for overlay screens: ScreenBackground brush + hint-bar visibility
 │   ├── Modals/
 │   │   ├── ModalViewModelBase.cs(.Generic.cs) # Modal lifecycle: close TCS, HandleInput (Back closes by default), Dispose hook, IsHintBarVisible (top modal only); generic result delivery
@@ -170,7 +170,7 @@ source/XeniaManager.BigScreen/
 │   │   ├── DiscSelectionViewModel.cs # Disc selection modal (typed int? result; skip-missing navigation)
 │   │   ├── ConfirmationModalViewModel.cs # Reusable 2-option prompt (Left/Right + A, B cancels → null; true/false/null result)
 │   │   ├── ProfilePickerViewModel.cs  # Picker modal: rows, switch-active, Y → Manage Profiles
-│   │   └── ManageProfilesViewModel.cs # Manage modal: rows + stub selection, edit fields + dirty tracking, create/delete/import/export, unsaved prompts
+│   │   └── ManageProfilesViewModel.cs # Manage modal: rows + stub selection, edit fields + dirty tracking, create/delete/import/export, unsaved prompts + edit-panel column nav (panel rows, dropdown editors, primary switch)
 │   ├── ViewModelBase.cs
 │   └── Items/
 │       ├── GameCardViewModel.cs       # Core Game ref, Title, Boxart/DiscArt layers (card_image_mode), stat strings, IsSelected, BackgroundArt
@@ -185,6 +185,8 @@ source/XeniaManager.BigScreen/
 │       ├── PatchListRowViewModel.cs   # Patches list row: patch entry or download/remove action (+ PatchActionType enum)
 │       ├── ProfileItemViewModel.cs    # Profile row: gamertag, country · language, gamerscore (loaded async), IsSelected/IsActive
 │       ├── CreateProfileStubViewModel.cs # The anchored "Create New Profile" row (ISelectable)
+│       ├── SettingsRowViewModel.cs   # Fixed settings row: kind + selection (ISelectable)
+│       ├── ManageProfilesRowViewModel.cs # Fixed edit-panel row: kind + selection (ISelectable)
 │       └── DiscOptionItemViewModel.cs # Disc card row: label, last-played/missing status, IsSelected (ISelectable)
 ├── Controls/
 │   ├── Cards/
@@ -255,6 +257,8 @@ source/XeniaManager.BigScreen/
 │   │   ├── CardImageMode.cs / CardImageModeOption.cs
 │   │   └── TimeFormat.cs / TimeFormatOption.cs
 │   ├── NavigationCommand.cs         # Public command set (Move/Activate/Back/CycleSort/ToggleView/Start/Details)
+│   ├── SettingsRowKind.cs           # Settings screen row kinds (fixed cards + gamepad rows)
+│   ├── ManageProfilesRowKind.cs     # Manage Profiles edit-panel row kinds (gamertag…save)
 │   ├── GameModalPane.cs             # The six game modal panes (Achievements…Settings)
 │   ├── AchievementSort.cs           # Achieved / GamerscoreAwarded / Alphabetical
 │   ├── GameStatInfo.cs              # Achievement/gamerscore counters (unlocked / total)
@@ -437,7 +441,7 @@ source/XeniaManager.BigScreen/
 ### 5.19 Dashboard, header & settings
 - [x] **T16.** Time format setting — 12h/24h (persisted in `DashboardSettings`); clock + capture dates follow it
 - [x] **T17.** Controllers section (Settings): auto-detected list of `GamepadCard` rows with name, **Status: Primary/Secondary** (primary in accent) and tiered battery icon + % (via `IconFactory`); no UI buttons; SDL controller database updates silently in the background at boot; changing primary is **controller-only** (lands with T18)
-- [ ] **T18.** Settings controller navigation: D-pad moves between rows; **A activates (sets primary controller on a gamepad row, opens dropdowns/checkbox/colour fields on the other rows)**; `GamepadCard` already carries `Classes.selected` + accent border, `SetPrimary` is wired in the VM
+- [x] **T18.** Settings controller navigation: D-pad moves between rows; **A activates (sets primary controller on a gamepad row, opens dropdowns/checkbox/colour fields on the other rows)**; `GamepadCard` already carries `Classes.selected` + accent border, `SetPrimary` is wired in the VM
 - [x] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game modal (T8/T10/T11)
 - [x] **T20.** Boxart tile sizing — in `CardImageMode.BoxArt` the dashboard tile is portrait and sized so the box art fills it bottom-anchored with the top ~12% cropped; Icon-mode fallback unchanged
 - [ ] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery **% text below** the battery icon

@@ -13,7 +13,8 @@ namespace XeniaManager.BigScreen.Services;
 /// Translates keyboard and gamepad input into dashboard navigation commands,
 /// routing them through the navigation controller. One command set serves
 /// both input sources; the active screen or modal decides what each command
-/// does (settings stays keyboard-only for its controls).
+/// does (settings takes its keyboard input on the native controls and its
+/// gamepad input on the row navigation).
 /// </summary>
 public class InputRouter(DashboardNavigationController navigation, IModalService modalService)
 {
@@ -101,10 +102,12 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// Commands while an overlay screen is open. Settings only responds to Back
-    /// (its controls stay keyboard/mouse-driven).
+    /// Commands while an overlay screen is open. Library and Gallery respond to
+    /// both input sources; Settings only takes Back from the keyboard - its
+    /// native controls keep the keyboard interaction, while the gamepad drives
+    /// the row navigation.
     /// </summary>
-    private void HandleOverlay(MainWindowViewModel vm, NavigationCommand command)
+    private void HandleOverlay(MainWindowViewModel vm, NavigationCommand command, bool fromGamepad)
     {
         if (vm.IsLibraryScreen)
         {
@@ -114,9 +117,32 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         {
             HandleGallery(vm, command);
         }
-        else if (vm.IsSettingsScreen && command == NavigationCommand.Back)
+        else if (vm.IsSettingsScreen)
         {
-            CloseOverlay(vm);
+            HandleSettings(vm, command, fromGamepad);
+        }
+    }
+
+    /// <summary>
+    /// Commands while the settings screen is open. Back closes the screen
+    /// after any open row editor; the remaining commands reach here from the
+    /// gamepad only and drive the row navigation.
+    /// </summary>
+    private void HandleSettings(MainWindowViewModel vm, NavigationCommand command, bool fromGamepad)
+    {
+        if (command == NavigationCommand.Back)
+        {
+            if (!vm.Settings.HandleBack())
+            {
+                CloseOverlay(vm);
+            }
+
+            return;
+        }
+
+        if (fromGamepad)
+        {
+            vm.Settings.HandleInput(command);
         }
     }
 
@@ -242,9 +268,10 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
 
     /// <summary>
     /// Routes a command to the handler for the active layer: the modal stack
-    /// (top modal), an overlay screen, or the dashboard.
+    /// (top modal), an overlay screen, or the dashboard. The source only matters
+    /// for the settings screen, where keyboard and gamepad diverge.
     /// </summary>
-    private void Dispatch(MainWindowViewModel vm, NavigationCommand command, GameCardViewModel? gameCard = null)
+    private void Dispatch(MainWindowViewModel vm, NavigationCommand command, GameCardViewModel? gameCard, bool fromGamepad)
     {
         if (modalService.Top is { } modal)
         {
@@ -252,7 +279,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         }
         else if (vm.IsOverlayOpen)
         {
-            HandleOverlay(vm, command);
+            HandleOverlay(vm, command, fromGamepad);
         }
         else
         {
@@ -315,7 +342,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         // Keyboard activation acts on the focused game card
         GameCardViewModel? gameCard =
             (focusManager?.GetFocusedElement() as Control)?.DataContext is GameCardViewModel card ? card : null;
-        Dispatch(vm, command.Value, gameCard);
+        Dispatch(vm, command.Value, gameCard, false);
         e.Handled = true;
     }
 
@@ -335,6 +362,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         GameCardViewModel? gameCard = !vm.IsOverlayOpen && !navigation.IsOnOptionsRow
             ? vm.Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected)
             : null;
-        Dispatch(vm, command.Value, gameCard);
+        Dispatch(vm, command.Value, gameCard, true);
     }
 }

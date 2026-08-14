@@ -6,8 +6,10 @@ using System.Linq;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.BigScreen.Controls.Settings;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Factories;
+using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -31,6 +33,23 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IGamepadInputService _gamepadService;
 
     /// <summary>
+    /// Every controller-navigable row in display order (fixed rows followed by
+    /// the connected gamepads), used for the row selection movement.
+    /// </summary>
+    private readonly List<ISelectable> _rows = [];
+
+    /// <summary>
+    /// Value snapshots taken when a row editor opens, restored on cancel.
+    /// </summary>
+    private BackgroundMode _originalMode;
+    private LibraryViewMode _originalLibraryView;
+    private CardImageMode _originalCardImage;
+    private TimeFormat _originalTimeFormat;
+    private Color _originalPrimary;
+    private Color _originalAccent;
+    private double _originalVignette;
+
+    /// <summary>
     /// Raised after a persisted appearance option changed, so the dashboard can
     /// rebuild its background.
     /// </summary>
@@ -52,6 +71,29 @@ public partial class SettingsViewModel : ViewModelBase
     public event Action? TimeFormatChanged;
 
     /// <summary>
+    /// Raised after the controller moved to a row, so the view can scroll it into view.
+    /// </summary>
+    public event Action<ISelectable>? RowSelectionChanged;
+
+    /// <summary>
+    /// Raised after a row's editor opened (dropdown, palette or slider), so the
+    /// view can open the matching native control.
+    /// </summary>
+    public event Action<SettingsRowKind>? EditorOpened;
+
+    /// <summary>
+    /// Raised after a row's editor closed (commit or cancel), so the view can
+    /// close the native control.
+    /// </summary>
+    public event Action? EditorClosed;
+
+    /// <summary>
+    /// Raised when the controller activates the Background Image row, so the
+    /// view can open the file picker.
+    /// </summary>
+    public event Action? SelectImageRequested;
+
+    /// <summary>
     /// Connected gamepads shown in the Controllers section.
     /// </summary>
     public ObservableCollection<GamepadItemViewModel> Controllers { get; } = [];
@@ -65,6 +107,56 @@ public partial class SettingsViewModel : ViewModelBase
     /// Gamertag of the active profile, shown in the Profiles section.
     /// </summary>
     public string ActiveGamertag => _profileService.Gamertag;
+
+    /// <summary>
+    /// Row for the Manage Profiles card.
+    /// </summary>
+    public SettingsRowViewModel RowManageProfiles { get; } = new(SettingsRowKind.ManageProfiles);
+
+    /// <summary>
+    /// Row for the library view dropdown card.
+    /// </summary>
+    public SettingsRowViewModel RowLibraryView { get; } = new(SettingsRowKind.LibraryView);
+
+    /// <summary>
+    /// Row for the card image dropdown card.
+    /// </summary>
+    public SettingsRowViewModel RowCardImage { get; } = new(SettingsRowKind.CardImage);
+
+    /// <summary>
+    /// Row for the time format dropdown card.
+    /// </summary>
+    public SettingsRowViewModel RowTimeFormat { get; } = new(SettingsRowKind.TimeFormat);
+
+    /// <summary>
+    /// Row for the quit behaviour toggle card.
+    /// </summary>
+    public SettingsRowViewModel RowQuitToggle { get; } = new(SettingsRowKind.QuitToggle);
+
+    /// <summary>
+    /// Row for the background type dropdown card.
+    /// </summary>
+    public SettingsRowViewModel RowBackgroundMode { get; } = new(SettingsRowKind.BackgroundMode);
+
+    /// <summary>
+    /// Row for the primary colour card.
+    /// </summary>
+    public SettingsRowViewModel RowPrimaryColour { get; } = new(SettingsRowKind.PrimaryColour);
+
+    /// <summary>
+    /// Row for the accent colour card.
+    /// </summary>
+    public SettingsRowViewModel RowAccentColour { get; } = new(SettingsRowKind.AccentColour);
+
+    /// <summary>
+    /// Row for the vignette slider card.
+    /// </summary>
+    public SettingsRowViewModel RowVignette { get; } = new(SettingsRowKind.Vignette);
+
+    /// <summary>
+    /// Row for the background image picker card.
+    /// </summary>
+    public SettingsRowViewModel RowBackgroundImage { get; } = new(SettingsRowKind.BackgroundImage);
 
     /// <summary>
     /// Options shown in the settings background-type dropdown, in enum order
@@ -178,6 +270,28 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsHintBarVisible { get; set; } = true;
 
+    /// <summary>
+    /// The kind of the row whose editor is currently open (dropdown, palette
+    /// or slider), or null when rows navigate normally.
+    /// </summary>
+    [ObservableProperty]
+    public partial SettingsRowKind? ActiveEditor { get; set; }
+
+    /// <summary>
+    /// Whether a row's editor is open and takes value input.
+    /// </summary>
+    public bool IsEditorOpen => ActiveEditor.HasValue;
+
+    /// <summary>
+    /// Whether the open editor cycles its value with Up/Down (the dropdown
+    /// rows) instead of Left/Right (colours and the slider).
+    /// </summary>
+    private bool IsComboEditor =>
+        ActiveEditor is SettingsRowKind.LibraryView
+            or SettingsRowKind.CardImage
+            or SettingsRowKind.TimeFormat
+            or SettingsRowKind.BackgroundMode;
+
     public SettingsViewModel(IBackgroundService backgroundService, IProfileService profileService,
         IGamepadInputService gamepadService, IModalService modalService)
     {
@@ -193,21 +307,57 @@ public partial class SettingsViewModel : ViewModelBase
         {
             _gamepadService.StateChanged += OnGamepadStateChanged;
         }
+
+        RebuildRows();
     }
 
     /// <summary>
-    /// Rebuilds the connected-gamepad list from the gamepad service.
+    /// Rebuilds the connected-gamepad list from the gamepad service, keeping
+    /// the selection on the same gamepad (or falling back to the Background
+    /// Image row when it disconnected). Battery polls rebuild this list, so
+    /// the selection must survive them.
     /// </summary>
     public void RefreshControllers()
     {
+        string? selectedGuid = Controllers.FirstOrDefault(c => c.IsSelected)?.Guid;
         Controllers.Clear();
         foreach (GamepadInfo gamepad in _gamepadService.ConnectedGamepads)
         {
             Controllers.Add(new GamepadItemViewModel(gamepad));
         }
 
+        RebuildRows();
+        if (selectedGuid != null)
+        {
+            GamepadItemViewModel? match = Controllers.FirstOrDefault(c => c.Guid == selectedGuid);
+            SelectionHelper.SelectOnly(_rows, (ISelectable?)match ?? RowBackgroundImage);
+        }
+
         OnPropertyChanged(nameof(HasNoControllers));
         Logger.Debug<SettingsViewModel>($"Controllers refreshed: {Controllers.Count} connected");
+    }
+
+    /// <summary>
+    /// Rebuilds the controller-navigable row list (fixed rows in display order,
+    /// then the connected gamepads).
+    /// </summary>
+    private void RebuildRows()
+    {
+        _rows.Clear();
+        _rows.Add(RowManageProfiles);
+        _rows.Add(RowLibraryView);
+        _rows.Add(RowCardImage);
+        _rows.Add(RowTimeFormat);
+        _rows.Add(RowQuitToggle);
+        _rows.Add(RowBackgroundMode);
+        _rows.Add(RowPrimaryColour);
+        _rows.Add(RowAccentColour);
+        _rows.Add(RowVignette);
+        _rows.Add(RowBackgroundImage);
+        foreach (GamepadItemViewModel controller in Controllers)
+        {
+            _rows.Add(controller);
+        }
     }
 
     /// <summary>
@@ -226,6 +376,282 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService.Save();
         Logger.Info<SettingsViewModel>($"Primary controller set to '{item.Name}' ({item.Source.Guid})");
     }
+
+    /// <summary>
+    /// Handles a gamepad navigation command: row movement while no editor is
+    /// open, value cycling while one is. Returns whether the command was consumed.
+    /// </summary>
+    public bool HandleInput(NavigationCommand command)
+    {
+        if (IsEditorOpen)
+        {
+            return HandleEditorInput(command);
+        }
+
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                MoveSelection(-1);
+                return true;
+            case NavigationCommand.MoveDown:
+                MoveSelection(1);
+                return true;
+            case NavigationCommand.Activate:
+                ActivateRow();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Handles Back: cancels the open row editor first, returning whether Back
+    /// was consumed (the router closes the settings screen otherwise).
+    /// </summary>
+    public bool HandleBack()
+    {
+        if (IsEditorOpen)
+        {
+            CancelEditor();
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Moves the row selection by the given step, clamped at both ends. Rows
+    /// start unselected - the first move selects the first row.
+    /// </summary>
+    public void MoveSelection(int delta)
+    {
+        int index = SelectionHelper.MoveSelection(_rows, delta);
+        if (index >= 0)
+        {
+            RowSelectionChanged?.Invoke(_rows[index]);
+        }
+    }
+
+    /// <summary>
+    /// Activates the selected row: sets the primary controller on a gamepad row,
+    /// or runs the fixed row's action (toggle, editor, modal or picker).
+    /// </summary>
+    private void ActivateRow()
+    {
+        switch (_rows.FirstOrDefault(r => r.IsSelected))
+        {
+            case SettingsRowViewModel row:
+                ActivateFixedRow(row.Kind);
+                break;
+            case GamepadItemViewModel gamepad:
+                SetPrimary(gamepad);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Runs the fixed row's action for its kind.
+    /// </summary>
+    private void ActivateFixedRow(SettingsRowKind kind)
+    {
+        switch (kind)
+        {
+            case SettingsRowKind.ManageProfiles:
+                OpenManageProfiles();
+                break;
+            case SettingsRowKind.QuitToggle:
+                ReturnToXeniaOnQuit = !ReturnToXeniaOnQuit;
+                break;
+            case SettingsRowKind.BackgroundImage:
+                SelectImageRequested?.Invoke();
+                break;
+            case SettingsRowKind.LibraryView:
+            case SettingsRowKind.CardImage:
+            case SettingsRowKind.TimeFormat:
+            case SettingsRowKind.BackgroundMode:
+            case SettingsRowKind.PrimaryColour:
+            case SettingsRowKind.AccentColour:
+            case SettingsRowKind.Vignette:
+                OpenEditor(kind);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Handles gamepad input while a row editor is open: dropdown rows cycle
+    /// with Up/Down, colours and the slider with Left/Right, A commits.
+    /// </summary>
+    private bool HandleEditorInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                if (IsComboEditor)
+                {
+                    CycleValue(-1);
+                }
+
+                return true;
+            case NavigationCommand.MoveDown:
+                if (IsComboEditor)
+                {
+                    CycleValue(1);
+                }
+
+                return true;
+            case NavigationCommand.MoveLeft:
+                if (!IsComboEditor)
+                {
+                    CycleValue(-1);
+                }
+
+                return true;
+            case NavigationCommand.MoveRight:
+                if (!IsComboEditor)
+                {
+                    CycleValue(1);
+                }
+
+                return true;
+            case NavigationCommand.Activate:
+                CommitEditor();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Cycles the open editor's value by the given step (dropdown option, palette
+    /// colour or vignette step), wrapping at both ends.
+    /// </summary>
+    private void CycleValue(int delta)
+    {
+        switch (ActiveEditor)
+        {
+            case SettingsRowKind.LibraryView:
+                LibraryViewMode = EnumCycleHelper.Next(LibraryViewMode, delta);
+                break;
+            case SettingsRowKind.CardImage:
+                CardImageMode = EnumCycleHelper.Next(CardImageMode, delta);
+                break;
+            case SettingsRowKind.TimeFormat:
+                TimeFormat = EnumCycleHelper.Next(TimeFormat, delta);
+                break;
+            case SettingsRowKind.BackgroundMode:
+                Mode = EnumCycleHelper.Next(Mode, delta);
+                break;
+            case SettingsRowKind.PrimaryColour:
+                PrimaryColor = EnumCycleHelper.NextColor(ColorPickerField.BackgroundPalette, PrimaryColor, delta, 0);
+                break;
+            case SettingsRowKind.AccentColour:
+                AccentColor = EnumCycleHelper.NextColor(ColorPickerField.AccentPalette, AccentColor, delta, 1);
+                break;
+            case SettingsRowKind.Vignette:
+                AdjustVignette(delta);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Opens the editor for the given row kind, snapshotting its value so a
+    /// cancel can restore it.
+    /// </summary>
+    private void OpenEditor(SettingsRowKind kind)
+    {
+        switch (kind)
+        {
+            case SettingsRowKind.LibraryView:
+                _originalLibraryView = LibraryViewMode;
+                break;
+            case SettingsRowKind.CardImage:
+                _originalCardImage = CardImageMode;
+                break;
+            case SettingsRowKind.TimeFormat:
+                _originalTimeFormat = TimeFormat;
+                break;
+            case SettingsRowKind.BackgroundMode:
+                _originalMode = Mode;
+                break;
+            case SettingsRowKind.PrimaryColour:
+                _originalPrimary = PrimaryColor;
+                break;
+            case SettingsRowKind.AccentColour:
+                _originalAccent = AccentColor;
+                break;
+            case SettingsRowKind.Vignette:
+                _originalVignette = VignetteOpacity;
+                break;
+        }
+
+        ActiveEditor = kind;
+        EditorOpened?.Invoke(kind);
+        Logger.Debug<SettingsViewModel>($"Opened {kind} editor");
+    }
+
+    /// <summary>
+    /// Commits the open editor's value and closes it.
+    /// </summary>
+    public void CommitEditor()
+    {
+        SettingsRowKind? kind = ActiveEditor;
+        CloseEditor();
+        Logger.Debug<SettingsViewModel>($"Committed {kind} editor");
+    }
+
+    /// <summary>
+    /// Restores the open editor's original value and closes it.
+    /// </summary>
+    public void CancelEditor()
+    {
+        RestoreEditorOriginal();
+        SettingsRowKind? kind = ActiveEditor;
+        CloseEditor();
+        Logger.Debug<SettingsViewModel>($"Cancelled {kind} editor");
+    }
+
+    /// <summary>
+    /// Restores the value the open editor started from.
+    /// </summary>
+    private void RestoreEditorOriginal()
+    {
+        switch (ActiveEditor)
+        {
+            case SettingsRowKind.LibraryView:
+                LibraryViewMode = _originalLibraryView;
+                break;
+            case SettingsRowKind.CardImage:
+                CardImageMode = _originalCardImage;
+                break;
+            case SettingsRowKind.TimeFormat:
+                TimeFormat = _originalTimeFormat;
+                break;
+            case SettingsRowKind.BackgroundMode:
+                Mode = _originalMode;
+                break;
+            case SettingsRowKind.PrimaryColour:
+                PrimaryColor = _originalPrimary;
+                break;
+            case SettingsRowKind.AccentColour:
+                AccentColor = _originalAccent;
+                break;
+            case SettingsRowKind.Vignette:
+                VignetteOpacity = _originalVignette;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Closes the editor and notifies the view to close the native control.
+    /// </summary>
+    private void CloseEditor()
+    {
+        ActiveEditor = null;
+        EditorClosed?.Invoke();
+    }
+
+    partial void OnActiveEditorChanged(SettingsRowKind? value) =>
+        OnPropertyChanged(nameof(IsEditorOpen));
 
     /// <summary>
     /// Opens the Manage Profiles overlay as a modal on top of the settings screen.

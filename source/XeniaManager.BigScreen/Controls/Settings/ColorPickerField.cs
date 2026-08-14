@@ -131,6 +131,28 @@ public class ColorPickerField : TemplatedControl
     }
 
     /// <summary>
+    /// Opens the palette dropdown (controller activation of the row).
+    /// </summary>
+    public void OpenPalette()
+    {
+        if (_popup != null)
+        {
+            _popup.IsOpen = true;
+        }
+    }
+
+    /// <summary>
+    /// Closes the palette dropdown (editor commit or cancel).
+    /// </summary>
+    public void ClosePalette()
+    {
+        if (_popup != null)
+        {
+            _popup.IsOpen = false;
+        }
+    }
+
+    /// <summary>
     /// Applies a colour picked from the palette dropdown and closes it.
     /// </summary>
     private void OnPickerColourChanged(object? sender, ColorChangedEventArgs e)

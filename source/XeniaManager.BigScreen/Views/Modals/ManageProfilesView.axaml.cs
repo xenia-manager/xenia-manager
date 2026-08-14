@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.BigScreen.ViewModels.Items;
@@ -43,6 +44,9 @@ public partial class ManageProfilesView : UserControl
             vm.ImportRequested += OnImportRequested;
             vm.ExportRequested += OnExportRequested;
             vm.ScrollRequested += OnScrollRequested;
+            vm.PanelEditorOpened += OnPanelEditorOpened;
+            vm.PanelEditorClosed += OnPanelEditorClosed;
+            vm.GamertagFocusRequested += OnGamertagFocusRequested;
         }
 
         Dispatcher.UIThread.Post(() =>
@@ -65,7 +69,52 @@ public partial class ManageProfilesView : UserControl
             vm.ImportRequested -= OnImportRequested;
             vm.ExportRequested -= OnExportRequested;
             vm.ScrollRequested -= OnScrollRequested;
+            vm.PanelEditorOpened -= OnPanelEditorOpened;
+            vm.PanelEditorClosed -= OnPanelEditorClosed;
+            vm.GamertagFocusRequested -= OnGamertagFocusRequested;
         }
+    }
+
+    /// <summary>
+    /// Opens the native dropdown matching the panel editor the controller just
+    /// opened.
+    /// </summary>
+    private void OnPanelEditorOpened(ManageProfilesRowKind kind)
+    {
+        switch (kind)
+        {
+            case ManageProfilesRowKind.Country:
+                CmbCountry.IsDropDownOpen = true;
+                CmbCountry.Focus();
+                break;
+            case ManageProfilesRowKind.Language:
+                CmbLanguage.IsDropDownOpen = true;
+                CmbLanguage.Focus();
+                break;
+            case ManageProfilesRowKind.SubscriptionTier:
+                CmbSubscriptionTier.IsDropDownOpen = true;
+                CmbSubscriptionTier.Focus();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Closes every panel dropdown (editor commit or cancel).
+    /// </summary>
+    private void OnPanelEditorClosed()
+    {
+        CmbCountry.IsDropDownOpen = false;
+        CmbLanguage.IsDropDownOpen = false;
+        CmbSubscriptionTier.IsDropDownOpen = false;
+    }
+
+    /// <summary>
+    /// Focuses the gamertag field so keyboard entry can start immediately
+    /// (controller activation of the gamertag row).
+    /// </summary>
+    private void OnGamertagFocusRequested()
+    {
+        TxtGamertag.Focus();
     }
 
     /// <summary>
