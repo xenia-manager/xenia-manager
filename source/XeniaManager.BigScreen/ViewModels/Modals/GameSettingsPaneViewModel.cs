@@ -23,6 +23,7 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 /// </summary>
 public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, IDisposable
 {
+    private readonly Game _game;
     private ConfigFile _configFile;
     private readonly string _configFilePath;
     private readonly IModalService _modalService;
@@ -32,6 +33,13 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
     /// The config sections shown in the pane.
     /// </summary>
     public ObservableCollection<ConfigSectionViewModel> Sections { get; } = [];
+
+    /// <summary>
+    /// The flattened display list for the virtualized view: each visible
+    /// section header followed by its visible options. Only realized rows are
+    /// instantiated, so opening the pane stays instant.
+    /// </summary>
+    public ObservableCollection<object> Items { get; } = [];
 
     /// <summary>
     /// Whether any option has unsaved changes.
@@ -51,14 +59,15 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
     public event Action? ExitRequested;
 
     /// <summary>
-    /// Loads the game's config file and builds the sections from the shared
-    /// UI definition.
+    /// Loads the game's config file (from the boot preload cache) and builds
+    /// the sections from the shared UI definition.
     /// </summary>
     public GameSettingsPaneViewModel(Game game)
     {
+        _game = game;
         _modalService = App.Services.GetRequiredService<IModalService>();
         _configFilePath = AppPathResolver.GetFullPath(game.FileLocations.Config);
-        _configFile = ConfigFile.Load(_configFilePath);
+        _configFile = GameDataCache.GetConfig(game);
         LoadSections();
 
         // Two-way bindings push control values into the option VMs while the
@@ -212,6 +221,25 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
         {
             _navigableOptions.AddRange(section.Options.Where(o => o.IsVisible));
         }
+
+        RebuildItems();
+    }
+
+    /// <summary>
+    /// Rebuilds the flattened display list (section headers + options) for the
+    /// virtualized view.
+    /// </summary>
+    private void RebuildItems()
+    {
+        Items.Clear();
+        foreach (ConfigSectionViewModel section in Sections.Where(s => s.IsVisible))
+        {
+            Items.Add(section);
+            foreach (ConfigOptionViewModel option in section.Options.Where(o => o.IsVisible))
+            {
+                Items.Add(option);
+            }
+        }
     }
 
     private void SectionViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -288,13 +316,13 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
     }
 
     /// <summary>
-    /// Re-reads the config file from disk and rebuilds the sections, discarding
-    /// the unsaved changes.
+    /// Re-reads the config file from disk (updating the cache) and rebuilds the
+    /// sections, discarding the unsaved changes.
     /// </summary>
     private void ReloadFromDisk()
     {
         Dispose();
-        _configFile = ConfigFile.Load(_configFilePath);
+        _configFile = GameDataCache.ReloadConfig(_game);
         LoadSections();
     }
 

@@ -118,7 +118,7 @@ public partial class GalleryViewModel : ScreenViewModel
         }
 
         _screenshotsLoaded = true;
-        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGallery"), 0.75));
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGallery"), 0.85));
         await Task.Run(() => _screenshotLibraryService.Load(), cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 

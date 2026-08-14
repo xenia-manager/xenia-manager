@@ -13,9 +13,9 @@
             <Border x:Name="RowBorder"
                     Padding="14,10"
                     Background="{DynamicResource CardBackground}"
-                    BorderBrush="Transparent"
+                    BorderBrush="{DynamicResource CardBorderInner}"
                     BorderThickness="3"
-                    BoxShadow="{DynamicResource CardShadowFlat}"
+                    BoxShadow="{DynamicResource CardShadowSoft}"
                     CornerRadius="10">
                 <ContentPresenter Content="{TemplateBinding Content}"
                                   HorizontalContentAlignment="Stretch"

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
@@ -236,6 +239,44 @@ public partial class LibraryViewModel : ScreenViewModel
         {
             Details.Info = info;
         }
+    }
+
+    /// <summary>
+    /// Preloads the marketplace DB info for every game into the details cache
+    /// (runs inside the game-data boot stage). Failures are negative-cached so
+    /// the details pane never re-fetches them. Logs how long each game took.
+    /// </summary>
+    public async Task PreloadDetailsAsync(CancellationToken cancellationToken)
+    {
+        int total = Games.Count;
+        foreach (GameCardViewModel card in Games)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!_detailsCache.ContainsKey(card.Game.GameId))
+            {
+                try
+                {
+                    Stopwatch sw = Stopwatch.StartNew();
+                    GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(card.Game.GameId, cancellationToken);
+                    sw.Stop();
+                    _detailsCache[card.Game.GameId] = info;
+                    Logger.Info<LibraryViewModel>(
+                        $"Details for '{card.Game.Title}' in {sw.ElapsedMilliseconds}ms");
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warning<LibraryViewModel>($"Failed to preload details for '{card.Game.Title}'");
+                    Logger.LogExceptionDetails<LibraryViewModel>(ex);
+                    _detailsCache[card.Game.GameId] = null;
+                }
+            }
+        }
+
+        Logger.Info<LibraryViewModel>($"Details preloaded for {total} games");
     }
 
     /// <summary>

@@ -51,7 +51,9 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     public string CountText => string.Format(LocalizationHelper.GetText("GameModal.Screenshots.Count"), Rows.Count);
 
     /// <summary>
-    /// Scans the game's screenshots folder off the UI thread, then fills the grid.
+    /// Fills the grid from the boot-time gallery cache for Canary games (the
+    /// screenshots are already scanned and decoded - no re-decode); other
+    /// emulator versions scan their own folder off the UI thread.
     /// </summary>
     public GameScreenshotsPaneViewModel(Game game)
     {
@@ -59,8 +61,37 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
         _modalService = App.Services.GetRequiredService<IModalService>();
         Rows.CollectionChanged += (_, _) => OnPropertyChanged(nameof(CountText));
         TimeFormat timeFormat = App.Services.GetRequiredService<IBackgroundService>().Settings.TimeFormat;
-        TaskUtilities.RunSafely<GameScreenshotsPaneViewModel>(
-            () => LoadAsync(timeFormat), "Loading game screenshots");
+        if (game.XeniaVersion == XeniaVersion.Canary)
+        {
+            PopulateFromGalleryCache(timeFormat);
+        }
+        else
+        {
+            TaskUtilities.RunSafely<GameScreenshotsPaneViewModel>(
+                () => LoadAsync(timeFormat), "Loading game screenshots");
+        }
+    }
+
+    /// <summary>
+    /// Filters the gallery's preloaded (already decoded) screenshots for this
+    /// game by the parent-folder game ID.
+    /// </summary>
+    private void PopulateFromGalleryCache(TimeFormat timeFormat)
+    {
+        IScreenshotLibraryService library = App.Services.GetRequiredService<IScreenshotLibraryService>();
+        foreach (ScreenshotItemViewModel screenshot in library.Screenshots)
+        {
+            string folder = Path.GetFileName(Path.GetDirectoryName(screenshot.Path) ?? string.Empty);
+            if (folder.Equals(_game.GameId, StringComparison.OrdinalIgnoreCase))
+            {
+                screenshot.TimeFormat = timeFormat;
+                Rows.Add(screenshot);
+            }
+        }
+
+        IsLoading = false;
+        Logger.Info<GameScreenshotsPaneViewModel>(
+            $"Loaded {Rows.Count} screenshots for '{_game.Title}' from the gallery cache");
     }
 
     /// <summary>

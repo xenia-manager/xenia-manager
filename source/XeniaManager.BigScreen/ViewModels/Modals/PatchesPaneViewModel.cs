@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -278,8 +277,8 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Opens the patch download modal; the patch list reloads when it closes
-    /// (a freshly downloaded patch shows up as an entry).
+    /// Opens the patch download modal; the patch cache and list reload when it
+    /// closes (a freshly downloaded patch shows up as an entry).
     /// </summary>
     private void OpenDownloadModal()
     {
@@ -287,6 +286,7 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
         TaskUtilities.RunSafely<PatchesPaneViewModel>(async () =>
         {
             await _modalService.ShowAsync(new PatchDownloadViewModel(_game));
+            GameDataCache.RefreshPatch(_game);
             ReloadPatch();
         }, "Opening patch download");
     }
@@ -383,6 +383,7 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
         {
             await PatchManager.RemovePatchAsync(_game);
             Logger.Info<PatchesPaneViewModel>($"Removed patch for '{_game.Title}'");
+            GameDataCache.RefreshPatch(_game);
             ReloadPatch();
         }
         catch (Exception ex)
@@ -393,29 +394,12 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Reloads the game's patch file and rebuilds the list rows.
+    /// Loads the game's patch file from the boot preload cache (when installed)
+    /// and builds the list rows.
     /// </summary>
     private void ReloadPatch()
     {
-        _patchFile = null;
-        _patchFilePath = null;
-        if (!string.IsNullOrEmpty(_game.FileLocations.Patch))
-        {
-            string path = AppPathResolver.GetFullPath(_game.FileLocations.Patch);
-            if (File.Exists(path))
-            {
-                try
-                {
-                    _patchFile = PatchFile.Load(path);
-                    _patchFilePath = path;
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error<PatchesPaneViewModel>($"Failed to load patch '{path}'");
-                    Logger.LogExceptionDetails<PatchesPaneViewModel>(ex);
-                }
-            }
-        }
+        (_patchFile, _patchFilePath) = GameDataCache.GetPatch(_game);
 
         OnPropertyChanged(nameof(HeaderText));
         Rows.Clear();

@@ -74,13 +74,6 @@ public partial class GameModalViewModel : ModalViewModelBase
     private readonly List<IDisposable> _disposables = [];
 
     /// <summary>
-    /// The session-cached settings pane for this game, or null until first shown.
-    /// Kept alive across modal opens (the config load runs once per session);
-    /// this modal only subscribes to its exit request and unsubscribes on close.
-    /// </summary>
-    private GameSettingsPaneViewModel? _settingsPane;
-
-    /// <summary>
     /// The X hint label while a pane is shown (sort / save), or empty when the
     /// shown pane has no X action.
     /// </summary>
@@ -258,7 +251,7 @@ public partial class GameModalViewModel : ModalViewModelBase
             _ => throw new ArgumentOutOfRangeException(nameof(pane), pane, null),
         };
         _panes[pane] = created;
-        if (created is IDisposable disposable && !ReferenceEquals(created, _settingsPane))
+        if (created is IDisposable disposable)
         {
             _disposables.Add(disposable);
         }
@@ -267,41 +260,24 @@ public partial class GameModalViewModel : ModalViewModelBase
     }
 
     /// <summary>
-    /// Returns the session-cached settings pane for this game (created on first
-    /// use), subscribing this modal to its exit request.
+    /// Creates the game settings pane, wiring its exit request back to the
+    /// options list.
     /// </summary>
     private GameSettingsPaneViewModel CreateSettingsPane()
     {
-        if (_settingsPane == null)
-        {
-            _settingsPane = GameSettingsPaneCache.GetOrCreate(Game);
-            _settingsPane.ExitRequested += OnSettingsExitRequested;
-        }
-
-        return _settingsPane;
+        GameSettingsPaneViewModel settings = new(Game);
+        settings.ExitRequested += () => IsPaneActive = false;
+        return settings;
     }
 
     /// <summary>
-    /// Returns the settings pane to the nav list after its changes were saved
-    /// or discarded.
-    /// </summary>
-    private void OnSettingsExitRequested() => IsPaneActive = false;
-
-    /// <summary>
-    /// Disposes every pane created during this modal's lifetime. The cached
-    /// settings pane stays alive for the session - only the subscription is
-    /// released.
+    /// Disposes every pane created during this modal's lifetime.
     /// </summary>
     public override void Dispose()
     {
         foreach (IDisposable disposable in _disposables)
         {
             disposable.Dispose();
-        }
-
-        if (_settingsPane != null)
-        {
-            _settingsPane.ExitRequested -= OnSettingsExitRequested;
         }
 
         base.Dispose();

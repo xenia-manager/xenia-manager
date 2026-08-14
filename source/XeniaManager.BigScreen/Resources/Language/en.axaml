@@ -94,6 +94,7 @@
     <sys:String x:Key="Splash.LoadingSettings">Loading Settings</sys:String>
     <sys:String x:Key="Splash.LoadingDashboard">Loading Dashboard</sys:String>
     <sys:String x:Key="Splash.LoadingLibrary">Loading Library</sys:String>
+    <sys:String x:Key="Splash.LoadingGameData">Loading Game Data</sys:String>
     <sys:String x:Key="Splash.LoadingGallery">Loading Gallery</sys:String>
     <sys:String x:Key="Splash.LoadingDone">Loading Done</sys:String>
 

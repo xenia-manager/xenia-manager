@@ -269,7 +269,7 @@
     </Style>
 
     <Style Selector="card|LibraryListItem Border#RowBorder">
-        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
     </Style>
 
     <Style

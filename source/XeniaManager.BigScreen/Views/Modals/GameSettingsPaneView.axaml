@@ -5,10 +5,48 @@
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
              xmlns:set="using:XeniaManager.BigScreen.Controls.Settings"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
-             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
              x:Class="XeniaManager.BigScreen.Views.Modals.GameSettingsPaneView"
              x:DataType="vm:GameSettingsPaneViewModel">
+
+    <UserControl.DataTemplates>
+        <!-- Section header row -->
+        <DataTemplate DataType="vm:ConfigSectionViewModel">
+            <StackPanel Margin="0,10,0,12" Spacing="4">
+                <TextBlock Text="{Binding DisplayName}"
+                           FontSize="24"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextPrimary}" />
+                <TextBlock Text="{Binding Description}"
+                           IsVisible="{Binding Description, Converter={x:Static ObjectConverters.IsNotNull}}"
+                           TextWrapping="Wrap"
+                           FontSize="15"
+                           Foreground="{DynamicResource TextSecondary}" />
+            </StackPanel>
+        </DataTemplate>
+        <!-- Config option row -->
+        <DataTemplate DataType="vm:ConfigOptionViewModel">
+            <set:ConfigOptionRow Margin="0,0,0,10" />
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <UserControl.Styles>
+        <!-- Keep the virtualized rows invisible: no selection chrome, the rows
+             style themselves via their own Classes.selected -->
+        <Style Selector="ListBoxItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBoxItem:selected">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid RowDefinitions="Auto, *" RowSpacing="20">
 
         <!-- HEADER: title -->
@@ -20,39 +58,12 @@
                        FontSize="24"
                        VerticalAlignment="Center" />
 
-        <!-- SECTIONS -->
-        <ScrollViewer Grid.Row="1"
-                      x:Name="SvSections"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Hidden">
-                <ItemsControl x:Name="SectionsList" ItemsSource="{Binding Sections}" Margin="0,0,0,20">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="vm:ConfigSectionViewModel">
-                            <Border IsVisible="{Binding IsVisible}">
-                                <StackPanel Orientation="Vertical" Spacing="12">
-                                    <StackPanel Orientation="Vertical" Spacing="4">
-                                        <TextBlock Text="{Binding DisplayName}"
-                                                   FontSize="24"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="{DynamicResource TextPrimary}" />
-                                        <TextBlock Text="{Binding Description}"
-                                                   IsVisible="{Binding Description, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                   TextWrapping="Wrap"
-                                                   FontSize="15"
-                                                   Foreground="{DynamicResource TextSecondary}" />
-                                    </StackPanel>
-                                    <ItemsControl ItemsSource="{Binding Options}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate DataType="vm:ConfigOptionViewModel">
-                                                <set:ConfigOptionRow Margin="0,0,0,10" />
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+        <!-- SECTIONS: virtualized flat list (section headers + option rows) so
+             only the visible rows are ever instantiated -->
+        <ListBox x:Name="SettingsList"
+                 Grid.Row="1"
+                 ItemsSource="{Binding Items}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden" />
     </Grid>
 </UserControl>

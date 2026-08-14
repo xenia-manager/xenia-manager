@@ -117,11 +117,12 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
     }
 
     /// <summary>
-    /// Re-scans the game's content headers of the current type and rebuilds the rows.
+    /// Re-scans the game's content headers of the current type (from the boot
+    /// preload cache) and rebuilds the rows.
     /// </summary>
     private void Reload()
     {
-        GameContent content = new(_game.XeniaVersion, _game.GameId);
+        GameContent content = GameDataCache.GetContent(_game);
         List<HeaderFile> headers = ContentType == ContentType.MarketplaceContent
             ? content.MarketplaceContentHeaderFiles
             : content.InstallerHeaderFiles;
@@ -178,6 +179,7 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
             }
 
             Rows.Remove(item);
+            GameDataCache.RefreshContent(_game);
             Logger.Info<InstalledContentPaneViewModel>($"Deleted '{item.DisplayName}'");
         }
         catch (Exception ex)

@@ -9,7 +9,7 @@ using XeniaManager.BigScreen.ViewModels.Modals;
 namespace XeniaManager.BigScreen.Views.Modals;
 
 /// <summary>
-/// The game modal's game settings pane: searchable config sections with the
+/// The game modal's game settings pane: virtualized config sections with the
 /// five control types, saved back to the game's config file.
 /// </summary>
 public partial class GameSettingsPaneView : UserControl
@@ -29,13 +29,15 @@ public partial class GameSettingsPaneView : UserControl
     }
 
     /// <summary>
-    /// Scrolls the requested option into view and focuses its editor control.
+    /// Scrolls the requested option into view and focuses its editor control
+    /// (the virtualized list realizes the row during the scroll).
     /// </summary>
     private void OnFocusOptionRequested(ConfigOptionViewModel option)
     {
+        SettingsList.ScrollIntoView(option);
         Dispatcher.UIThread.Post(() =>
         {
-            ConfigOptionRow? row = SvSections.GetVisualDescendants().OfType<ConfigOptionRow>()
+            ConfigOptionRow? row = SettingsList.GetVisualDescendants().OfType<ConfigOptionRow>()
                 .FirstOrDefault(r => ReferenceEquals(r.DataContext, option));
             row?.FocusEditor();
         });

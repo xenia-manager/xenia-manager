@@ -175,10 +175,11 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         Settings.TimeFormatChanged += () => Header.ApplyTimeFormat(Settings.TimeFormat);
 
-        // A profile switch refreshes the header identity and rebuilds the cards
-        // so per-game achievement stats follow the new profile
+        // A profile switch refreshes the header identity and rebuilds the cards;
+        // the cached achievement GPDs belong to the old profile and are dropped
         _profileService.ProfileChanged += () =>
         {
+            GameDataCache.ClearAchievementGpds();
             Header.ApplyProfile(_profileService);
             TaskUtilities.RunSafely<MainWindowViewModel>(RebuildCards, "Rebuilding profile cards");
         };
@@ -297,11 +298,40 @@ public partial class MainWindowViewModel : ViewModelBase
             if (loadedGames % TimingConstants.ProgressReportInterval == 0)
             {
                 progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"),
-                    0.45 + 0.30 * (double)loadedGames / Math.Max(1, totalGames)));
+                    0.45 + 0.17 * (double)loadedGames / Math.Max(1, totalGames)));
             }
         }
 
         await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+
+        // Game data preload: parsed configs (lazy), content scans, patch files,
+        // achievement GPDs and marketplace details for every game, so the game
+        // modal's panes and the details pane open instantly
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGameData"), 0.66));
+        cancellationToken.ThrowIfCancellationRequested();
+        Stopwatch dataSw = Stopwatch.StartNew();
+        await Task.Run(async () =>
+        {
+            int preloaded = 0;
+            foreach (Game game in _gameLibraryService.Games)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                GameDataCache.PreloadGame(game);
+                preloaded++;
+                if (preloaded % TimingConstants.ProgressReportInterval == 0)
+                {
+                    progress?.Report((LocalizationHelper.GetText("Splash.LoadingGameData"),
+                        0.66 + 0.12 * preloaded / Math.Max(1, totalGames)));
+                }
+            }
+
+            await Library.PreloadDetailsAsync(cancellationToken);
+        }, cancellationToken);
+        dataSw.Stop();
+        Logger.Info<MainWindowViewModel>(
+            $"Game data preloaded for {_gameLibraryService.Games.Count} games in {dataSw.ElapsedMilliseconds}ms");
+        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+
         await Gallery.LoadScreenshotsAsync(progress, cancellationToken);
         await Task.Delay(TimingConstants.StageDwell, cancellationToken);
 

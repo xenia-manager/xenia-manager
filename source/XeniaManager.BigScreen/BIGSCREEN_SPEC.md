@@ -28,7 +28,7 @@
 ### Overlay screens
 Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape** closes, focus returns to the option row. Bottom hint bars use the `InputHint` control (coloured circle keycap + label).
 - **Library** — all games in a horizontal **carousel** (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD) or a vertical **list** with a details pane (`LibraryListItem` + `GameDetailsPanel`). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle; in list mode Up/Down iterates. **X** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). **View/V** swaps the layout (Carousel ↔ List, persisted via `library_view_mode`); the details pane shows marketplace DB info (bio, genre, developer, publisher, release date — loading/no-info states, stale-fetch guard + negative cache). Disc stub shown when the library is empty.
-- **Gallery** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, capture date from file write time). Click/Enter → **screenshot viewer modal** (on the modal stack — see the viewer section below). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
+- **Gallery** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, **capture date decoded from the file name** (`{GAMEID} - {yyyy-MM-ddTHH-mm-ss}`, write time as fallback — `ScreenshotFileNameParser`)). Click/Enter → **screenshot viewer modal** (on the modal stack — see the viewer section below). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
 - **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker.
 - **Quit** — closes the app.
 - **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (X blue) → Details (Y amber) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Gallery = Back → Select (A) → Sort (X blue); Settings = Back/Close. **One hint bar at a time:** only the top modal's hint bar shows (`ModalViewModelBase.IsHintBarVisible`), and the overlay screens hide theirs while any modal is open.
@@ -215,17 +215,18 @@ source/XeniaManager.BigScreen/
 │   ├── InputRouter.cs               # Command-driven: key/gamepad → NavigationCommand → dispatcher (modal stack → viewer → overlay → dashboard)
 │   ├── ModalService.cs              # Push/pop modal stack: ShowAsync (typed result), Close pops + disposes, StackChanged (IModalService)
 │   ├── ProfileService.cs            # All Canary profiles, active profile (persisted profile_xuid), switch/refresh, per-game achievement/GPD stats, per-profile gamerscore (IProfileService)
-│   ├── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching (IScreenshotLibraryService)
+│   ├── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching, filename-decoded metadata (IScreenshotLibraryService)
 │   └── ServiceConfigurator.cs       # DI registration (mirrors the main app: singleton services + VMs, App.Services)
 ├── Constants/
 │   ├── AppConstants.cs              # BaseAppExecutable, RecentGamesLimit, SettingsFileName
 │   ├── TimingConstants.cs           # Gamepad/battery/wifi/clock polls, fade, splash stage/done/minimum timings
-│   ├── FormatConstants.cs           # Clock/capture-date formats, XUID format
+│   ├── FormatConstants.cs           # Clock/capture-date formats, screenshot file-name timestamp format, achievement unlock format, XUID format
 │   ├── XboxConstants.cs             # ProfileContentTitleId (FFFE07D1)
 │   └── LayoutConstants.cs           # Vignette step, gradient mixes, accent tint step, carousel fallbacks
 ├── Utilities/
-│   ├── SelectionHelper.cs           # ISelectable + single-selection helpers (move/select/resort-preserving)
+│   ├── SelectionHelper.cs           # ISelectable + single-selection helpers (move/select/resort-preserving; MoveSelection picks the first from nothing)
 │   ├── EnumCycleHelper.cs           # Generic enum + colour palette cycling
+│   ├── ScreenshotFileNameParser.cs  # Decodes game ID + capture timestamp from Xenia screenshot file names ("{GAMEID} - {yyyy-MM-ddTHH-mm-ss}")
 │   ├── ImageFormats.cs              # Shared screenshot extensions + file-picker patterns
 │   ├── ProfileRowsHelper.cs         # Shared profile row building (active-first + alphabetical) + async gamerscore loading
 │   ├── TaskUtilities.cs             # RunSafely<T>: logged fire-and-forget task execution
@@ -319,7 +320,7 @@ source/XeniaManager.BigScreen/
 - [x] Faded chevrons in the modal (hide at the ends, brighten on hover)
 - [x] B/Escape closes (viewer, then overlay)
 - [x] Grid scrolls down, clamped at both ends, no wrap-back
-- [x] **X** sorts: Newest First / Oldest First / By Game (indicator top-right, date from file write time); selection follows the list index
+- [x] **X** sorts: Newest First / Oldest First / By Game (indicator top-right, **capture date decoded from the file name** with write-time fallback); selection follows the list index
 
 ### 5.4 Game launch
 - [x] Launch via `Launcher.LaunchGameASync` (Core `Settings`)

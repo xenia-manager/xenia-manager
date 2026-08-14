@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -20,7 +19,7 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 /// (Achieved / Gamerscore Awarded / Alphabetical) and scrollable rows from
 /// the active profile's per-game achievement GPD.
 /// </summary>
-public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane, IDisposable
+public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
 {
     private readonly List<AchievementItemViewModel> _allAchievements;
     private readonly GpdFile? _gpdFile;
@@ -67,11 +66,12 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane, 
     public event Action? ScrollRequested;
 
     /// <summary>
-    /// Loads the achievement GPD for the active profile and builds the rows.
+    /// Loads the achievement GPD for the active profile (from the boot preload
+    /// cache; the cache owns its lifetime) and builds the rows.
     /// </summary>
     public AchievementsPaneViewModel(Game game)
     {
-        _gpdFile = App.Services.GetRequiredService<IProfileService>().LoadGameAchievementGpd(game.GameId);
+        _gpdFile = GameDataCache.GetAchievementGpd(game);
         if (_gpdFile == null)
         {
             AchievementText = "0 / 0";
@@ -164,13 +164,5 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane, 
 
         SelectionHelper.ResortPreservingSelection(Rows, sorted);
         OnPropertyChanged(nameof(ShowEmpty));
-    }
-
-    /// <summary>
-    /// Releases the loaded achievement GPD.
-    /// </summary>
-    public void Dispose()
-    {
-        _gpdFile?.Dispose();
     }
 }
