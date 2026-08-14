@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             x:Class="XeniaManager.BigScreen.Views.Modals.InstalledContentPaneView"
+             x:DataType="vm:InstalledContentPaneViewModel">
+    <Grid RowDefinitions="Auto, *" RowSpacing="24">
+
+        <!-- HEADER: content type + count -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Spacing="40"
+                    VerticalAlignment="Center">
+            <prim:IconStat Icon="Document"
+                           Stat="{Binding TypeText}"
+                           IconSize="26"
+                           Spacing="14"
+                           FontSize="24" />
+            <prim:IconStat Icon="Library"
+                           Stat="{Binding CountText}"
+                           IconSize="26"
+                           Spacing="14"
+                           FontSize="24" />
+        </StackPanel>
+
+        <!-- BODY: content rows -->
+        <Grid Grid.Row="1">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Hidden">
+                <ItemsControl x:Name="ContentList" ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:ContentItemViewModel">
+                            <card:ContentRow />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Empty state: nothing installed of this type -->
+            <Border IsVisible="{Binding ShowEmpty}"
+                    Height="220"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="520"
+                    Classes="empty-state">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Spacing="16">
+                    <fluent:SymbolIcon Symbol="Document"
+                                       FontSize="64" />
+                    <TextBlock Text="{DynamicResource GameModal.Content.Empty}"
+                               FontSize="22" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -72,7 +72,7 @@ public static class SelectionHelper
 
     /// <summary>
     /// Moves the selection by the given step, clamped at both ends. When nothing
-    /// is selected yet, the first card is selected instead.
+    /// is selected yet, the first card is selected instead (any direction).
     /// </summary>
     public static int MoveSelection<T>(IList<T> items, int delta) where T : ISelectable
     {
@@ -88,7 +88,7 @@ public static class SelectionHelper
             index = 0;
         }
 
-        int target = Math.Clamp(index + delta, 0, items.Count - 1);
+        int target = hadSelection ? Math.Clamp(index + delta, 0, items.Count - 1) : 0;
         if (!hadSelection || target != index)
         {
             SelectOnlyAt(items, target);
@@ -99,7 +99,8 @@ public static class SelectionHelper
 
     /// <summary>
     /// Replaces a collection with the given sorted items, keeping the selection on
-    /// the same index so the viewport stays put (no fly-across).
+    /// the same index so the viewport stays put (no fly-across). Clears the
+    /// collection when the sorted list is empty.
     /// </summary>
     public static void ResortPreservingSelection<T>(ObservableCollection<T> items, List<T> sorted)
         where T : ISelectable
@@ -117,6 +118,9 @@ public static class SelectionHelper
             items.Add(item);
         }
 
-        SelectOnlyAt(items, Math.Clamp(selectedIndex, 0, items.Count - 1));
+        if (items.Count > 0)
+        {
+            SelectOnlyAt(items, Math.Clamp(selectedIndex, 0, items.Count - 1));
+        }
     }
 }

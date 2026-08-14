@@ -122,13 +122,15 @@
             </Grid>
         </Grid>
 
-        <StackPanel Grid.Row="2" Classes="hint-bar">
+        <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
             <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
                                 Text="{DynamicResource Library.Hint.Back}" />
             <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
                                 Text="{DynamicResource Library.Hint.Play}" />
             <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
                                 Text="{DynamicResource Library.Hint.Sort}" />
+            <prim:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+                                Text="{DynamicResource Library.Hint.Details}" />
             <prim:InputHint Icon="CaretLeft" KeyColour="{DynamicResource HintKeyBack}"
                                 Text="{DynamicResource Library.Hint.SwapView}" />
         </StackPanel>

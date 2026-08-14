@@ -164,10 +164,18 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private bool _returnToXeniaOnQuit = true;
 
-    public SettingsViewModel(IBackgroundService backgroundService, IGamepadInputService gamepadService)
+    /// <summary>
+    /// Whether this screen's hint bar is visible - hidden while any modal is
+    /// open, so only the top modal's hints show.
+    /// </summary>
+    [ObservableProperty] private bool _isHintBarVisible = true;
+
+    public SettingsViewModel(IBackgroundService backgroundService, IGamepadInputService gamepadService,
+        IModalService modalService)
     {
         _backgroundService = backgroundService;
         _gamepadService = gamepadService;
+        modalService.StackChanged += () => IsHintBarVisible = !modalService.IsOpen;
 
         // Keep the settings "Active Profile" line in sync with profile switches
         App.Services.GetRequiredService<IProfileService>().ProfileChanged +=

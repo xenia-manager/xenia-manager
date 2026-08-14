@@ -212,7 +212,7 @@
             </Grid>
 
             <!-- HINTS: B back · X delete · View import · Start export -->
-            <StackPanel Grid.Row="2" Classes="hint-bar">
+            <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
                                     Text="{DynamicResource ManageProfiles.Hint.Back}" />
                 <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"

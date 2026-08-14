@@ -51,6 +51,7 @@ public class ModalService : IModalService
     {
         _stack.Add(modal);
         modal.Attach(this);
+        UpdateTopModalState();
         StackChanged?.Invoke();
         Logger.Debug<ModalService>($"Modal pushed: {modal.GetType().Name} (stack: {_stack.Count})");
         return modal.WaitForClose();
@@ -67,7 +68,20 @@ public class ModalService : IModalService
 
         _stack.RemoveAt(_stack.Count - 1);
         modal.Dispose();
+        UpdateTopModalState();
         StackChanged?.Invoke();
         Logger.Debug<ModalService>($"Modal popped: {modal.GetType().Name} (stack: {_stack.Count})");
+    }
+
+    /// <summary>
+    /// Marks only the top modal as the visible one, hiding the hint bars of
+    /// the modals beneath it.
+    /// </summary>
+    private void UpdateTopModalState()
+    {
+        for (int i = 0; i < _stack.Count; i++)
+        {
+            _stack[i].SetIsTopModal(i == _stack.Count - 1);
+        }
     }
 }

@@ -11,6 +11,7 @@ using XeniaManager.BigScreen.Controls.Cards;
 using XeniaManager.BigScreen.Controls.Profiles;
 using XeniaManager.BigScreen.Controls.Splash;
 using XeniaManager.BigScreen.Services;
+using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Shell;
@@ -61,6 +62,7 @@ public partial class MainWindow : FAAppWindow
         // (dashboard rows only - overlay cards are handled by their own views)
         AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
         AddHandler(PointerPressedEvent, OnOptionCardPressed, RoutingStrategies.Bubble, true);
+        AddHandler(PointerPressedEvent, OnGameCardRightPressed, RoutingStrategies.Bubble, true);
 
         _navigation.OptionFocusRequested += OnOptionFocusRequested;
         _navigation.GameFocusRequested += OnGameFocusRequested;
@@ -346,5 +348,51 @@ public partial class MainWindow : FAAppWindow
         {
             _navigation.HandleOptionCardPressed(vm, vm.Dashboard, option);
         }
+    }
+
+    /// <summary>
+    /// Opens the game modal on a right-click of a dashboard, carousel or list
+    /// card, mirroring the controller path (Y = Details). The card is selected
+    /// first so the dialog's game matches the pointer target.
+    /// </summary>
+    private void OnGameCardRightPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        {
+            return;
+        }
+
+        if (!e.GetCurrentPoint(this).Properties.IsRightButtonPressed)
+        {
+            return;
+        }
+
+        if (e.Source is not Control control)
+        {
+            return;
+        }
+
+        if (control.GetSelfAndVisualAncestors().FirstOrDefault(c => c is GameCard or LibraryCard or LibraryListItem)
+            is not Control card)
+        {
+            return;
+        }
+
+        if (card.DataContext is not GameCardViewModel gameCard)
+        {
+            return;
+        }
+
+        if (card is GameCard)
+        {
+            _navigation.OnGameCardFocused(vm.Dashboard, gameCard);
+        }
+        else
+        {
+            SelectionHelper.SelectOnly(vm.Library.Games, gameCard);
+            Dispatcher.UIThread.Post(() => Find<LibraryView>()?.ScrollToSelected());
+        }
+
+        vm.OpenGameModal(gameCard.Game);
     }
 }

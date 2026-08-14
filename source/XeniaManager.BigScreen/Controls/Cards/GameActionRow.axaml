@@ -1,0 +1,38 @@
+<Button xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+        mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="72"
+        x:Class="XeniaManager.BigScreen.Controls.Cards.GameActionRow"
+        x:DataType="vm:GameActionItemViewModel"
+        Classes.selected="{Binding IsSelected}">
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <Border x:Name="RowBorder"
+                    Padding="18,16"
+                    Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderInner}"
+                    BorderThickness="3"
+                    BoxShadow="{DynamicResource CardShadowSoft}"
+                    CornerRadius="10">
+                <ContentPresenter Content="{TemplateBinding Content}"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Center" />
+            </Border>
+        </ControlTemplate>
+    </Button.Template>
+    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="20">
+        <fluent:SymbolIcon Symbol="{Binding Icon}"
+                           FontSize="26"
+                           Foreground="{DynamicResource TextSecondary}"
+                           VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1"
+                   Text="{Binding Title}"
+                   TextTrimming="CharacterEllipsis"
+                   VerticalAlignment="Center"
+                   FontSize="22"
+                   Foreground="{DynamicResource TextPrimary}" />
+    </Grid>
+</Button>

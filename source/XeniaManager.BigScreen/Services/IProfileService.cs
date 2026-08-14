@@ -56,6 +56,12 @@ public interface IProfileService
     void SwitchProfile(AccountInfo profile);
 
     /// <summary>
+    /// Loads the per-game achievement GPD for the active profile, or null when
+    /// no profile or GPD exists.
+    /// </summary>
+    Core.Files.GpdFile? LoadGameAchievementGpd(string gameId);
+
+    /// <summary>
     /// Resolves achievement/gamerscore counters for the given game.
     /// </summary>
     GameStatInfo? GetGameStats(Game game);

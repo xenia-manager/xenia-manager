@@ -105,11 +105,14 @@
         </Grid>
 
         <!-- MODAL LAYER: covers the ENTIRE window - a sibling of the content grid,
-             not a grid child, so the backdrop is always full-screen -->
+             not a grid child, so the backdrop is always full-screen. The backdrop
+             hides while the screenshot viewer is the top modal (its own opaque
+             backdrop covers the window) -->
         <Panel IsVisible="{Binding IsModalOpen}"
                IsHitTestVisible="{Binding IsModalOpen}">
             <!-- Transparent black backdrop over everything -->
-            <Border Background="{DynamicResource ModalBackdrop}" />
+            <Border Background="{DynamicResource ModalBackdrop}"
+                    IsVisible="{Binding ModalBackdropVisible}" />
             <!-- The top modal's view, rebuilt on every stack change -->
             <modal:ModalHost />
         </Panel>

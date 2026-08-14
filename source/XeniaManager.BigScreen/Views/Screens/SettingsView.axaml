@@ -241,7 +241,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="2" Classes="hint-bar">
+        <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
             <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
                                 Text="{DynamicResource Settings.Hint.Back}" />
         </StackPanel>

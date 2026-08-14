@@ -192,9 +192,10 @@ public class ProfileService : IProfileService
     }
 
     /// <summary>
-    /// Loads the per-game achievement GPD ({titleId}.gpd next to the profile GPD) if it exists.
+    /// Loads the per-game achievement GPD ({titleId}.gpd next to the profile GPD)
+    /// for the active profile, or null when no profile or GPD exists.
     /// </summary>
-    private GpdFile? LoadGameAchievementGpd(string gameId)
+    public GpdFile? LoadGameAchievementGpd(string gameId)
     {
         AccountInfo? profileAccount = ActiveProfile;
         if (profileAccount == null || string.IsNullOrEmpty(gameId))

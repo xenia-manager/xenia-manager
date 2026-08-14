@@ -94,25 +94,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// Commands while the screenshot viewer is open: step or close.
-    /// </summary>
-    private static void HandleViewer(MainWindowViewModel vm, NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveLeft:
-                vm.Gallery.Viewer!.Step(-1);
-                break;
-            case NavigationCommand.MoveRight:
-                vm.Gallery.Viewer!.Step(1);
-                break;
-            case NavigationCommand.Back:
-                vm.Gallery.CloseGalleryViewer();
-                break;
-        }
-    }
-
-    /// <summary>
     /// Commands while an overlay screen is open. Settings only responds to Back
     /// (its controls stay keyboard/mouse-driven).
     /// </summary>
@@ -160,6 +141,21 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             case NavigationCommand.ToggleView:
                 vm.Library.ToggleView();
                 break;
+            case NavigationCommand.Details:
+                OpenGameDetailsForSelected(vm);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Opens the game modal for the game currently selected in the library.
+    /// </summary>
+    private static void OpenGameDetailsForSelected(MainWindowViewModel vm)
+    {
+        GameCardViewModel? card = vm.Library.Games.FirstOrDefault(g => g.IsSelected);
+        if (card != null)
+        {
+            vm.OpenGameModal(card.Game);
         }
     }
 
@@ -218,22 +214,34 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             case NavigationCommand.Activate:
                 Activate(vm, gameCard);
                 break;
+            case NavigationCommand.Details:
+                OpenGameDetails(vm, gameCard);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Opens the game modal for the given card, or the currently selected
+    /// dashboard card when none was passed.
+    /// </summary>
+    private static void OpenGameDetails(MainWindowViewModel vm, GameCardViewModel? gameCard)
+    {
+        gameCard ??= vm.Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected);
+        if (gameCard != null)
+        {
+            vm.OpenGameModal(gameCard.Game);
         }
     }
 
     /// <summary>
     /// Routes a command to the handler for the active layer: the modal stack
-    /// (top modal), the screenshot viewer, an overlay screen, or the dashboard.
+    /// (top modal), an overlay screen, or the dashboard.
     /// </summary>
     private void Dispatch(MainWindowViewModel vm, NavigationCommand command, GameCardViewModel? gameCard = null)
     {
         if (modalService.Top is { } modal)
         {
             modal.HandleInput(command);
-        }
-        else if (vm is { IsGalleryScreen: true, IsGalleryViewerOpen: true })
-        {
-            HandleViewer(vm, command);
         }
         else if (vm.IsOverlayOpen)
         {

@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:set="using:XeniaManager.BigScreen.Controls.Settings"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             x:Class="XeniaManager.BigScreen.Views.Modals.GameSettingsPaneView"
+             x:DataType="vm:GameSettingsPaneViewModel">
+    <Grid RowDefinitions="Auto, *" RowSpacing="20">
+
+        <!-- HEADER: title -->
+        <prim:IconStat Grid.Row="0"
+                       Icon="Settings"
+                       Stat="{DynamicResource GameModal.Settings.Title}"
+                       IconSize="26"
+                       Spacing="14"
+                       FontSize="24"
+                       VerticalAlignment="Center" />
+
+        <!-- SECTIONS -->
+        <ScrollViewer Grid.Row="1"
+                      x:Name="SvSections"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Hidden">
+                <ItemsControl x:Name="SectionsList" ItemsSource="{Binding Sections}" Margin="0,0,0,20">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:ConfigSectionViewModel">
+                            <Border IsVisible="{Binding IsVisible}">
+                                <StackPanel Orientation="Vertical" Spacing="12">
+                                    <StackPanel Orientation="Vertical" Spacing="4">
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   FontSize="24"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource TextPrimary}" />
+                                        <TextBlock Text="{Binding Description}"
+                                                   IsVisible="{Binding Description, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="15"
+                                                   Foreground="{DynamicResource TextSecondary}" />
+                                    </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding Options}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="vm:ConfigOptionViewModel">
+                                                <set:ConfigOptionRow Margin="0,0,0,10" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+    </Grid>
+</UserControl>

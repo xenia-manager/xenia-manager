@@ -28,6 +28,17 @@ public abstract class ModalViewModelBase : ViewModelBase
     public Task WaitForClose() => _closed.Task;
 
     /// <summary>
+    /// Whether this modal is the top of the stack (drives which hint bar shows).
+    /// </summary>
+    public bool IsTopModal { get; private set; }
+
+    /// <summary>
+    /// Whether this modal's hint bar is visible - only the top modal shows one,
+    /// so stacked modals never show competing hints.
+    /// </summary>
+    public bool IsHintBarVisible => IsTopModal;
+
+    /// <summary>
     /// Handles a navigation command while this modal is the top of the stack.
     /// The base implementation closes on Back and ignores everything else.
     /// </summary>
@@ -41,6 +52,16 @@ public abstract class ModalViewModelBase : ViewModelBase
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Updates whether this modal is the top of the stack (called by the modal
+    /// service when the stack changes).
+    /// </summary>
+    internal void SetIsTopModal(bool isTop)
+    {
+        IsTopModal = isTop;
+        OnPropertyChanged(nameof(IsHintBarVisible));
     }
 
     /// <summary>

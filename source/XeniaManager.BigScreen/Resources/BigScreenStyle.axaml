@@ -277,6 +277,89 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
+    <!-- game modal ACTION ROW (game modal options list) -->
+    <Style Selector="card|GameActionRow">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="card|GameActionRow Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+    </Style>
+
+    <Style
+        Selector="card|GameActionRow:pointerover Border#RowBorder, card|GameActionRow:focus-visible Border#RowBorder, card|GameActionRow.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="card|GameActionRow.selected fluent|SymbolIcon">
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- ACHIEVEMENT ROW (game modal achievements pane) -->
+    <Style Selector="card|AchievementRow">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="card|AchievementRow Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
+    </Style>
+
+    <Style
+        Selector="card|AchievementRow:pointerover Border#RowBorder, card|AchievementRow:focus-visible Border#RowBorder, card|AchievementRow.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- CONTENT ROW (game modal installed content) -->
+    <Style Selector="card|ContentRow">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="card|ContentRow Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
+    </Style>
+
+    <Style
+        Selector="card|ContentRow:pointerover Border#RowBorder, card|ContentRow:focus-visible Border#RowBorder, card|ContentRow.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- CONFIG OPTION ROW (game modal game settings) -->
+    <Style Selector="set|ConfigOptionRow Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
+    </Style>
+
+    <Style
+        Selector="set|ConfigOptionRow:pointerover Border#RowBorder, set|ConfigOptionRow:focus-visible Border#RowBorder, set|ConfigOptionRow.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
     <!-- SCREENSHOT CARD (gallery) -->
     <Style Selector="card|ScreenshotCard">
         <Setter Property="Transitions">

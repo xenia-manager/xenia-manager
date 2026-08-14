@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
+using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Database;
@@ -78,7 +79,7 @@ public partial class LibraryViewModel : ScreenViewModel
     /// </summary>
     private int _detailsLoadGeneration;
 
-    public LibraryViewModel(SettingsViewModel settings) : base(settings)
+    public LibraryViewModel(SettingsViewModel settings, IModalService modalService) : base(settings, modalService)
     {
         _settings = settings;
         Games.CollectionChanged += OnGamesCollectionChanged;

@@ -74,7 +74,7 @@
             </Grid>
 
             <!-- HINTS (gallery) -->
-            <StackPanel Grid.Row="2" Classes="hint-bar">
+            <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
                                     Text="{DynamicResource Gallery.Hint.Back}" />
                 <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
@@ -83,10 +83,5 @@
                                     Text="{DynamicResource Gallery.Hint.Sort}" />
             </StackPanel>
         </Grid>
-
-        <!-- SCREENSHOT VIEWER (nested sub-screen, covers the whole screen while open) -->
-        <ContentControl Content="{Binding Viewer}"
-                        IsHitTestVisible="{Binding IsViewerOpen}"
-                        IsVisible="{Binding IsViewerOpen}" />
     </Grid>
 </UserControl>

@@ -9,19 +9,21 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Screens;
 
 /// <summary>
-/// Gallery screen state: the screenshot gallery, its sort mode, and the
-/// full-screen viewer (nested sub-screen).
+/// Gallery screen state: the screenshot gallery and its sort mode. The
+/// full-screen viewer opens as a modal on the modal stack.
 /// </summary>
 public partial class GalleryViewModel : ScreenViewModel
 {
     private readonly SettingsViewModel _settings;
     private readonly IScreenshotLibraryService _screenshotLibraryService;
+    private readonly IModalService _modalService;
     private bool _screenshotsLoaded;
 
     /// <summary>
@@ -49,26 +51,13 @@ public partial class GalleryViewModel : ScreenViewModel
         _ => LocalizationHelper.GetText("Gallery.Sort.NewestFirst"),
     };
 
-    /// <summary>
-    /// The screenshot viewer sub-screen, or null when it is closed.
-    /// </summary>
-    [ObservableProperty] private GalleryViewerViewModel? _viewer;
-
-    /// <summary>
-    /// Whether the full-screen screenshot viewer is open.
-    /// </summary>
-    public bool IsViewerOpen => Viewer != null;
-
-    partial void OnViewerChanged(GalleryViewerViewModel? value)
-    {
-        OnPropertyChanged(nameof(IsViewerOpen));
-    }
-
-    public GalleryViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService)
-        : base(settings)
+    public GalleryViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService,
+        IModalService modalService)
+        : base(settings, modalService)
     {
         _settings = settings;
         _screenshotLibraryService = screenshotLibraryService;
+        _modalService = modalService;
         Screenshots.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyScreenshots));
 
         // Screenshot captions follow the persisted time format
@@ -146,16 +135,13 @@ public partial class GalleryViewModel : ScreenViewModel
     }
 
     /// <summary>
-    /// Opens the modal viewer for the given screenshot.
+    /// Opens the full-screen screenshot viewer as a modal on the modal stack.
     /// </summary>
     public void OpenScreenshot(ScreenshotItemViewModel screenshot)
     {
-        Viewer = new GalleryViewerViewModel(screenshot, Screenshots);
         Logger.Debug<GalleryViewModel>($"Opening screenshot viewer for '{screenshot.Title}'");
+        TaskUtilities.RunSafely<GalleryViewModel>(
+            () => _modalService.ShowAsync(new ScreenshotViewerViewModel(screenshot, Screenshots)),
+            "Opening screenshot viewer");
     }
-
-    /// <summary>
-    /// Closes the modal screenshot viewer.
-    /// </summary>
-    public void CloseGalleryViewer() => Viewer = null;
 }

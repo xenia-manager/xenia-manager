@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             x:Class="XeniaManager.BigScreen.Views.Modals.AchievementsPaneView"
+             x:DataType="vm:AchievementsPaneViewModel">
+    <Grid RowDefinitions="Auto, *" RowSpacing="24">
+
+        <!-- HEADER: stats (left) + filter indicator (right) -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" ColumnSpacing="40">
+            <StackPanel Orientation="Horizontal" Spacing="40" VerticalAlignment="Center">
+                <prim:IconStat Icon="Trophy"
+                               Stat="{Binding AchievementText}"
+                               IconSize="26"
+                               Spacing="14"
+                               FontSize="24" />
+                <prim:IconStat Icon="Star"
+                               Stat="{Binding GamerscoreText}"
+                               IconSize="26"
+                               Spacing="14"
+                               FontSize="24" />
+            </StackPanel>
+            <prim:IconStat Grid.Column="1"
+                           Icon="ArrowSort"
+                           Stat="{Binding SortText}"
+                           IconRotation="90"
+                           IconSize="24"
+                           Spacing="12"
+                           VerticalAlignment="Center"
+                           FontSize="22" />
+        </Grid>
+
+        <!-- BODY: scrollable achievement rows -->
+        <Grid Grid.Row="1">
+            <ScrollViewer x:Name="SvAchievements"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Hidden">
+                <ItemsControl x:Name="AchievementsList" ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:AchievementItemViewModel">
+                            <card:AchievementRow />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Empty state: no GPD or no achievements -->
+            <Border IsVisible="{Binding ShowEmpty}"
+                    Height="220"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="520"
+                    Classes="empty-state">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Spacing="16">
+                    <fluent:SymbolIcon Symbol="Trophy"
+                                       FontSize="64" />
+                    <TextBlock Text="{DynamicResource GameModal.Achievements.Empty}"
+                               FontSize="22" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

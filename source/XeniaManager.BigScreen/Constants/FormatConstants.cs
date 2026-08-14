@@ -28,6 +28,11 @@ public static class FormatConstants
     public const string CaptureDateFormat24h = "d MMM yyyy, HH:mm";
 
     /// <summary>
+    /// Achievement unlock date format (e.g. "2026-08-05 14:30").
+    /// </summary>
+    public const string AchievementUnlockFormat = "yyyy-MM-dd HH:mm";
+
+    /// <summary>
     /// XUID serialization format (16 uppercase hex digits).
     /// </summary>
     public const string XuidFormat = "X16";

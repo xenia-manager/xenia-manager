@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Screens"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-             x:Class="XeniaManager.BigScreen.Views.Screens.GalleryViewerView"
-             x:DataType="vm:GalleryViewerViewModel">
+             x:Class="XeniaManager.BigScreen.Views.Modals.ScreenshotViewerView"
+             x:DataType="vm:ScreenshotViewerViewModel">
 
     <UserControl.Styles>
         <!-- Subtle faded chevron buttons for the modal viewer -->
@@ -65,7 +65,8 @@
               VerticalAlignment="Bottom">
             <StackPanel Grid.Column="0"
                         Orientation="Horizontal"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
                                     Text="{DynamicResource Gallery.Viewer.Close}" />
             </StackPanel>

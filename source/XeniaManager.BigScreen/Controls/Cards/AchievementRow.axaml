@@ -1,0 +1,83 @@
+<Button xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="120"
+        x:Class="XeniaManager.BigScreen.Controls.Cards.AchievementRow"
+        x:DataType="vm:AchievementItemViewModel"
+        Classes.selected="{Binding IsSelected}">
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <Border x:Name="RowBorder"
+                    Padding="16,12"
+                    Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderInner}"
+                    BorderThickness="3"
+                    BoxShadow="{DynamicResource CardShadowSoft}"
+                    CornerRadius="10">
+                <ContentPresenter Content="{TemplateBinding Content}"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Center" />
+            </Border>
+        </ControlTemplate>
+    </Button.Template>
+    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+        <Border Width="56"
+                Height="56"
+                VerticalAlignment="Center"
+                Background="{DynamicResource CardBorder}"
+                ClipToBounds="True"
+                CornerRadius="8">
+            <Grid>
+                <Image Source="{Binding AchievementImage}"
+                       IsVisible="{Binding HasAchievementImage}"
+                       Stretch="Uniform" />
+                <fluent:SymbolIcon Symbol="LockClosed"
+                                   IsVisible="{Binding !IsUnlocked}"
+                                   FontSize="22"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                <fluent:SymbolIcon Symbol="LockOpen"
+                                   IsVisible="{Binding ShowLockOpenIcon}"
+                                   FontSize="22"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+        <StackPanel Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Spacing="4">
+            <TextBlock Text="{Binding Name}"
+                       TextTrimming="CharacterEllipsis"
+                       FontSize="20"
+                       Foreground="{DynamicResource TextPrimary}" />
+            <TextBlock Text="{Binding Description}"
+                       TextWrapping="Wrap"
+                       FontSize="16"
+                       Foreground="{DynamicResource TextSecondary}" />
+            <TextBlock Text="{Binding UnlockDateDisplay}"
+                       IsVisible="{Binding IsUnlocked}"
+                       FontSize="16"
+                       Foreground="{DynamicResource TextSecondary}" />
+        </StackPanel>
+        <Grid Grid.Column="2"
+              ColumnDefinitions="Auto, Auto"
+              ColumnSpacing="8"
+              VerticalAlignment="Center">
+            <fluent:SymbolIcon Grid.Column="0"
+                               Symbol="Star"
+                               FontSize="16"
+                               Foreground="{DynamicResource TextSecondary}"
+                               VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1"
+                       Text="{Binding Gamerscore}"
+                       FontSize="16"
+                       Foreground="{DynamicResource TextSecondary}"
+                       VerticalAlignment="Center" />
+        </Grid>
+    </Grid>
+</Button>

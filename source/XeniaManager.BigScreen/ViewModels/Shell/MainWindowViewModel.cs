@@ -39,6 +39,13 @@ public partial class MainWindowViewModel : ViewModelBase
     private GameCardViewModel? _lastSelectedGame;
 
     /// <summary>
+    /// The screen that was open when the first modal was pushed, restored when
+    /// the modal stack empties (e.g. a game modal opened from the library lands
+    /// back in the library instead of the dashboard).
+    /// </summary>
+    private ViewModelBase? _screenBeforeModal;
+
+    /// <summary>
     /// The currently open overlay screen, or null when the dashboard is showing.
     /// </summary>
     [ObservableProperty] private ViewModelBase? _currentScreen;
@@ -64,14 +71,16 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsSettingsScreen => CurrentScreen == Settings;
 
     /// <summary>
-    /// Whether the Gallery screenshot viewer is open.
-    /// </summary>
-    public bool IsGalleryViewerOpen => CurrentScreen is GalleryViewModel { IsViewerOpen: true };
-
-    /// <summary>
     /// Whether any modal is on the modal stack (drives the full-window modal layer).
     /// </summary>
     [ObservableProperty] private bool _isModalOpen;
+
+    /// <summary>
+    /// Whether the modal backdrop scrim shows. Hidden while the screenshot
+    /// viewer is the top modal - its own opaque backdrop covers the window,
+    /// so the extra scrim would double-darken it.
+    /// </summary>
+    [ObservableProperty] private bool _modalBackdropVisible;
 
     /// <summary>
     /// Whether the library has games with nothing selected yet (first open).
@@ -152,9 +161,9 @@ public partial class MainWindowViewModel : ViewModelBase
         // The constructor stays cheap: profile, library and screenshot loading
         // happen in InitializeAsync, behind the splash screen
         Header = new HeaderViewModel();
-        Settings = new SettingsViewModel(backgroundService, gamepadService);
-        Library = new LibraryViewModel(Settings);
-        Gallery = new GalleryViewModel(Settings, screenshotLibraryService);
+        Settings = new SettingsViewModel(backgroundService, gamepadService, modalService);
+        Library = new LibraryViewModel(Settings, modalService);
+        Gallery = new GalleryViewModel(Settings, screenshotLibraryService, modalService);
         Dashboard = new DashboardViewModel(backgroundService);
         Settings.AppearanceChanged += () => Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt);
         Settings.CardImageChanged += () =>
@@ -175,14 +184,26 @@ public partial class MainWindowViewModel : ViewModelBase
         };
 
         // The full-window modal layer follows the modal stack; when the stack
-        // empties the dashboard shows again (any open overlay screen closes)
+        // empties, the screen under the first modal is restored (the dashboard
+        // shows when the modal was opened from it)
         _modalService.StackChanged += () =>
         {
-            IsModalOpen = _modalService.IsOpen;
-            if (!_modalService.IsOpen && CurrentScreen != null)
+            if (_modalService.IsOpen)
+            {
+                _screenBeforeModal ??= CurrentScreen;
+            }
+            else if (_screenBeforeModal != null)
+            {
+                CurrentScreen = _screenBeforeModal;
+                _screenBeforeModal = null;
+            }
+            else
             {
                 CloseOverlay();
             }
+
+            IsModalOpen = _modalService.IsOpen;
+            ModalBackdropVisible = _modalService.IsOpen && _modalService.Top is not ScreenshotViewerViewModel;
         };
     }
 
@@ -433,6 +454,22 @@ public partial class MainWindowViewModel : ViewModelBase
         Logger.Info<MainWindowViewModel>("Opening profile picker");
         TaskUtilities.RunSafely<MainWindowViewModel>(
             () => _modalService.ShowAsync(new ProfilePickerViewModel()), "Opening profile picker");
+    }
+
+    /// <summary>
+    /// Opens the game modal modal for the given game (Y on a card, or right-click).
+    /// Skipped when a modal is already open.
+    /// </summary>
+    public void OpenGameModal(Game game)
+    {
+        if (_modalService.IsOpen)
+        {
+            return;
+        }
+
+        Logger.Info<MainWindowViewModel>($"Opening game modal for '{game.Title}'");
+        TaskUtilities.RunSafely<MainWindowViewModel>(
+            () => _modalService.ShowAsync(new GameModalViewModel(game)), "Opening game modal");
     }
 
     /// <summary>

@@ -4,7 +4,7 @@
     <Color x:Key="CardBackgroundColor">#FF1F232B</Color>
     <Color x:Key="CardTitleBarColor">#FF101216</Color>
     <Color x:Key="CardBorderColor">#FF191C22</Color>
-    <Color x:Key="CardBorderInnerColor">#FF1D2128</Color>
+    <Color x:Key="CardBorderInnerColor">#FF2C313B</Color>
     <Color x:Key="CardSubtleFillColor">#FF1A1E24</Color>
     <SolidColorBrush x:Key="CardBackground" Color="{StaticResource CardBackgroundColor}" />
     <SolidColorBrush x:Key="CardTitleBar" Color="{StaticResource CardTitleBarColor}" />
