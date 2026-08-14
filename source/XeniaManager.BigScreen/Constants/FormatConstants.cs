@@ -28,6 +28,12 @@ public static class FormatConstants
     public const string CaptureDateFormat24h = "d MMM yyyy, HH:mm";
 
     /// <summary>
+    /// The capture timestamp format Xenia embeds in screenshot file names
+    /// (e.g. "2026-08-09T21-59-28" in "454108F3 - 2026-08-09T21-59-28.png").
+    /// </summary>
+    public const string ScreenshotFileNameDateFormat = "yyyy-MM-ddTHH-mm-ss";
+
+    /// <summary>
     /// Achievement unlock date format (e.g. "2026-08-05 14:30").
     /// </summary>
     public const string AchievementUnlockFormat = "yyyy-MM-dd HH:mm";

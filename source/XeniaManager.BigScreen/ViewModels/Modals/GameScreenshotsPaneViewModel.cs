@@ -129,10 +129,13 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
         {
             try
             {
+                string fileName = Path.GetFileName(file);
+                DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
+                                      ?? File.GetLastWriteTime(file);
                 screenshots.Add(new ScreenshotItemViewModel(
                     file,
-                    Path.GetFileName(file),
-                    File.GetLastWriteTime(file),
+                    fileName,
+                    capturedAt,
                     _game.Title,
                     new Bitmap(file)));
             }

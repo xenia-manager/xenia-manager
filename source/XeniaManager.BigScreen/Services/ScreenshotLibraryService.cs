@@ -55,11 +55,20 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
             {
                 try
                 {
+                    string fileName = Path.GetFileName(file);
+                    string gameId = ScreenshotFileNameParser.ExtractGameId(fileName);
+                    if (gameId.Length == 0)
+                    {
+                        gameId = Path.GetFileName(Path.GetDirectoryName(file) ?? string.Empty);
+                    }
+
+                    DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
+                                          ?? File.GetLastWriteTime(file);
                     screenshots.Add(new ScreenshotItemViewModel(
                         file,
-                        Path.GetFileName(file),
-                        File.GetLastWriteTime(file),
-                        ResolveGameTitle(Path.GetFileName(Path.GetDirectoryName(file) ?? string.Empty)),
+                        fileName,
+                        capturedAt,
+                        ResolveGameTitle(gameId),
                         new Bitmap(file)));
                 }
                 catch (Exception ex)
