@@ -20,10 +20,11 @@
 ## 2. Current State (done)
 
 ### Dashboard shell (`Views/Shell/MainWindow.axaml`)
-- **Header:** avatar icon (PersonCircle), gamertag from the **Canary profile** (`ProfileManager.LoadProfiles(XeniaVersion.Canary)` + profile GPD), gamerscore as an `IconStat` (Star), **live** Wi-Fi + controller battery icons (10s/5s polls), live clock (1s `DispatcherTimer`).
-- **Game card row:** **max 6 recent games** (`RecentGames`, its own VM instances — independent selection from the library). Each `GameCard` shows its **box art or disc icon** per the `card_image_mode` setting (default Icon; Box Art mode is a **portrait tile filled bottom-anchored by the box art with the top ~12% cropped** — falls back to the icon when art is missing; Icon mode is a zoom-to-fill square disc); the selected card grows (200→250 wide, height follows the mode) and shows the title bar. A transparent `BorderOverlay` larger than the card carries **all** border strokes (inactive `CardBorder`, hover/selected accent) so nothing sits on top of the art edges.
-- **Option card row:** `Library` · `Gallery` · `Settings` · `Quit`. Hover shows the accent border; selection is driven by `IsSelected` (controller focus), not by keyboard focus.
-- **Fullscreen:** plain `Window` (no title bar) with `WindowState=FullScreen` **forced in code** at construction and before `Show()` — the XAML attribute is not reliable on the DI creation path; 1920×1080 fallback, centered column layout so header aligns with content rows.
+- **Header:** avatar chip (PersonCircle, 40px circle, **no fill**, reserved 4px border that turns accent on hover/selection, no shadow), gamertag from the **Canary profile** (`ProfileManager.LoadProfiles(XeniaVersion.Canary)` + profile GPD), **white** gamerscore (star + number), **live** Wi-Fi + controller battery icons (10s/5s polls), live clock (1s `DispatcherTimer`). Header row 100px, `150,55,150,0` insets — the 55px top inset equals the dashboard's bottom inset so the frame is uniform.
+- **Game card row:** **max 8 recent games** (`RecentGames`, its own VM instances — independent selection from the library). Each `GameCard` shows its **box art or disc icon** per the `card_image_mode` setting (default Icon; Box Art mode is a **portrait tile filled bottom-anchored by the box art with the top ~12% cropped** — falls back to the icon when art is missing; Icon mode is a square disc fill); cards are **153 wide, the focused card grows to 228** (~50% width emphasis, animated via Width/Height transitions), icon mode stays square (153² → 228²), box art keeps its fixed 1.19 ratio (153×182 → 228×271); row spacing 15, slot 271 (the focused box-art card's height). A `BorderOverlay` carries the strokes: **base border transparent at the SAME 5px** as the hover/selected accent stroke (nothing shifts on focus), and each card floats on an **even box shadow (offset 0,0)**.
+- **Option card row:** `Library` · `Gallery` · `Settings` · `Quit`, **339×135** cards (icon 26 / text 20), spacing 16. Hover shows the accent border (same 5px as idle); selection is driven by `IsSelected` (controller focus), not by keyboard focus.
+- **Layout:** full-width grid with **concrete insets** — dashboard `150,0,150,55`, rows `*, 271, 145`, row gap 17; header and dashboard share the same 150px side boundaries. No centered Auto column (it re-centred on every selection change and pushed content offscreen on narrower displays).
+- **Fullscreen:** plain `Window` (no title bar) with `WindowState=FullScreen` **forced in code** at construction and before `Show()` — the XAML attribute is not reliable on the DI creation path; 1920×1080 fallback.
 
 ### Overlay screens
 Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape** closes, focus returns to the option row. Bottom hint bars use the `InputHint` control (coloured circle keycap + label).
@@ -57,7 +58,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **"Big Screen" nav button** in Xenia Manager (`MainView.axaml`, `Tv` icon, tooltip "Open Big Screen") → `NavigationService` `BigScreen` tag → launches `XeniaManager.BigScreen.exe` resolved **side-by-side or via the repo-sibling bin folder** (same config, matching `BaseAppLocator`); missing exe → localised warning box.
 
 ### Theming
-- `Resources/Themes/DarkGradient.axaml` — token dictionary: `CardBackground`, `CardTitleBar`, `CardBorder`, `AccentColor`, `TextPrimary/Secondary`, `HintKeyX/Y/A/B/Back`, `CardShadow`/`CardShadowSelected` (`BoxShadows`!), `SystemAccentColor*` (Colour-typed variants), slider/control overrides, accent-fill family.
+- `Resources/Themes/DarkGradient.axaml` — token dictionary: `CardBackground`, `CardTitleBar`, `CardBorder`, `AccentColor`, `TextPrimary/Secondary`, `HintKeyX/Y/A/B/Back`, `CardShadow`/`CardShadowSelected` (`BoxShadows`, **all offset 0,0 — even on every side, no directional angle**), `SystemAccentColor*` (Colour-typed variants), slider/control overrides, accent-fill family.
 - `Resources/Themes/Controls.axaml` — `ControlTheme`s for the custom controls (`ColorPickerField`, `PalettePicker`).
 - `Resources/BigScreenStyle.axaml` — global styles (cards, shared `.screen-title`/`.card-title`/`.hint-bar`/`.empty-state` classes, text halos).
 - `Resources/Language/en.axaml` — **full key set for every user-facing string** (main-app naming convention), wired via `{DynamicResource}` in XAML and `LocalizationHelper.GetText` in code; `LocalizationHelper.Initialize(...)` in `App.axaml.cs`. Other languages = new files only.
@@ -71,7 +72,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **`LibraryCard`** — carousel card: box art (bottom-anchored, top 13% cropped, rounded clip via `RectangleGeometry`), title, playtime row, achievements/gamerscore row; `CardBorder` 2px inactive → accent on selection (outer border only).
 - **`LibraryListItem`** — list-view row: disc icon + title, accent border on selection/hover.
 - **`GameDetailsPanel`** — list-view details pane: disc art, playtime/achievements/gamerscore, marketplace DB bio + metadata strip (genre, developer, publisher, released), loading bar / no-info states.
-- **`GameCard`** — dashboard game tile: box art or disc icon per `card_image_mode` (rounded clip; Box Art mode is a portrait tile filled bottom-anchored with the top ~12% cropped, Icon mode a square fill) + title bar on selection, border overlay strokes; grows on selection (200→250 wide, height follows the mode).
+- **`GameCard`** — dashboard game tile: box art or disc icon per `card_image_mode` (rounded clip; Box Art mode is a portrait tile filled bottom-anchored with the top ~12% cropped, Icon mode a square fill) + title bar on selection, border overlay strokes (transparent idle / accent hover+selected, both 5px); grows on selection **153 → 228 wide** (animated), height follows the mode (icon stays square, box art keeps the 1.19 ratio).
 - **`ScreenshotCard`** — gallery tile: 16:9 screenshot with 6px rounded clip, title bar on selection, border overlay strokes.
 - **`OptionsCard`** — dashboard option tile.
 
@@ -109,7 +110,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 ### Profiles & identity
 - **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first.
 - **Boot reorder:** Settings stage now runs before the Profile stage (the persisted XUID is needed to pick the profile).
-- **Header `ProfileButton`** (avatar chip) — focusable + clickable; controller **Up** from the game row selects it (**Down** returns to game card 1); reserved 2px accent outline on selection/hover (`IsSelected` on `HeaderViewModel`).
+- **Header `ProfileButton`** (avatar chip) — focusable + clickable; controller **Up** from the game row selects it (**Down** returns to the previously selected card; **Right** jumps to the next card after the current selection, wrapping from card 8 back to card 1); reserved 4px border that turns accent on selection/hover (no fill, no shadow — the icon floats inside the 40px circle).
 - **Profile picker modal** (`ProfilePickerView`) — opened from the header chip: all profiles (active first, then alphabetical) with gamertag, country · language and per-profile gamerscore; Up/Down + A switches + B closes, **Y opens Manage Profiles** on top of the picker; "no profiles" stub.
 - **Manage Profiles modal** (`ManageProfilesView`) — opened from a Profiles card in Settings or via Y in the picker: profile rows (scrollable) + an anchored **Create New Profile stub row** beneath; full desktop-dialogue port (create / delete / import (`ProfileManager.ImportProfileWithReplacement` + replace-confirm, `.xaccount`/`.zip` picker) / export (save picker + "include saves?" confirm) / edit gamertag (regex + 15-char validation, inline error) + country/language/subscription combos + Xbox Live toggle / Save (`SaveProfiles`)); edit panel hidden while the stub is selected; **unsaved edits prompt Save / Discard on exit and row switches (B cancels, staying put)**; deleting the active profile falls back to the first and refreshes the header/stats. Hints: B Back · X Delete · View Import · Start Export.
 
@@ -187,8 +188,8 @@ source/XeniaManager.BigScreen/
 │       └── DiscOptionItemViewModel.cs # Disc card row: label, last-played/missing status, IsSelected (ISelectable)
 ├── Controls/
 │   ├── Cards/
-│   │   ├── GameCard.axaml(.cs)        # Dashboard game tile: box art + title bar on selection (grow 200→250)
-│   │   ├── OptionsCard.axaml(.cs)     # Dashboard option tile
+│   │   ├── GameCard.axaml(.cs)        # Dashboard game tile: box art + title bar on selection (grow 153→228, animated)
+│   │   ├── OptionsCard.axaml(.cs)     # Dashboard option tile (339×135, icon 26 + text 20, transparent 5px base border)
 │   │   ├── ScreenshotCard.axaml(.cs)  # Gallery tile: 16:9 screenshot, 6px corners
 │   │   ├── LibraryCard.axaml(.cs)     # Carousel card: box art + title + stat rows (rounded art clip)
 │   │   ├── LibraryListItem.axaml(.cs) # List row: disc icon + title (accent on select/hover)
@@ -300,7 +301,7 @@ source/XeniaManager.BigScreen/
 | Token                                                             | Purpose                                                                 |
 |-------------------------------------------------------------------|-------------------------------------------------------------------------|
 | `CardBackground` / `CardTitleBar`                                 | Card surfaces                                                           |
-| `CardBorder`                                                      | Reserved 3–4px borders (no layout shift on focus)                       |
+| `CardBorder`                                                      | Reserved borders on non-dashboard cards; dashboard game/option cards reserve a transparent 5px stroke (accent at the same 5px on hover/selection — no layout shift) |
 | `AccentColor`                                                     | Selected/hover accent (runtime-configurable)                            |
 | `TextPrimary` / `TextSecondary`                                   | Text                                                                    |
 | `HintKeyX` / `HintKeyY` / `HintKeyA` / `HintKeyB` / `HintKeyBack` | Keycap colours (X blue, Y amber, A green, B red, back/view faded white) |
@@ -358,13 +359,13 @@ source/XeniaManager.BigScreen/
 ### 5.7 Empty states
 - [x] No games → disc stub (dashboard row and library screen)
 - [x] No screenshots → camera stub (media gallery)
-- [x] Dashboard row capped at 6 (fewer games = fewer cards, no empty slots)
+- [x] Dashboard row capped at 8 (fewer games = fewer cards, no empty slots)
 
 ### 5.8 SDL3 gamepad input
 - [x] `ppy.SDL3-CS` + `AllowUnsafeBlocks` for the pointer API
 - [x] `GamepadInputService` (now in Core): graceful init failure, UI-thread poll, deadzone edge detection (no hold repeat); D-pad, left stick and bumpers normalise onto the D-pad values; opens/adds/closes gamepads; raw input traced
 - [x] D-pad + A/B mapped to the selection model
-- [x] Dashboard **row-state driven** (not keyboard focus): Up/Down switches rows with a fixed column mapping (games 2-3 → option 2, 4-5 → option 3, etc.); A acts on the active row only; options cleared when returning to games; no games = options row stays active
+- [x] Dashboard **row-state driven** (not keyboard focus): Up/Down switches rows with a fixed column mapping (2 games per option card, 8 games → 4 options); A acts on the active row only; options cleared when returning to games; no games = options row stays active
 - [x] Left/Right via D-pad, stick and bumpers; Up/Down with row jumps in media
 - [x] Settings stays keyboard-only; input gated while the window is disabled (game running)
 - [x] Sorting keeps the viewport fixed (selection follows the list index) — library and media
@@ -440,7 +441,7 @@ source/XeniaManager.BigScreen/
 - [x] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game modal (T8/T10/T11)
 - [x] **T20.** Boxart tile sizing — in `CardImageMode.BoxArt` the dashboard tile is portrait and sized so the box art fills it bottom-anchored with the top ~12% cropped; Icon-mode fallback unchanged
 - [ ] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery **% text below** the battery icon
-- [ ] **T22.** Background type default → **Dynamic** (`DashboardSettings.Mode` + settings default)
+- [x] **T22.** Background type default → **Dynamic** (`DashboardSettings.Mode` + settings default); Settings dropdowns built from **enum order** via `BuildOptions` so the defaults lead (`BackgroundMode` reordered Dynamic-first, `CardImageMode` Icon-first); persisted settings files migrated to the new enum mapping
 - [ ] **T23.** Xenia version indicator — per-game badge/icon on library cards, list rows + details (reuse Core `XeniaVersionToIconConverter`/`XeniaVersionToStringConverter`)
 - [ ] **T24.** Game compatibility indicator — coloured rating dot + label on cards (Core `CompatibilityRatingColorConverter`), DB URL as tooltip
 - [ ] **T25.** List-view achievements — scrollable locked/unlocked achievement section in the list-view details pane

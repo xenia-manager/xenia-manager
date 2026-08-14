@@ -68,9 +68,9 @@ public class DashboardNavigationController
 
     /// <summary>
     /// Column mapping from a game card index to the option card underneath it
-    /// (games 1-2 → option 1, games 3-4 → option 2, games 5-6 → option 3, game 7 → option 4).
+    /// (games 1-2 → option 1, games 3-4 → option 2, games 5-6 → option 3, games 7-8 → option 4).
     /// </summary>
-    private static readonly int[] GameToOptionColumn = [0, 0, 1, 1, 2, 2, 3];
+    private static readonly int[] GameToOptionColumn = [0, 0, 1, 1, 2, 2, 3, 3];
 
     /// <summary>
     /// Column mapping from an option card index to the first game card of its

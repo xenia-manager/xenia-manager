@@ -37,7 +37,16 @@
                        FontSize="16"
                        FontWeight="Bold"
                        Foreground="{DynamicResource TextPrimary}" />
-            <prim:IconStat Icon="Star" Stat="{Binding Header.Gamerscore}" IconSize="13" FontSize="13" />
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <fluent:SymbolIcon Symbol="Star"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Header.Gamerscore}"
+                           FontSize="13"
+                           Foreground="{DynamicResource TextPrimary}"
+                           VerticalAlignment="Center" />
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </Button>

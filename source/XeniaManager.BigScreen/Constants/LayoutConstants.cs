@@ -73,35 +73,35 @@ public static class LayoutConstants
     /// <summary>
     /// Dashboard game tile width (unselected).
     /// </summary>
-    public const double DashboardCardWidth = 185;
+    public const double DashboardCardWidth = 153;
 
     /// <summary>
-    /// Dashboard game tile width when selected (grows; width is the primary
-    /// emphasis so the carousel stays compact vertically).
+    /// Dashboard game tile width when selected (grows so the focus stands out;
+    /// leaves room for the 5px stroke and even shadow inside the row).
     /// </summary>
-    public const double DashboardCardSelectedWidth = 220;
+    public const double DashboardCardSelectedWidth = 228;
 
     /// <summary>
     /// Dashboard game tile height in Icon mode (unselected, square).
     /// </summary>
-    public const double DashboardCardIconHeight = 185;
+    public const double DashboardCardIconHeight = 153;
 
     /// <summary>
     /// Dashboard game tile height in Icon mode when selected (uniform growth -
     /// stays square).
     /// </summary>
-    public const double DashboardCardIconSelectedHeight = 220;
+    public const double DashboardCardIconSelectedHeight = 228;
 
     /// <summary>
     /// Dashboard game tile height in Box Art mode (unselected). Keeps the
     /// original 1.19 width:height ratio scaled to the current tile width.
     /// </summary>
-    public const double DashboardCardBoxArtHeight = 220;
+    public const double DashboardCardBoxArtHeight = 182;
 
     /// <summary>
     /// Dashboard game tile height in Box Art mode when selected (same 1.19 ratio).
     /// </summary>
-    public const double DashboardCardBoxArtSelectedHeight = 262;
+    public const double DashboardCardBoxArtSelectedHeight = 271;
 
     /// <summary>
     /// Dashboard game tile art inset (2px card margin on both sides).

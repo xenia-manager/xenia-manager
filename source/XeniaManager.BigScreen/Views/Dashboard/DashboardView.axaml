@@ -8,21 +8,21 @@
              x:Class="XeniaManager.BigScreen.Views.Dashboard.DashboardView"
              x:DataType="vm:DashboardViewModel">
 
-    <Grid RowDefinitions="*, 262, 145"
+    <Grid RowDefinitions="*, 271, 145"
           Margin="150,0,150,55"
           RowSpacing="17">
 
-        <!-- GAME CARDS ROW (262 = the selected box-art card's height, so
+        <!-- GAME CARDS ROW (271 = the selected box-art card's height, so
              nothing gets cut vertically) -->
         <Grid Grid.Row="1" VerticalAlignment="Bottom">
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
             <Border IsVisible="{Binding ShowEmptyStub}"
                     CornerRadius="8"
-                    Height="185"
+                    Height="153"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    Width="185"
+                    Width="153"
                     Classes="empty-state">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
@@ -38,7 +38,7 @@
                           ItemsSource="{Binding RecentGames}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Bottom" />
+                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Bottom" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>

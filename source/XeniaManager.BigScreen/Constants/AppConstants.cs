@@ -13,7 +13,7 @@ public static class AppConstants
     /// <summary>
     /// How many games the dashboard's recent-games row shows.
     /// </summary>
-    public const int RecentGamesLimit = 7;
+    public const int RecentGamesLimit = 8;
 
     /// <summary>
     /// File name of the persisted dashboard settings (next to the executable).
