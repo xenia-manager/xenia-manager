@@ -27,8 +27,9 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// Moves the active dashboard row by the given step. The profile row has a
-    /// single element, so horizontal movement there is a no-op.
+    /// <summary>
+    /// Moves the active dashboard row by the given step. Right from the profile
+    /// row drops into the game row on the next card (wrapping after the last).
     /// </summary>
     private void MoveDashboard(MainWindowViewModel vm, int delta)
     {
@@ -36,7 +37,14 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
         {
             DashboardNavigationController.MoveOptionSelection(vm.Dashboard, delta);
         }
-        else if (!navigation.IsOnProfileRow)
+        else if (navigation.IsOnProfileRow)
+        {
+            if (delta > 0)
+            {
+                navigation.AdvanceFromProfileRow(vm.Dashboard);
+            }
+        }
+        else
         {
             DashboardNavigationController.MoveRecentGameSelection(vm.Dashboard, delta);
         }

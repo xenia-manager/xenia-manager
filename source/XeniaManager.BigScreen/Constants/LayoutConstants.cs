@@ -73,33 +73,35 @@ public static class LayoutConstants
     /// <summary>
     /// Dashboard game tile width (unselected).
     /// </summary>
-    public const double DashboardCardWidth = 200;
+    public const double DashboardCardWidth = 185;
 
     /// <summary>
-    /// Dashboard game tile width when selected (grows).
+    /// Dashboard game tile width when selected (grows; width is the primary
+    /// emphasis so the carousel stays compact vertically).
     /// </summary>
-    public const double DashboardCardSelectedWidth = 250;
+    public const double DashboardCardSelectedWidth = 220;
 
     /// <summary>
-    /// Dashboard game tile height in Icon mode (unselected).
+    /// Dashboard game tile height in Icon mode (unselected, square).
     /// </summary>
-    public const double DashboardCardIconHeight = 200;
+    public const double DashboardCardIconHeight = 185;
 
     /// <summary>
-    /// Dashboard game tile height in Icon mode when selected (grows).
+    /// Dashboard game tile height in Icon mode when selected (uniform growth -
+    /// stays square).
     /// </summary>
-    public const double DashboardCardIconSelectedHeight = 250;
+    public const double DashboardCardIconSelectedHeight = 220;
 
     /// <summary>
-    /// Dashboard game tile height in Box Art mode (unselected). Portrait, sized so
-    /// ~0.73-ratio box art fills the tile bottom-anchored with the top ~12% cropped.
+    /// Dashboard game tile height in Box Art mode (unselected). Keeps the
+    /// original 1.19 width:height ratio scaled to the current tile width.
     /// </summary>
-    public const double DashboardCardBoxArtHeight = 238;
+    public const double DashboardCardBoxArtHeight = 220;
 
     /// <summary>
-    /// Dashboard game tile height in Box Art mode when selected (grows).
+    /// Dashboard game tile height in Box Art mode when selected (same 1.19 ratio).
     /// </summary>
-    public const double DashboardCardBoxArtSelectedHeight = 298;
+    public const double DashboardCardBoxArtSelectedHeight = 262;
 
     /// <summary>
     /// Dashboard game tile art inset (2px card margin on both sides).

@@ -19,22 +19,22 @@
     <StackPanel Orientation="Horizontal"
                 Spacing="12"
                 VerticalAlignment="Center">
-        <!-- Avatar circle: reserved 2px border that turns accent on selection/hover -->
+        <!-- Avatar circle: reserved 2px border that turns accent on selection/hover;
+             no fill - the icon sits inside with breathing room -->
         <Border x:Name="AvatarCircle"
-                CornerRadius="22"
-                Height="44"
-                Width="44"
-                Background="{DynamicResource CardBackground}">
+                CornerRadius="20"
+                Height="40"
+                Width="40">
             <fluent:SymbolIcon Symbol="PersonCircle"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               FontSize="24"
+                               FontSize="30"
                                Foreground="{DynamicResource TextPrimary}" />
         </Border>
         <StackPanel Margin="0,-4,0,0" VerticalAlignment="Center">
             <TextBlock Text="{Binding Header.Gamertag}"
                        Classes="header-text"
-                       FontSize="18"
+                       FontSize="16"
                        FontWeight="Bold"
                        Foreground="{DynamicResource TextPrimary}" />
             <prim:IconStat Icon="Star" Stat="{Binding Header.Gamerscore}" IconSize="13" FontSize="13" />

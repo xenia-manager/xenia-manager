@@ -8,26 +8,29 @@
              x:Class="XeniaManager.BigScreen.Views.Dashboard.DashboardView"
              x:DataType="vm:DashboardViewModel">
 
-    <Grid RowDefinitions="*, 360, 200">
+    <Grid RowDefinitions="*, 262, 145"
+          Margin="150,0,150,55"
+          RowSpacing="17">
 
-        <!-- GAME CARDS ROW -->
-        <Grid Grid.Row="1" VerticalAlignment="Bottom" Height="360">
+        <!-- GAME CARDS ROW (262 = the selected box-art card's height, so
+             nothing gets cut vertically) -->
+        <Grid Grid.Row="1" VerticalAlignment="Bottom">
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
             <Border IsVisible="{Binding ShowEmptyStub}"
                     CornerRadius="8"
-                    Height="250"
+                    Height="185"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    Width="200"
+                    Width="185"
                     Classes="empty-state">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
-                            Spacing="12">
+                            Spacing="10">
                     <fluent:SymbolIcon Symbol="PlayCircle"
-                                       FontSize="64" />
+                                       FontSize="52" />
                     <TextBlock Text="{DynamicResource Dashboard.NoGamesFound}"
-                               FontSize="16" />
+                               FontSize="14" />
                 </StackPanel>
             </Border>
 
@@ -35,13 +38,14 @@
                           ItemsSource="{Binding RecentGames}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="25" VerticalAlignment="Bottom" />
+                        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Bottom" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </Grid>
 
-        <!-- OPTION CARDS ROW -->
+        <!-- OPTION CARDS ROW: 4 x 393 + 3 x 16 = 1620, exactly filling the
+             content region between the dashboard insets -->
         <ItemsControl x:Name="OptionsRow"
                       Grid.Row="2"
                       ItemsSource="{Binding Options}"

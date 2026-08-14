@@ -20,17 +20,18 @@
                        Background="{Binding Dashboard.Background}">
 
     <Panel>
-        <!-- Shared centered column so the header margins align with the content rows -->
-        <Grid RowDefinitions="150, *" ColumnDefinitions="*, Auto, *">
+        <!-- Full-width grid; the header and dashboard carry their own concrete
+             horizontal padding so both rows always share the same boundaries -->
+        <Grid RowDefinitions="100, *">
 
             <!-- Vignette overlay over the background (ignores input, images only) -->
-            <Border Grid.ColumnSpan="3" Grid.RowSpan="2"
+            <Border Grid.RowSpan="2"
                     IsVisible="{Binding Dashboard.VignetteVisible}"
                     IsHitTestVisible="False"
                     Background="{DynamicResource BackgroundVignette}" />
 
             <!-- Black fade overlay for background transitions (ignores input) -->
-            <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
+            <Border Grid.Row="0" Grid.RowSpan="2"
                     Opacity="{Binding Dashboard.FadeOpacity}"
                     IsHitTestVisible="False"
                     Background="Black">
@@ -41,10 +42,12 @@
                 </Border.Transitions>
             </Border>
 
-            <!-- TOP DASHBOARD HEADER -->
-            <Grid Grid.Row="0" Grid.Column="1"
+            <!-- TOP DASHBOARD HEADER: top inset 55 = the dashboard's bottom inset,
+                 so the frame is uniform on all sides -->
+            <Grid Grid.Row="0"
+                  Margin="150,55,150,0"
                   ColumnDefinitions="Auto, *, Auto"
-                  VerticalAlignment="Center">
+                  VerticalAlignment="Top">
 
                 <!-- PROFILE (LEFT): focusable chip - opens the profile picker -->
                 <prof:ProfileButton Grid.Column="0"
@@ -80,13 +83,12 @@
                 </StackPanel>
             </Grid>
 
-            <!-- MAIN DASHBOARD CONTENT -->
-            <ContentControl Grid.Row="1" Grid.Column="1"
-                            Content="{Binding Dashboard}"
-                            Margin="0,0,0,80" />
+            <!-- MAIN DASHBOARD CONTENT (owns its own padding) -->
+            <ContentControl Grid.Row="1"
+                            Content="{Binding Dashboard}" />
 
             <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
-            <Panel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"
+            <Panel Grid.Row="0" Grid.RowSpan="2"
                    IsVisible="{Binding IsOverlayOpen}"
                    IsHitTestVisible="{Binding IsOverlayOpen}">
                 <!-- Full-screen backdrop -->

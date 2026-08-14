@@ -68,15 +68,15 @@ public class DashboardNavigationController
 
     /// <summary>
     /// Column mapping from a game card index to the option card underneath it
-    /// (game 1 → option 1, games 2-3 → option 2, games 4-5 → option 3, game 6 → option 4).
+    /// (games 1-2 → option 1, games 3-4 → option 2, games 5-6 → option 3, game 7 → option 4).
     /// </summary>
-    private static readonly int[] GameToOptionColumn = [0, 1, 1, 2, 2, 3];
+    private static readonly int[] GameToOptionColumn = [0, 0, 1, 1, 2, 2, 3];
 
     /// <summary>
     /// Column mapping from an option card index to the first game card of its
-    /// group (option 1 → game 1, option 2 → game 2, option 3 → game 4, option 4 → game 6).
+    /// group (option 1 → game 1, option 2 → game 3, option 3 → game 5, option 4 → game 7).
     /// </summary>
-    private static readonly int[] OptionToGameColumn = [0, 1, 3, 5];
+    private static readonly int[] OptionToGameColumn = [0, 2, 4, 6];
 
     /// <summary>
     /// Switches the dashboard to the option row, selecting the option card in the
@@ -102,10 +102,12 @@ public class DashboardNavigationController
     }
 
     /// <summary>
-    /// Switches the dashboard to the game row, selecting the first game card of
-    /// the current option's column group (clamped to the game count). Coming from
-    /// the profile row, the single-element header maps to game card 1. When the
-    /// library is empty there is no game row, so the option row stays active.
+    /// Switches the dashboard to the game row. Coming from the profile row it
+    /// returns to the card that was selected before the header took focus (the
+    /// game row keeps its selection while the avatar row is active); coming
+    /// from the option row it selects the first game card of the current
+    /// option's column group. When the library is empty there is no game row,
+    /// so the option row stays active.
     /// </summary>
     public void SelectGameRow(DashboardViewModel dashboard)
     {
@@ -123,7 +125,7 @@ public class DashboardNavigationController
 
         int optionIndex = SelectionHelper.IndexOfSelected(dashboard.Options);
         int mapped = fromProfileRow
-            ? 0
+            ? SelectionHelper.IndexOfSelected(dashboard.RecentGames)
             : OptionToGameColumn[Math.Clamp(optionIndex, 0, OptionToGameColumn.Length - 1)];
         int target = Math.Clamp(mapped, 0, dashboard.RecentGames.Count - 1);
         SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
@@ -173,6 +175,31 @@ public class DashboardNavigationController
 
         SelectionHelper.MoveSelection(dashboard.RecentGames, delta);
         Logger.Trace<DashboardNavigationController>($"Moved recent game selection by {delta}");
+    }
+
+    /// <summary>
+    /// Coming from the profile row with Right: drops into the game row on the
+    /// card after the currently selected one, wrapping from the last card back
+    /// to the first. With no games the option row stays active.
+    /// </summary>
+    public void AdvanceFromProfileRow(DashboardViewModel dashboard)
+    {
+        if (dashboard.RecentGames.Count == 0)
+        {
+            SelectOptionRow(dashboard);
+            return;
+        }
+
+        IsOnProfileRow = false;
+        IsOnOptionsRow = false;
+
+        int current = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
+        int target = (Math.Max(current, 0) + 1) % dashboard.RecentGames.Count;
+        SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
+        SelectionHelper.ClearSelection(dashboard.Options);
+
+        GameFocusRequested?.Invoke(dashboard.RecentGames[target]);
+        Logger.Debug<DashboardNavigationController>($"Advanced from profile row to game card {target + 1}");
     }
 
     /// <summary>

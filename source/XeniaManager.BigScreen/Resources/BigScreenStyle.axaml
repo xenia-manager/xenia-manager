@@ -37,14 +37,22 @@
     </Style>
 
     <!-- Size is bound to the ViewModel (mode + selection), so the tile stays square
-         in Icon mode and turns portrait in Box Art mode -->
+         in Icon mode and turns portrait in Box Art mode; the growth tweens -->
     <Style Selector="card|GameCard">
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.18" Easing="CubicEaseOut" />
+                <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
+            </Transitions>
+        </Setter>
     </Style>
 
-    <!-- Border overlay above the box art: carries every card stroke -->
+    <!-- Border overlay above the box art: reserves the stroke area; the base
+         border is transparent (the card reads through its even shadow), the
+         accent stroke appears on hover/selection at the SAME 5px -->
     <Style Selector="card|GameCard Border#BorderOverlay">
-        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="5" />
     </Style>
 
@@ -422,21 +430,23 @@
         <Setter Property="BorderThickness" Value="4" />
     </Style>
 
-    <!-- OPTION CARD: reserved 4px border so hover/focus doesn't change size -->
+    <!-- OPTION CARD: reserved 3px border so hover/focus doesn't change size;
+         base border transparent (even shadow only), accent on hover/selection -->
     <Style Selector="card|OptionsCard">
-        <Setter Property="Width" Value="333" />
-        <Setter Property="Height" Value="160" />
+        <Setter Property="Width" Value="339" />
+        <Setter Property="Height" Value="135" />
     </Style>
 
     <Style Selector="card|OptionsCard Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
-        <Setter Property="BorderThickness" Value="4" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="5" />
     </Style>
 
     <Style Selector="card|OptionsCard:pointerover Border#Tile, card|OptionsCard.selected Border#Tile">
         <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderThickness" Value="5" />
     </Style>
 
     <!-- PROFILE BUTTON (header avatar chip): reserved 2px border so focus doesn't change size -->
@@ -454,15 +464,14 @@
     </Style>
 
     <Style Selector="prof|ProfileButton Border#AvatarCircle">
-        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
-        <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <Style
         Selector="prof|ProfileButton:pointerover Border#AvatarCircle, prof|ProfileButton:focus-visible Border#AvatarCircle, prof|ProfileButton.selected Border#AvatarCircle">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
+        <Setter Property="BorderThickness" Value="4" />
     </Style>
 
     <!-- MODAL CARD: regular card background with the regular card border -->
