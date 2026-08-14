@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
-using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
@@ -14,11 +13,11 @@ using XeniaManager.Core.Utilities;
 namespace XeniaManager.BigScreen.ViewModels.Modals;
 
 /// <summary>
-/// The game modal modal: the game's icon and title above a vertical options
+/// The game modal: the game's icon and title above a vertical options
 /// list (Achievements, Screenshots, Title Updates, Marketplace Content, Patches,
 /// Settings); the selected option's pane renders on the right and updates live
 /// as the selection moves. A/Right enters the open pane, B/Left returns to the
-/// options list, B there closes the dialog.
+/// options list, B there closes the dialogue.
 /// </summary>
 public partial class GameModalViewModel : ModalViewModelBase
 {
@@ -50,7 +49,8 @@ public partial class GameModalViewModel : ModalViewModelBase
     /// <summary>
     /// The currently selected option row.
     /// </summary>
-    [ObservableProperty] private GameActionItemViewModel? _selectedOption;
+    [ObservableProperty]
+    public partial GameActionItemViewModel? SelectedOption { get; set; }
 
     /// <summary>
     /// The pane displayed for the selected option, updated live on navigation.
@@ -81,7 +81,7 @@ public partial class GameModalViewModel : ModalViewModelBase
     {
         AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Sort"),
         GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Save"),
-        _ => string.Empty,
+        _ => string.Empty
     };
 
     /// <summary>
@@ -100,7 +100,7 @@ public partial class GameModalViewModel : ModalViewModelBase
         InstalledContentPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Delete"),
         PatchesPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Toggle"),
         GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Edit"),
-        _ => LocalizationHelper.GetText("GameModal.Hint.Select"),
+        _ => LocalizationHelper.GetText("GameModal.Hint.Select")
     };
 
     partial void OnPaneChanged(ViewModelBase? value)
@@ -132,10 +132,7 @@ public partial class GameModalViewModel : ModalViewModelBase
                 pane.OnPaneExited();
             }
 
-            if (SelectedOption != null)
-            {
-                SelectedOption.IsSelected = true;
-            }
+            SelectedOption?.IsSelected = true;
         }
     }
 
@@ -159,11 +156,11 @@ public partial class GameModalViewModel : ModalViewModelBase
             new GameActionItemViewModel(
                 LocalizationHelper.GetText("GameModal.Action.Patches"), "DocumentText", GameModalPane.Patches),
             new GameActionItemViewModel(
-                LocalizationHelper.GetText("GameModal.Action.Settings"), "Settings", GameModalPane.Settings),
+                LocalizationHelper.GetText("GameModal.Action.Settings"), "Settings", GameModalPane.Settings)
         ];
-        _selectedOption = Options[0];
-        _selectedOption.IsSelected = true;
-        _pane = GetOrCreatePane(_selectedOption.Pane);
+        SelectedOption = Options[0];
+        SelectedOption.IsSelected = true;
+        _pane = GetOrCreatePane(SelectedOption.Pane);
     }
 
     /// <summary>
@@ -248,7 +245,7 @@ public partial class GameModalViewModel : ModalViewModelBase
             GameModalPane.MarketplaceContent => new InstalledContentPaneViewModel(Game, ContentType.MarketplaceContent),
             GameModalPane.Patches => new PatchesPaneViewModel(Game),
             GameModalPane.Settings => CreateSettingsPane(),
-            _ => throw new ArgumentOutOfRangeException(nameof(pane), pane, null),
+            _ => throw new ArgumentOutOfRangeException(nameof(pane), pane, null)
         };
         _panes[pane] = created;
         if (created is IDisposable disposable)

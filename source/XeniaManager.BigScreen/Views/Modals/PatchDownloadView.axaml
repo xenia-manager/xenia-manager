@@ -31,7 +31,7 @@
 
             <!-- HEADER: title + game name -->
             <prim:IconStat Grid.Row="0"
-                           Icon="ArrowImport"
+                           Icon="ArrowDownload"
                            Stat="{Binding HeaderText}"
                            IconSize="28"
                            Spacing="14"
@@ -132,9 +132,9 @@
             <!-- HINTS: B back · A download (top modal only) -->
             <StackPanel Grid.Row="4" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource GameModal.Hint.Back}" />
+                                Text="{DynamicResource GameModal.Hint.Back}" />
                 <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
-                                    Text="{DynamicResource GameModal.Hint.Download}" />
+                                Text="{DynamicResource GameModal.Hint.Download}" />
             </StackPanel>
         </Grid>
     </Border>

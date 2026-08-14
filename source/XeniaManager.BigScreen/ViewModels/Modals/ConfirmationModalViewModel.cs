@@ -34,7 +34,8 @@ public partial class ConfirmationModalViewModel : ModalViewModelBase<bool?>
     /// <summary>
     /// Whether the left (first) option is selected.
     /// </summary>
-    [ObservableProperty] private bool _isOption1Selected = true;
+    [ObservableProperty]
+    public partial bool IsOption1Selected { get; set; } = true;
 
     /// <summary>
     /// Whether the right (second) option is selected.

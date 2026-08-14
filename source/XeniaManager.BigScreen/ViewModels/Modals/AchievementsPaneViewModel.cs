@@ -32,7 +32,8 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// The active sort order; X cycles through the options.
     /// </summary>
-    [ObservableProperty] private AchievementSort _sort = AchievementSort.Achieved;
+    [ObservableProperty]
+    public partial AchievementSort Sort { get; set; } = AchievementSort.Achieved;
 
     /// <summary>
     /// Unlocked / total achievement counters for the active profile.
@@ -49,9 +50,10 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// </summary>
     public string SortText => Sort switch
     {
-        AchievementSort.GamerscoreAwarded => LocalizationHelper.GetText("GameModal.Achievements.Sort.GamerscoreAwarded"),
+        AchievementSort.GamerscoreAwarded =>
+            LocalizationHelper.GetText("GameModal.Achievements.Sort.GamerscoreAwarded"),
         AchievementSort.Alphabetical => LocalizationHelper.GetText("GameModal.Achievements.Sort.Alphabetical"),
-        _ => LocalizationHelper.GetText("GameModal.Achievements.Sort.Achieved"),
+        _ => LocalizationHelper.GetText("GameModal.Achievements.Sort.Achieved")
     };
 
     /// <summary>
@@ -159,7 +161,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
                 _allAchievements.OrderByDescending(item => item.Gamerscore).ToList(),
             AchievementSort.Alphabetical =>
                 _allAchievements.OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase).ToList(),
-            _ => _allAchievements.OrderBy(item => item.IsUnlocked ? 0 : 1).ToList(),
+            _ => _allAchievements.OrderBy(item => item.IsUnlocked ? 0 : 1).ToList()
         };
 
         SelectionHelper.ResortPreservingSelection(Rows, sorted);

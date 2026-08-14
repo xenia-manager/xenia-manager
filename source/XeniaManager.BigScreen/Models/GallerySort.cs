@@ -7,5 +7,5 @@ public enum GallerySort
 {
     NewestFirst,
     OldestFirst,
-    ByGame,
+    ByGame
 }

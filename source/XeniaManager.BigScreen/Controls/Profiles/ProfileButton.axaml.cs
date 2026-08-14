@@ -1,6 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Shell;
 
 namespace XeniaManager.BigScreen.Controls.Profiles;

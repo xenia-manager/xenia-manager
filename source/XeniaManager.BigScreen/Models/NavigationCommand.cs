@@ -15,5 +15,5 @@ public enum NavigationCommand
     CycleSort,
     ToggleView,
     Start,
-    Details,
+    Details
 }

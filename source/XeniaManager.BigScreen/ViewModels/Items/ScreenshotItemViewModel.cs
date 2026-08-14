@@ -2,7 +2,6 @@ using System;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
-using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Utilities;
 
@@ -22,12 +21,14 @@ public partial class ScreenshotItemViewModel(
     /// <summary>
     /// Whether this tile currently has focus/selection in the gallery.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The hour format used by the capture date, following the persisted setting.
     /// </summary>
-    [ObservableProperty] private TimeFormat _timeFormat = TimeFormat.TwelveHour;
+    [ObservableProperty]
+    public partial TimeFormat TimeFormat { get; set; } = TimeFormat.TwelveHour;
 
     /// <summary>
     /// The screenshot file name (shown in the modal as a subtitle).

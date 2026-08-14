@@ -19,12 +19,14 @@ public partial class GameDetailsViewModel : ObservableObject
     /// <summary>
     /// The marketplace database info for the game, or null when unavailable/loading.
     /// </summary>
-    [ObservableProperty] private GameDetailedInfo? _info;
+    [ObservableProperty]
+    public partial GameDetailedInfo? Info { get; set; }
 
     /// <summary>
     /// Whether the database info is currently being fetched.
     /// </summary>
-    [ObservableProperty] private bool _isLoading;
+    [ObservableProperty]
+    public partial bool IsLoading { get; set; }
 
     public GameDetailsViewModel(GameCardViewModel card)
     {

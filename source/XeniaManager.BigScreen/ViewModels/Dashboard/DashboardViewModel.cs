@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Media;
@@ -24,19 +23,22 @@ public partial class DashboardViewModel : ViewModelBase
     /// <summary>
     /// The brush currently applied to the dashboard background.
     /// </summary>
-    [ObservableProperty] private IBrush? _background;
+    [ObservableProperty]
+    public partial IBrush? Background { get; set; }
 
     /// <summary>
     /// Whether the vignette overlay should be shown. Only for image-based backgrounds
     /// (Image mode, or Dynamic with artwork) - it ruins flat color/gradient backgrounds.
     /// </summary>
-    [ObservableProperty] private bool _vignetteVisible;
+    [ObservableProperty]
+    public partial bool VignetteVisible { get; set; }
 
     /// <summary>
     /// Opacity of the black fade overlay (0 = transparent, 1 = black). Used to
     /// fade the background out to black and back in when the selected game changes.
     /// </summary>
-    [ObservableProperty] private double _fadeOpacity;
+    [ObservableProperty]
+    public partial double FadeOpacity { get; set; }
 
     /// <summary>
     /// Cancels in-flight background fades; only the newest request completes.
@@ -64,8 +66,8 @@ public partial class DashboardViewModel : ViewModelBase
     /// requested, the mode is Dynamic and the artwork actually changed.
     /// </summary>
     private bool ShouldFadeBackground => _fadeRequested
-        && _backgroundService.Settings.Mode == BackgroundMode.Dynamic
-        && !ReferenceEquals(_pendingArt, _currentBackgroundArt);
+                                         && _backgroundService.Settings.Mode == BackgroundMode.Dynamic
+                                         && !ReferenceEquals(_pendingArt, _currentBackgroundArt);
 
     /// <summary>
     /// The first 6 games, shown on the dashboard.
@@ -82,7 +84,7 @@ public partial class DashboardViewModel : ViewModelBase
         new("Library", "Games", OverlayScreen.Library),
         new("Gallery", "Library", OverlayScreen.Gallery),
         new("Settings", "Settings", OverlayScreen.Settings),
-        new("Quit", "Power", OverlayScreen.None),
+        new("Quit", "Power", OverlayScreen.None)
     ];
 
     public DashboardViewModel(IBackgroundService backgroundService)

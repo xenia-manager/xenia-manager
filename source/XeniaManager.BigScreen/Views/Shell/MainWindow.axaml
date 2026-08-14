@@ -48,7 +48,7 @@
 
                 <!-- PROFILE (LEFT): focusable chip - opens the profile picker -->
                 <prof:ProfileButton Grid.Column="0"
-                                        VerticalAlignment="Center" />
+                                    VerticalAlignment="Center" />
 
                 <!-- SYSTEM STATUS (RIGHT) -->
                 <StackPanel Grid.Column="2"

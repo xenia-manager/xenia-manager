@@ -3,7 +3,6 @@ using System.IO;
 using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
 using XeniaManager.BigScreen.Constants;

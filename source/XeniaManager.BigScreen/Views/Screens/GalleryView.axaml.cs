@@ -7,7 +7,6 @@ using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using XeniaManager.BigScreen.Controls.Cards;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Screens;
 using XeniaManager.BigScreen.ViewModels.Items;
 

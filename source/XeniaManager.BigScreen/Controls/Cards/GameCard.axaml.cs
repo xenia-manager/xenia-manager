@@ -16,7 +16,7 @@ public partial class GameCard : UserControl
         {
             Rect = new Rect(0, 0, e.NewSize.Width, e.NewSize.Height),
             RadiusX = 12,
-            RadiusY = 12,
+            RadiusY = 12
         };
     }
 }

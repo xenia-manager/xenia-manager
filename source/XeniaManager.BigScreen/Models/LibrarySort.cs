@@ -7,5 +7,5 @@ public enum LibrarySort
 {
     Alphabetical,
     TimePlayed,
-    LastPlayed,
+    LastPlayed
 }

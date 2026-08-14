@@ -63,12 +63,12 @@ public static class LayoutConstants
     /// <summary>
     /// Minimum header clock width in 12-hour mode (e.g. "10:45 PM").
     /// </summary>
-    public const double ClockMinWidth12h = 70;
+    public const double ClockMinWidth12H = 70;
 
     /// <summary>
     /// Minimum header clock width in 24-hour mode (e.g. "22:45").
     /// </summary>
-    public const double ClockMinWidth24h = 48;
+    public const double ClockMinWidth24H = 48;
 
     /// <summary>
     /// Dashboard game tile width (unselected).

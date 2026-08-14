@@ -13,5 +13,5 @@ public enum TimeFormat
     /// <summary>
     /// 24-hour clock (e.g. "22:45").
     /// </summary>
-    TwentyFourHour,
+    TwentyFourHour
 }

@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Constants;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Shell;
 using XeniaManager.Core.Logging;
 

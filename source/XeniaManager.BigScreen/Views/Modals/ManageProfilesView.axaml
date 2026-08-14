@@ -114,9 +114,9 @@
 
                     <!-- CREATE NEW PROFILE (anchored row beneath the list) -->
                     <prof:CreateProfileRow Grid.Row="1"
-                                               Margin="0"
-                                               DataContext="{Binding CreateStub}"
-                                               Click="OnCreateRowClick" />
+                                           Margin="0"
+                                           DataContext="{Binding CreateStub}"
+                                           Click="OnCreateRowClick" />
                 </Grid>
 
                 <!-- RIGHT: edit panel (hidden while the create stub is selected) -->
@@ -214,13 +214,13 @@
             <!-- HINTS: B back · X delete · View import · Start export -->
             <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource ManageProfiles.Hint.Back}" />
+                                Text="{DynamicResource ManageProfiles.Hint.Back}" />
                 <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
-                                    Text="{DynamicResource ManageProfiles.Hint.Delete}" />
+                                Text="{DynamicResource ManageProfiles.Hint.Delete}" />
                 <prim:InputHint Icon="CaretLeft" KeyColour="{DynamicResource HintKeyBack}"
-                                    Text="{DynamicResource ManageProfiles.Hint.Import}" />
+                                Text="{DynamicResource ManageProfiles.Hint.Import}" />
                 <prim:InputHint Icon="CaretRight" KeyColour="{DynamicResource HintKeyBack}"
-                                    Text="{DynamicResource ManageProfiles.Hint.Export}" />
+                                Text="{DynamicResource ManageProfiles.Hint.Export}" />
             </StackPanel>
         </Grid>
     </Border>

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;

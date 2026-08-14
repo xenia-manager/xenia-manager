@@ -18,5 +18,5 @@ public enum NetworkStatus
     /// <summary>
     /// Connected over a wired (ethernet) interface.
     /// </summary>
-    Ethernet,
+    Ethernet
 }

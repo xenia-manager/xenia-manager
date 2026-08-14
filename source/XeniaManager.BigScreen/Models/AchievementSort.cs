@@ -18,5 +18,5 @@ public enum AchievementSort
     /// <summary>
     /// Alphabetically by achievement name.
     /// </summary>
-    Alphabetical,
+    Alphabetical
 }

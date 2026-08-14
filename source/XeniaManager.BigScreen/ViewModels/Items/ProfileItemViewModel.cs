@@ -29,7 +29,8 @@ public partial class ProfileItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// The profile's total gamerscore, or empty until loaded from its GPD.
     /// </summary>
-    [ObservableProperty] private string _gamerscoreText = string.Empty;
+    [ObservableProperty]
+    public partial string GamerscoreText { get; set; } = string.Empty;
 
     /// <summary>
     /// Whether the profile's gamerscore has been resolved from its GPD.
@@ -39,17 +40,19 @@ public partial class ProfileItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether this is the active profile.
     /// </summary>
-    [ObservableProperty] private bool _isActive;
+    [ObservableProperty]
+    public partial bool IsActive { get; set; }
 
     /// <summary>
     /// Whether this row currently has selection.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     public ProfileItemViewModel(AccountInfo profile, bool isActive = false)
     {
         Profile = profile;
-        _isActive = isActive;
+        IsActive = isActive;
     }
 
     partial void OnGamerscoreTextChanged(string value) => OnPropertyChanged(nameof(HasGamerscore));

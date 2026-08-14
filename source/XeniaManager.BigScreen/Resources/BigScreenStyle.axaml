@@ -304,6 +304,39 @@
         <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
     </Style>
 
+    <!-- DISC OPTION CARD (disc selection modal) -->
+    <Style Selector="card|DiscOptionCard">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="card|DiscOptionCard Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadow}" />
+    </Style>
+
+    <Style
+        Selector="card|DiscOptionCard:pointerover:not(.missing) Border#RowBorder, card|DiscOptionCard:focus-visible:not(.missing) Border#RowBorder, card|DiscOptionCard.selected Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSelected}" />
+    </Style>
+
+    <Style Selector="card|DiscOptionCard.missing">
+        <Setter Property="Opacity" Value="0.45" />
+    </Style>
+
+    <Style Selector="card|DiscOptionCard.selected Path">
+        <Setter Property="Fill" Value="{DynamicResource AccentColor}" />
+    </Style>
+
     <!-- ACHIEVEMENT ROW (game modal achievements pane) -->
     <Style Selector="card|AchievementRow">
         <Setter Property="Background" Value="Transparent" />

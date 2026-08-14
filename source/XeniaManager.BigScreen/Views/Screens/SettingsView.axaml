@@ -162,9 +162,9 @@
                 <Border Classes="settings-card">
                     <DockPanel>
                         <set:ColorPickerField x:Name="PrimaryColorField"
-                                                   DockPanel.Dock="Right"
-                                                   Color="{Binding PrimaryColor, Mode=TwoWay}"
-                                                   VerticalAlignment="Center" />
+                                              DockPanel.Dock="Right"
+                                              Color="{Binding PrimaryColor, Mode=TwoWay}"
+                                              VerticalAlignment="Center" />
                         <TextBlock Classes="settings-label" Text="{DynamicResource Settings.PrimaryColour}" />
                     </DockPanel>
                 </Border>
@@ -173,9 +173,9 @@
                 <Border Classes="settings-card">
                     <DockPanel>
                         <set:ColorPickerField x:Name="AccentColorField"
-                                                   DockPanel.Dock="Right"
-                                                   Color="{Binding AccentColor, Mode=TwoWay}"
-                                                   VerticalAlignment="Center" />
+                                              DockPanel.Dock="Right"
+                                              Color="{Binding AccentColor, Mode=TwoWay}"
+                                              VerticalAlignment="Center" />
                         <TextBlock Classes="settings-label" Text="{DynamicResource Settings.AccentColour}" />
                     </DockPanel>
                 </Border>
@@ -243,7 +243,7 @@
 
         <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
             <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                Text="{DynamicResource Settings.Hint.Back}" />
+                            Text="{DynamicResource Settings.Hint.Back}" />
         </StackPanel>
     </Grid>
 </UserControl>

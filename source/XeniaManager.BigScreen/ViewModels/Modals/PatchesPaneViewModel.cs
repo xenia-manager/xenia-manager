@@ -31,7 +31,7 @@ public enum PatchesPaneMode
     /// <summary>
     /// The selected entry's commands with the command editor on the right.
     /// </summary>
-    Commands,
+    Commands
 }
 
 /// <summary>
@@ -55,23 +55,26 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// The currently selected patch entry (commands mode).
     /// </summary>
-    [ObservableProperty] private PatchEntryItemViewModel? _selectedEntry;
+    [ObservableProperty]
+    public partial PatchEntryItemViewModel? SelectedEntry { get; set; }
 
     /// <summary>
     /// The command being edited in the commands mode editor, or null.
     /// </summary>
-    [ObservableProperty] private PatchCommandItemViewModel? _editingCommand;
+    [ObservableProperty]
+    public partial PatchCommandItemViewModel? EditingCommand { get; set; }
 
     /// <summary>
     /// The pane's current mode.
     /// </summary>
-    [ObservableProperty] private PatchesPaneMode _mode = PatchesPaneMode.List;
+    [ObservableProperty]
+    public partial PatchesPaneMode Mode { get; set; } = PatchesPaneMode.List;
 
     /// <summary>
     /// The pane header: the patch's title name, or a "no patch" label.
     /// </summary>
     public string HeaderText => _patchFile?.TitleName
-        ?? LocalizationHelper.GetText("GameModal.Patches.NoPatch");
+                                ?? LocalizationHelper.GetText("GameModal.Patches.NoPatch");
 
     /// <summary>
     /// Whether a patch file is installed.

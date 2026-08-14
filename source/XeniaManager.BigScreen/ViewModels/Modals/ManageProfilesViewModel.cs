@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -108,57 +107,68 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// <summary>
     /// The currently selected (edited) profile.
     /// </summary>
-    [ObservableProperty] private AccountInfo? _selectedProfile;
+    [ObservableProperty]
+    public partial AccountInfo? SelectedProfile { get; set; }
 
     /// <summary>
     /// The gamertag for editing.
     /// </summary>
-    [ObservableProperty] private string _editGamertag = string.Empty;
+    [ObservableProperty]
+    public partial string EditGamertag { get; set; } = string.Empty;
 
     /// <summary>
     /// The selected country index for the ComboBox.
     /// </summary>
-    [ObservableProperty] private int _selectedCountryIndex;
+    [ObservableProperty]
+    public partial int SelectedCountryIndex { get; set; }
 
     /// <summary>
     /// The selected language index for the ComboBox.
     /// </summary>
-    [ObservableProperty] private int _selectedLanguageIndex;
+    [ObservableProperty]
+    public partial int SelectedLanguageIndex { get; set; }
 
     /// <summary>
     /// Whether Xbox Live is enabled for the selected profile.
     /// </summary>
-    [ObservableProperty] private bool _isLiveEnabled;
+    [ObservableProperty]
+    public partial bool IsLiveEnabled { get; set; }
 
     /// <summary>
     /// The selected subscription tier index for the ComboBox.
     /// </summary>
-    [ObservableProperty] private int _selectedSubscriptionTierIndex;
+    [ObservableProperty]
+    public partial int SelectedSubscriptionTierIndex { get; set; }
 
     /// <summary>
     /// Indicates whether the Save button should be enabled.
     /// </summary>
-    [ObservableProperty] private bool _canSave;
+    [ObservableProperty]
+    public partial bool CanSave { get; set; }
 
     /// <summary>
     /// The validation error message for the gamertag.
     /// </summary>
-    [ObservableProperty] private string _gamertagErrorMessage = string.Empty;
+    [ObservableProperty]
+    public partial string GamertagErrorMessage { get; set; } = string.Empty;
 
     /// <summary>
     /// Indicates whether the gamertag has a validation error.
     /// </summary>
-    [ObservableProperty] private bool _hasGamertagError;
+    [ObservableProperty]
+    public partial bool HasGamertagError { get; set; }
 
     /// <summary>
     /// Whether the status line below the list has a message.
     /// </summary>
-    [ObservableProperty] private bool _hasStatus;
+    [ObservableProperty]
+    public partial bool HasStatus { get; set; }
 
     /// <summary>
     /// The status line text (create/save/import/export feedback).
     /// </summary>
-    [ObservableProperty] private string _statusText = string.Empty;
+    [ObservableProperty]
+    public partial string StatusText { get; set; } = string.Empty;
 
     /// <summary>
     /// Whether any profiles exist.

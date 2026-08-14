@@ -21,12 +21,14 @@ public partial class PatchCommandItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// The command's patch type (be8 … string/array).
     /// </summary>
-    [ObservableProperty] private PatchType _type;
+    [ObservableProperty]
+    public partial PatchType Type { get; set; }
 
     /// <summary>
     /// The command's memory address.
     /// </summary>
-    [ObservableProperty] private ulong _address;
+    [ObservableProperty]
+    public partial ulong Address { get; set; }
 
     /// <summary>
     /// The command's value as a display string (hex, float, quoted string…).
@@ -123,7 +125,7 @@ public partial class PatchCommandItemViewModel : ObservableObject, ISelectable
             TypeComment = _typeComment,
             AddressComment = _addressComment,
             ValueComment = _valueComment,
-            UseArrayPrefix = _useArrayPrefix,
+            UseArrayPrefix = _useArrayPrefix
         };
     }
 
@@ -143,7 +145,7 @@ public partial class PatchCommandItemViewModel : ObservableObject, ISelectable
             PatchType.Array => ValidateArray(value),
             PatchType.F32 => ValidateFloat(value, "single"),
             PatchType.F64 => ValidateFloat(value, "double"),
-            _ => (true, string.Empty),
+            _ => (true, string.Empty)
         };
     }
 
@@ -263,7 +265,7 @@ public partial class PatchCommandItemViewModel : ObservableObject, ISelectable
                 PatchType.F64 => double.Parse(value, CultureInfo.InvariantCulture),
                 PatchType.String or PatchType.U16String => value,
                 PatchType.Array => ParseArrayString(value),
-                _ => value,
+                _ => value
             };
         }
         catch

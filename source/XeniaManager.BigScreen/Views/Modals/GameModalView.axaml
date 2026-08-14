@@ -81,12 +81,12 @@
             <!-- HINTS: B back · A select · X pane action (top modal only) -->
             <StackPanel Grid.Row="1" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource GameModal.Hint.Back}" />
+                                Text="{DynamicResource GameModal.Hint.Back}" />
                 <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
-                                    Text="{Binding AHintText}" />
+                                Text="{Binding AHintText}" />
                 <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
-                                    Text="{Binding XHintText}"
-                                    IsVisible="{Binding IsXHintVisible}" />
+                                Text="{Binding XHintText}"
+                                IsVisible="{Binding IsXHintVisible}" />
             </StackPanel>
         </Grid>
     </Border>

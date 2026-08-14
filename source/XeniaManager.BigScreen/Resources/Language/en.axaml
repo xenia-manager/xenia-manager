@@ -192,7 +192,7 @@
     <sys:String x:Key="GameModal.Patches.Actions.Download">Download New Patch</sys:String>
     <sys:String x:Key="GameModal.Patches.Actions.Remove">Remove Patch</sys:String>
     <sys:String x:Key="GameModal.Patches.Actions.AddCommand">Add Command</sys:String>
-    <sys:String x:Key="GameModal.Patches.Download.TitleWithGame">Download Patch — {0}</sys:String>
+    <sys:String x:Key="GameModal.Patches.Download.TitleWithGame">{0} Patches</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.SearchWatermark">Search patches…</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.Searching">Searching…</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.Empty">No patches found</sys:String>
@@ -215,6 +215,15 @@
 
     <!-- game modal hints -->
     <sys:String x:Key="GameModal.Hint.Save">Save</sys:String>
+
+    <!-- Disc selection modal -->
+    <sys:String x:Key="DiscSelection.Header">Disc Selection</sys:String>
+    <sys:String x:Key="DiscSelection.Disc1">Disc 1</sys:String>
+    <sys:String x:Key="DiscSelection.DiscN">Disc {0}</sys:String>
+    <sys:String x:Key="DiscSelection.LastPlayed">Last Played</sys:String>
+    <sys:String x:Key="DiscSelection.FileMissing">File Missing</sys:String>
+    <sys:String x:Key="DiscSelection.Hint.Back">Back</sys:String>
+    <sys:String x:Key="DiscSelection.Hint.Select">Select</sys:String>
 
     <!-- Config editor keys (ConfigUiSettings from Core) -->
     <sys:String x:Key="ConfigUiSettings.Section.APU">Audio</sys:String>

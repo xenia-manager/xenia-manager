@@ -39,7 +39,8 @@ public partial class GalleryViewModel : ScreenViewModel
     /// <summary>
     /// The current gallery sort mode (cycled with X).
     /// </summary>
-    [ObservableProperty] private GallerySort _gallerySort = GallerySort.NewestFirst;
+    [ObservableProperty]
+    public partial GallerySort GallerySort { get; set; } = GallerySort.NewestFirst;
 
     /// <summary>
     /// Display name of the current gallery sort mode.
@@ -48,7 +49,7 @@ public partial class GalleryViewModel : ScreenViewModel
     {
         GallerySort.OldestFirst => LocalizationHelper.GetText("Gallery.Sort.OldestFirst"),
         GallerySort.ByGame => LocalizationHelper.GetText("Gallery.Sort.ByGame"),
-        _ => LocalizationHelper.GetText("Gallery.Sort.NewestFirst"),
+        _ => LocalizationHelper.GetText("Gallery.Sort.NewestFirst")
     };
 
     public GalleryViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService,
@@ -85,7 +86,7 @@ public partial class GalleryViewModel : ScreenViewModel
         {
             GallerySort.OldestFirst => Screenshots.OrderBy(s => s.CapturedAt).ToList(),
             GallerySort.ByGame => Screenshots.OrderBy(s => s.GameTitle).ThenByDescending(s => s.CapturedAt).ToList(),
-            _ => Screenshots.OrderByDescending(s => s.CapturedAt).ToList(),
+            _ => Screenshots.OrderByDescending(s => s.CapturedAt).ToList()
         };
 
         SelectionHelper.ResortPreservingSelection(Screenshots, sorted);

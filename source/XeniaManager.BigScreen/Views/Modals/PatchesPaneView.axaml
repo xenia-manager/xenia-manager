@@ -39,234 +39,234 @@
     </UserControl.Styles>
 
     <Grid>
-    <!-- ================= LIST MODE ================= -->
-    <Grid IsVisible="{Binding IsListMode}" RowDefinitions="Auto, *" RowSpacing="24">
-        <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
-            <prim:IconStat Grid.Column="0"
-                           Icon="DocumentText"
-                           Stat="{Binding HeaderText}"
-                           IconSize="26"
-                           Spacing="14"
-                           FontSize="24"
-                           VerticalAlignment="Center" />
-        </Grid>
+        <!-- ================= LIST MODE ================= -->
+        <Grid IsVisible="{Binding IsListMode}" RowDefinitions="Auto, *" RowSpacing="24">
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                <prim:IconStat Grid.Column="0"
+                               Icon="DocumentText"
+                               Stat="{Binding HeaderText}"
+                               IconSize="26"
+                               Spacing="14"
+                               FontSize="24"
+                               VerticalAlignment="Center" />
+            </Grid>
 
-        <ScrollViewer Grid.Row="1"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Hidden">
-            <ItemsControl x:Name="PatchList" ItemsSource="{Binding Rows}" Margin="0,0,0,20">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="items:PatchListRowViewModel">
-                        <Border Classes="patch-row" Classes.selected="{Binding IsSelected}">
-                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
-
-                                <!-- ACTION ICON or ENABLED MARKER -->
-                                <fluent:SymbolIcon Grid.Column="0"
-                                                   Symbol="ArrowImport"
-                                                   IsVisible="{Binding IsDownloadAction}"
-                                                   FontSize="24"
-                                                   Foreground="{DynamicResource TextSecondary}"
-                                                   VerticalAlignment="Center" />
-                                <fluent:SymbolIcon Grid.Column="0"
-                                                   Symbol="Delete"
-                                                   IsVisible="{Binding IsRemoveAction}"
-                                                   FontSize="24"
-                                                   Foreground="{DynamicResource TextError}"
-                                                   VerticalAlignment="Center" />
-                                <fluent:SymbolIcon Grid.Column="0"
-                                                   Symbol="Checkmark"
-                                                   IsVisible="{Binding IsEnabled}"
-                                                   FontSize="24"
-                                                   Foreground="{DynamicResource AccentColor}"
-                                                   VerticalAlignment="Center"
-                                                   Opacity="0.9" />
-
-                                <!-- TITLE / PATCH NAME -->
-                                <StackPanel Grid.Column="1"
-                                            VerticalAlignment="Center"
-                                            Spacing="2">
-                                    <TextBlock Text="{Binding Title}"
-                                               TextTrimming="CharacterEllipsis"
-                                               FontSize="20"
-                                               Foreground="{DynamicResource TextPrimary}" />
-                                    <TextBlock Text="{Binding Subtitle}"
-                                               IsVisible="{Binding HasSubtitle}"
-                                               TextTrimming="CharacterEllipsis"
-                                               FontSize="15"
-                                               Foreground="{DynamicResource TextSecondary}" />
-                                </StackPanel>
-
-                                <!-- COMMAND COUNT (entries) -->
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding CommandCountText}"
-                                           IsVisible="{Binding !IsAction}"
-                                           FontSize="16"
-                                           Foreground="{DynamicResource TextSecondary}"
-                                           VerticalAlignment="Center" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" Spacing="10" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
-    </Grid>
-
-    <!-- ================= COMMANDS MODE ================= -->
-    <Grid IsVisible="{Binding IsCommandsMode}" RowDefinitions="Auto, *" RowSpacing="24">
-
-        <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
-            <prim:IconStat Grid.Column="0"
-                           Icon="DocumentText"
-                           Stat="{Binding SelectedEntry.Name}"
-                           IconSize="26"
-                           Spacing="14"
-                           FontSize="24"
-                           VerticalAlignment="Center" />
-            <prim:IconStat Grid.Column="1"
-                           Icon="ArrowSort"
-                           Stat="{Binding SelectedEntry.CommandCountText}"
-                           IconRotation="90"
-                           IconSize="22"
-                           Spacing="12"
-                           FontSize="20"
-                           VerticalAlignment="Center" />
-        </Grid>
-
-        <Grid Grid.Row="1" ColumnDefinitions="2*,3*" ColumnSpacing="32">
-
-            <!-- LEFT: command list + add action -->
-            <ScrollViewer Grid.Column="0"
+            <ScrollViewer Grid.Row="1"
                           HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Hidden">
-                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
-                    <ItemsControl x:Name="CommandList" ItemsSource="{Binding Commands}">
+                <ItemsControl x:Name="PatchList" ItemsSource="{Binding Rows}" Margin="0,0,0,20">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="items:PatchCommandItemViewModel">
-                            <Border Classes="command-row" Classes.selected="{Binding IsSelected}">
-                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
-                                    <TextBlock Grid.Column="0"
-                                               Text="{Binding Type}"
+                        <DataTemplate DataType="items:PatchListRowViewModel">
+                            <Border Classes="patch-row" Classes.selected="{Binding IsSelected}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+
+                                    <!-- ACTION ICON or ENABLED MARKER -->
+                                    <fluent:SymbolIcon Grid.Column="0"
+                                                       Symbol="ArrowDownload"
+                                                       IsVisible="{Binding IsDownloadAction}"
+                                                       FontSize="24"
+                                                       Foreground="{DynamicResource TextSecondary}"
+                                                       VerticalAlignment="Center" />
+                                    <fluent:SymbolIcon Grid.Column="0"
+                                                       Symbol="Delete"
+                                                       IsVisible="{Binding IsRemoveAction}"
+                                                       FontSize="24"
+                                                       Foreground="{DynamicResource TextError}"
+                                                       VerticalAlignment="Center" />
+                                    <fluent:SymbolIcon Grid.Column="0"
+                                                       Symbol="Checkmark"
+                                                       IsVisible="{Binding IsEnabled}"
+                                                       FontSize="24"
+                                                       Foreground="{DynamicResource AccentColor}"
+                                                       VerticalAlignment="Center"
+                                                       Opacity="0.9" />
+
+                                    <!-- TITLE / PATCH NAME -->
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Spacing="2">
+                                        <TextBlock Text="{Binding Title}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   FontSize="20"
+                                                   Foreground="{DynamicResource TextPrimary}" />
+                                        <TextBlock Text="{Binding Subtitle}"
+                                                   IsVisible="{Binding HasSubtitle}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   FontSize="15"
+                                                   Foreground="{DynamicResource TextSecondary}" />
+                                    </StackPanel>
+
+                                    <!-- COMMAND COUNT (entries) -->
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding CommandCountText}"
+                                               IsVisible="{Binding !IsAction}"
                                                FontSize="16"
                                                Foreground="{DynamicResource TextSecondary}"
                                                VerticalAlignment="Center" />
-                                    <TextBlock Grid.Column="1"
-                                               Text="{Binding AddressText}"
-                                               FontSize="16"
-                                               Foreground="{DynamicResource TextPrimary}"
-                                               VerticalAlignment="Center" />
-                                    <fluent:SymbolIcon Grid.Column="2"
-                                                       Symbol="CheckmarkCircle"
-                                                       IsVisible="{Binding IsValid}"
-                                                       FontSize="20"
-                                                       Foreground="{DynamicResource AccentColor}"
-                                                       VerticalAlignment="Center" />
-                                    <fluent:SymbolIcon Grid.Column="2"
-                                                       Symbol="ErrorCircle"
-                                                       IsVisible="{Binding !IsValid}"
-                                                       FontSize="20"
-                                                       Foreground="{DynamicResource TextError}"
-                                                       VerticalAlignment="Center" />
                                 </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="8" />
+                            <StackPanel Orientation="Vertical" Spacing="10" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-
-                <!-- ADD COMMAND action -->
-                <Button x:Name="BtnAddCommand"
-                        Content="{DynamicResource GameModal.Patches.Actions.AddCommand}"
-                        HorizontalAlignment="Stretch"
-                        FontSize="18"
-                        Padding="16,12"
-                        Classes="settings-button"
-                        Click="OnAddCommandClick" />
-                </StackPanel>
             </ScrollViewer>
-
-            <!-- RIGHT: command editor -->
-            <Border Grid.Column="1"
-                    Classes="settings-card"
-                    BorderBrush="{DynamicResource CardBorderInner}"
-                    BorderThickness="3"
-                    BoxShadow="{DynamicResource CardShadowFlat}"
-                    Padding="24,20"
-                    IsVisible="{Binding EditingCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
-                <StackPanel Orientation="Vertical" Spacing="18">
-
-                    <Grid ColumnDefinitions="Auto, *">
-                        <TextBlock Classes="settings-label"
-                                   Grid.Column="0"
-                                   Margin="0,0,28,0"
-                                   Text="{DynamicResource GameModal.Patches.Editor.Type}" />
-                        <ComboBox Grid.Column="1"
-                                  ItemsSource="{Binding PatchTypes}"
-                                  SelectedItem="{Binding EditingCommand.Type, Mode=TwoWay}"
-                                  HorizontalAlignment="Right"
-                                  MinWidth="280"
-                                  FontSize="18"
-                                  Padding="10,8" />
-                    </Grid>
-
-                    <Grid ColumnDefinitions="Auto, *">
-                        <TextBlock Classes="settings-label"
-                                   Grid.Column="0"
-                                   Margin="0,0,28,0"
-                                   Text="{DynamicResource GameModal.Patches.Editor.Address}" />
-                        <TextBox Grid.Column="1"
-                                 Text="{Binding EditingCommand.AddressText, Mode=TwoWay}"
-                                 HorizontalAlignment="Right"
-                                 Width="280"
-                                 FontSize="18"
-                                 Padding="10,8" />
-                    </Grid>
-
-                    <Grid ColumnDefinitions="Auto, *">
-                        <TextBlock Classes="settings-label"
-                                   Grid.Column="0"
-                                   Margin="0,0,28,0"
-                                   Text="{DynamicResource GameModal.Patches.Editor.Value}" />
-                        <TextBox Grid.Column="1"
-                                 Text="{Binding EditingCommand.Value, Mode=TwoWay}"
-                                 HorizontalAlignment="Right"
-                                 Width="280"
-                                 FontSize="18"
-                                 Padding="10,8" />
-                    </Grid>
-
-                    <TextBlock Text="{Binding EditingCommand.ValidationError}"
-                               IsVisible="{Binding ShowValidationError}"
-                               Foreground="{DynamicResource TextError}"
-                               FontSize="16"
-                               TextWrapping="Wrap" />
-
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                Spacing="16">
-                        <Button x:Name="BtnDeleteCommand"
-                                Content="{DynamicResource GameModal.Patches.Editor.Delete}"
-                                FontSize="18"
-                                Padding="18,10"
-                                Click="OnDeleteCommandClick" />
-                        <Button x:Name="BtnSaveCommand"
-                                Content="{DynamicResource GameModal.Patches.Editor.Save}"
-                                FontSize="18"
-                                Padding="24,10"
-                                Classes="settings-button"
-                                Click="OnSaveCommandClick" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
         </Grid>
-    </Grid>
+
+        <!-- ================= COMMANDS MODE ================= -->
+        <Grid IsVisible="{Binding IsCommandsMode}" RowDefinitions="Auto, *" RowSpacing="24">
+
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                <prim:IconStat Grid.Column="0"
+                               Icon="DocumentText"
+                               Stat="{Binding SelectedEntry.Name}"
+                               IconSize="26"
+                               Spacing="14"
+                               FontSize="24"
+                               VerticalAlignment="Center" />
+                <prim:IconStat Grid.Column="1"
+                               Icon="ArrowSort"
+                               Stat="{Binding SelectedEntry.CommandCountText}"
+                               IconRotation="90"
+                               IconSize="22"
+                               Spacing="12"
+                               FontSize="20"
+                               VerticalAlignment="Center" />
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="2*,3*" ColumnSpacing="32">
+
+                <!-- LEFT: command list + add action -->
+                <ScrollViewer Grid.Column="0"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+                        <ItemsControl x:Name="CommandList" ItemsSource="{Binding Commands}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="items:PatchCommandItemViewModel">
+                                    <Border Classes="command-row" Classes.selected="{Binding IsSelected}">
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding Type}"
+                                                       FontSize="16"
+                                                       Foreground="{DynamicResource TextSecondary}"
+                                                       VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding AddressText}"
+                                                       FontSize="16"
+                                                       Foreground="{DynamicResource TextPrimary}"
+                                                       VerticalAlignment="Center" />
+                                            <fluent:SymbolIcon Grid.Column="2"
+                                                               Symbol="CheckmarkCircle"
+                                                               IsVisible="{Binding IsValid}"
+                                                               FontSize="20"
+                                                               Foreground="{DynamicResource AccentColor}"
+                                                               VerticalAlignment="Center" />
+                                            <fluent:SymbolIcon Grid.Column="2"
+                                                               Symbol="ErrorCircle"
+                                                               IsVisible="{Binding !IsValid}"
+                                                               FontSize="20"
+                                                               Foreground="{DynamicResource TextError}"
+                                                               VerticalAlignment="Center" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" Spacing="8" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                        <!-- ADD COMMAND action -->
+                        <Button x:Name="BtnAddCommand"
+                                Content="{DynamicResource GameModal.Patches.Actions.AddCommand}"
+                                HorizontalAlignment="Stretch"
+                                FontSize="18"
+                                Padding="16,12"
+                                Classes="settings-button"
+                                Click="OnAddCommandClick" />
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- RIGHT: command editor -->
+                <Border Grid.Column="1"
+                        Classes="settings-card"
+                        BorderBrush="{DynamicResource CardBorderInner}"
+                        BorderThickness="3"
+                        BoxShadow="{DynamicResource CardShadowFlat}"
+                        Padding="24,20"
+                        IsVisible="{Binding EditingCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Vertical" Spacing="18">
+
+                        <Grid ColumnDefinitions="Auto, *">
+                            <TextBlock Classes="settings-label"
+                                       Grid.Column="0"
+                                       Margin="0,0,28,0"
+                                       Text="{DynamicResource GameModal.Patches.Editor.Type}" />
+                            <ComboBox Grid.Column="1"
+                                      ItemsSource="{Binding PatchTypes}"
+                                      SelectedItem="{Binding EditingCommand.Type, Mode=TwoWay}"
+                                      HorizontalAlignment="Right"
+                                      MinWidth="280"
+                                      FontSize="18"
+                                      Padding="10,8" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="Auto, *">
+                            <TextBlock Classes="settings-label"
+                                       Grid.Column="0"
+                                       Margin="0,0,28,0"
+                                       Text="{DynamicResource GameModal.Patches.Editor.Address}" />
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding EditingCommand.AddressText, Mode=TwoWay}"
+                                     HorizontalAlignment="Right"
+                                     Width="280"
+                                     FontSize="18"
+                                     Padding="10,8" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="Auto, *">
+                            <TextBlock Classes="settings-label"
+                                       Grid.Column="0"
+                                       Margin="0,0,28,0"
+                                       Text="{DynamicResource GameModal.Patches.Editor.Value}" />
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding EditingCommand.Value, Mode=TwoWay}"
+                                     HorizontalAlignment="Right"
+                                     Width="280"
+                                     FontSize="18"
+                                     Padding="10,8" />
+                        </Grid>
+
+                        <TextBlock Text="{Binding EditingCommand.ValidationError}"
+                                   IsVisible="{Binding ShowValidationError}"
+                                   Foreground="{DynamicResource TextError}"
+                                   FontSize="16"
+                                   TextWrapping="Wrap" />
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Spacing="16">
+                            <Button x:Name="BtnDeleteCommand"
+                                    Content="{DynamicResource GameModal.Patches.Editor.Delete}"
+                                    FontSize="18"
+                                    Padding="18,10"
+                                    Click="OnDeleteCommandClick" />
+                            <Button x:Name="BtnSaveCommand"
+                                    Content="{DynamicResource GameModal.Patches.Editor.Save}"
+                                    FontSize="18"
+                                    Padding="24,10"
+                                    Classes="settings-button"
+                                    Click="OnSaveCommandClick" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

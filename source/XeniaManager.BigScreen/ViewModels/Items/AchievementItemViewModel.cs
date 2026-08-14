@@ -28,7 +28,8 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether this row currently has selection in the achievements list.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The achievement's display name.
@@ -56,7 +57,7 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     /// The unlock date, or a "not unlocked" label when locked.
     /// </summary>
     public string UnlockDateDisplay => Achievement.UnlockDateTime?.ToString(FormatConstants.AchievementUnlockFormat)
-        ?? LocalizationHelper.GetText("GameModal.Achievements.NotUnlocked");
+                                       ?? LocalizationHelper.GetText("GameModal.Achievements.NotUnlocked");
 
     /// <summary>
     /// The achievement image, decoded lazily and only when unlocked.

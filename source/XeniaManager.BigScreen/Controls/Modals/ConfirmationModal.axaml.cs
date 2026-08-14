@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Modals;
 
 namespace XeniaManager.BigScreen.Controls.Modals;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
@@ -17,27 +16,32 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether this row currently has selection in the patch list.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The patch's display name.
     /// </summary>
-    [ObservableProperty] private string _name = string.Empty;
+    [ObservableProperty]
+    public partial string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// The patch's author.
     /// </summary>
-    [ObservableProperty] private string _author = string.Empty;
+    [ObservableProperty]
+    public partial string Author { get; set; } = string.Empty;
 
     /// <summary>
     /// The patch's description, or null when none.
     /// </summary>
-    [ObservableProperty] private string? _description;
+    [ObservableProperty]
+    public partial string? Description { get; set; }
 
     /// <summary>
     /// Whether the patch is enabled (A toggles this on the list).
     /// </summary>
-    [ObservableProperty] private bool _isEnabled;
+    [ObservableProperty]
+    public partial bool IsEnabled { get; set; }
 
     /// <summary>
     /// The patch's command list.
@@ -75,7 +79,7 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
             Author = Author,
             Description = Description,
             IsEnabled = IsEnabled,
-            HeaderComment = _originalEntry.HeaderComment,
+            HeaderComment = _originalEntry.HeaderComment
         };
 
         foreach (PatchCommandItemViewModel command in Commands)

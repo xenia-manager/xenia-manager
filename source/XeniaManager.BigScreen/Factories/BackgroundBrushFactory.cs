@@ -27,8 +27,8 @@ public static class BackgroundBrushFactory
                 new GradientStop(primary, 0),
                 new GradientStop(MixWithBlack(primary, LayoutConstants.GradientMixAmount),
                     LayoutConstants.LinearMidOffset),
-                new GradientStop(MixWithBlack(primary, LayoutConstants.GradientEndMixAmount), 1),
-            },
+                new GradientStop(MixWithBlack(primary, LayoutConstants.GradientEndMixAmount), 1)
+            }
         };
     }
 
@@ -49,8 +49,8 @@ public static class BackgroundBrushFactory
                 new GradientStop(primary, 0),
                 new GradientStop(MixWithBlack(primary, LayoutConstants.GradientMixAmount),
                     LayoutConstants.RadialMidOffset),
-                new GradientStop(MixWithBlack(primary, LayoutConstants.GradientEndMixAmount), 1),
-            },
+                new GradientStop(MixWithBlack(primary, LayoutConstants.GradientEndMixAmount), 1)
+            }
         };
     }
 
@@ -80,8 +80,8 @@ public static class BackgroundBrushFactory
             {
                 new GradientStop(transparent, 0),
                 new GradientStop(transparent, LayoutConstants.VignetteInnerStop),
-                new GradientStop(edge, 1),
-            },
+                new GradientStop(edge, 1)
+            }
         };
     }
 

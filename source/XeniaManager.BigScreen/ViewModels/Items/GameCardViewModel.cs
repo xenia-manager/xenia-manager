@@ -22,22 +22,26 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     /// <summary>
     /// The game's display title.
     /// </summary>
-    [ObservableProperty] private string _title;
+    [ObservableProperty]
+    public partial string Title { get; set; }
 
     /// <summary>
     /// Whether this card currently has focus/selection on the dashboard.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The game's artwork, used by the dynamic background. Null until real art is loaded.
     /// </summary>
-    [ObservableProperty] private Bitmap? _backgroundArt;
+    [ObservableProperty]
+    public partial Bitmap? BackgroundArt { get; set; }
 
     /// <summary>
     /// The image shown on this card (box art or disc icon).
     /// </summary>
-    [ObservableProperty] private CardImageMode _cardImageMode = CardImageMode.Icon;
+    [ObservableProperty]
+    public partial CardImageMode CardImageMode { get; set; } = CardImageMode.Icon;
 
     /// <summary>
     /// The game's box art, or null when missing/unreadable.
@@ -117,7 +121,7 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     public GameCardViewModel(Game game, GameStatInfo? stats = null)
     {
         Game = game;
-        _title = game.Title;
+        Title = game.Title;
 
         if (stats != null)
         {

@@ -50,11 +50,11 @@
                        Foreground="{DynamicResource TextSecondary}" />
         </StackPanel>
         <prim:IconStat Grid.Column="2"
-                           Icon="Star"
-                           Stat="{Binding GamerscoreText}"
-                           IconSize="16"
-                           FontSize="18"
-                           IsVisible="{Binding HasGamerscore}"
-                           VerticalAlignment="Center" />
+                       Icon="Star"
+                       Stat="{Binding GamerscoreText}"
+                       IconSize="16"
+                       FontSize="18"
+                       IsVisible="{Binding HasGamerscore}"
+                       VerticalAlignment="Center" />
     </Grid>
 </Button>

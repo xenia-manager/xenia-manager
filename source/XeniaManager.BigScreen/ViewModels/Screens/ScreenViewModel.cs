@@ -16,7 +16,8 @@ public abstract partial class ScreenViewModel : ViewModelBase
     /// Whether this screen's hint bar is visible - hidden while any modal is
     /// open, so only the top modal's hints show.
     /// </summary>
-    [ObservableProperty] private bool _isHintBarVisible = true;
+    [ObservableProperty]
+    public partial bool IsHintBarVisible { get; set; } = true;
 
     protected ScreenViewModel(SettingsViewModel settings, IModalService modalService)
     {

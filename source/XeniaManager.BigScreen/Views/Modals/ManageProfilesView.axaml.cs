@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Utilities;
@@ -172,9 +170,9 @@ public partial class ManageProfilesView : UserControl
             [
                 new FilePickerFileType("Xenia Account File")
                 {
-                    Patterns = ["*.xaccount", "*.zip"],
-                },
-            ],
+                    Patterns = ["*.xaccount", "*.zip"]
+                }
+            ]
         };
 
         IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
@@ -209,12 +207,12 @@ public partial class ManageProfilesView : UserControl
             [
                 new FilePickerFileType("Xenia Account File")
                 {
-                    Patterns = ["*.xaccount"],
-                },
+                    Patterns = ["*.xaccount"]
+                }
             ],
             SuggestedFileName = suggestedName,
             DefaultExtension = "xaccount",
-            ShowOverwritePrompt = true,
+            ShowOverwritePrompt = true
         });
 
         if (file != null)

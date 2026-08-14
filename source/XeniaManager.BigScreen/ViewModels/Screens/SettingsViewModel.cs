@@ -62,7 +62,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// Gamertag of the active profile, shown in the Profiles section.
     /// </summary>
-    public string ActiveGamertag => App.Services.GetRequiredService<IProfileService>().Gamertag;
+    public static string ActiveGamertag => App.Services.GetRequiredService<IProfileService>().Gamertag;
 
     /// <summary>
     /// Options shown in the settings background-type dropdown.
@@ -73,7 +73,7 @@ public partial class SettingsViewModel : ViewModelBase
         new(BackgroundMode.Solid, LocalizationHelper.GetText("Settings.BackgroundMode.Solid")),
         new(BackgroundMode.LinearGradient, LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")),
         new(BackgroundMode.RadialGradient, LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient")),
-        new(BackgroundMode.Dynamic, LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic")),
+        new(BackgroundMode.Dynamic, LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"))
     ];
 
     /// <summary>
@@ -82,7 +82,7 @@ public partial class SettingsViewModel : ViewModelBase
     public ObservableCollection<LibraryViewModeOption> LibraryViewModeOptions { get; } =
     [
         new(LibraryViewMode.Carousel, LocalizationHelper.GetText("Settings.LibraryView.Carousel")),
-        new(LibraryViewMode.List, LocalizationHelper.GetText("Settings.LibraryView.List")),
+        new(LibraryViewMode.List, LocalizationHelper.GetText("Settings.LibraryView.List"))
     ];
 
     /// <summary>
@@ -91,7 +91,7 @@ public partial class SettingsViewModel : ViewModelBase
     public ObservableCollection<CardImageModeOption> CardImageModeOptions { get; } =
     [
         new(CardImageMode.BoxArt, LocalizationHelper.GetText("Settings.CardImage.BoxArt")),
-        new(CardImageMode.Icon, LocalizationHelper.GetText("Settings.CardImage.Icon")),
+        new(CardImageMode.Icon, LocalizationHelper.GetText("Settings.CardImage.Icon"))
     ];
 
     /// <summary>
@@ -100,75 +100,88 @@ public partial class SettingsViewModel : ViewModelBase
     public ObservableCollection<TimeFormatOption> TimeFormatOptions { get; } =
     [
         new(TimeFormat.TwelveHour, LocalizationHelper.GetText("Settings.TimeFormat.TwelveHour")),
-        new(TimeFormat.TwentyFourHour, LocalizationHelper.GetText("Settings.TimeFormat.TwentyFourHour")),
+        new(TimeFormat.TwentyFourHour, LocalizationHelper.GetText("Settings.TimeFormat.TwentyFourHour"))
     ];
 
     /// <summary>
     /// The selected option in the background-type dropdown.
     /// </summary>
-    [ObservableProperty] private BackgroundModeOption? _selectedBackgroundMode;
+    [ObservableProperty]
+    public partial BackgroundModeOption? SelectedBackgroundMode { get; set; }
 
     /// <summary>
     /// The active background mode.
     /// </summary>
-    [ObservableProperty] private BackgroundMode _mode = BackgroundMode.LinearGradient;
+    [ObservableProperty]
+    public partial BackgroundMode Mode { get; set; } = BackgroundMode.LinearGradient;
 
     /// <summary>
     /// The selected option in the library-view dropdown.
     /// </summary>
-    [ObservableProperty] private LibraryViewModeOption? _selectedLibraryViewMode;
+    [ObservableProperty]
+    public partial LibraryViewModeOption? SelectedLibraryViewMode { get; set; }
 
     /// <summary>
     /// The active library view mode.
     /// </summary>
-    [ObservableProperty] private LibraryViewMode _libraryViewMode = LibraryViewMode.Carousel;
+    [ObservableProperty]
+    public partial LibraryViewMode LibraryViewMode { get; set; } = LibraryViewMode.Carousel;
 
     /// <summary>
     /// The selected option in the card-image dropdown.
     /// </summary>
-    [ObservableProperty] private CardImageModeOption? _selectedCardImageMode;
+    [ObservableProperty]
+    public partial CardImageModeOption? SelectedCardImageMode { get; set; }
 
     /// <summary>
     /// The active dashboard card image mode.
     /// </summary>
-    [ObservableProperty] private CardImageMode _cardImageMode = CardImageMode.Icon;
+    [ObservableProperty]
+    public partial CardImageMode CardImageMode { get; set; } = CardImageMode.Icon;
 
     /// <summary>
     /// The selected option in the time-format dropdown.
     /// </summary>
-    [ObservableProperty] private TimeFormatOption? _selectedTimeFormat;
+    [ObservableProperty]
+    public partial TimeFormatOption? SelectedTimeFormat { get; set; }
 
     /// <summary>
     /// The active time format for the clock and capture dates.
     /// </summary>
-    [ObservableProperty] private TimeFormat _timeFormat = TimeFormat.TwelveHour;
+    [ObservableProperty]
+    public partial TimeFormat TimeFormat { get; set; } = TimeFormat.TwelveHour;
 
     /// <summary>
     /// The primary color; gradients are derived from it.
     /// </summary>
-    [ObservableProperty] private Color _primaryColor;
+    [ObservableProperty]
+    public partial Color PrimaryColor { get; set; }
 
     /// <summary>
     /// The dashboard's accent color (selected card border).
     /// </summary>
-    [ObservableProperty] private Color _accentColor;
+    [ObservableProperty]
+    public partial Color AccentColor { get; set; }
 
     /// <summary>
     /// Vignette edge opacity (0-1).
     /// </summary>
-    [ObservableProperty] private double _vignetteOpacity;
+    [ObservableProperty]
+    public partial double VignetteOpacity { get; set; }
 
     /// <summary>
     /// Whether Quit returns to Xenia Manager (launching it if it isn't running).
     /// Off = just close BigScreen.
     /// </summary>
-    [ObservableProperty] private bool _returnToXeniaOnQuit = true;
+    [ObservableProperty]
+    public partial bool ReturnToXeniaOnQuit { get; set; } = true;
 
     /// <summary>
     /// Whether this screen's hint bar is visible - hidden while any modal is
     /// open, so only the top modal's hints show.
     /// </summary>
-    [ObservableProperty] private bool _isHintBarVisible = true;
+    [ObservableProperty]
+    public partial bool IsHintBarVisible { get; set; } = true;
 
     public SettingsViewModel(IBackgroundService backgroundService, IGamepadInputService gamepadService,
         IModalService modalService)
@@ -179,7 +192,7 @@ public partial class SettingsViewModel : ViewModelBase
 
         // Keep the settings "Active Profile" line in sync with profile switches
         App.Services.GetRequiredService<IProfileService>().ProfileChanged +=
-            () => OnPropertyChanged(nameof(ActiveGamertag));
+            () => OnPropertyChanged(nameof(Screens.SettingsViewModel.ActiveGamertag));
 
         if (_gamepadService.IsActive)
         {
@@ -224,7 +237,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// Skipped when a modal is already open (stray Enter on the still-focused
     /// button would otherwise double-open the overlay).
     /// </summary>
-    public void OpenManageProfiles()
+    public static void OpenManageProfiles()
     {
         IModalService modalService = App.Services.GetRequiredService<IModalService>();
         if (modalService.IsOpen)
@@ -276,7 +289,7 @@ public partial class SettingsViewModel : ViewModelBase
         BackgroundMode.LinearGradient => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
         BackgroundMode.RadialGradient => LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient"),
         BackgroundMode.Dynamic => LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"),
-        _ => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
+        _ => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")
     };
 
     /// <summary>

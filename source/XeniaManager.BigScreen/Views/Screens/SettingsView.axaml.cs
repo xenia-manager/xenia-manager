@@ -6,7 +6,6 @@ using Avalonia.Platform.Storage;
 using XeniaManager.BigScreen.Controls.Settings;
 using XeniaManager.BigScreen.ViewModels.Screens;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.Views.Screens;
@@ -46,7 +45,7 @@ public partial class SettingsView : UserControl
     {
         if (DataContext is SettingsViewModel vm)
         {
-            vm.OpenManageProfiles();
+            SettingsViewModel.OpenManageProfiles();
         }
     }
 
@@ -74,9 +73,9 @@ public partial class SettingsView : UserControl
             [
                 new FilePickerFileType("Images")
                 {
-                    Patterns = ImageFormats.FilePickerPatterns,
-                },
-            ],
+                    Patterns = ImageFormats.FilePickerPatterns
+                }
+            ]
         };
 
         IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);

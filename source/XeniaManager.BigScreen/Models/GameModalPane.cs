@@ -33,5 +33,5 @@ public enum GameModalPane
     /// <summary>
     /// The game's config file editor.
     /// </summary>
-    Settings,
+    Settings
 }

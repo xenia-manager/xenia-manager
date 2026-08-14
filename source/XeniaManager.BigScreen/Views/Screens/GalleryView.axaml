@@ -22,13 +22,13 @@
                            Text="{DynamicResource Gallery.Title}"
                            Classes="screen-title" />
                 <prim:IconStat Grid.Column="1"
-                                   Icon="ArrowSort"
-                                   Stat="{Binding GallerySortText}"
-                                   IconRotation="90"
-                                   IconSize="26"
-                                   Spacing="16"
-                                   VerticalAlignment="Center"
-                                   FontSize="24" />
+                               Icon="ArrowSort"
+                               Stat="{Binding GallerySortText}"
+                               IconRotation="90"
+                               IconSize="26"
+                               Spacing="16"
+                               VerticalAlignment="Center"
+                               FontSize="24" />
             </Grid>
 
             <!-- GALLERY GRID (4 across, scrolls down) -->
@@ -76,11 +76,11 @@
             <!-- HINTS (gallery) -->
             <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource Gallery.Hint.Back}" />
+                                Text="{DynamicResource Gallery.Hint.Back}" />
                 <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
-                                    Text="{DynamicResource Gallery.Hint.Select}" />
+                                Text="{DynamicResource Gallery.Hint.Select}" />
                 <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
-                                    Text="{DynamicResource Gallery.Hint.Sort}" />
+                                Text="{DynamicResource Gallery.Hint.Sort}" />
             </StackPanel>
         </Grid>
     </Grid>

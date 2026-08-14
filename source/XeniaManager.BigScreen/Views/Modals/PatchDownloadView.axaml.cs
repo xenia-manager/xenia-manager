@@ -32,7 +32,7 @@ public partial class PatchDownloadView : UserControl
         }
 
         if (control.GetSelfAndVisualAncestors().OfType<Border>()
-            .FirstOrDefault(b => b.Classes.Contains("download-row"))
+                .FirstOrDefault(b => b.Classes.Contains("download-row"))
             is { DataContext: PatchDownloadItemViewModel item })
         {
             vm.SelectResult(item);

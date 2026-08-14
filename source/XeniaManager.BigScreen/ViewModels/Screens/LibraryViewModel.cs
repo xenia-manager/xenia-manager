@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
@@ -42,7 +41,8 @@ public partial class LibraryViewModel : ScreenViewModel
     /// <summary>
     /// The current library sort mode (cycled with Y).
     /// </summary>
-    [ObservableProperty] private LibrarySort _sort = LibrarySort.Alphabetical;
+    [ObservableProperty]
+    public partial LibrarySort Sort { get; set; } = LibrarySort.Alphabetical;
 
     /// <summary>
     /// Display name of the current library sort mode.
@@ -51,24 +51,27 @@ public partial class LibraryViewModel : ScreenViewModel
     {
         LibrarySort.TimePlayed => LocalizationHelper.GetText("Library.Sort.TimePlayed"),
         LibrarySort.LastPlayed => LocalizationHelper.GetText("Library.Sort.LastPlayed"),
-        _ => LocalizationHelper.GetText("Library.Sort.Alphabetical"),
+        _ => LocalizationHelper.GetText("Library.Sort.Alphabetical")
     };
 
     /// <summary>
     /// Whether the library is shown as a vertical list with a details pane
     /// (vs. the horizontal card carousel). Follows the settings dropdown.
     /// </summary>
-    [ObservableProperty] private bool _isListView;
+    [ObservableProperty]
+    public partial bool IsListView { get; set; }
 
     /// <summary>
     /// The currently selected game card (drives the details pane).
     /// </summary>
-    [ObservableProperty] private GameCardViewModel? _selectedCard;
+    [ObservableProperty]
+    public partial GameCardViewModel? SelectedCard { get; set; }
 
     /// <summary>
     /// The details pane content for the selected game, or null when nothing is selected.
     /// </summary>
-    [ObservableProperty] private GameDetailsViewModel? _details;
+    [ObservableProperty]
+    public partial GameDetailsViewModel? Details { get; set; }
 
     /// <summary>
     /// In-memory cache of fetched database info keyed by game ID (null values are
@@ -105,7 +108,7 @@ public partial class LibraryViewModel : ScreenViewModel
         {
             LibrarySort.TimePlayed => Games.OrderByDescending(g => g.Game.Playtime).ToList(),
             LibrarySort.LastPlayed => Games.OrderByDescending(g => g.Game.LastPlayed).ToList(),
-            _ => Games.OrderBy(g => g.Game.Title, StringComparer.OrdinalIgnoreCase).ToList(),
+            _ => Games.OrderBy(g => g.Game.Title, StringComparer.OrdinalIgnoreCase).ToList()
         };
 
         SelectionHelper.ResortPreservingSelection(Games, sorted);
@@ -197,10 +200,7 @@ public partial class LibraryViewModel : ScreenViewModel
         }
 
         int generation = ++_detailsLoadGeneration;
-        if (Details != null)
-        {
-            Details.IsLoading = true;
-        }
+        Details?.IsLoading = true;
 
         try
         {
@@ -235,10 +235,7 @@ public partial class LibraryViewModel : ScreenViewModel
     /// </summary>
     private void ApplyDetails(GameDetailedInfo? info)
     {
-        if (Details != null)
-        {
-            Details.Info = info;
-        }
+        Details?.Info = info;
     }
 
     /// <summary>

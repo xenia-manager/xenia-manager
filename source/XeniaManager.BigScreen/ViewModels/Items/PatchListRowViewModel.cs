@@ -16,7 +16,7 @@ public enum PatchActionType
     /// <summary>
     /// Removes the installed patch file.
     /// </summary>
-    Remove,
+    Remove
 }
 
 /// <summary>
@@ -28,7 +28,8 @@ public partial class PatchListRowViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether this row currently has selection in the patch list.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The patch entry behind this row, or null for action rows.

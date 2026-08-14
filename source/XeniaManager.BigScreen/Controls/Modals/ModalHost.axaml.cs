@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Services;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Modals;
 
 namespace XeniaManager.BigScreen.Controls.Modals;
@@ -36,7 +35,7 @@ public partial class ModalHost : UserControl
             StackHost.Children.Add(new ContentControl
             {
                 Content = stack[i],
-                IsHitTestVisible = i == stack.Count - 1,
+                IsHitTestVisible = i == stack.Count - 1
             });
         }
     }

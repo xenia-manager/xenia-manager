@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using SDL;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
@@ -12,7 +9,7 @@ namespace XeniaManager.Core.Services;
 /// selection. All SDL pointer code lives here; the input service only
 /// orchestrates events around it.
 /// </summary>
-internal unsafe sealed class GamepadDeviceCollection
+internal sealed unsafe class GamepadDeviceCollection
 {
     /// <summary>
     /// A single connected gamepad: SDL handle + live status.
@@ -167,7 +164,7 @@ internal unsafe sealed class GamepadDeviceCollection
     public void Rescan()
     {
         Logger.Info<GamepadDeviceCollection>("Rescanning connected gamepads");
-        SDLArray<SDL_JoystickID>? gamepads = SDL3.SDL_GetGamepads();
+        using SDLArray<SDL_JoystickID>? gamepads = SDL3.SDL_GetGamepads();
         if (gamepads == null)
         {
             Logger.Warning<GamepadDeviceCollection>("Rescan: SDL_GetGamepads returned null");

@@ -13,5 +13,5 @@ public enum CardImageMode
     /// <summary>
     /// The game's disc icon.
     /// </summary>
-    Icon,
+    Icon
 }

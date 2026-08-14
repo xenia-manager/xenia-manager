@@ -94,7 +94,7 @@ public class PalettePicker : TemplatedControl
                 BorderBrush = new SolidColorBrush(Color.FromArgb(60, 0, 0, 0)),
                 BorderThickness = new Thickness(1),
                 Focusable = true,
-                Tag = colour,
+                Tag = colour
             };
             swatch.PointerPressed += OnSwatchPressed;
             swatch.KeyDown += OnSwatchKeyDown;

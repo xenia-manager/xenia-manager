@@ -2,7 +2,6 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using XeniaManager.BigScreen.Models;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.Views.Screens;
 using XeniaManager.BigScreen.ViewModels.Shell;
@@ -35,11 +34,11 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     {
         if (navigation.IsOnOptionsRow)
         {
-            navigation.MoveOptionSelection(vm.Dashboard, delta);
+            DashboardNavigationController.MoveOptionSelection(vm.Dashboard, delta);
         }
         else if (!navigation.IsOnProfileRow)
         {
-            navigation.MoveRecentGameSelection(vm.Dashboard, delta);
+            DashboardNavigationController.MoveRecentGameSelection(vm.Dashboard, delta);
         }
     }
 
@@ -51,7 +50,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     {
         if (navigation.IsOnProfileRow)
         {
-            navigation.ActivateProfileRow(vm);
+            DashboardNavigationController.ActivateProfileRow(vm);
         }
         else if (navigation.IsOnOptionsRow)
         {
@@ -133,7 +132,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
                 vm.Library.CycleSort();
                 break;
             case NavigationCommand.Activate:
-                navigation.LaunchSelectedGame(vm);
+                DashboardNavigationController.LaunchSelectedGame(vm);
                 break;
             case NavigationCommand.Back:
                 CloseOverlay(vm);
@@ -183,7 +182,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
                 vm.Gallery.CycleGallerySort();
                 break;
             case NavigationCommand.Activate:
-                navigation.OpenSelectedScreenshot(vm.Gallery);
+                DashboardNavigationController.OpenSelectedScreenshot(vm.Gallery);
                 break;
             case NavigationCommand.Back:
                 CloseOverlay(vm);
@@ -269,7 +268,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             Key.X => NavigationCommand.CycleSort,
             Key.Y => NavigationCommand.Details,
             Key.V => NavigationCommand.ToggleView,
-            _ => null,
+            _ => null
         };
     }
 
@@ -290,7 +289,7 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             GamepadButton.Y => NavigationCommand.Details,
             GamepadButton.View => NavigationCommand.ToggleView,
             GamepadButton.Start => NavigationCommand.Start,
-            _ => null,
+            _ => null
         };
     }
 

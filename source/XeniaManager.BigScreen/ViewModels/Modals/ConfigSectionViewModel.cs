@@ -17,13 +17,19 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
     private readonly ConfigSectionDefinition? _definition;
     private bool _disposed;
 
-    [ObservableProperty] private string _name = string.Empty;
-    [ObservableProperty] private string _displayName = string.Empty;
-    [ObservableProperty] private string? _description;
-    [ObservableProperty] private ObservableCollection<ConfigOptionViewModel> _options = [];
-    [ObservableProperty] private bool _isExpanded = true;
-    [ObservableProperty] private bool _isVisible = true;
-    [ObservableProperty] private bool _hasUnsavedChanges;
+    [ObservableProperty] public partial string Name { get; set; } = string.Empty;
+
+    [ObservableProperty] public partial string DisplayName { get; set; } = string.Empty;
+
+    [ObservableProperty] public partial string? Description { get; set; }
+
+    [ObservableProperty] public partial ObservableCollection<ConfigOptionViewModel> Options { get; set; } = [];
+
+    [ObservableProperty] public partial bool IsExpanded { get; set; } = true;
+
+    [ObservableProperty] public partial bool IsVisible { get; set; } = true;
+
+    [ObservableProperty] public partial bool HasUnsavedChanges { get; set; }
 
     public ConfigSectionViewModel(ConfigSection configSection, ConfigSectionDefinition? definition = null)
     {
@@ -168,7 +174,7 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
                 option.Type is ConfigOptionType.Integer or ConfigOptionType.Float,
             ConfigControlType.ComboBox => option.Type is ConfigOptionType.String or ConfigOptionType.Integer,
             ConfigControlType.TextBox => option.Type is not ConfigOptionType.Array,
-            _ => option.Type is not ConfigOptionType.Array,
+            _ => option.Type is not ConfigOptionType.Array
         };
     }
 }

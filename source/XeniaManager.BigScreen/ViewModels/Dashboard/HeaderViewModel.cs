@@ -21,53 +21,63 @@ public partial class HeaderViewModel : ViewModelBase
     /// <summary>
     /// Whether the profile row (avatar chip) is currently selected.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// Gamertag of the active profile (Canary)
     /// </summary>
-    [ObservableProperty] private string _gamertag = LocalizationHelper.GetText("Header.Guest");
+    [ObservableProperty]
+    public partial string Gamertag { get; set; } = LocalizationHelper.GetText("Header.Guest");
 
     /// <summary>
     /// Total gamerscore of the active profile
     /// </summary>
-    [ObservableProperty] private string _gamerscore = "0";
+    [ObservableProperty]
+    public partial string Gamerscore { get; set; } = "0";
 
     /// <summary>
     /// Whether a controller is connected
     /// </summary>
-    [ObservableProperty] private bool _controllerConnected = true;
+    [ObservableProperty]
+    public partial bool ControllerConnected { get; set; } = true;
 
     /// <summary>
     /// Controller battery level in percent. -1 when unknown/no controller.
     /// </summary>
-    [ObservableProperty] private int _batteryLevel = -1;
+    [ObservableProperty]
+    public partial int BatteryLevel { get; set; } = -1;
 
     /// <summary>
     /// Whether the controller battery is charging
     /// </summary>
-    [ObservableProperty] private bool _isCharging;
+    [ObservableProperty]
+    public partial bool IsCharging { get; set; }
 
     /// <summary>
     /// Current network connection status (drives the header network icon).
     /// </summary>
-    [ObservableProperty] private NetworkStatus _networkStatus = NetworkStatus.Wifi;
+    [ObservableProperty]
+    public partial NetworkStatus NetworkStatus { get; set; } = NetworkStatus.Wifi;
 
     /// <summary>
     /// The hour format used by the clock, following the persisted setting.
     /// </summary>
-    [ObservableProperty] private TimeFormat _timeFormat = TimeFormat.TwelveHour;
+    [ObservableProperty]
+    public partial TimeFormat TimeFormat { get; set; } = TimeFormat.TwelveHour;
 
     /// <summary>
     /// Minimum clock width so the status area never jiggles as digits change;
     /// follows the time format (24-hour is narrower).
     /// </summary>
-    [ObservableProperty] private double _clockMinWidth = LayoutConstants.ClockMinWidth12h;
+    [ObservableProperty]
+    public partial double ClockMinWidth { get; set; } = LayoutConstants.ClockMinWidth12H;
 
     /// <summary>
     /// Current time string
     /// </summary>
-    [ObservableProperty] private string _time = DateTime.Now.ToString(FormatConstants.ClockFormat12h);
+    [ObservableProperty]
+    public partial string Time { get; set; } = DateTime.Now.ToString(FormatConstants.ClockFormat12H);
 
     /// <summary>
     /// Fluent icon for the current network state (wifi / wired / off).
@@ -97,8 +107,8 @@ public partial class HeaderViewModel : ViewModelBase
     {
         Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(value));
         ClockMinWidth = value == TimeFormat.TwentyFourHour
-            ? LayoutConstants.ClockMinWidth24h
-            : LayoutConstants.ClockMinWidth12h;
+            ? LayoutConstants.ClockMinWidth24H
+            : LayoutConstants.ClockMinWidth12H;
         Logger.Debug<HeaderViewModel>($"Clock format: {value}");
     }
 
@@ -109,14 +119,14 @@ public partial class HeaderViewModel : ViewModelBase
     {
         _clockTimer = new DispatcherTimer
         {
-            Interval = TimingConstants.ClockUpdateInterval,
+            Interval = TimingConstants.ClockUpdateInterval
         };
         _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(TimeFormat));
         _clockTimer.Start();
 
         _networkTimer = new DispatcherTimer
         {
-            Interval = TimingConstants.WifiPollInterval,
+            Interval = TimingConstants.WifiPollInterval
         };
         _networkTimer.Tick += (_, _) => CheckNetwork();
         _networkTimer.Start();

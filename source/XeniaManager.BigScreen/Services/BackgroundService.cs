@@ -8,7 +8,6 @@ using Avalonia.Media.Imaging;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Converters;
 using XeniaManager.BigScreen.Factories;
-using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.Core.Logging;
 
@@ -29,7 +28,7 @@ public class BackgroundService : IBackgroundService
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
-        Converters = { new ColorJsonConverter() },
+        Converters = { new ColorJsonConverter() }
     };
 
     /// <summary>
@@ -62,7 +61,7 @@ public class BackgroundService : IBackgroundService
             {
                 return new ImageBrush(new Bitmap(Settings.ImagePath))
                 {
-                    Stretch = Stretch.UniformToFill,
+                    Stretch = Stretch.UniformToFill
                 };
             }
         }
@@ -116,10 +115,10 @@ public class BackgroundService : IBackgroundService
             BackgroundMode.Dynamic => selectedGameArt != null
                 ? new ImageBrush(selectedGameArt)
                 {
-                    Stretch = Stretch.UniformToFill,
+                    Stretch = Stretch.UniformToFill
                 }
                 : BackgroundBrushFactory.CreateRadial(Settings.PrimaryColor),
-            _ => BackgroundBrushFactory.CreateLinear(Settings.PrimaryColor),
+            _ => BackgroundBrushFactory.CreateLinear(Settings.PrimaryColor)
         };
     }
 

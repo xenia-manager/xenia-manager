@@ -13,17 +13,20 @@ public partial class GameActionItemViewModel(string title, string icon, GameModa
     /// <summary>
     /// The option's display title.
     /// </summary>
-    [ObservableProperty] private string _title = title;
+    [ObservableProperty]
+    public partial string Title { get; set; } = title;
 
     /// <summary>
     /// The fluent symbol name rendered on the row.
     /// </summary>
-    [ObservableProperty] private string _icon = icon;
+    [ObservableProperty]
+    public partial string Icon { get; set; } = icon;
 
     /// <summary>
     /// Whether this row currently has selection in the options list.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The pane opened when this option is activated.

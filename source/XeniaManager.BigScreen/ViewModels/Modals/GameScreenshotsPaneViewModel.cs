@@ -38,7 +38,8 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     /// <summary>
     /// Whether the screenshot scan is still running (loading state).
     /// </summary>
-    [ObservableProperty] private bool _isLoading = true;
+    [ObservableProperty]
+    public partial bool IsLoading { get; set; } = true;
 
     /// <summary>
     /// Whether the pane shows the empty state (scan finished, no screenshots).

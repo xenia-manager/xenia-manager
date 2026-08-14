@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.BigScreen.Services;
-using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Game;

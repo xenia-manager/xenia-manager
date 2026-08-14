@@ -43,7 +43,7 @@ public class ColorPickerField : TemplatedControl
         Color.FromRgb(0x3A, 0x40, 0x49), // Grey
         Color.FromRgb(0x49, 0x4F, 0x59), // Light grey
         Color.FromRgb(0x5A, 0x61, 0x6B), // Silver grey
-        Color.FromRgb(0x6E, 0x75, 0x80), // Pale grey
+        Color.FromRgb(0x6E, 0x75, 0x80) // Pale grey
     ];
 
     /// <summary>
@@ -60,7 +60,7 @@ public class ColorPickerField : TemplatedControl
         Color.FromRgb(0xE6, 0x7E, 0x22), // Orange
         Color.FromRgb(0xF1, 0xC4, 0x0F), // Yellow
         Color.FromRgb(0xC0, 0xC0, 0xC0), // Light grey
-        Color.FromRgb(0xFF, 0xFF, 0xFF), // White
+        Color.FromRgb(0xFF, 0xFF, 0xFF) // White
     ];
 
     /// <summary>
@@ -113,10 +113,7 @@ public class ColorPickerField : TemplatedControl
             _swatch.PointerPressed += OnSwatchPressed;
         }
 
-        if (_popup != null)
-        {
-            _popup.PlacementTarget = this;
-        }
+        _popup?.PlacementTarget = this;
 
         if (_hexBox != null)
         {
@@ -139,10 +136,7 @@ public class ColorPickerField : TemplatedControl
     private void OnPickerColourChanged(object? sender, ColorChangedEventArgs e)
     {
         Color = e.NewColor;
-        if (_popup != null)
-        {
-            _popup.IsOpen = false;
-        }
+        _popup?.IsOpen = false;
     }
 
     /// <summary>
@@ -210,20 +204,11 @@ public class ColorPickerField : TemplatedControl
         _syncing = true;
         try
         {
-            if (_swatch != null)
-            {
-                _swatch.Background = new SolidColorBrush(Color);
-            }
+            _swatch?.Background = new SolidColorBrush(Color);
 
-            if (_hexBox != null)
-            {
-                _hexBox.Text = $"#{Color.R:X2}{Color.G:X2}{Color.B:X2}";
-            }
+            _hexBox?.Text = $"#{Color.R:X2}{Color.G:X2}{Color.B:X2}";
 
-            if (_palettePicker != null)
-            {
-                _palettePicker.SelectedColor = Color;
-            }
+            _palettePicker?.SelectedColor = Color;
         }
         finally
         {

@@ -1,6 +1,5 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 
 namespace XeniaManager.BigScreen.Services;

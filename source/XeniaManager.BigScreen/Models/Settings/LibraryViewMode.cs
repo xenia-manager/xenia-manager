@@ -13,5 +13,5 @@ public enum LibraryViewMode
     /// <summary>
     /// Vertical list with a details pane on the right.
     /// </summary>
-    List,
+    List
 }

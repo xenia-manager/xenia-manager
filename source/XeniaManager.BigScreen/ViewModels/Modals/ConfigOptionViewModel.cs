@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Config;
 
 namespace XeniaManager.BigScreen.ViewModels.Modals;
@@ -20,35 +19,53 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
     private readonly ConfigOptionDefinition? _definition;
     private object? _originalValue;
     private bool _disposed;
-    private bool _isInitializing;
+    private readonly bool _isInitializing;
 
     /// <summary>
     /// Whether this option row currently has selection (controller navigation).
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
-    [ObservableProperty] private string _name = string.Empty;
-    [ObservableProperty] private string _displayName = string.Empty;
-    [ObservableProperty] private string? _comment;
-    [ObservableProperty] private ConfigOptionType _type;
-    [ObservableProperty] private bool _isCommented;
-    [ObservableProperty] private bool _isEditable = true;
-    [ObservableProperty] private bool _isVisible = true;
-    [ObservableProperty] private ConfigControlType _controlType = ConfigControlType.Auto;
-    [ObservableProperty] private bool _hasUnsavedChanges;
+    [ObservableProperty] public partial string Name { get; set; }
 
-    [ObservableProperty] private bool _boolValue;
-    [ObservableProperty] private int _intValue;
-    [ObservableProperty] private double _floatValue;
-    [ObservableProperty] private string _stringValue = string.Empty;
+    [ObservableProperty] public partial string DisplayName { get; set; }
 
-    [ObservableProperty] private double? _minimum;
-    [ObservableProperty] private double? _maximum;
-    [ObservableProperty] private double? _step;
-    [ObservableProperty] private string? _valueSuffix;
-    [ObservableProperty] private string? _valueFormat;
-    [ObservableProperty] private ObservableCollection<ComboBoxOptionViewModel>? _comboBoxOptions;
-    [ObservableProperty] private int _selectedComboBoxIndex = -1;
+    [ObservableProperty] public partial string? Comment { get; set; }
+
+    [ObservableProperty] public partial ConfigOptionType Type { get; set; }
+
+    [ObservableProperty] public partial bool IsCommented { get; set; }
+
+    [ObservableProperty] public partial bool IsEditable { get; set; } = true;
+
+    [ObservableProperty] public partial bool IsVisible { get; set; } = true;
+
+    [ObservableProperty] public partial ConfigControlType ControlType { get; set; } = ConfigControlType.Auto;
+
+    [ObservableProperty] public partial bool HasUnsavedChanges { get; set; }
+
+    [ObservableProperty] public partial bool BoolValue { get; set; }
+
+    [ObservableProperty] public partial int IntValue { get; set; }
+
+    [ObservableProperty] public partial double FloatValue { get; set; }
+
+    [ObservableProperty] public partial string StringValue { get; set; } = string.Empty;
+
+    [ObservableProperty] public partial double? Minimum { get; set; }
+
+    [ObservableProperty] public partial double? Maximum { get; set; }
+
+    [ObservableProperty] public partial double? Step { get; set; }
+
+    [ObservableProperty] public partial string? ValueSuffix { get; set; }
+
+    [ObservableProperty] public partial string? ValueFormat { get; set; }
+
+    [ObservableProperty] public partial ObservableCollection<ComboBoxOptionViewModel>? ComboBoxOptions { get; set; }
+
+    [ObservableProperty] public partial int SelectedComboBoxIndex { get; set; } = -1;
 
     /// <summary>
     /// Whether the toggle-switch control is shown for this option.
@@ -121,7 +138,7 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
                 ConfigOptionType.Boolean => ConfigControlType.ToggleSwitch,
                 ConfigOptionType.Integer => ConfigControlType.Slider,
                 ConfigOptionType.Float => ConfigControlType.Slider,
-                _ => ConfigControlType.TextBox,
+                _ => ConfigControlType.TextBox
             };
         }
 
@@ -154,7 +171,8 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
                 isFirstItem = false;
             }
 
-            if (string.IsNullOrEmpty(configOption.Value?.ToString()) && selectedIndex == -1 && ComboBoxOptions.Count > 0)
+            if (string.IsNullOrEmpty(configOption.Value?.ToString()) && selectedIndex == -1 &&
+                ComboBoxOptions.Count > 0)
             {
                 selectedIndex = 0;
             }
@@ -165,8 +183,8 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
         if (_definition == null || _definition.IsEditable)
         {
             IsEditable = Type is ConfigOptionType.Boolean or ConfigOptionType.Integer or ConfigOptionType.Float
-                or ConfigOptionType.String
-                || ControlType == ConfigControlType.ComboBox;
+                             or ConfigOptionType.String
+                         || ControlType == ConfigControlType.ComboBox;
         }
 
         _isInitializing = false;
@@ -194,7 +212,7 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
         switch (Type)
         {
             case ConfigOptionType.Boolean:
-                BoolValue = value is bool b && b;
+                BoolValue = value is bool and true;
                 break;
             case ConfigOptionType.Integer:
                 IntValue = value switch
@@ -202,7 +220,7 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
                     int i => i,
                     long l => (int)l,
                     uint u => (int)u,
-                    _ => 0,
+                    _ => 0
                 };
                 FloatValue = IntValue;
                 break;
@@ -211,7 +229,7 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
                 {
                     float f => f,
                     double d => d,
-                    _ => 0.0,
+                    _ => 0.0
                 };
                 break;
             default:
@@ -312,7 +330,8 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
             _configOption.Value = (float)value;
             CheckForChanges(value);
         }
-        else if (Type == ConfigOptionType.Integer && ControlType is ConfigControlType.Slider or ConfigControlType.NumberBox)
+        else if (Type == ConfigOptionType.Integer &&
+                 ControlType is ConfigControlType.Slider or ConfigControlType.NumberBox)
         {
             if (Step is < 1.0)
             {
@@ -396,8 +415,9 @@ public partial class ConfigOptionViewModel : ObservableObject, ISelectable, IDis
 /// </summary>
 public partial class ComboBoxOptionViewModel : ObservableObject
 {
-    [ObservableProperty] private object _value;
-    [ObservableProperty] private string _displayName;
+    [ObservableProperty] public partial object Value { get; set; }
+
+    [ObservableProperty] public partial string DisplayName { get; set; }
 
     public ComboBoxOptionViewModel(object value, string displayName)
     {

@@ -13,17 +13,20 @@ public partial class OptionsCardViewModel(string title, string icon, OverlayScre
     /// <summary>
     /// The option's display title.
     /// </summary>
-    [ObservableProperty] private string _title = title;
+    [ObservableProperty]
+    public partial string Title { get; set; } = title;
 
     /// <summary>
     /// The fluent symbol name rendered on the tile.
     /// </summary>
-    [ObservableProperty] private string _icon = icon;
+    [ObservableProperty]
+    public partial string Icon { get; set; } = icon;
 
     /// <summary>
     /// Whether this card currently has focus/selection on the dashboard.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The overlay screen opened when this card is activated, or None for actions

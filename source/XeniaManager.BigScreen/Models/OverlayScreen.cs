@@ -23,5 +23,5 @@ public enum OverlayScreen
     /// <summary>
     /// The dashboard settings screen.
     /// </summary>
-    Settings,
+    Settings
 }

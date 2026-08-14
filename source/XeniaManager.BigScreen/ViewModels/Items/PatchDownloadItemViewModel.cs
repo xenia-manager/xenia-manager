@@ -13,7 +13,8 @@ public partial class PatchDownloadItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether this row currently has selection in the download list.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The patch's display name.

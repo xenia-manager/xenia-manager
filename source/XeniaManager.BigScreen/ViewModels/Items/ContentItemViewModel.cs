@@ -21,7 +21,8 @@ public partial class ContentItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether this row currently has selection in the content list.
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     /// <summary>
     /// The content's display name.

@@ -37,7 +37,7 @@ public partial class GamepadItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// "Status:" label for the row (stays white for both states).
     /// </summary>
-    public string StatusLabel => LocalizationHelper.GetText("Settings.Controllers.StatusLabel");
+    public static string StatusLabel => LocalizationHelper.GetText("Settings.Controllers.StatusLabel");
 
     /// <summary>
     /// Status value: "Primary" (accent) or "Secondary" (faded).
@@ -63,7 +63,8 @@ public partial class GamepadItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether the row is selected (controller focus).
     /// </summary>
-    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
 
     public GamepadItemViewModel(GamepadInfo source)
     {

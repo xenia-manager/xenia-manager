@@ -68,7 +68,7 @@
                         VerticalAlignment="Center"
                         IsVisible="{Binding IsHintBarVisible}">
                 <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
-                                    Text="{DynamicResource Gallery.Viewer.Close}" />
+                                Text="{DynamicResource Gallery.Viewer.Close}" />
             </StackPanel>
             <StackPanel Grid.Column="1"
                         Orientation="Vertical"

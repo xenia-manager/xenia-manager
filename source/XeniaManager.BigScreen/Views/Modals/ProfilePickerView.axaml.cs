@@ -1,7 +1,5 @@
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.BigScreen.ViewModels.Items;
 

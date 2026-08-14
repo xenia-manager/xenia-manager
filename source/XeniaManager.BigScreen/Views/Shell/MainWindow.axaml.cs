@@ -12,11 +12,9 @@ using XeniaManager.BigScreen.Controls.Profiles;
 using XeniaManager.BigScreen.Controls.Splash;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Shell;
 using XeniaManager.BigScreen.Views.Screens;
-using XeniaManager.BigScreen.Views.Dashboard;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
@@ -27,7 +25,7 @@ public partial class MainWindow : FAAppWindow
 {
     private readonly DashboardNavigationController _navigation;
     private readonly InputRouter _router;
-    private IGamepadInputService? _gamepadService;
+    private readonly IGamepadInputService? _gamepadService;
 
     public MainWindow()
     {
@@ -283,7 +281,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnOverlayFocusRequested()
     {
-        if (DataContext is MainWindowViewModel vm && vm.IsSettingsScreen)
+        if (DataContext is MainWindowViewModel { IsSettingsScreen: true })
         {
             if (Find<SettingsView>() is { } settingsView)
             {

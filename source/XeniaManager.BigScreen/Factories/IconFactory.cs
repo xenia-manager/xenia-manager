@@ -25,7 +25,7 @@ public static class IconFactory
         Symbol.Battery7,
         Symbol.Battery8,
         Symbol.Battery9,
-        Symbol.Battery10,
+        Symbol.Battery10
     ];
 
     /// <summary>
@@ -43,7 +43,7 @@ public static class IconFactory
         Symbol.BatteryCharge7,
         Symbol.BatteryCharge8,
         Symbol.BatteryCharge9,
-        Symbol.BatteryCharge10,
+        Symbol.BatteryCharge10
     ];
 
     /// <summary>
@@ -72,7 +72,7 @@ public static class IconFactory
         {
             NetworkStatus.Wifi => Symbol.WiFi,
             NetworkStatus.Ethernet => Symbol.PlugConnected,
-            _ => Symbol.WiFiOff,
+            _ => Symbol.WiFiOff
         };
     }
 }

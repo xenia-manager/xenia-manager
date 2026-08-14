@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +7,6 @@ using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Modals;
 

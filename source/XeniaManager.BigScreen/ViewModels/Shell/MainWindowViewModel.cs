@@ -48,7 +48,8 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// The currently open overlay screen, or null when the dashboard is showing.
     /// </summary>
-    [ObservableProperty] private ViewModelBase? _currentScreen;
+    [ObservableProperty]
+    public partial ViewModelBase? CurrentScreen { get; set; }
 
     /// <summary>
     /// Whether any overlay is currently open.
@@ -73,14 +74,16 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Whether any modal is on the modal stack (drives the full-window modal layer).
     /// </summary>
-    [ObservableProperty] private bool _isModalOpen;
+    [ObservableProperty]
+    public partial bool IsModalOpen { get; set; }
 
     /// <summary>
     /// Whether the modal backdrop scrim shows. Hidden while the screenshot
     /// viewer is the top modal - its own opaque backdrop covers the window,
     /// so the extra scrim would double-darken it.
     /// </summary>
-    [ObservableProperty] private bool _modalBackdropVisible;
+    [ObservableProperty]
+    public partial bool ModalBackdropVisible { get; set; }
 
     /// <summary>
     /// Whether the library has games with nothing selected yet (first open).
@@ -91,7 +94,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Whether the base Xenia Manager app is currently running.
     /// </summary>
-    private bool IsBaseAppRunning =>
+    private static bool IsBaseAppRunning =>
         Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length > 0;
 
     /// <summary>
@@ -204,7 +207,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             IsModalOpen = _modalService.IsOpen;
-            ModalBackdropVisible = _modalService.IsOpen && _modalService.Top is not ScreenshotViewerViewModel;
+            ModalBackdropVisible = _modalService is { IsOpen: true, Top: not ScreenshotViewerViewModel };
         };
     }
 
@@ -364,7 +367,7 @@ public partial class MainWindowViewModel : ViewModelBase
             OverlayScreen.Library => Library,
             OverlayScreen.Gallery => Gallery,
             OverlayScreen.Settings => Settings,
-            _ => null,
+            _ => null
         };
     }
 
@@ -503,17 +506,26 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Launches the given game via Core's Launcher. Disables the window while the
-    /// game runs, then re-enables it and refreshes the library (playtime, last played).
+    /// Launches the given game via Core's Launcher. Multi-disc games show the
+    /// disc selection modal first. Disables the window while the game runs,
+    /// then re-enables it and refreshes the library (playtime, last played).
     /// </summary>
     public async Task LaunchGame(GameCardViewModel card)
     {
         Logger.Info<MainWindowViewModel>($"Launching '{card.Game.Title}'");
+
+        int discNumber = await ResolveDiscNumber(card.Game);
+        if (discNumber < 1)
+        {
+            Logger.Info<MainWindowViewModel>($"Disc selection cancelled for '{card.Game.Title}'");
+            return;
+        }
+
         try
         {
             EventManager.Instance.DisableWindow();
             Settings settings = new();
-            await Launcher.LaunchGameASync(card.Game, settings, discNumber: card.Game.LastPlayedDisc);
+            await Launcher.LaunchGameASync(card.Game, settings, discNumber: discNumber);
             Logger.Info<MainWindowViewModel>($"Game session ended for '{card.Game.Title}'");
         }
         catch (Exception ex)
@@ -526,6 +538,24 @@ public partial class MainWindowViewModel : ViewModelBase
             EventManager.Instance.EnableWindow();
             await RefreshLibrary();
         }
+    }
+
+    /// <summary>
+    /// Resolves the disc to launch: the game's last played disc for single-disc
+    /// games, or the user's choice from the disc selection modal for multi-disc
+    /// games. Returns 0 when the selection was cancelled.
+    /// </summary>
+    private async Task<int> ResolveDiscNumber(Game game)
+    {
+        if (!game.FileLocations.IsMultiDisc)
+        {
+            return game.LastPlayedDisc;
+        }
+
+        Logger.Info<MainWindowViewModel>(
+            $"Showing disc selection for '{game.Title}' ({game.FileLocations.DiscCount} discs)");
+        int? selectedDisc = await _modalService.ShowAsync<int?>(new DiscSelectionViewModel(game));
+        return selectedDisc ?? 0;
     }
 
     private void OnGameCardPropertyChanged(object? sender, PropertyChangedEventArgs e)

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Dashboard;
 using XeniaManager.BigScreen.ViewModels.Screens;
@@ -151,7 +150,7 @@ public class DashboardNavigationController
     /// <summary>
     /// Moves the option row selection by the given step, clamped at both ends.
     /// </summary>
-    public void MoveOptionSelection(DashboardViewModel dashboard, int delta)
+    public static void MoveOptionSelection(DashboardViewModel dashboard, int delta)
     {
         if (dashboard.Options.Count == 0)
         {
@@ -165,7 +164,7 @@ public class DashboardNavigationController
     /// <summary>
     /// Moves the dashboard game selection by the given step, clamped at both ends.
     /// </summary>
-    public void MoveRecentGameSelection(DashboardViewModel dashboard, int delta)
+    public static void MoveRecentGameSelection(DashboardViewModel dashboard, int delta)
     {
         if (dashboard.RecentGames.Count == 0)
         {
@@ -210,7 +209,7 @@ public class DashboardNavigationController
     /// <summary>
     /// Launches the game currently selected in the library carousel, or the given card.
     /// </summary>
-    public void LaunchSelectedGame(MainWindowViewModel vm, GameCardViewModel? explicitCard = null)
+    public static void LaunchSelectedGame(MainWindowViewModel vm, GameCardViewModel? explicitCard = null)
     {
         GameCardViewModel? card = explicitCard ?? vm.Library.Games.FirstOrDefault(g => g.IsSelected);
         if (card != null)
@@ -269,7 +268,7 @@ public class DashboardNavigationController
     /// <summary>
     /// Opens the modal viewer for the currently selected screenshot (Enter in the gallery).
     /// </summary>
-    public void OpenSelectedScreenshot(GalleryViewModel gallery)
+    public static void OpenSelectedScreenshot(GalleryViewModel gallery)
     {
         ScreenshotItemViewModel? selected = gallery.Screenshots.FirstOrDefault(s => s.IsSelected);
         if (selected != null)
@@ -281,7 +280,7 @@ public class DashboardNavigationController
     /// <summary>
     /// Activates the header profile row (A on the profile row): opens the profile picker.
     /// </summary>
-    public void ActivateProfileRow(MainWindowViewModel vm)
+    public static void ActivateProfileRow(MainWindowViewModel vm)
     {
         Logger.Info<DashboardNavigationController>("Activating profile row");
         vm.OpenProfilePicker();

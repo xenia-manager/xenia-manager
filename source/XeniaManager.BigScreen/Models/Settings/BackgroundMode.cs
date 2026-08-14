@@ -28,5 +28,5 @@ public enum BackgroundMode
     /// <summary>
     /// The currently selected game's artwork, falling back to the linear gradient.
     /// </summary>
-    Dynamic,
+    Dynamic
 }

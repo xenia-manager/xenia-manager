@@ -33,7 +33,7 @@ public partial class PatchesPaneView : UserControl
         }
 
         if (control.GetSelfAndVisualAncestors().OfType<Border>()
-            .FirstOrDefault(b => b.Classes.Contains("patch-row"))
+                .FirstOrDefault(b => b.Classes.Contains("patch-row"))
             is { DataContext: PatchListRowViewModel row })
         {
             vm.SelectRow(row);
@@ -51,7 +51,7 @@ public partial class PatchesPaneView : UserControl
         }
 
         if (control.GetSelfAndVisualAncestors().OfType<Border>()
-            .FirstOrDefault(b => b.Classes.Contains("command-row"))
+                .FirstOrDefault(b => b.Classes.Contains("command-row"))
             is { DataContext: PatchCommandItemViewModel command })
         {
             vm.SelectCommand(command);

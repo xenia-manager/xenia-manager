@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +43,8 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
     /// <summary>
     /// Whether any option has unsaved changes.
     /// </summary>
-    [ObservableProperty] private bool _hasUnsavedChanges;
+    [ObservableProperty]
+    public partial bool HasUnsavedChanges { get; set; }
 
     /// <summary>
     /// Raised when the controller navigates to an option, so the view can

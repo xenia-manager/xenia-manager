@@ -6,7 +6,6 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Screens;
 using XeniaManager.BigScreen.ViewModels.Items;
 

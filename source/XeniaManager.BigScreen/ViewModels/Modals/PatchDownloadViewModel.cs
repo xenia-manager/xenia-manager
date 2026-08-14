@@ -28,12 +28,14 @@ public partial class PatchDownloadViewModel : ModalViewModelBase
     /// <summary>
     /// The download search text, pre-filled with the game ID.
     /// </summary>
-    [ObservableProperty] private string _searchText;
+    [ObservableProperty]
+    public partial string SearchText { get; set; }
 
     /// <summary>
     /// Whether the search is running (drives the "Searching…" state).
     /// </summary>
-    [ObservableProperty] private bool _isSearching;
+    [ObservableProperty]
+    public partial bool IsSearching { get; set; }
 
     /// <summary>
     /// The search results.
@@ -43,7 +45,8 @@ public partial class PatchDownloadViewModel : ModalViewModelBase
     /// <summary>
     /// The failure status text, or empty when everything succeeded.
     /// </summary>
-    [ObservableProperty] private string _statusText = string.Empty;
+    [ObservableProperty]
+    public partial string StatusText { get; set; } = string.Empty;
 
     /// <summary>
     /// Whether the status line is shown.
@@ -74,7 +77,7 @@ public partial class PatchDownloadViewModel : ModalViewModelBase
     public PatchDownloadViewModel(Game game)
     {
         _game = game;
-        _searchText = game.GameId;
+        SearchText = game.GameId;
         Results.CollectionChanged += (_, _) =>
         {
             OnPropertyChanged(nameof(ShowEmpty));
