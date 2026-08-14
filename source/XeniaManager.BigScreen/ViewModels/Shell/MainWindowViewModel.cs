@@ -164,7 +164,7 @@ public partial class MainWindowViewModel : ViewModelBase
         // The constructor stays cheap: profile, library and screenshot loading
         // happen in InitializeAsync, behind the splash screen
         Header = new HeaderViewModel();
-        Settings = new SettingsViewModel(backgroundService, gamepadService, modalService);
+        Settings = new SettingsViewModel(backgroundService, profileService, gamepadService, modalService);
         Library = new LibraryViewModel(Settings, modalService);
         Gallery = new GalleryViewModel(Settings, screenshotLibraryService, modalService);
         Dashboard = new DashboardViewModel(backgroundService);
@@ -179,9 +179,15 @@ public partial class MainWindowViewModel : ViewModelBase
         Settings.TimeFormatChanged += () => Header.ApplyTimeFormat(Settings.TimeFormat);
 
         // A profile switch refreshes the header identity and rebuilds the cards;
-        // the cached achievement GPDs belong to the old profile and are dropped
+        // the cached achievement GPDs belong to the old profile and are dropped.
+        // Skipped during boot - the pipeline builds the header and cards itself.
         _profileService.ProfileChanged += () =>
         {
+            if (!IsInitialized)
+            {
+                return;
+            }
+
             GameDataCache.ClearAchievementGpds();
             Header.ApplyProfile(_profileService);
             TaskUtilities.RunSafely<MainWindowViewModel>(RebuildCards, "Rebuilding profile cards");

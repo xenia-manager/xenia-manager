@@ -6,6 +6,11 @@ namespace XeniaManager.BigScreen.Models.Settings;
 public enum BackgroundMode
 {
     /// <summary>
+    /// The currently selected game's artwork, falling back to the radial gradient.
+    /// </summary>
+    Dynamic,
+
+    /// <summary>
     /// A user-selected image stretched to fill the screen.
     /// </summary>
     Image,
@@ -23,10 +28,5 @@ public enum BackgroundMode
     /// <summary>
     /// A radial gradient.
     /// </summary>
-    RadialGradient,
-
-    /// <summary>
-    /// The currently selected game's artwork, falling back to the linear gradient.
-    /// </summary>
-    Dynamic
+    RadialGradient
 }

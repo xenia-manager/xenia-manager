@@ -12,7 +12,7 @@ public class DashboardSettings
     /// The active background mode.
     /// </summary>
     [JsonPropertyName("mode")]
-    public BackgroundMode Mode { get; set; } = BackgroundMode.LinearGradient;
+    public BackgroundMode Mode { get; set; } = BackgroundMode.Dynamic;
 
     /// <summary>
     /// Path to the background image used in <see cref="BackgroundMode.Image"/>.

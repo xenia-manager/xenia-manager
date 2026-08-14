@@ -6,12 +6,12 @@ namespace XeniaManager.BigScreen.Models.Settings;
 public enum CardImageMode
 {
     /// <summary>
-    /// The game's box art (with the disc icon as fallback when missing).
-    /// </summary>
-    BoxArt,
-
-    /// <summary>
     /// The game's disc icon.
     /// </summary>
-    Icon
+    Icon,
+
+    /// <summary>
+    /// The game's box art (with the disc icon as fallback when missing).
+    /// </summary>
+    BoxArt
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace XeniaManager.BigScreen.ViewModels.Screens;
 public partial class SettingsViewModel : ViewModelBase
 {
     private readonly IBackgroundService _backgroundService;
+    private readonly IProfileService _profileService;
     private readonly IGamepadInputService _gamepadService;
 
     /// <summary>
@@ -62,46 +64,39 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// Gamertag of the active profile, shown in the Profiles section.
     /// </summary>
-    public static string ActiveGamertag => App.Services.GetRequiredService<IProfileService>().Gamertag;
+    public string ActiveGamertag => _profileService.Gamertag;
 
     /// <summary>
-    /// Options shown in the settings background-type dropdown.
+    /// Options shown in the settings background-type dropdown, in enum order
+    /// (the default leads).
     /// </summary>
     public ObservableCollection<BackgroundModeOption> BackgroundModeOptions { get; } =
-    [
-        new(BackgroundMode.Image, LocalizationHelper.GetText("Settings.BackgroundMode.Image")),
-        new(BackgroundMode.Solid, LocalizationHelper.GetText("Settings.BackgroundMode.Solid")),
-        new(BackgroundMode.LinearGradient, LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")),
-        new(BackgroundMode.RadialGradient, LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient")),
-        new(BackgroundMode.Dynamic, LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"))
-    ];
+        BuildOptions<BackgroundMode, BackgroundModeOption>(
+            "Settings.BackgroundMode", (mode, name) => new BackgroundModeOption(mode, name));
 
     /// <summary>
-    /// Options shown in the settings library-view dropdown.
+    /// Options shown in the settings library-view dropdown, in enum order
+    /// (the default leads).
     /// </summary>
     public ObservableCollection<LibraryViewModeOption> LibraryViewModeOptions { get; } =
-    [
-        new(LibraryViewMode.Carousel, LocalizationHelper.GetText("Settings.LibraryView.Carousel")),
-        new(LibraryViewMode.List, LocalizationHelper.GetText("Settings.LibraryView.List"))
-    ];
+        BuildOptions<LibraryViewMode, LibraryViewModeOption>(
+            "Settings.LibraryView", (mode, name) => new LibraryViewModeOption(mode, name));
 
     /// <summary>
-    /// Options shown in the settings card-image dropdown.
+    /// Options shown in the settings card-image dropdown, in enum order
+    /// (the default leads).
     /// </summary>
     public ObservableCollection<CardImageModeOption> CardImageModeOptions { get; } =
-    [
-        new(CardImageMode.BoxArt, LocalizationHelper.GetText("Settings.CardImage.BoxArt")),
-        new(CardImageMode.Icon, LocalizationHelper.GetText("Settings.CardImage.Icon"))
-    ];
+        BuildOptions<CardImageMode, CardImageModeOption>(
+            "Settings.CardImage", (mode, name) => new CardImageModeOption(mode, name));
 
     /// <summary>
-    /// Options shown in the settings time-format dropdown.
+    /// Options shown in the settings time-format dropdown, in enum order
+    /// (the default leads).
     /// </summary>
     public ObservableCollection<TimeFormatOption> TimeFormatOptions { get; } =
-    [
-        new(TimeFormat.TwelveHour, LocalizationHelper.GetText("Settings.TimeFormat.TwelveHour")),
-        new(TimeFormat.TwentyFourHour, LocalizationHelper.GetText("Settings.TimeFormat.TwentyFourHour"))
-    ];
+        BuildOptions<TimeFormat, TimeFormatOption>(
+            "Settings.TimeFormat", (format, name) => new TimeFormatOption(format, name));
 
     /// <summary>
     /// The selected option in the background-type dropdown.
@@ -113,7 +108,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// The active background mode.
     /// </summary>
     [ObservableProperty]
-    public partial BackgroundMode Mode { get; set; } = BackgroundMode.LinearGradient;
+    public partial BackgroundMode Mode { get; set; } = BackgroundMode.Dynamic;
 
     /// <summary>
     /// The selected option in the library-view dropdown.
@@ -183,16 +178,16 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsHintBarVisible { get; set; } = true;
 
-    public SettingsViewModel(IBackgroundService backgroundService, IGamepadInputService gamepadService,
-        IModalService modalService)
+    public SettingsViewModel(IBackgroundService backgroundService, IProfileService profileService,
+        IGamepadInputService gamepadService, IModalService modalService)
     {
         _backgroundService = backgroundService;
+        _profileService = profileService;
         _gamepadService = gamepadService;
         modalService.StackChanged += () => IsHintBarVisible = !modalService.IsOpen;
 
         // Keep the settings "Active Profile" line in sync with profile switches
-        App.Services.GetRequiredService<IProfileService>().ProfileChanged +=
-            () => OnPropertyChanged(nameof(Screens.SettingsViewModel.ActiveGamertag));
+        _profileService.ProfileChanged += () => OnPropertyChanged(nameof(ActiveGamertag));
 
         if (_gamepadService.IsActive)
         {
@@ -438,5 +433,19 @@ public partial class SettingsViewModel : ViewModelBase
         {
             TimeFormat = value.Format;
         }
+    }
+
+    /// <summary>
+    /// Builds a settings dropdown option per enum member, in declaration order
+    /// (the default leads). Each option's display name comes from the key
+    /// "{keyPrefix}.{MemberName}".
+    /// </summary>
+    private static ObservableCollection<TOption> BuildOptions<TEnum, TOption>(
+        string keyPrefix, Func<TEnum, string, TOption> create)
+        where TEnum : struct, Enum
+    {
+        IEnumerable<TOption> options = Enum.GetValues<TEnum>()
+            .Select(value => create(value, LocalizationHelper.GetText($"{keyPrefix}.{value}")));
+        return new ObservableCollection<TOption>(options);
     }
 }

@@ -80,6 +80,7 @@ public class ProfileService : IProfileService
             string? savedXuid = _backgroundService.Settings.ProfileXuid;
             AccountInfo? profile = Profiles.FirstOrDefault(p => MatchesXuid(p, savedXuid)) ?? Profiles[0];
             ActivateProfile(profile);
+            ProfileChanged?.Invoke();
             Logger.Info<ProfileService>(
                 $"Loaded {Profiles.Count} profiles, active: '{Gamertag}'");
         }
