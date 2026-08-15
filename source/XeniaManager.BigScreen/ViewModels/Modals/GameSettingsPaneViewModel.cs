@@ -57,8 +57,8 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     private ConfigFile _configFile;
 
     /// <summary>
-    /// The row whose editor (dropdown or slider) is open, or null when the
-    /// rows navigate normally.
+    /// The row whose combo editor is open, or null when the rows navigate
+    /// normally (sliders step directly, no editor).
     /// </summary>
     private ConfigRowViewModel? _editorRow;
 
@@ -226,10 +226,10 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Handles pane input: Up/Down moves the rows, A activates the selected
-    /// row (toggle flip, editor open). While an editor is open it takes the
-    /// input instead: combo boxes cycle with Up/Down, sliders step with
-    /// Left/Right, A commits and B cancels.
+    /// Handles pane input: Up/Down moves the rows, Left/Right steps the
+    /// selected slider directly (no editor needed), A flips toggles or opens
+    /// the combo editor. While a combo editor is open it takes the input
+    /// instead: Up/Down cycles the options, A commits and B cancels.
     /// </summary>
     public bool HandleInput(NavigationCommand command)
     {
@@ -246,6 +246,10 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
             case NavigationCommand.MoveDown:
                 MoveSelection(1);
                 return true;
+            case NavigationCommand.MoveLeft:
+                return StepSelectedSlider(-1);
+            case NavigationCommand.MoveRight:
+                return StepSelectedSlider(1);
             case NavigationCommand.Activate:
                 ActivateSelectedRow();
                 return true;
@@ -267,8 +271,8 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Activates the selected row: flips a toggle, or opens the editor for
-    /// combo boxes and sliders.
+    /// Activates the selected row: flips a toggle, or opens the combo editor.
+    /// Sliders don't need an editor - Left/Right steps them directly.
     /// </summary>
     private void ActivateSelectedRow()
     {
@@ -284,16 +288,31 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
             return;
         }
 
-        if (row.IsComboBox || row.IsSlider)
+        if (row.IsComboBox)
         {
             OpenEditor(row);
         }
     }
 
     /// <summary>
-    /// Handles input while a row editor is open: combo boxes cycle with
-    /// Up/Down, sliders step with Left/Right, A commits and B cancels
-    /// (restoring the original value).
+    /// Steps the selected row's slider by one increment when it is a slider
+    /// row; returns false so other rows fall through (B/Left exits the pane).
+    /// </summary>
+    private bool StepSelectedSlider(int delta)
+    {
+        ConfigRowViewModel? row = Rows.FirstOrDefault(r => r.IsSelected);
+        if (row is { IsSlider: true })
+        {
+            StepSlider(row, delta);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Handles input while a combo editor is open: Up/Down cycles the options,
+    /// A commits and B cancels (restoring the original value).
     /// </summary>
     private bool HandleEditorInput(NavigationCommand command)
     {
@@ -319,20 +338,6 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
                 }
 
                 return true;
-            case NavigationCommand.MoveLeft:
-                if (row.IsSlider)
-                {
-                    StepSlider(row, -1);
-                }
-
-                return true;
-            case NavigationCommand.MoveRight:
-                if (row.IsSlider)
-                {
-                    StepSlider(row, 1);
-                }
-
-                return true;
             case NavigationCommand.Activate:
                 CommitEditor();
                 return true;
@@ -340,13 +345,13 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
                 CancelEditor();
                 return true;
             default:
-                return false;
+                return true;
         }
     }
 
     /// <summary>
-    /// Opens the editor for the given row, snapshotting its value so a cancel
-    /// can restore it.
+    /// Opens the combo editor for the given row, snapshotting its value so a
+    /// cancel can restore it.
     /// </summary>
     private void OpenEditor(ConfigRowViewModel row)
     {

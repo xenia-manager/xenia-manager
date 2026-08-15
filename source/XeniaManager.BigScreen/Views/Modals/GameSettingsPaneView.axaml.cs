@@ -11,8 +11,8 @@ namespace XeniaManager.BigScreen.Views.Modals;
 
 /// <summary>
 /// The game modal's game settings pane: curated config rows as scannable
-/// settings cards. Opens/focuses the native editor controls on demand and
-/// commits slider edits when the mouse releases them.
+/// settings cards. Opens/focuses the combo editor control on demand; sliders
+/// are stepped directly from the controller.
 /// </summary>
 public partial class GameSettingsPaneView : UserControl
 {
@@ -45,8 +45,8 @@ public partial class GameSettingsPaneView : UserControl
     }
 
     /// <summary>
-    /// Opens the editor control for the given row: the combo box opens its
-    /// native dropdown, the slider takes focus.
+    /// Opens the combo editor control for the given row: its native dropdown
+    /// opens and takes focus.
     /// </summary>
     private void OnEditorOpened(ConfigRowViewModel row)
     {
@@ -56,16 +56,6 @@ public partial class GameSettingsPaneView : UserControl
             {
                 combo.IsDropDownOpen = true;
                 combo.Focus();
-                return;
-            }
-        }
-
-        foreach (Slider slider in SvSettings.GetVisualDescendants().OfType<Slider>())
-        {
-            if (ReferenceEquals(slider.DataContext, row))
-            {
-                slider.Focus();
-                slider.BringIntoView();
                 return;
             }
         }

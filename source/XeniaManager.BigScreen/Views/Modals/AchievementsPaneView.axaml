@@ -36,57 +36,23 @@
                            FontSize="22" />
         </Grid>
 
-        <!-- BODY: scrollable achievement rows, split into unlocked/locked sections -->
+        <!-- BODY: scrollable flat list of achievement rows -->
         <Grid Grid.Row="1">
             <ScrollViewer x:Name="SvAchievements"
                           HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Hidden">
-                <StackPanel Orientation="Vertical" Spacing="18" Margin="0,0,0,20">
-
-                    <!-- UNLOCKED section -->
-                    <StackPanel Orientation="Vertical"
-                                Spacing="10"
-                                IsVisible="{Binding HasUnlocked}">
-                        <TextBlock Text="{Binding UnlockedCountText}"
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextSecondary}" />
-                        <ItemsControl ItemsSource="{Binding UnlockedRows}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="items:AchievementItemViewModel">
-                                    <card:AchievementRow />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" Spacing="10" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>
-
-                    <!-- LOCKED section (spoiler-gated rows) -->
-                    <StackPanel Orientation="Vertical"
-                                Spacing="10"
-                                IsVisible="{Binding HasLocked}">
-                        <TextBlock Text="{Binding LockedCountText}"
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextSecondary}" />
-                        <ItemsControl ItemsSource="{Binding LockedRows}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="items:AchievementItemViewModel">
-                                    <card:AchievementRow />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" Spacing="10" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>
-                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:AchievementItemViewModel">
+                            <card:AchievementRow />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
             </ScrollViewer>
 
             <!-- Empty state: no GPD or no achievements -->

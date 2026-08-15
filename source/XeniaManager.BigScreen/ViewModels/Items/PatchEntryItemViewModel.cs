@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Models.Files.Patches;
@@ -7,7 +6,7 @@ namespace XeniaManager.BigScreen.ViewModels.Items;
 
 /// <summary>
 /// ViewModel for a single patch entry: name, author, enabled state and its
-/// commands, plus the conversion back to a Core patch entry.
+/// command count, plus the conversion back to a Core patch entry.
 /// </summary>
 public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
 {
@@ -44,16 +43,11 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
     public partial bool IsEnabled { get; set; }
 
     /// <summary>
-    /// The patch's command list.
-    /// </summary>
-    public ObservableCollection<PatchCommandItemViewModel> Commands { get; } = [];
-
-    /// <summary>
     /// "X commands" summary shown on the list row.
     /// </summary>
-    public string CommandCountText => Commands.Count == 1
+    public string CommandCountText => _originalEntry.Commands.Count == 1
         ? "1 command"
-        : $"{Commands.Count} commands";
+        : $"{_originalEntry.Commands.Count} commands";
 
     public PatchEntryItemViewModel(PatchEntry entry)
     {
@@ -62,14 +56,11 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
         Author = entry.Author;
         Description = entry.Description;
         IsEnabled = entry.IsEnabled;
-        foreach (PatchCommand command in entry.Commands)
-        {
-            Commands.Add(new PatchCommandItemViewModel(command));
-        }
     }
 
     /// <summary>
-    /// Converts this view model back to a Core patch entry.
+    /// Converts this view model back to a Core patch entry, preserving the
+    /// original command list (commands are not editable in BigScreen).
     /// </summary>
     public PatchEntry ToPatchEntry()
     {
@@ -82,29 +73,11 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
             HeaderComment = _originalEntry.HeaderComment
         };
 
-        foreach (PatchCommandItemViewModel command in Commands)
+        foreach (PatchCommand command in _originalEntry.Commands)
         {
-            entry.Commands.Add(command.ToPatchCommand());
+            entry.Commands.Add(command);
         }
 
         return entry;
-    }
-
-    /// <summary>
-    /// Adds a default (be32 0x00000000) command to this entry.
-    /// </summary>
-    public PatchCommandItemViewModel AddCommand()
-    {
-        PatchCommandItemViewModel command = new();
-        Commands.Add(command);
-        return command;
-    }
-
-    /// <summary>
-    /// Removes the given command from this entry.
-    /// </summary>
-    public void RemoveCommand(PatchCommandItemViewModel command)
-    {
-        Commands.Remove(command);
     }
 }

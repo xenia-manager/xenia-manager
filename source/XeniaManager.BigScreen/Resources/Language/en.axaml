@@ -185,8 +185,6 @@
     <sys:String x:Key="GameModal.Achievements.NotUnlocked">Not Unlocked</sys:String>
     <sys:String x:Key="GameModal.Achievements.HiddenName">Hidden Achievement</sys:String>
     <sys:String x:Key="GameModal.Achievements.SpoilerWarning">This achievement contains spoilers</sys:String>
-    <sys:String x:Key="GameModal.Achievements.Section.Unlocked">Unlocked</sys:String>
-    <sys:String x:Key="GameModal.Achievements.Section.Locked">Locked</sys:String>
 
     <!-- game modal screenshots pane -->
     <sys:String x:Key="GameModal.Screenshots.Count">{0} Screenshots</sys:String>
@@ -206,17 +204,11 @@
     <sys:String x:Key="GameModal.Patches.NoPatch">No patch installed</sys:String>
     <sys:String x:Key="GameModal.Patches.Actions.Download">Download New Patch</sys:String>
     <sys:String x:Key="GameModal.Patches.Actions.Remove">Remove Patch</sys:String>
-    <sys:String x:Key="GameModal.Patches.Actions.AddCommand">Add Command</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.TitleWithGame">{0} Patches</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.SearchWatermark">Search patches…</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.Searching">Searching…</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.Empty">No patches found</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.Failed">Failed to download patch</sys:String>
-    <sys:String x:Key="GameModal.Patches.Editor.Type">Type</sys:String>
-    <sys:String x:Key="GameModal.Patches.Editor.Address">Address</sys:String>
-    <sys:String x:Key="GameModal.Patches.Editor.Value">Value</sys:String>
-    <sys:String x:Key="GameModal.Patches.Editor.Save">Save</sys:String>
-    <sys:String x:Key="GameModal.Patches.Editor.Delete">Delete Command</sys:String>
     <sys:String x:Key="GameModal.Patches.Remove.Confirmation.Title">Remove Patch</sys:String>
     <sys:String x:Key="GameModal.Patches.Remove.Confirmation.Message">Remove the patch for '{0}'?</sys:String>
     <sys:String x:Key="GameModal.Patches.Remove.Confirm">Remove</sys:String>

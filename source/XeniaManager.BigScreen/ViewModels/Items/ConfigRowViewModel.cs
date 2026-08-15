@@ -121,6 +121,14 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     public partial double FloatValue { get; set; }
 
     /// <summary>
+    /// The slider's current value as display text (whole numbers for integer
+    /// options, trimmed decimals for floats).
+    /// </summary>
+    public string SliderValueText => _option.Type == ConfigOptionType.Integer
+        ? ((int)Math.Round(FloatValue)).ToString(CultureInfo.InvariantCulture)
+        : FloatValue.ToString("0.##", CultureInfo.InvariantCulture);
+
+    /// <summary>
     /// The combo box's selected option index.
     /// </summary>
     [ObservableProperty]
@@ -274,6 +282,7 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
 
     partial void OnFloatValueChanged(double value)
     {
+        OnPropertyChanged(nameof(SliderValueText));
         if (IsSameValue(_option.Value, value))
         {
             return;

@@ -16,8 +16,8 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 
 /// <summary>
 /// The game modal's achievements pane: stats header, an X-cycled sort
-/// (Achieved / Gamerscore Awarded / Alphabetical) and scrollable rows from
-/// the active profile's per-game achievement GPD.
+/// (Achieved / Gamerscore Awarded / Alphabetical) and a scrollable flat list
+/// of rows from the active profile's per-game achievement GPD.
 /// </summary>
 public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
 {
@@ -28,38 +28,6 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// The achievements currently shown, sorted by <see cref="Sort"/>.
     /// </summary>
     public ObservableCollection<AchievementItemViewModel> Rows { get; } = [];
-
-    /// <summary>
-    /// The unlocked achievements, shown in their own section.
-    /// </summary>
-    public ObservableCollection<AchievementItemViewModel> UnlockedRows { get; } = [];
-
-    /// <summary>
-    /// The locked achievements, shown in their own (spoiler-gated) section.
-    /// </summary>
-    public ObservableCollection<AchievementItemViewModel> LockedRows { get; } = [];
-
-    /// <summary>
-    /// "Unlocked (N)" header text for the unlocked section.
-    /// </summary>
-    public string UnlockedCountText =>
-        $"{LocalizationHelper.GetText("GameModal.Achievements.Section.Unlocked")} ({UnlockedRows.Count})";
-
-    /// <summary>
-    /// "Locked (N)" header text for the locked section.
-    /// </summary>
-    public string LockedCountText =>
-        $"{LocalizationHelper.GetText("GameModal.Achievements.Section.Locked")} ({LockedRows.Count})";
-
-    /// <summary>
-    /// Whether the unlocked section is shown.
-    /// </summary>
-    public bool HasUnlocked => UnlockedRows.Count > 0;
-
-    /// <summary>
-    /// Whether the locked section is shown.
-    /// </summary>
-    public bool HasLocked => LockedRows.Count > 0;
 
     /// <summary>
     /// The active sort order; X cycles through the options.
@@ -120,14 +88,13 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
         AchievementText = $"{_allAchievements.Count(achievement => achievement.IsUnlocked)} / {_allAchievements.Count}";
         GamerscoreText =
             $"{_allAchievements.Where(achievement => achievement.IsUnlocked).Sum(achievement => achievement.Gamerscore)} / {_allAchievements.Sum(achievement => achievement.Gamerscore)}";
-        foreach (AchievementItemViewModel achievement in _allAchievements)
+        foreach (AchievementItemViewModel achievement in SortAchievements(_allAchievements))
         {
             Rows.Add(achievement);
         }
 
-        RebuildSections();
         Logger.Debug<AchievementsPaneViewModel>(
-            $"Achievements pane: {Rows.Count} achievements ({UnlockedRows.Count} unlocked, {LockedRows.Count} locked)");
+            $"Achievements pane: {Rows.Count} achievements ({_allAchievements.Count(a => a.IsUnlocked)} unlocked)");
     }
 
     /// <summary>
@@ -187,21 +154,16 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
 
     /// <summary>
     /// Rebuilds <see cref="Rows"/> from the sort order, keeping the selection on
-    /// the same row index so the viewport stays put, and rebuilds the
-    /// unlocked/locked display sections.
+    /// the same row index so the viewport stays put.
     /// </summary>
     private void ApplySort()
     {
-        List<AchievementItemViewModel> unlocked = SortAchievements(_allAchievements.Where(item => item.IsUnlocked));
-        List<AchievementItemViewModel> locked = SortAchievements(_allAchievements.Where(item => !item.IsUnlocked));
-
-        SelectionHelper.ResortPreservingSelection(Rows, unlocked.Concat(locked).ToList());
-        RebuildSections(unlocked, locked);
+        SelectionHelper.ResortPreservingSelection(Rows, SortAchievements(_allAchievements));
     }
 
     /// <summary>
     /// Sorts an achievement set by the current sort order (Achieved keeps the
-    /// GPD order within each section).
+    /// GPD order within each group).
     /// </summary>
     private List<AchievementItemViewModel> SortAchievements(IEnumerable<AchievementItemViewModel> items)
     {
@@ -211,36 +173,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
                 items.OrderByDescending(item => item.Gamerscore).ToList(),
             AchievementSort.Alphabetical =>
                 items.OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase).ToList(),
-            _ => items.ToList()
+            _ => items.OrderBy(item => item.IsUnlocked ? 0 : 1).ToList()
         };
-    }
-
-    /// <summary>
-    /// Rebuilds the unlocked/locked display sections (with the given sorted
-    /// sets when provided, otherwise from the current sort order).
-    /// </summary>
-    private void RebuildSections(List<AchievementItemViewModel>? unlocked = null,
-        List<AchievementItemViewModel>? locked = null)
-    {
-        unlocked ??= SortAchievements(_allAchievements.Where(item => item.IsUnlocked));
-        locked ??= SortAchievements(_allAchievements.Where(item => !item.IsUnlocked));
-
-        UnlockedRows.Clear();
-        foreach (AchievementItemViewModel item in unlocked)
-        {
-            UnlockedRows.Add(item);
-        }
-
-        LockedRows.Clear();
-        foreach (AchievementItemViewModel item in locked)
-        {
-            LockedRows.Add(item);
-        }
-
-        OnPropertyChanged(nameof(ShowEmpty));
-        OnPropertyChanged(nameof(UnlockedCountText));
-        OnPropertyChanged(nameof(LockedCountText));
-        OnPropertyChanged(nameof(HasUnlocked));
-        OnPropertyChanged(nameof(HasLocked));
     }
 }

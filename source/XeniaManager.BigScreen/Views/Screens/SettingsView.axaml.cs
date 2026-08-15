@@ -99,7 +99,7 @@ public partial class SettingsView : UserControl
 
     /// <summary>
     /// Opens the native control matching the editor the controller just opened
-    /// (dropdowns, palette popups) or focuses the slider.
+    /// (dropdowns, palette popups).
     /// </summary>
     private void OnEditorOpened(SettingsRowKind kind)
     {
@@ -126,9 +126,6 @@ public partial class SettingsView : UserControl
                 break;
             case SettingsRowKind.AccentColour:
                 AccentColorField.OpenPalette();
-                break;
-            case SettingsRowKind.Vignette:
-                SldVignette.Focus();
                 break;
             case SettingsRowKind.XConfig:
                 XConfigResolutionCombo.IsDropDownOpen = true;

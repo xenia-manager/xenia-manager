@@ -47,16 +47,22 @@
                                               IsChecked="{Binding BoolValue, Mode=TwoWay}"
                                               IsVisible="{Binding IsToggle}"
                                               VerticalAlignment="Center" />
-                                    <!-- SLIDER -->
-                                    <Slider DockPanel.Dock="Right"
-                                            Width="340"
-                                            Minimum="{Binding Minimum, TargetNullValue=0}"
-                                            Maximum="{Binding Maximum, TargetNullValue=100}"
-                                            TickFrequency="{Binding Step, TargetNullValue=1}"
-                                            IsSnapToTickEnabled="{Binding Step, Converter={x:Static conv:ObjectConverters.IsNotNull}}"
-                                            Value="{Binding FloatValue, Mode=TwoWay}"
-                                            IsVisible="{Binding IsSlider}"
-                                            VerticalAlignment="Center" />
+                                    <!-- SLIDER (value to the right, like the main settings) -->
+                                    <StackPanel DockPanel.Dock="Right"
+                                                Orientation="Vertical"
+                                                Spacing="6"
+                                                IsVisible="{Binding IsSlider}"
+                                                VerticalAlignment="Center">
+                                        <Slider Width="340"
+                                                Minimum="{Binding Minimum, TargetNullValue=0}"
+                                                Maximum="{Binding Maximum, TargetNullValue=100}"
+                                                TickFrequency="{Binding Step, TargetNullValue=1}"
+                                                IsSnapToTickEnabled="{Binding Step, Converter={x:Static conv:ObjectConverters.IsNotNull}}"
+                                                Value="{Binding FloatValue, Mode=TwoWay}" />
+                                        <TextBlock Text="{Binding SliderValueText}"
+                                                   Classes="settings-value"
+                                                   HorizontalAlignment="Right" />
+                                    </StackPanel>
                                     <!-- COMBO BOX -->
                                     <ComboBox DockPanel.Dock="Right"
                                               Width="320"

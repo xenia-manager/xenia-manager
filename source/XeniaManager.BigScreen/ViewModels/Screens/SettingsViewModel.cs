@@ -56,7 +56,6 @@ public partial class SettingsViewModel : ViewModelBase
     private TimeFormat _originalTimeFormat;
     private Color _originalPrimary;
     private Color _originalAccent;
-    private double _originalVignette;
     private XConfigResolutionOption? _originalXConfigResolution;
 
     /// <summary>
@@ -305,8 +304,9 @@ public partial class SettingsViewModel : ViewModelBase
     public partial bool IsHintBarVisible { get; set; } = true;
 
     /// <summary>
-    /// The kind of the row whose editor is currently open (dropdown, palette
-    /// or slider), or null when rows navigate normally.
+    /// The kind of the row whose editor is currently open (dropdown or palette),
+    /// or null when rows navigate normally. The vignette slider steps directly
+    /// with Left/Right - it has no editor.
     /// </summary>
     [ObservableProperty]
     public partial SettingsRowKind? ActiveEditor { get; set; }
@@ -437,6 +437,10 @@ public partial class SettingsViewModel : ViewModelBase
             case NavigationCommand.MoveDown:
                 MoveSelection(1);
                 return true;
+            case NavigationCommand.MoveLeft:
+                return StepSelectedSlider(-1);
+            case NavigationCommand.MoveRight:
+                return StepSelectedSlider(1);
             case NavigationCommand.Activate:
                 ActivateRow();
                 return true;
@@ -491,6 +495,21 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Steps the selected row's vignette slider directly when it is the vignette
+    /// row; returns false so other rows fall through (Left/Right stays unused).
+    /// </summary>
+    private bool StepSelectedSlider(int delta)
+    {
+        if (_rows.FirstOrDefault(r => r.IsSelected) is SettingsRowViewModel { Kind: SettingsRowKind.Vignette })
+        {
+            AdjustVignette(delta);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Runs the fixed row's action for its kind.
     /// </summary>
     private void ActivateFixedRow(SettingsRowKind kind)
@@ -512,7 +531,6 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.BackgroundMode:
             case SettingsRowKind.PrimaryColour:
             case SettingsRowKind.AccentColour:
-            case SettingsRowKind.Vignette:
             case SettingsRowKind.XConfig:
                 OpenEditor(kind);
                 break;
@@ -521,7 +539,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     /// <summary>
     /// Handles gamepad input while a row editor is open: dropdown rows cycle
-    /// with Up/Down, colours and the slider with Left/Right, A commits.
+    /// with Up/Down, palette colours with Left/Right, A commits.
     /// </summary>
     private bool HandleEditorInput(NavigationCommand command)
     {
@@ -589,9 +607,6 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.AccentColour:
                 AccentColor = EnumCycleHelper.NextColor(ColorPickerField.AccentPalette, AccentColor, delta, 1);
                 break;
-            case SettingsRowKind.Vignette:
-                AdjustVignette(delta);
-                break;
             case SettingsRowKind.XConfig:
                 CycleXConfigResolution(delta);
                 break;
@@ -643,9 +658,6 @@ public partial class SettingsViewModel : ViewModelBase
                 break;
             case SettingsRowKind.AccentColour:
                 _originalAccent = AccentColor;
-                break;
-            case SettingsRowKind.Vignette:
-                _originalVignette = VignetteOpacity;
                 break;
             case SettingsRowKind.XConfig:
                 _originalXConfigResolution = SelectedXConfigResolution;
@@ -702,9 +714,6 @@ public partial class SettingsViewModel : ViewModelBase
                 break;
             case SettingsRowKind.AccentColour:
                 AccentColor = _originalAccent;
-                break;
-            case SettingsRowKind.Vignette:
-                VignetteOpacity = _originalVignette;
                 break;
             case SettingsRowKind.XConfig:
                 SelectedXConfigResolution = _originalXConfigResolution;

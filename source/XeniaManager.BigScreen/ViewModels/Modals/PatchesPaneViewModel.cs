@@ -19,25 +19,9 @@ using XeniaManager.Core.Utilities;
 namespace XeniaManager.BigScreen.ViewModels.Modals;
 
 /// <summary>
-/// The mode the patches pane is currently in.
-/// </summary>
-public enum PatchesPaneMode
-{
-    /// <summary>
-    /// The installed patch entries plus the download/remove actions.
-    /// </summary>
-    List,
-
-    /// <summary>
-    /// The selected entry's commands with the command editor on the right.
-    /// </summary>
-    Commands
-}
-
-/// <summary>
 /// The game modal's patches pane: download new patches (via the download
-/// modal), enable/disable and edit the installed patch's entries and
-/// commands, or remove the patch.
+/// modal), enable/disable the installed patch's entries, or remove the patch.
+/// Entries are toggled in place; full editing stays in the main app.
 /// </summary>
 public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
 {
@@ -53,24 +37,6 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     public ObservableCollection<PatchListRowViewModel> Rows { get; } = [];
 
     /// <summary>
-    /// The currently selected patch entry (commands mode).
-    /// </summary>
-    [ObservableProperty]
-    public partial PatchEntryItemViewModel? SelectedEntry { get; set; }
-
-    /// <summary>
-    /// The command being edited in the commands mode editor, or null.
-    /// </summary>
-    [ObservableProperty]
-    public partial PatchCommandItemViewModel? EditingCommand { get; set; }
-
-    /// <summary>
-    /// The pane's current mode.
-    /// </summary>
-    [ObservableProperty]
-    public partial PatchesPaneMode Mode { get; set; } = PatchesPaneMode.List;
-
-    /// <summary>
     /// The pane header: the patch's title name, or a "no patch" label.
     /// </summary>
     public string HeaderText => _patchFile?.TitleName
@@ -80,21 +46,6 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     /// Whether a patch file is installed.
     /// </summary>
     public bool HasPatch => _patchFile != null;
-
-    /// <summary>
-    /// The available patch types for the command editor combo box.
-    /// </summary>
-    public IReadOnlyList<PatchType> PatchTypes { get; } = Enum.GetValues<PatchType>();
-
-    /// <summary>
-    /// The commands of the selected entry (commands mode).
-    /// </summary>
-    public ObservableCollection<PatchCommandItemViewModel> Commands => SelectedEntry?.Commands ?? [];
-
-    /// <summary>
-    /// Whether the validation error is shown in the command editor.
-    /// </summary>
-    public bool ShowValidationError => EditingCommand is { IsValid: false };
 
     /// <summary>
     /// Loads the game's patch file (when installed) and builds the list rows.
@@ -107,82 +58,26 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
         ReloadPatch();
     }
 
-    partial void OnSelectedEntryChanged(PatchEntryItemViewModel? value)
-    {
-        OnPropertyChanged(nameof(Commands));
-        if (value != null)
-        {
-            EditingCommand = value.Commands.FirstOrDefault();
-        }
-    }
-
-    partial void OnEditingCommandChanged(PatchCommandItemViewModel? value)
-    {
-        OnPropertyChanged(nameof(ShowValidationError));
-    }
-
     /// <summary>
-    /// Whether the pane is in list mode.
-    /// </summary>
-    public bool IsListMode => Mode == PatchesPaneMode.List;
-
-    /// <summary>
-    /// Whether the pane is in commands mode.
-    /// </summary>
-    public bool IsCommandsMode => Mode == PatchesPaneMode.Commands;
-
-    partial void OnModeChanged(PatchesPaneMode value)
-    {
-        OnPropertyChanged(nameof(IsListMode));
-        OnPropertyChanged(nameof(IsCommandsMode));
-    }
-
-    /// <summary>
-    /// Selects the first row of the current mode (patch list or commands) when
-    /// the pane becomes active.
+    /// Selects the first row when the pane becomes active.
     /// </summary>
     public void OnPaneEntered()
     {
-        if (Mode == PatchesPaneMode.Commands)
-        {
-            SelectionHelper.SelectOnlyAt(Commands, 0);
-        }
-        else
-        {
-            SelectionHelper.SelectOnlyAt(Rows, 0);
-        }
+        SelectionHelper.SelectOnlyAt(Rows, 0);
     }
 
     /// <summary>
-    /// Clears the patch and command selections when the pane loses focus.
+    /// Clears the patch selection when the pane loses focus.
     /// </summary>
     public void OnPaneExited()
     {
         SelectionHelper.ClearSelection(Rows);
-        SelectionHelper.ClearSelection(Commands);
     }
 
     /// <summary>
-    /// Handles pane input per mode: list navigation/actions and command editing.
+    /// Handles pane input: Up/Down moves the rows, A toggles/activates a row.
     /// </summary>
     public bool HandleInput(NavigationCommand command)
-    {
-        switch (Mode)
-        {
-            case PatchesPaneMode.List:
-                return HandleListInput(command);
-            case PatchesPaneMode.Commands:
-                return HandleCommandsInput(command);
-            default:
-                return false;
-        }
-    }
-
-    /// <summary>
-    /// Handles list-mode input: Up/Down moves, A toggles/activates a row,
-    /// Right opens the entry's commands.
-    /// </summary>
-    private bool HandleListInput(NavigationCommand command)
     {
         switch (command)
         {
@@ -195,41 +90,8 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
             case NavigationCommand.Activate:
                 ActivateSelectedRow();
                 return true;
-            case NavigationCommand.MoveRight:
-                OpenSelectedEntryCommands();
-                return true;
             default:
                 return false;
-        }
-    }
-
-    /// <summary>
-    /// Handles commands-mode input: Up/Down moves the commands, A selects a
-    /// command for editing, X saves, B returns to the list.
-    /// </summary>
-    private bool HandleCommandsInput(NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveUp:
-                SelectionHelper.MoveSelection(Commands, -1);
-                return true;
-            case NavigationCommand.MoveDown:
-                SelectionHelper.MoveSelection(Commands, 1);
-                return true;
-            case NavigationCommand.Activate:
-                SelectCommandForEditing();
-                return true;
-            case NavigationCommand.CycleSort:
-                SaveCommand();
-                return true;
-            case NavigationCommand.Back:
-            case NavigationCommand.MoveLeft:
-                EditingCommand = null;
-                Mode = PatchesPaneMode.List;
-                return true;
-            default:
-                return true;
         }
     }
 
@@ -240,15 +102,6 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     {
         SelectionHelper.SelectOnly(Rows, row);
         ActivateSelectedRow();
-    }
-
-    /// <summary>
-    /// Selects the given command and opens it in the editor (mouse path).
-    /// </summary>
-    public void SelectCommand(PatchCommandItemViewModel command)
-    {
-        SelectionHelper.SelectOnly(Commands, command);
-        SelectCommandForEditing();
     }
 
     /// <summary>
@@ -292,79 +145,6 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
             GameDataCache.RefreshPatch(_game);
             ReloadPatch();
         }, "Opening patch download");
-    }
-
-    /// <summary>
-    /// Opens the selected entry's commands (commands mode).
-    /// </summary>
-    private void OpenSelectedEntryCommands()
-    {
-        PatchListRowViewModel? row = Rows.FirstOrDefault(r => r.IsSelected);
-        if (row?.Entry is { } entry)
-        {
-            SelectedEntry = entry;
-            Mode = PatchesPaneMode.Commands;
-            Logger.Debug<PatchesPaneViewModel>($"Editing commands of '{entry.Name}'");
-        }
-    }
-
-    /// <summary>
-    /// Selects the currently selected command for editing (focus moves to the
-    /// editor panel).
-    /// </summary>
-    private void SelectCommandForEditing()
-    {
-        PatchCommandItemViewModel? command = Commands.FirstOrDefault(c => c.IsSelected);
-        if (command != null)
-        {
-            EditingCommand = command;
-        }
-    }
-
-    /// <summary>
-    /// Saves the edited command (validated), then returns to the commands list.
-    /// </summary>
-    public void SaveCommand()
-    {
-        if (EditingCommand == null || !EditingCommand.Validate())
-        {
-            return;
-        }
-
-        SavePatchFile();
-        EditingCommand = null;
-        Logger.Debug<PatchesPaneViewModel>("Saved command changes");
-    }
-
-    /// <summary>
-    /// Deletes the edited command and saves the patch file.
-    /// </summary>
-    public void DeleteEditingCommand()
-    {
-        if (EditingCommand == null || SelectedEntry == null)
-        {
-            return;
-        }
-
-        SelectedEntry.RemoveCommand(EditingCommand);
-        SavePatchFile();
-        EditingCommand = null;
-    }
-
-    /// <summary>
-    /// Adds a new command to the selected entry and opens it in the editor.
-    /// </summary>
-    public void AddCommand()
-    {
-        if (SelectedEntry == null)
-        {
-            return;
-        }
-
-        PatchCommandItemViewModel command = SelectedEntry.AddCommand();
-        SelectionHelper.SelectOnly(Commands, command);
-        EditingCommand = command;
-        Logger.Debug<PatchesPaneViewModel>($"Added command to '{SelectedEntry.Name}'");
     }
 
     /// <summary>

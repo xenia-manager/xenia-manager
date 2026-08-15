@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
 
@@ -92,5 +93,18 @@ public partial class PatchListRowViewModel : ObservableObject, ISelectable
     {
         Entry = entry;
         Title = entry.Name;
+        entry.PropertyChanged += OnEntryPropertyChanged;
+    }
+
+    /// <summary>
+    /// Forwards the entry's enabled state so the row's toggle marker updates
+    /// immediately when the patch is toggled.
+    /// </summary>
+    private void OnEntryPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(PatchEntryItemViewModel.IsEnabled))
+        {
+            OnPropertyChanged(nameof(IsEnabled));
+        }
     }
 }
