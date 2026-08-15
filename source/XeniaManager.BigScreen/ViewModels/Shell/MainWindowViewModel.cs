@@ -16,7 +16,10 @@ using XeniaManager.BigScreen.ViewModels.Dashboard;
 using XeniaManager.BigScreen.ViewModels.Screens;
 using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -345,6 +348,8 @@ public partial class MainWindowViewModel : ViewModelBase
     /// Launches the given game via Core's Launcher. Multi-disc games show the
     /// disc selection modal first. Disables the window while the game runs,
     /// then re-enables it and refreshes the library (playtime, last played).
+    /// When "Launch Games in Fullscreen" is on, the game's Display.fullscreen
+    /// is forced for the session and restored when the game closes.
     /// </summary>
     public async Task LaunchGame(GameCardViewModel card)
     {
@@ -357,8 +362,26 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        bool originalFullscreen = false;
+        bool fullscreenForced = false;
         try
         {
+            if (Settings.LaunchGamesFullscreen && CanForceFullscreen(card.Game))
+            {
+                ConfigFile config = GameDataCache.GetConfig(card.Game);
+                originalFullscreen = config.GetValue<bool>(
+                    AppConstants.ConfigFullscreenSection, AppConstants.ConfigFullscreenOption);
+                if (!originalFullscreen)
+                {
+                    config.SetValue(AppConstants.ConfigFullscreenSection, AppConstants.ConfigFullscreenOption, true);
+                    config.Save();
+                    fullscreenForced = true;
+                    Logger.Info<MainWindowViewModel>($"Forcing fullscreen for '{card.Game.Title}'");
+                }
+            }
+
+            _profileService.EnsureActiveProfile();
+            InjectLaunchProfile(card.Game);
             _profileService.SyncXConfigDefaultProfile();
             EventManager.Instance.DisableWindow();
             Settings settings = new();
@@ -372,8 +395,78 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         finally
         {
+            if (fullscreenForced)
+            {
+                try
+                {
+                    ConfigFile config = GameDataCache.GetConfig(card.Game);
+                    config.SetValue(AppConstants.ConfigFullscreenSection, AppConstants.ConfigFullscreenOption,
+                        originalFullscreen);
+                    config.Save();
+                    Logger.Info<MainWindowViewModel>($"Restored fullscreen config for '{card.Game.Title}'");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<MainWindowViewModel>($"Failed to restore fullscreen config for '{card.Game.Title}'");
+                    Logger.LogExceptionDetails<MainWindowViewModel>(ex);
+                }
+            }
+
             EventManager.Instance.EnableWindow();
             await RefreshLibrary();
+        }
+    }
+
+    /// <summary>
+    /// Whether the fullscreen-forcing can be applied: the setting is on, the
+    /// game runs a managed Xenia version (Custom ignores the config) and its
+    /// config file exists on disk.
+    /// </summary>
+    private bool CanForceFullscreen(Game game) =>
+        game.XeniaVersion != XeniaVersion.Custom
+        && !string.IsNullOrEmpty(game.FileLocations.Config)
+        && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config));
+
+    /// <summary>
+    /// Writes the active profile's XUID into the game's config Profiles slot
+    /// so Xenia signs the profile in for the session (the config is copied to
+    /// the emulator's default location at launch). Xenia owns the slot - it is
+    /// re-injected on every launch and Xenia persists it after the session.
+    /// </summary>
+    private void InjectLaunchProfile(Game game)
+    {
+        if (game.XeniaVersion == XeniaVersion.Custom
+            || string.IsNullOrEmpty(game.FileLocations.Config)
+            || !File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config)))
+        {
+            return;
+        }
+
+        if (_profileService.ActiveProfile is not { } profile)
+        {
+            Logger.Debug<MainWindowViewModel>("No active profile - launch profile injection skipped");
+            return;
+        }
+
+        string? pathXuid = profile.PathXuidText();
+        if (string.IsNullOrEmpty(pathXuid))
+        {
+            Logger.Debug<MainWindowViewModel>("No active profile XUID - launch profile injection skipped");
+            return;
+        }
+
+        try
+        {
+            ConfigFile config = GameDataCache.GetConfig(game);
+            config.SetValue(AppConstants.ConfigProfilesSection, AppConstants.ConfigProfileSlotOption, pathXuid);
+            config.Save();
+            Logger.Info<MainWindowViewModel>(
+                $"Signing '{profile.Gamertag}' ({pathXuid}) into slot 0 for '{game.Title}'");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<MainWindowViewModel>($"Failed to inject the launch profile for '{game.Title}'");
+            Logger.LogExceptionDetails<MainWindowViewModel>(ex);
         }
     }
 

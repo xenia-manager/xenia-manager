@@ -172,6 +172,52 @@ public class ProfileService : IProfileService
     }
 
     /// <summary>
+    /// Safety net: makes sure the active profile matches the persisted
+    /// <c>profile_xuid</c>, reloading the profile list when needed. Called at
+    /// game launch so sessions always run under the right profile even when
+    /// the boot-time restore fell back to the first profile.
+    /// </summary>
+    public void EnsureActiveProfile()
+    {
+        try
+        {
+            string? savedXuid = _backgroundService.Settings.ProfileXuid;
+            if (string.IsNullOrEmpty(savedXuid))
+            {
+                Logger.Debug<ProfileService>("No persisted profile XUID - launch safety net skipped");
+                return;
+            }
+
+            if (ActiveProfile != null && MatchesXuid(ActiveProfile, savedXuid))
+            {
+                return;
+            }
+
+            if (Profiles.Count == 0)
+            {
+                Profiles = ProfileManager.LoadProfiles(XeniaVersion.Canary);
+            }
+
+            AccountInfo? profile = Profiles.FirstOrDefault(p => MatchesXuid(p, savedXuid));
+            if (profile == null)
+            {
+                Logger.Warning<ProfileService>(
+                    "Persisted profile XUID no longer exists - keeping the current active profile");
+                return;
+            }
+
+            ActivateProfile(profile);
+            ProfileChanged?.Invoke();
+            Logger.Info<ProfileService>($"Launch safety net restored the active profile: '{Gamertag}'");
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<ProfileService>("Failed to restore the persisted active profile at launch");
+            Logger.LogExceptionDetails<ProfileService>(ex);
+        }
+    }
+
+    /// <summary>
     /// Re-scans the profile list after external changes, keeping the active
     /// profile when it still exists (falling back to the first otherwise) and
     /// refreshing the header and per-game stats.

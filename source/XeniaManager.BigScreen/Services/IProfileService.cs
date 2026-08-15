@@ -50,6 +50,14 @@ public interface IProfileService
     void Refresh();
 
     /// <summary>
+    /// Safety net: makes sure the active profile matches the persisted
+    /// <c>profile_xuid</c>, reloading the profile list when needed. Called at
+    /// game launch so sessions always run under the right profile even when
+    /// the boot-time restore fell back to the first profile.
+    /// </summary>
+    void EnsureActiveProfile();
+
+    /// <summary>
     /// Activates the given profile, persists the selection and raises
     /// <see cref="ProfileChanged"/>.
     /// </summary>

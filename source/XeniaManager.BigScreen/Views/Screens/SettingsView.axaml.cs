@@ -89,6 +89,7 @@ public partial class SettingsView : UserControl
         _rowCards[vm.RowCardImage] = CardCardImage;
         _rowCards[vm.RowTimeFormat] = CardTimeFormat;
         _rowCards[vm.RowQuitToggle] = CardQuitToggle;
+        _rowCards[vm.RowFullscreenToggle] = CardFullscreenToggle;
         _rowCards[vm.RowBackgroundMode] = CardBackgroundMode;
         _rowCards[vm.RowPrimaryColour] = CardPrimaryColour;
         _rowCards[vm.RowAccentColour] = CardAccentColour;

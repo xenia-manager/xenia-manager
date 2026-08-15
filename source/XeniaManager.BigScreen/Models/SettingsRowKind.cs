@@ -12,6 +12,7 @@ public enum SettingsRowKind
     CardImage,
     TimeFormat,
     QuitToggle,
+    FullscreenToggle,
     BackgroundMode,
     PrimaryColour,
     AccentColour,

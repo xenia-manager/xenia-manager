@@ -178,6 +178,11 @@ public partial class SettingsViewModel : ViewModelBase
     public SettingsRowViewModel RowQuitToggle { get; } = new(SettingsRowKind.QuitToggle);
 
     /// <summary>
+    /// Row for the "launch games in fullscreen" toggle.
+    /// </summary>
+    public SettingsRowViewModel RowFullscreenToggle { get; } = new(SettingsRowKind.FullscreenToggle);
+
+    /// <summary>
     /// Row for the background type dropdown card.
     /// </summary>
     public SettingsRowViewModel RowBackgroundMode { get; } = new(SettingsRowKind.BackgroundMode);
@@ -358,6 +363,13 @@ public partial class SettingsViewModel : ViewModelBase
     public partial bool ReturnToXeniaOnQuit { get; set; } = true;
 
     /// <summary>
+    /// Whether launched games start in fullscreen (Display.fullscreen is forced
+    /// for the session and restored after).
+    /// </summary>
+    [ObservableProperty]
+    public partial bool LaunchGamesFullscreen { get; set; } = true;
+
+    /// <summary>
     /// Whether this screen's hint bar is visible - hidden while any modal is
     /// open, so only the top modal's hints show.
     /// </summary>
@@ -495,6 +507,7 @@ public partial class SettingsViewModel : ViewModelBase
         _rows.Add(RowCardImage);
         _rows.Add(RowTimeFormat);
         _rows.Add(RowQuitToggle);
+        _rows.Add(RowFullscreenToggle);
         _rows.Add(RowBackgroundMode);
         _rows.Add(RowPrimaryColour);
         _rows.Add(RowAccentColour);
@@ -722,6 +735,9 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.QuitToggle:
                 ReturnToXeniaOnQuit = !ReturnToXeniaOnQuit;
                 break;
+            case SettingsRowKind.FullscreenToggle:
+                LaunchGamesFullscreen = !LaunchGamesFullscreen;
+                break;
             case SettingsRowKind.BackgroundImage:
                 SelectImageRequested?.Invoke();
                 break;
@@ -827,6 +843,7 @@ public partial class SettingsViewModel : ViewModelBase
         AccentColor = _backgroundService.Settings.AccentColor;
         VignetteOpacity = _backgroundService.Settings.VignetteOpacity;
         ReturnToXeniaOnQuit = _backgroundService.Settings.ReturnToXeniaOnQuit;
+        LaunchGamesFullscreen = _backgroundService.Settings.LaunchGamesFullscreen;
         LibraryViewMode = _backgroundService.Settings.LibraryViewMode;
         SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == LibraryViewMode);
         CardImageMode = _backgroundService.Settings.CardImageMode;
@@ -917,6 +934,12 @@ public partial class SettingsViewModel : ViewModelBase
     {
         SaveAppearance(s => s.ReturnToXeniaOnQuit = value);
         Logger.Info<SettingsViewModel>($"Return to Xenia Manager on quit: {value}");
+    }
+
+    partial void OnLaunchGamesFullscreenChanged(bool value)
+    {
+        SaveAppearance(s => s.LaunchGamesFullscreen = value);
+        Logger.Info<SettingsViewModel>($"Launch games in fullscreen: {value}");
     }
 
     partial void OnLibraryViewModeChanged(LibraryViewMode value)

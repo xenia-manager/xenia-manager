@@ -47,6 +47,13 @@ public class DashboardSettings
     public bool ReturnToXeniaOnQuit { get; set; } = true;
 
     /// <summary>
+    /// Whether launched games start in fullscreen (sets the game's
+    /// Display.fullscreen for the session, restoring the original after).
+    /// </summary>
+    [JsonPropertyName("launch_games_fullscreen")]
+    public bool LaunchGamesFullscreen { get; set; } = true;
+
+    /// <summary>
     /// The layout used by the library screen.
     /// </summary>
     [JsonPropertyName("library_view_mode")]

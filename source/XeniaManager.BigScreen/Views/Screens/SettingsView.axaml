@@ -108,6 +108,27 @@
                     </DockPanel>
                 </Border>
 
+                <!-- FULLSCREEN LAUNCHES -->
+                <Border x:Name="CardFullscreenToggle"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowFullscreenToggle.IsSelected}">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkFullscreenLaunches"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding LaunchGamesFullscreen}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                   Classes="toggle-switch" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.LaunchGamesFullscreen}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.LaunchGamesFullscreen.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
                 <!-- THEME -->
                 <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Theme}" />
 
