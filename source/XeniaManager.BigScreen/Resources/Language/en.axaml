@@ -34,6 +34,12 @@
     <sys:String x:Key="Library.Details.Developer">Developer:</sys:String>
     <sys:String x:Key="Library.Details.Publisher">Publisher:</sys:String>
     <sys:String x:Key="Library.Details.Released">Released:</sys:String>
+    <sys:String x:Key="Library.Details.Compatibility">Compatibility:</sys:String>
+    <sys:String x:Key="CompatibilityRating.Unknown">Unknown</sys:String>
+    <sys:String x:Key="CompatibilityRating.Unplayable">Unplayable</sys:String>
+    <sys:String x:Key="CompatibilityRating.Loads">Loads</sys:String>
+    <sys:String x:Key="CompatibilityRating.Gameplay">Gameplay</sys:String>
+    <sys:String x:Key="CompatibilityRating.Playable">Playable</sys:String>
 
     <!-- Gallery screen -->
     <sys:String x:Key="Gallery.Title">Gallery</sys:String>

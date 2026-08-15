@@ -15,6 +15,8 @@
 
 **Non-goals (for now):** other languages beyond the English key set (translations deferred — the app is fully keyed and wired). BigScreen's Quit returns to Xenia Manager, launching `XeniaManager.exe` if it isn't running, or closes everything per the 5.6 toggle.
 
+**Isolation principle:** BigScreen is isolated in its own world — all access to `XeniaManager.Core` is read-only. Its main-app integration is limited to the Launch Big Screen button (done) and the "Start in Big Screen" default switch (T29). If isolation isn't holding, that's a bug, not a feature.
+
 ---
 
 ## 2. Current State (done)
@@ -28,7 +30,7 @@
 
 ### Overlay screens
 Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape** closes, focus returns to the option row. Bottom hint bars use the `InputHint` control (coloured circle keycap + label).
-- **Library** — all games in a horizontal **carousel** (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD) or a vertical **list** with a details pane (`LibraryListItem` + `GameDetailsPanel`). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle; in list mode Up/Down iterates. **X** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). **View/V** swaps the layout (Carousel ↔ List, persisted via `library_view_mode`); the details pane shows marketplace DB info (bio, genre, developer, publisher, release date — loading/no-info states, stale-fetch guard + negative cache). Disc stub shown when the library is empty.
+- **Library** — all games in a horizontal **carousel** (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD) or a vertical **list** with a details pane (`LibraryListItem` + `GameDetailsPanel`). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle; in list mode Up/Down iterates. **X** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). **View/V** swaps the layout (Carousel ↔ List, persisted via `library_view_mode`); the details pane shows marketplace DB info (bio, genre, developer, publisher, release date — loading/no-info states, stale-fetch guard + negative cache) plus a **Xenia version icon** opposite the title (bare build icon + hover tooltip via Core converters) and a **compatibility row** as the first metadata entry (rating label with the coloured dot to its right, DB URL as hover tooltip). Disc stub shown when the library is empty.
 - **Gallery** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, **capture date decoded from the file name** (`{GAMEID} - {yyyy-MM-ddTHH-mm-ss}`, write time as fallback — `ScreenshotFileNameParser`)). Click/Enter → **screenshot viewer modal** (on the modal stack — see the viewer section below). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
 - **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker. **Controller navigation (T18):** D-pad walks the rows (fixed cards then connected gamepad rows — the `.settings-row` accent border marks the selection, rows start unselected, the first move selects the first row, the selection survives battery-poll rebuilds); **A** activates — gamepad rows set the primary controller, the quit toggle flips, Manage Profiles / Select Image act, dropdown rows open their native dropdown (**Up/Down** cycles, **A** commits, **B** restores the original), colour rows open the palette popup (**Left/Right** cycles), the slider row steps with **Left/Right**; **Back** closes an open editor first, then the screen. Keyboard input stays on the native controls (Tab, arrows, hex typing).
 - **Quit** — closes the app.
@@ -195,7 +197,7 @@ source/XeniaManager.BigScreen/
 │   │   ├── ScreenshotCard.axaml(.cs)  # Gallery tile: 16:9 screenshot, 6px corners
 │   │   ├── LibraryCard.axaml(.cs)     # Carousel card: box art + title + stat rows (rounded art clip)
 │   │   ├── LibraryListItem.axaml(.cs) # List row: disc icon + title (accent on select/hover)
-│   │   ├── GameDetailsPanel.axaml(.cs) # Details pane: art, local stats, DB bio + metadata strip
+│   │   ├── GameDetailsPanel.axaml(.cs) # Details pane: art, local stats, DB bio + metadata strip (+ version chip + compatibility row)
 │   │   ├── GameActionRow.axaml(.cs)   # Game modal option row (icon + title, accent on select/hover)
 │   │   ├── DiscOptionCard.axaml(.cs)  # Disc selection card (filled disc icon + label + status line, dimmed when missing)
 │   │   ├── AchievementRow.axaml(.cs)  # Achievement row (image/lock icon, name, description, star + gamerscore)
@@ -444,10 +446,10 @@ source/XeniaManager.BigScreen/
 - [x] **T18.** Settings controller navigation: D-pad moves between rows; **A activates (sets primary controller on a gamepad row, opens dropdowns/checkbox/colour fields on the other rows)**; `GamepadCard` already carries `Classes.selected` + accent border, `SetPrimary` is wired in the VM
 - [x] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game modal (T8/T10/T11)
 - [x] **T20.** Boxart tile sizing — in `CardImageMode.BoxArt` the dashboard tile is portrait and sized so the box art fills it bottom-anchored with the top ~12% cropped; Icon-mode fallback unchanged
-- [ ] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery **% text below** the battery icon
+- [x] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery icon has 10 distinct stages (the % text lives in the settings Controllers rows)
 - [x] **T22.** Background type default → **Dynamic** (`DashboardSettings.Mode` + settings default); Settings dropdowns built from **enum order** via `BuildOptions` so the defaults lead (`BackgroundMode` reordered Dynamic-first, `CardImageMode` Icon-first); persisted settings files migrated to the new enum mapping
-- [ ] **T23.** Xenia version indicator — per-game badge/icon on library cards, list rows + details (reuse Core `XeniaVersionToIconConverter`/`XeniaVersionToStringConverter`)
-- [ ] **T24.** Game compatibility indicator — coloured rating dot + label on cards (Core `CompatibilityRatingColorConverter`), DB URL as tooltip
+- [x] **T23.** Xenia version indicator — version icon on the **list-view details pane only** (bare build icon opposite the game title, Core `XeniaVersionToIconConverter`/`XeniaVersionToStringConverter` + hover tooltip); the carousel stays visually clean
+- [x] **T24.** Game compatibility indicator — coloured rating dot + label as the first metadata row of the **list-view details pane** (Core `CompatibilityRatingColorConverter`/`CompatibilityRatingToStringConverter`), DB URL as hover tooltip
 - [ ] **T25.** List-view achievements — scrollable locked/unlocked achievement section in the list-view details pane
 - [ ] **T26.** XConfig editor — port `EditXConfigDialog` (language, country, AV HDMI size, default profile) via `XConfigManager` as a Settings overlay (hidden when `XConfigExists` is false)
 - [ ] **T27.** Input gating while a game runs — gamepad already gated by `IsEnabled`; add the same gate to `OnWindowKeyDown`, `OnCardGotFocus`, `OnOptionCardPressed`
@@ -462,9 +464,14 @@ source/XeniaManager.BigScreen/
 ### 5.22 Screen animations
 - [ ] **T31.** Screen animations — overlay screens, the game modal + its panes (T8–T14), the screenshot viewer modal and dashboard screen swaps must never open statically: very basic, very subtle motion only. Avalonia-native `Transitions`/`DoubleTransition` (opacity, translate, scale), ~150–250ms ease-in-out, one or two properties max; see §7 for full constraints + candidate approaches
 
+### 5.23 Input, animation & config follow-ups
+- [ ] **T32.** Gamepad hold-repeat (Core) — `GamepadInputService` currently fires a button once per press (deadzone edge detection only). Add hold support: while a button (or stick-derived D-pad) stays pressed, re-raise it after an initial delay at a repeat rate, so holding D-pad down scrolls continuously. Core first, then BigScreen.
+- [ ] **T33.** Background fade hard reset — the fade-through-black can bug out when moving right-to-left across cards: the previous background shows, then black, then the transition runs (left-to-right through the first cards works). Implementation: treat the fade like a tween stored as a local variable — **stop and restart it on every art swap, so exactly one animation plays at all times, never overlapping**; rapid card passes hold black until the selection slows/stops.
+- [ ] **T34.** Trim the config editor — not every desktop setting belongs in Big Screen mode: remove **Notification Sound Path**, **WinKey Bindings** (`HID.WinKey`) and **Logging** sections from the BigScreen config editor (`ConfigUiSettings` section definitions).
+
 ---
 
-## 5.23 Extra info & conventions (T1–T36)
+## 5.24 Extra info & conventions (T1–T36)
 
 > **Notes & conventions for the tasks above**
 > - All new user-facing strings go into `en.axaml` (BigScreen + desktop), keys follow the existing naming convention; other languages deferred per spec §1.
@@ -475,7 +482,8 @@ source/XeniaManager.BigScreen/
 > - Fire-and-forget async work goes through **`TaskUtilities.RunSafely<T>(...)`** — exceptions (including synchronous ones from modal-VM construction) are logged, never silently swallowed. Existing public bool properties (`ShowEmptyStub`, `IsOverlayOpen`, …) are the canonical checks for external code — raw collection `Count` checks in other classes should use them.
 > - Core work first (`GamepadInputService`, any shared helpers), then BigScreen, then the desktop app.
 > - Verification per task: `dotnet build "Xenia Manager.sln"`, `dotnet test tests/XeniaManager.Tests`, manual smoke run (launch, right-click menu, modals, controller input).
-> - Artwork/icon choices reuse FluentIcons + existing token dictionary (`DarkGradient.axaml`); no new colours without adding tokens.
+> - Artwork/icon choices reuse FluentIcons + existing token dictionary (`DarkGradient.axaml`); no new colours without adding tokens. BigScreen keeps its own unique app icon (no reuse of the main app's icon).
+> - **Core is read-only from BigScreen** — BigScreen stays isolated in its own world; its main-app integration is limited to the existing Launch Big Screen button and the "Start in Big Screen" default switch (**T29**). If isolation isn't holding, that's a bug, not a feature.
 > - This roadmap supersedes/supplements §5.14 items; update §3 architecture tree (`Services/`, `Controls/`, `Views/`) as new files land.
 
 ### Untested ports
@@ -532,6 +540,7 @@ dotnet run --project source/XeniaManager.BigScreen/XeniaManager.BigScreen.csproj
 - Overlays: fade + slight up/scale on the overlay `Panel` / `ContentControl` when `IsVisible` flips
 - Game modal + its panes (T8–T14): same fade+translate on the modal/pane root; viewer: fade + zoom-out on close
 - Selection feedback: keep existing `IsSelected` styling; optional 100ms grow/shrink on the selected card
+- **Single cancellable fade instance (T33):** store the fade like a tween in a local variable — stop and restart it on every art swap so exactly one animation plays at all times; rapid passes hold black until the selection settles
 
 ---
 
