@@ -92,44 +92,52 @@ public partial class DashboardViewModel : ViewModelBase
         Tween.Custom(ArtOpacity, to, TimingConstants.ArtFadeDuration, _setArtOpacity, Tween.DefaultEasing);
 
     /// <summary>
-    /// Recomputes the background from the current settings and selection. In Dynamic
-    /// mode the artwork crossfades on its own layer above the static base (no black);
-    /// all other modes and settings changes swap instantly.
+    /// Resolves the static base brush, falling back to a linear gradient when
+    /// the configured background can't be built.
     /// </summary>
-    public void UpdateBackground(Bitmap? selectedArt, bool fade = false)
+    private IBrush ResolveBackgroundBrush()
     {
-        BackgroundMode mode = _backgroundService.Settings.Mode;
         IBrush? brush = _backgroundService.GetBackground(null);
-        if (brush == null)
+        if (brush != null)
         {
-            _backgroundService.Settings.Mode = BackgroundMode.LinearGradient;
-            brush = _backgroundService.GetBackground(null);
+            return brush;
         }
 
-        Background = brush;
+        _backgroundService.Settings.Mode = BackgroundMode.LinearGradient;
+        return _backgroundService.GetBackground(null)!;
+    }
 
-        // Vignette only belongs on image-based backgrounds
-        VignetteVisible = mode == BackgroundMode.Image
-                          || (mode == BackgroundMode.Dynamic && selectedArt != null);
+    /// <summary>
+    /// Whether the vignette overlay belongs on the given background: image
+    /// backgrounds always, dynamic backgrounds only while artwork is shown.
+    /// </summary>
+    private static bool ShouldShowVignette(BackgroundMode mode, bool hasArtwork) =>
+        mode == BackgroundMode.Image || (mode == BackgroundMode.Dynamic && hasArtwork);
 
-        Bitmap? newArt = mode == BackgroundMode.Dynamic ? selectedArt : null;
-        if (newArt == null)
+    /// <summary>
+    /// Updates the fading artwork layer: hidden without artwork, fully visible
+    /// when the same artwork is already shown, crossfaded when fading is
+    /// requested and swapped instantly otherwise.
+    /// </summary>
+    private void UpdateArtworkLayer(Bitmap? newArt, bool hasArtwork, bool fade)
+    {
+        if (!hasArtwork)
         {
-            // Nothing to show on the artwork layer - hide it instantly
             _artFade.Stop();
             Artwork = null;
             ArtOpacity = 0;
+            return;
         }
-        else if (ReferenceEquals(newArt, Artwork))
+
+        if (ReferenceEquals(newArt, Artwork))
         {
-            // Already displayed - cancel any lingering fade and show it fully
             _artFade.Stop();
             ArtOpacity = 1;
+            return;
         }
-        else if (fade)
+
+        if (fade)
         {
-            // Supersede any in-flight fade, then fade the old artwork out (the
-            // static base shows through), swap, and fade the new artwork in.
             _artFade.Stop();
             _artFade = FadeArtOpacity(0).OnComplete(() =>
             {
@@ -137,16 +145,29 @@ public partial class DashboardViewModel : ViewModelBase
                 ArtOpacity = 0;
                 _artFade = FadeArtOpacity(1);
             });
-        }
-        else
-        {
-            // Instant swap (settings changes)
-            _artFade.Stop();
-            Artwork = newArt;
-            ArtOpacity = 1;
+            return;
         }
 
+        _artFade.Stop();
+        Artwork = newArt;
+        ArtOpacity = 1;
+    }
+
+    /// <summary>
+    /// Recomputes the background from the current settings and selection. In Dynamic
+    /// mode the artwork crossfades on its own layer above the static base (no black);
+    /// all other modes and settings changes swap instantly.
+    /// </summary>
+    public void UpdateBackground(Bitmap? selectedArt, bool fade = false)
+    {
+        BackgroundMode mode = _backgroundService.Settings.Mode;
+        bool hasArtwork = mode == BackgroundMode.Dynamic && selectedArt != null;
+
+        Background = ResolveBackgroundBrush();
+        VignetteVisible = ShouldShowVignette(mode, hasArtwork);
+        UpdateArtworkLayer(selectedArt, hasArtwork, fade);
+
         Logger.Debug<DashboardViewModel>(
-            $"Background updated: mode={_backgroundService.Settings.Mode}, art={(newArt != null ? "game art" : "none")}");
+            $"Background updated: mode={_backgroundService.Settings.Mode}, art={(hasArtwork ? "game art" : "none")}");
     }
 }

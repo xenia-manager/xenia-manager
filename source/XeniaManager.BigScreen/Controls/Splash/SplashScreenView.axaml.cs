@@ -18,14 +18,59 @@ namespace XeniaManager.BigScreen.Controls.Splash;
 /// </summary>
 public partial class SplashScreenView : UserControl
 {
+    /// <summary>
+    /// Reads the saved colour for the given property from the settings JSON,
+    /// returning whether it was found and parsed.
+    /// </summary>
+    private static bool TryGetSavedColor(string json, string propertyName, out Color color)
+    {
+        using JsonDocument document = JsonDocument.Parse(json);
+        if (document.RootElement.TryGetProperty(propertyName, out JsonElement element)
+            && element.ValueKind == JsonValueKind.String
+            && Color.TryParse(element.GetString(), out Color parsed))
+        {
+            color = parsed;
+            return true;
+        }
+
+        color = default;
+        return false;
+    }
+
+    /// <summary>
+    /// The saved BigScreen accent color, falling back to the theme default.
+    /// </summary>
+    private static Color LoadAccentColor() => LoadSavedColor("accent_color", Color.FromRgb(0x10, 0x7C, 0x41));
+
+    /// <summary>
+    /// Reads a saved color from the dashboard settings file, falling back to
+    /// <paramref name="fallback"/> when unavailable.
+    /// </summary>
+    private static Color LoadSavedColor(string propertyName, Color fallback)
+    {
+        try
+        {
+            string path = Path.Combine(AppContext.BaseDirectory, AppConstants.SettingsFileName);
+            if (File.Exists(path) && TryGetSavedColor(File.ReadAllText(path), propertyName, out Color color))
+            {
+                return color;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<SplashScreenView>("Failed to read saved BigScreen colors, falling back to defaults");
+            Logger.LogExceptionDetails<SplashScreenView>(ex);
+        }
+
+        return fallback;
+    }
+
     public SplashScreenView()
     {
         InitializeComponent();
         Background = BackgroundBrushFactory.CreateRadial(
             LoadSavedColor("primary_color", Color.FromRgb(0x1C, 0x1F, 0x25)));
 
-        // Use the saved BigScreen accent (not the theme default) so the splash
-        // matches the dashboard once the settings load
         Color accent = LoadAccentColor();
         LogoIcon.Foreground = new SolidColorBrush(accent);
         LoadBar.Foreground = new SolidColorBrush(accent);
@@ -60,53 +105,5 @@ public partial class SplashScreenView : UserControl
         {
             Dispatcher.UIThread.Post(() => SetProgress(status, progress));
         }
-    }
-
-    /// <summary>
-    /// The saved BigScreen accent color, falling back to the theme default.
-    /// </summary>
-    private static Color LoadAccentColor() => LoadSavedColor("accent_color", Color.FromRgb(0x10, 0x7C, 0x41));
-
-    /// <summary>
-    /// Reads a saved color from the dashboard settings file, falling back to
-    /// <paramref name="fallback"/> when unavailable.
-    /// </summary>
-    private static Color LoadSavedColor(string propertyName, Color fallback)
-    {
-        try
-        {
-            string path = Path.Combine(AppContext.BaseDirectory, AppConstants.SettingsFileName);
-            if (File.Exists(path) && TryGetSavedColor(File.ReadAllText(path), propertyName, out Color color))
-            {
-                return color;
-            }
-        }
-        catch (Exception ex)
-        {
-            // Unreadable settings - fall back to the default
-            Logger.Warning<SplashScreenView>("Failed to read saved BigScreen colors, falling back to defaults");
-            Logger.LogExceptionDetails<SplashScreenView>(ex);
-        }
-
-        return fallback;
-    }
-
-    /// <summary>
-    /// Reads the saved colour for the given property from the settings JSON,
-    /// returning whether it was found and parsed.
-    /// </summary>
-    private static bool TryGetSavedColor(string json, string propertyName, out Color color)
-    {
-        using JsonDocument document = JsonDocument.Parse(json);
-        if (document.RootElement.TryGetProperty(propertyName, out JsonElement element)
-            && element.ValueKind == JsonValueKind.String
-            && Color.TryParse(element.GetString(), out Color parsed))
-        {
-            color = parsed;
-            return true;
-        }
-
-        color = default;
-        return false;
     }
 }

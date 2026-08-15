@@ -30,16 +30,16 @@ public class ModalService : IModalService
     /// <inheritdoc />
     public event Action? StackChanged;
 
-    /// <inheritdoc />
-    public Task ShowAsync(ModalViewModelBase modal)
+    /// <summary>
+    /// Marks only the top modal as the visible one, hiding the hint bars of
+    /// the modals beneath it.
+    /// </summary>
+    private void UpdateTopModalState()
     {
-        return ShowAsyncCore(modal);
-    }
-
-    /// <inheritdoc />
-    public Task<TResult?> ShowAsync<TResult>(ModalViewModelBase<TResult> modal)
-    {
-        return ShowAsyncCore(modal).ContinueWith(_ => modal.Result, TaskContinuationOptions.ExecuteSynchronously);
+        for (int i = 0; i < _stack.Count; i++)
+        {
+            _stack[i].SetIsTopModal(i == _stack.Count - 1);
+        }
     }
 
     /// <summary>
@@ -57,6 +57,18 @@ public class ModalService : IModalService
     }
 
     /// <inheritdoc />
+    public Task ShowAsync(ModalViewModelBase modal)
+    {
+        return ShowAsyncCore(modal);
+    }
+
+    /// <inheritdoc />
+    public Task<TResult?> ShowAsync<TResult>(ModalViewModelBase<TResult> modal)
+    {
+        return ShowAsyncCore(modal).ContinueWith(_ => modal.Result, TaskContinuationOptions.ExecuteSynchronously);
+    }
+
+    /// <inheritdoc />
     public void Close(ModalViewModelBase modal)
     {
         if (_stack.Count == 0 || !ReferenceEquals(_stack[^1], modal))
@@ -70,17 +82,5 @@ public class ModalService : IModalService
         UpdateTopModalState();
         StackChanged?.Invoke();
         Logger.Debug<ModalService>($"Modal popped: {modal.GetType().Name} (stack: {_stack.Count})");
-    }
-
-    /// <summary>
-    /// Marks only the top modal as the visible one, hiding the hint bars of
-    /// the modals beneath it.
-    /// </summary>
-    private void UpdateTopModalState()
-    {
-        for (int i = 0; i < _stack.Count; i++)
-        {
-            _stack[i].SetIsTopModal(i == _stack.Count - 1);
-        }
     }
 }

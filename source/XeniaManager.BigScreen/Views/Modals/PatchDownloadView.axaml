@@ -87,38 +87,22 @@
                 </ScrollViewer>
 
                 <!-- Searching state -->
-                <Border IsVisible="{Binding ShowSearching}"
-                        Height="200"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="520"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="Search"
-                                           FontSize="64" />
-                        <TextBlock Text="{DynamicResource GameModal.Patches.Download.Searching}"
-                                   FontSize="22" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState IsVisible="{Binding ShowSearching}"
+                                 Symbol="Search"
+                                 Text="{DynamicResource GameModal.Patches.Download.Searching}"
+                                 Width="520"
+                                 Height="200"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
 
                 <!-- Empty state: no search results -->
-                <Border IsVisible="{Binding ShowEmpty}"
-                        Height="200"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="520"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="Search"
-                                           FontSize="64" />
-                        <TextBlock Text="{DynamicResource GameModal.Patches.Download.Empty}"
-                                   FontSize="22" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                                 Symbol="Search"
+                                 Text="{DynamicResource GameModal.Patches.Download.Empty}"
+                                 Width="520"
+                                 Height="200"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
             </Grid>
 
             <!-- FAILURE STATUS -->

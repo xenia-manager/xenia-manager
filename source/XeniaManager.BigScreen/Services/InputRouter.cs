@@ -28,7 +28,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// <summary>
     /// Moves the active dashboard row by the given step. Right from the profile
     /// row drops into the game row on the next card (wrapping after the last).
     /// </summary>
@@ -102,28 +101,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// Commands while an overlay screen is open. Library and Gallery respond to
-    /// both input sources; Settings only takes Back from the keyboard - its
-    /// native controls keep the keyboard interaction, while the gamepad drives
-    /// the row navigation.
-    /// </summary>
-    private void HandleOverlay(MainWindowViewModel vm, NavigationCommand command, bool fromGamepad)
-    {
-        if (vm.IsLibraryScreen)
-        {
-            HandleLibrary(vm, command);
-        }
-        else if (vm.IsGalleryScreen)
-        {
-            HandleGallery(vm, command);
-        }
-        else if (vm.IsSettingsScreen)
-        {
-            HandleSettings(vm, command, fromGamepad);
-        }
-    }
-
-    /// <summary>
     /// Commands while the settings screen is open. Back closes the screen
     /// after any open row editor; the remaining commands reach here from the
     /// gamepad only and drive the row navigation.
@@ -147,6 +124,18 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
+    /// Opens the game modal for the game currently selected in the library.
+    /// </summary>
+    private static void OpenGameDetailsForSelected(MainWindowViewModel vm)
+    {
+        GameCardViewModel? card = vm.Library.Games.FirstOrDefault(g => g.IsSelected);
+        if (card != null)
+        {
+            vm.OpenGameModal(card.Game);
+        }
+    }
+
+    /// <summary>
     /// Commands while the library screen is open.
     /// </summary>
     private void HandleLibrary(MainWindowViewModel vm, NavigationCommand command)
@@ -162,7 +151,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
                 navigation.MoveGameSelection(vm.Library, 1);
                 break;
             case NavigationCommand.CycleSort:
-                // Sort keeps the selection on the same card, but the viewport stays put
                 vm.Library.CycleSort();
                 break;
             case NavigationCommand.Activate:
@@ -181,14 +169,15 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
-    /// Opens the game modal for the game currently selected in the library.
+    /// Opens the game modal for the given card, or the currently selected
+    /// dashboard card when none was passed.
     /// </summary>
-    private static void OpenGameDetailsForSelected(MainWindowViewModel vm)
+    private static void OpenGameDetails(MainWindowViewModel vm, GameCardViewModel? gameCard)
     {
-        GameCardViewModel? card = vm.Library.Games.FirstOrDefault(g => g.IsSelected);
-        if (card != null)
+        gameCard ??= vm.Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected);
+        if (gameCard != null)
         {
-            vm.OpenGameModal(card.Game);
+            vm.OpenGameModal(gameCard.Game);
         }
     }
 
@@ -212,7 +201,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
                 navigation.MoveScreenshotSelection(vm.Gallery, GalleryView.CardsPerRow);
                 break;
             case NavigationCommand.CycleSort:
-                // Sort keeps the selection on the same card, but the viewport stays put
                 vm.Gallery.CycleGallerySort();
                 break;
             case NavigationCommand.Activate:
@@ -221,6 +209,28 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             case NavigationCommand.Back:
                 CloseOverlay(vm);
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Commands while an overlay screen is open. Library and Gallery respond to
+    /// both input sources; Settings only takes Back from the keyboard - its
+    /// native controls keep the keyboard interaction, while the gamepad drives
+    /// the row navigation.
+    /// </summary>
+    private void HandleOverlay(MainWindowViewModel vm, NavigationCommand command, bool fromGamepad)
+    {
+        if (vm.IsLibraryScreen)
+        {
+            HandleLibrary(vm, command);
+        }
+        else if (vm.IsGalleryScreen)
+        {
+            HandleGallery(vm, command);
+        }
+        else if (vm.IsSettingsScreen)
+        {
+            HandleSettings(vm, command, fromGamepad);
         }
     }
 
@@ -250,19 +260,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             case NavigationCommand.Details:
                 OpenGameDetails(vm, gameCard);
                 break;
-        }
-    }
-
-    /// <summary>
-    /// Opens the game modal for the given card, or the currently selected
-    /// dashboard card when none was passed.
-    /// </summary>
-    private static void OpenGameDetails(MainWindowViewModel vm, GameCardViewModel? gameCard)
-    {
-        gameCard ??= vm.Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected);
-        if (gameCard != null)
-        {
-            vm.OpenGameModal(gameCard.Game);
         }
     }
 
@@ -340,7 +337,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             return;
         }
 
-        // Keyboard activation acts on the focused game card
         GameCardViewModel? gameCard =
             (focusManager?.GetFocusedElement() as Control)?.DataContext is GameCardViewModel card ? card : null;
         Dispatch(vm, command.Value, gameCard, false);
@@ -359,7 +355,6 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             return;
         }
 
-        // Gamepad activation acts on the selected dashboard game card
         GameCardViewModel? gameCard = !vm.IsOverlayOpen && !navigation.IsOnOptionsRow
             ? vm.Dashboard.RecentGames.FirstOrDefault(g => g.IsSelected)
             : null;

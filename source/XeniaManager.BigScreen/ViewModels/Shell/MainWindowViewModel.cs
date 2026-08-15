@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -46,12 +47,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private ViewModelBase? _screenBeforeModal;
 
     /// <summary>
-    /// The currently open overlay screen, or null when the dashboard is showing.
-    /// </summary>
-    [ObservableProperty]
-    public partial ViewModelBase? CurrentScreen { get; set; }
-
-    /// <summary>
     /// Whether any overlay is currently open.
     /// </summary>
     public bool IsOverlayOpen => CurrentScreen != null;
@@ -72,20 +67,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsSettingsScreen => CurrentScreen == Settings;
 
     /// <summary>
-    /// Whether any modal is on the modal stack (drives the full-window modal layer).
-    /// </summary>
-    [ObservableProperty]
-    public partial bool IsModalOpen { get; set; }
-
-    /// <summary>
-    /// Whether the modal backdrop scrim shows. Hidden while the screenshot
-    /// viewer is the top modal - its own opaque backdrop covers the window,
-    /// so the extra scrim would double-darken it.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool ModalBackdropVisible { get; set; }
-
-    /// <summary>
     /// Whether the library has games with nothing selected yet (first open).
     /// </summary>
     private bool LibraryHasUnselectedGames =>
@@ -98,6 +79,11 @@ public partial class MainWindowViewModel : ViewModelBase
         Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length > 0;
 
     /// <summary>
+    /// Whether the boot pipeline (profile, library, screenshots) has completed.
+    /// </summary>
+    public bool IsInitialized { get; private set; }
+
+    /// <summary>
     /// Raised when the user chooses to quit BigScreen.
     /// </summary>
     public event EventHandler? QuitRequested;
@@ -106,6 +92,39 @@ public partial class MainWindowViewModel : ViewModelBase
     /// Raised after the library is reloaded (e.g. after a game session) so views can re-sync.
     /// </summary>
     public event EventHandler? LibraryRefreshed;
+
+    /// <summary>
+    /// Raised when the boot pipeline completes, so views can run their initial
+    /// selection logic (which needs the collections to be populated).
+    /// </summary>
+    public event EventHandler? InitializationCompleted;
+
+    /// <summary>
+    /// Raised at the very end of the boot pipeline (after the final dwell), the
+    /// moment the splash is about to close, so the view can fade the dashboard
+    /// elements in visibly.
+    /// </summary>
+    public event Action? DashboardRevealRequested;
+
+    /// <summary>
+    /// The currently open overlay screen, or null when the dashboard is showing.
+    /// </summary>
+    [ObservableProperty]
+    public partial ViewModelBase? CurrentScreen { get; set; }
+
+    /// <summary>
+    /// Whether any modal is on the modal stack (drives the full-window modal layer).
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsModalOpen { get; set; }
+
+    /// <summary>
+    /// Whether the modal backdrop scrim shows. Hidden while the screenshot
+    /// viewer is the top modal - its own opaque backdrop covers the window,
+    /// so the extra scrim would double-darken it.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool ModalBackdropVisible { get; set; }
 
     /// <summary>
     /// Header state (profile, clock, wifi, controller battery).
@@ -132,113 +151,6 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public GalleryViewModel Gallery { get; }
 
-    partial void OnCurrentScreenChanged(ViewModelBase? value)
-    {
-        OnPropertyChanged(nameof(IsOverlayOpen));
-        OnPropertyChanged(nameof(IsLibraryScreen));
-        OnPropertyChanged(nameof(IsGalleryScreen));
-        OnPropertyChanged(nameof(IsSettingsScreen));
-
-        // Start the library on the first game (keeps the previous selection on re-open)
-        if (value == Library && LibraryHasUnselectedGames)
-        {
-            Library.Games[0].IsSelected = true;
-        }
-    }
-
-    public MainWindowViewModel(
-        IBackgroundService backgroundService,
-        IProfileService profileService,
-        IGameLibraryService gameLibraryService,
-        IScreenshotLibraryService screenshotLibraryService,
-        IGamepadInputService gamepadService,
-        IModalService modalService)
-    {
-        _backgroundService = backgroundService;
-        _profileService = profileService;
-        _gameLibraryService = gameLibraryService;
-        _screenshotLibraryService = screenshotLibraryService;
-        _gamepadService = gamepadService;
-        _modalService = modalService;
-
-        // The constructor stays cheap: profile, library and screenshot loading
-        // happen in InitializeAsync, behind the splash screen
-        Header = new HeaderViewModel();
-        Settings = new SettingsViewModel(backgroundService, profileService, gamepadService, modalService);
-        Library = new LibraryViewModel(Settings, modalService);
-        Gallery = new GalleryViewModel(Settings, screenshotLibraryService, modalService);
-        Dashboard = new DashboardViewModel(backgroundService);
-        Settings.AppearanceChanged += () => Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt);
-        Settings.CardImageChanged += () =>
-        {
-            foreach (GameCardViewModel card in Dashboard.RecentGames)
-            {
-                card.CardImageMode = Settings.CardImageMode;
-            }
-        };
-        Settings.TimeFormatChanged += () => Header.ApplyTimeFormat(Settings.TimeFormat);
-
-        // A profile switch refreshes the header identity and rebuilds the cards;
-        // the cached achievement GPDs belong to the old profile and are dropped.
-        // Skipped during boot - the pipeline builds the header and cards itself.
-        _profileService.ProfileChanged += () =>
-        {
-            if (!IsInitialized)
-            {
-                return;
-            }
-
-            GameDataCache.ClearAchievementGpds();
-            Header.ApplyProfile(_profileService);
-            TaskUtilities.RunSafely<MainWindowViewModel>(RebuildCards, "Rebuilding profile cards");
-        };
-
-        // The full-window modal layer follows the modal stack; when the stack
-        // empties, the screen under the first modal is restored (the dashboard
-        // shows when the modal was opened from it)
-        _modalService.StackChanged += () =>
-        {
-            if (_modalService.IsOpen)
-            {
-                _screenBeforeModal ??= CurrentScreen;
-            }
-            else if (_screenBeforeModal != null)
-            {
-                CurrentScreen = _screenBeforeModal;
-                _screenBeforeModal = null;
-            }
-            else
-            {
-                CloseOverlay();
-            }
-
-            IsModalOpen = _modalService.IsOpen;
-            ModalBackdropVisible = _modalService is { IsOpen: true, Top: not ScreenshotViewerViewModel };
-        };
-    }
-
-    /// <summary>
-    /// Whether the boot pipeline (profile, library, screenshots) has completed.
-    /// </summary>
-    public bool IsInitialized { get; private set; }
-
-    /// <summary>
-    /// Raised when the boot pipeline completes, so views can run their initial
-    /// selection logic (which needs the collections to be populated).
-    /// </summary>
-    public event EventHandler? InitializationCompleted;
-
-    /// <summary>
-    /// Raised at the very end of the boot pipeline (after the final dwell), the
-    /// moment the splash is about to close, so the view can fade the dashboard
-    /// elements in visibly.
-    /// </summary>
-    public event Action? DashboardRevealRequested;
-
-    /// <summary>
-    /// Runs the boot pipeline behind the splash screen: profile, library and
-    /// screenshot loading with live status/progress, cancellable between steps.
-    /// </summary>
     /// <summary>
     /// Reports a stage, runs its work and holds it for the stage dwell.
     /// </summary>
@@ -256,115 +168,62 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Runs the boot pipeline behind the splash screen: profile, settings,
-    /// dashboard, library and Gallery loading with live status/progress,
-    /// cancellable between steps.
+    /// Tracks the most recently selected card and swaps the dynamic background
+    /// behind closed overlays (the library/Gallery screens cover the dashboard,
+    /// so the fade only matters when the dashboard is visible).
     /// </summary>
-    public async Task InitializeAsync(
-        IProgress<(string Status, double Progress)>? progress = null,
-        CancellationToken cancellationToken = default)
+    private void OnGameCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        // Yield so the splash screen paints its first frame before any work runs
-        await Task.Yield();
-
-        // Settings first: the persisted profile_xuid drives which profile activates
-        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingSettings"), 0.10, cancellationToken, () =>
+        if (e.PropertyName == nameof(GameCardViewModel.IsSelected))
         {
-            Settings.Load();
-            Dashboard.UpdateBackground(null);
-            Header.ApplyTimeFormat(Settings.TimeFormat);
-
-            // Restore the saved primary controller (falls back to the first pad)
-            if (!string.IsNullOrEmpty(_backgroundService.Settings.PrimaryControllerGuid))
+            if (sender is GameCardViewModel { IsSelected: true } card)
             {
-                _gamepadService.SetPrimaryByGuid(_backgroundService.Settings.PrimaryControllerGuid);
-            }
-        });
-
-        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingProfile"), 0.25, cancellationToken, () =>
-        {
-            _profileService.Load();
-            Header.ApplyProfile(_profileService);
-        });
-
-        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingDashboard"), 0.35, cancellationToken, () =>
-        {
-            _gameLibraryService.Load();
-            foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
-            {
-                Dashboard.RecentGames.Add(CreateRecentGameCard(game));
-            }
-        });
-
-        progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"), 0.45));
-        cancellationToken.ThrowIfCancellationRequested();
-        int totalGames = _gameLibraryService.Games.Count;
-
-        // Per-game achievement stats are resolved off the UI thread (GPD file I/O)
-        (Game Game, GameStatInfo? Stats)[] games = await Task.Run(() =>
-            _gameLibraryService.Games
-                .Select(game => (game, _profileService.GetGameStats(game)))
-                .ToArray(), cancellationToken);
-        int loadedGames = 0;
-        foreach ((Game game, GameStatInfo? stats) in games)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            Library.Games.Add(CreateGameCard(game, stats));
-            loadedGames++;
-            if (loadedGames % TimingConstants.ProgressReportInterval == 0)
-            {
-                progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"),
-                    0.45 + 0.17 * (double)loadedGames / Math.Max(1, totalGames)));
+                _lastSelectedGame = card;
             }
         }
 
-        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
-
-        // Game data preload: parsed configs (lazy), content scans, patch files,
-        // achievement GPDs and marketplace details for every game, so the game
-        // modal's panes and the details pane open instantly
-        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGameData"), 0.66));
-        cancellationToken.ThrowIfCancellationRequested();
-        Stopwatch dataSw = Stopwatch.StartNew();
-        await Task.Run(async () =>
+        if (e.PropertyName is nameof(GameCardViewModel.IsSelected) or nameof(GameCardViewModel.BackgroundArt))
         {
-            int preloaded = 0;
-            foreach (Game game in _gameLibraryService.Games)
+            if (!IsOverlayOpen)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                GameDataCache.PreloadGame(game);
-                preloaded++;
-                if (preloaded % TimingConstants.ProgressReportInterval == 0)
-                {
-                    progress?.Report((LocalizationHelper.GetText("Splash.LoadingGameData"),
-                        0.66 + 0.12 * preloaded / Math.Max(1, totalGames)));
-                }
+                Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, fade: true);
             }
+        }
+    }
 
-            await Library.PreloadDetailsAsync(cancellationToken);
-        }, cancellationToken);
-        dataSw.Stop();
-        Logger.Info<MainWindowViewModel>(
-            $"Game data preloaded for {_gameLibraryService.Games.Count} games in {dataSw.ElapsedMilliseconds}ms");
-        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+    /// <summary>
+    /// Resolves the achievement stats for every library game off the UI thread
+    /// (GPD file I/O).
+    /// </summary>
+    private Task<(Game Game, GameStatInfo? Stats)[]> LoadGameStatsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        return Task.Run(() =>
+            _gameLibraryService.Games
+                .Select(game => (game, _profileService.GetGameStats(game)))
+                .ToArray(), cancellationToken);
+    }
 
-        await Gallery.LoadScreenshotsAsync(progress, cancellationToken);
-        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+    /// <summary>
+    /// Creates a game card wired to the shared selection handler.
+    /// </summary>
+    private GameCardViewModel CreateGameCard(Game game, GameStatInfo? stats)
+    {
+        GameCardViewModel card = GameCardFactory.Create(game, stats);
+        card.PropertyChanged += OnGameCardPropertyChanged;
+        return card;
+    }
 
-        // Pre-warm the first library game's background art so the first library
-        // open doesn't pay a synchronous image decode
-        Library.Games.FirstOrDefault()?.EnsureBackgroundLoaded();
-
-        IsInitialized = true;
-        InitializationCompleted?.Invoke(this, EventArgs.Empty);
-        Logger.Info<MainWindowViewModel>(
-            $"Dashboard ready: {Library.Games.Count} games in library, {Dashboard.RecentGames.Count} recent");
-        progress?.Report((LocalizationHelper.GetText("Splash.LoadingDone"), 1.0));
-        await Task.Delay(TimingConstants.DoneDwell, cancellationToken);
-
-        // The splash closes right after this: fade the dashboard elements in
-        // while the reveal happens, so the tween is visible from the first frame
-        DashboardRevealRequested?.Invoke();
+    /// <summary>
+    /// Creates a dashboard game card, pre-loading its background art so the
+    /// dynamic background has something to show immediately.
+    /// </summary>
+    private GameCardViewModel CreateRecentGameCard(Game game)
+    {
+        GameCardViewModel card =
+            GameCardFactory.CreateRecent(game, _profileService.GetGameStats(game), Settings.CardImageMode);
+        card.PropertyChanged += OnGameCardPropertyChanged;
+        return card;
     }
 
     /// <summary>
@@ -419,25 +278,21 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Creates a game card wired to the shared selection handler.
+    /// Resolves the disc to launch: the game's last played disc for single-disc
+    /// games, or the user's choice from the disc selection modal for multi-disc
+    /// games. Returns 0 when the selection was cancelled.
     /// </summary>
-    private GameCardViewModel CreateGameCard(Game game, GameStatInfo? stats)
+    private async Task<int> ResolveDiscNumber(Game game)
     {
-        GameCardViewModel card = new(game, stats);
-        card.PropertyChanged += OnGameCardPropertyChanged;
-        return card;
-    }
+        if (!game.FileLocations.IsMultiDisc)
+        {
+            return game.LastPlayedDisc;
+        }
 
-    /// <summary>
-    /// Creates a dashboard game card, pre-loading its background art so the
-    /// dynamic background has something to show immediately.
-    /// </summary>
-    private GameCardViewModel CreateRecentGameCard(Game game)
-    {
-        GameCardViewModel card = CreateGameCard(game, _profileService.GetGameStats(game));
-        card.CardImageMode = Settings.CardImageMode;
-        card.EnsureBackgroundLoaded();
-        return card;
+        Logger.Info<MainWindowViewModel>(
+            $"Showing disc selection for '{game.Title}' ({game.FileLocations.DiscCount} discs)");
+        int? selectedDisc = await _modalService.ShowAsync<int?>(new DiscSelectionViewModel(game));
+        return selectedDisc ?? 0;
     }
 
     /// <summary>
@@ -453,10 +308,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Library.Games.Clear();
         Dashboard.RecentGames.Clear();
 
-        (Game Game, GameStatInfo? Stats)[] games = await Task.Run(() =>
-            _gameLibraryService.Games
-                .Select(game => (game, _profileService.GetGameStats(game)))
-                .ToArray());
+        (Game Game, GameStatInfo? Stats)[] games = await LoadGameStatsAsync();
 
         foreach ((Game game, GameStatInfo? stats) in games)
         {
@@ -487,6 +339,42 @@ public partial class MainWindowViewModel : ViewModelBase
         _gameLibraryService.Load();
         await RebuildCards();
         Logger.Debug<MainWindowViewModel>("Library refreshed from disk");
+    }
+
+    /// <summary>
+    /// Launches the given game via Core's Launcher. Multi-disc games show the
+    /// disc selection modal first. Disables the window while the game runs,
+    /// then re-enables it and refreshes the library (playtime, last played).
+    /// </summary>
+    public async Task LaunchGame(GameCardViewModel card)
+    {
+        Logger.Info<MainWindowViewModel>($"Launching '{card.Game.Title}'");
+
+        int discNumber = await ResolveDiscNumber(card.Game);
+        if (discNumber < 1)
+        {
+            Logger.Info<MainWindowViewModel>($"Disc selection cancelled for '{card.Game.Title}'");
+            return;
+        }
+
+        try
+        {
+            _profileService.SyncXConfigDefaultProfile();
+            EventManager.Instance.DisableWindow();
+            Settings settings = new();
+            await Launcher.LaunchGameASync(card.Game, settings, discNumber: discNumber);
+            Logger.Info<MainWindowViewModel>($"Game session ended for '{card.Game.Title}'");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<MainWindowViewModel>($"Failed to launch '{card.Game.Title}'");
+            Logger.LogExceptionDetails<MainWindowViewModel>(ex);
+        }
+        finally
+        {
+            EventManager.Instance.EnableWindow();
+            await RefreshLibrary();
+        }
     }
 
     /// <summary>
@@ -522,80 +410,182 @@ public partial class MainWindowViewModel : ViewModelBase
             () => _modalService.ShowAsync(new GameModalViewModel(game)), "Opening game modal");
     }
 
-    /// <summary>
-    /// Launches the given game via Core's Launcher. Multi-disc games show the
-    /// disc selection modal first. Disables the window while the game runs,
-    /// then re-enables it and refreshes the library (playtime, last played).
-    /// </summary>
-    public async Task LaunchGame(GameCardViewModel card)
+    partial void OnCurrentScreenChanged(ViewModelBase? value)
     {
-        Logger.Info<MainWindowViewModel>($"Launching '{card.Game.Title}'");
+        OnPropertyChanged(nameof(IsOverlayOpen));
+        OnPropertyChanged(nameof(IsLibraryScreen));
+        OnPropertyChanged(nameof(IsGalleryScreen));
+        OnPropertyChanged(nameof(IsSettingsScreen));
 
-        int discNumber = await ResolveDiscNumber(card.Game);
-        if (discNumber < 1)
+        if (value == Library && LibraryHasUnselectedGames)
         {
-            Logger.Info<MainWindowViewModel>($"Disc selection cancelled for '{card.Game.Title}'");
-            return;
-        }
-
-        try
-        {
-            // Belt-and-braces: make sure the Canary XConfig default profile
-            // matches the active BigScreen profile before the session starts
-            _profileService.SyncXConfigDefaultProfile();
-            EventManager.Instance.DisableWindow();
-            Settings settings = new();
-            await Launcher.LaunchGameASync(card.Game, settings, discNumber: discNumber);
-            Logger.Info<MainWindowViewModel>($"Game session ended for '{card.Game.Title}'");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<MainWindowViewModel>($"Failed to launch '{card.Game.Title}'");
-            Logger.LogExceptionDetails<MainWindowViewModel>(ex);
-        }
-        finally
-        {
-            EventManager.Instance.EnableWindow();
-            await RefreshLibrary();
+            Library.Games[0].IsSelected = true;
         }
     }
 
     /// <summary>
-    /// Resolves the disc to launch: the game's last played disc for single-disc
-    /// games, or the user's choice from the disc selection modal for multi-disc
-    /// games. Returns 0 when the selection was cancelled.
+    /// Runs the boot pipeline behind the splash screen: profile, settings,
+    /// dashboard, library and Gallery loading with live status/progress,
+    /// cancellable between steps.
     /// </summary>
-    private async Task<int> ResolveDiscNumber(Game game)
+    public async Task InitializeAsync(
+        IProgress<(string Status, double Progress)>? progress = null,
+        CancellationToken cancellationToken = default)
     {
-        if (!game.FileLocations.IsMultiDisc)
+        await Task.Yield();
+
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingSettings"), SplashStages.LoadingSettings,
+            cancellationToken, () =>
         {
-            return game.LastPlayedDisc;
+            Settings.Load();
+            Dashboard.UpdateBackground(null);
+            Header.ApplyTimeFormat(Settings.TimeFormat);
+
+            if (!string.IsNullOrEmpty(_backgroundService.Settings.PrimaryControllerGuid))
+            {
+                _gamepadService.SetPrimaryByGuid(_backgroundService.Settings.PrimaryControllerGuid);
+            }
+        });
+
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingProfile"), SplashStages.LoadingProfile,
+            cancellationToken, () =>
+        {
+            _profileService.Load();
+            Header.ApplyProfile(_profileService);
+        });
+
+        await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingDashboard"),
+            SplashStages.LoadingDashboard, cancellationToken, () =>
+        {
+            _gameLibraryService.Load();
+            foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
+            {
+                Dashboard.RecentGames.Add(CreateRecentGameCard(game));
+            }
+        });
+
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"), SplashStages.LoadingLibrary));
+        cancellationToken.ThrowIfCancellationRequested();
+        int totalGames = _gameLibraryService.Games.Count;
+
+        (Game Game, GameStatInfo? Stats)[] games = await LoadGameStatsAsync(cancellationToken);
+        int loadedGames = 0;
+        foreach ((Game game, GameStatInfo? stats) in games)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Library.Games.Add(CreateGameCard(game, stats));
+            loadedGames++;
+            if (loadedGames % TimingConstants.ProgressReportInterval == 0)
+            {
+                progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"),
+                    SplashStages.LoadingLibrary +
+                    SplashStages.LoadingLibraryIncrement * (double)loadedGames / Math.Max(1, totalGames)));
+            }
         }
 
+        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGameData"), SplashStages.LoadingGameData));
+        cancellationToken.ThrowIfCancellationRequested();
+        Stopwatch dataSw = Stopwatch.StartNew();
+        await Task.Run(async () =>
+        {
+            int preloaded = 0;
+            foreach (Game game in _gameLibraryService.Games)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                GameDataCache.PreloadGame(game);
+                preloaded++;
+                if (preloaded % TimingConstants.ProgressReportInterval == 0)
+                {
+                    progress?.Report((LocalizationHelper.GetText("Splash.LoadingGameData"),
+                        SplashStages.LoadingGameData +
+                        SplashStages.LoadingGameDataIncrement * preloaded / Math.Max(1, totalGames)));
+                }
+            }
+
+            await Library.PreloadDetailsAsync(cancellationToken);
+        }, cancellationToken);
+        dataSw.Stop();
         Logger.Info<MainWindowViewModel>(
-            $"Showing disc selection for '{game.Title}' ({game.FileLocations.DiscCount} discs)");
-        int? selectedDisc = await _modalService.ShowAsync<int?>(new DiscSelectionViewModel(game));
-        return selectedDisc ?? 0;
+            $"Game data preloaded for {_gameLibraryService.Games.Count} games in {dataSw.ElapsedMilliseconds}ms");
+        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+
+        await Gallery.LoadScreenshotsAsync(progress, cancellationToken);
+        await Task.Delay(TimingConstants.StageDwell, cancellationToken);
+
+        Library.Games.FirstOrDefault()?.EnsureBackgroundLoaded();
+
+        IsInitialized = true;
+        InitializationCompleted?.Invoke(this, EventArgs.Empty);
+        Logger.Info<MainWindowViewModel>(
+            $"Dashboard ready: {Library.Games.Count} games in library, {Dashboard.RecentGames.Count} recent");
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingDone"), SplashStages.Done));
+        await Task.Delay(TimingConstants.DoneDwell, cancellationToken);
+
+        DashboardRevealRequested?.Invoke();
     }
 
-    private void OnGameCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    public MainWindowViewModel(
+        IBackgroundService backgroundService,
+        IProfileService profileService,
+        IGameLibraryService gameLibraryService,
+        IScreenshotLibraryService screenshotLibraryService,
+        IGamepadInputService gamepadService,
+        IModalService modalService)
     {
-        if (e.PropertyName == nameof(GameCardViewModel.IsSelected))
-        {
-            if (sender is GameCardViewModel { IsSelected: true } card)
-            {
-                _lastSelectedGame = card;
-            }
-        }
+        _backgroundService = backgroundService;
+        _profileService = profileService;
+        _gameLibraryService = gameLibraryService;
+        _screenshotLibraryService = screenshotLibraryService;
+        _gamepadService = gamepadService;
+        _modalService = modalService;
 
-        // Swap behind closed overlays; the library/Gallery screens cover the
-        // dashboard, so the fade only matters when the dashboard is visible
-        if (e.PropertyName is nameof(GameCardViewModel.IsSelected) or nameof(GameCardViewModel.BackgroundArt))
+        Header = new HeaderViewModel();
+        Settings = new SettingsViewModel(backgroundService, profileService, gamepadService, modalService);
+        Library = new LibraryViewModel(Settings, modalService);
+        Gallery = new GalleryViewModel(Settings, screenshotLibraryService, modalService);
+        Dashboard = new DashboardViewModel(backgroundService);
+        Settings.AppearanceChanged += () => Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt);
+        Settings.CardImageChanged += () =>
         {
-            if (!IsOverlayOpen)
+            foreach (GameCardViewModel card in Dashboard.RecentGames)
             {
-                Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, fade: true);
+                card.CardImageMode = Settings.CardImageMode;
             }
-        }
+        };
+        Settings.TimeFormatChanged += () => Header.ApplyTimeFormat(Settings.TimeFormat);
+
+        _profileService.ProfileChanged += () =>
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+
+            GameDataCache.ClearAchievementGpds();
+            Header.ApplyProfile(_profileService);
+            TaskUtilities.RunSafely<MainWindowViewModel>(RebuildCards, "Rebuilding profile cards");
+        };
+
+        _modalService.StackChanged += () =>
+        {
+            if (_modalService.IsOpen)
+            {
+                _screenBeforeModal ??= CurrentScreen;
+            }
+            else if (_screenBeforeModal != null)
+            {
+                CurrentScreen = _screenBeforeModal;
+                _screenBeforeModal = null;
+            }
+            else
+            {
+                CloseOverlay();
+            }
+
+            IsModalOpen = _modalService.IsOpen;
+            ModalBackdropVisible = _modalService is { IsOpen: true, Top: not ScreenshotViewerViewModel };
+        };
     }
 }

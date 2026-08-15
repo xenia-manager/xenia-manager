@@ -31,6 +31,11 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     private readonly IModalService _modalService;
 
     /// <summary>
+    /// Whether the pane shows the empty state (scan finished, no screenshots).
+    /// </summary>
+    public bool ShowEmpty => !IsLoading && Rows.Count == 0;
+
+    /// <summary>
     /// The screenshots found for this game.
     /// </summary>
     public ObservableCollection<ScreenshotItemViewModel> Rows { get; } = [];
@@ -42,101 +47,9 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     public partial bool IsLoading { get; set; } = true;
 
     /// <summary>
-    /// Whether the pane shows the empty state (scan finished, no screenshots).
-    /// </summary>
-    public bool ShowEmpty => !IsLoading && Rows.Count == 0;
-
-    /// <summary>
     /// The screenshot count shown in the pane header.
     /// </summary>
     public string CountText => string.Format(LocalizationHelper.GetText("GameModal.Screenshots.Count"), Rows.Count);
-
-    /// <summary>
-    /// Fills the grid from the boot-time gallery cache for Canary games (the
-    /// screenshots are already scanned and decoded - no re-decode); other
-    /// emulator versions scan their own folder off the UI thread.
-    /// </summary>
-    public GameScreenshotsPaneViewModel(Game game)
-    {
-        _game = game;
-        _modalService = App.Services.GetRequiredService<IModalService>();
-        Rows.CollectionChanged += (_, _) => OnPropertyChanged(nameof(CountText));
-        TimeFormat timeFormat = App.Services.GetRequiredService<IBackgroundService>().Settings.TimeFormat;
-        if (game.XeniaVersion == XeniaVersion.Canary)
-        {
-            PopulateFromGalleryCache(timeFormat);
-        }
-        else
-        {
-            TaskUtilities.RunSafely<GameScreenshotsPaneViewModel>(
-                () => LoadAsync(timeFormat), "Loading game screenshots");
-        }
-    }
-
-    /// <summary>
-    /// Filters the gallery's preloaded (already decoded) screenshots for this
-    /// game by the parent-folder game ID.
-    /// </summary>
-    private void PopulateFromGalleryCache(TimeFormat timeFormat)
-    {
-        IScreenshotLibraryService library = App.Services.GetRequiredService<IScreenshotLibraryService>();
-        foreach (ScreenshotItemViewModel screenshot in library.Screenshots)
-        {
-            string folder = Path.GetFileName(Path.GetDirectoryName(screenshot.Path) ?? string.Empty);
-            if (folder.Equals(_game.GameId, StringComparison.OrdinalIgnoreCase))
-            {
-                screenshot.TimeFormat = timeFormat;
-                Rows.Add(screenshot);
-            }
-        }
-
-        IsLoading = false;
-        Logger.Info<GameScreenshotsPaneViewModel>(
-            $"Loaded {Rows.Count} screenshots for '{_game.Title}' from the gallery cache");
-    }
-
-    /// <summary>
-    /// Handles pane input: Up/Down moves the grid (one row), Right steps into
-    /// the row, A opens the full-screen viewer modal. Left/Back return to the
-    /// nav list (not consumed here).
-    /// </summary>
-    public bool HandleInput(NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveUp:
-                SelectionHelper.MoveSelection(Rows, -GalleryView.CardsPerRow);
-                return true;
-            case NavigationCommand.MoveDown:
-                SelectionHelper.MoveSelection(Rows, GalleryView.CardsPerRow);
-                return true;
-            case NavigationCommand.MoveRight:
-                SelectionHelper.MoveSelection(Rows, 1);
-                return true;
-            case NavigationCommand.Activate:
-                OpenScreenshot();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    /// <summary>
-    /// Scans the screenshots folder on a background thread and populates the grid.
-    /// </summary>
-    private async Task LoadAsync(TimeFormat timeFormat)
-    {
-        List<ScreenshotItemViewModel> loaded = await Task.Run(ScanScreenshots);
-        IsLoading = false;
-
-        foreach (ScreenshotItemViewModel screenshot in loaded)
-        {
-            screenshot.TimeFormat = timeFormat;
-            Rows.Add(screenshot);
-        }
-
-        Logger.Info<GameScreenshotsPaneViewModel>($"Loaded {Rows.Count} screenshots for '{_game.Title}'");
-    }
 
     /// <summary>
     /// Enumerates the game's screenshots folder (newest first), decoding each
@@ -182,6 +95,86 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     }
 
     /// <summary>
+    /// Filters the gallery's preloaded (already decoded) screenshots for this
+    /// game by the parent-folder game ID.
+    /// </summary>
+    private void PopulateFromGalleryCache(TimeFormat timeFormat)
+    {
+        IScreenshotLibraryService library = App.Services.GetRequiredService<IScreenshotLibraryService>();
+        foreach (ScreenshotItemViewModel screenshot in library.Screenshots)
+        {
+            string folder = Path.GetFileName(Path.GetDirectoryName(screenshot.Path) ?? string.Empty);
+            if (folder.Equals(_game.GameId, StringComparison.OrdinalIgnoreCase))
+            {
+                screenshot.TimeFormat = timeFormat;
+                Rows.Add(screenshot);
+            }
+        }
+
+        IsLoading = false;
+        Logger.Info<GameScreenshotsPaneViewModel>(
+            $"Loaded {Rows.Count} screenshots for '{_game.Title}' from the gallery cache");
+    }
+
+    /// <summary>
+    /// Scans the screenshots folder on a background thread and populates the grid.
+    /// </summary>
+    private async Task LoadAsync(TimeFormat timeFormat)
+    {
+        List<ScreenshotItemViewModel> loaded = await Task.Run(ScanScreenshots);
+        IsLoading = false;
+
+        foreach (ScreenshotItemViewModel screenshot in loaded)
+        {
+            screenshot.TimeFormat = timeFormat;
+            Rows.Add(screenshot);
+        }
+
+        Logger.Info<GameScreenshotsPaneViewModel>($"Loaded {Rows.Count} screenshots for '{_game.Title}'");
+    }
+
+    /// <summary>
+    /// Opens the full-screen screenshot viewer modal for the selected screenshot.
+    /// </summary>
+    private void OpenScreenshot()
+    {
+        ScreenshotItemViewModel? selected = Rows.FirstOrDefault(s => s.IsSelected);
+        if (selected != null)
+        {
+            Logger.Debug<GameScreenshotsPaneViewModel>($"Opening screenshot viewer for '{selected.Title}'");
+            TaskUtilities.RunSafely<GameScreenshotsPaneViewModel>(
+                () => _modalService.ShowAsync(new ScreenshotViewerViewModel(selected, Rows)),
+                "Opening screenshot viewer");
+        }
+    }
+
+    /// <summary>
+    /// Handles pane input: Up/Down moves the grid (one row), Right steps into
+    /// the row, A opens the full-screen viewer modal. Left/Back return to the
+    /// nav list (not consumed here).
+    /// </summary>
+    public bool HandleInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                SelectionHelper.MoveSelection(Rows, -GalleryView.CardsPerRow);
+                return true;
+            case NavigationCommand.MoveDown:
+                SelectionHelper.MoveSelection(Rows, GalleryView.CardsPerRow);
+                return true;
+            case NavigationCommand.MoveRight:
+                SelectionHelper.MoveSelection(Rows, 1);
+                return true;
+            case NavigationCommand.Activate:
+                OpenScreenshot();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
     /// Selects the first screenshot when the pane becomes active.
     /// </summary>
     public void OnPaneEntered()
@@ -198,17 +191,24 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     }
 
     /// <summary>
-    /// Opens the full-screen screenshot viewer modal for the selected screenshot.
+    /// Fills the grid from the boot-time gallery cache for Canary games (the
+    /// screenshots are already scanned and decoded - no re-decode); other
+    /// emulator versions scan their own folder off the UI thread.
     /// </summary>
-    private void OpenScreenshot()
+    public GameScreenshotsPaneViewModel(Game game)
     {
-        ScreenshotItemViewModel? selected = Rows.FirstOrDefault(s => s.IsSelected);
-        if (selected != null)
+        _game = game;
+        _modalService = App.Services.GetRequiredService<IModalService>();
+        Rows.CollectionChanged += (_, _) => OnPropertyChanged(nameof(CountText));
+        TimeFormat timeFormat = App.Services.GetRequiredService<IBackgroundService>().Settings.TimeFormat;
+        if (game.XeniaVersion == XeniaVersion.Canary)
         {
-            Logger.Debug<GameScreenshotsPaneViewModel>($"Opening screenshot viewer for '{selected.Title}'");
+            PopulateFromGalleryCache(timeFormat);
+        }
+        else
+        {
             TaskUtilities.RunSafely<GameScreenshotsPaneViewModel>(
-                () => _modalService.ShowAsync(new ScreenshotViewerViewModel(selected, Rows)),
-                "Opening screenshot viewer");
+                () => LoadAsync(timeFormat), "Loading game screenshots");
         }
     }
 }

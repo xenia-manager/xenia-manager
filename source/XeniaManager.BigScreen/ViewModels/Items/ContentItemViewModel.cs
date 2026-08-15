@@ -40,6 +40,11 @@ public partial class ContentItemViewModel : ObservableObject, ISelectable
     public string HeaderFilePath => Header.FilePath;
 
     /// <summary>
+    /// Whether the given path exists as a file or a directory.
+    /// </summary>
+    private static bool ExistsOnDisk(string path) => File.Exists(path) || Directory.Exists(path);
+
+    /// <summary>
     /// The reconstructed content path (package file or directory), or an empty
     /// string when neither the primary nor the backup path exists.
     /// </summary>
@@ -49,7 +54,7 @@ public partial class ContentItemViewModel : ObservableObject, ISelectable
         {
             string basePath = Regex.Split(HeaderFilePath, @"\\Headers", RegexOptions.IgnoreCase)[0];
             string primaryPath = Path.Combine(basePath, Header.ContentType.ToHexString(), Header.FileName);
-            if (File.Exists(primaryPath) || Directory.Exists(primaryPath))
+            if (ExistsOnDisk(primaryPath))
             {
                 return primaryPath;
             }
@@ -57,7 +62,7 @@ public partial class ContentItemViewModel : ObservableObject, ISelectable
             string backupPath = HeaderFilePath
                 .Replace(@"\Headers\", @"\", System.StringComparison.OrdinalIgnoreCase)
                 .Replace(".header", "", System.StringComparison.OrdinalIgnoreCase);
-            if (File.Exists(backupPath) || Directory.Exists(backupPath))
+            if (ExistsOnDisk(backupPath))
             {
                 return backupPath;
             }

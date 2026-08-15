@@ -25,6 +25,92 @@ public class GameDataCache
     private static readonly Dictionary<Game, string?> PatchPaths = [];
     private static readonly Dictionary<Game, GpdFile?> AchievementGpds = [];
 
+    private static ConfigFile LoadConfig(Game game)
+    {
+        string path = AppPathResolver.GetFullPath(game.FileLocations.Config);
+        return ConfigFile.Load(path);
+    }
+
+    private static GameContent LoadContent(Game game)
+    {
+        return new GameContent(game.XeniaVersion, game.GameId);
+    }
+
+    private static (PatchFile? File, string? Path) LoadPatch(Game game)
+    {
+        if (string.IsNullOrEmpty(game.FileLocations.Patch))
+        {
+            return (null, null);
+        }
+
+        string path = AppPathResolver.GetFullPath(game.FileLocations.Patch);
+        if (!File.Exists(path))
+        {
+            return (null, path);
+        }
+
+        return (PatchFile.Load(path), path);
+    }
+
+    private static GpdFile? LoadAchievementGpd(Game game)
+    {
+        return App.Services.GetRequiredService<IProfileService>().LoadGameAchievementGpd(game.GameId);
+    }
+
+    private static long LoadAndCacheContent(Game game)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        try
+        {
+            GameContent content = LoadContent(game);
+            Contents[game] = content;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDataCache>($"Failed to preload content for '{game.Title}'");
+            Logger.LogExceptionDetails<GameDataCache>(ex);
+        }
+
+        sw.Stop();
+        return sw.ElapsedMilliseconds;
+    }
+
+    private static long LoadAndCachePatch(Game game)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        try
+        {
+            (PatchFile? patch, PatchPaths[game]) = LoadPatch(game);
+            Patches[game] = patch;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDataCache>($"Failed to preload patch for '{game.Title}'");
+            Logger.LogExceptionDetails<GameDataCache>(ex);
+        }
+
+        sw.Stop();
+        return sw.ElapsedMilliseconds;
+    }
+
+    private static long LoadAndCacheAchievementGpd(Game game)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        try
+        {
+            GpdFile? gpd = LoadAchievementGpd(game);
+            AchievementGpds[game] = gpd;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDataCache>($"Failed to preload achievement GPD for '{game.Title}'");
+            Logger.LogExceptionDetails<GameDataCache>(ex);
+        }
+
+        sw.Stop();
+        return sw.ElapsedMilliseconds;
+    }
+
     /// <summary>
     /// The parsed config file for the given game, loading it on first use.
     /// </summary>
@@ -146,91 +232,5 @@ public class GameDataCache
 
         AchievementGpds.Clear();
         Logger.Debug<GameDataCache>("Achievement GPD cache cleared (profile switched)");
-    }
-
-    private static long LoadAndCacheContent(Game game)
-    {
-        Stopwatch sw = Stopwatch.StartNew();
-        try
-        {
-            GameContent content = LoadContent(game);
-            Contents[game] = content;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<GameDataCache>($"Failed to preload content for '{game.Title}'");
-            Logger.LogExceptionDetails<GameDataCache>(ex);
-        }
-
-        sw.Stop();
-        return sw.ElapsedMilliseconds;
-    }
-
-    private static long LoadAndCachePatch(Game game)
-    {
-        Stopwatch sw = Stopwatch.StartNew();
-        try
-        {
-            (PatchFile? patch, PatchPaths[game]) = LoadPatch(game);
-            Patches[game] = patch;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<GameDataCache>($"Failed to preload patch for '{game.Title}'");
-            Logger.LogExceptionDetails<GameDataCache>(ex);
-        }
-
-        sw.Stop();
-        return sw.ElapsedMilliseconds;
-    }
-
-    private static long LoadAndCacheAchievementGpd(Game game)
-    {
-        Stopwatch sw = Stopwatch.StartNew();
-        try
-        {
-            GpdFile? gpd = LoadAchievementGpd(game);
-            AchievementGpds[game] = gpd;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<GameDataCache>($"Failed to preload achievement GPD for '{game.Title}'");
-            Logger.LogExceptionDetails<GameDataCache>(ex);
-        }
-
-        sw.Stop();
-        return sw.ElapsedMilliseconds;
-    }
-
-    private static ConfigFile LoadConfig(Game game)
-    {
-        string path = AppPathResolver.GetFullPath(game.FileLocations.Config);
-        return ConfigFile.Load(path);
-    }
-
-    private static GameContent LoadContent(Game game)
-    {
-        return new GameContent(game.XeniaVersion, game.GameId);
-    }
-
-    private static (PatchFile? File, string? Path) LoadPatch(Game game)
-    {
-        if (string.IsNullOrEmpty(game.FileLocations.Patch))
-        {
-            return (null, null);
-        }
-
-        string path = AppPathResolver.GetFullPath(game.FileLocations.Patch);
-        if (!File.Exists(path))
-        {
-            return (null, path);
-        }
-
-        return (PatchFile.Load(path), path);
-    }
-
-    private static GpdFile? LoadAchievementGpd(Game game)
-    {
-        return App.Services.GetRequiredService<IProfileService>().LoadGameAchievementGpd(game.GameId);
     }
 }

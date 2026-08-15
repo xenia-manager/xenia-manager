@@ -35,57 +35,18 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private Tween _headerFade;
 
-    public MainWindow()
-    {
-        // Resolve the injected services from the container (the XAML loader
-        // requires a public parameterless constructor)
-        DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
-        _navigation = App.Services.GetRequiredService<DashboardNavigationController>();
-        _router = App.Services.GetRequiredService<InputRouter>();
-        _gamepadService = App.Services.GetRequiredService<IGamepadInputService>();
+    /// <summary>
+    /// Whether the window can route input to the dashboard: enabled and the
+    /// boot pipeline completed, so a stray key or button can't activate
+    /// anything during the splash or while a game is running.
+    /// </summary>
+    private bool CanHandleInput => IsEnabled && DataContext is MainWindowViewModel { IsInitialized: true };
 
-        WindowState = Avalonia.Controls.WindowState.FullScreen;
-
-        InitializeComponent();
-
-        // Drive tweens from this window's render loop (one tick per frame)
-        XeniaManager.Core.Tweening.TweenEngine.Instance.Attach(this);
-
-        // FAAppWindow's managed title bar reserves a top strip and insets the
-        // window content below it; extend the content into it so overlays and
-        // the modal layer cover the entire window (like the window background)
-        if (TitleBar != null)
-        {
-            TitleBar.ExtendsContentIntoTitleBar = true;
-            TitleBar.Height = 0;
-        }
-
-        // FluentAvalonia's built-in splash: shows the splash, runs the boot
-        // pipeline, then reveals this window
-        SplashScreen = new AppSplashScreen();
-
-        Loaded += OnLoaded;
-        KeyDown += OnWindowKeyDown;
-
-        // Window-wide: any card gaining focus updates its row's selection
-        // (dashboard rows only - overlay cards are handled by their own views)
-        AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
-        AddHandler(PointerPressedEvent, OnOptionCardPressed, RoutingStrategies.Bubble, true);
-        AddHandler(PointerPressedEvent, OnGameCardRightPressed, RoutingStrategies.Bubble, true);
-
-        _navigation.OptionFocusRequested += OnOptionFocusRequested;
-        _navigation.GameFocusRequested += OnGameFocusRequested;
-        _navigation.ScrollLibraryRequested += OnScrollLibraryRequested;
-        _navigation.ScrollGalleryRequested += OnScrollGalleryRequested;
-        _navigation.OverlayFocusRequested += OnOverlayFocusRequested;
-        _navigation.ProfileFocusRequested += OnProfileFocusRequested;
-
-        if (_gamepadService.IsActive)
-        {
-            _gamepadService.ButtonPressed += OnGamepadButtonPressed;
-            _gamepadService.StateChanged += OnGamepadStateChanged;
-        }
-    }
+    /// <summary>
+    /// Whether dashboard cards may update their row selection on focus.
+    /// Overlay cards update their own screen's selection instead.
+    /// </summary>
+    private bool CanRouteCardFocus => IsEnabled && DataContext is MainWindowViewModel { IsOverlayOpen: false };
 
     /// <summary>
     /// Finds the first descendant of the given type in the visual tree,
@@ -96,6 +57,24 @@ public partial class MainWindow : FAAppWindow
         return predicate == null
             ? this.GetVisualDescendants().OfType<T>().FirstOrDefault()
             : this.GetVisualDescendants().OfType<T>().FirstOrDefault(predicate);
+    }
+
+    /// <summary>
+    /// Closes the window when the view model requests a quit.
+    /// </summary>
+    private void OnQuitRequested(object? sender, System.EventArgs e)
+    {
+        Logger.Info<MainWindow>("Quit requested, closing window");
+        Close();
+    }
+
+    /// <summary>
+    /// Disables/enables the window while a game is running (Core's EventManager).
+    /// </summary>
+    private void OnWindowDisabled(bool isDisabled)
+    {
+        IsEnabled = !isDisabled;
+        Logger.Debug<MainWindow>($"Window {(isDisabled ? "disabled" : "enabled")} (game running)");
     }
 
     /// <summary>
@@ -111,38 +90,6 @@ public partial class MainWindow : FAAppWindow
         vm.ApplyGamepadState(_gamepadService!.IsConnected, _gamepadService.BatteryPercent, _gamepadService.IsCharging);
     }
 
-    private void OnLoaded(object? sender, RoutedEventArgs e)
-    {
-        EventManager.Instance.WindowDisabled += OnWindowDisabled;
-        Logger.Debug<MainWindow>("Main window loaded");
-
-        // Start with the first card selected (after the boot pipeline, which
-        // runs behind the splash screen - the collections may still be empty)
-        if (DataContext is MainWindowViewModel vm)
-        {
-            vm.QuitRequested += OnQuitRequested;
-            vm.LibraryRefreshed += OnLibraryRefreshed;
-            vm.DashboardRevealRequested += StartDashboardReveal;
-
-            // Push the gamepad state captured during construction (DataContext wasn't set yet)
-            if (_gamepadService is { IsActive: true })
-            {
-                vm.ApplyGamepadState(_gamepadService.IsConnected, _gamepadService.BatteryPercent,
-                    _gamepadService.IsCharging);
-            }
-
-            if (vm.IsInitialized)
-            {
-                InitializeDashboardSelection(vm);
-                Dispatcher.UIThread.Post(StartDashboardReveal);
-            }
-            else
-            {
-                vm.InitializationCompleted += (_, _) => InitializeDashboardSelection(vm);
-            }
-        }
-    }
-
     /// <summary>
     /// Selects the first dashboard card, or falls back to the option row when
     /// the library is empty.
@@ -156,7 +103,6 @@ public partial class MainWindow : FAAppWindow
         }
         else
         {
-            // No games - the game row isn't available, start on the option row
             _navigation.SelectOptionRow(vm.Dashboard);
         }
     }
@@ -175,48 +121,13 @@ public partial class MainWindow : FAAppWindow
     }
 
     /// <summary>
-    /// Disables/enables the window while a game is running (Core's EventManager).
-    /// </summary>
-    private void OnWindowDisabled(bool isDisabled)
-    {
-        IsEnabled = !isDisabled;
-        Logger.Debug<MainWindow>($"Window {(isDisabled ? "disabled" : "enabled")} (game running)");
-    }
-
-    /// <summary>
-    /// Re-centers the library carousel after the library is refreshed (post-layout).
-    /// </summary>
-    private void OnLibraryRefreshed(object? sender, EventArgs e)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (DataContext is MainWindowViewModel vm)
-            {
-                if (vm.Dashboard.ShowEmptyStub && !vm.IsOverlayOpen)
-                {
-                    // Library became empty - the game row is gone, fall back to options
-                    _navigation.SelectOptionRow(vm.Dashboard);
-                }
-            }
-
-            Find<LibraryView>()?.ScrollToSelected();
-        });
-    }
-
-    private void OnQuitRequested(object? sender, System.EventArgs e)
-    {
-        Logger.Info<MainWindow>("Quit requested, closing window");
-        Close();
-    }
-
-    /// <summary>
     /// Routes keyboard input to the input router. Input is ignored until the
     /// boot pipeline completes (the splash is showing) so a stray key can't
     /// activate anything before the dashboard is ready.
     /// </summary>
     private void OnWindowKeyDown(object? sender, KeyEventArgs e)
     {
-        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        if (DataContext is not MainWindowViewModel vm || !CanHandleInput)
         {
             return;
         }
@@ -231,17 +142,31 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnGamepadButtonPressed(GamepadButton button)
     {
-        if (!IsEnabled || DataContext is not MainWindowViewModel vm)
-        {
-            return;
-        }
-
-        if (!vm.IsInitialized)
+        if (DataContext is not MainWindowViewModel vm || !CanHandleInput)
         {
             return;
         }
 
         _router.HandleGamepad(vm, button);
+    }
+
+    /// <summary>
+    /// Re-centers the library carousel after the library is refreshed (post-layout).
+    /// </summary>
+    private void OnLibraryRefreshed(object? sender, EventArgs e)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                if (vm.Dashboard.ShowEmptyStub && !vm.IsOverlayOpen)
+                {
+                    _navigation.SelectOptionRow(vm.Dashboard);
+                }
+            }
+
+            Find<LibraryView>()?.ScrollToSelected();
+        });
     }
 
     /// <summary>
@@ -316,7 +241,6 @@ public partial class MainWindow : FAAppWindow
             }
         }
 
-        // Focus the overlay panel itself so keys route through the window handler
         Focus();
     }
 
@@ -328,7 +252,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnCardGotFocus(object? sender, FocusChangedEventArgs e)
     {
-        if (!IsEnabled || DataContext is not MainWindowViewModel vm || vm.IsOverlayOpen)
+        if (DataContext is not MainWindowViewModel vm || !CanRouteCardFocus)
         {
             return;
         }
@@ -357,7 +281,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnOptionCardPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        if (DataContext is not MainWindowViewModel vm || !CanHandleInput)
         {
             return;
         }
@@ -381,7 +305,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnGameCardRightPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        if (DataContext is not MainWindowViewModel vm || !CanHandleInput)
         {
             return;
         }
@@ -418,5 +342,84 @@ public partial class MainWindow : FAAppWindow
         }
 
         vm.OpenGameModal(gameCard.Game);
+    }
+
+    /// <summary>
+    /// Subscribes the window to the navigation controller's focus and scroll
+    /// requests.
+    /// </summary>
+    private void RegisterNavigationHandlers()
+    {
+        _navigation.OptionFocusRequested += OnOptionFocusRequested;
+        _navigation.GameFocusRequested += OnGameFocusRequested;
+        _navigation.ScrollLibraryRequested += OnScrollLibraryRequested;
+        _navigation.ScrollGalleryRequested += OnScrollGalleryRequested;
+        _navigation.OverlayFocusRequested += OnOverlayFocusRequested;
+        _navigation.ProfileFocusRequested += OnProfileFocusRequested;
+    }
+
+    private void OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        EventManager.Instance.WindowDisabled += OnWindowDisabled;
+        Logger.Debug<MainWindow>("Main window loaded");
+
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.QuitRequested += OnQuitRequested;
+            vm.LibraryRefreshed += OnLibraryRefreshed;
+            vm.DashboardRevealRequested += StartDashboardReveal;
+
+            if (_gamepadService is { IsActive: true })
+            {
+                vm.ApplyGamepadState(_gamepadService.IsConnected, _gamepadService.BatteryPercent,
+                    _gamepadService.IsCharging);
+            }
+
+            if (vm.IsInitialized)
+            {
+                InitializeDashboardSelection(vm);
+                Dispatcher.UIThread.Post(StartDashboardReveal);
+            }
+            else
+            {
+                vm.InitializationCompleted += (_, _) => InitializeDashboardSelection(vm);
+            }
+        }
+    }
+
+    public MainWindow()
+    {
+        DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
+        _navigation = App.Services.GetRequiredService<DashboardNavigationController>();
+        _router = App.Services.GetRequiredService<InputRouter>();
+        _gamepadService = App.Services.GetRequiredService<IGamepadInputService>();
+
+        WindowState = Avalonia.Controls.WindowState.FullScreen;
+
+        InitializeComponent();
+
+        XeniaManager.Core.Tweening.TweenEngine.Instance.Attach(this);
+
+        if (TitleBar != null)
+        {
+            TitleBar.ExtendsContentIntoTitleBar = true;
+            TitleBar.Height = 0;
+        }
+
+        SplashScreen = new AppSplashScreen();
+
+        Loaded += OnLoaded;
+        KeyDown += OnWindowKeyDown;
+        AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
+        AddHandler(PointerPressedEvent, OnOptionCardPressed, RoutingStrategies.Bubble, true);
+        AddHandler(PointerPressedEvent, OnGameCardRightPressed, RoutingStrategies.Bubble, true);
+
+        RegisterNavigationHandlers();
+
+        if (_gamepadService.IsActive)
+        {
+            _gamepadService.ButtonPressed += OnGamepadButtonPressed;
+            _gamepadService.StateChanged += OnGamepadStateChanged;
+        }
     }
 }

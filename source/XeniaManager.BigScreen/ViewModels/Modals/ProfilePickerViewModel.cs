@@ -34,13 +34,6 @@ public class ProfilePickerViewModel : ModalViewModelBase
     /// </summary>
     public bool ShowEmpty => !HasProfiles;
 
-    public ProfilePickerViewModel()
-    {
-        _profileService = App.Services.GetRequiredService<IProfileService>();
-        _modalService = App.Services.GetRequiredService<IModalService>();
-        Reload();
-    }
-
     /// <summary>
     /// Rebuilds the profile list from the profile service, active first, then alphabetical.
     /// </summary>
@@ -60,32 +53,6 @@ public class ProfilePickerViewModel : ModalViewModelBase
 
         TaskUtilities.RunSafely<ProfilePickerViewModel>(
             () => ProfileRowsHelper.LoadGamerscoresAsync(Profiles, _profileService), "Loading profile gamerscores");
-    }
-
-    /// <inheritdoc />
-    public override bool HandleInput(NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveUp:
-                Move(-1);
-                return true;
-            case NavigationCommand.MoveDown:
-                Move(1);
-                return true;
-            case NavigationCommand.Activate:
-                SelectActive();
-                return true;
-            case NavigationCommand.Details:
-                // Y opens the full profile manager on top of the picker
-                OpenManageProfiles();
-                return true;
-            case NavigationCommand.Back:
-                Close();
-                return true;
-            default:
-                return false;
-        }
     }
 
     /// <summary>
@@ -125,5 +92,37 @@ public class ProfilePickerViewModel : ModalViewModelBase
         Logger.Debug<ProfilePickerViewModel>("Opening manage profiles from picker");
         TaskUtilities.RunSafely<ProfilePickerViewModel>(
             () => _modalService.ShowAsync(new ManageProfilesViewModel()), "Opening manage profiles");
+    }
+
+    /// <inheritdoc />
+    public override bool HandleInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                Move(-1);
+                return true;
+            case NavigationCommand.MoveDown:
+                Move(1);
+                return true;
+            case NavigationCommand.Activate:
+                SelectActive();
+                return true;
+            case NavigationCommand.Details:
+                OpenManageProfiles();
+                return true;
+            case NavigationCommand.Back:
+                Close();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public ProfilePickerViewModel()
+    {
+        _profileService = App.Services.GetRequiredService<IProfileService>();
+        _modalService = App.Services.GetRequiredService<IModalService>();
+        Reload();
     }
 }

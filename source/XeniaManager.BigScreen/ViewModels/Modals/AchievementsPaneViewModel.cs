@@ -30,6 +30,11 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     public ObservableCollection<AchievementItemViewModel> Rows { get; } = [];
 
     /// <summary>
+    /// Whether the pane shows the empty state (no GPD or no achievements).
+    /// </summary>
+    public bool ShowEmpty => Rows.Count == 0;
+
+    /// <summary>
     /// The active sort order; X cycles through the options.
     /// </summary>
     [ObservableProperty]
@@ -57,15 +62,90 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     };
 
     /// <summary>
-    /// Whether the pane shows the empty state (no GPD or no achievements).
-    /// </summary>
-    public bool ShowEmpty => Rows.Count == 0;
-
-    /// <summary>
     /// Raised after the selection moves, so the view can scroll the selected
     /// row into view.
     /// </summary>
     public event Action? ScrollRequested;
+
+    /// <summary>
+    /// Steps the sort to the next option, keeping the selection on the same row.
+    /// </summary>
+    private void CycleSort()
+    {
+        Sort = EnumCycleHelper.Next(Sort, 1);
+        Logger.Trace<AchievementsPaneViewModel>($"Achievements sort: {Sort}");
+    }
+
+    /// <summary>
+    /// Sorts an achievement set by the current sort order (Achieved keeps the
+    /// GPD order within each group).
+    /// </summary>
+    private List<AchievementItemViewModel> SortAchievements(IEnumerable<AchievementItemViewModel> items)
+    {
+        return Sort switch
+        {
+            AchievementSort.GamerscoreAwarded =>
+                items.OrderByDescending(item => item.Gamerscore).ToList(),
+            AchievementSort.Alphabetical =>
+                items.OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase).ToList(),
+            _ => items.OrderBy(item => item.IsUnlocked ? 0 : 1).ToList()
+        };
+    }
+
+    /// <summary>
+    /// Rebuilds <see cref="Rows"/> from the sort order, keeping the selection on
+    /// the same row index so the viewport stays put.
+    /// </summary>
+    private void ApplySort()
+    {
+        SelectionHelper.ResortPreservingSelection(Rows, SortAchievements(_allAchievements));
+    }
+
+    partial void OnSortChanged(AchievementSort value)
+    {
+        ApplySort();
+        OnPropertyChanged(nameof(SortText));
+    }
+
+    /// <summary>
+    /// Selects the first achievement row when the pane becomes active.
+    /// </summary>
+    public void OnPaneEntered()
+    {
+        SelectionHelper.SelectOnlyAt(Rows, 0);
+    }
+
+    /// <summary>
+    /// Clears the achievement selection when the pane loses focus.
+    /// </summary>
+    public void OnPaneExited()
+    {
+        SelectionHelper.ClearSelection(Rows);
+    }
+
+    /// <summary>
+    /// Handles pane input: Up/Down moves the rows (scrolling into view), X
+    /// cycles the sort.
+    /// </summary>
+    public bool HandleInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                SelectionHelper.MoveSelection(Rows, -1);
+                ScrollRequested?.Invoke();
+                return true;
+            case NavigationCommand.MoveDown:
+                SelectionHelper.MoveSelection(Rows, 1);
+                ScrollRequested?.Invoke();
+                return true;
+            case NavigationCommand.CycleSort:
+                CycleSort();
+                return true;
+            default:
+                return false;
+        }
+    }
 
     /// <summary>
     /// Loads the achievement GPD for the active profile (from the boot preload
@@ -95,85 +175,5 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
 
         Logger.Debug<AchievementsPaneViewModel>(
             $"Achievements pane: {Rows.Count} achievements ({_allAchievements.Count(a => a.IsUnlocked)} unlocked)");
-    }
-
-    /// <summary>
-    /// Handles pane input: Up/Down moves the rows (scrolling into view), X
-    /// cycles the sort.
-    /// </summary>
-    public bool HandleInput(NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveUp:
-                SelectionHelper.MoveSelection(Rows, -1);
-                ScrollRequested?.Invoke();
-                return true;
-            case NavigationCommand.MoveDown:
-                SelectionHelper.MoveSelection(Rows, 1);
-                ScrollRequested?.Invoke();
-                return true;
-            case NavigationCommand.CycleSort:
-                CycleSort();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    /// <summary>
-    /// Steps the sort to the next option, keeping the selection on the same row.
-    /// </summary>
-    private void CycleSort()
-    {
-        Sort = EnumCycleHelper.Next(Sort, 1);
-        Logger.Trace<AchievementsPaneViewModel>($"Achievements sort: {Sort}");
-    }
-
-    /// <summary>
-    /// Selects the first achievement row when the pane becomes active.
-    /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(Rows, 0);
-    }
-
-    /// <summary>
-    /// Clears the achievement selection when the pane loses focus.
-    /// </summary>
-    public void OnPaneExited()
-    {
-        SelectionHelper.ClearSelection(Rows);
-    }
-
-    partial void OnSortChanged(AchievementSort value)
-    {
-        ApplySort();
-        OnPropertyChanged(nameof(SortText));
-    }
-
-    /// <summary>
-    /// Rebuilds <see cref="Rows"/> from the sort order, keeping the selection on
-    /// the same row index so the viewport stays put.
-    /// </summary>
-    private void ApplySort()
-    {
-        SelectionHelper.ResortPreservingSelection(Rows, SortAchievements(_allAchievements));
-    }
-
-    /// <summary>
-    /// Sorts an achievement set by the current sort order (Achieved keeps the
-    /// GPD order within each group).
-    /// </summary>
-    private List<AchievementItemViewModel> SortAchievements(IEnumerable<AchievementItemViewModel> items)
-    {
-        return Sort switch
-        {
-            AchievementSort.GamerscoreAwarded =>
-                items.OrderByDescending(item => item.Gamerscore).ToList(),
-            AchievementSort.Alphabetical =>
-                items.OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase).ToList(),
-            _ => items.OrderBy(item => item.IsUnlocked ? 0 : 1).ToList()
-        };
     }
 }

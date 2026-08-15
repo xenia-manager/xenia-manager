@@ -4,8 +4,9 @@
                        xmlns:prof="using:XeniaManager.BigScreen.Controls.Profiles"
                        xmlns:modal="using:XeniaManager.BigScreen.Controls.Modals"
                        xmlns:views="using:XeniaManager.BigScreen.Views.Screens"
-                       xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-                       xmlns:windowing="using:FluentAvalonia.UI.Windowing"
+                        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+                        xmlns:const="using:XeniaManager.BigScreen.Constants"
+                        xmlns:windowing="using:FluentAvalonia.UI.Windowing"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
@@ -38,12 +39,12 @@
                     IsHitTestVisible="False"
                     Background="{DynamicResource BackgroundVignette}" />
 
-            <!-- TOP DASHBOARD HEADER: top inset 55 = the dashboard's bottom inset,
-                 so the frame is uniform on all sides; fades in with the dashboard
-                 elements after the splash reveal -->
+            <!-- TOP DASHBOARD HEADER: top inset = the dashboard's bottom inset
+                 (LayoutConstants.DashboardInsetY), so the frame is uniform on all
+                 sides; fades in with the dashboard elements after the splash reveal -->
             <Grid x:Name="HeaderRow"
                   Grid.Row="0"
-                  Margin="150,55,150,0"
+                  Margin="{x:Static const:LayoutConstants.MainWindowContentMargin}"
                   ColumnDefinitions="Auto, *, Auto"
                   VerticalAlignment="Top">
 

@@ -21,34 +21,15 @@ public partial class GalleryView : UserControl
     /// <summary>
     /// How many cards fit on one row.
     /// </summary>
-    public const int CardsPerRow = 4;
+    public const int CardsPerRow = ScreenshotGridLayout.CardsPerRow;
 
-    /// <summary>
-    /// The widest a card may get (16:9). Cards shrink to fit <see cref="CardsPerRow"/> per row.
-    /// </summary>
-    private const double MaxCardWidth = 384;
-
-    /// <summary>
-    /// The gap between cards and rows (matches the WrapPanel spacing).
-    /// </summary>
-    private const double ItemSpacing = 16;
-
-    private double _cardWidth = MaxCardWidth;
-    private double _cardHeight = MaxCardWidth * 9 / 16;
-
-    public GalleryView()
-    {
-        InitializeComponent();
-        Loaded += OnLoaded;
-        SvCarousel.EffectiveViewportChanged += (_, _) => ApplyCardSize();
-        ScreenshotsGrid.AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
-        ScreenshotsGrid.AddHandler(PointerPressedEvent, OnCardPressed, RoutingStrategies.Bubble, true);
-        ScreenshotsGrid.ContainerPrepared += OnContainerPrepared;
-    }
+    private double _cardWidth = ScreenshotGridLayout.MaxCardWidth;
+    private double _cardHeight = ScreenshotGridLayout.CardHeight(ScreenshotGridLayout.MaxCardWidth);
 
     /// <summary>
     /// Sizes every realized card so exactly <see cref="CardsPerRow"/> fit per row
-    /// (16:9), capped at <see cref="MaxCardWidth"/>, whatever the window width.
+    /// (16:9), capped at <see cref="ScreenshotGridLayout.MaxCardWidth"/>,
+    /// whatever the window width.
     /// </summary>
     private void ApplyCardSize()
     {
@@ -58,8 +39,8 @@ public partial class GalleryView : UserControl
             return;
         }
 
-        _cardWidth = Math.Min((available - ItemSpacing * (CardsPerRow - 1)) / CardsPerRow, MaxCardWidth);
-        _cardHeight = _cardWidth * 9 / 16;
+        _cardWidth = ScreenshotGridLayout.FitCardWidth(available);
+        _cardHeight = ScreenshotGridLayout.CardHeight(_cardWidth);
 
         foreach (Control child in panel.Children)
         {
@@ -97,13 +78,11 @@ public partial class GalleryView : UserControl
             return;
         }
 
-        double step = _cardHeight + ItemSpacing;
         int row = selectedIndex / CardsPerRow;
         int rowCount = (vm.Screenshots.Count + CardsPerRow - 1) / CardsPerRow;
-        double gridHeight = rowCount * step - ItemSpacing;
-
-        double target = row * step + _cardHeight / 2 - viewport / 2;
-        SvCarousel.Offset = new Vector(0, Math.Clamp(target, 0, Math.Max(0, gridHeight - viewport)));
+        double offset = ScrollViewerHelper.CenterOnItem(
+            row, _cardHeight, ScreenshotGridLayout.ItemSpacing, rowCount, viewport);
+        SvCarousel.Offset = new Vector(0, offset);
     }
 
     /// <summary>
@@ -150,7 +129,6 @@ public partial class GalleryView : UserControl
             return;
         }
 
-        // Screenshots are loaded by the boot pipeline behind the splash screen
         if (vm.Screenshots.Count > 0 && !vm.Screenshots.Any(s => s.IsSelected))
         {
             vm.Screenshots[0].IsSelected = true;
@@ -158,5 +136,15 @@ public partial class GalleryView : UserControl
 
         ApplyCardSize();
         ScrollToSelected();
+    }
+
+    public GalleryView()
+    {
+        InitializeComponent();
+        Loaded += OnLoaded;
+        SvCarousel.EffectiveViewportChanged += (_, _) => ApplyCardSize();
+        ScreenshotsGrid.AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
+        ScreenshotsGrid.AddHandler(PointerPressedEvent, OnCardPressed, RoutingStrategies.Bubble, true);
+        ScreenshotsGrid.ContainerPrepared += OnContainerPrepared;
     }
 }

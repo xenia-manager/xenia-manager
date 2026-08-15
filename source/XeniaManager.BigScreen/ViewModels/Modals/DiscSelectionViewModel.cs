@@ -18,6 +18,11 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 public class DiscSelectionViewModel : ModalViewModelBase<int?>
 {
     /// <summary>
+    /// Whether disc art is available to show.
+    /// </summary>
+    public bool HasIcon => Icon != null;
+
+    /// <summary>
     /// The Core game model this selection is for.
     /// </summary>
     public Game Game { get; }
@@ -33,21 +38,9 @@ public class DiscSelectionViewModel : ModalViewModelBase<int?>
     public Bitmap? Icon => Game.Artwork.CachedIcon;
 
     /// <summary>
-    /// Whether disc art is available to show.
-    /// </summary>
-    public bool HasIcon => Icon != null;
-
-    /// <summary>
     /// The disc cards, one per disc (Disc 1 + additional discs).
     /// </summary>
     public List<DiscOptionItemViewModel> Discs { get; }
-
-    public DiscSelectionViewModel(Game game)
-    {
-        Game = game;
-        Discs = BuildDiscs(game);
-        SelectDefaultDisc();
-    }
 
     /// <summary>
     /// Builds one card per disc: Disc 1 from the main game file, then every
@@ -93,56 +86,6 @@ public class DiscSelectionViewModel : ModalViewModelBase<int?>
         }
     }
 
-    /// <inheritdoc />
-    public override bool HandleInput(NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveLeft:
-                MoveSelection(-1);
-                return true;
-            case NavigationCommand.MoveRight:
-                MoveSelection(1);
-                return true;
-            case NavigationCommand.Activate:
-                ActivateSelected();
-                return true;
-            case NavigationCommand.Back:
-                Close(null);
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    /// <summary>
-    /// Launches the selected disc (A), blocked when its file is missing.
-    /// </summary>
-    private void ActivateSelected()
-    {
-        DiscOptionItemViewModel? selected = Discs.FirstOrDefault(d => d.IsSelected);
-        if (selected is { IsPathValid: true })
-        {
-            Logger.Info<DiscSelectionViewModel>($"User selected Disc {selected.DiscNumber}");
-            Close(selected.DiscNumber);
-        }
-    }
-
-    /// <summary>
-    /// Moves the selection by the given step, skipping cards whose file is
-    /// missing. Stays put when no valid disc lies in that direction.
-    /// </summary>
-    private void MoveSelection(int delta)
-    {
-        int index = SelectionHelper.IndexOfSelected(Discs);
-        int target = index < 0 ? FindFirstSelectable(delta) : FindNextSelectable(index, delta);
-        if (target >= 0)
-        {
-            SelectionHelper.SelectOnlyAt(Discs, target);
-            Logger.Trace<DiscSelectionViewModel>($"Moved disc selection by {delta}");
-        }
-    }
-
     /// <summary>
     /// Index of the first valid disc, scanning from the left for a positive
     /// step and from the right otherwise. -1 when every disc is missing.
@@ -180,6 +123,34 @@ public class DiscSelectionViewModel : ModalViewModelBase<int?>
     }
 
     /// <summary>
+    /// Moves the selection by the given step, skipping cards whose file is
+    /// missing. Stays put when no valid disc lies in that direction.
+    /// </summary>
+    private void MoveSelection(int delta)
+    {
+        int index = SelectionHelper.IndexOfSelected(Discs);
+        int target = index < 0 ? FindFirstSelectable(delta) : FindNextSelectable(index, delta);
+        if (target >= 0)
+        {
+            SelectionHelper.SelectOnlyAt(Discs, target);
+            Logger.Trace<DiscSelectionViewModel>($"Moved disc selection by {delta}");
+        }
+    }
+
+    /// <summary>
+    /// Launches the selected disc (A), blocked when its file is missing.
+    /// </summary>
+    private void ActivateSelected()
+    {
+        DiscOptionItemViewModel? selected = Discs.FirstOrDefault(d => d.IsSelected);
+        if (selected is { IsPathValid: true })
+        {
+            Logger.Info<DiscSelectionViewModel>($"User selected Disc {selected.DiscNumber}");
+            Close(selected.DiscNumber);
+        }
+    }
+
+    /// <summary>
     /// Launches the clicked disc (mouse path; a click selects and confirms in
     /// one step, mirroring the desktop dialog). Ignored for missing files.
     /// </summary>
@@ -193,5 +164,34 @@ public class DiscSelectionViewModel : ModalViewModelBase<int?>
         SelectionHelper.SelectOnly(Discs, disc);
         Logger.Info<DiscSelectionViewModel>($"User selected Disc {disc.DiscNumber}");
         Close(disc.DiscNumber);
+    }
+
+    /// <inheritdoc />
+    public override bool HandleInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveLeft:
+                MoveSelection(-1);
+                return true;
+            case NavigationCommand.MoveRight:
+                MoveSelection(1);
+                return true;
+            case NavigationCommand.Activate:
+                ActivateSelected();
+                return true;
+            case NavigationCommand.Back:
+                Close(null);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public DiscSelectionViewModel(Game game)
+    {
+        Game = game;
+        Discs = BuildDiscs(game);
+        SelectDefaultDisc();
     }
 }

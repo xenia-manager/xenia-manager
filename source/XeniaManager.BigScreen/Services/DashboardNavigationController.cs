@@ -111,7 +111,6 @@ public class DashboardNavigationController
     /// </summary>
     public void SelectGameRow(DashboardViewModel dashboard)
     {
-        // No games - the game row doesn't exist, stay on the option row
         if (dashboard.RecentGames.Count == 0)
         {
             IsOnOptionsRow = true;

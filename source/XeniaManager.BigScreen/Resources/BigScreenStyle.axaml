@@ -227,6 +227,68 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
+    <!-- Toggle switch: track + sliding thumb, no tick glyph -->
+    <Style Selector="CheckBox.toggle-switch">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid Height="34" VerticalAlignment="Center" Width="66">
+                        <Border x:Name="Track"
+                                CornerRadius="17"
+                                Background="{DynamicResource CardBorder}"
+                                BorderBrush="{DynamicResource TextSecondary}"
+                                BorderThickness="2" />
+                        <Ellipse x:Name="Thumb"
+                                 Height="26"
+                                 HorizontalAlignment="Left"
+                                 Margin="4,0,0,0"
+                                 VerticalAlignment="Center"
+                                 Width="26"
+                                 Fill="#FFFFFFFF">
+                            <Ellipse.Transitions>
+                                <Transitions>
+                                    <ThicknessTransition Property="Margin" Duration="0:0:0.15" />
+                                </Transitions>
+                            </Ellipse.Transitions>
+                        </Ellipse>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector="CheckBox.toggle-switch:checked /template/ Border#Track">
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="CheckBox.toggle-switch:checked /template/ Ellipse#Thumb">
+        <Setter Property="Margin" Value="32,0,4,0" />
+    </Style>
+
+    <Style Selector="CheckBox.toggle-switch:focus-visible /template/ Border#Track">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- Pane header: icon + title row inside the game modal panes -->
+    <Style Selector="StackPanel.pane-header">
+        <Setter Property="Spacing" Value="14" />
+    </Style>
+
+    <Style Selector="StackPanel.pane-header fluent|SymbolIcon">
+        <Setter Property="FontSize" Value="26" />
+    </Style>
+
+    <Style Selector="StackPanel.pane-header TextBlock">
+        <Setter Property="FontSize" Value="24" />
+    </Style>
+
+    <!-- Pane header stat row (IconStat based) -->
+    <Style Selector="prim|IconStat.pane-header-stat">
+        <Setter Property="IconSize" Value="26" />
+        <Setter Property="Spacing" Value="14" />
+        <Setter Property="FontSize" Value="24" />
+    </Style>
+
     <!-- SETTINGS OVERLAY ROWS: reserved border thickness so focus doesn't change size -->
     <Style Selector="Border.settings-row">
         <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />

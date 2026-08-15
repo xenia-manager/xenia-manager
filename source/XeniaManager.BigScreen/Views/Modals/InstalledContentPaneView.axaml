@@ -19,14 +19,10 @@
                     VerticalAlignment="Center">
             <prim:IconStat Icon="Document"
                            Stat="{Binding TypeText}"
-                           IconSize="26"
-                           Spacing="14"
-                           FontSize="24" />
+                           Classes="pane-header-stat" />
             <prim:IconStat Icon="Library"
                            Stat="{Binding CountText}"
-                           IconSize="26"
-                           Spacing="14"
-                           FontSize="24" />
+                           Classes="pane-header-stat" />
         </StackPanel>
 
         <!-- BODY: content rows -->
@@ -48,21 +44,13 @@
             </ScrollViewer>
 
             <!-- Empty state: nothing installed of this type -->
-            <Border IsVisible="{Binding ShowEmpty}"
-                    Height="220"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="520"
-                    Classes="empty-state">
-                <StackPanel Orientation="Vertical"
-                            VerticalAlignment="Center"
-                            Spacing="16">
-                    <fluent:SymbolIcon Symbol="Document"
-                                       FontSize="64" />
-                    <TextBlock Text="{DynamicResource GameModal.Content.Empty}"
-                               FontSize="22" />
-                </StackPanel>
-            </Border>
+            <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                             Symbol="Document"
+                             Text="{DynamicResource GameModal.Content.Empty}"
+                             Width="520"
+                             Height="220"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center" />
         </Grid>
     </Grid>
 </UserControl>

@@ -13,6 +13,22 @@ namespace XeniaManager.BigScreen.Factories;
 public static class BackgroundBrushFactory
 {
     /// <summary>
+    /// Linearly interpolates between two colors.
+    /// </summary>
+    public static Color Mix(Color from, Color to, double amount)
+    {
+        return Color.FromRgb(
+            (byte)Math.Round(from.R + (to.R - from.R) * amount),
+            (byte)Math.Round(from.G + (to.G - from.G) * amount),
+            (byte)Math.Round(from.B + (to.B - from.B) * amount));
+    }
+
+    /// <summary>
+    /// Blends the colour toward black by the given amount (0-1).
+    /// </summary>
+    private static Color MixWithBlack(Color color, double amount) => Mix(color, Colors.Black, amount);
+
+    /// <summary>
     /// Creates a smooth vertical linear gradient from the primary colour:
     /// the colour itself at the top, fading to a slightly darker slate at the bottom.
     /// </summary>
@@ -68,9 +84,6 @@ public static class BackgroundBrushFactory
     {
         Color edge = Color.FromArgb((byte)Math.Round(opacity * 255), 0, 0, 0);
 
-        // Explicit transparent black (#00000000), NOT Colors.Transparent (#00FFFFFF):
-        // interpolating white-tinted transparency toward the black edge produces a
-        // bright halo in the middle of the screen.
         Color transparent = Color.FromArgb(0, 0, 0, 0);
         return new RadialGradientBrush
         {
@@ -84,20 +97,4 @@ public static class BackgroundBrushFactory
             }
         };
     }
-
-    /// <summary>
-    /// Linearly interpolates between two colors.
-    /// </summary>
-    public static Color Mix(Color from, Color to, double amount)
-    {
-        return Color.FromRgb(
-            (byte)Math.Round(from.R + (to.R - from.R) * amount),
-            (byte)Math.Round(from.G + (to.G - from.G) * amount),
-            (byte)Math.Round(from.B + (to.B - from.B) * amount));
-    }
-
-    /// <summary>
-    /// Blends the colour toward black by the given amount (0-1).
-    /// </summary>
-    private static Color MixWithBlack(Color color, double amount) => Mix(color, Colors.Black, amount);
 }

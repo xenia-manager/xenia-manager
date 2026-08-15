@@ -12,48 +12,6 @@
              x:DataType="vm:ManageProfilesViewModel">
 
     <UserControl.Styles>
-        <!-- Live toggle: rendered as a toggle switch (track + sliding thumb), no tick glyph -->
-        <Style Selector="CheckBox.live-toggle">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Grid Height="34" VerticalAlignment="Center" Width="66">
-                            <Border x:Name="Track"
-                                    CornerRadius="17"
-                                    Background="{DynamicResource CardBorder}"
-                                    BorderBrush="{DynamicResource TextSecondary}"
-                                    BorderThickness="2" />
-                            <Ellipse x:Name="Thumb"
-                                     Height="26"
-                                     HorizontalAlignment="Left"
-                                     Margin="4,0,0,0"
-                                     VerticalAlignment="Center"
-                                     Width="26"
-                                     Fill="#FFFFFFFF">
-                                <Ellipse.Transitions>
-                                    <Transitions>
-                                        <ThicknessTransition Property="Margin" Duration="0:0:0.15" />
-                                    </Transitions>
-                                </Ellipse.Transitions>
-                            </Ellipse>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style Selector="CheckBox.live-toggle:checked /template/ Border#Track">
-            <Setter Property="Background" Value="{DynamicResource AccentColor}" />
-        </Style>
-
-        <Style Selector="CheckBox.live-toggle:checked /template/ Ellipse#Thumb">
-            <Setter Property="Margin" Value="32,0,4,0" />
-        </Style>
-
-        <Style Selector="CheckBox.live-toggle:focus-visible /template/ Border#Track">
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        </Style>
-
         <!-- Edit-panel dropdowns (right-aligned, sized to content) -->
         <Style Selector="ComboBox.edit-combo">
             <Setter Property="MinWidth" Value="280" />
@@ -119,21 +77,13 @@
                         </ScrollViewer>
 
                         <!-- Empty-state stub -->
-                        <Border IsVisible="{Binding ShowEmpty}"
-                                Height="200"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Width="520"
-                                Classes="empty-state">
-                            <StackPanel Orientation="Vertical"
-                                        VerticalAlignment="Center"
-                                        Spacing="16">
-                                <fluent:SymbolIcon Symbol="PersonQuestionMark"
-                                                   FontSize="64" />
-                                <TextBlock Text="{DynamicResource ManageProfiles.NoProfilesFound}"
-                                           FontSize="22" />
-                            </StackPanel>
-                        </Border>
+                        <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                                         Symbol="PersonQuestionMark"
+                                         Text="{DynamicResource ManageProfiles.NoProfilesFound}"
+                                         Width="520"
+                                         Height="200"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center" />
                     </Grid>
 
                     <!-- CREATE NEW PROFILE (anchored row beneath the list) -->
@@ -218,7 +168,7 @@
                                           IsChecked="{Binding IsLiveEnabled, Mode=TwoWay}"
                                           Padding="12,8"
                                           VerticalAlignment="Center"
-                                          Classes="live-toggle" />
+                                          Classes="toggle-switch" />
                             </Grid>
                         </Border>
 

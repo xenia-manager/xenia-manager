@@ -67,7 +67,6 @@ internal class AppSplashScreen : IFAApplicationSplashScreen
         }
         catch (Exception ex)
         {
-            // Boot failures are logged; the main window still reveals
             Logger.Error<AppSplashScreen>("Failed to initialize BigScreen");
             Logger.LogExceptionDetails<AppSplashScreen>(ex);
         }

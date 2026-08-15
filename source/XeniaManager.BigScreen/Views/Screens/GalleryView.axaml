@@ -56,21 +56,15 @@
                 </ScrollViewer>
 
                 <!-- Empty-gallery stub: shown when there are no screenshots -->
-                <Border IsVisible="{Binding ShowEmptyScreenshots}"
-                        Height="220"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="360"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="Camera"
-                                           FontSize="72" />
-                        <TextBlock Text="{DynamicResource Gallery.NoScreenshotsFound}"
-                                   FontSize="24" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState IsVisible="{Binding ShowEmptyScreenshots}"
+                                 Symbol="Camera"
+                                 Text="{DynamicResource Gallery.NoScreenshotsFound}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="360"
+                                 Height="220"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
             </Grid>
 
             <!-- HINTS (gallery) -->

@@ -3,26 +3,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Dashboard"
+             xmlns:const="using:XeniaManager.BigScreen.Constants"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Views.Dashboard.DashboardView"
              x:DataType="vm:DashboardViewModel">
 
+    <!-- Row 2 = 271 (LayoutConstants.DashboardCardBoxArtSelectedHeight), so the
+         selected box-art card is never cut vertically -->
     <Grid RowDefinitions="*, 271, 145"
-          Margin="150,0,150,55"
-          RowSpacing="17">
+          Margin="{x:Static const:LayoutConstants.DashboardContentMargin}"
+          RowSpacing="{x:Static const:LayoutConstants.DashboardRowSpacing}">
 
-        <!-- GAME CARDS ROW (271 = the selected box-art card's height, so
-             nothing gets cut vertically) -->
+        <!-- GAME CARDS ROW -->
         <Grid Grid.Row="1" VerticalAlignment="Bottom">
 
             <!-- Empty-library stub: subtle disc card, shown when there are no games -->
             <Border IsVisible="{Binding ShowEmptyStub}"
                     CornerRadius="8"
-                    Height="153"
+                    Height="{x:Static const:LayoutConstants.DashboardCardWidth}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    Width="153"
+                    Width="{x:Static const:LayoutConstants.DashboardCardWidth}"
                     Classes="empty-state">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
@@ -34,11 +36,15 @@
                 </StackPanel>
             </Border>
 
+            <!-- Cards grow to DashboardCardSelectedWidth on selection; the
+                 transition on GameCard makes the row reflow smoothly -->
             <ItemsControl x:Name="GamesRow"
                           ItemsSource="{Binding RecentGames}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Bottom" />
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="{x:Static const:LayoutConstants.DashboardCardSpacing}"
+                                    VerticalAlignment="Bottom" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
@@ -52,7 +58,9 @@
                       VerticalAlignment="Bottom">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Bottom" />
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="{x:Static const:LayoutConstants.DashboardOptionSpacing}"
+                                VerticalAlignment="Bottom" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

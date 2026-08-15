@@ -29,14 +29,26 @@ public partial class LibraryViewModel : ScreenViewModel
     private readonly SettingsViewModel _settings;
 
     /// <summary>
-    /// All games in the library (carousel / list).
+    /// In-memory cache of fetched database info keyed by game ID (null values are
+    /// cached too so games missing from the marketplace DB aren't re-fetched).
     /// </summary>
-    public ObservableCollection<GameCardViewModel> Games { get; } = [];
+    private readonly Dictionary<string, GameDetailedInfo?> _detailsCache = [];
+
+    /// <summary>
+    /// Monotonic generation counter so a slow fetch can't overwrite the pane for a
+    /// game the user already navigated away from.
+    /// </summary>
+    private int _detailsLoadGeneration;
 
     /// <summary>
     /// Whether the library screen shows the "no games" stub.
     /// </summary>
     public bool ShowEmptyStub => Games.Count == 0;
+
+    /// <summary>
+    /// All games in the library (carousel / list).
+    /// </summary>
+    public ObservableCollection<GameCardViewModel> Games { get; } = [];
 
     /// <summary>
     /// The current library sort mode (cycled with Y).
@@ -74,26 +86,6 @@ public partial class LibraryViewModel : ScreenViewModel
     public partial GameDetailsViewModel? Details { get; set; }
 
     /// <summary>
-    /// In-memory cache of fetched database info keyed by game ID (null values are
-    /// cached too so games missing from the marketplace DB aren't re-fetched).
-    /// </summary>
-    private readonly Dictionary<string, GameDetailedInfo?> _detailsCache = [];
-
-    /// <summary>
-    /// Monotonic generation counter so a slow fetch can't overwrite the pane for a
-    /// game the user already navigated away from.
-    /// </summary>
-    private int _detailsLoadGeneration;
-
-    public LibraryViewModel(SettingsViewModel settings, IModalService modalService) : base(settings, modalService)
-    {
-        _settings = settings;
-        Games.CollectionChanged += OnGamesCollectionChanged;
-        settings.LibraryViewModeChanged += OnLibraryViewModeChanged;
-        IsListView = settings.LibraryViewMode == LibraryViewMode.List;
-    }
-
-    /// <summary>
     /// Re-sorts the game collection. The selection follows the list position,
     /// not the element, so the selected card stays in the same spot on screen.
     /// </summary>
@@ -114,26 +106,17 @@ public partial class LibraryViewModel : ScreenViewModel
         SelectionHelper.ResortPreservingSelection(Games, sorted);
     }
 
-    partial void OnSortChanged(LibrarySort value)
+    /// <summary>
+    /// Updates the selected card when it gains selection.
+    /// </summary>
+    private void OnCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        ApplySort();
-        OnPropertyChanged(nameof(SortText));
-        Logger.Debug<LibraryViewModel>($"Library sort changed to {value}");
+        if (e.PropertyName == nameof(GameCardViewModel.IsSelected) &&
+            sender is GameCardViewModel { IsSelected: true } card)
+        {
+            SelectedCard = card;
+        }
     }
-
-    /// <summary>
-    /// Cycles the library sort mode: Alphabetical → Time Played → Last Played.
-    /// </summary>
-    public void CycleSort() => Sort = EnumCycleHelper.Next(Sort, 1);
-
-    /// <summary>
-    /// Swaps between the carousel and list views, persisting the choice through
-    /// the settings dropdown (which the library follows live).
-    /// </summary>
-    public void ToggleView() =>
-        _settings.LibraryViewMode = _settings.LibraryViewMode == LibraryViewMode.List
-            ? LibraryViewMode.Carousel
-            : LibraryViewMode.List;
 
     /// <summary>
     /// Tracks card selection changes (via PropertyChanged) whenever cards are
@@ -165,24 +148,11 @@ public partial class LibraryViewModel : ScreenViewModel
     }
 
     /// <summary>
-    /// Updates the selected card when it gains selection.
+    /// Applies the fetched database info to the current details pane.
     /// </summary>
-    private void OnCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void ApplyDetails(GameDetailedInfo? info)
     {
-        if (e.PropertyName == nameof(GameCardViewModel.IsSelected) &&
-            sender is GameCardViewModel { IsSelected: true } card)
-        {
-            SelectedCard = card;
-        }
-    }
-
-    partial void OnSelectedCardChanged(GameCardViewModel? value)
-    {
-        Details = value != null ? new GameDetailsViewModel(value) : null;
-        if (value != null)
-        {
-            _ = LoadDetailsAsync(value);
-        }
+        Details?.Info = info;
     }
 
     /// <summary>
@@ -230,13 +200,35 @@ public partial class LibraryViewModel : ScreenViewModel
         }
     }
 
-    /// <summary>
-    /// Applies the fetched database info to the current details pane.
-    /// </summary>
-    private void ApplyDetails(GameDetailedInfo? info)
+    partial void OnSelectedCardChanged(GameCardViewModel? value)
     {
-        Details?.Info = info;
+        Details = value != null ? new GameDetailsViewModel(value) : null;
+        if (value != null)
+        {
+            _ = LoadDetailsAsync(value);
+        }
     }
+
+    partial void OnSortChanged(LibrarySort value)
+    {
+        ApplySort();
+        OnPropertyChanged(nameof(SortText));
+        Logger.Debug<LibraryViewModel>($"Library sort changed to {value}");
+    }
+
+    /// <summary>
+    /// Cycles the library sort mode: Alphabetical → Time Played → Last Played.
+    /// </summary>
+    public void CycleSort() => Sort = EnumCycleHelper.Next(Sort, 1);
+
+    /// <summary>
+    /// Swaps between the carousel and list views, persisting the choice through
+    /// the settings dropdown (which the library follows live).
+    /// </summary>
+    public void ToggleView() =>
+        _settings.LibraryViewMode = _settings.LibraryViewMode == LibraryViewMode.List
+            ? LibraryViewMode.Carousel
+            : LibraryViewMode.List;
 
     /// <summary>
     /// Preloads the marketplace DB info for every game into the details cache
@@ -282,5 +274,13 @@ public partial class LibraryViewModel : ScreenViewModel
     private void OnLibraryViewModeChanged()
     {
         IsListView = _settings.LibraryViewMode == LibraryViewMode.List;
+    }
+
+    public LibraryViewModel(SettingsViewModel settings, IModalService modalService) : base(settings, modalService)
+    {
+        _settings = settings;
+        Games.CollectionChanged += OnGamesCollectionChanged;
+        settings.LibraryViewModeChanged += OnLibraryViewModeChanged;
+        IsListView = settings.LibraryViewMode == LibraryViewMode.List;
     }
 }

@@ -12,12 +12,6 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class DiscSelectionView : UserControl
 {
-    public DiscSelectionView()
-    {
-        InitializeComponent();
-        DiscList.AddHandler(Button.ClickEvent, OnDiscClick, RoutingStrategies.Bubble);
-    }
-
     /// <summary>
     /// Launches the clicked disc (mouse path; the controller path goes through
     /// the modal VM's HandleInput).
@@ -29,5 +23,11 @@ public partial class DiscSelectionView : UserControl
         {
             vm.SelectDisc(disc);
         }
+    }
+
+    public DiscSelectionView()
+    {
+        InitializeComponent();
+        DiscList.AddHandler(Button.ClickEvent, OnDiscClick, RoutingStrategies.Bubble);
     }
 }

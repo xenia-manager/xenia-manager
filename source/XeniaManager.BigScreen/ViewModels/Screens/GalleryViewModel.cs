@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -61,7 +62,6 @@ public partial class GalleryViewModel : ScreenViewModel
         _modalService = modalService;
         Screenshots.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyScreenshots));
 
-        // Screenshot captions follow the persisted time format
         _settings.TimeFormatChanged += () =>
         {
             foreach (ScreenshotItemViewModel screenshot in Screenshots)
@@ -119,7 +119,7 @@ public partial class GalleryViewModel : ScreenViewModel
         }
 
         _screenshotsLoaded = true;
-        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGallery"), 0.85));
+        progress?.Report((LocalizationHelper.GetText("Splash.LoadingGallery"), SplashStages.LoadingGallery));
         await Task.Run(() => _screenshotLibraryService.Load(), cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 

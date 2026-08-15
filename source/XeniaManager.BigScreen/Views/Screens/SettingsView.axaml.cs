@@ -30,17 +30,6 @@ public partial class SettingsView : UserControl
     /// </summary>
     private readonly Dictionary<ISelectable, Control> _rowCards = [];
 
-    public SettingsView()
-    {
-        InitializeComponent();
-        Loaded += OnLoaded;
-        DataContextChanged += OnDataContextChanged;
-
-        // Assign the appropriate palette to each colour field
-        PrimaryColorField.Palette = ColorPickerField.BackgroundPalette;
-        AccentColorField.Palette = ColorPickerField.AccentPalette;
-    }
-
     /// <summary>
     /// Focuses the first interactive setting (called when the overlay opens).
     /// </summary>
@@ -49,21 +38,45 @@ public partial class SettingsView : UserControl
         BackgroundModeCombo.Focus();
     }
 
+    /// <summary>
+    /// Shows the image file picker and applies the chosen image.
+    /// </summary>
+    private async Task ShowImagePickerAsync()
+    {
+        if (DataContext is not SettingsViewModel vm)
+        {
+            return;
+        }
+
+        TopLevel? topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null)
+        {
+            return;
+        }
+
+        FilePickerOpenOptions options = new()
+        {
+            Title = LocalizationHelper.GetText("Settings.SelectImageDialogTitle"),
+            AllowMultiple = false,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("Images")
+                {
+                    Patterns = ImageFormats.FilePickerPatterns
+                }
+            ]
+        };
+
+        IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
+        if (files.Count > 0)
+        {
+            vm.SetBackgroundImage(files[0].Path.LocalPath);
+        }
+    }
+
     private void OnLoaded(object? sender, EventArgs e)
     {
         FocusFirst();
-    }
-
-    private void OnDataContextChanged(object? sender, EventArgs e)
-    {
-        if (DataContext is SettingsViewModel vm)
-        {
-            vm.RowSelectionChanged += OnRowSelectionChanged;
-            vm.EditorOpened += OnEditorOpened;
-            vm.EditorClosed += OnEditorClosed;
-            vm.SelectImageRequested += OnSelectImageRequested;
-            BuildRowMap(vm);
-        }
     }
 
     /// <summary>
@@ -175,39 +188,25 @@ public partial class SettingsView : UserControl
         TaskUtilities.RunSafely<SettingsView>(ShowImagePickerAsync, "Opening background image picker");
     }
 
-    /// <summary>
-    /// Shows the image file picker and applies the chosen image.
-    /// </summary>
-    private async Task ShowImagePickerAsync()
+    private void OnDataContextChanged(object? sender, EventArgs e)
     {
-        if (DataContext is not SettingsViewModel vm)
+        if (DataContext is SettingsViewModel vm)
         {
-            return;
+            vm.RowSelectionChanged += OnRowSelectionChanged;
+            vm.EditorOpened += OnEditorOpened;
+            vm.EditorClosed += OnEditorClosed;
+            vm.SelectImageRequested += OnSelectImageRequested;
+            BuildRowMap(vm);
         }
+    }
 
-        TopLevel? topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel == null)
-        {
-            return;
-        }
+    public SettingsView()
+    {
+        InitializeComponent();
+        Loaded += OnLoaded;
+        DataContextChanged += OnDataContextChanged;
 
-        FilePickerOpenOptions options = new()
-        {
-            Title = LocalizationHelper.GetText("Settings.SelectImageDialogTitle"),
-            AllowMultiple = false,
-            FileTypeFilter =
-            [
-                new FilePickerFileType("Images")
-                {
-                    Patterns = ImageFormats.FilePickerPatterns
-                }
-            ]
-        };
-
-        IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
-        if (files.Count > 0)
-        {
-            vm.SetBackgroundImage(files[0].Path.LocalPath);
-        }
+        PrimaryColorField.Palette = ColorPickerField.BackgroundPalette;
+        AccentColorField.Palette = ColorPickerField.AccentPalette;
     }
 }

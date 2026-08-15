@@ -19,6 +19,12 @@ public class ColorPickerField : TemplatedControl
     /// </summary>
     private const int HexColorLength = 6;
 
+    private Border? _swatch;
+    private TextBox? _hexBox;
+    private Popup? _popup;
+    private PalettePicker? _palettePicker;
+    private bool _syncing;
+
     /// <summary>
     /// Defines the <see cref="Color"/> property.
     /// </summary>
@@ -79,77 +85,6 @@ public class ColorPickerField : TemplatedControl
     {
         get => GetValue(PaletteProperty);
         set => SetValue(PaletteProperty, value);
-    }
-
-    private Border? _swatch;
-    private TextBox? _hexBox;
-    private Popup? _popup;
-    private PalettePicker? _palettePicker;
-    private bool _syncing;
-
-    static ColorPickerField()
-    {
-        ColorProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.SyncFromColor());
-        PaletteProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.SyncPalette());
-    }
-
-    public ColorPickerField()
-    {
-        Focusable = false;
-    }
-
-    /// <inheritdoc/>
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-
-        _swatch = e.NameScope.Get<Border>("PART_Swatch");
-        _hexBox = e.NameScope.Get<TextBox>("PART_HexBox");
-        _popup = e.NameScope.Get<Popup>("PART_Popup");
-        _palettePicker = e.NameScope.Get<PalettePicker>("PART_Palette");
-
-        if (_swatch != null)
-        {
-            _swatch.PointerPressed += OnSwatchPressed;
-        }
-
-        _popup?.PlacementTarget = this;
-
-        if (_hexBox != null)
-        {
-            _hexBox.TextChanged += OnHexTextChanged;
-            _hexBox.KeyDown += OnHexKeyDown;
-        }
-
-        if (_palettePicker != null)
-        {
-            _palettePicker.SelectedColorChanged += OnPickerColourChanged;
-        }
-
-        SyncPalette();
-        SyncFromColor();
-    }
-
-    /// <summary>
-    /// Opens the palette dropdown (controller activation of the row).
-    /// </summary>
-    public void OpenPalette()
-    {
-        if (_popup != null)
-        {
-            _popup.IsOpen = true;
-        }
-    }
-
-    /// <summary>
-    /// Closes the palette dropdown (editor commit or cancel).
-    /// </summary>
-    public void ClosePalette()
-    {
-        if (_popup != null)
-        {
-            _popup.IsOpen = false;
-        }
     }
 
     /// <summary>
@@ -236,5 +171,70 @@ public class ColorPickerField : TemplatedControl
         {
             _syncing = false;
         }
+    }
+
+    /// <summary>
+    /// Opens the palette dropdown (controller activation of the row).
+    /// </summary>
+    public void OpenPalette()
+    {
+        if (_popup != null)
+        {
+            _popup.IsOpen = true;
+        }
+    }
+
+    /// <summary>
+    /// Closes the palette dropdown (editor commit or cancel).
+    /// </summary>
+    public void ClosePalette()
+    {
+        if (_popup != null)
+        {
+            _popup.IsOpen = false;
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+
+        _swatch = e.NameScope.Get<Border>("PART_Swatch");
+        _hexBox = e.NameScope.Get<TextBox>("PART_HexBox");
+        _popup = e.NameScope.Get<Popup>("PART_Popup");
+        _palettePicker = e.NameScope.Get<PalettePicker>("PART_Palette");
+
+        if (_swatch != null)
+        {
+            _swatch.PointerPressed += OnSwatchPressed;
+        }
+
+        _popup?.PlacementTarget = this;
+
+        if (_hexBox != null)
+        {
+            _hexBox.TextChanged += OnHexTextChanged;
+            _hexBox.KeyDown += OnHexKeyDown;
+        }
+
+        if (_palettePicker != null)
+        {
+            _palettePicker.SelectedColorChanged += OnPickerColourChanged;
+        }
+
+        SyncPalette();
+        SyncFromColor();
+    }
+
+    static ColorPickerField()
+    {
+        ColorProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.SyncFromColor());
+        PaletteProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.SyncPalette());
+    }
+
+    public ColorPickerField()
+    {
+        Focusable = false;
     }
 }

@@ -71,20 +71,6 @@ public partial class InputHint : UserControl
         set => SetValue(TextProperty, value);
     }
 
-    static InputHint()
-    {
-        KeyColourProperty.Changed.AddClassHandler<InputHint>((hint, _) => hint.SyncKeyColour());
-        IconProperty.Changed.AddClassHandler<InputHint>((hint, _) => hint.SyncGlyph());
-        CharProperty.Changed.AddClassHandler<InputHint>((hint, _) => hint.SyncGlyph());
-    }
-
-    public InputHint()
-    {
-        InitializeComponent();
-        SyncKeyColour();
-        SyncGlyph();
-    }
-
     /// <summary>
     /// Pushes the keycap colour into the border and glyph (transparent background).
     /// </summary>
@@ -111,5 +97,19 @@ public partial class InputHint : UserControl
             IconElement.IsVisible = false;
             CharElement.IsVisible = true;
         }
+    }
+
+    static InputHint()
+    {
+        KeyColourProperty.Changed.AddClassHandler<InputHint>((hint, _) => hint.SyncKeyColour());
+        IconProperty.Changed.AddClassHandler<InputHint>((hint, _) => hint.SyncGlyph());
+        CharProperty.Changed.AddClassHandler<InputHint>((hint, _) => hint.SyncGlyph());
+    }
+
+    public InputHint()
+    {
+        InitializeComponent();
+        SyncKeyColour();
+        SyncGlyph();
     }
 }

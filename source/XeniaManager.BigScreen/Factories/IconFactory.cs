@@ -11,6 +11,11 @@ namespace XeniaManager.BigScreen.Factories;
 public static class IconFactory
 {
     /// <summary>
+    /// Battery percentage covered by one icon tier.
+    /// </summary>
+    private const int BatteryTierPercent = 10;
+
+    /// <summary>
     /// Discharge icons, one tier per 10% (index 0-10).
     /// </summary>
     private static readonly Symbol[] BatteryTierIcons =
@@ -59,7 +64,7 @@ public static class IconFactory
             return Symbol.BatteryWarning;
         }
 
-        int tier = Math.Clamp(batteryPercent / 10, 0, 10);
+        int tier = Math.Clamp(batteryPercent / BatteryTierPercent, 0, BatteryTierIcons.Length - 1);
         return isCharging ? BatteryChargingTierIcons[tier] : BatteryTierIcons[tier];
     }
 

@@ -22,11 +22,6 @@ public abstract class ModalViewModelBase : ViewModelBase
     private readonly TaskCompletionSource _closed = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     /// <summary>
-    /// Awaits the modal's close (returns after it is popped).
-    /// </summary>
-    public Task WaitForClose() => _closed.Task;
-
-    /// <summary>
     /// Whether this modal is the top of the stack (drives which hint bar shows).
     /// </summary>
     public bool IsTopModal { get; private set; }
@@ -36,6 +31,20 @@ public abstract class ModalViewModelBase : ViewModelBase
     /// so stacked modals never show competing hints.
     /// </summary>
     public bool IsHintBarVisible => IsTopModal;
+
+    /// <summary>
+    /// Awaits the modal's close (returns after it is popped).
+    /// </summary>
+    public Task WaitForClose() => _closed.Task;
+
+    /// <summary>
+    /// Closes this modal and pops it off the stack.
+    /// </summary>
+    protected void Close()
+    {
+        _closed.TrySetResult();
+        _modalService?.Close(this);
+    }
 
     /// <summary>
     /// Handles a navigation command while this modal is the top of the stack.
@@ -69,15 +78,6 @@ public abstract class ModalViewModelBase : ViewModelBase
     /// </summary>
     public virtual void Dispose()
     {
-    }
-
-    /// <summary>
-    /// Closes this modal and pops it off the stack.
-    /// </summary>
-    protected void Close()
-    {
-        _closed.TrySetResult();
-        _modalService?.Close(this);
     }
 
     /// <summary>

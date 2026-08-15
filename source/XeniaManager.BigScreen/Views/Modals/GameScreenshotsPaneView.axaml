@@ -17,9 +17,7 @@
                 <prim:IconStat Grid.Column="0"
                                Icon="Camera"
                                Stat="{Binding CountText}"
-                               IconSize="26"
-                               Spacing="14"
-                               FontSize="24"
+                               Classes="pane-header-stat"
                                VerticalAlignment="Center" />
             </Grid>
 
@@ -47,38 +45,26 @@
                 </ScrollViewer>
 
                 <!-- Loading state -->
-                <Border IsVisible="{Binding IsLoading}"
-                        Height="220"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="360"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="Camera"
-                                           FontSize="72" />
-                        <TextBlock Text="{DynamicResource GameModal.Screenshots.Loading}"
-                                   FontSize="24" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState IsVisible="{Binding IsLoading}"
+                                 Symbol="Camera"
+                                 Text="{DynamicResource GameModal.Screenshots.Loading}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="360"
+                                 Height="220"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
 
                 <!-- Empty state: no screenshots for this game -->
-                <Border IsVisible="{Binding ShowEmpty}"
-                        Height="220"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="360"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="Camera"
-                                           FontSize="72" />
-                        <TextBlock Text="{DynamicResource GameModal.Screenshots.Empty}"
-                                   FontSize="24" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                                 Symbol="Camera"
+                                 Text="{DynamicResource GameModal.Screenshots.Empty}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="360"
+                                 Height="220"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
             </Grid>
         </Grid>
     </Grid>

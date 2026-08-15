@@ -21,7 +21,6 @@ public class ServiceConfigurator
     {
         ServiceCollection services = new ServiceCollection();
 
-        // Services
         services.AddSingleton<IBackgroundService, BackgroundService>();
         services.AddSingleton<IProfileService, ProfileService>();
         services.AddSingleton<IGameLibraryService, GameLibraryService>();
@@ -31,7 +30,6 @@ public class ServiceConfigurator
         services.AddSingleton<InputRouter>();
         services.AddSingleton<IGamepadInputService, GamepadInputService>();
 
-        // ViewModels and views
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 

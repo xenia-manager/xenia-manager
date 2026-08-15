@@ -11,12 +11,6 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class GameModalView : UserControl
 {
-    public GameModalView()
-    {
-        InitializeComponent();
-        OptionsList.AddHandler(Button.ClickEvent, OnActionRowClick, RoutingStrategies.Bubble);
-    }
-
     /// <summary>
     /// Opens the option's pane when its row is clicked (mouse path; the
     /// controller path goes through the dialog VM's HandleInput).
@@ -28,5 +22,11 @@ public partial class GameModalView : UserControl
         {
             vm.OpenOption(option);
         }
+    }
+
+    public GameModalView()
+    {
+        InitializeComponent();
+        OptionsList.AddHandler(Button.ClickEvent, OnActionRowClick, RoutingStrategies.Bubble);
     }
 }

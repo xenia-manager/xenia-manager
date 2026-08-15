@@ -14,12 +14,6 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class PatchesPaneView : UserControl
 {
-    public PatchesPaneView()
-    {
-        InitializeComponent();
-        PatchList.AddHandler(TappedEvent, OnPatchRowTapped, RoutingStrategies.Bubble, true);
-    }
-
     /// <summary>
     /// Activates a patch list row on click (mouse path; the gamepad path goes
     /// through the pane VM's HandleInput).
@@ -37,5 +31,11 @@ public partial class PatchesPaneView : UserControl
         {
             vm.SelectRow(row);
         }
+    }
+
+    public PatchesPaneView()
+    {
+        InitializeComponent();
+        PatchList.AddHandler(TappedEvent, OnPatchRowTapped, RoutingStrategies.Bubble, true);
     }
 }

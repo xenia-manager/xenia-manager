@@ -45,27 +45,6 @@ public class ScreenshotViewerViewModel(
     public bool HasNext => screenshots.IndexOf(_screenshot) < screenshots.Count - 1;
 
     /// <summary>
-    /// Handles viewer input: Left/Right step through the screenshots, Back closes.
-    /// </summary>
-    public override bool HandleInput(NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveLeft:
-                Step(-1);
-                return true;
-            case NavigationCommand.MoveRight:
-                Step(1);
-                return true;
-            case NavigationCommand.Back:
-                Close();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    /// <summary>
     /// Moves the viewer to the neighbouring screenshot, clamped at both ends.
     /// </summary>
     public void Step(int delta)
@@ -89,5 +68,26 @@ public class ScreenshotViewerViewModel(
         OnPropertyChanged(nameof(CapturedAtText));
         OnPropertyChanged(nameof(HasPrevious));
         OnPropertyChanged(nameof(HasNext));
+    }
+
+    /// <summary>
+    /// Handles viewer input: Left/Right step through the screenshots, Back closes.
+    /// </summary>
+    public override bool HandleInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveLeft:
+                Step(-1);
+                return true;
+            case NavigationCommand.MoveRight:
+                Step(1);
+                return true;
+            case NavigationCommand.Back:
+                Close();
+                return true;
+            default:
+                return false;
+        }
     }
 }

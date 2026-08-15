@@ -28,22 +28,6 @@ public partial class GameDetailsViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IsLoading { get; set; }
 
-    public GameDetailsViewModel(GameCardViewModel card)
-    {
-        Card = card;
-    }
-
-    /// <summary>
-    /// Display title: the database full title when available, otherwise the local one.
-    /// </summary>
-    public string Title => Info?.Title?.Full ?? Card.Title;
-
-    /// <summary>
-    /// The game bio (short description is the real marketing blurb; the full one
-    /// appends legal text, so it only serves as a fallback).
-    /// </summary>
-    public string? Bio => Info?.Description?.Short ?? Info?.Description?.Full;
-
     /// <summary>
     /// Whether a bio is available to show.
     /// </summary>
@@ -61,19 +45,9 @@ public partial class GameDetailsViewModel : ObservableObject
         HasGenre || HasDeveloper || HasPublisher || HasReleased;
 
     /// <summary>
-    /// Comma-separated genre list.
-    /// </summary>
-    public string GenreText => Info?.Genres is { Count: > 0 } genres ? string.Join(", ", genres) : string.Empty;
-
-    /// <summary>
     /// Whether a genre list is available.
     /// </summary>
     public bool HasGenre => !string.IsNullOrWhiteSpace(GenreText);
-
-    /// <summary>
-    /// The game's developer.
-    /// </summary>
-    public string? Developer => Info?.Developer;
 
     /// <summary>
     /// Whether a developer is available.
@@ -81,24 +55,50 @@ public partial class GameDetailsViewModel : ObservableObject
     public bool HasDeveloper => !string.IsNullOrWhiteSpace(Developer);
 
     /// <summary>
-    /// The game's publisher.
-    /// </summary>
-    public string? Publisher => Info?.Publisher;
-
-    /// <summary>
     /// Whether a publisher is available.
     /// </summary>
     public bool HasPublisher => !string.IsNullOrWhiteSpace(Publisher);
+
+    /// <summary>
+    /// Whether a release date is available.
+    /// </summary>
+    public bool HasReleased => !string.IsNullOrWhiteSpace(Released);
+
+    /// <summary>
+    /// Display title: the database full title when available, otherwise the local one.
+    /// </summary>
+    public string Title => Info?.Title?.Full ?? Card.Title;
+
+    /// <summary>
+    /// The game bio (short description is the real marketing blurb; the full one
+    /// appends legal text, so it only serves as a fallback).
+    /// </summary>
+    public string? Bio => Info?.Description?.Short ?? Info?.Description?.Full;
+
+    /// <summary>
+    /// Comma-separated genre list.
+    /// </summary>
+    public string GenreText => Info?.Genres is { Count: > 0 } genres ? string.Join(", ", genres) : string.Empty;
+
+    /// <summary>
+    /// The game's developer.
+    /// </summary>
+    public string? Developer => Info?.Developer;
+
+    /// <summary>
+    /// The game's publisher.
+    /// </summary>
+    public string? Publisher => Info?.Publisher;
 
     /// <summary>
     /// The game's release date, formatted as a real date (e.g. "18th May 2010").
     /// </summary>
     public string? Released => ReleaseDateFormatter.Format(Info?.ReleaseDate);
 
-    /// <summary>
-    /// Whether a release date is available.
-    /// </summary>
-    public bool HasReleased => !string.IsNullOrWhiteSpace(Released);
+    public GameDetailsViewModel(GameCardViewModel card)
+    {
+        Card = card;
+    }
 
     partial void OnInfoChanged(GameDetailedInfo? value)
     {

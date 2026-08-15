@@ -24,44 +24,6 @@ public partial class App : Application
     /// </summary>
     public static IServiceProvider Services { get; private set; } = null!;
 
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
-
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            // Configure services
-            Logger.Debug<App>("Configuring dependency injection services");
-            Services = ServiceConfigurator.ConfigureServices();
-            Logger.Info<App>("Services configured successfully");
-
-            // Default-language resources so Core's PlaytimeFormatter can localize
-            LocalizationHelper.Initialize("avares://XeniaManager.BigScreen/Resources/Language/");
-
-            // Keep the SDL controller database current silently in the background
-            _ = UpdateSdlDatabaseSilentlyAsync();
-
-            // FAAppWindow shows its built-in splash (AppSplashScreen) while the
-            // boot pipeline runs, then reveals the fullscreen dashboard
-            MainWindow mainWindow = Services.GetRequiredService<MainWindow>();
-            desktop.MainWindow = mainWindow;
-
-            desktop.Exit += (_, _) =>
-            {
-                Logger.Info<App>("Closing BigScreen");
-                Logger.Debug<App>("Shutting down logger");
-                Logger.Shutdown();
-            };
-
-            Logger.Info<App>("Application initialization completed successfully");
-        }
-
-        base.OnFrameworkInitializationCompleted();
-    }
-
     /// <summary>
     /// Silently keeps the SDL game controller database current for every
     /// installed emulator, then reloads the live mappings. Runs in the
@@ -100,5 +62,38 @@ public partial class App : Application
             Logger.Warning<App>("Failed to update SDL game controller database");
             Logger.LogExceptionDetails<App>(ex);
         }
+    }
+
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            Logger.Debug<App>("Configuring dependency injection services");
+            Services = ServiceConfigurator.ConfigureServices();
+            Logger.Info<App>("Services configured successfully");
+
+            LocalizationHelper.Initialize("avares://XeniaManager.BigScreen/Resources/Language/");
+
+            _ = UpdateSdlDatabaseSilentlyAsync();
+
+            MainWindow mainWindow = Services.GetRequiredService<MainWindow>();
+            desktop.MainWindow = mainWindow;
+
+            desktop.Exit += (_, _) =>
+            {
+                Logger.Info<App>("Closing BigScreen");
+                Logger.Debug<App>("Shutting down logger");
+                Logger.Shutdown();
+            };
+
+            Logger.Info<App>("Application initialization completed successfully");
+        }
+
+        base.OnFrameworkInitializationCompleted();
     }
 }

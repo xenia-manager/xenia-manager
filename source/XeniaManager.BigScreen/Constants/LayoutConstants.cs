@@ -1,10 +1,49 @@
 namespace XeniaManager.BigScreen.Constants;
 
+using Avalonia;
+
 /// <summary>
 /// Layout and appearance constants.
 /// </summary>
 public static class LayoutConstants
 {
+    /// <summary>
+    /// Dashboard horizontal inset from the window edges (header and row regions).
+    /// </summary>
+    public const double DashboardInsetX = 150;
+
+    /// <summary>
+    /// Dashboard vertical inset from the bottom window edge.
+    /// </summary>
+    public const double DashboardInsetY = 55;
+
+    /// <summary>
+    /// Vertical gap between the dashboard rows.
+    /// </summary>
+    public const double DashboardRowSpacing = 17;
+
+    /// <summary>
+    /// Gap between the dashboard game cards.
+    /// </summary>
+    public const double DashboardCardSpacing = 15;
+
+    /// <summary>
+    /// Gap between the dashboard option cards.
+    /// </summary>
+    public const double DashboardOptionSpacing = 16;
+
+    /// <summary>
+    /// Dashboard content margin: inset X on the sides, inset Y at the bottom.
+    /// </summary>
+    public static readonly Thickness DashboardContentMargin =
+        new(DashboardInsetX, 0, DashboardInsetX, DashboardInsetY);
+
+    /// <summary>
+    /// Main window content margin: inset X on the sides, inset Y at the top.
+    /// </summary>
+    public static readonly Thickness MainWindowContentMargin =
+        new(DashboardInsetX, DashboardInsetY, DashboardInsetX, 0);
+
     /// <summary>
     /// Vignette opacity step per adjustment press.
     /// </summary>
@@ -59,6 +98,11 @@ public static class LayoutConstants
     /// Per-step tint amount used to derive the accent light/dark variants.
     /// </summary>
     public const double AccentTintStep = 0.15;
+
+    /// <summary>
+    /// Number of accent light/dark variants derived per side.
+    /// </summary>
+    public const int AccentVariantCount = 3;
 
     /// <summary>
     /// Minimum header clock width in 12-hour mode (e.g. "10:45 PM").

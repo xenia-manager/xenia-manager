@@ -31,9 +31,7 @@
             <prim:IconStat Grid.Column="0"
                            Icon="DocumentText"
                            Stat="{Binding HeaderText}"
-                           IconSize="26"
-                           Spacing="14"
-                           FontSize="24"
+                           Classes="pane-header-stat"
                            VerticalAlignment="Center" />
         </Grid>
 
@@ -59,13 +57,13 @@
                                                    FontSize="24"
                                                    Foreground="{DynamicResource TextError}"
                                                    VerticalAlignment="Center" />
-                                    <fluent:SymbolIcon Grid.Column="0"
-                                                       Symbol="Checkmark"
-                                                       IsVisible="{Binding IsEnabled}"
-                                                       FontSize="24"
-                                                       Foreground="{DynamicResource AccentColor}"
-                                                       VerticalAlignment="Center"
-                                                       Opacity="0.9" />
+                                <fluent:SymbolIcon Grid.Column="0"
+                                                   Symbol="Checkmark"
+                                                   IsVisible="{Binding IsEnabled}"
+                                                   FontSize="24"
+                                                   Foreground="{DynamicResource AccentColor}"
+                                                   VerticalAlignment="Center"
+                                                   Opacity="0.9" />
 
                                 <!-- TITLE / PATCH NAME -->
                                 <StackPanel Grid.Column="1"

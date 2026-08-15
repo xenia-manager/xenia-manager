@@ -16,24 +16,6 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class GameSettingsPaneView : UserControl
 {
-    public GameSettingsPaneView()
-    {
-        InitializeComponent();
-        DataContextChanged += OnDataContextChanged;
-    }
-
-    private void OnDataContextChanged(object? sender, EventArgs e)
-    {
-        if (DataContext is GameSettingsPaneViewModel vm)
-        {
-            vm.EditorOpened += OnEditorOpened;
-            vm.EditorClosed += OnEditorClosed;
-            vm.RowSelectionChanged += OnRowSelectionChanged;
-            Core.Logging.Logger.Debug<GameSettingsPaneView>(
-                $"Game settings pane attached: {vm.Rows.Count} rows");
-        }
-    }
-
     /// <summary>
     /// Scrolls the newly selected row into view (controller navigation).
     /// </summary>
@@ -70,5 +52,23 @@ public partial class GameSettingsPaneView : UserControl
         {
             combo.IsDropDownOpen = false;
         }
+    }
+
+    private void OnDataContextChanged(object? sender, EventArgs e)
+    {
+        if (DataContext is GameSettingsPaneViewModel vm)
+        {
+            vm.EditorOpened += OnEditorOpened;
+            vm.EditorClosed += OnEditorClosed;
+            vm.RowSelectionChanged += OnRowSelectionChanged;
+            Core.Logging.Logger.Debug<GameSettingsPaneView>(
+                $"Game settings pane attached: {vm.Rows.Count} rows");
+        }
+    }
+
+    public GameSettingsPaneView()
+    {
+        InitializeComponent();
+        DataContextChanged += OnDataContextChanged;
     }
 }

@@ -22,57 +22,21 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class ManageProfilesView : UserControl
 {
-    public ManageProfilesView()
-    {
-        InitializeComponent();
-        Loaded += OnLoaded;
-        DetachedFromVisualTree += OnDetachedFromVisualTree;
-
-        // A mouse click on a row loads it into the edit panel; the create stub
-        // creates a new profile
-        RowsList.AddHandler(Button.ClickEvent, OnProfileRowClick, RoutingStrategies.Bubble);
-    }
-
     /// <summary>
-    /// Moves focus to the gamertag field so keyboard edits are immediately possible,
-    /// and wires the View/Start import-export requests to the file pickers.
+    /// Scrolls the scroll viewer so the given control is fully visible.
     /// </summary>
-    private void OnLoaded(object? sender, RoutedEventArgs e)
+    private void ScrollIntoView(Control target)
     {
-        if (DataContext is ManageProfilesViewModel vm)
+        Point? position = target.TranslatePoint(new Point(0, 0), SvList);
+        if (position == null)
         {
-            vm.ImportRequested += OnImportRequested;
-            vm.ExportRequested += OnExportRequested;
-            vm.ScrollRequested += OnScrollRequested;
-            vm.PanelEditorOpened += OnPanelEditorOpened;
-            vm.PanelEditorClosed += OnPanelEditorClosed;
-            vm.GamertagFocusRequested += OnGamertagFocusRequested;
+            return;
         }
 
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (DataContext is ManageProfilesViewModel { HasProfiles: true })
-            {
-                TxtGamertag.Focus();
-                TxtGamertag.SelectAll();
-            }
-        });
-    }
-
-    /// <summary>
-    /// Unsubscribes the view event handlers when the modal closes.
-    /// </summary>
-    private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        if (DataContext is ManageProfilesViewModel vm)
-        {
-            vm.ImportRequested -= OnImportRequested;
-            vm.ExportRequested -= OnExportRequested;
-            vm.ScrollRequested -= OnScrollRequested;
-            vm.PanelEditorOpened -= OnPanelEditorOpened;
-            vm.PanelEditorClosed -= OnPanelEditorClosed;
-            vm.GamertagFocusRequested -= OnGamertagFocusRequested;
-        }
+        double top = position.Value.Y;
+        double offset = ScrollViewerHelper.OffsetForElement(
+            top, target.Bounds.Height, SvList.Viewport.Height, SvList.Offset.Y);
+        SvList.Offset = SvList.Offset.WithY(offset);
     }
 
     /// <summary>
@@ -145,32 +109,6 @@ public partial class ManageProfilesView : UserControl
                 }
             }
         });
-    }
-
-    /// <summary>
-    /// Scrolls the scroll viewer so the given control is fully visible.
-    /// </summary>
-    private void ScrollIntoView(Control target)
-    {
-        Point? position = target.TranslatePoint(new Point(0, 0), SvList);
-        if (position == null)
-        {
-            return;
-        }
-
-        double top = position.Value.Y;
-        double bottom = top + target.Bounds.Height;
-        double viewport = SvList.Viewport.Height;
-        double offset = SvList.Offset.Y;
-
-        if (top < 0)
-        {
-            SvList.Offset = SvList.Offset.WithY(Math.Max(0, offset + top));
-        }
-        else if (bottom > viewport)
-        {
-            SvList.Offset = SvList.Offset.WithY(Math.Max(0, offset + bottom - viewport));
-        }
     }
 
     private void OnProfileRowClick(object? sender, RoutedEventArgs e)
@@ -276,5 +214,56 @@ public partial class ManageProfilesView : UserControl
         {
             vm.Save();
         }
+    }
+
+    /// <summary>
+    /// Moves focus to the gamertag field so keyboard edits are immediately possible,
+    /// and wires the View/Start import-export requests to the file pickers.
+    /// </summary>
+    private void OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is ManageProfilesViewModel vm)
+        {
+            vm.ImportRequested += OnImportRequested;
+            vm.ExportRequested += OnExportRequested;
+            vm.ScrollRequested += OnScrollRequested;
+            vm.PanelEditorOpened += OnPanelEditorOpened;
+            vm.PanelEditorClosed += OnPanelEditorClosed;
+            vm.GamertagFocusRequested += OnGamertagFocusRequested;
+        }
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (DataContext is ManageProfilesViewModel { HasProfiles: true })
+            {
+                TxtGamertag.Focus();
+                TxtGamertag.SelectAll();
+            }
+        });
+    }
+
+    /// <summary>
+    /// Unsubscribes the view event handlers when the modal closes.
+    /// </summary>
+    private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (DataContext is ManageProfilesViewModel vm)
+        {
+            vm.ImportRequested -= OnImportRequested;
+            vm.ExportRequested -= OnExportRequested;
+            vm.ScrollRequested -= OnScrollRequested;
+            vm.PanelEditorOpened -= OnPanelEditorOpened;
+            vm.PanelEditorClosed -= OnPanelEditorClosed;
+            vm.GamertagFocusRequested -= OnGamertagFocusRequested;
+        }
+    }
+
+    public ManageProfilesView()
+    {
+        InitializeComponent();
+        Loaded += OnLoaded;
+        DetachedFromVisualTree += OnDetachedFromVisualTree;
+
+        RowsList.AddHandler(Button.ClickEvent, OnProfileRowClick, RoutingStrategies.Bubble);
     }
 }

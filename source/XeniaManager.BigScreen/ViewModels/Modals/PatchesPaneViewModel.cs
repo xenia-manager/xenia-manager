@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -31,6 +32,11 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     private string? _patchFilePath;
 
     /// <summary>
+    /// Whether a patch file is installed.
+    /// </summary>
+    public bool HasPatch => _patchFile != null;
+
+    /// <summary>
     /// The rows shown in list mode: patch entries with the download and remove
     /// actions pinned at the ends.
     /// </summary>
@@ -41,140 +47,6 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     /// </summary>
     public string HeaderText => _patchFile?.TitleName
                                 ?? LocalizationHelper.GetText("GameModal.Patches.NoPatch");
-
-    /// <summary>
-    /// Whether a patch file is installed.
-    /// </summary>
-    public bool HasPatch => _patchFile != null;
-
-    /// <summary>
-    /// Loads the game's patch file (when installed) and builds the list rows.
-    /// </summary>
-    public PatchesPaneViewModel(Game game)
-    {
-        _game = game;
-        _modalService = App.Services.GetRequiredService<IModalService>();
-        Rows.CollectionChanged += (_, _) => OnPropertyChanged(nameof(HasPatch));
-        ReloadPatch();
-    }
-
-    /// <summary>
-    /// Selects the first row when the pane becomes active.
-    /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(Rows, 0);
-    }
-
-    /// <summary>
-    /// Clears the patch selection when the pane loses focus.
-    /// </summary>
-    public void OnPaneExited()
-    {
-        SelectionHelper.ClearSelection(Rows);
-    }
-
-    /// <summary>
-    /// Handles pane input: Up/Down moves the rows, A toggles/activates a row.
-    /// </summary>
-    public bool HandleInput(NavigationCommand command)
-    {
-        switch (command)
-        {
-            case NavigationCommand.MoveUp:
-                SelectionHelper.MoveSelection(Rows, -1);
-                return true;
-            case NavigationCommand.MoveDown:
-                SelectionHelper.MoveSelection(Rows, 1);
-                return true;
-            case NavigationCommand.Activate:
-                ActivateSelectedRow();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    /// <summary>
-    /// Selects the given list row and activates it (mouse path).
-    /// </summary>
-    public void SelectRow(PatchListRowViewModel row)
-    {
-        SelectionHelper.SelectOnly(Rows, row);
-        ActivateSelectedRow();
-    }
-
-    /// <summary>
-    /// Activates the selected list row: opens the download modal, toggles a
-    /// patch entry, or removes the patch after confirmation.
-    /// </summary>
-    private void ActivateSelectedRow()
-    {
-        PatchListRowViewModel? row = Rows.FirstOrDefault(r => r.IsSelected);
-        if (row == null)
-        {
-            return;
-        }
-
-        if (row.IsDownloadAction)
-        {
-            OpenDownloadModal();
-        }
-        else if (row.IsRemoveAction)
-        {
-            TaskUtilities.RunSafely<PatchesPaneViewModel>(
-                RemovePatchAsync, "Removing patch");
-        }
-        else if (row.Entry is { } entry)
-        {
-            entry.IsEnabled = !entry.IsEnabled;
-            SavePatchFile();
-        }
-    }
-
-    /// <summary>
-    /// Opens the patch download modal; the patch cache and list reload when it
-    /// closes (a freshly downloaded patch shows up as an entry).
-    /// </summary>
-    private void OpenDownloadModal()
-    {
-        Logger.Info<PatchesPaneViewModel>($"Opening patch download for '{_game.Title}'");
-        TaskUtilities.RunSafely<PatchesPaneViewModel>(async () =>
-        {
-            await _modalService.ShowAsync(new PatchDownloadViewModel(_game));
-            GameDataCache.RefreshPatch(_game);
-            ReloadPatch();
-        }, "Opening patch download");
-    }
-
-    /// <summary>
-    /// Confirms and removes the installed patch, then reloads the list.
-    /// </summary>
-    private async Task RemovePatchAsync()
-    {
-        bool confirmed = await _modalService.ShowAsync<bool?>(new ConfirmationModalViewModel(
-            LocalizationHelper.GetText("GameModal.Patches.Remove.Confirmation.Title"),
-            string.Format(LocalizationHelper.GetText("GameModal.Patches.Remove.Confirmation.Message"), _game.Title),
-            LocalizationHelper.GetText("GameModal.Patches.Remove.Confirm"),
-            LocalizationHelper.GetText("Modal.Cancel"))) == true;
-        if (!confirmed)
-        {
-            return;
-        }
-
-        try
-        {
-            await PatchManager.RemovePatchAsync(_game);
-            Logger.Info<PatchesPaneViewModel>($"Removed patch for '{_game.Title}'");
-            GameDataCache.RefreshPatch(_game);
-            ReloadPatch();
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<PatchesPaneViewModel>($"Failed to remove patch for '{_game.Title}'");
-            Logger.LogExceptionDetails<PatchesPaneViewModel>(ex);
-        }
-    }
 
     /// <summary>
     /// Loads the game's patch file from the boot preload cache (when installed)
@@ -224,5 +96,134 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
             Logger.Error<PatchesPaneViewModel>($"Failed to save patch '{_patchFilePath}'");
             Logger.LogExceptionDetails<PatchesPaneViewModel>(ex);
         }
+    }
+
+    /// <summary>
+    /// Opens the patch download modal; the patch cache and list reload when it
+    /// closes (a freshly downloaded patch shows up as an entry).
+    /// </summary>
+    private void OpenDownloadModal()
+    {
+        Logger.Info<PatchesPaneViewModel>($"Opening patch download for '{_game.Title}'");
+        TaskUtilities.RunSafely<PatchesPaneViewModel>(async () =>
+        {
+            await _modalService.ShowAsync(new PatchDownloadViewModel(_game));
+            GameDataCache.RefreshPatch(_game);
+            ReloadPatch();
+        }, "Opening patch download");
+    }
+
+    /// <summary>
+    /// Confirms and removes the installed patch, then reloads the list.
+    /// </summary>
+    private async Task RemovePatchAsync()
+    {
+        bool confirmed = await ModalFactory.ConfirmAsync(_modalService,
+            LocalizationHelper.GetText("GameModal.Patches.Remove.Confirmation.Title"),
+            string.Format(LocalizationHelper.GetText("GameModal.Patches.Remove.Confirmation.Message"), _game.Title),
+            LocalizationHelper.GetText("GameModal.Patches.Remove.Confirm"),
+            LocalizationHelper.GetText("Modal.Cancel")) == true;
+        if (!confirmed)
+        {
+            return;
+        }
+
+        try
+        {
+            await PatchManager.RemovePatchAsync(_game);
+            Logger.Info<PatchesPaneViewModel>($"Removed patch for '{_game.Title}'");
+            GameDataCache.RefreshPatch(_game);
+            ReloadPatch();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<PatchesPaneViewModel>($"Failed to remove patch for '{_game.Title}'");
+            Logger.LogExceptionDetails<PatchesPaneViewModel>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Activates the selected list row: opens the download modal, toggles a
+    /// patch entry, or removes the patch after confirmation.
+    /// </summary>
+    private void ActivateSelectedRow()
+    {
+        PatchListRowViewModel? row = Rows.FirstOrDefault(r => r.IsSelected);
+        if (row == null)
+        {
+            return;
+        }
+
+        if (row.IsDownloadAction)
+        {
+            OpenDownloadModal();
+        }
+        else if (row.IsRemoveAction)
+        {
+            TaskUtilities.RunSafely<PatchesPaneViewModel>(
+                RemovePatchAsync, "Removing patch");
+        }
+        else if (row.Entry is { } entry)
+        {
+            entry.IsEnabled = !entry.IsEnabled;
+            SavePatchFile();
+        }
+    }
+
+    /// <summary>
+    /// Selects the given list row and activates it (mouse path).
+    /// </summary>
+    public void SelectRow(PatchListRowViewModel row)
+    {
+        SelectionHelper.SelectOnly(Rows, row);
+        ActivateSelectedRow();
+    }
+
+    /// <summary>
+    /// Handles pane input: Up/Down moves the rows, A toggles/activates a row.
+    /// </summary>
+    public bool HandleInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                SelectionHelper.MoveSelection(Rows, -1);
+                return true;
+            case NavigationCommand.MoveDown:
+                SelectionHelper.MoveSelection(Rows, 1);
+                return true;
+            case NavigationCommand.Activate:
+                ActivateSelectedRow();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Selects the first row when the pane becomes active.
+    /// </summary>
+    public void OnPaneEntered()
+    {
+        SelectionHelper.SelectOnlyAt(Rows, 0);
+    }
+
+    /// <summary>
+    /// Clears the patch selection when the pane loses focus.
+    /// </summary>
+    public void OnPaneExited()
+    {
+        SelectionHelper.ClearSelection(Rows);
+    }
+
+    /// <summary>
+    /// Loads the game's patch file (when installed) and builds the list rows.
+    /// </summary>
+    public PatchesPaneViewModel(Game game)
+    {
+        _game = game;
+        _modalService = App.Services.GetRequiredService<IModalService>();
+        Rows.CollectionChanged += (_, _) => OnPropertyChanged(nameof(HasPatch));
+        ReloadPatch();
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -97,16 +98,95 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     public event Action<ConfigRowViewModel>? RowSelectionChanged;
 
     /// <summary>
-    /// Loads the game's config file (from the boot preload cache) and builds
-    /// the curated rows.
+    /// Closes the editor and notifies the view to close the native control.
     /// </summary>
-    public GameSettingsPaneViewModel(Game game)
+    private void CloseEditor()
     {
-        _game = game;
-        _modalService = App.Services.GetRequiredService<IModalService>();
-        _configFilePath = AppPathResolver.GetFullPath(game.FileLocations.Config);
-        _configFile = GameDataCache.GetConfig(game);
-        RebuildRows();
+        _editorRow = null;
+        EditorClosed?.Invoke();
+    }
+
+    /// <summary>
+    /// Recomputes the unsaved-changes flag after a row's value changed.
+    /// </summary>
+    private void OnRowValueChanged()
+    {
+        HasUnsavedChanges = Rows.Any(row => row.IsDirty);
+    }
+
+    /// <summary>
+    /// Writes the current values to the config file and marks every row saved.
+    /// </summary>
+    private void SaveChanges()
+    {
+        try
+        {
+            _configFile.Save(_configFilePath);
+            foreach (ConfigRowViewModel row in Rows)
+            {
+                row.MarkAsSaved();
+            }
+
+            HasUnsavedChanges = false;
+            Logger.Info<GameSettingsPaneViewModel>($"Saved config '{_configFilePath}'");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameSettingsPaneViewModel>($"Failed to save config '{_configFilePath}'");
+            Logger.LogExceptionDetails<GameSettingsPaneViewModel>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Steps the open slider editor by one increment, clamped to its range.
+    /// </summary>
+    private static void StepSlider(ConfigRowViewModel row, int delta)
+    {
+        double step = row.Step ?? 1;
+        double min = row.Minimum ?? double.MinValue;
+        double max = row.Maximum ?? double.MaxValue;
+        row.FloatValue = Math.Clamp(row.FloatValue + delta * step, min, max);
+    }
+
+    /// <summary>
+    /// Cycles the open combo editor's selection by the given step, wrapping at
+    /// both ends.
+    /// </summary>
+    private static void CycleCombo(ConfigRowViewModel row, int delta)
+    {
+        int count = row.ComboBoxOptions?.Count ?? 0;
+        if (count == 0)
+        {
+            return;
+        }
+
+        int current = row.SelectedIndex < 0 ? 0 : row.SelectedIndex;
+        row.SelectedIndex = (current + delta + count) % count;
+    }
+
+    /// <summary>
+    /// Moves the row selection by the given step, clamped at both ends. Rows
+    /// start unselected - the first move selects the first row.
+    /// </summary>
+    private void MoveSelection(int delta)
+    {
+        int index = SelectionHelper.MoveSelection(Rows, delta);
+        if (index >= 0)
+        {
+            RowSelectionChanged?.Invoke(Rows[index]);
+        }
+    }
+
+    /// <summary>
+    /// Opens the combo editor for the given row, snapshotting its value so a
+    /// cancel can restore it.
+    /// </summary>
+    private void OpenEditor(ConfigRowViewModel row)
+    {
+        row.StartEdit();
+        _editorRow = row;
+        EditorOpened?.Invoke(row);
+        Logger.Debug<GameSettingsPaneViewModel>($"Opened editor for '{row.Label}'");
     }
 
     /// <summary>
@@ -148,37 +228,6 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Recomputes the unsaved-changes flag after a row's value changed.
-    /// </summary>
-    private void OnRowValueChanged()
-    {
-        HasUnsavedChanges = Rows.Any(row => row.IsDirty);
-    }
-
-    /// <summary>
-    /// Writes the current values to the config file and marks every row saved.
-    /// </summary>
-    private void SaveChanges()
-    {
-        try
-        {
-            _configFile.Save(_configFilePath);
-            foreach (ConfigRowViewModel row in Rows)
-            {
-                row.MarkAsSaved();
-            }
-
-            HasUnsavedChanges = false;
-            Logger.Info<GameSettingsPaneViewModel>($"Saved config '{_configFilePath}'");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<GameSettingsPaneViewModel>($"Failed to save config '{_configFilePath}'");
-            Logger.LogExceptionDetails<GameSettingsPaneViewModel>(ex);
-        }
-    }
-
-    /// <summary>
     /// Re-reads the config file from disk (updating the cache) and rebuilds
     /// the rows, discarding the unsaved changes.
     /// </summary>
@@ -194,80 +243,25 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Prompts to save or discard the unsaved changes; after the choice the
-    /// pane raises <see cref="ExitRequested"/> so the modal returns to the
-    /// options list. A cancelled prompt (B) keeps the pane open.
+    /// Commits the open editor: closes it, keeping the edited value (the save
+    /// happens on X or the exit confirmation).
     /// </summary>
-    private void ConfirmExitAsync()
+    private void CommitEditor()
     {
-        TaskUtilities.RunSafely<GameSettingsPaneViewModel>(async () =>
-        {
-            bool? choice = await _modalService.ShowAsync<bool?>(new ConfirmationModalViewModel(
-                LocalizationHelper.GetText("GameModal.Settings.Unsaved.Title"),
-                string.Format(LocalizationHelper.GetText("GameModal.Settings.Unsaved.Message"), _game.Title),
-                LocalizationHelper.GetText("GameModal.Settings.Unsaved.Save"),
-                LocalizationHelper.GetText("GameModal.Settings.Unsaved.Discard")));
-            if (choice == null)
-            {
-                return;
-            }
-
-            if (choice == true)
-            {
-                SaveChanges();
-            }
-            else
-            {
-                ReloadFromDisk();
-            }
-
-            ExitRequested?.Invoke();
-        }, "Confirming unsaved config changes");
+        ConfigRowViewModel? row = _editorRow;
+        CloseEditor();
+        Logger.Debug<GameSettingsPaneViewModel>($"Committed editor for '{row?.Label}'");
     }
 
     /// <summary>
-    /// Handles pane input: Up/Down moves the rows, Left/Right steps the
-    /// selected slider directly (no editor needed), A flips toggles or opens
-    /// the combo editor. While a combo editor is open it takes the input
-    /// instead: Up/Down cycles the options, A commits and B cancels.
+    /// Restores the open editor's original value and closes it.
     /// </summary>
-    public bool HandleInput(NavigationCommand command)
+    private void CancelEditor()
     {
-        if (_editorRow != null)
-        {
-            return HandleEditorInput(command);
-        }
-
-        switch (command)
-        {
-            case NavigationCommand.MoveUp:
-                MoveSelection(-1);
-                return true;
-            case NavigationCommand.MoveDown:
-                MoveSelection(1);
-                return true;
-            case NavigationCommand.MoveLeft:
-                return StepSelectedSlider(-1);
-            case NavigationCommand.MoveRight:
-                return StepSelectedSlider(1);
-            case NavigationCommand.Activate:
-                ActivateSelectedRow();
-                return true;
-            case NavigationCommand.CycleSort:
-                // X saves the unsaved changes
-                SaveChanges();
-                return true;
-            case NavigationCommand.Back:
-                if (HasUnsavedChanges)
-                {
-                    ConfirmExitAsync();
-                    return true;
-                }
-
-                return false;
-            default:
-                return false;
-        }
+        ConfigRowViewModel? row = _editorRow;
+        CloseEditor();
+        row?.CancelEdit();
+        Logger.Debug<GameSettingsPaneViewModel>($"Cancelled editor for '{row?.Label}'");
     }
 
     /// <summary>
@@ -350,85 +344,78 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Opens the combo editor for the given row, snapshotting its value so a
-    /// cancel can restore it.
+    /// Prompts to save or discard the unsaved changes; after the choice the
+    /// pane raises <see cref="ExitRequested"/> so the modal returns to the
+    /// options list. A cancelled prompt (B) keeps the pane open.
     /// </summary>
-    private void OpenEditor(ConfigRowViewModel row)
+    private void ConfirmExitAsync()
     {
-        row.StartEdit();
-        _editorRow = row;
-        EditorOpened?.Invoke(row);
-        Logger.Debug<GameSettingsPaneViewModel>($"Opened editor for '{row.Label}'");
-    }
-
-    /// <summary>
-    /// Commits the open editor: closes it, keeping the edited value (the save
-    /// happens on X or the exit confirmation).
-    /// </summary>
-    private void CommitEditor()
-    {
-        ConfigRowViewModel? row = _editorRow;
-        CloseEditor();
-        Logger.Debug<GameSettingsPaneViewModel>($"Committed editor for '{row?.Label}'");
-    }
-
-    /// <summary>
-    /// Restores the open editor's original value and closes it.
-    /// </summary>
-    private void CancelEditor()
-    {
-        ConfigRowViewModel? row = _editorRow;
-        CloseEditor();
-        row?.CancelEdit();
-        Logger.Debug<GameSettingsPaneViewModel>($"Cancelled editor for '{row?.Label}'");
-    }
-
-    /// <summary>
-    /// Closes the editor and notifies the view to close the native control.
-    /// </summary>
-    private void CloseEditor()
-    {
-        _editorRow = null;
-        EditorClosed?.Invoke();
-    }
-
-    /// <summary>
-    /// Cycles the open combo editor's selection by the given step, wrapping at
-    /// both ends.
-    /// </summary>
-    private static void CycleCombo(ConfigRowViewModel row, int delta)
-    {
-        int count = row.ComboBoxOptions?.Count ?? 0;
-        if (count == 0)
+        TaskUtilities.RunSafely<GameSettingsPaneViewModel>(async () =>
         {
-            return;
+            bool? choice = await ModalFactory.ConfirmAsync(_modalService,
+                LocalizationHelper.GetText("GameModal.Settings.Unsaved.Title"),
+                string.Format(LocalizationHelper.GetText("GameModal.Settings.Unsaved.Message"), _game.Title),
+                LocalizationHelper.GetText("GameModal.Settings.Unsaved.Save"),
+                LocalizationHelper.GetText("GameModal.Settings.Unsaved.Discard"));
+            if (choice == null)
+            {
+                return;
+            }
+
+            if (choice == true)
+            {
+                SaveChanges();
+            }
+            else
+            {
+                ReloadFromDisk();
+            }
+
+            ExitRequested?.Invoke();
+        }, "Confirming unsaved config changes");
+    }
+
+    /// <summary>
+    /// Handles pane input: Up/Down moves the rows, Left/Right steps the
+    /// selected slider directly (no editor needed), A flips toggles or opens
+    /// the combo editor. While a combo editor is open it takes the input
+    /// instead: Up/Down cycles the options, A commits and B cancels.
+    /// </summary>
+    public bool HandleInput(NavigationCommand command)
+    {
+        if (_editorRow != null)
+        {
+            return HandleEditorInput(command);
         }
 
-        int current = row.SelectedIndex < 0 ? 0 : row.SelectedIndex;
-        row.SelectedIndex = (current + delta + count) % count;
-    }
-
-    /// <summary>
-    /// Steps the open slider editor by one increment, clamped to its range.
-    /// </summary>
-    private static void StepSlider(ConfigRowViewModel row, int delta)
-    {
-        double step = row.Step ?? 1;
-        double min = row.Minimum ?? double.MinValue;
-        double max = row.Maximum ?? double.MaxValue;
-        row.FloatValue = Math.Clamp(row.FloatValue + delta * step, min, max);
-    }
-
-    /// <summary>
-    /// Moves the row selection by the given step, clamped at both ends. Rows
-    /// start unselected - the first move selects the first row.
-    /// </summary>
-    private void MoveSelection(int delta)
-    {
-        int index = SelectionHelper.MoveSelection(Rows, delta);
-        if (index >= 0)
+        switch (command)
         {
-            RowSelectionChanged?.Invoke(Rows[index]);
+            case NavigationCommand.MoveUp:
+                MoveSelection(-1);
+                return true;
+            case NavigationCommand.MoveDown:
+                MoveSelection(1);
+                return true;
+            case NavigationCommand.MoveLeft:
+                return StepSelectedSlider(-1);
+            case NavigationCommand.MoveRight:
+                return StepSelectedSlider(1);
+            case NavigationCommand.Activate:
+                ActivateSelectedRow();
+                return true;
+            case NavigationCommand.CycleSort:
+                SaveChanges();
+                return true;
+            case NavigationCommand.Back:
+                if (HasUnsavedChanges)
+                {
+                    ConfirmExitAsync();
+                    return true;
+                }
+
+                return false;
+            default:
+                return false;
         }
     }
 
@@ -447,5 +434,18 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     {
         CloseEditor();
         SelectionHelper.ClearSelection(Rows);
+    }
+
+    /// <summary>
+    /// Loads the game's config file (from the boot preload cache) and builds
+    /// the curated rows.
+    /// </summary>
+    public GameSettingsPaneViewModel(Game game)
+    {
+        _game = game;
+        _modalService = App.Services.GetRequiredService<IModalService>();
+        _configFilePath = AppPathResolver.GetFullPath(game.FileLocations.Config);
+        _configFile = GameDataCache.GetConfig(game);
+        RebuildRows();
     }
 }

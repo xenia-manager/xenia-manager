@@ -18,6 +18,9 @@ namespace XeniaManager.BigScreen.ViewModels.Dashboard;
 /// </summary>
 public partial class HeaderViewModel : ViewModelBase
 {
+    private readonly DispatcherTimer _clockTimer;
+    private readonly DispatcherTimer _networkTimer;
+
     /// <summary>
     /// Whether the profile row (avatar chip) is currently selected.
     /// </summary>
@@ -91,81 +94,6 @@ public partial class HeaderViewModel : ViewModelBase
     /// </summary>
     public Symbol BatteryIcon => IconFactory.GetBatteryIcon(BatteryLevel, IsCharging);
 
-    partial void OnNetworkStatusChanged(NetworkStatus value)
-    {
-        OnPropertyChanged(nameof(NetworkIcon));
-        Logger.Debug<HeaderViewModel>($"Network status: {value}");
-    }
-
-    partial void OnBatteryLevelChanged(int value) => OnPropertyChanged(nameof(BatteryIcon));
-
-    partial void OnIsChargingChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
-
-    partial void OnControllerConnectedChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
-
-    partial void OnTimeFormatChanged(TimeFormat value)
-    {
-        Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(value));
-        ClockMinWidth = value == TimeFormat.TwentyFourHour
-            ? LayoutConstants.ClockMinWidth24H
-            : LayoutConstants.ClockMinWidth12H;
-        Logger.Debug<HeaderViewModel>($"Clock format: {value}");
-    }
-
-    private readonly DispatcherTimer _clockTimer;
-    private readonly DispatcherTimer _networkTimer;
-
-    public HeaderViewModel()
-    {
-        _clockTimer = new DispatcherTimer
-        {
-            Interval = TimingConstants.ClockUpdateInterval
-        };
-        _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(TimeFormat));
-        _clockTimer.Start();
-
-        _networkTimer = new DispatcherTimer
-        {
-            Interval = TimingConstants.WifiPollInterval
-        };
-        _networkTimer.Tick += (_, _) => CheckNetwork();
-        _networkTimer.Start();
-        CheckNetwork();
-    }
-
-    /// <summary>
-    /// Applies the loaded profile's identity. Called once the profile has been
-    /// loaded during the boot pipeline (the constructor stays cheap so the
-    /// splash screen can appear immediately).
-    /// </summary>
-    public void ApplyProfile(IProfileService profileService)
-    {
-        Gamertag = profileService.Gamertag;
-        Gamerscore = profileService.Gamerscore;
-        Logger.Debug<HeaderViewModel>($"Profile loaded: {Gamertag} ({Gamerscore}G)");
-    }
-
-    /// <summary>
-    /// Applies the persisted time format to the clock.
-    /// </summary>
-    public void ApplyTimeFormat(TimeFormat timeFormat)
-    {
-        TimeFormat = timeFormat;
-        Logger.Debug<HeaderViewModel>($"Time format applied: {timeFormat}");
-    }
-
-    /// <summary>
-    /// Applies the live gamepad connection/battery state from the gamepad service.
-    /// </summary>
-    public void ApplyGamepadState(bool connected, int batteryPercent, bool charging)
-    {
-        ControllerConnected = connected;
-        BatteryLevel = batteryPercent;
-        IsCharging = charging;
-        Logger.Debug<HeaderViewModel>(
-            $"Gamepad state: connected={connected}, battery={batteryPercent}%, charging={charging}");
-    }
-
     /// <summary>
     /// Re-checks the network connection state from the network interfaces:
     /// wireless-up wins, then ethernet-up, otherwise disconnected.
@@ -202,5 +130,77 @@ public partial class HeaderViewModel : ViewModelBase
             Logger.Error<HeaderViewModel>("Failed to query network connection state");
             Logger.LogExceptionDetails<HeaderViewModel>(ex);
         }
+    }
+
+    /// <summary>
+    /// Applies the loaded profile's identity. Called once the profile has been
+    /// loaded during the boot pipeline (the constructor stays cheap so the
+    /// splash screen can appear immediately).
+    /// </summary>
+    public void ApplyProfile(IProfileService profileService)
+    {
+        Gamertag = profileService.Gamertag;
+        Gamerscore = profileService.Gamerscore;
+        Logger.Debug<HeaderViewModel>($"Profile loaded: {Gamertag} ({Gamerscore}G)");
+    }
+
+    /// <summary>
+    /// Applies the persisted time format to the clock.
+    /// </summary>
+    public void ApplyTimeFormat(TimeFormat timeFormat)
+    {
+        TimeFormat = timeFormat;
+        Logger.Debug<HeaderViewModel>($"Time format applied: {timeFormat}");
+    }
+
+    /// <summary>
+    /// Applies the live gamepad connection/battery state from the gamepad service.
+    /// </summary>
+    public void ApplyGamepadState(bool connected, int batteryPercent, bool charging)
+    {
+        ControllerConnected = connected;
+        BatteryLevel = batteryPercent;
+        IsCharging = charging;
+        Logger.Debug<HeaderViewModel>(
+            $"Gamepad state: connected={connected}, battery={batteryPercent}%, charging={charging}");
+    }
+
+    partial void OnNetworkStatusChanged(NetworkStatus value)
+    {
+        OnPropertyChanged(nameof(NetworkIcon));
+        Logger.Debug<HeaderViewModel>($"Network status: {value}");
+    }
+
+    partial void OnBatteryLevelChanged(int value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    partial void OnIsChargingChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    partial void OnControllerConnectedChanged(bool value) => OnPropertyChanged(nameof(BatteryIcon));
+
+    partial void OnTimeFormatChanged(TimeFormat value)
+    {
+        Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(value));
+        ClockMinWidth = value == TimeFormat.TwentyFourHour
+            ? LayoutConstants.ClockMinWidth24H
+            : LayoutConstants.ClockMinWidth12H;
+        Logger.Debug<HeaderViewModel>($"Clock format: {value}");
+    }
+
+    public HeaderViewModel()
+    {
+        _clockTimer = new DispatcherTimer
+        {
+            Interval = TimingConstants.ClockUpdateInterval
+        };
+        _clockTimer.Tick += (_, _) => Time = DateTime.Now.ToString(FormatConstants.GetClockFormat(TimeFormat));
+        _clockTimer.Start();
+
+        _networkTimer = new DispatcherTimer
+        {
+            Interval = TimingConstants.WifiPollInterval
+        };
+        _networkTimer.Tick += (_, _) => CheckNetwork();
+        _networkTimer.Start();
+        CheckNetwork();
     }
 }

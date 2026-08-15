@@ -76,7 +76,6 @@ public partial class ConfirmationModalViewModel : ModalViewModelBase<bool?>
                 Close(IsOption1Selected);
                 return true;
             case NavigationCommand.Back:
-                // B cancels the prompt entirely (null result)
                 Close(null);
                 return true;
             default:

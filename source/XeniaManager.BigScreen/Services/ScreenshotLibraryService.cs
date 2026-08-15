@@ -73,7 +73,6 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
                 }
                 catch (Exception ex)
                 {
-                    // Skip unreadable images
                     Logger.Warning<ScreenshotLibraryService>($"Failed to load screenshot '{file}', skipping");
                     Logger.LogExceptionDetails<ScreenshotLibraryService>(ex);
                 }

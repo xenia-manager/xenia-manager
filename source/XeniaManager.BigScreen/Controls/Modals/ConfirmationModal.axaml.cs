@@ -11,12 +11,6 @@ namespace XeniaManager.BigScreen.Controls.Modals;
 /// </summary>
 public partial class ConfirmationModal : UserControl
 {
-    public ConfirmationModal()
-    {
-        InitializeComponent();
-        Loaded += OnLoaded;
-    }
-
     /// <summary>
     /// Moves focus to the selected option so keyboard Enter activates it.
     /// </summary>
@@ -45,5 +39,11 @@ public partial class ConfirmationModal : UserControl
         {
             vm.Cancel();
         }
+    }
+
+    public ConfirmationModal()
+    {
+        InitializeComponent();
+        Loaded += OnLoaded;
     }
 }

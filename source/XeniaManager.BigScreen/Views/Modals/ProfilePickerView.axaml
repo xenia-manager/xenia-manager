@@ -35,21 +35,15 @@
                 </ScrollViewer>
 
                 <!-- Empty-state stub: no profiles to pick -->
-                <Border IsVisible="{Binding ShowEmpty}"
-                        Height="220"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="520"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="PersonQuestionMark"
-                                           FontSize="72" />
-                        <TextBlock Text="{DynamicResource Profiles.NoProfilesFound}"
-                                   FontSize="24" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                                 Symbol="PersonQuestionMark"
+                                 Text="{DynamicResource Profiles.NoProfilesFound}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="520"
+                                 Height="220"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
             </Grid>
 
             <!-- HINTS -->

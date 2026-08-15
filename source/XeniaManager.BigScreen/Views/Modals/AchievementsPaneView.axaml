@@ -17,14 +17,10 @@
             <StackPanel Orientation="Horizontal" Spacing="40" VerticalAlignment="Center">
                 <prim:IconStat Icon="Trophy"
                                Stat="{Binding AchievementText}"
-                               IconSize="26"
-                               Spacing="14"
-                               FontSize="24" />
+                               Classes="pane-header-stat" />
                 <prim:IconStat Icon="Star"
                                Stat="{Binding GamerscoreText}"
-                               IconSize="26"
-                               Spacing="14"
-                               FontSize="24" />
+                               Classes="pane-header-stat" />
             </StackPanel>
             <prim:IconStat Grid.Column="1"
                            Icon="ArrowSort"
@@ -56,21 +52,13 @@
             </ScrollViewer>
 
             <!-- Empty state: no GPD or no achievements -->
-            <Border IsVisible="{Binding ShowEmpty}"
-                    Height="220"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="520"
-                    Classes="empty-state">
-                <StackPanel Orientation="Vertical"
-                            VerticalAlignment="Center"
-                            Spacing="16">
-                    <fluent:SymbolIcon Symbol="Trophy"
-                                       FontSize="64" />
-                    <TextBlock Text="{DynamicResource GameModal.Achievements.Empty}"
-                               FontSize="22" />
-                </StackPanel>
-            </Border>
+            <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                             Symbol="Trophy"
+                             Text="{DynamicResource GameModal.Achievements.Empty}"
+                             Width="520"
+                             Height="220"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center" />
         </Grid>
     </Grid>
 </UserControl>

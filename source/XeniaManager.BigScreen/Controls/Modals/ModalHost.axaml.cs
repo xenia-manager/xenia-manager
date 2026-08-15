@@ -15,14 +15,6 @@ public partial class ModalHost : UserControl
 {
     private readonly IModalService _modalService;
 
-    public ModalHost()
-    {
-        InitializeComponent();
-
-        _modalService = App.Services.GetRequiredService<IModalService>();
-        _modalService.StackChanged += OnStackChanged;
-    }
-
     /// <summary>
     /// Rebuilds the layered stack - later modals overlay earlier ones.
     /// </summary>
@@ -38,5 +30,13 @@ public partial class ModalHost : UserControl
                 IsHitTestVisible = i == stack.Count - 1
             });
         }
+    }
+
+    public ModalHost()
+    {
+        InitializeComponent();
+
+        _modalService = App.Services.GetRequiredService<IModalService>();
+        _modalService.StackChanged += OnStackChanged;
     }
 }

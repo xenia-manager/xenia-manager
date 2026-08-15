@@ -51,21 +51,15 @@
                 </ScrollViewer>
 
                 <!-- Empty-library stub: subtle disc card, shown when there are no games -->
-                <Border IsVisible="{Binding ShowEmptyStub}"
-                        Height="200"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="320"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="PlayCircle"
-                                           FontSize="72" />
-                        <TextBlock Text="{DynamicResource Library.NoGamesFound}"
-                                   FontSize="24" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState IsVisible="{Binding ShowEmptyStub}"
+                                 Symbol="PlayCircle"
+                                 Text="{DynamicResource Library.NoGamesFound}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="320"
+                                 Height="200"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
             </Grid>
 
             <!-- LIST VIEW: vertical list + details pane -->
@@ -102,23 +96,17 @@
                 </Border>
 
                 <!-- Empty-library stub (list view) -->
-                <Border Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        IsVisible="{Binding ShowEmptyStub}"
-                        Height="200"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="320"
-                        Classes="empty-state">
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                Spacing="16">
-                        <fluent:SymbolIcon Symbol="PlayCircle"
-                                           FontSize="72" />
-                        <TextBlock Text="{DynamicResource Library.NoGamesFound}"
-                                   FontSize="24" />
-                    </StackPanel>
-                </Border>
+                <prim:EmptyState Grid.Column="0"
+                                 Grid.ColumnSpan="2"
+                                 IsVisible="{Binding ShowEmptyStub}"
+                                 Symbol="PlayCircle"
+                                 Text="{DynamicResource Library.NoGamesFound}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="320"
+                                 Height="200"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
             </Grid>
         </Grid>
 

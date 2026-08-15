@@ -30,6 +30,11 @@ public class ProfileService : IProfileService
     private readonly IBackgroundService _backgroundService;
 
     /// <summary>
+    /// The profile GPD of the active profile, used for per-game achievement stats.
+    /// </summary>
+    private GpdFile? _profileGpd;
+
+    /// <summary>
     /// Gamertag of the active Canary profile, or "Guest" when none exists.
     /// </summary>
     public string Gamertag { get; private set; } = "Guest";
@@ -55,13 +60,87 @@ public class ProfileService : IProfileService
     public event Action? ProfileChanged;
 
     /// <summary>
-    /// The profile GPD of the active profile, used for per-game achievement stats.
+    /// Whether the XConfig already carries the given default profile XUID,
+    /// language and country.
     /// </summary>
-    private GpdFile? _profileGpd;
+    private static bool IsProfileSynced(XConfigFile xconfig, ulong xuid, XLanguage language, XOnlineCountry country) =>
+        xconfig.DefaultProfile == xuid && xconfig.Language == language && xconfig.Country == country;
 
-    public ProfileService(IBackgroundService backgroundService)
+    /// <summary>
+    /// Whether the given profile's path XUID matches the persisted value.
+    /// </summary>
+    private static bool MatchesXuid(AccountInfo profile, string? xuid)
     {
-        _backgroundService = backgroundService;
+        return !string.IsNullOrEmpty(xuid)
+               && profile.PathXuidText()?.Equals(xuid, StringComparison.OrdinalIgnoreCase) == true;
+    }
+
+    /// <summary>
+    /// Writes the active profile's XUID, language and country into the Canary
+    /// XConfig (the emulator's default profile), so launched games run with the
+    /// selected BigScreen profile. Skipped when no XConfig file exists.
+    /// </summary>
+    public void SyncXConfigDefaultProfile()
+    {
+        try
+        {
+            XConfigFile? xconfig = XConfigManager.LoadXConfig(XeniaVersion.Canary);
+            if (xconfig == null)
+            {
+                Logger.Debug<ProfileService>("No Canary XConfig file - default profile sync skipped");
+                return;
+            }
+
+            ulong xuid = ActiveProfile?.PathXuid?.Value ?? 0;
+            XLanguage language = ActiveProfile != null ? (XLanguage)ActiveProfile.Language : XLanguage.Invalid;
+            XOnlineCountry country = ActiveProfile != null ? (XOnlineCountry)ActiveProfile.Country : (XOnlineCountry)0;
+
+            if (IsProfileSynced(xconfig, xuid, language, country))
+            {
+                return;
+            }
+
+            xconfig.DefaultProfile = xuid;
+            xconfig.Language = language;
+            xconfig.Country = country;
+            XConfigManager.SaveXConfig(xconfig, XeniaVersion.Canary);
+            Logger.Info<ProfileService>(
+                $"XConfig synced: default profile 0x{xuid:X16}, language {language}, country {country}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ProfileService>("Failed to sync the Canary XConfig default profile");
+            Logger.LogExceptionDetails<ProfileService>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Applies the given profile as active and loads its gamerscore from the profile GPD.
+    /// </summary>
+    private void ActivateProfile(AccountInfo profile)
+    {
+        ActiveProfile = profile;
+        Gamertag = profile.Gamertag;
+        _profileGpd = null;
+        Gamerscore = "0";
+
+        try
+        {
+            AccountContent content = new(profile, XeniaVersion.Canary, XboxConstants.ProfileContentTitleId);
+            if (content.ProfileGpd != null)
+            {
+                _profileGpd = content.ProfileGpd;
+                Gamerscore = content.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked).ToString();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<ProfileService>(
+                $"Failed to load the profile GPD for '{profile.Gamertag}', gamerscore kept at 0");
+            Logger.LogExceptionDetails<ProfileService>(ex);
+        }
+
+        SyncXConfigDefaultProfile();
     }
 
     /// <summary>
@@ -87,7 +166,6 @@ public class ProfileService : IProfileService
         }
         catch (Exception ex)
         {
-            // No profiles found - keep defaults
             Logger.Warning<ProfileService>("Failed to load Canary profiles, keeping defaults");
             Logger.LogExceptionDetails<ProfileService>(ex);
         }
@@ -121,7 +199,6 @@ public class ProfileService : IProfileService
             Profiles = loaded;
             ActivateProfile(profile);
 
-            // The active profile changed (deleted) - persist the new selection
             if (profile.PathXuidText() != activeXuid)
             {
                 _backgroundService.Settings.ProfileXuid = profile.PathXuidText();
@@ -155,84 +232,6 @@ public class ProfileService : IProfileService
         _backgroundService.Save();
         ProfileChanged?.Invoke();
         Logger.Info<ProfileService>($"Switched to profile '{Gamertag}' ({Gamerscore}G)");
-    }
-
-    /// <summary>
-    /// Applies the given profile as active and loads its gamerscore from the profile GPD.
-    /// </summary>
-    private void ActivateProfile(AccountInfo profile)
-    {
-        ActiveProfile = profile;
-        Gamertag = profile.Gamertag;
-        _profileGpd = null;
-        Gamerscore = "0";
-
-        try
-        {
-            AccountContent content = new(profile, XeniaVersion.Canary, XboxConstants.ProfileContentTitleId);
-            if (content.ProfileGpd != null)
-            {
-                _profileGpd = content.ProfileGpd;
-                Gamerscore = content.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked).ToString();
-            }
-        }
-        catch (Exception ex)
-        {
-            // Profile GPD missing or unreadable - keep gamerscore at 0
-            Logger.Warning<ProfileService>(
-                $"Failed to load the profile GPD for '{profile.Gamertag}', gamerscore kept at 0");
-            Logger.LogExceptionDetails<ProfileService>(ex);
-        }
-
-        SyncXConfigDefaultProfile();
-    }
-
-    /// <summary>
-    /// Writes the active profile's XUID, language and country into the Canary
-    /// XConfig (the emulator's default profile), so launched games run with the
-    /// selected BigScreen profile. Skipped when no XConfig file exists.
-    /// </summary>
-    public void SyncXConfigDefaultProfile()
-    {
-        try
-        {
-            XConfigFile? xconfig = XConfigManager.LoadXConfig(XeniaVersion.Canary);
-            if (xconfig == null)
-            {
-                Logger.Debug<ProfileService>("No Canary XConfig file - default profile sync skipped");
-                return;
-            }
-
-            ulong xuid = ActiveProfile?.PathXuid?.Value ?? 0;
-            XLanguage language = ActiveProfile != null ? (XLanguage)ActiveProfile.Language : XLanguage.Invalid;
-            XOnlineCountry country = ActiveProfile != null ? (XOnlineCountry)ActiveProfile.Country : (XOnlineCountry)0;
-
-            if (xconfig.DefaultProfile == xuid && xconfig.Language == language && xconfig.Country == country)
-            {
-                return;
-            }
-
-            xconfig.DefaultProfile = xuid;
-            xconfig.Language = language;
-            xconfig.Country = country;
-            XConfigManager.SaveXConfig(xconfig, XeniaVersion.Canary);
-            Logger.Info<ProfileService>(
-                $"XConfig synced: default profile 0x{xuid:X16}, language {language}, country {country}");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<ProfileService>("Failed to sync the Canary XConfig default profile");
-            Logger.LogExceptionDetails<ProfileService>(ex);
-        }
-    }
-
-    /// <summary>
-    /// Whether the given profile's path XUID matches the persisted value.
-    /// </summary>
-    private static bool MatchesXuid(AccountInfo profile, string? xuid)
-    {
-        return !string.IsNullOrEmpty(xuid)
-               && profile.PathXuidText()?.Equals(xuid, StringComparison.OrdinalIgnoreCase) == true;
     }
 
     /// <summary>
@@ -301,25 +300,42 @@ public class ProfileService : IProfileService
     }
 
     /// <summary>
+    /// Resolves achievement/gamerscore counters from the profile GPD TitleEntry
+    /// matching the game's title id.
+    /// </summary>
+    private bool TryGetProfileGpdStats(Game game, out GameStatInfo? stats)
+    {
+        if (_profileGpd == null ||
+            !uint.TryParse(game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
+        {
+            stats = null;
+            return false;
+        }
+
+        TitleEntry? entry = _profileGpd.Titles.FirstOrDefault(t => t.TitleId == titleId);
+        if (entry == null)
+        {
+            stats = null;
+            return false;
+        }
+
+        stats = new GameStatInfo(
+            entry.AchievementUnlockedCount, entry.AchievementCount,
+            entry.GamerscoreUnlocked, entry.GamerscoreTotal);
+        return true;
+    }
+
+    /// <summary>
     /// Resolves achievement/gamerscore counters for the given game. Preferred source is the
     /// profile GPD TitleEntry; falls back to the per-game achievement GPD ({titleId}.gpd).
     /// </summary>
     public GameStatInfo? GetGameStats(Game game)
     {
-        // Preferred: profile GPD TitleEntry
-        if (_profileGpd != null &&
-            uint.TryParse(game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
+        if (TryGetProfileGpdStats(game, out GameStatInfo? profileStats))
         {
-            TitleEntry? entry = _profileGpd.Titles.FirstOrDefault(t => t.TitleId == titleId);
-            if (entry != null)
-            {
-                return new GameStatInfo(
-                    entry.AchievementUnlockedCount, entry.AchievementCount,
-                    entry.GamerscoreUnlocked, entry.GamerscoreTotal);
-            }
+            return profileStats;
         }
 
-        // Fallback: count from the per-game achievement GPD
         GpdFile? achievementGpd = LoadGameAchievementGpd(game.GameId);
         if (achievementGpd != null)
         {
@@ -331,5 +347,10 @@ public class ProfileService : IProfileService
         }
 
         return null;
+    }
+
+    public ProfileService(IBackgroundService backgroundService)
+    {
+        _backgroundService = backgroundService;
     }
 }

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
@@ -21,6 +21,27 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 /// </summary>
 public partial class GameModalViewModel : ModalViewModelBase
 {
+    /// <summary>
+    /// The pane instances created so far, keyed by option; navigating back to an
+    /// option reuses its pane (no reloads).
+    /// </summary>
+    private readonly Dictionary<GameModalPane, ViewModelBase> _panes = [];
+
+    /// <summary>
+    /// The disposable panes created during this modal's lifetime, disposed on close.
+    /// </summary>
+    private readonly List<IDisposable> _disposables = [];
+
+    /// <summary>
+    /// Whether disc art is available to show.
+    /// </summary>
+    public bool HasIcon => Icon != null;
+
+    /// <summary>
+    /// Whether the X hint is shown (the shown pane has an X action).
+    /// </summary>
+    public bool IsXHintVisible => XHintText.Length > 0;
+
     /// <summary>
     /// The Core game model this dialog describes.
     /// </summary>
@@ -37,14 +58,34 @@ public partial class GameModalViewModel : ModalViewModelBase
     public Bitmap? Icon => Game.Artwork.CachedIcon;
 
     /// <summary>
-    /// Whether disc art is available to show.
-    /// </summary>
-    public bool HasIcon => Icon != null;
-
-    /// <summary>
     /// The options list shown on the left column.
     /// </summary>
     public List<GameActionItemViewModel> Options { get; }
+
+    /// <summary>
+    /// The X hint label while a pane is shown (sort), or empty when the shown
+    /// pane has no X action.
+    /// </summary>
+    public string XHintText => Pane switch
+    {
+        AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Sort"),
+        GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Save"),
+        _ => string.Empty
+    };
+
+    /// <summary>
+    /// The A hint label: what activating does in the current column (enter the
+    /// pane from the nav list, or the pane's own A action).
+    /// </summary>
+    public string AHintText => Pane switch
+    {
+        AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Select"),
+        GameScreenshotsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.View"),
+        InstalledContentPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Delete"),
+        PatchesPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Toggle"),
+        GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Edit"),
+        _ => LocalizationHelper.GetText("GameModal.Hint.Select")
+    };
 
     /// <summary>
     /// The currently selected option row.
@@ -63,104 +104,50 @@ public partial class GameModalViewModel : ModalViewModelBase
     [ObservableProperty] private bool _isPaneActive;
 
     /// <summary>
-    /// The pane instances created so far, keyed by option; navigating back to an
-    /// option reuses its pane (no reloads).
+    /// Returns the pane for the given option, creating and caching it on first use.
     /// </summary>
-    private readonly Dictionary<GameModalPane, ViewModelBase> _panes = [];
-
-    /// <summary>
-    /// The disposable panes created during this modal's lifetime, disposed on close.
-    /// </summary>
-    private readonly List<IDisposable> _disposables = [];
-
-    /// <summary>
-    /// The X hint label while a pane is shown (sort), or empty when the shown
-    /// pane has no X action.
-    /// </summary>
-    public string XHintText => Pane switch
+    private ViewModelBase GetOrCreatePane(GameModalPane pane)
     {
-        AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Sort"),
-        GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Save"),
-        _ => string.Empty
-    };
+        if (_panes.TryGetValue(pane, out ViewModelBase? existing))
+        {
+            return existing;
+        }
 
-    /// <summary>
-    /// Whether the X hint is shown (the shown pane has an X action).
-    /// </summary>
-    public bool IsXHintVisible => XHintText.Length > 0;
+        ViewModelBase created = GameModalPaneFactory.Create(pane, Game);
+        if (created is GameSettingsPaneViewModel settings)
+        {
+            settings.ExitRequested += () => IsPaneActive = false;
+        }
 
-    /// <summary>
-    /// The A hint label: what activating does in the current column (enter the
-    /// pane from the nav list, or the pane's own A action).
-    /// </summary>
-    public string AHintText => Pane switch
-    {
-        AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Select"),
-        GameScreenshotsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.View"),
-        InstalledContentPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Delete"),
-        PatchesPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Toggle"),
-        GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Edit"),
-        _ => LocalizationHelper.GetText("GameModal.Hint.Select")
-    };
+        _panes[pane] = created;
+        if (created is IDisposable disposable)
+        {
+            _disposables.Add(disposable);
+        }
 
-    partial void OnPaneChanged(ViewModelBase? value)
-    {
-        OnPropertyChanged(nameof(XHintText));
-        OnPropertyChanged(nameof(IsXHintVisible));
-        OnPropertyChanged(nameof(AHintText));
+        return created;
     }
 
     /// <summary>
-    /// Toggles the single highlight on column switches: entering the pane
-    /// clears the nav selection and selects the pane's first item; exiting
-    /// clears the pane and re-selects the nav option.
+    /// Moves the options selection by the given step (clamped at both ends) and
+    /// displays the newly selected option's pane.
     /// </summary>
-    partial void OnIsPaneActiveChanged(bool value)
+    private void MoveSelection(int delta)
     {
-        if (value)
-        {
-            SelectionHelper.ClearSelection(Options);
-            if (Pane is IGameModalPane pane)
-            {
-                pane.OnPaneEntered();
-            }
-        }
-        else
-        {
-            if (Pane is IGameModalPane pane)
-            {
-                pane.OnPaneExited();
-            }
-
-            SelectedOption?.IsSelected = true;
-        }
+        int target = SelectionHelper.MoveSelection(Options, delta);
+        SelectedOption = Options[target];
+        Pane = GetOrCreatePane(SelectedOption.Pane);
+        Logger.Trace<GameModalViewModel>($"Moved game modal selection by {delta}");
     }
 
     /// <summary>
-    /// Creates the dialog, builds its options list and shows the first pane.
+    /// Selects the given option and displays its pane (mouse path).
     /// </summary>
-    public GameModalViewModel(Game game)
+    public void OpenOption(GameActionItemViewModel option)
     {
-        Game = game;
-        Options =
-        [
-            new GameActionItemViewModel(
-                LocalizationHelper.GetText("GameModal.Action.Achievements"), "Trophy", GameModalPane.Achievements),
-            new GameActionItemViewModel(
-                LocalizationHelper.GetText("GameModal.Action.Screenshots"), "Camera", GameModalPane.Screenshots),
-            new GameActionItemViewModel(
-                LocalizationHelper.GetText("GameModal.Action.TitleUpdates"), "Document", GameModalPane.TitleUpdates),
-            new GameActionItemViewModel(
-                LocalizationHelper.GetText("GameModal.Action.MarketplaceContent"), "Tag",
-                GameModalPane.MarketplaceContent),
-            new GameActionItemViewModel(
-                LocalizationHelper.GetText("GameModal.Action.Patches"), "DocumentText", GameModalPane.Patches),
-            new GameActionItemViewModel(
-                LocalizationHelper.GetText("GameModal.Action.Settings"), "Settings", GameModalPane.Settings)
-        ];
-        SelectedOption = Options[0];
-        SelectedOption.IsSelected = true;
-        _pane = GetOrCreatePane(SelectedOption.Pane);
+        SelectionHelper.SelectOnly(Options, option);
+        SelectedOption = option;
+        Pane = GetOrCreatePane(option.Pane);
     }
 
     /// <summary>
@@ -205,66 +192,37 @@ public partial class GameModalViewModel : ModalViewModelBase
         }
     }
 
-    /// <summary>
-    /// Moves the options selection by the given step (clamped at both ends) and
-    /// displays the newly selected option's pane.
-    /// </summary>
-    private void MoveSelection(int delta)
+    partial void OnPaneChanged(ViewModelBase? value)
     {
-        int target = SelectionHelper.MoveSelection(Options, delta);
-        SelectedOption = Options[target];
-        Pane = GetOrCreatePane(SelectedOption.Pane);
-        Logger.Trace<GameModalViewModel>($"Moved game modal selection by {delta}");
+        OnPropertyChanged(nameof(XHintText));
+        OnPropertyChanged(nameof(IsXHintVisible));
+        OnPropertyChanged(nameof(AHintText));
     }
 
     /// <summary>
-    /// Selects the given option and displays its pane (mouse path).
+    /// Toggles the single highlight on column switches: entering the pane
+    /// clears the nav selection and selects the pane's first item; exiting
+    /// clears the pane and re-selects the nav option.
     /// </summary>
-    public void OpenOption(GameActionItemViewModel option)
+    partial void OnIsPaneActiveChanged(bool value)
     {
-        SelectionHelper.SelectOnly(Options, option);
-        SelectedOption = option;
-        Pane = GetOrCreatePane(option.Pane);
-    }
-
-    /// <summary>
-    /// Returns the pane for the given option, creating and caching it on first use.
-    /// </summary>
-    private ViewModelBase GetOrCreatePane(GameModalPane pane)
-    {
-        if (_panes.TryGetValue(pane, out ViewModelBase? existing))
+        if (value)
         {
-            return existing;
+            SelectionHelper.ClearSelection(Options);
+            if (Pane is IGameModalPane pane)
+            {
+                pane.OnPaneEntered();
+            }
         }
+        else
+        {
+            if (Pane is IGameModalPane pane)
+            {
+                pane.OnPaneExited();
+            }
 
-        ViewModelBase created = pane switch
-        {
-            GameModalPane.Achievements => new AchievementsPaneViewModel(Game),
-            GameModalPane.Screenshots => new GameScreenshotsPaneViewModel(Game),
-            GameModalPane.TitleUpdates => new InstalledContentPaneViewModel(Game, ContentType.Installer),
-            GameModalPane.MarketplaceContent => new InstalledContentPaneViewModel(Game, ContentType.MarketplaceContent),
-            GameModalPane.Patches => new PatchesPaneViewModel(Game),
-            GameModalPane.Settings => CreateSettingsPane(),
-            _ => throw new ArgumentOutOfRangeException(nameof(pane), pane, null)
-        };
-        _panes[pane] = created;
-        if (created is IDisposable disposable)
-        {
-            _disposables.Add(disposable);
+            SelectedOption?.IsSelected = true;
         }
-
-        return created;
-    }
-
-    /// <summary>
-    /// Creates the game settings pane, wiring its exit request back to the
-    /// options list.
-    /// </summary>
-    private GameSettingsPaneViewModel CreateSettingsPane()
-    {
-        GameSettingsPaneViewModel settings = new(Game);
-        settings.ExitRequested += () => IsPaneActive = false;
-        return settings;
     }
 
     /// <summary>
@@ -278,5 +236,32 @@ public partial class GameModalViewModel : ModalViewModelBase
         }
 
         base.Dispose();
+    }
+
+    /// <summary>
+    /// Creates the dialog, builds its options list and shows the first pane.
+    /// </summary>
+    public GameModalViewModel(Game game)
+    {
+        Game = game;
+        Options =
+        [
+            new GameActionItemViewModel(
+                LocalizationHelper.GetText("GameModal.Action.Achievements"), "Trophy", GameModalPane.Achievements),
+            new GameActionItemViewModel(
+                LocalizationHelper.GetText("GameModal.Action.Screenshots"), "Camera", GameModalPane.Screenshots),
+            new GameActionItemViewModel(
+                LocalizationHelper.GetText("GameModal.Action.TitleUpdates"), "Document", GameModalPane.TitleUpdates),
+            new GameActionItemViewModel(
+                LocalizationHelper.GetText("GameModal.Action.MarketplaceContent"), "Tag",
+                GameModalPane.MarketplaceContent),
+            new GameActionItemViewModel(
+                LocalizationHelper.GetText("GameModal.Action.Patches"), "DocumentText", GameModalPane.Patches),
+            new GameActionItemViewModel(
+                LocalizationHelper.GetText("GameModal.Action.Settings"), "Settings", GameModalPane.Settings)
+        ];
+        SelectedOption = Options[0];
+        SelectedOption.IsSelected = true;
+        _pane = GetOrCreatePane(SelectedOption.Pane);
     }
 }

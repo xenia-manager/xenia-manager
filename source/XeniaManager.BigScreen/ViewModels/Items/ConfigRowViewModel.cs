@@ -43,14 +43,34 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     private object? _editorValue;
 
     /// <summary>
-    /// The config option this row edits.
-    /// </summary>
-    public ConfigOption Option => _option;
-
-    /// <summary>
     /// Whether the current value differs from the last saved value.
     /// </summary>
     public bool IsDirty => !IsSameValue(_option.Value, _savedValue);
+
+    /// <summary>
+    /// Whether a section header shows above this row.
+    /// </summary>
+    public bool HasSectionTitle => SectionTitle != null;
+
+    /// <summary>
+    /// Whether the row renders a toggle switch.
+    /// </summary>
+    public bool IsToggle => ControlType == ConfigControlType.ToggleSwitch;
+
+    /// <summary>
+    /// Whether the row renders a slider.
+    /// </summary>
+    public bool IsSlider => ControlType == ConfigControlType.Slider;
+
+    /// <summary>
+    /// Whether the row renders a combo box.
+    /// </summary>
+    public bool IsComboBox => ControlType == ConfigControlType.ComboBox;
+
+    /// <summary>
+    /// The config option this row edits.
+    /// </summary>
+    public ConfigOption Option => _option;
 
     /// <summary>
     /// The row's display label (from the shared UI definitions).
@@ -61,11 +81,6 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     /// The section header text shown above the first row of each section, or null.
     /// </summary>
     public string? SectionTitle { get; }
-
-    /// <summary>
-    /// Whether a section header shows above this row.
-    /// </summary>
-    public bool HasSectionTitle => SectionTitle != null;
 
     /// <summary>
     /// The resolved control type for this row.
@@ -88,19 +103,12 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     public double? Step { get; }
 
     /// <summary>
-    /// Whether the row renders a toggle switch.
+    /// The slider's current value as display text (whole numbers for integer
+    /// options, trimmed decimals for floats).
     /// </summary>
-    public bool IsToggle => ControlType == ConfigControlType.ToggleSwitch;
-
-    /// <summary>
-    /// Whether the row renders a slider.
-    /// </summary>
-    public bool IsSlider => ControlType == ConfigControlType.Slider;
-
-    /// <summary>
-    /// Whether the row renders a combo box.
-    /// </summary>
-    public bool IsComboBox => ControlType == ConfigControlType.ComboBox;
+    public string SliderValueText => _option.Type == ConfigOptionType.Integer
+        ? ((int)Math.Round(FloatValue)).ToString(CultureInfo.InvariantCulture)
+        : FloatValue.ToString("0.##", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Whether the row is selected (controller focus).
@@ -121,14 +129,6 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     public partial double FloatValue { get; set; }
 
     /// <summary>
-    /// The slider's current value as display text (whole numbers for integer
-    /// options, trimmed decimals for floats).
-    /// </summary>
-    public string SliderValueText => _option.Type == ConfigOptionType.Integer
-        ? ((int)Math.Round(FloatValue)).ToString(CultureInfo.InvariantCulture)
-        : FloatValue.ToString("0.##", CultureInfo.InvariantCulture);
-
-    /// <summary>
     /// The combo box's selected option index.
     /// </summary>
     [ObservableProperty]
@@ -146,23 +146,22 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     /// </summary>
     public event Action? ValueChanged;
 
-    public ConfigRowViewModel(ConfigOption option, ConfigOptionDefinition definition, string label,
-        string? sectionTitle)
+    /// <summary>
+    /// Whether the incoming control value equals the option's stored value
+    /// (string comparison so int/float/boxed values compare sensibly).
+    /// </summary>
+    private static bool IsSameValue(object? stored, object? incoming)
     {
-        _option = option;
-        _savedValue = option.Value;
-        Label = label;
-        SectionTitle = sectionTitle;
-        Minimum = definition.Minimum;
-        Maximum = definition.Maximum;
-        Step = definition.Step;
-        ControlType = ResolveControlType(option, definition);
-        InitializeValues();
-        if (definition.ComboBoxOptions != null)
-        {
-            BuildComboBoxOptions(option, definition.ComboBoxOptions);
-        }
+        return string.Equals(Convert.ToString(stored, CultureInfo.InvariantCulture),
+            Convert.ToString(incoming, CultureInfo.InvariantCulture), StringComparison.Ordinal);
     }
+
+    /// <summary>
+    /// Whether the incoming selection index is valid for the combo box:
+    /// non-negative and within the current options.
+    /// </summary>
+    private bool IsValidSelectionIndex(int value) =>
+        value >= 0 && ComboBoxOptions != null && value < ComboBoxOptions.Count;
 
     /// <summary>
     /// Resolves the row's control type, applying the Auto default from the
@@ -296,12 +295,12 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
 
     partial void OnSelectedIndexChanged(int value)
     {
-        if (value < 0 || ComboBoxOptions == null || value >= ComboBoxOptions.Count)
+        if (!IsValidSelectionIndex(value))
         {
             return;
         }
 
-        object selected = ComboBoxOptions[value].Value;
+        object selected = ComboBoxOptions![value].Value;
         if (IsSameValue(_option.Value, selected))
         {
             return;
@@ -311,13 +310,21 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
         ValueChanged?.Invoke();
     }
 
-    /// <summary>
-    /// Whether the incoming control value equals the option's stored value
-    /// (string comparison so int/float/boxed values compare sensibly).
-    /// </summary>
-    private static bool IsSameValue(object? stored, object? incoming)
+    public ConfigRowViewModel(ConfigOption option, ConfigOptionDefinition definition, string label,
+        string? sectionTitle)
     {
-        return string.Equals(Convert.ToString(stored, CultureInfo.InvariantCulture),
-            Convert.ToString(incoming, CultureInfo.InvariantCulture), StringComparison.Ordinal);
+        _option = option;
+        _savedValue = option.Value;
+        Label = label;
+        SectionTitle = sectionTitle;
+        Minimum = definition.Minimum;
+        Maximum = definition.Maximum;
+        Step = definition.Step;
+        ControlType = ResolveControlType(option, definition);
+        InitializeValues();
+        if (definition.ComboBoxOptions != null)
+        {
+            BuildComboBoxOptions(option, definition.ComboBoxOptions);
+        }
     }
 }

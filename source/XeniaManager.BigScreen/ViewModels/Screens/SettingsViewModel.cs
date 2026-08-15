@@ -59,6 +59,20 @@ public partial class SettingsViewModel : ViewModelBase
     private XConfigResolutionOption? _originalXConfigResolution;
 
     /// <summary>
+    /// Builds a settings dropdown option per enum member, in declaration order
+    /// (the default leads). Each option's display name comes from the key
+    /// "{keyPrefix}.{MemberName}".
+    /// </summary>
+    private static ObservableCollection<TOption> BuildOptions<TEnum, TOption>(
+        string keyPrefix, Func<TEnum, string, TOption> create)
+        where TEnum : struct, Enum
+    {
+        IEnumerable<TOption> options = Enum.GetValues<TEnum>()
+            .Select(value => create(value, LocalizationHelper.GetText($"{keyPrefix}.{value}")));
+        return new ObservableCollection<TOption>(options);
+    }
+
+    /// <summary>
     /// Raised after a persisted appearance option changed, so the dashboard can
     /// rebuild its background.
     /// </summary>
@@ -103,14 +117,35 @@ public partial class SettingsViewModel : ViewModelBase
     public event Action? SelectImageRequested;
 
     /// <summary>
-    /// Connected gamepads shown in the Controllers section.
-    /// </summary>
-    public ObservableCollection<GamepadItemViewModel> Controllers { get; } = [];
-
-    /// <summary>
     /// Whether no gamepads are currently connected.
     /// </summary>
     public bool HasNoControllers => Controllers.Count == 0;
+
+    /// <summary>
+    /// Whether a Canary XConfig file exists (the resolution card shows only then).
+    /// </summary>
+    public bool HasXConfig => XConfigManager.XConfigExists(XeniaVersion.Canary);
+
+    /// <summary>
+    /// Whether a row's editor is open and takes value input.
+    /// </summary>
+    public bool IsEditorOpen => ActiveEditor.HasValue;
+
+    /// <summary>
+    /// Whether the open editor cycles its value with Up/Down (the dropdown
+    /// rows) instead of Left/Right (colours and the slider).
+    /// </summary>
+    private bool IsComboEditor =>
+        ActiveEditor is SettingsRowKind.LibraryView
+            or SettingsRowKind.CardImage
+            or SettingsRowKind.TimeFormat
+            or SettingsRowKind.BackgroundMode
+            or SettingsRowKind.XConfig;
+
+    /// <summary>
+    /// Connected gamepads shown in the Controllers section.
+    /// </summary>
+    public ObservableCollection<GamepadItemViewModel> Controllers { get; } = [];
 
     /// <summary>
     /// Gamertag of the active profile, shown in the Profiles section.
@@ -205,17 +240,43 @@ public partial class SettingsViewModel : ViewModelBase
             "Settings.TimeFormat", (format, name) => new TimeFormatOption(format, name));
 
     /// <summary>
-    /// Whether a Canary XConfig file exists (the resolution card shows only then).
-    /// </summary>
-    public bool HasXConfig => XConfigManager.XConfigExists(XeniaVersion.Canary);
-
-    /// <summary>
     /// Options shown in the XConfig resolution dropdown (the "R" enum prefix
     /// is stripped for display).
     /// </summary>
     public ObservableCollection<XConfigResolutionOption> XConfigResolutions { get; } =
         new(Enum.GetValues<XConfigResolution>()
             .Select(value => new XConfigResolutionOption(value, value.ToString().TrimStart('R'))));
+
+    /// <summary>
+    /// Brush used as the overlay/menu background, derived from the primary colour
+    /// so menus match the dashboard instead of being pitch black.
+    /// </summary>
+    public IBrush ScreenBackground => BackgroundBrushFactory.CreateSolid(PrimaryColor);
+
+    /// <summary>
+    /// Display name of the current background mode.
+    /// </summary>
+    public string ModeText => Mode switch
+    {
+        BackgroundMode.Image => LocalizationHelper.GetText("Settings.BackgroundMode.Image"),
+        BackgroundMode.Solid => LocalizationHelper.GetText("Settings.BackgroundMode.Solid"),
+        BackgroundMode.LinearGradient => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
+        BackgroundMode.RadialGradient => LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient"),
+        BackgroundMode.Dynamic => LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"),
+        _ => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")
+    };
+
+    /// <summary>
+    /// Display text for the vignette opacity as a percentage.
+    /// </summary>
+    public string VignetteText => $"{Math.Round(VignetteOpacity * 100)}%";
+
+    /// <summary>
+    /// Display text for the currently configured background image.
+    /// </summary>
+    public string ImageDisplayText => string.IsNullOrEmpty(_backgroundService.Settings.ImagePath)
+        ? LocalizationHelper.GetText("Settings.NoImage")
+        : Path.GetFileName(_backgroundService.Settings.ImagePath);
 
     /// <summary>
     /// The selected option in the XConfig resolution dropdown.
@@ -312,38 +373,142 @@ public partial class SettingsViewModel : ViewModelBase
     public partial SettingsRowKind? ActiveEditor { get; set; }
 
     /// <summary>
-    /// Whether a row's editor is open and takes value input.
+    /// Closes the editor and notifies the view to close the native control.
     /// </summary>
-    public bool IsEditorOpen => ActiveEditor.HasValue;
+    private void CloseEditor()
+    {
+        ActiveEditor = null;
+        EditorClosed?.Invoke();
+    }
 
     /// <summary>
-    /// Whether the open editor cycles its value with Up/Down (the dropdown
-    /// rows) instead of Left/Right (colours and the slider).
+    /// Restores the value the open editor started from.
     /// </summary>
-    private bool IsComboEditor =>
-        ActiveEditor is SettingsRowKind.LibraryView
-            or SettingsRowKind.CardImage
-            or SettingsRowKind.TimeFormat
-            or SettingsRowKind.BackgroundMode
-            or SettingsRowKind.XConfig;
-
-    public SettingsViewModel(IBackgroundService backgroundService, IProfileService profileService,
-        IGamepadInputService gamepadService, IModalService modalService)
+    private void RestoreEditorOriginal()
     {
-        _backgroundService = backgroundService;
-        _profileService = profileService;
-        _gamepadService = gamepadService;
-        modalService.StackChanged += () => IsHintBarVisible = !modalService.IsOpen;
-
-        // Keep the settings "Active Profile" line in sync with profile switches
-        _profileService.ProfileChanged += () => OnPropertyChanged(nameof(ActiveGamertag));
-
-        if (_gamepadService.IsActive)
+        switch (ActiveEditor)
         {
-            _gamepadService.StateChanged += OnGamepadStateChanged;
+            case SettingsRowKind.LibraryView:
+                LibraryViewMode = _originalLibraryView;
+                break;
+            case SettingsRowKind.CardImage:
+                CardImageMode = _originalCardImage;
+                break;
+            case SettingsRowKind.TimeFormat:
+                TimeFormat = _originalTimeFormat;
+                break;
+            case SettingsRowKind.BackgroundMode:
+                Mode = _originalMode;
+                break;
+            case SettingsRowKind.PrimaryColour:
+                PrimaryColor = _originalPrimary;
+                break;
+            case SettingsRowKind.AccentColour:
+                AccentColor = _originalAccent;
+                break;
+            case SettingsRowKind.XConfig:
+                SelectedXConfigResolution = _originalXConfigResolution;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Cycles the XConfig resolution option by the given step, wrapping at both ends.
+    /// </summary>
+    private void CycleXConfigResolution(int delta)
+    {
+        int count = XConfigResolutions.Count;
+        if (count == 0)
+        {
+            return;
         }
 
-        RebuildRows();
+        int current = XConfigResolutions.IndexOf(SelectedXConfigResolution!);
+        if (current < 0)
+        {
+            current = 0;
+        }
+
+        SelectedXConfigResolution = XConfigResolutions[(current + delta + count) % count];
+    }
+
+    /// <summary>
+    /// Steps the vignette opacity by the given direction (0.05 per step), clamped to 0-1.
+    /// </summary>
+    public void AdjustVignette(int delta) =>
+        VignetteOpacity = Math.Clamp(VignetteOpacity + delta * LayoutConstants.VignetteStep, 0, 1);
+
+    /// <summary>
+    /// Cycles the background mode by the given step.
+    /// </summary>
+    public void CycleMode(int delta) => Mode = EnumCycleHelper.Next(Mode, delta);
+
+    /// <summary>
+    /// Cycles the primary color through the given palette by the given step.
+    /// </summary>
+    public void CyclePrimaryColor(int delta, Color[] palette) =>
+        PrimaryColor = EnumCycleHelper.NextColor(palette, PrimaryColor, delta, 0);
+
+    /// <summary>
+    /// Cycles the accent color through the given palette by the given step.
+    /// </summary>
+    public void CycleAccentColor(int delta, Color[] palette) =>
+        AccentColor = EnumCycleHelper.NextColor(palette, AccentColor, delta, 1);
+
+    /// <summary>
+    /// Sets the given gamepad as primary and persists its device GUID.
+    /// </summary>
+    public void SetPrimary(GamepadItemViewModel item)
+    {
+        _gamepadService.SetPrimary(item.Source);
+        _backgroundService.Settings.PrimaryControllerGuid = item.Source.Guid;
+        _backgroundService.Save();
+        Logger.Info<SettingsViewModel>($"Primary controller set to '{item.Name}' ({item.Source.Guid})");
+    }
+
+    /// <summary>
+    /// Loads the Canary XConfig file and syncs the resolution dropdown to it.
+    /// </summary>
+    private void LoadXConfig()
+    {
+        OnPropertyChanged(nameof(HasXConfig));
+        if (!HasXConfig)
+        {
+            _xconfigFile = null;
+            return;
+        }
+
+        _xconfigFile = XConfigManager.LoadXConfig(XeniaVersion.Canary);
+        SelectedXConfigResolution =
+            XConfigResolutions.FirstOrDefault(r => r.Value == _xconfigFile?.AvHdmiScreenSize);
+    }
+
+    /// <summary>
+    /// Rebuilds the controller-navigable row list (fixed rows in display order,
+    /// then the connected gamepads).
+    /// </summary>
+    private void RebuildRows()
+    {
+        _rows.Clear();
+        _rows.Add(RowManageProfiles);
+        _rows.Add(RowLibraryView);
+        _rows.Add(RowCardImage);
+        _rows.Add(RowTimeFormat);
+        _rows.Add(RowQuitToggle);
+        _rows.Add(RowBackgroundMode);
+        _rows.Add(RowPrimaryColour);
+        _rows.Add(RowAccentColour);
+        _rows.Add(RowVignette);
+        _rows.Add(RowBackgroundImage);
+        foreach (GamepadItemViewModel controller in Controllers)
+        {
+            _rows.Add(controller);
+        }
+
+        if (HasXConfig)
+        {
+            _rows.Add(RowXConfig);
+        }
     }
 
     /// <summary>
@@ -373,166 +538,114 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Rebuilds the controller-navigable row list (fixed rows in display order,
-    /// then the connected gamepads).
-    /// </summary>
-    private void RebuildRows()
-    {
-        _rows.Clear();
-        _rows.Add(RowManageProfiles);
-        _rows.Add(RowLibraryView);
-        _rows.Add(RowCardImage);
-        _rows.Add(RowTimeFormat);
-        _rows.Add(RowQuitToggle);
-        _rows.Add(RowBackgroundMode);
-        _rows.Add(RowPrimaryColour);
-        _rows.Add(RowAccentColour);
-        _rows.Add(RowVignette);
-        _rows.Add(RowBackgroundImage);
-        foreach (GamepadItemViewModel controller in Controllers)
-        {
-            _rows.Add(controller);
-        }
-
-        // Least-worthy row lives at the very bottom (hidden when no XConfig exists)
-        if (HasXConfig)
-        {
-            _rows.Add(RowXConfig);
-        }
-    }
-
-    /// <summary>
     /// Refreshes the controller list when the gamepad service state changes
     /// (connect, disconnect, primary switch, battery).
     /// </summary>
     private void OnGamepadStateChanged() => RefreshControllers();
 
     /// <summary>
-    /// Sets the given gamepad as primary and persists its device GUID.
+    /// Commits the open editor's value and closes it.
     /// </summary>
-    public void SetPrimary(GamepadItemViewModel item)
+    public void CommitEditor()
     {
-        _gamepadService.SetPrimary(item.Source);
-        _backgroundService.Settings.PrimaryControllerGuid = item.Source.Guid;
-        _backgroundService.Save();
-        Logger.Info<SettingsViewModel>($"Primary controller set to '{item.Name}' ({item.Source.Guid})");
+        SettingsRowKind? kind = ActiveEditor;
+        CloseEditor();
+        Logger.Debug<SettingsViewModel>($"Committed {kind} editor");
     }
 
     /// <summary>
-    /// Handles a gamepad navigation command: row movement while no editor is
-    /// open, value cycling while one is. Returns whether the command was consumed.
+    /// Restores the open editor's original value and closes it.
     /// </summary>
-    public bool HandleInput(NavigationCommand command)
+    public void CancelEditor()
     {
-        if (IsEditorOpen)
-        {
-            return HandleEditorInput(command);
-        }
-
-        switch (command)
-        {
-            case NavigationCommand.MoveUp:
-                MoveSelection(-1);
-                return true;
-            case NavigationCommand.MoveDown:
-                MoveSelection(1);
-                return true;
-            case NavigationCommand.MoveLeft:
-                return StepSelectedSlider(-1);
-            case NavigationCommand.MoveRight:
-                return StepSelectedSlider(1);
-            case NavigationCommand.Activate:
-                ActivateRow();
-                return true;
-            default:
-                return false;
-        }
+        RestoreEditorOriginal();
+        SettingsRowKind? kind = ActiveEditor;
+        CloseEditor();
+        Logger.Debug<SettingsViewModel>($"Cancelled {kind} editor");
     }
 
     /// <summary>
-    /// Handles Back: cancels the open row editor first, returning whether Back
-    /// was consumed (the router closes the settings screen otherwise).
+    /// Opens the editor for the given row kind, snapshotting its value so a
+    /// cancel can restore it.
     /// </summary>
-    public bool HandleBack()
-    {
-        if (IsEditorOpen)
-        {
-            CancelEditor();
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Moves the row selection by the given step, clamped at both ends. Rows
-    /// start unselected - the first move selects the first row.
-    /// </summary>
-    public void MoveSelection(int delta)
-    {
-        int index = SelectionHelper.MoveSelection(_rows, delta);
-        if (index >= 0)
-        {
-            RowSelectionChanged?.Invoke(_rows[index]);
-        }
-    }
-
-    /// <summary>
-    /// Activates the selected row: sets the primary controller on a gamepad row,
-    /// or runs the fixed row's action (toggle, editor, modal or picker).
-    /// </summary>
-    private void ActivateRow()
-    {
-        switch (_rows.FirstOrDefault(r => r.IsSelected))
-        {
-            case SettingsRowViewModel row:
-                ActivateFixedRow(row.Kind);
-                break;
-            case GamepadItemViewModel gamepad:
-                SetPrimary(gamepad);
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Steps the selected row's vignette slider directly when it is the vignette
-    /// row; returns false so other rows fall through (Left/Right stays unused).
-    /// </summary>
-    private bool StepSelectedSlider(int delta)
-    {
-        if (_rows.FirstOrDefault(r => r.IsSelected) is SettingsRowViewModel { Kind: SettingsRowKind.Vignette })
-        {
-            AdjustVignette(delta);
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Runs the fixed row's action for its kind.
-    /// </summary>
-    private void ActivateFixedRow(SettingsRowKind kind)
+    private void OpenEditor(SettingsRowKind kind)
     {
         switch (kind)
         {
-            case SettingsRowKind.ManageProfiles:
-                OpenManageProfiles();
-                break;
-            case SettingsRowKind.QuitToggle:
-                ReturnToXeniaOnQuit = !ReturnToXeniaOnQuit;
-                break;
-            case SettingsRowKind.BackgroundImage:
-                SelectImageRequested?.Invoke();
-                break;
             case SettingsRowKind.LibraryView:
+                _originalLibraryView = LibraryViewMode;
+                break;
             case SettingsRowKind.CardImage:
+                _originalCardImage = CardImageMode;
+                break;
             case SettingsRowKind.TimeFormat:
+                _originalTimeFormat = TimeFormat;
+                break;
             case SettingsRowKind.BackgroundMode:
+                _originalMode = Mode;
+                break;
             case SettingsRowKind.PrimaryColour:
+                _originalPrimary = PrimaryColor;
+                break;
             case SettingsRowKind.AccentColour:
+                _originalAccent = AccentColor;
+                break;
             case SettingsRowKind.XConfig:
-                OpenEditor(kind);
+                _originalXConfigResolution = SelectedXConfigResolution;
+                break;
+        }
+
+        ActiveEditor = kind;
+        EditorOpened?.Invoke(kind);
+        Logger.Debug<SettingsViewModel>($"Opened {kind} editor");
+    }
+
+    /// <summary>
+    /// Opens the Manage Profiles overlay as a modal on top of the settings screen.
+    /// Skipped when a modal is already open (stray Enter on the still-focused
+    /// button would otherwise double-open the overlay).
+    /// </summary>
+    public static void OpenManageProfiles()
+    {
+        IModalService modalService = App.Services.GetRequiredService<IModalService>();
+        if (modalService.IsOpen)
+        {
+            return;
+        }
+
+        Logger.Info<SettingsViewModel>("Opening manage profiles");
+        TaskUtilities.RunSafely<SettingsViewModel>(
+            () => modalService.ShowAsync(new ManageProfilesViewModel()), "Opening manage profiles");
+    }
+
+    /// <summary>
+    /// Cycles the open editor's value by the given step (dropdown option, palette
+    /// colour or vignette step), wrapping at both ends.
+    /// </summary>
+    private void CycleValue(int delta)
+    {
+        switch (ActiveEditor)
+        {
+            case SettingsRowKind.LibraryView:
+                LibraryViewMode = EnumCycleHelper.Next(LibraryViewMode, delta);
+                break;
+            case SettingsRowKind.CardImage:
+                CardImageMode = EnumCycleHelper.Next(CardImageMode, delta);
+                break;
+            case SettingsRowKind.TimeFormat:
+                TimeFormat = EnumCycleHelper.Next(TimeFormat, delta);
+                break;
+            case SettingsRowKind.BackgroundMode:
+                Mode = EnumCycleHelper.Next(Mode, delta);
+                break;
+            case SettingsRowKind.PrimaryColour:
+                PrimaryColor = EnumCycleHelper.NextColor(ColorPickerField.BackgroundPalette, PrimaryColor, delta, 0);
+                break;
+            case SettingsRowKind.AccentColour:
+                AccentColor = EnumCycleHelper.NextColor(ColorPickerField.AccentPalette, AccentColor, delta, 1);
+                break;
+            case SettingsRowKind.XConfig:
+                CycleXConfigResolution(delta);
                 break;
         }
     }
@@ -582,173 +695,122 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Cycles the open editor's value by the given step (dropdown option, palette
-    /// colour or vignette step), wrapping at both ends.
+    /// Steps the selected row's vignette slider directly when it is the vignette
+    /// row; returns false so other rows fall through (Left/Right stays unused).
     /// </summary>
-    private void CycleValue(int delta)
+    private bool StepSelectedSlider(int delta)
     {
-        switch (ActiveEditor)
+        if (_rows.FirstOrDefault(r => r.IsSelected) is SettingsRowViewModel { Kind: SettingsRowKind.Vignette })
         {
-            case SettingsRowKind.LibraryView:
-                LibraryViewMode = EnumCycleHelper.Next(LibraryViewMode, delta);
-                break;
-            case SettingsRowKind.CardImage:
-                CardImageMode = EnumCycleHelper.Next(CardImageMode, delta);
-                break;
-            case SettingsRowKind.TimeFormat:
-                TimeFormat = EnumCycleHelper.Next(TimeFormat, delta);
-                break;
-            case SettingsRowKind.BackgroundMode:
-                Mode = EnumCycleHelper.Next(Mode, delta);
-                break;
-            case SettingsRowKind.PrimaryColour:
-                PrimaryColor = EnumCycleHelper.NextColor(ColorPickerField.BackgroundPalette, PrimaryColor, delta, 0);
-                break;
-            case SettingsRowKind.AccentColour:
-                AccentColor = EnumCycleHelper.NextColor(ColorPickerField.AccentPalette, AccentColor, delta, 1);
-                break;
-            case SettingsRowKind.XConfig:
-                CycleXConfigResolution(delta);
-                break;
+            AdjustVignette(delta);
+            return true;
         }
+
+        return false;
     }
 
     /// <summary>
-    /// Cycles the XConfig resolution option by the given step, wrapping at both ends.
+    /// Runs the fixed row's action for its kind.
     /// </summary>
-    private void CycleXConfigResolution(int delta)
-    {
-        int count = XConfigResolutions.Count;
-        if (count == 0)
-        {
-            return;
-        }
-
-        int current = XConfigResolutions.IndexOf(SelectedXConfigResolution!);
-        if (current < 0)
-        {
-            current = 0;
-        }
-
-        SelectedXConfigResolution = XConfigResolutions[(current + delta + count) % count];
-    }
-
-    /// <summary>
-    /// Opens the editor for the given row kind, snapshotting its value so a
-    /// cancel can restore it.
-    /// </summary>
-    private void OpenEditor(SettingsRowKind kind)
+    private void ActivateFixedRow(SettingsRowKind kind)
     {
         switch (kind)
         {
+            case SettingsRowKind.ManageProfiles:
+                OpenManageProfiles();
+                break;
+            case SettingsRowKind.QuitToggle:
+                ReturnToXeniaOnQuit = !ReturnToXeniaOnQuit;
+                break;
+            case SettingsRowKind.BackgroundImage:
+                SelectImageRequested?.Invoke();
+                break;
             case SettingsRowKind.LibraryView:
-                _originalLibraryView = LibraryViewMode;
-                break;
             case SettingsRowKind.CardImage:
-                _originalCardImage = CardImageMode;
-                break;
             case SettingsRowKind.TimeFormat:
-                _originalTimeFormat = TimeFormat;
-                break;
             case SettingsRowKind.BackgroundMode:
-                _originalMode = Mode;
-                break;
             case SettingsRowKind.PrimaryColour:
-                _originalPrimary = PrimaryColor;
-                break;
             case SettingsRowKind.AccentColour:
-                _originalAccent = AccentColor;
-                break;
             case SettingsRowKind.XConfig:
-                _originalXConfigResolution = SelectedXConfigResolution;
+                OpenEditor(kind);
                 break;
         }
-
-        ActiveEditor = kind;
-        EditorOpened?.Invoke(kind);
-        Logger.Debug<SettingsViewModel>($"Opened {kind} editor");
     }
 
     /// <summary>
-    /// Commits the open editor's value and closes it.
+    /// Activates the selected row: sets the primary controller on a gamepad row,
+    /// or runs the fixed row's action (toggle, editor, modal or picker).
     /// </summary>
-    public void CommitEditor()
+    private void ActivateRow()
     {
-        SettingsRowKind? kind = ActiveEditor;
-        CloseEditor();
-        Logger.Debug<SettingsViewModel>($"Committed {kind} editor");
-    }
-
-    /// <summary>
-    /// Restores the open editor's original value and closes it.
-    /// </summary>
-    public void CancelEditor()
-    {
-        RestoreEditorOriginal();
-        SettingsRowKind? kind = ActiveEditor;
-        CloseEditor();
-        Logger.Debug<SettingsViewModel>($"Cancelled {kind} editor");
-    }
-
-    /// <summary>
-    /// Restores the value the open editor started from.
-    /// </summary>
-    private void RestoreEditorOriginal()
-    {
-        switch (ActiveEditor)
+        switch (_rows.FirstOrDefault(r => r.IsSelected))
         {
-            case SettingsRowKind.LibraryView:
-                LibraryViewMode = _originalLibraryView;
+            case SettingsRowViewModel row:
+                ActivateFixedRow(row.Kind);
                 break;
-            case SettingsRowKind.CardImage:
-                CardImageMode = _originalCardImage;
-                break;
-            case SettingsRowKind.TimeFormat:
-                TimeFormat = _originalTimeFormat;
-                break;
-            case SettingsRowKind.BackgroundMode:
-                Mode = _originalMode;
-                break;
-            case SettingsRowKind.PrimaryColour:
-                PrimaryColor = _originalPrimary;
-                break;
-            case SettingsRowKind.AccentColour:
-                AccentColor = _originalAccent;
-                break;
-            case SettingsRowKind.XConfig:
-                SelectedXConfigResolution = _originalXConfigResolution;
+            case GamepadItemViewModel gamepad:
+                SetPrimary(gamepad);
                 break;
         }
     }
 
     /// <summary>
-    /// Closes the editor and notifies the view to close the native control.
+    /// Moves the row selection by the given step, clamped at both ends. Rows
+    /// start unselected - the first move selects the first row.
     /// </summary>
-    private void CloseEditor()
+    public void MoveSelection(int delta)
     {
-        ActiveEditor = null;
-        EditorClosed?.Invoke();
-    }
-
-    partial void OnActiveEditorChanged(SettingsRowKind? value) =>
-        OnPropertyChanged(nameof(IsEditorOpen));
-
-    /// <summary>
-    /// Opens the Manage Profiles overlay as a modal on top of the settings screen.
-    /// Skipped when a modal is already open (stray Enter on the still-focused
-    /// button would otherwise double-open the overlay).
-    /// </summary>
-    public static void OpenManageProfiles()
-    {
-        IModalService modalService = App.Services.GetRequiredService<IModalService>();
-        if (modalService.IsOpen)
+        int index = SelectionHelper.MoveSelection(_rows, delta);
+        if (index >= 0)
         {
-            return;
+            RowSelectionChanged?.Invoke(_rows[index]);
+        }
+    }
+
+    /// <summary>
+    /// Handles a gamepad navigation command: row movement while no editor is
+    /// open, value cycling while one is. Returns whether the command was consumed.
+    /// </summary>
+    public bool HandleInput(NavigationCommand command)
+    {
+        if (IsEditorOpen)
+        {
+            return HandleEditorInput(command);
         }
 
-        Logger.Info<SettingsViewModel>("Opening manage profiles");
-        TaskUtilities.RunSafely<SettingsViewModel>(
-            () => modalService.ShowAsync(new ManageProfilesViewModel()), "Opening manage profiles");
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                MoveSelection(-1);
+                return true;
+            case NavigationCommand.MoveDown:
+                MoveSelection(1);
+                return true;
+            case NavigationCommand.MoveLeft:
+                return StepSelectedSlider(-1);
+            case NavigationCommand.MoveRight:
+                return StepSelectedSlider(1);
+            case NavigationCommand.Activate:
+                ActivateRow();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Handles Back: cancels the open row editor first, returning whether Back
+    /// was consumed (the router closes the settings screen otherwise).
+    /// </summary>
+    public bool HandleBack()
+    {
+        if (IsEditorOpen)
+        {
+            CancelEditor();
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -776,89 +838,6 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Loads the Canary XConfig file and syncs the resolution dropdown to it.
-    /// </summary>
-    private void LoadXConfig()
-    {
-        OnPropertyChanged(nameof(HasXConfig));
-        if (!HasXConfig)
-        {
-            _xconfigFile = null;
-            return;
-        }
-
-        _xconfigFile = XConfigManager.LoadXConfig(XeniaVersion.Canary);
-        SelectedXConfigResolution =
-            XConfigResolutions.FirstOrDefault(r => r.Value == _xconfigFile?.AvHdmiScreenSize);
-    }
-
-    partial void OnSelectedXConfigResolutionChanged(XConfigResolutionOption? value)
-    {
-        if (value == null || _xconfigFile == null)
-        {
-            return;
-        }
-
-        _xconfigFile.AvHdmiScreenSize = value.Value;
-        XConfigManager.SaveXConfig(_xconfigFile, XeniaVersion.Canary);
-        Logger.Info<SettingsViewModel>($"XConfig resolution set to {value.Value}");
-    }
-
-    /// <summary>
-    /// Brush used as the overlay/menu background, derived from the primary colour
-    /// so menus match the dashboard instead of being pitch black.
-    /// </summary>
-    public IBrush ScreenBackground => BackgroundBrushFactory.CreateSolid(PrimaryColor);
-
-    /// <summary>
-    /// Display name of the current background mode.
-    /// </summary>
-    public string ModeText => Mode switch
-    {
-        BackgroundMode.Image => LocalizationHelper.GetText("Settings.BackgroundMode.Image"),
-        BackgroundMode.Solid => LocalizationHelper.GetText("Settings.BackgroundMode.Solid"),
-        BackgroundMode.LinearGradient => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
-        BackgroundMode.RadialGradient => LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient"),
-        BackgroundMode.Dynamic => LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"),
-        _ => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")
-    };
-
-    /// <summary>
-    /// Display text for the vignette opacity as a percentage.
-    /// </summary>
-    public string VignetteText => $"{Math.Round(VignetteOpacity * 100)}%";
-
-    /// <summary>
-    /// Display text for the currently configured background image.
-    /// </summary>
-    public string ImageDisplayText => string.IsNullOrEmpty(_backgroundService.Settings.ImagePath)
-        ? LocalizationHelper.GetText("Settings.NoImage")
-        : Path.GetFileName(_backgroundService.Settings.ImagePath);
-
-    /// <summary>
-    /// Cycles the background mode by the given step.
-    /// </summary>
-    public void CycleMode(int delta) => Mode = EnumCycleHelper.Next(Mode, delta);
-
-    /// <summary>
-    /// Cycles the primary color through the given palette by the given step.
-    /// </summary>
-    public void CyclePrimaryColor(int delta, Color[] palette) =>
-        PrimaryColor = EnumCycleHelper.NextColor(palette, PrimaryColor, delta, 0);
-
-    /// <summary>
-    /// Cycles the accent color through the given palette by the given step.
-    /// </summary>
-    public void CycleAccentColor(int delta, Color[] palette) =>
-        AccentColor = EnumCycleHelper.NextColor(palette, AccentColor, delta, 1);
-
-    /// <summary>
-    /// Steps the vignette opacity by the given direction (0.05 per step), clamped to 0-1.
-    /// </summary>
-    public void AdjustVignette(int delta) =>
-        VignetteOpacity = Math.Clamp(VignetteOpacity + delta * LayoutConstants.VignetteStep, 0, 1);
-
-    /// <summary>
     /// Sets a custom image path and switches to image background mode.
     /// </summary>
     public void SetBackgroundImage(string path)
@@ -872,10 +851,34 @@ public partial class SettingsViewModel : ViewModelBase
         Logger.Info<SettingsViewModel>($"Background image set to '{path}'");
     }
 
+    /// <summary>
+    /// Applies the given change to the persisted dashboard settings and saves
+    /// them to disk.
+    /// </summary>
+    private void SaveAppearance(Action<DashboardSettings> apply)
+    {
+        apply(_backgroundService.Settings);
+        _backgroundService.Save();
+    }
+
+    partial void OnActiveEditorChanged(SettingsRowKind? value) =>
+        OnPropertyChanged(nameof(IsEditorOpen));
+
+    partial void OnSelectedXConfigResolutionChanged(XConfigResolutionOption? value)
+    {
+        if (value == null || _xconfigFile == null)
+        {
+            return;
+        }
+
+        _xconfigFile.AvHdmiScreenSize = value.Value;
+        XConfigManager.SaveXConfig(_xconfigFile, XeniaVersion.Canary);
+        Logger.Info<SettingsViewModel>($"XConfig resolution set to {value.Value}");
+    }
+
     partial void OnModeChanged(BackgroundMode value)
     {
-        _backgroundService.Settings.Mode = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.Mode = value);
         SelectedBackgroundMode = BackgroundModeOptions.FirstOrDefault(o => o.Mode == value);
         AppearanceChanged?.Invoke();
         Logger.Info<SettingsViewModel>($"Background mode changed to {value}");
@@ -891,8 +894,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     partial void OnPrimaryColorChanged(Color value)
     {
-        _backgroundService.Settings.PrimaryColor = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.PrimaryColor = value);
         OnPropertyChanged(nameof(ScreenBackground));
         AppearanceChanged?.Invoke();
         Logger.Info<SettingsViewModel>($"Primary color changed to {value}");
@@ -900,30 +902,26 @@ public partial class SettingsViewModel : ViewModelBase
 
     partial void OnAccentColorChanged(Color value)
     {
-        _backgroundService.Settings.AccentColor = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.AccentColor = value);
         Logger.Info<SettingsViewModel>($"Accent color changed to {value}");
     }
 
     partial void OnVignetteOpacityChanged(double value)
     {
-        _backgroundService.Settings.VignetteOpacity = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.VignetteOpacity = value);
         OnPropertyChanged(nameof(VignetteText));
         Logger.Debug<SettingsViewModel>($"Vignette opacity changed to {value:0.00}");
     }
 
     partial void OnReturnToXeniaOnQuitChanged(bool value)
     {
-        _backgroundService.Settings.ReturnToXeniaOnQuit = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.ReturnToXeniaOnQuit = value);
         Logger.Info<SettingsViewModel>($"Return to Xenia Manager on quit: {value}");
     }
 
     partial void OnLibraryViewModeChanged(LibraryViewMode value)
     {
-        _backgroundService.Settings.LibraryViewMode = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.LibraryViewMode = value);
         SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == value);
         LibraryViewModeChanged?.Invoke();
         Logger.Info<SettingsViewModel>($"Library view mode changed to {value}");
@@ -939,8 +937,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     partial void OnCardImageModeChanged(CardImageMode value)
     {
-        _backgroundService.Settings.CardImageMode = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.CardImageMode = value);
         SelectedCardImageMode = CardImageModeOptions.FirstOrDefault(o => o.Mode == value);
         CardImageChanged?.Invoke();
         Logger.Info<SettingsViewModel>($"Card image mode changed to {value}");
@@ -956,8 +953,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     partial void OnTimeFormatChanged(TimeFormat value)
     {
-        _backgroundService.Settings.TimeFormat = value;
-        _backgroundService.Save();
+        SaveAppearance(s => s.TimeFormat = value);
         SelectedTimeFormat = TimeFormatOptions.FirstOrDefault(o => o.Format == value);
         TimeFormatChanged?.Invoke();
         Logger.Info<SettingsViewModel>($"Time format changed to {value}");
@@ -971,17 +967,21 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
 
-    /// <summary>
-    /// Builds a settings dropdown option per enum member, in declaration order
-    /// (the default leads). Each option's display name comes from the key
-    /// "{keyPrefix}.{MemberName}".
-    /// </summary>
-    private static ObservableCollection<TOption> BuildOptions<TEnum, TOption>(
-        string keyPrefix, Func<TEnum, string, TOption> create)
-        where TEnum : struct, Enum
+    public SettingsViewModel(IBackgroundService backgroundService, IProfileService profileService,
+        IGamepadInputService gamepadService, IModalService modalService)
     {
-        IEnumerable<TOption> options = Enum.GetValues<TEnum>()
-            .Select(value => create(value, LocalizationHelper.GetText($"{keyPrefix}.{value}")));
-        return new ObservableCollection<TOption>(options);
+        _backgroundService = backgroundService;
+        _profileService = profileService;
+        _gamepadService = gamepadService;
+        modalService.StackChanged += () => IsHintBarVisible = !modalService.IsOpen;
+
+        _profileService.ProfileChanged += () => OnPropertyChanged(nameof(ActiveGamertag));
+
+        if (_gamepadService.IsActive)
+        {
+            _gamepadService.StateChanged += OnGamepadStateChanged;
+        }
+
+        RebuildRows();
     }
 }

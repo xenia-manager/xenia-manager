@@ -11,14 +11,6 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class ProfilePickerView : UserControl
 {
-    public ProfilePickerView()
-    {
-        InitializeComponent();
-
-        // A mouse click on a row switches to that profile and closes the picker
-        ProfileList.AddHandler(Button.ClickEvent, OnProfileRowClick, RoutingStrategies.Bubble);
-    }
-
     private void OnProfileRowClick(object? sender, RoutedEventArgs e)
     {
         if (e.Source is not Button { DataContext: ProfileItemViewModel item } ||
@@ -28,5 +20,12 @@ public partial class ProfilePickerView : UserControl
         }
 
         vm.SelectProfile(item);
+    }
+
+    public ProfilePickerView()
+    {
+        InitializeComponent();
+
+        ProfileList.AddHandler(Button.ClickEvent, OnProfileRowClick, RoutingStrategies.Bubble);
     }
 }

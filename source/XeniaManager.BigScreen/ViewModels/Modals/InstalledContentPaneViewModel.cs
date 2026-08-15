@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
@@ -26,6 +27,11 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
 {
     private readonly Game _game;
     private readonly IModalService _modalService;
+
+    /// <summary>
+    /// Whether the pane shows the empty state (nothing installed of this type).
+    /// </summary>
+    public bool ShowEmpty => Rows.Count == 0;
 
     /// <summary>
     /// The content rows for the pane's content type.
@@ -51,24 +57,84 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
     public string CountText => string.Format(LocalizationHelper.GetText("GameModal.Content.Count"), Rows.Count);
 
     /// <summary>
-    /// Whether the pane shows the empty state (nothing installed of this type).
+    /// Re-scans the game's content headers of the current type (from the boot
+    /// preload cache) and rebuilds the rows.
     /// </summary>
-    public bool ShowEmpty => Rows.Count == 0;
+    private void Reload()
+    {
+        GameContent content = GameDataCache.GetContent(_game);
+        List<HeaderFile> headers = ContentType == ContentType.MarketplaceContent
+            ? content.MarketplaceContentHeaderFiles
+            : content.InstallerHeaderFiles;
+
+        Rows.Clear();
+        foreach (HeaderFile header in headers)
+        {
+            Rows.Add(new ContentItemViewModel(header));
+        }
+
+        Logger.Debug<InstalledContentPaneViewModel>($"Loaded {Rows.Count} {ContentType} items for '{_game.Title}'");
+    }
 
     /// <summary>
-    /// Loads the game's content of the given type.
+    /// Deletes the content's package file or directory, plus its header file.
     /// </summary>
-    public InstalledContentPaneViewModel(Game game, ContentType contentType)
+    private static void DeleteItemFromDisk(ContentItemViewModel item)
     {
-        _game = game;
-        _modalService = App.Services.GetRequiredService<IModalService>();
-        Rows.CollectionChanged += (_, _) =>
+        if (!string.IsNullOrEmpty(item.FilePath))
         {
-            OnPropertyChanged(nameof(CountText));
-            OnPropertyChanged(nameof(ShowEmpty));
-        };
-        ContentType = contentType;
-        Reload();
+            if (File.Exists(item.FilePath))
+            {
+                File.Delete(item.FilePath);
+            }
+            else if (Directory.Exists(item.FilePath))
+            {
+                Directory.Delete(item.FilePath, true);
+            }
+        }
+
+        if (File.Exists(item.HeaderFilePath))
+        {
+            File.Delete(item.HeaderFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Confirms and deletes the selected content (package file/directory plus
+    /// its header file), then removes the row.
+    /// </summary>
+    private async Task DeleteSelectedAsync()
+    {
+        ContentItemViewModel? item = Rows.FirstOrDefault(r => r.IsSelected);
+        if (item == null)
+        {
+            return;
+        }
+
+        bool confirmed = await ModalFactory.ConfirmAsync(_modalService,
+            LocalizationHelper.GetText("GameModal.Content.Delete.Confirmation.Title"),
+            string.Format(LocalizationHelper.GetText("GameModal.Content.Delete.Confirmation.Message"),
+                item.DisplayName),
+            LocalizationHelper.GetText("GameModal.Content.Delete.Confirm"),
+            LocalizationHelper.GetText("Modal.Cancel")) == true;
+        if (!confirmed)
+        {
+            return;
+        }
+
+        try
+        {
+            DeleteItemFromDisk(item);
+
+            Rows.Remove(item);
+            GameDataCache.RefreshContent(_game);
+            Logger.Info<InstalledContentPaneViewModel>($"Deleted '{item.DisplayName}'");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<InstalledContentPaneViewModel>($"Failed to delete '{item.DisplayName}'");
+            Logger.LogExceptionDetails<InstalledContentPaneViewModel>(ex);
+        }
     }
 
     /// <summary>
@@ -116,75 +182,18 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
     }
 
     /// <summary>
-    /// Re-scans the game's content headers of the current type (from the boot
-    /// preload cache) and rebuilds the rows.
+    /// Loads the game's content of the given type.
     /// </summary>
-    private void Reload()
+    public InstalledContentPaneViewModel(Game game, ContentType contentType)
     {
-        GameContent content = GameDataCache.GetContent(_game);
-        List<HeaderFile> headers = ContentType == ContentType.MarketplaceContent
-            ? content.MarketplaceContentHeaderFiles
-            : content.InstallerHeaderFiles;
-
-        Rows.Clear();
-        foreach (HeaderFile header in headers)
+        _game = game;
+        _modalService = App.Services.GetRequiredService<IModalService>();
+        Rows.CollectionChanged += (_, _) =>
         {
-            Rows.Add(new ContentItemViewModel(header));
-        }
-
-        Logger.Debug<InstalledContentPaneViewModel>($"Loaded {Rows.Count} {ContentType} items for '{_game.Title}'");
-    }
-
-    /// <summary>
-    /// Confirms and deletes the selected content (package file/directory plus
-    /// its header file), then removes the row.
-    /// </summary>
-    private async Task DeleteSelectedAsync()
-    {
-        ContentItemViewModel? item = Rows.FirstOrDefault(r => r.IsSelected);
-        if (item == null)
-        {
-            return;
-        }
-
-        bool confirmed = await _modalService.ShowAsync<bool?>(new ConfirmationModalViewModel(
-            LocalizationHelper.GetText("GameModal.Content.Delete.Confirmation.Title"),
-            string.Format(LocalizationHelper.GetText("GameModal.Content.Delete.Confirmation.Message"),
-                item.DisplayName),
-            LocalizationHelper.GetText("GameModal.Content.Delete.Confirm"),
-            LocalizationHelper.GetText("Modal.Cancel"))) == true;
-        if (!confirmed)
-        {
-            return;
-        }
-
-        try
-        {
-            if (!string.IsNullOrEmpty(item.FilePath))
-            {
-                if (File.Exists(item.FilePath))
-                {
-                    File.Delete(item.FilePath);
-                }
-                else if (Directory.Exists(item.FilePath))
-                {
-                    Directory.Delete(item.FilePath, true);
-                }
-            }
-
-            if (File.Exists(item.HeaderFilePath))
-            {
-                File.Delete(item.HeaderFilePath);
-            }
-
-            Rows.Remove(item);
-            GameDataCache.RefreshContent(_game);
-            Logger.Info<InstalledContentPaneViewModel>($"Deleted '{item.DisplayName}'");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<InstalledContentPaneViewModel>($"Failed to delete '{item.DisplayName}'");
-            Logger.LogExceptionDetails<InstalledContentPaneViewModel>(ex);
-        }
+            OnPropertyChanged(nameof(CountText));
+            OnPropertyChanged(nameof(ShowEmpty));
+        };
+        ContentType = contentType;
+        Reload();
     }
 }

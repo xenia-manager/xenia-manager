@@ -15,20 +15,6 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class AchievementsPaneView : UserControl
 {
-    public AchievementsPaneView()
-    {
-        InitializeComponent();
-        DataContextChanged += OnDataContextChanged;
-    }
-
-    private void OnDataContextChanged(object? sender, EventArgs e)
-    {
-        if (DataContext is AchievementsPaneViewModel vm)
-        {
-            vm.ScrollRequested += OnScrollRequested;
-        }
-    }
-
     /// <summary>
     /// Scrolls the selected achievement row into view (controller navigation).
     /// </summary>
@@ -50,5 +36,19 @@ public partial class AchievementsPaneView : UserControl
             SvAchievements.GetVisualDescendants().OfType<AchievementRow>()
                 .FirstOrDefault(r => ReferenceEquals(r.DataContext, selected))?.BringIntoView();
         });
+    }
+
+    private void OnDataContextChanged(object? sender, EventArgs e)
+    {
+        if (DataContext is AchievementsPaneViewModel vm)
+        {
+            vm.ScrollRequested += OnScrollRequested;
+        }
+    }
+
+    public AchievementsPaneView()
+    {
+        InitializeComponent();
+        DataContextChanged += OnDataContextChanged;
     }
 }

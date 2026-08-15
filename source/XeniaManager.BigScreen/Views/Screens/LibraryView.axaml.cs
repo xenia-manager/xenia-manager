@@ -16,32 +16,60 @@ namespace XeniaManager.BigScreen.Views.Screens;
 /// </summary>
 public partial class LibraryView : UserControl
 {
-    public LibraryView()
+    /// <summary>
+    /// Scrolls the carousel so the selected card stays visible (horizontal).
+    /// </summary>
+    private void ScrollCarouselToSelected(LibraryViewModel vm, int selectedIndex)
     {
-        InitializeComponent();
-        GamesRow.AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
-        GamesList.AddHandler(GotFocusEvent, OnListItemGotFocus, RoutingStrategies.Bubble, true);
-        DataContextChanged += OnDataContextChanged;
+        double viewport = SvCarousel.Viewport.Width;
+        if (viewport <= 0)
+        {
+            return;
+        }
+
+        double cardWidth = LayoutConstants.LibraryCardDefaultWidth;
+        double spacing = LayoutConstants.LibraryCardSpacing;
+        if (GamesRow.ItemsPanelRoot is StackPanel panel)
+        {
+            if (panel.Children.Count > 0 && panel.Children[0].Bounds.Width > 0)
+            {
+                cardWidth = panel.Children[0].Bounds.Width;
+            }
+
+            spacing = panel.Spacing;
+        }
+
+        double offset = ScrollViewerHelper.CenterOnItem(
+            selectedIndex, cardWidth, spacing, vm.Games.Count, viewport);
+        SvCarousel.Offset = new Vector(offset, 0);
     }
 
     /// <summary>
-    /// Re-centers the selection when the view mode swaps while the library is
-    /// open, so the newly shown layout starts on the selected game.
+    /// Scrolls the list so the selected row stays visible (vertical).
     /// </summary>
-    private void OnDataContextChanged(object? sender, System.EventArgs e)
+    private void ScrollListToSelected(LibraryViewModel vm, int selectedIndex)
     {
-        if (DataContext is LibraryViewModel vm)
+        double viewport = SvList.Viewport.Height;
+        if (viewport <= 0)
         {
-            vm.PropertyChanged += OnViewModelPropertyChanged;
+            return;
         }
-    }
 
-    private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(LibraryViewModel.IsListView))
+        double rowHeight = LayoutConstants.LibraryListRowHeight;
+        double spacing = LayoutConstants.LibraryListRowSpacing;
+        if (GamesList.ItemsPanelRoot is StackPanel panel)
         {
-            Dispatcher.UIThread.Post(ScrollToSelected);
+            if (panel.Children.Count > 0 && panel.Children[0].Bounds.Height > 0)
+            {
+                rowHeight = panel.Children[0].Bounds.Height;
+            }
+
+            spacing = panel.Spacing;
         }
+
+        double offset = ScrollViewerHelper.CenterOnItem(
+            selectedIndex, rowHeight, spacing, vm.Games.Count, viewport);
+        SvList.Offset = new Vector(0, offset);
     }
 
     /// <summary>
@@ -71,64 +99,24 @@ public partial class LibraryView : UserControl
         }
     }
 
-    /// <summary>
-    /// Scrolls the carousel so the selected card stays visible (horizontal).
-    /// </summary>
-    private void ScrollCarouselToSelected(LibraryViewModel vm, int selectedIndex)
+    private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        double viewport = SvCarousel.Viewport.Width;
-        if (viewport <= 0)
+        if (e.PropertyName == nameof(LibraryViewModel.IsListView))
         {
-            return;
+            Dispatcher.UIThread.Post(ScrollToSelected);
         }
-
-        double cardWidth = LayoutConstants.LibraryCardDefaultWidth;
-        double spacing = LayoutConstants.LibraryCardSpacing;
-        if (GamesRow.ItemsPanelRoot is StackPanel panel)
-        {
-            if (panel.Children.Count > 0 && panel.Children[0].Bounds.Width > 0)
-            {
-                cardWidth = panel.Children[0].Bounds.Width;
-            }
-
-            spacing = panel.Spacing;
-        }
-
-        double step = cardWidth + spacing;
-        double cardCenter = selectedIndex * step + cardWidth / 2;
-        double rowWidth = vm.Games.Count * step - spacing;
-        double target = cardCenter - viewport / 2;
-        SvCarousel.Offset = new Vector(Math.Clamp(target, 0, Math.Max(0, rowWidth - viewport)), 0);
     }
 
     /// <summary>
-    /// Scrolls the list so the selected row stays visible (vertical).
+    /// Re-centers the selection when the view mode swaps while the library is
+    /// open, so the newly shown layout starts on the selected game.
     /// </summary>
-    private void ScrollListToSelected(LibraryViewModel vm, int selectedIndex)
+    private void OnDataContextChanged(object? sender, System.EventArgs e)
     {
-        double viewport = SvList.Viewport.Height;
-        if (viewport <= 0)
+        if (DataContext is LibraryViewModel vm)
         {
-            return;
+            vm.PropertyChanged += OnViewModelPropertyChanged;
         }
-
-        double rowHeight = LayoutConstants.LibraryListRowHeight;
-        double spacing = LayoutConstants.LibraryListRowSpacing;
-        if (GamesList.ItemsPanelRoot is StackPanel panel)
-        {
-            if (panel.Children.Count > 0 && panel.Children[0].Bounds.Height > 0)
-            {
-                rowHeight = panel.Children[0].Bounds.Height;
-            }
-
-            spacing = panel.Spacing;
-        }
-
-        double step = rowHeight + spacing;
-        double rowCenter = selectedIndex * step + rowHeight / 2;
-        double listHeight = vm.Games.Count * step - spacing;
-        double target = rowCenter - viewport / 2;
-        SvList.Offset = new Vector(0, Math.Clamp(target, 0, Math.Max(0, listHeight - viewport)));
     }
 
     /// <summary>
@@ -161,5 +149,13 @@ public partial class LibraryView : UserControl
         SelectionHelper.SelectOnly(vm.Games, card);
 
         ScrollToSelected();
+    }
+
+    public LibraryView()
+    {
+        InitializeComponent();
+        GamesRow.AddHandler(GotFocusEvent, OnCardGotFocus, RoutingStrategies.Bubble, true);
+        GamesList.AddHandler(GotFocusEvent, OnListItemGotFocus, RoutingStrategies.Bubble, true);
+        DataContextChanged += OnDataContextChanged;
     }
 }

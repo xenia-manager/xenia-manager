@@ -14,12 +14,6 @@ namespace XeniaManager.BigScreen.Views.Modals;
 /// </summary>
 public partial class PatchDownloadView : UserControl
 {
-    public PatchDownloadView()
-    {
-        InitializeComponent();
-        ResultsList.AddHandler(TappedEvent, OnResultTapped, RoutingStrategies.Bubble, true);
-    }
-
     /// <summary>
     /// Downloads the clicked result (mouse path; the gamepad path goes through
     /// the modal VM's HandleInput).
@@ -37,5 +31,11 @@ public partial class PatchDownloadView : UserControl
         {
             vm.SelectResult(item);
         }
+    }
+
+    public PatchDownloadView()
+    {
+        InitializeComponent();
+        ResultsList.AddHandler(TappedEvent, OnResultTapped, RoutingStrategies.Bubble, true);
     }
 }

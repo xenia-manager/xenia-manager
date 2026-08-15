@@ -67,7 +67,6 @@ public class BackgroundService : IBackgroundService
         }
         catch (Exception ex)
         {
-            // Unreadable image - fall through to null
             Logger.Warning<BackgroundService>($"Failed to load background image '{Settings.ImagePath}'");
             Logger.LogExceptionDetails<BackgroundService>(ex);
         }
@@ -90,7 +89,7 @@ public class BackgroundService : IBackgroundService
         resources["AccentColor"] = new SolidColorBrush(Settings.AccentColor);
         resources["SystemAccentColor"] = Settings.AccentColor;
         resources["SystemAccentColorBrush"] = new SolidColorBrush(Settings.AccentColor);
-        for (int i = 1; i <= 3; i++)
+        for (int i = 1; i <= LayoutConstants.AccentVariantCount; i++)
         {
             double amount = i * LayoutConstants.AccentTintStep;
             resources[$"SystemAccentColorLight{i}"] = AdjustAccent(amount);
@@ -142,7 +141,6 @@ public class BackgroundService : IBackgroundService
         }
         catch (Exception ex)
         {
-            // Corrupt settings - fall back to defaults
             Logger.Error<BackgroundService>("Failed to load dashboard settings, falling back to defaults");
             Logger.LogExceptionDetails<BackgroundService>(ex);
         }
@@ -161,7 +159,6 @@ public class BackgroundService : IBackgroundService
         }
         catch (Exception ex)
         {
-            // Ignore save failures - the styling just won't persist
             Logger.Error<BackgroundService>("Failed to save dashboard settings");
             Logger.LogExceptionDetails<BackgroundService>(ex);
         }

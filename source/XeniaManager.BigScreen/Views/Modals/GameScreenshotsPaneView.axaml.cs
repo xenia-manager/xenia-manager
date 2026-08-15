@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using XeniaManager.BigScreen.Utilities;
 
 namespace XeniaManager.BigScreen.Views.Modals;
 
@@ -13,28 +14,10 @@ public partial class GameScreenshotsPaneView : UserControl
     /// <summary>
     /// How many cards fit on one row.
     /// </summary>
-    public const int CardsPerRow = 4;
+    public const int CardsPerRow = ScreenshotGridLayout.CardsPerRow;
 
-    /// <summary>
-    /// The widest a card may get (16:9). Cards shrink to fit <see cref="CardsPerRow"/> per row.
-    /// </summary>
-    private const double MaxCardWidth = 384;
-
-    /// <summary>
-    /// The gap between cards and rows (matches the WrapPanel spacing).
-    /// </summary>
-    private const double ItemSpacing = 16;
-
-    private double _cardWidth = MaxCardWidth;
-    private double _cardHeight = MaxCardWidth * 9 / 16;
-
-    public GameScreenshotsPaneView()
-    {
-        InitializeComponent();
-        Loaded += OnLoaded;
-        SvScreenshots.EffectiveViewportChanged += (_, _) => ApplyCardSize();
-        ScreenshotsGrid.ContainerPrepared += OnContainerPrepared;
-    }
+    private double _cardWidth = ScreenshotGridLayout.MaxCardWidth;
+    private double _cardHeight = ScreenshotGridLayout.CardHeight(ScreenshotGridLayout.MaxCardWidth);
 
     /// <summary>
     /// Sizes every realized card so exactly <see cref="CardsPerRow"/> fit per row.
@@ -47,8 +30,8 @@ public partial class GameScreenshotsPaneView : UserControl
             return;
         }
 
-        _cardWidth = Math.Min((available - ItemSpacing * (CardsPerRow - 1)) / CardsPerRow, MaxCardWidth);
-        _cardHeight = _cardWidth * 9 / 16;
+        _cardWidth = ScreenshotGridLayout.FitCardWidth(available);
+        _cardHeight = ScreenshotGridLayout.CardHeight(_cardWidth);
 
         foreach (Control child in panel.Children)
         {
@@ -66,5 +49,13 @@ public partial class GameScreenshotsPaneView : UserControl
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         ApplyCardSize();
+    }
+
+    public GameScreenshotsPaneView()
+    {
+        InitializeComponent();
+        Loaded += OnLoaded;
+        SvScreenshots.EffectiveViewportChanged += (_, _) => ApplyCardSize();
+        ScreenshotsGrid.ContainerPrepared += OnContainerPrepared;
     }
 }

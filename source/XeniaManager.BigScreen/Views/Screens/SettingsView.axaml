@@ -11,50 +11,6 @@
              x:DataType="vm:SettingsViewModel"
              Background="{Binding ScreenBackground}">
 
-    <UserControl.Styles>
-        <!-- Quit-toggle: rendered as a toggle switch (track + sliding thumb), no tick glyph -->
-        <Style Selector="CheckBox.quit-toggle">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Grid Height="34" VerticalAlignment="Center" Width="66">
-                            <Border x:Name="Track"
-                                    CornerRadius="17"
-                                    Background="{DynamicResource CardBorder}"
-                                    BorderBrush="{DynamicResource TextSecondary}"
-                                    BorderThickness="2" />
-                            <Ellipse x:Name="Thumb"
-                                     Height="26"
-                                     HorizontalAlignment="Left"
-                                     Margin="4,0,0,0"
-                                     VerticalAlignment="Center"
-                                     Width="26"
-                                     Fill="#FFFFFFFF">
-                                <Ellipse.Transitions>
-                                    <Transitions>
-                                        <ThicknessTransition Property="Margin" Duration="0:0:0.15" />
-                                    </Transitions>
-                                </Ellipse.Transitions>
-                            </Ellipse>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style Selector="CheckBox.quit-toggle:checked /template/ Border#Track">
-            <Setter Property="Background" Value="{DynamicResource AccentColor}" />
-        </Style>
-
-        <Style Selector="CheckBox.quit-toggle:checked /template/ Ellipse#Thumb">
-            <Setter Property="Margin" Value="32,0,4,0" />
-        </Style>
-
-        <Style Selector="CheckBox.quit-toggle:focus-visible /template/ Border#Track">
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        </Style>
-    </UserControl.Styles>
-
     <Grid RowDefinitions="Auto, *, Auto" Margin="60">
         <TextBlock Grid.Row="0"
                    Classes="screen-title"
@@ -141,7 +97,7 @@
                                   IsChecked="{Binding ReturnToXeniaOnQuit}"
                                   Padding="12,8"
                                   VerticalAlignment="Center"
-                                  Classes="quit-toggle" />
+                                   Classes="toggle-switch" />
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
