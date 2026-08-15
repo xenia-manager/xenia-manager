@@ -110,7 +110,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **Screenshots pane** reuses the gallery's boot-time items for Canary games (same decoded bitmaps — no duplicate decode).
 
 ### Profiles & identity
-- **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first.
+- **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first. **XConfig sync:** every profile activation (boot, switch, refresh) writes the active profile's XUID, language and country into the Canary XConfig (`DefaultProfile` + `Language` + `Country`) so launched games run with the selected BigScreen profile; skipped when no XConfig file exists (no file creation), values de-duplicated, re-synced as a safety net at game launch (`MainWindowViewModel.LaunchGame`).
 - **Boot reorder:** Settings stage now runs before the Profile stage (the persisted XUID is needed to pick the profile).
 - **Header `ProfileButton`** (avatar chip) — focusable + clickable; controller **Up** from the game row selects it (**Down** returns to the previously selected card; **Right** jumps to the next card after the current selection, wrapping from card 8 back to card 1); reserved 4px border that turns accent on selection/hover (no fill, no shadow — the icon floats inside the 40px circle).
 - **Profile picker modal** (`ProfilePickerView`) — opened from the header chip: all profiles (active first, then alphabetical) with gamertag, country · language and per-profile gamerscore; Up/Down + A switches + B closes, **Y opens Manage Profiles** on top of the picker; "no profiles" stub.
@@ -233,7 +233,7 @@ source/XeniaManager.BigScreen/
 │   ├── IBackgroundService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs / IModalService.cs
 │   ├── InputRouter.cs               # Command-driven: key/gamepad → NavigationCommand → dispatcher (modal stack → viewer → overlay → dashboard)
 │   ├── ModalService.cs              # Push/pop modal stack: ShowAsync (typed result), Close pops + disposes, StackChanged (IModalService)
-│   ├── ProfileService.cs            # All Canary profiles, active profile (persisted profile_xuid), switch/refresh, per-game achievement/GPD stats, per-profile gamerscore (IProfileService)
+│   ├── ProfileService.cs            # All Canary profiles, active profile (persisted profile_xuid), switch/refresh, per-game achievement/GPD stats, per-profile gamerscore, XConfig default-profile sync (IProfileService)
 │   ├── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching, filename-decoded metadata (IScreenshotLibraryService)
 │   └── ServiceConfigurator.cs       # DI registration (mirrors the main app: singleton services + VMs, App.Services)
 ├── Constants/

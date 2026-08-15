@@ -13,6 +13,7 @@ using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Files.Gpd;
 using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Core.Models.Files.XConfig;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;
@@ -109,6 +110,7 @@ public class ProfileService : IProfileService
                 _profileGpd = null;
                 Gamertag = "Guest";
                 Gamerscore = "0";
+                SyncXConfigDefaultProfile();
                 Logger.Warning<ProfileService>("No profiles remain after refresh");
                 ProfileChanged?.Invoke();
                 return;
@@ -179,6 +181,47 @@ public class ProfileService : IProfileService
             // Profile GPD missing or unreadable - keep gamerscore at 0
             Logger.Warning<ProfileService>(
                 $"Failed to load the profile GPD for '{profile.Gamertag}', gamerscore kept at 0");
+            Logger.LogExceptionDetails<ProfileService>(ex);
+        }
+
+        SyncXConfigDefaultProfile();
+    }
+
+    /// <summary>
+    /// Writes the active profile's XUID, language and country into the Canary
+    /// XConfig (the emulator's default profile), so launched games run with the
+    /// selected BigScreen profile. Skipped when no XConfig file exists.
+    /// </summary>
+    public void SyncXConfigDefaultProfile()
+    {
+        try
+        {
+            XConfigFile? xconfig = XConfigManager.LoadXConfig(XeniaVersion.Canary);
+            if (xconfig == null)
+            {
+                Logger.Debug<ProfileService>("No Canary XConfig file - default profile sync skipped");
+                return;
+            }
+
+            ulong xuid = ActiveProfile?.PathXuid?.Value ?? 0;
+            XLanguage language = ActiveProfile != null ? (XLanguage)ActiveProfile.Language : XLanguage.Invalid;
+            XOnlineCountry country = ActiveProfile != null ? (XOnlineCountry)ActiveProfile.Country : (XOnlineCountry)0;
+
+            if (xconfig.DefaultProfile == xuid && xconfig.Language == language && xconfig.Country == country)
+            {
+                return;
+            }
+
+            xconfig.DefaultProfile = xuid;
+            xconfig.Language = language;
+            xconfig.Country = country;
+            XConfigManager.SaveXConfig(xconfig, XeniaVersion.Canary);
+            Logger.Info<ProfileService>(
+                $"XConfig synced: default profile 0x{xuid:X16}, language {language}, country {country}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ProfileService>("Failed to sync the Canary XConfig default profile");
             Logger.LogExceptionDetails<ProfileService>(ex);
         }
     }

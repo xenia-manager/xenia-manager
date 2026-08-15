@@ -71,4 +71,10 @@ public interface IProfileService
     /// (reusing the loaded GPD when the profile is the active one).
     /// </summary>
     int GetGamerscore(AccountInfo profile);
+
+    /// <summary>
+    /// Writes the active profile's XUID, language and country into the Canary
+    /// XConfig (the emulator's default profile). Skipped when no XConfig exists.
+    /// </summary>
+    void SyncXConfigDefaultProfile();
 }

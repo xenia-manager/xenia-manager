@@ -529,6 +529,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
         try
         {
+            // Belt-and-braces: make sure the Canary XConfig default profile
+            // matches the active BigScreen profile before the session starts
+            _profileService.SyncXConfigDefaultProfile();
             EventManager.Instance.DisableWindow();
             Settings settings = new();
             await Launcher.LaunchGameASync(card.Game, settings, discNumber: discNumber);
