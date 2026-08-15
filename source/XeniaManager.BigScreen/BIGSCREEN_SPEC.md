@@ -418,57 +418,57 @@ source/XeniaManager.BigScreen/
 - [x] Media hint bar: Back → Select (A) → Sort (X blue)
 
 ### 5.15 Post-review: housekeeping
-- [x] **T1.** Formatting sweep (JetBrains Rider: Code Clean-up → Reformat on the whole solution; normalises AI double blank lines). Manual fix of misaligned `en.axaml` entries in both apps (`XeniaManager/Resources/Language/en.axaml` + BigScreen's)
-- [x] **T2.** Delete test artwork (`Resources/Art/fr65z3.jpg`, `Resources/Art/SL1qfH.jpg`)
-- [x] **T3.** Move `Services/ColorJsonConverter.cs` → `Converters/` folder (namespace `XeniaManager.BigScreen.Converters`)
-- [x] **T4.** SplashScreen rewrite — `MainWindow` becomes `FAAppWindow`; boot splash uses FluentAvalonia's built-in `AppWindow.SplashScreen` (`IFAApplicationSplashScreen` + `SplashScreenContent`, `RunTasks` hosts the boot pipeline) per shazzaam7/dotnet-templates pattern; delete `SplashWindow`; fixes the "line at top" splash bug. Splash window forced fullscreen from `SplashScreenView.OnAttachedToVisualTree`; gradient math extracted to `Factories/BackgroundBrushFactory.cs`
+- [x] **T1.** Formatting sweep (Rider Code Clean-up; `en.axaml` alignment in both apps)
+- [x] **T2.** Delete test artwork (`Resources/Art/fr65z3.jpg`, `SL1qfH.jpg`)
+- [x] **T3.** Move `ColorJsonConverter` → `Converters/`
+- [x] **T4.** Boot splash via FA's built-in `AppWindow.SplashScreen`; delete `SplashWindow`; gradient math → `Factories/BackgroundBrushFactory.cs`
 
 ### 5.16 Controller input: primary controller + rescan (Core)
-- [x] **T5.** `GamepadInputService` (Core): opens **all** gamepads; `ConnectedGamepads` snapshots (name, GUID, battery, charging, isPrimary); `SetPrimary` / `SetPrimaryByGuid` (GUID persisted as `primary_controller_guid` in `dashboard-settings.json`, restored at boot); `Rescan()`; `ReloadMappings()`; **input flows from the primary pad only**; refactored into `GamepadDeviceCollection` + `GamepadButtonMapper` + `StickTracker`
+- [x] **T5.** All gamepads opened; `ConnectedGamepads` snapshots; `SetPrimary`/`SetPrimaryByGuid` (GUID persisted, restored at boot); `Rescan()`/`ReloadMappings()`; input from the primary pad only; refactored into `GamepadDeviceCollection` + `GamepadButtonMapper` + `StickTracker`
 
 ### 5.17 Profiles & identity
-- [x] **T6.** Profile switching — `ProfileService` loads all Canary profiles; selected profile persisted (`profile_xuid` in `dashboard-settings.json`); header gamertag/gamerscore + per-game achievement stats follow the selection
-- [x] **T7.** Manage Profiles modal — port desktop `ManageProfilesDialog` (create / delete / import / export via `ProfileManager`) as a BigScreen modal
+- [x] **T6.** Profile switching — active profile persisted (`profile_xuid`); header + per-game stats follow
+- [x] **T7.** Manage Profiles modal — port desktop dialog (create/delete/import/export)
 
 ### 5.18 Game actions (game modal)
-- [x] **T8.** Game modal — **Y** = Details on the selected card (and right-click on `GameCard`/`LibraryCard`/`LibraryListItem`) opens the game modal: icon + title above a vertical options list (Achievements · Screenshots · Title Updates · Marketplace Content · Patches · Settings) with the selected option's pane rendering live on the right; panes cached per option; A/Right enters the pane, B/Left returns, B closes. **Exactly one element highlights at a time** — a state contract: entering a pane clears the nav selection and calls `IGameModalPane.OnPaneEntered()` (selects the pane's first item); exiting calls `OnPaneExited()` and re-selects the nav option. Panes start unselected; `SelectionHelper.MoveSelection` picks the first item on the first move.
-- [x] **T9.** Achievements pane — stats header (unlocked/total + gamerscore), **X-cycled sort**: Achieved (default) → Gamerscore Awarded → Alphabetical, scroll-to-selected on Up/Down, rows (name, description, gamerscore via star icon, unlock date; image only when unlocked), empty state
-- [x] **T10.** Title Updates pane — `GameContent.InstallerHeaderFiles` rows + delete (confirmation modal, package + `.header` removed); A blocked when nothing is installed
-- [x] **T11.** Marketplace Content pane — same shared pane initialised per menu entry (`MarketplaceContentHeaderFiles`)
-- [x] **T12.** Screenshots pane — per-game gallery from `screenshots/<GAMEID_UPPER>`, reusing `ScreenshotCard`; A opens the shared screenshot viewer modal
-- [x] **T13.** Patches pane — entries enable/disable (instant save), command editor (Type/Address/Value with per-type validation, add/delete), Remove with confirmation; **download moved to its own modal** (search prefilled with game ID, Canary/Netplay results, status states)
-- [x] **T14.** Game Settings pane — **minimised set of primary controller-friendly options**: 18 curated rows (toggles, sliders, dropdowns only) as main-settings-style `settings-card settings-row` cards (single inline `ItemTemplate`, section headers). **The full config editor stays in the main app** — instantiating 335 options with controller-friendly user controls caused a big performance spike, so only the primary options ship here. **Manual save** (X writes the config file; edits only mark the pane dirty) with a **Save / Discard / Cancel confirmation** on exit (game title in the prompt) — the Manage Profiles pattern. Controller: Up/Down rows, A flips toggles / opens dropdown+slider editors, Up/Down cycles combos, Left/Right steps sliders, A closes the editor, B restores. Curated sections: Display (fullscreen, letterbox) · Audio (audio system, mute, XMP, XMA decoder) · GPU (backend, async shader compilation, vsync, resolution scale X/Y) · General (apply patches, controller hotkeys, discord) · HID (vibration, stick deadzones) · UI (achievement notifications). The old full editor (`ConfigUiSettings` 335 keys, `ConfigOptionRow`, `ConfigOptionViewModel`/`ConfigSectionViewModel`, virtualized mixed `ListBox`) was deleted — it never rendered.
-- [x] **T15.** Disc selection modal on launch — when `IsMultiDisc`: compact centered card (game icon + name header, "Disc Selection" line), one `DiscOptionCard` per disc (custom label or "Disc N", filled disc icon, "Last Played"/"File Missing" status; missing files dimmed and skipped by navigation), A/click launches the selected disc, B cancels; selection starts on the last played disc (first valid fallback)
+- [x] **T8.** Game modal — Y/right-click opens; options list with live panes; A/Right enters, B/Left returns; single-highlight contract
+- [x] **T9.** Achievements pane — X-cycled sort (Achieved/Gamerscore/Alphabetical), scroll-to-selected, images only when unlocked
+- [x] **T10.** Title Updates pane — rows + confirmed delete
+- [x] **T11.** Marketplace Content pane — shared pane, per-menu init
+- [x] **T12.** Screenshots pane — per-game grid; A opens the shared viewer
+- [x] **T13.** Patches pane — toggle/edit/remove + dedicated download modal
+- [x] **T14.** Game Settings pane — 18 curated primary options (toggles/sliders/dropdowns) as main-settings-style cards; manual save (X) + Save/Discard/Cancel on exit; full config editor stays in the main app (335 controller-friendly options caused a performance spike)
+- [x] **T15.** Disc selection modal on multi-disc launch — A launches, B cancels, missing discs skipped
 
 ### 5.19 Dashboard, header & settings
-- [x] **T16.** Time format setting — 12h/24h (persisted in `DashboardSettings`); clock + capture dates follow it
-- [x] **T17.** Controllers section (Settings): auto-detected list of `GamepadCard` rows with name, **Status: Primary/Secondary** (primary in accent) and tiered battery icon + % (via `IconFactory`); no UI buttons; SDL controller database updates silently in the background at boot; changing primary is **controller-only** (lands with T18)
-- [x] **T18.** Settings controller navigation: D-pad moves between rows; **A activates (sets primary controller on a gamepad row, opens dropdowns/checkbox/colour fields on the other rows)**; `GamepadCard` already carries `Classes.selected` + accent border, `SetPrimary` is wired in the VM
-- [x] **T19.** Rename **Media → Gallery** — overlay, option-card label, screen title and `en.axaml` keys renamed; screenshot gallery only. Installed content (title updates / marketplace, XUID `0000000000000000`) does **not** get its own media entry — it lives in the game modal (T8/T10/T11)
-- [x] **T20.** Boxart tile sizing — in `CardImageMode.BoxArt` the dashboard tile is portrait and sized so the box art fills it bottom-anchored with the top ~12% cropped; Icon-mode fallback unchanged
-- [x] **T21.** Header — network icon adapts to ethernet (`Ethernet`/`Wifi`/`WifiOff`); battery icon has 10 distinct stages (the % text lives in the settings Controllers rows)
-- [x] **T22.** Background type default → **Dynamic** (`DashboardSettings.Mode` + settings default); Settings dropdowns built from **enum order** via `BuildOptions` so the defaults lead (`BackgroundMode` reordered Dynamic-first, `CardImageMode` Icon-first); persisted settings files migrated to the new enum mapping
-- [x] **T23.** Xenia version indicator — version icon on the **list-view details pane only** (bare build icon opposite the game title, Core `XeniaVersionToIconConverter`/`XeniaVersionToStringConverter` + hover tooltip); the carousel stays visually clean
-- [x] **T24.** Game compatibility indicator — coloured rating dot + label as the first metadata row of the **list-view details pane** (Core `CompatibilityRatingColorConverter`/`CompatibilityRatingToStringConverter`), DB URL as hover tooltip
-- [x] **T25.** Achievements locked/unlocked handling + spoiler gating (game modal pane) — rows split into **Unlocked (N) / Locked (N)** sections with counts; locked rows show the locked-hint description normally, but **secret achievements** (`AchievementEntry.ShowUnachieved` flag) are spoiler-gated while locked: name hidden behind "Hidden Achievement", a "This achievement contains spoilers" tagline instead of the real description, no gamerscore, no date, dimmed (opacity 0.55). X sort applies within sections (Achieved / Gamerscore Awarded / Alphabetical).
-- [x] **T26.** XConfig resolution — Settings gets an **XConfig section** at the **bottom of the screen** (least-worthy row; hidden when `XConfigManager.XConfigExists(Canary)` is false) with a single **Resolution** dropdown (`AvHdmiScreenSize`, instant-saved via `XConfigManager`). It's a controller-navigable settings row (A opens the dropdown, Up/Down cycles, A commits, B restores); the "R" enum prefix is stripped for display (`XConfigResolutionOption`, e.g. "1280x720" not "R1280x720"). The desktop `EditXConfigDialog`'s other fields (language, country, default profile) are dashboard-level settings redundant with the profile system — deliberately not ported.
-- [ ] **T27.** Input gating while a game runs — gamepad already gated by `IsEnabled`; add the same gate to `OnWindowKeyDown`, `OnCardGotFocus`, `OnOptionCardPressed`
-- [ ] **T35.** Launch games in fullscreen — Settings → **Preferences** toggle (default **on**, persisted in `DashboardSettings`); when on, the launched game's config `Display.fullscreen` is set before launch and restored when the session ends
+- [x] **T16.** Time format setting — 12h/24h persisted; clock + capture dates follow
+- [x] **T17.** Controllers section — `GamepadCard` rows with primary/secondary status + battery
+- [x] **T18.** Settings controller navigation — D-pad rows, A activates (primary controller, dropdowns, toggles, colours)
+- [x] **T19.** Media → Gallery rename (screenshots only; installed content stays in the game modal)
+- [x] **T20.** Boxart tile sizing — portrait, bottom-anchored, top ~12% cropped
+- [x] **T21.** Header — ethernet-aware network icon; 10-stage battery
+- [x] **T22.** Background default → Dynamic; settings dropdowns built in enum order
+- [x] **T23.** Xenia version icon in the list-view details pane (Core converters, hover tooltip)
+- [x] **T24.** Compatibility rating row in the details pane (dot + label, DB URL tooltip)
+- [x] **T25.** Achievements locked/unlocked sections + spoiler gating (secret achievements hidden while locked)
+- [x] **T26.** XConfig section — resolution dropdown only (bottom of settings, hidden without XConfig)
+- [x] **T27.** Input gating while a game runs (all window handlers)
+- [ ] **T35.** Launch games in fullscreen — Preferences toggle (default on, persisted); sets `Display.fullscreen` at launch, restores after
 
 ### 5.20 Desktop app integration
-- [ ] **T28.** Hide + disable main window when BigScreen opens — `NavigationService.LaunchBigScreen` keeps the `Process` handle, `EventManager.DisableWindow()` + `Hide()`; restore (`Show()` + `EnableWindow()`) on BigScreen exit
-- [ ] **T29.** BigScreen start by default — `--bigscreen` CLI arg (desktop `Program.cs` launches BigScreen and hides the main window) + Settings toggle "Start in Big Screen" (persisted)
+- [ ] **T28.** Hide + disable the main window while BigScreen is open; restore on exit
+- [ ] **T29.** BigScreen start by default — `--bigscreen` CLI arg + "Start in Big Screen" toggle (persisted)
 
 ### 5.21 Gallery sort expansion (full desktop parity)
-- [ ] **T30.** Expand `GallerySort` (renamed from `MediaSort` in T19) with the desktop app's full `GameSortOption` list, sorted by each screenshot's owning game (resolved from the parent folder's game ID): **Title** (alphabetical), **Time Played**, **Compatibility**, **TitleId**, **MediaId**, **XeniaVersion**, **Last Played** — alongside the existing **Newest First / Oldest First / By Game**. X still cycles; indicator + selection-preserving resort keep working (`GalleryViewModel.ApplyGallerySort`)
+- [ ] **T30.** Expand gallery sort with the desktop's full list: Title, Time Played, Compatibility, TitleId, MediaId, XeniaVersion, Last Played (alongside Newest/Oldest/By Game)
 
 ### 5.22 Screen animations
-- [ ] **T31.** Screen animations — overlay screens, the game modal + its panes (T8–T14), the screenshot viewer modal and dashboard screen swaps must never open statically: very basic, very subtle motion only. Avalonia-native `Transitions`/`DoubleTransition` (opacity, translate, scale), ~150–250ms ease-in-out, one or two properties max; see §7 for full constraints + candidate approaches
+- [ ] **T31.** Screen animations — subtle ~150–250ms Avalonia-native transitions on overlays, modals and dashboard swaps (see §7)
 
 ### 5.23 Input, animation & config follow-ups
-- [ ] **T32.** Gamepad hold-repeat (Core) — `GamepadInputService` currently fires a button once per press (deadzone edge detection only). Add hold support: while a button (or stick-derived D-pad) stays pressed, re-raise it after an initial delay at a repeat rate, so holding D-pad down scrolls continuously. Core first, then BigScreen.
-- [ ] **T33.** Background fade hard reset — the fade-through-black can bug out when moving right-to-left across cards: the previous background shows, then black, then the transition runs (left-to-right through the first cards works). Implementation: treat the fade like a tween stored as a local variable — **stop and restart it on every art swap, so exactly one animation plays at all times, never overlapping**; rapid card passes hold black until the selection slows/stops.
-- [ ] **T34.** Trim the config editor — not every desktop setting belongs in Big Screen mode: remove **Notification Sound Path**, **WinKey Bindings** (`HID.WinKey`) and **Logging** sections from the BigScreen config editor (`ConfigUiSettings` section definitions).
+- [ ] **T32.** Gamepad hold-repeat (Core) — held buttons re-raise after a delay at a repeat rate
+- [ ] **T33.** Background fade hard reset — single cancellable fade instance, restarted on every art swap
+- [x] **T34.** Trim the config editor — superseded by the T14 curated rewrite (Notification Sound/WinKey/Logging never shipped)
 
 ---
 

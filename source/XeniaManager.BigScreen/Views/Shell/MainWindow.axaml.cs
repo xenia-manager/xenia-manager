@@ -190,7 +190,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnWindowKeyDown(object? sender, KeyEventArgs e)
     {
-        if (DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
         {
             return;
         }
@@ -302,7 +302,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnCardGotFocus(object? sender, FocusChangedEventArgs e)
     {
-        if (DataContext is not MainWindowViewModel vm || vm.IsOverlayOpen)
+        if (!IsEnabled || DataContext is not MainWindowViewModel vm || vm.IsOverlayOpen)
         {
             return;
         }
@@ -331,7 +331,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnOptionCardPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
         {
             return;
         }
@@ -355,7 +355,7 @@ public partial class MainWindow : FAAppWindow
     /// </summary>
     private void OnGameCardRightPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
+        if (!IsEnabled || DataContext is not MainWindowViewModel vm || !vm.IsInitialized)
         {
             return;
         }
