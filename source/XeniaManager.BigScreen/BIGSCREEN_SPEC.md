@@ -91,7 +91,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 ### Game modal (T8–T14)
 - **`GameModalViewModel`/`GameModalView`** — opened from any game card (**Y** = Details or right-click): a `modal-screen` card with the game's icon + title above a vertical options list (Achievements · Screenshots · Title Updates · Marketplace Content · Patches · Settings). The selected option's **pane renders on the right and updates live as the selection moves** (panes are created once and cached per option — no reloads when navigating back). A/Right enters the pane, B/Left returns to the options list, B there closes the modal. **Exactly one element highlights at a time** — a state contract, not styling: entering a pane clears the nav selection and calls `IGameModalPane.OnPaneEntered()` (selects the pane's first item); exiting calls `OnPaneExited()` (clears the pane) and re-selects the nav option.
 - **Panes** (`ViewModels/Modals/`, all implementing `IGameModalPane.HandleInput`):
-  - **Achievements** — stats header (Trophy + Star `IconStat`s), X-cycled sort (Achieved default → Gamerscore Awarded → Alphabetical), scroll-to-selected on Up/Down, rows with image only when unlocked (spoiler guard), empty state. Rows show the gamerscore as a star icon + number (no box). Panes start **unselected** — `SelectionHelper.MoveSelection` picks the first item on the first move.
+  - **Achievements** — stats header (Trophy + Star `IconStat`s), X-cycled sort (Achieved default → Gamerscore Awarded → Alphabetical), scroll-to-selected on Up/Down, **Unlocked/Locked sections** with counts, rows with image only when unlocked, empty state. **Spoiler gating:** secret achievements (`ShowUnachieved` flag) hidden while locked — "Hidden Achievement" name, "This achievement contains spoilers" tagline, no gamerscore, dimmed. Rows show the gamerscore as a star icon + number (no box). Panes start **unselected** — `SelectionHelper.MoveSelection` picks the first item on the first move.
   - **Screenshots** — the game's own folder (`{EmulatorDir}/screenshots/{GAMEID}`) as a 4-across grid; **Canary games reuse the boot-time gallery cache** (already decoded — no re-scan), other versions scan off-thread with a loading state; Left/Back return to the nav list; A opens the shared screenshot viewer modal.
   - **Title Updates / Marketplace Content** — one shared pane initialised per menu entry (single type — no switching), rows with display name + file name, A deletes (confirmation modal, package + `.header` removed), empty state; A is blocked when nothing is installed.
   - **Patches** — installed patch entries (A toggles enabled, instant save), Right opens the command editor (per-type validated Type/Address/Value fields, add/delete commands), pinned Remove action (confirmation); "Download New Patch" opens the download modal (X shortcut removed — the row is the only path).
@@ -161,7 +161,7 @@ source/XeniaManager.BigScreen/
 │   │   ├── ModalViewModelBase.cs(.Generic.cs) # Modal lifecycle: close TCS, HandleInput (Back closes by default), Dispose hook, IsHintBarVisible (top modal only); generic result delivery
 │   │   ├── IGameModalPane.cs         # Pane contract: HandleInput(NavigationCommand)
 │   │   ├── GameModalViewModel.cs     # Game modal: options list + cached panes, live display on navigation, pane input routing, single-highlight state
-│   │   ├── AchievementsPaneViewModel.cs  # GPD achievements: stats, sort (Achieved/Gamerscore/Alphabetical), scroll event
+│   │   ├── AchievementsPaneViewModel.cs  # GPD achievements: stats, sort (Achieved/Gamerscore/Alphabetical), unlocked/locked sections, scroll event
 │   │   ├── GameScreenshotsPaneViewModel.cs # Per-game screenshot scan (off-thread) + grid; viewer opens as modal
 │   │   ├── InstalledContentPaneViewModel.cs # Title Updates / Marketplace rows + confirmed delete
 │   │   ├── PatchesPaneViewModel.cs   # Patch entries (toggle/edit/remove), commands mode + editor
@@ -180,7 +180,7 @@ source/XeniaManager.BigScreen/
 │       ├── ScreenshotItemViewModel.cs # Path, Title, CapturedAt (+ text), GameTitle, Image, IsSelected
 │       ├── OptionsCardViewModel.cs    # Title, Icon, TargetScreen
 │       ├── GameActionItemViewModel.cs # Game modal option row: Title, Icon, GameModalPane, IsSelected
-│       ├── AchievementItemViewModel.cs # Achievement row: name/description/gamerscore/date, image only when unlocked
+│       ├── AchievementItemViewModel.cs # Achievement row: name/description/gamerscore/date, image only when unlocked; spoiler gating (secret + locked → Hidden Achievement, warning tagline, no score)
 │       ├── ContentItemViewModel.cs    # Installed content row: HeaderFile + reconstructed delete path
 │       ├── PatchCommandItemViewModel.cs / PatchEntryItemViewModel.cs # Patch editor ports (validated values, ToPatchEntry/ToPatchCommand)
 │       ├── PatchDownloadItemViewModel.cs # Download result: name + Canary/Netplay source badge
@@ -200,7 +200,7 @@ source/XeniaManager.BigScreen/
 │   │   ├── GameDetailsPanel.axaml(.cs) # Details pane: art, local stats, DB bio + metadata strip (+ version chip + compatibility row)
 │   │   ├── GameActionRow.axaml(.cs)   # Game modal option row (icon + title, accent on select/hover)
 │   │   ├── DiscOptionCard.axaml(.cs)  # Disc selection card (filled disc icon + label + status line, dimmed when missing)
-│   │   ├── AchievementRow.axaml(.cs)  # Achievement row (image/lock icon, name, description, star + gamerscore)
+│   │   ├── AchievementRow.axaml(.cs)  # Achievement row (image/lock icon, name, description, star + gamerscore; dimmed when spoiler-gated)
 │   │   └── ContentRow.axaml(.cs)      # Installed content row (display name + file name + delete icon)
 │   ├── Modals/
 │   │   ├── ModalHost.axaml(.cs)       # Renders the modal stack bottom→top (later entries overlay; only the top gets input)
@@ -450,9 +450,10 @@ source/XeniaManager.BigScreen/
 - [x] **T22.** Background type default → **Dynamic** (`DashboardSettings.Mode` + settings default); Settings dropdowns built from **enum order** via `BuildOptions` so the defaults lead (`BackgroundMode` reordered Dynamic-first, `CardImageMode` Icon-first); persisted settings files migrated to the new enum mapping
 - [x] **T23.** Xenia version indicator — version icon on the **list-view details pane only** (bare build icon opposite the game title, Core `XeniaVersionToIconConverter`/`XeniaVersionToStringConverter` + hover tooltip); the carousel stays visually clean
 - [x] **T24.** Game compatibility indicator — coloured rating dot + label as the first metadata row of the **list-view details pane** (Core `CompatibilityRatingColorConverter`/`CompatibilityRatingToStringConverter`), DB URL as hover tooltip
-- [ ] **T25.** List-view achievements — scrollable locked/unlocked achievement section in the list-view details pane
+- [x] **T25.** Achievements locked/unlocked handling + spoiler gating (game modal pane) — rows split into **Unlocked (N) / Locked (N)** sections with counts; locked rows show the locked-hint description normally, but **secret achievements** (`AchievementEntry.ShowUnachieved` flag) are spoiler-gated while locked: name hidden behind "Hidden Achievement", a "This achievement contains spoilers" tagline instead of the real description, no gamerscore, no date, dimmed (opacity 0.55). X sort applies within sections (Achieved / Gamerscore Awarded / Alphabetical).
 - [ ] **T26.** XConfig editor — port `EditXConfigDialog` (language, country, AV HDMI size, default profile) via `XConfigManager` as a Settings overlay (hidden when `XConfigExists` is false)
 - [ ] **T27.** Input gating while a game runs — gamepad already gated by `IsEnabled`; add the same gate to `OnWindowKeyDown`, `OnCardGotFocus`, `OnOptionCardPressed`
+- [ ] **T35.** Launch games in fullscreen — Settings → **Preferences** toggle (default **on**, persisted in `DashboardSettings`); when on, the launched game's config `Display.fullscreen` is set before launch and restored when the session ends
 
 ### 5.20 Desktop app integration
 - [ ] **T28.** Hide + disable main window when BigScreen opens — `NavigationService.LaunchBigScreen` keeps the `Process` handle, `EventManager.DisableWindow()` + `Hide()`; restore (`Show()` + `EnableWindow()`) on BigScreen exit

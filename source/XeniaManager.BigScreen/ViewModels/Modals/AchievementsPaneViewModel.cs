@@ -30,6 +30,38 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     public ObservableCollection<AchievementItemViewModel> Rows { get; } = [];
 
     /// <summary>
+    /// The unlocked achievements, shown in their own section.
+    /// </summary>
+    public ObservableCollection<AchievementItemViewModel> UnlockedRows { get; } = [];
+
+    /// <summary>
+    /// The locked achievements, shown in their own (spoiler-gated) section.
+    /// </summary>
+    public ObservableCollection<AchievementItemViewModel> LockedRows { get; } = [];
+
+    /// <summary>
+    /// "Unlocked (N)" header text for the unlocked section.
+    /// </summary>
+    public string UnlockedCountText =>
+        $"{LocalizationHelper.GetText("GameModal.Achievements.Section.Unlocked")} ({UnlockedRows.Count})";
+
+    /// <summary>
+    /// "Locked (N)" header text for the locked section.
+    /// </summary>
+    public string LockedCountText =>
+        $"{LocalizationHelper.GetText("GameModal.Achievements.Section.Locked")} ({LockedRows.Count})";
+
+    /// <summary>
+    /// Whether the unlocked section is shown.
+    /// </summary>
+    public bool HasUnlocked => UnlockedRows.Count > 0;
+
+    /// <summary>
+    /// Whether the locked section is shown.
+    /// </summary>
+    public bool HasLocked => LockedRows.Count > 0;
+
+    /// <summary>
     /// The active sort order; X cycles through the options.
     /// </summary>
     [ObservableProperty]
@@ -92,6 +124,10 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
         {
             Rows.Add(achievement);
         }
+
+        RebuildSections();
+        Logger.Debug<AchievementsPaneViewModel>(
+            $"Achievements pane: {Rows.Count} achievements ({UnlockedRows.Count} unlocked, {LockedRows.Count} locked)");
     }
 
     /// <summary>
@@ -151,20 +187,60 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
 
     /// <summary>
     /// Rebuilds <see cref="Rows"/> from the sort order, keeping the selection on
-    /// the same row index so the viewport stays put.
+    /// the same row index so the viewport stays put, and rebuilds the
+    /// unlocked/locked display sections.
     /// </summary>
     private void ApplySort()
     {
-        List<AchievementItemViewModel> sorted = Sort switch
+        List<AchievementItemViewModel> unlocked = SortAchievements(_allAchievements.Where(item => item.IsUnlocked));
+        List<AchievementItemViewModel> locked = SortAchievements(_allAchievements.Where(item => !item.IsUnlocked));
+
+        SelectionHelper.ResortPreservingSelection(Rows, unlocked.Concat(locked).ToList());
+        RebuildSections(unlocked, locked);
+    }
+
+    /// <summary>
+    /// Sorts an achievement set by the current sort order (Achieved keeps the
+    /// GPD order within each section).
+    /// </summary>
+    private List<AchievementItemViewModel> SortAchievements(IEnumerable<AchievementItemViewModel> items)
+    {
+        return Sort switch
         {
             AchievementSort.GamerscoreAwarded =>
-                _allAchievements.OrderByDescending(item => item.Gamerscore).ToList(),
+                items.OrderByDescending(item => item.Gamerscore).ToList(),
             AchievementSort.Alphabetical =>
-                _allAchievements.OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase).ToList(),
-            _ => _allAchievements.OrderBy(item => item.IsUnlocked ? 0 : 1).ToList()
+                items.OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase).ToList(),
+            _ => items.ToList()
         };
+    }
 
-        SelectionHelper.ResortPreservingSelection(Rows, sorted);
+    /// <summary>
+    /// Rebuilds the unlocked/locked display sections (with the given sorted
+    /// sets when provided, otherwise from the current sort order).
+    /// </summary>
+    private void RebuildSections(List<AchievementItemViewModel>? unlocked = null,
+        List<AchievementItemViewModel>? locked = null)
+    {
+        unlocked ??= SortAchievements(_allAchievements.Where(item => item.IsUnlocked));
+        locked ??= SortAchievements(_allAchievements.Where(item => !item.IsUnlocked));
+
+        UnlockedRows.Clear();
+        foreach (AchievementItemViewModel item in unlocked)
+        {
+            UnlockedRows.Add(item);
+        }
+
+        LockedRows.Clear();
+        foreach (AchievementItemViewModel item in locked)
+        {
+            LockedRows.Add(item);
+        }
+
         OnPropertyChanged(nameof(ShowEmpty));
+        OnPropertyChanged(nameof(UnlockedCountText));
+        OnPropertyChanged(nameof(LockedCountText));
+        OnPropertyChanged(nameof(HasUnlocked));
+        OnPropertyChanged(nameof(HasLocked));
     }
 }

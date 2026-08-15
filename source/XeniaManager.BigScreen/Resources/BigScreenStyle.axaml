@@ -368,6 +368,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
+    <!-- LOCKED ACHIEVEMENT ROW: dimmed (spoiler-gated content) -->
+    <Style Selector="card|AchievementRow.locked">
+        <Setter Property="Opacity" Value="0.55" />
+    </Style>
+
     <!-- CONTENT ROW (game modal installed content) -->
     <Style Selector="card|ContentRow">
         <Setter Property="Background" Value="Transparent" />

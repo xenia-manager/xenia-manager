@@ -32,9 +32,34 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     public partial bool IsSelected { get; set; }
 
     /// <summary>
-    /// The achievement's display name.
+    /// Whether the active profile has earned this achievement.
+    /// </summary>
+    public bool IsUnlocked => Achievement.IsEarned;
+
+    /// <summary>
+    /// The achievement's display name (raw GPD name, used for sorting).
     /// </summary>
     public string Name => Achievement.Name;
+
+    /// <summary>
+    /// Whether this achievement is a secret/hidden achievement (its name and
+    /// description should stay hidden until unlocked).
+    /// </summary>
+    public bool IsSecret => !Achievement.ShowUnachieved;
+
+    /// <summary>
+    /// Whether this row is spoiler-gated: locked AND secret, so its name,
+    /// description and gamerscore are hidden behind placeholders.
+    /// </summary>
+    public bool IsSpoilerGated => !IsUnlocked && IsSecret;
+
+    /// <summary>
+    /// The achievement name as shown: hidden behind a placeholder while
+    /// spoiler-gated (secret locked achievements reveal surprises).
+    /// </summary>
+    public string DisplayName => IsSpoilerGated
+        ? LocalizationHelper.GetText("GameModal.Achievements.HiddenName")
+        : Achievement.Name;
 
     /// <summary>
     /// The gamerscore awarded by this achievement.
@@ -42,16 +67,14 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     public int Gamerscore => Achievement.Gamerscore;
 
     /// <summary>
-    /// The achievement description (unlocked or locked variant).
+    /// The achievement description (unlocked or locked variant); spoiler-gated
+    /// rows show a spoiler warning instead of the real text.
     /// </summary>
-    public string Description => Achievement.IsEarned
-        ? Achievement.UnlockedDescription
-        : Achievement.LockedDescription;
-
-    /// <summary>
-    /// Whether the active profile has earned this achievement.
-    /// </summary>
-    public bool IsUnlocked => Achievement.IsEarned;
+    public string Description => IsSpoilerGated
+        ? LocalizationHelper.GetText("GameModal.Achievements.SpoilerWarning")
+        : Achievement.IsEarned
+            ? Achievement.UnlockedDescription
+            : Achievement.LockedDescription;
 
     /// <summary>
     /// The unlock date, or a "not unlocked" label when locked.
