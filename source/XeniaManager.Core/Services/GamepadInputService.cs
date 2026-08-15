@@ -12,6 +12,9 @@ namespace XeniaManager.Core.Services;
 /// D-pad, left-stick and bumper input all normalise onto the D-pad values.
 /// All connected gamepads are tracked (<see cref="GamepadDeviceCollection"/>);
 /// navigation input flows from the primary pad only.
+/// Navigation directions (D-pad + left stick) repeat while held: one press on
+/// entry, then a repeat every <see cref="HoldRepeatInterval"/> after
+/// <see cref="HoldRepeatDelay"/>. Action buttons raise once per press.
 /// Fails gracefully when SDL can't be initialised (e.g. no native runtime).
 /// </summary>
 public class GamepadInputService : IGamepadInputService
@@ -20,6 +23,16 @@ public class GamepadInputService : IGamepadInputService
     /// How often the gamepad event queue is drained.
     /// </summary>
     private static readonly TimeSpan PollInterval = TimeSpan.FromMilliseconds(50);
+
+    /// <summary>
+    /// How long a navigation direction must be held before the first repeat fires.
+    /// </summary>
+    private static readonly TimeSpan HoldRepeatDelay = TimeSpan.FromMilliseconds(400);
+
+    /// <summary>
+    /// How often a held navigation direction re-raises after the initial delay.
+    /// </summary>
+    private static readonly TimeSpan HoldRepeatInterval = TimeSpan.FromMilliseconds(100);
 
     /// <summary>
     /// How often the gamepad battery state is queried.
@@ -75,6 +88,12 @@ public class GamepadInputService : IGamepadInputService
     /// Left stick Y-axis tracker (up/down).
     /// </summary>
     private readonly StickTracker _stickY = new();
+
+    /// <summary>
+    /// Repeat scheduling for currently held navigation directions (D-pad + left
+    /// stick), keyed by the normalised button.
+    /// </summary>
+    private readonly Dictionary<GamepadButton, HoldState> _heldButtons = [];
 
     /// <summary>
     /// All open gamepads + the primary selection.
@@ -182,7 +201,7 @@ public class GamepadInputService : IGamepadInputService
 
     /// <summary>
     /// Maps an SDL gamepad button to a navigation button and raises it
-    /// (primary pad only).
+    /// (primary pad only). Navigation directions register for hold-repeat.
     /// </summary>
     private void HandleButtonDown(SDL_GamepadButtonEvent e)
     {
@@ -200,13 +219,38 @@ public class GamepadInputService : IGamepadInputService
             return;
         }
 
+        if (RepeatsWhileHeld(mapped.Value))
+        {
+            _heldButtons[mapped.Value] = new HoldState(DateTime.UtcNow + HoldRepeatDelay);
+        }
+
         Logger.Debug<GamepadInputService>($"Raising {mapped.Value} (from {e.Button})");
         ButtonPressed?.Invoke(mapped.Value);
     }
 
     /// <summary>
+    /// Whether the given button repeats while held (navigation directions only -
+    /// action buttons raise exactly once per press).
+    /// </summary>
+    private static bool RepeatsWhileHeld(GamepadButton button) =>
+        button is GamepadButton.DpadLeft or GamepadButton.DpadRight or GamepadButton.DpadUp or GamepadButton.DpadDown;
+
+    /// <summary>
+    /// Removes a held button from the repeat map (its SDL button came up).
+    /// </summary>
+    private void ReleaseButton(SDL_GamepadButton button)
+    {
+        GamepadButton? mapped = GamepadButtonMapper.Map(button);
+        if (mapped != null)
+        {
+            _heldButtons.Remove(mapped.Value);
+        }
+    }
+
+    /// <summary>
     /// Tracks the left stick axes, raising a press only when a direction is
-    /// newly entered (no repeat while held, no press when returning to center).
+    /// newly entered (no press while held, no press when returning to center).
+    /// The held direction registers for hold-repeat and clears when released.
     /// </summary>
     private void HandleAxisMotion(SDL_GamepadAxisEvent e)
     {
@@ -230,13 +274,71 @@ public class GamepadInputService : IGamepadInputService
             if (e.Axis is not (SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX or SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY))
             {
                 Logger.Trace<GamepadInputService>($"Axis {e.Axis} not tracked, ignoring");
+                return;
             }
 
+            StopAxisRepeat(e.Axis);
             return;
         }
 
+        _heldButtons[pressed.Value] = new HoldState(DateTime.UtcNow + HoldRepeatDelay);
         Logger.Debug<GamepadInputService>($"Stick crossed deadzone (value {e.value}), raising {pressed.Value}");
         ButtonPressed?.Invoke(pressed.Value);
+    }
+
+    /// <summary>
+    /// Stops hold-repeat for a stick axis once its held direction is released
+    /// (the stick returned to center; direction switches keep the new hold).
+    /// </summary>
+    private void StopAxisRepeat(SDL_GamepadAxis axis)
+    {
+        GamepadButton? held = axis switch
+        {
+            SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX => _stickX.HeldButton,
+            SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY => _stickY.HeldButton,
+            _ => null,
+        };
+        if (held != null)
+        {
+            return;
+        }
+
+        GamepadButton[] buttons = axis switch
+        {
+            SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX => [GamepadButton.DpadLeft, GamepadButton.DpadRight],
+            SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY => [GamepadButton.DpadUp, GamepadButton.DpadDown],
+            _ => [],
+        };
+        foreach (GamepadButton button in buttons)
+        {
+            _heldButtons.Remove(button);
+        }
+    }
+
+    /// <summary>
+    /// Raises repeats for held navigation directions: the first fires after
+    /// <see cref="HoldRepeatDelay"/>, then every <see cref="HoldRepeatInterval"/>
+    /// while the button stays held. Runs at the end of each poll cycle.
+    /// </summary>
+    private void CheckHoldRepeats()
+    {
+        if (_heldButtons.Count == 0)
+        {
+            return;
+        }
+
+        DateTime now = DateTime.UtcNow;
+        foreach ((GamepadButton button, HoldState state) in _heldButtons)
+        {
+            if (now < state.NextRepeatAt)
+            {
+                continue;
+            }
+
+            Logger.Trace<GamepadInputService>($"Hold repeat: {button}");
+            ButtonPressed?.Invoke(button);
+            state.NextRepeatAt = now + HoldRepeatInterval;
+        }
     }
 
     /// <summary>
@@ -255,6 +357,7 @@ public class GamepadInputService : IGamepadInputService
                     HandleButtonDown(ev.gbutton);
                     break;
                 case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_UP:
+                    ReleaseButton(ev.gbutton.Button);
                     Logger.Trace<GamepadInputService>($"Button up: {ev.gbutton.Button} (gamepad {ev.gbutton.which})");
                     break;
                 case SDL_EventType.SDL_EVENT_GAMEPAD_AXIS_MOTION:
@@ -266,6 +369,7 @@ public class GamepadInputService : IGamepadInputService
                     break;
                 case SDL_EventType.SDL_EVENT_GAMEPAD_REMOVED:
                     Logger.Info<GamepadInputService>($"Gamepad removed: joystick ID {ev.gdevice.which}");
+                    _heldButtons.Clear();
                     _devices.Close(ev.gdevice.which);
                     break;
                 default:
@@ -278,6 +382,19 @@ public class GamepadInputService : IGamepadInputService
         {
             Logger.Trace<GamepadInputService>($"Poll cycle processed {eventsProcessed} event(s)");
         }
+
+        CheckHoldRepeats();
+    }
+
+    /// <summary>
+    /// Repeat scheduling state for a single held navigation direction.
+    /// </summary>
+    private sealed class HoldState(DateTime nextRepeatAt)
+    {
+        /// <summary>
+        /// The next time the held direction should re-raise.
+        /// </summary>
+        public DateTime NextRepeatAt { get; set; } = nextRepeatAt;
     }
 
     /// <summary>
