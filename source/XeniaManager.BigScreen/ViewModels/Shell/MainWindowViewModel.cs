@@ -229,6 +229,13 @@ public partial class MainWindowViewModel : ViewModelBase
     public event EventHandler? InitializationCompleted;
 
     /// <summary>
+    /// Raised at the very end of the boot pipeline (after the final dwell), the
+    /// moment the splash is about to close, so the view can fade the dashboard
+    /// elements in visibly.
+    /// </summary>
+    public event Action? DashboardRevealRequested;
+
+    /// <summary>
     /// Runs the boot pipeline behind the splash screen: profile, library and
     /// screenshot loading with live status/progress, cancellable between steps.
     /// </summary>
@@ -354,6 +361,10 @@ public partial class MainWindowViewModel : ViewModelBase
             $"Dashboard ready: {Library.Games.Count} games in library, {Dashboard.RecentGames.Count} recent");
         progress?.Report((LocalizationHelper.GetText("Splash.LoadingDone"), 1.0));
         await Task.Delay(TimingConstants.DoneDwell, cancellationToken);
+
+        // The splash closes right after this: fade the dashboard elements in
+        // while the reveal happens, so the tween is visible from the first frame
+        DashboardRevealRequested?.Invoke();
     }
 
     /// <summary>

@@ -463,7 +463,7 @@ source/XeniaManager.BigScreen/
 - [ ] **T30.** Expand gallery sort with the desktop's full list: Title, Time Played, Compatibility, TitleId, MediaId, XeniaVersion, Last Played (alongside Newest/Oldest/By Game)
 
 ### 5.22 Screen animations
-- [ ] **T31.** Screen animations — subtle ~150–250ms Avalonia-native transitions on overlays, modals and dashboard swaps (see §7)
+- [x] **T31.** Dashboard reveal fade — header + card rows fade in (500ms) after launch; overlays/modals open instantly (no tweens outside the dashboard)
 
 ### 5.23 Input, animation & config follow-ups
 - [ ] **T32.** Gamepad hold-repeat (Core) — held buttons re-raise after a delay at a repeat rate
@@ -520,30 +520,30 @@ dotnet run --project source/XeniaManager.BigScreen/XeniaManager.BigScreen.csproj
 
 ## 7. Screen Animations
 
-> **Status:** Design intent only — the app should never open a static screen. Specifics to be narrowed down at implementation time.
+> **Status:** Implemented (dashboard reveal only). The app deliberately keeps **all animation outside the dashboard at zero** — overlays and modals open instantly; the only tweens are the dashboard art crossfade (T33) and the launch reveal below.
 
-### Goal
-- Every modal/screen opens and closes with **very basic, very subtle** motion — nothing static, nothing flashy.
-- Covers: overlay screens (Library / Gallery / Settings), the game modal + its panes (T8–T14), the screenshot viewer modal, and screen-to-screen swaps on the dashboard.
+### Delivered scope
+- **Dashboard reveal after launch:** the header (`HeaderRow`) and the dashboard elements (game cards row + option cards row) fade from 0 → full opacity over **500ms** (`TimingConstants.LaunchFadeDuration`). Started by `DashboardRevealRequested`, raised by `MainWindowViewModel.InitializeAsync` at the very end of the boot pipeline (after the final dwell) — the exact moment the FA splash closes, so the tween is visible from the first revealed frame (it previously ran behind the splash and was never seen).
+- **Nothing else animates:** overlays (Library/Gallery/Settings) and modals (game modal, viewer, confirmations, pickers) appear instantly — backdrops and content. No tweens tick in the background on rapid open/close.
 
 ### Hard constraints
 - **First-party animation code only** — either XAML `Transitions` / `DoubleTransition` / `ThicknessTransition` for declarative property changes, or the in-repo tween engine (`XeniaManager.Core.Tweening`) whenever an animation needs manual control (stop/start/resume, latest-wins, completion callbacks). No external animation libraries.
 - **Cheap:** UI-thread property tweens only, no layout thrash, no re-renders of heavy content; long lists/cards animate via the container, not per-item (except a gentle stagger if trivial).
-- **Subtle:** ~150–250ms, ease-in-out, one or two properties max (e.g. opacity 0→1 + 8–16px translate / 1.02 scale). No bouncing, no overshoot. The dashboard art crossfade is the one allowed exception (300ms legs).
+- **Subtle:** ease-in-out, one property max (opacity). The dashboard art crossfade is the one allowed exception (300ms legs). No bouncing, no overshoot.
 - Respect **reduced-motion** if cheap to add; never animate while a game is running (input already gated).
 
 ### Existing building blocks to reuse
 - `XeniaManager.Core.Tweening` — first-party tween engine: `Tween.To` / `Tween.Opacity` / `Tween.Custom` returning controllable `Tween` handles (`Stop` / `Start` / `Pause` / `Resume` / `Complete` / `OnComplete`); one shared per-frame loop via `TopLevel.RequestAnimationFrame`; starting a tween on the same target property supersedes the previous one (latest-wins). **Slated for extraction into its own package** — keep its dependencies to Avalonia.Base/System so the folder can be lifted into a standalone project as-is.
 - `TweenEngine.Instance.Attach(topLevel)` — called in `MainWindow` ctor; ticks once per rendered frame.
 - Dashboard artwork crossfade: `Image` layer above the static window background, `ArtOpacity` tweened by `DashboardViewModel` (Dynamic mode only, 300ms `SineEaseInOut` legs, no black frames).
+- Dashboard launch reveal: `DashboardView.BeginReveal()` + `MainWindow.StartDashboardReveal()` (header) — 500ms opacity fades driven by `DashboardRevealRequested`.
 - `DoubleTransition` on the splash `ProgressBar` value; `ThicknessTransition` on the quit-toggle thumb; `Transitions` on `Border`/`ContentControl`
 - Core `AnimationExtensions.AnimateOpacity(Window, from, to)` (ease-in-out) — window-level fades (legacy; prefer the tween engine for new code)
 
-### Candidate approaches (for the details pass)
-- Overlays: fade + slight up/scale on the overlay `Panel` / `ContentControl` when `IsVisible` flips
-- Game modal + its panes (T8–T14): same fade+translate on the modal/pane root; viewer: fade + zoom-out on close
-- Selection feedback: keep existing `IsSelected` styling; optional 100ms grow/shrink on the selected card
-- **Single cancellable fade instance (T33 — done):** the dashboard art fade is one held `Tween` handle that is stopped and replaced on every art swap; rapid passes fade the new artwork in from the static base (no black)
+### Explicitly not animated (user preference, deliberate)
+- Overlay opens/closes, modal pushes/pops, screenshot viewer — all instant.
+- Exit animations (fade-out on close) — would need pre-hide interception hooks; not wanted.
+- Reduced-motion — no accessibility setting exists in the app.
 
 ---
 

@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Controls.Cards;
 using XeniaManager.BigScreen.Controls.Profiles;
 using XeniaManager.BigScreen.Controls.Splash;
@@ -14,10 +15,12 @@ using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Shell;
+using XeniaManager.BigScreen.Views.Dashboard;
 using XeniaManager.BigScreen.Views.Screens;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
+using XeniaManager.Core.Tweening;
 
 namespace XeniaManager.BigScreen.Views.Shell;
 
@@ -26,6 +29,11 @@ public partial class MainWindow : FAAppWindow
     private readonly DashboardNavigationController _navigation;
     private readonly InputRouter _router;
     private readonly IGamepadInputService? _gamepadService;
+
+    /// <summary>
+    /// The in-flight header reveal fade; always completes to full opacity.
+    /// </summary>
+    private Tween _headerFade;
 
     public MainWindow()
     {
@@ -114,6 +122,7 @@ public partial class MainWindow : FAAppWindow
         {
             vm.QuitRequested += OnQuitRequested;
             vm.LibraryRefreshed += OnLibraryRefreshed;
+            vm.DashboardRevealRequested += StartDashboardReveal;
 
             // Push the gamepad state captured during construction (DataContext wasn't set yet)
             if (_gamepadService is { IsActive: true })
@@ -125,6 +134,7 @@ public partial class MainWindow : FAAppWindow
             if (vm.IsInitialized)
             {
                 InitializeDashboardSelection(vm);
+                Dispatcher.UIThread.Post(StartDashboardReveal);
             }
             else
             {
@@ -149,6 +159,19 @@ public partial class MainWindow : FAAppWindow
             // No games - the game row isn't available, start on the option row
             _navigation.SelectOptionRow(vm.Dashboard);
         }
+    }
+
+    /// <summary>
+    /// Fades the dashboard elements in (header + card rows) from 0 to full
+    /// opacity. Raised by the view model at the moment the splash is about to
+    /// close, so the tween is visible from the first revealed frame.
+    /// </summary>
+    private void StartDashboardReveal()
+    {
+        _headerFade.Stop();
+        HeaderRow.Opacity = 0;
+        _headerFade = Tween.Opacity(HeaderRow, 1, TimingConstants.LaunchFadeDuration);
+        Find<DashboardView>()?.BeginReveal();
     }
 
     /// <summary>

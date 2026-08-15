@@ -39,8 +39,10 @@
                     Background="{DynamicResource BackgroundVignette}" />
 
             <!-- TOP DASHBOARD HEADER: top inset 55 = the dashboard's bottom inset,
-                 so the frame is uniform on all sides -->
-            <Grid Grid.Row="0"
+                 so the frame is uniform on all sides; fades in with the dashboard
+                 elements after the splash reveal -->
+            <Grid x:Name="HeaderRow"
+                  Grid.Row="0"
                   Margin="150,55,150,0"
                   ColumnDefinitions="Auto, *, Auto"
                   VerticalAlignment="Top">

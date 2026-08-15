@@ -23,6 +23,12 @@ public static class TimingConstants
     public static readonly TimeSpan ArtFadeDuration = TimeSpan.FromMilliseconds(300);
 
     /// <summary>
+    /// Duration of the dashboard reveal after launch: the header and card
+    /// elements fade from 0 to full opacity.
+    /// </summary>
+    public static readonly TimeSpan LaunchFadeDuration = TimeSpan.FromMilliseconds(1000);
+
+    /// <summary>
     /// Minimum time each splash loading stage stays visible.
     /// </summary>
     public static readonly TimeSpan StageDwell = TimeSpan.FromMilliseconds(400);
