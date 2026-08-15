@@ -60,6 +60,8 @@
     <sys:String x:Key="Settings.Section.Preferences">Preferences</sys:String>
     <sys:String x:Key="Settings.Section.Theme">Theme</sys:String>
     <sys:String x:Key="Settings.Section.Controllers">Controllers</sys:String>
+    <sys:String x:Key="Settings.Section.XConfig">XConfig</sys:String>
+    <sys:String x:Key="Settings.XConfig.Resolution">Resolution</sys:String>
     <sys:String x:Key="Settings.ActiveProfile">Active Profile</sys:String>
     <sys:String x:Key="Settings.ManageProfiles">Manage Profiles</sys:String>
     <sys:String x:Key="Settings.BackgroundType">Background Type</sys:String>

@@ -17,5 +17,6 @@ public enum SettingsRowKind
     AccentColour,
     Vignette,
     BackgroundImage,
-    Gamepad
+    Gamepad,
+    XConfig
 }

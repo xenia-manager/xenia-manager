@@ -15,8 +15,11 @@ using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Modals;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.XConfig;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 
@@ -31,6 +34,11 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IBackgroundService _backgroundService;
     private readonly IProfileService _profileService;
     private readonly IGamepadInputService _gamepadService;
+
+    /// <summary>
+    /// The loaded Canary XConfig file (resolution card), or null when none exists.
+    /// </summary>
+    private XConfigFile? _xconfigFile;
 
     /// <summary>
     /// Every controller-navigable row in display order (fixed rows followed by
@@ -48,6 +56,7 @@ public partial class SettingsViewModel : ViewModelBase
     private Color _originalPrimary;
     private Color _originalAccent;
     private double _originalVignette;
+    private XConfigResolutionOption? _originalXConfigResolution;
 
     /// <summary>
     /// Raised after a persisted appearance option changed, so the dashboard can
@@ -159,6 +168,11 @@ public partial class SettingsViewModel : ViewModelBase
     public SettingsRowViewModel RowBackgroundImage { get; } = new(SettingsRowKind.BackgroundImage);
 
     /// <summary>
+    /// Row for the XConfig resolution card (bottom of the screen).
+    /// </summary>
+    public SettingsRowViewModel RowXConfig { get; } = new(SettingsRowKind.XConfig);
+
+    /// <summary>
     /// Options shown in the settings background-type dropdown, in enum order
     /// (the default leads).
     /// </summary>
@@ -189,6 +203,25 @@ public partial class SettingsViewModel : ViewModelBase
     public ObservableCollection<TimeFormatOption> TimeFormatOptions { get; } =
         BuildOptions<TimeFormat, TimeFormatOption>(
             "Settings.TimeFormat", (format, name) => new TimeFormatOption(format, name));
+
+    /// <summary>
+    /// Whether a Canary XConfig file exists (the resolution card shows only then).
+    /// </summary>
+    public bool HasXConfig => XConfigManager.XConfigExists(XeniaVersion.Canary);
+
+    /// <summary>
+    /// Options shown in the XConfig resolution dropdown (the "R" enum prefix
+    /// is stripped for display).
+    /// </summary>
+    public ObservableCollection<XConfigResolutionOption> XConfigResolutions { get; } =
+        new(Enum.GetValues<XConfigResolution>()
+            .Select(value => new XConfigResolutionOption(value, value.ToString().TrimStart('R'))));
+
+    /// <summary>
+    /// The selected option in the XConfig resolution dropdown.
+    /// </summary>
+    [ObservableProperty]
+    public partial XConfigResolutionOption? SelectedXConfigResolution { get; set; }
 
     /// <summary>
     /// The selected option in the background-type dropdown.
@@ -290,7 +323,8 @@ public partial class SettingsViewModel : ViewModelBase
         ActiveEditor is SettingsRowKind.LibraryView
             or SettingsRowKind.CardImage
             or SettingsRowKind.TimeFormat
-            or SettingsRowKind.BackgroundMode;
+            or SettingsRowKind.BackgroundMode
+            or SettingsRowKind.XConfig;
 
     public SettingsViewModel(IBackgroundService backgroundService, IProfileService profileService,
         IGamepadInputService gamepadService, IModalService modalService)
@@ -357,6 +391,12 @@ public partial class SettingsViewModel : ViewModelBase
         foreach (GamepadItemViewModel controller in Controllers)
         {
             _rows.Add(controller);
+        }
+
+        // Least-worthy row lives at the very bottom (hidden when no XConfig exists)
+        if (HasXConfig)
+        {
+            _rows.Add(RowXConfig);
         }
     }
 
@@ -472,6 +512,7 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.PrimaryColour:
             case SettingsRowKind.AccentColour:
             case SettingsRowKind.Vignette:
+            case SettingsRowKind.XConfig:
                 OpenEditor(kind);
                 break;
         }
@@ -550,7 +591,30 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.Vignette:
                 AdjustVignette(delta);
                 break;
+            case SettingsRowKind.XConfig:
+                CycleXConfigResolution(delta);
+                break;
         }
+    }
+
+    /// <summary>
+    /// Cycles the XConfig resolution option by the given step, wrapping at both ends.
+    /// </summary>
+    private void CycleXConfigResolution(int delta)
+    {
+        int count = XConfigResolutions.Count;
+        if (count == 0)
+        {
+            return;
+        }
+
+        int current = XConfigResolutions.IndexOf(SelectedXConfigResolution!);
+        if (current < 0)
+        {
+            current = 0;
+        }
+
+        SelectedXConfigResolution = XConfigResolutions[(current + delta + count) % count];
     }
 
     /// <summary>
@@ -581,6 +645,9 @@ public partial class SettingsViewModel : ViewModelBase
                 break;
             case SettingsRowKind.Vignette:
                 _originalVignette = VignetteOpacity;
+                break;
+            case SettingsRowKind.XConfig:
+                _originalXConfigResolution = SelectedXConfigResolution;
                 break;
         }
 
@@ -638,6 +705,9 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.Vignette:
                 VignetteOpacity = _originalVignette;
                 break;
+            case SettingsRowKind.XConfig:
+                SelectedXConfigResolution = _originalXConfigResolution;
+                break;
         }
     }
 
@@ -691,7 +761,37 @@ public partial class SettingsViewModel : ViewModelBase
         SelectedCardImageMode = CardImageModeOptions.FirstOrDefault(o => o.Mode == CardImageMode);
         TimeFormat = _backgroundService.Settings.TimeFormat;
         SelectedTimeFormat = TimeFormatOptions.FirstOrDefault(o => o.Format == TimeFormat);
+        LoadXConfig();
         RefreshControllers();
+    }
+
+    /// <summary>
+    /// Loads the Canary XConfig file and syncs the resolution dropdown to it.
+    /// </summary>
+    private void LoadXConfig()
+    {
+        OnPropertyChanged(nameof(HasXConfig));
+        if (!HasXConfig)
+        {
+            _xconfigFile = null;
+            return;
+        }
+
+        _xconfigFile = XConfigManager.LoadXConfig(XeniaVersion.Canary);
+        SelectedXConfigResolution =
+            XConfigResolutions.FirstOrDefault(r => r.Value == _xconfigFile?.AvHdmiScreenSize);
+    }
+
+    partial void OnSelectedXConfigResolutionChanged(XConfigResolutionOption? value)
+    {
+        if (value == null || _xconfigFile == null)
+        {
+            return;
+        }
+
+        _xconfigFile.AvHdmiScreenSize = value.Value;
+        XConfigManager.SaveXConfig(_xconfigFile, XeniaVersion.Canary);
+        Logger.Info<SettingsViewModel>($"XConfig resolution set to {value.Value}");
     }
 
     /// <summary>

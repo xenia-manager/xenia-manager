@@ -259,6 +259,27 @@
                     </StackPanel>
                 </Border>
 
+                <!-- XCONFIG (least-worthy section, bottom of the screen) -->
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.XConfig}"
+                           IsVisible="{Binding HasXConfig}" />
+
+                <!-- XCONFIG RESOLUTION -->
+                <Border x:Name="CardXConfig"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowXConfig.IsSelected}"
+                        IsVisible="{Binding HasXConfig}">
+                    <DockPanel>
+                        <ComboBox x:Name="XConfigResolutionCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding XConfigResolutions}"
+                                  SelectedItem="{Binding SelectedXConfigResolution}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.XConfig.Resolution}" />
+                    </DockPanel>
+                </Border>
+
             </StackPanel>
         </ScrollViewer>
 
