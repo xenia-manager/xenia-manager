@@ -156,7 +156,8 @@
                         <Border Classes="edit-field-row"
                                 Classes.selected="{Binding RowGamertag.IsSelected}">
                             <StackPanel Orientation="Vertical" Spacing="8">
-                                <TextBlock Classes="settings-label" Text="{DynamicResource ManageProfiles.Edit.Gamertag}" />
+                                <TextBlock Classes="settings-label"
+                                           Text="{DynamicResource ManageProfiles.Edit.Gamertag}" />
                                 <TextBox x:Name="TxtGamertag"
                                          Text="{Binding EditGamertag, Mode=TwoWay}"
                                          FontSize="20"

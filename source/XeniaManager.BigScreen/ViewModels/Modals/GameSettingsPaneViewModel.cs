@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
+using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Config;
@@ -17,50 +17,88 @@ using XeniaManager.Core.Utilities;
 namespace XeniaManager.BigScreen.ViewModels.Modals;
 
 /// <summary>
-/// The game modal's game settings pane: a full config editor (sections and
-/// five control types) saved back to the game's config file.
+/// The game modal's game settings pane: a curated list of primary config
+/// options (toggles, sliders and combo boxes) rendered as main-settings-style
+/// cards. Values commit straight to the game's config file - there is no
+/// save prompt, so no unsaved-changes state exists.
 /// </summary>
-public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, IDisposable
+public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
 {
+    /// <summary>
+    /// The curated options shown in the pane, in display order (section name,
+    /// option name). Only primary options - simple switches, dropdowns and
+    /// sliders - make the cut.
+    /// </summary>
+    private static readonly (string Section, string Option)[] CuratedOptions =
+    [
+        ("Display", "fullscreen"),
+        ("Display", "present_letterbox"),
+        ("APU", "apu"),
+        ("APU", "mute"),
+        ("APU", "enable_xmp"),
+        ("APU", "xma_decoder"),
+        ("GPU", "gpu"),
+        ("GPU", "async_shader_compilation"),
+        ("GPU", "vsync"),
+        ("GPU", "draw_resolution_scale_x"),
+        ("GPU", "draw_resolution_scale_y"),
+        ("General", "apply_patches"),
+        ("General", "controller_hotkeys"),
+        ("General", "discord"),
+        ("HID", "vibration"),
+        ("HID", "left_stick_deadzone_percentage"),
+        ("HID", "right_stick_deadzone_percentage"),
+        ("UI", "show_achievement_notification")
+    ];
+
     private readonly Game _game;
-    private ConfigFile _configFile;
     private readonly string _configFilePath;
     private readonly IModalService _modalService;
-    private readonly List<ConfigOptionViewModel> _navigableOptions = [];
+    private ConfigFile _configFile;
 
     /// <summary>
-    /// The config sections shown in the pane.
+    /// The row whose editor (dropdown or slider) is open, or null when the
+    /// rows navigate normally.
     /// </summary>
-    public ObservableCollection<ConfigSectionViewModel> Sections { get; } = [];
+    private ConfigRowViewModel? _editorRow;
 
     /// <summary>
-    /// The flattened display list for the virtualized view: each visible
-    /// section header followed by its visible options. Only realized rows are
-    /// instantiated, so opening the pane stays instant.
+    /// The curated config rows shown in the pane.
     /// </summary>
-    public ObservableCollection<object> Items { get; } = [];
+    public ObservableCollection<ConfigRowViewModel> Rows { get; } = [];
 
     /// <summary>
-    /// Whether any option has unsaved changes.
+    /// Whether any row has unsaved changes (drives the exit confirmation).
     /// </summary>
     [ObservableProperty]
     public partial bool HasUnsavedChanges { get; set; }
 
     /// <summary>
-    /// Raised when the controller navigates to an option, so the view can
-    /// scroll it into view and focus its control.
-    /// </summary>
-    public event Action<ConfigOptionViewModel>? FocusOptionRequested;
-
-    /// <summary>
-    /// Raised after unsaved changes were saved or discarded, so the dialog
-    /// closes the pane.
+    /// Raised after unsaved changes were saved or discarded, so the modal
+    /// returns to the options list.
     /// </summary>
     public event Action? ExitRequested;
 
     /// <summary>
+    /// Raised when a row's editor opens, so the view can open/focus the
+    /// matching native control.
+    /// </summary>
+    public event Action<ConfigRowViewModel>? EditorOpened;
+
+    /// <summary>
+    /// Raised when a row's editor closes (commit or cancel), so the view can
+    /// close the native control.
+    /// </summary>
+    public event Action? EditorClosed;
+
+    /// <summary>
+    /// Raised after the selection moved, so the view can scroll the row into view.
+    /// </summary>
+    public event Action<ConfigRowViewModel>? RowSelectionChanged;
+
+    /// <summary>
     /// Loads the game's config file (from the boot preload cache) and builds
-    /// the sections from the shared UI definition.
+    /// the curated rows.
     /// </summary>
     public GameSettingsPaneViewModel(Game game)
     {
@@ -68,208 +106,66 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
         _modalService = App.Services.GetRequiredService<IModalService>();
         _configFilePath = AppPathResolver.GetFullPath(game.FileLocations.Config);
         _configFile = GameDataCache.GetConfig(game);
-        LoadSections();
-
-        // Two-way bindings push control values into the option VMs while the
-        // view attaches (clamping, snapping, control defaults). None of that is
-        // a user edit - re-mark everything saved once the initial layout has
-        // settled so a freshly opened pane never prompts about phantom changes.
-        _ = Dispatcher.UIThread.InvokeAsync(MarkAllAsSaved, DispatcherPriority.Background);
+        RebuildRows();
     }
 
     /// <summary>
-    /// Marks every section and option as saved (clears the phantom dirty flags
-    /// caused by control binding attach).
+    /// Rebuilds the curated rows from the shared UI definitions, wiring each
+    /// row's value changes to the unsaved-changes tracking.
     /// </summary>
-    private void MarkAllAsSaved()
+    private void RebuildRows()
     {
-        foreach (ConfigSectionViewModel section in Sections)
+        foreach (ConfigRowViewModel row in Rows)
         {
-            section.MarkAsSaved();
+            row.ValueChanged -= OnRowValueChanged;
         }
 
-        HasUnsavedChanges = false;
-    }
-
-    /// <summary>
-    /// Handles pane input: Up/Down moves through the visible options, A focuses
-    /// the selected option's control, X saves and Back leaves (confirming when
-    /// there are unsaved changes).
-    /// </summary>
-    public bool HandleInput(NavigationCommand command)
-    {
-        switch (command)
+        Rows.Clear();
+        string? lastSection = null;
+        foreach ((string sectionName, string optionName) in CuratedOptions)
         {
-            case NavigationCommand.MoveUp:
-                MoveSelection(-1);
-                return true;
-            case NavigationCommand.MoveDown:
-                MoveSelection(1);
-                return true;
-            case NavigationCommand.Activate:
-                FocusSelectedOption();
-                return true;
-            case NavigationCommand.CycleSort:
-                SaveChanges();
-                return true;
-            case NavigationCommand.Back:
-                return HasUnsavedChanges ? ConfirmExitAsync() : false;
-            default:
-                return false;
-        }
-    }
-
-    /// <summary>
-    /// Selects the first visible option when the pane becomes active.
-    /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(_navigableOptions, 0);
-    }
-
-    /// <summary>
-    /// Clears the option selection when the pane loses focus.
-    /// </summary>
-    public void OnPaneExited()
-    {
-        foreach (ConfigOptionViewModel option in _navigableOptions)
-        {
-            option.IsSelected = false;
-        }
-    }
-
-    /// <summary>
-    /// Moves the option selection by the given step, clamped at both ends.
-    /// </summary>
-    private void MoveSelection(int delta)
-    {
-        if (_navigableOptions.Count == 0)
-        {
-            return;
-        }
-
-        int index = _navigableOptions.FindIndex(o => o.IsSelected);
-        if (index < 0)
-        {
-            _navigableOptions[0].IsSelected = true;
-            return;
-        }
-
-        int target = Math.Clamp(index + delta, 0, _navigableOptions.Count - 1);
-        if (target != index)
-        {
-            _navigableOptions[index].IsSelected = false;
-            _navigableOptions[target].IsSelected = true;
-        }
-    }
-
-    /// <summary>
-    /// Asks the view to scroll the selected option into view and focus it.
-    /// </summary>
-    private void FocusSelectedOption()
-    {
-        ConfigOptionViewModel? option = _navigableOptions.FirstOrDefault(o => o.IsSelected);
-        if (option != null)
-        {
-            FocusOptionRequested?.Invoke(option);
-        }
-    }
-
-    /// <summary>
-    /// Loads the visible sections from the UI definition, skipping sections
-    /// missing from the config file.
-    /// </summary>
-    private void LoadSections()
-    {
-        HasUnsavedChanges = false;
-        Sections.Clear();
-
-        foreach (ConfigSectionDefinition sectionDef in ConfigUiSettings.AllSettings.Sections)
-        {
-            if (!sectionDef.IsVisible)
+            ConfigSectionDefinition? sectionDef =
+                ConfigUiSettings.AllSettings.Sections.FirstOrDefault(s => s.SectionName == sectionName);
+            ConfigOptionDefinition? optionDef =
+                sectionDef?.Options.FirstOrDefault(o => o.OptionName == optionName);
+            ConfigOption? option = _configFile.GetSection(sectionName)?.GetOption(optionName);
+            if (option == null || optionDef == null)
             {
+                Logger.Warning<GameSettingsPaneViewModel>(
+                    $"Skipping '{sectionName}.{optionName}': option or definition missing");
                 continue;
             }
 
-            ConfigSection? section = _configFile.GetSection(sectionDef.SectionName);
-            if (section == null)
-            {
-                continue;
-            }
-
-            ConfigSectionViewModel sectionVm = new ConfigSectionViewModel(section, sectionDef);
-            sectionVm.PropertyChanged += SectionViewModel_PropertyChanged;
-            Sections.Add(sectionVm);
+            string? sectionTitle = lastSection != sectionName ? sectionDef?.DisplayName ?? sectionName : null;
+            lastSection = sectionName;
+            ConfigRowViewModel row = new(option, optionDef, optionDef.DisplayName ?? option.Name, sectionTitle);
+            row.ValueChanged += OnRowValueChanged;
+            Rows.Add(row);
         }
 
-        RebuildNavigableOptions();
-        Logger.Debug<GameSettingsPaneViewModel>($"Loaded {Sections.Count} config sections");
+        HasUnsavedChanges = false;
+        Logger.Info<GameSettingsPaneViewModel>($"Game settings pane: {Rows.Count} curated rows for '{_game.Title}'");
     }
 
     /// <summary>
-    /// Rebuilds the flat list of visible options used by the controller navigation.
+    /// Recomputes the unsaved-changes flag after a row's value changed.
     /// </summary>
-    private void RebuildNavigableOptions()
+    private void OnRowValueChanged()
     {
-        foreach (ConfigOptionViewModel option in _navigableOptions)
-        {
-            option.IsSelected = false;
-        }
-
-        _navigableOptions.Clear();
-        foreach (ConfigSectionViewModel section in Sections.Where(s => s.IsVisible))
-        {
-            _navigableOptions.AddRange(section.Options.Where(o => o.IsVisible));
-        }
-
-        RebuildItems();
+        HasUnsavedChanges = Rows.Any(row => row.IsDirty);
     }
 
     /// <summary>
-    /// Rebuilds the flattened display list (section headers + options) for the
-    /// virtualized view.
+    /// Writes the current values to the config file and marks every row saved.
     /// </summary>
-    private void RebuildItems()
-    {
-        Items.Clear();
-        foreach (ConfigSectionViewModel section in Sections.Where(s => s.IsVisible))
-        {
-            Items.Add(section);
-            foreach (ConfigOptionViewModel option in section.Options.Where(o => o.IsVisible))
-            {
-                Items.Add(option);
-            }
-        }
-    }
-
-    private void SectionViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ConfigSectionViewModel.HasUnsavedChanges))
-        {
-            HasUnsavedChanges = Sections.Any(s => s.HasUnsavedChanges);
-        }
-        else if (e.PropertyName == nameof(ConfigSectionViewModel.IsVisible))
-        {
-            RebuildNavigableOptions();
-        }
-    }
-
-    /// <summary>
-    /// Applies every section's changes and saves the config file.
-    /// </summary>
-    public void SaveChanges()
+    private void SaveChanges()
     {
         try
         {
-            foreach (ConfigSectionViewModel sectionVm in Sections)
-            {
-                sectionVm.ApplyChanges();
-            }
-
             _configFile.Save(_configFilePath);
-            foreach (ConfigSectionViewModel sectionVm in Sections)
+            foreach (ConfigRowViewModel row in Rows)
             {
-                sectionVm.MarkAsSaved();
+                row.MarkAsSaved();
             }
 
             HasUnsavedChanges = false;
@@ -283,16 +179,32 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
     }
 
     /// <summary>
-    /// Confirms saving or discarding the unsaved changes; after the choice the
-    /// pane raises <see cref="ExitRequested"/> so the dialog closes it.
+    /// Re-reads the config file from disk (updating the cache) and rebuilds
+    /// the rows, discarding the unsaved changes.
     /// </summary>
-    private bool ConfirmExitAsync()
+    private void ReloadFromDisk()
+    {
+        foreach (ConfigRowViewModel row in Rows)
+        {
+            row.ValueChanged -= OnRowValueChanged;
+        }
+
+        _configFile = GameDataCache.ReloadConfig(_game);
+        RebuildRows();
+    }
+
+    /// <summary>
+    /// Prompts to save or discard the unsaved changes; after the choice the
+    /// pane raises <see cref="ExitRequested"/> so the modal returns to the
+    /// options list. A cancelled prompt (B) keeps the pane open.
+    /// </summary>
+    private void ConfirmExitAsync()
     {
         TaskUtilities.RunSafely<GameSettingsPaneViewModel>(async () =>
         {
             bool? choice = await _modalService.ShowAsync<bool?>(new ConfirmationModalViewModel(
                 LocalizationHelper.GetText("GameModal.Settings.Unsaved.Title"),
-                string.Format(LocalizationHelper.GetText("GameModal.Settings.Unsaved.Message"), _configFilePath),
+                string.Format(LocalizationHelper.GetText("GameModal.Settings.Unsaved.Message"), _game.Title),
                 LocalizationHelper.GetText("GameModal.Settings.Unsaved.Save"),
                 LocalizationHelper.GetText("GameModal.Settings.Unsaved.Discard")));
             if (choice == null)
@@ -311,32 +223,224 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane, 
 
             ExitRequested?.Invoke();
         }, "Confirming unsaved config changes");
-
-        return true;
     }
 
     /// <summary>
-    /// Re-reads the config file from disk (updating the cache) and rebuilds the
-    /// sections, discarding the unsaved changes.
+    /// Handles pane input: Up/Down moves the rows, A activates the selected
+    /// row (toggle flip, editor open). While an editor is open it takes the
+    /// input instead: combo boxes cycle with Up/Down, sliders step with
+    /// Left/Right, A commits and B cancels.
     /// </summary>
-    private void ReloadFromDisk()
+    public bool HandleInput(NavigationCommand command)
     {
-        Dispose();
-        _configFile = GameDataCache.ReloadConfig(_game);
-        LoadSections();
-    }
-
-    /// <summary>
-    /// Disposes the section view models.
-    /// </summary>
-    public void Dispose()
-    {
-        foreach (ConfigSectionViewModel sectionVm in Sections)
+        if (_editorRow != null)
         {
-            sectionVm.PropertyChanged -= SectionViewModel_PropertyChanged;
-            sectionVm.Dispose();
+            return HandleEditorInput(command);
         }
 
-        Sections.Clear();
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                MoveSelection(-1);
+                return true;
+            case NavigationCommand.MoveDown:
+                MoveSelection(1);
+                return true;
+            case NavigationCommand.Activate:
+                ActivateSelectedRow();
+                return true;
+            case NavigationCommand.CycleSort:
+                // X saves the unsaved changes
+                SaveChanges();
+                return true;
+            case NavigationCommand.Back:
+                if (HasUnsavedChanges)
+                {
+                    ConfirmExitAsync();
+                    return true;
+                }
+
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Activates the selected row: flips a toggle, or opens the editor for
+    /// combo boxes and sliders.
+    /// </summary>
+    private void ActivateSelectedRow()
+    {
+        ConfigRowViewModel? row = Rows.FirstOrDefault(r => r.IsSelected);
+        if (row == null)
+        {
+            return;
+        }
+
+        if (row.IsToggle)
+        {
+            row.BoolValue = !row.BoolValue;
+            return;
+        }
+
+        if (row.IsComboBox || row.IsSlider)
+        {
+            OpenEditor(row);
+        }
+    }
+
+    /// <summary>
+    /// Handles input while a row editor is open: combo boxes cycle with
+    /// Up/Down, sliders step with Left/Right, A commits and B cancels
+    /// (restoring the original value).
+    /// </summary>
+    private bool HandleEditorInput(NavigationCommand command)
+    {
+        ConfigRowViewModel? row = _editorRow;
+        if (row == null)
+        {
+            return false;
+        }
+
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                if (row.IsComboBox)
+                {
+                    CycleCombo(row, -1);
+                }
+
+                return true;
+            case NavigationCommand.MoveDown:
+                if (row.IsComboBox)
+                {
+                    CycleCombo(row, 1);
+                }
+
+                return true;
+            case NavigationCommand.MoveLeft:
+                if (row.IsSlider)
+                {
+                    StepSlider(row, -1);
+                }
+
+                return true;
+            case NavigationCommand.MoveRight:
+                if (row.IsSlider)
+                {
+                    StepSlider(row, 1);
+                }
+
+                return true;
+            case NavigationCommand.Activate:
+                CommitEditor();
+                return true;
+            case NavigationCommand.Back:
+                CancelEditor();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Opens the editor for the given row, snapshotting its value so a cancel
+    /// can restore it.
+    /// </summary>
+    private void OpenEditor(ConfigRowViewModel row)
+    {
+        row.StartEdit();
+        _editorRow = row;
+        EditorOpened?.Invoke(row);
+        Logger.Debug<GameSettingsPaneViewModel>($"Opened editor for '{row.Label}'");
+    }
+
+    /// <summary>
+    /// Commits the open editor: closes it, keeping the edited value (the save
+    /// happens on X or the exit confirmation).
+    /// </summary>
+    private void CommitEditor()
+    {
+        ConfigRowViewModel? row = _editorRow;
+        CloseEditor();
+        Logger.Debug<GameSettingsPaneViewModel>($"Committed editor for '{row?.Label}'");
+    }
+
+    /// <summary>
+    /// Restores the open editor's original value and closes it.
+    /// </summary>
+    private void CancelEditor()
+    {
+        ConfigRowViewModel? row = _editorRow;
+        CloseEditor();
+        row?.CancelEdit();
+        Logger.Debug<GameSettingsPaneViewModel>($"Cancelled editor for '{row?.Label}'");
+    }
+
+    /// <summary>
+    /// Closes the editor and notifies the view to close the native control.
+    /// </summary>
+    private void CloseEditor()
+    {
+        _editorRow = null;
+        EditorClosed?.Invoke();
+    }
+
+    /// <summary>
+    /// Cycles the open combo editor's selection by the given step, wrapping at
+    /// both ends.
+    /// </summary>
+    private static void CycleCombo(ConfigRowViewModel row, int delta)
+    {
+        int count = row.ComboBoxOptions?.Count ?? 0;
+        if (count == 0)
+        {
+            return;
+        }
+
+        int current = row.SelectedIndex < 0 ? 0 : row.SelectedIndex;
+        row.SelectedIndex = (current + delta + count) % count;
+    }
+
+    /// <summary>
+    /// Steps the open slider editor by one increment, clamped to its range.
+    /// </summary>
+    private static void StepSlider(ConfigRowViewModel row, int delta)
+    {
+        double step = row.Step ?? 1;
+        double min = row.Minimum ?? double.MinValue;
+        double max = row.Maximum ?? double.MaxValue;
+        row.FloatValue = Math.Clamp(row.FloatValue + delta * step, min, max);
+    }
+
+    /// <summary>
+    /// Moves the row selection by the given step, clamped at both ends. Rows
+    /// start unselected - the first move selects the first row.
+    /// </summary>
+    private void MoveSelection(int delta)
+    {
+        int index = SelectionHelper.MoveSelection(Rows, delta);
+        if (index >= 0)
+        {
+            RowSelectionChanged?.Invoke(Rows[index]);
+        }
+    }
+
+    /// <summary>
+    /// Selects the first row when the pane becomes active.
+    /// </summary>
+    public void OnPaneEntered()
+    {
+        SelectionHelper.SelectOnlyAt(Rows, 0);
+    }
+
+    /// <summary>
+    /// Clears the row selection when the pane loses focus.
+    /// </summary>
+    public void OnPaneExited()
+    {
+        CloseEditor();
+        SelectionHelper.ClearSelection(Rows);
     }
 }

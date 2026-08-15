@@ -242,6 +242,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// </summary>
     [ObservableProperty]
     public partial bool HasStatus { get; set; }
+
     /// <summary>
     /// The status line text (create/save/import/export feedback).
     /// </summary>

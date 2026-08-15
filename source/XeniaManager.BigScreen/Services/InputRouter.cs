@@ -271,7 +271,8 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     /// (top modal), an overlay screen, or the dashboard. The source only matters
     /// for the settings screen, where keyboard and gamepad diverge.
     /// </summary>
-    private void Dispatch(MainWindowViewModel vm, NavigationCommand command, GameCardViewModel? gameCard, bool fromGamepad)
+    private void Dispatch(MainWindowViewModel vm, NavigationCommand command, GameCardViewModel? gameCard,
+        bool fromGamepad)
     {
         if (modalService.Top is { } modal)
         {

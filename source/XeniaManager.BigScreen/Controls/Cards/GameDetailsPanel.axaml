@@ -34,7 +34,8 @@
                                    VerticalAlignment="Center"
                                    Foreground="{DynamicResource TextPrimary}">
                     <ToolTip.Tip>
-                        <TextBlock Text="{Binding Card.Game.XeniaVersion, Converter={x:Static coreconv:XeniaVersionToStringConverter.Instance}}" />
+                        <TextBlock
+                            Text="{Binding Card.Game.XeniaVersion, Converter={x:Static coreconv:XeniaVersionToStringConverter.Instance}}" />
                     </ToolTip.Tip>
                 </fluent:SymbolIcon>
             </Grid>
@@ -119,9 +120,10 @@
                                 Spacing="12"
                                 VerticalAlignment="Center"
                                 ToolTip.Tip="{Binding Card.Game.Compatibility.Url}">
-                        <TextBlock Text="{Binding Card.Game.Compatibility.Rating, Converter={x:Static coreconv:CompatibilityRatingToStringConverter.Instance}}"
-                                   FontSize="20"
-                                   Foreground="{DynamicResource TextPrimary}" />
+                        <TextBlock
+                            Text="{Binding Card.Game.Compatibility.Rating, Converter={x:Static coreconv:CompatibilityRatingToStringConverter.Instance}}"
+                            FontSize="20"
+                            Foreground="{DynamicResource TextPrimary}" />
                         <Ellipse Width="16"
                                  Height="16"
                                  VerticalAlignment="Center"

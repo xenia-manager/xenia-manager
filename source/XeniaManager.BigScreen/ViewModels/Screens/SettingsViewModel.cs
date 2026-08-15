@@ -50,6 +50,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// Value snapshots taken when a row editor opens, restored on cancel.
     /// </summary>
     private BackgroundMode _originalMode;
+
     private LibraryViewMode _originalLibraryView;
     private CardImageMode _originalCardImage;
     private TimeFormat _originalTimeFormat;

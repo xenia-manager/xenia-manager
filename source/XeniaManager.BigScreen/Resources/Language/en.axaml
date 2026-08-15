@@ -175,6 +175,7 @@
     <sys:String x:Key="GameModal.Hint.Toggle">Toggle</sys:String>
     <sys:String x:Key="GameModal.Hint.Edit">Edit</sys:String>
     <sys:String x:Key="GameModal.Hint.Download">Download</sys:String>
+    <sys:String x:Key="GameModal.Hint.Save">Save</sys:String>
 
     <!-- game modal achievements pane -->
     <sys:String x:Key="GameModal.Achievements.Sort.GamerscoreAwarded">Gamerscore Awarded</sys:String>
@@ -223,12 +224,9 @@
     <!-- game modal game settings pane -->
     <sys:String x:Key="GameModal.Settings.Title">Game Settings</sys:String>
     <sys:String x:Key="GameModal.Settings.Unsaved.Title">Unsaved Changes</sys:String>
-    <sys:String x:Key="GameModal.Settings.Unsaved.Message">Save changes to '{0}'?</sys:String>
+    <sys:String x:Key="GameModal.Settings.Unsaved.Message">Save changes to {0} Settings?</sys:String>
     <sys:String x:Key="GameModal.Settings.Unsaved.Save">Save</sys:String>
     <sys:String x:Key="GameModal.Settings.Unsaved.Discard">Discard</sys:String>
-
-    <!-- game modal hints -->
-    <sys:String x:Key="GameModal.Hint.Save">Save</sys:String>
 
     <!-- Disc selection modal -->
     <sys:String x:Key="DiscSelection.Header">Disc Selection</sys:String>

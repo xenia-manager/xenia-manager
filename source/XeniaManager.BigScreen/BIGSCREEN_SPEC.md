@@ -95,7 +95,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
   - **Screenshots** — the game's own folder (`{EmulatorDir}/screenshots/{GAMEID}`) as a 4-across grid; **Canary games reuse the boot-time gallery cache** (already decoded — no re-scan), other versions scan off-thread with a loading state; Left/Back return to the nav list; A opens the shared screenshot viewer modal.
   - **Title Updates / Marketplace Content** — one shared pane initialised per menu entry (single type — no switching), rows with display name + file name, A deletes (confirmation modal, package + `.header` removed), empty state; A is blocked when nothing is installed.
   - **Patches** — installed patch entries (A toggles enabled, instant save), Right opens the command editor (per-type validated Type/Address/Value fields, add/delete commands), pinned Remove action (confirmation); "Download New Patch" opens the download modal (X shortcut removed — the row is the only path).
-  - **Game Settings** — full config editor port: sections from `ConfigUiSettings.AllSettings` (335 keys now in `en.axaml`), all five control types via `ConfigOptionRow` (toggle/slider/numberbox/combobox/textbox), controller row navigation (A focuses the editor control), X saves, unsaved-changes prompt on exit (Save/Discard/Cancel). **Virtualized**: a single `ListBox` over a flattened `Items` list (section headers + option rows) so only visible rows instantiate — the pane opens instantly; the config file itself loads lazily from `GameDataCache` on first open (never at boot). A **settle pass** (`MarkAllAsSaved` on a background-priority post) plus compare-first value guards mean a fresh pane never prompts about phantom changes.
+  - **Game Settings** — **minimised set of primary controller-friendly options**: 18 curated rows (toggles/sliders/dropdowns only) as main-settings-style cards (label + control, accent selection, section headers). Full config editing stays in the main app — 335 options with controller-friendly controls caused a performance spike. **Manual save**: X writes the config, edits only mark the pane dirty; exiting with unsaved changes prompts **Save / Discard / Cancel** (game title in the message). Controller: Up/Down rows, A flips toggles / opens dropdown+slider editors, Up/Down cycles combos, Left/Right steps sliders, A closes the editor, B restores. Curated sections: Display (fullscreen, letterbox) · Audio (audio system, mute, XMP, XMA decoder) · GPU (backend, async shader compilation, vsync, resolution scale X/Y) · General (apply patches, controller hotkeys, discord) · HID (vibration, stick deadzones) · UI (achievement notifications).
 - **Hint bars** — the game modal's hint bar is fully dynamic: B = Back always, A = `AHintText` per column (Select nav / Select achievements / View screenshots / Delete content / Toggle patches / Edit settings), X = `XHintText` where a pane has an X action (Sort achievements / Save settings). The patch download modal shows B Back · A Download.
 - **Patch download modal** (`PatchDownloadViewModel`/`PatchDownloadView`) — dedicated modal: search prefilled with the game ID, generation-guarded Canary/Netplay results with source badges, A/Tap downloads (`PatchManager.DownloadPatchAsync`) and closes on success; visible Searching… / No patches found / failure status. The patches pane refreshes the patch cache and reloads its list when it closes.
 - **Screenshot viewer modal** (`ScreenshotViewerViewModel`/`ScreenshotViewerView`, in `Views/Modals/`) — the full-window viewer (uniform-stretched image, faded chevrons that hide at the ends, caption with game title + capture date) now lives on the modal stack and is opened from **both** the gallery and the game modal's screenshots pane. It is the **only modal that ignores the modal backdrop layer** — `ModalBackdropVisible` (top modal is not the viewer) hides the 30% scrim so its own opaque `ViewerBackdrop` renders exactly as before. Left/Right steps, B closes.
@@ -140,7 +140,7 @@ source/XeniaManager.BigScreen/
 │       ├── GameScreenshotsPaneView.axaml(.cs) # Per-game screenshot grid pane
 │       ├── InstalledContentPaneView.axaml(.cs) # Title Updates / Marketplace rows + delete
 │       ├── PatchesPaneView.axaml(.cs) # Patches pane (entries + command editor + remove)
-│       ├── GameSettingsPaneView.axaml(.cs)    # Config editor pane (sections + five control types)
+│       ├── GameSettingsPaneView.axaml(.cs)    # Curated config pane (main-settings-style cards, inline template)
 │       ├── PatchDownloadView.axaml(.cs)       # Patch download modal (search + results + status)
 │       ├── ScreenshotViewerView.axaml(.cs)    # Full-window screenshot viewer modal (chevrons, caption)
 │       ├── DiscSelectionView.axaml(.cs) # Disc selection modal (compact card: game header + disc cards)
@@ -166,8 +166,7 @@ source/XeniaManager.BigScreen/
 │   │   ├── InstalledContentPaneViewModel.cs # Title Updates / Marketplace rows + confirmed delete
 │   │   ├── PatchesPaneViewModel.cs   # Patch entries (toggle/edit/remove), commands mode + editor
 │   │   ├── PatchDownloadViewModel.cs # Download modal: search (generation guard), results, status, download-on-activate
-│   │   ├── GameSettingsPaneViewModel.cs # Config editor: sections, controller nav, save/discard + exit prompt
-│   │   ├── ConfigOptionViewModel.cs / ConfigSectionViewModel.cs # Config editor ports (+ ComboBoxOptionViewModel, IsSelected for nav)
+│   │   ├── GameSettingsPaneViewModel.cs # Curated config rows: dirty tracking, X saves, Save/Discard/Cancel on exit
 │   │   ├── ScreenshotViewerViewModel.cs # Full-window viewer modal (step, caption); no modal backdrop
 │   │   ├── DiscSelectionViewModel.cs # Disc selection modal (typed int? result; skip-missing navigation)
 │   │   ├── ConfirmationModalViewModel.cs # Reusable 2-option prompt (Left/Right + A, B cancels → null; true/false/null result)
@@ -182,6 +181,7 @@ source/XeniaManager.BigScreen/
 │       ├── GameActionItemViewModel.cs # Game modal option row: Title, Icon, GameModalPane, IsSelected
 │       ├── AchievementItemViewModel.cs # Achievement row: name/description/gamerscore/date, image only when unlocked; spoiler gating (secret + locked → Hidden Achievement, warning tagline, no score)
 │       ├── ContentItemViewModel.cs    # Installed content row: HeaderFile + reconstructed delete path
+│       ├── ConfigRowViewModel.cs      # Curated config row: label/section header, control type, dirty tracking + edit restore (+ ComboBoxOptionViewModel)
 │       ├── PatchCommandItemViewModel.cs / PatchEntryItemViewModel.cs # Patch editor ports (validated values, ToPatchEntry/ToPatchCommand)
 │       ├── PatchDownloadItemViewModel.cs # Download result: name + Canary/Netplay source badge
 │       ├── PatchListRowViewModel.cs   # Patches list row: patch entry or download/remove action (+ PatchActionType enum)
@@ -211,7 +211,6 @@ source/XeniaManager.BigScreen/
 │   │   └── CreateProfileRow.axaml(.cs) # "+ Create New Profile" row (anchored beneath the list)
 │   ├── Settings/
 │   │   ├── GamepadCard.axaml(.cs)     # Settings controller row: name, status text, battery icon + % (accent on hover/select)
-│   │   ├── ConfigOptionRow.axaml(.cs) # Config option row: label/comment + editor (toggle/slider/numberbox/combo/textbox)
 │   │   ├── ColorPickerField.cs        # Swatch + hex + palette popup
 │   │   └── PalettePicker.cs           # Swatch row
 │   ├── Primitives/
@@ -438,7 +437,7 @@ source/XeniaManager.BigScreen/
 - [x] **T11.** Marketplace Content pane — same shared pane initialised per menu entry (`MarketplaceContentHeaderFiles`)
 - [x] **T12.** Screenshots pane — per-game gallery from `screenshots/<GAMEID_UPPER>`, reusing `ScreenshotCard`; A opens the shared screenshot viewer modal
 - [x] **T13.** Patches pane — entries enable/disable (instant save), command editor (Type/Address/Value with per-type validation, add/delete), Remove with confirmation; **download moved to its own modal** (search prefilled with game ID, Canary/Netplay results, status states)
-- [x] **T14.** Game Settings pane — config editor port (`ConfigUiSettings.AllSettings` + 335 localisation keys, five control types via `ConfigOptionRow`), controller row navigation, X saves, unsaved-changes prompt on exit
+- [x] **T14.** Game Settings pane — **minimised set of primary controller-friendly options**: 18 curated rows (toggles, sliders, dropdowns only) as main-settings-style `settings-card settings-row` cards (single inline `ItemTemplate`, section headers). **The full config editor stays in the main app** — instantiating 335 options with controller-friendly user controls caused a big performance spike, so only the primary options ship here. **Manual save** (X writes the config file; edits only mark the pane dirty) with a **Save / Discard / Cancel confirmation** on exit (game title in the prompt) — the Manage Profiles pattern. Controller: Up/Down rows, A flips toggles / opens dropdown+slider editors, Up/Down cycles combos, Left/Right steps sliders, A closes the editor, B restores. Curated sections: Display (fullscreen, letterbox) · Audio (audio system, mute, XMP, XMA decoder) · GPU (backend, async shader compilation, vsync, resolution scale X/Y) · General (apply patches, controller hotkeys, discord) · HID (vibration, stick deadzones) · UI (achievement notifications). The old full editor (`ConfigUiSettings` 335 keys, `ConfigOptionRow`, `ConfigOptionViewModel`/`ConfigSectionViewModel`, virtualized mixed `ListBox`) was deleted — it never rendered.
 - [x] **T15.** Disc selection modal on launch — when `IsMultiDisc`: compact centered card (game icon + name header, "Disc Selection" line), one `DiscOptionCard` per disc (custom label or "Disc N", filled disc icon, "Last Played"/"File Missing" status; missing files dimmed and skipped by navigation), A/click launches the selected disc, B cancels; selection starts on the last played disc (first valid fallback)
 
 ### 5.19 Dashboard, header & settings

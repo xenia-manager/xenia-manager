@@ -396,16 +396,6 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>
 
-    <!-- CONFIG OPTION ROW (game modal game settings) -->
-    <Style Selector="set|ConfigOptionRow Border#RowBorder">
-        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
-    </Style>
-
-    <Style
-        Selector="set|ConfigOptionRow:pointerover Border#RowBorder, set|ConfigOptionRow:focus-visible Border#RowBorder, set|ConfigOptionRow.selected Border#RowBorder">
-        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-    </Style>
-
     <!-- SCREENSHOT CARD (gallery) -->
     <Style Selector="card|ScreenshotCard">
         <Setter Property="Transitions">

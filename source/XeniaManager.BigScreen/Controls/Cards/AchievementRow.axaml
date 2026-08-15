@@ -2,13 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="120"
-             x:Class="XeniaManager.BigScreen.Controls.Cards.AchievementRow"
-             x:DataType="vm:AchievementItemViewModel"
-             Classes.selected="{Binding IsSelected}"
-             Classes.locked="{Binding !IsUnlocked}">
+        xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="120"
+        x:Class="XeniaManager.BigScreen.Controls.Cards.AchievementRow"
+        x:DataType="vm:AchievementItemViewModel"
+        Classes.selected="{Binding IsSelected}"
+        Classes.locked="{Binding !IsUnlocked}">
     <Button.Template>
         <ControlTemplate TargetType="Button">
             <Border x:Name="RowBorder"

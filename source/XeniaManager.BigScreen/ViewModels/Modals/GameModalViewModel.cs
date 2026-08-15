@@ -74,8 +74,8 @@ public partial class GameModalViewModel : ModalViewModelBase
     private readonly List<IDisposable> _disposables = [];
 
     /// <summary>
-    /// The X hint label while a pane is shown (sort / save), or empty when the
-    /// shown pane has no X action.
+    /// The X hint label while a pane is shown (sort), or empty when the shown
+    /// pane has no X action.
     /// </summary>
     public string XHintText => Pane switch
     {
