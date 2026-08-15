@@ -18,9 +18,9 @@ public static class TimingConstants
     public static readonly TimeSpan WifiPollInterval = TimeSpan.FromSeconds(10);
 
     /// <summary>
-    /// Duration of one background fade leg (out to black, or in from black).
+    /// Duration of one artwork fade leg (out to the static base, or in from it).
     /// </summary>
-    public static readonly TimeSpan FadeDuration = TimeSpan.FromMilliseconds(180);
+    public static readonly TimeSpan ArtFadeDuration = TimeSpan.FromMilliseconds(300);
 
     /// <summary>
     /// Minimum time each splash loading stage stays visible.

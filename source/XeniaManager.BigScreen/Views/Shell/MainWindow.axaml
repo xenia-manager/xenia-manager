@@ -24,23 +24,19 @@
              horizontal padding so both rows always share the same boundaries -->
         <Grid RowDefinitions="100, *">
 
+            <!-- Dynamic artwork layer: fades in/out on top of the static window
+                 background (no black frames; the base brush shows through) -->
+            <Image Grid.RowSpan="2"
+                   Source="{Binding Dashboard.Artwork}"
+                   Opacity="{Binding Dashboard.ArtOpacity}"
+                   Stretch="UniformToFill"
+                   IsHitTestVisible="False" />
+
             <!-- Vignette overlay over the background (ignores input, images only) -->
             <Border Grid.RowSpan="2"
                     IsVisible="{Binding Dashboard.VignetteVisible}"
                     IsHitTestVisible="False"
                     Background="{DynamicResource BackgroundVignette}" />
-
-            <!-- Black fade overlay for background transitions (ignores input) -->
-            <Border Grid.Row="0" Grid.RowSpan="2"
-                    Opacity="{Binding Dashboard.FadeOpacity}"
-                    IsHitTestVisible="False"
-                    Background="Black">
-                <Border.Transitions>
-                    <Transitions>
-                        <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
-                    </Transitions>
-                </Border.Transitions>
-            </Border>
 
             <!-- TOP DASHBOARD HEADER: top inset 55 = the dashboard's bottom inset,
                  so the frame is uniform on all sides -->

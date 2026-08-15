@@ -40,6 +40,9 @@ public partial class MainWindow : FAAppWindow
 
         InitializeComponent();
 
+        // Drive tweens from this window's render loop (one tick per frame)
+        XeniaManager.Core.Tweening.TweenEngine.Instance.Attach(this);
+
         // FAAppWindow's managed title bar reserves a top strip and insets the
         // window content below it; extend the content into it so overlays and
         // the modal layer cover the entire window (like the window background)

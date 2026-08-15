@@ -467,7 +467,7 @@ source/XeniaManager.BigScreen/
 
 ### 5.23 Input, animation & config follow-ups
 - [ ] **T32.** Gamepad hold-repeat (Core) — held buttons re-raise after a delay at a repeat rate
-- [ ] **T33.** Background fade hard reset — single cancellable fade instance, restarted on every art swap
+- [x] **T33.** Background fade hard reset — single cancellable fade instance, restarted on every art swap
 - [x] **T34.** Trim the config editor — superseded by the T14 curated rewrite (Notification Sound/WinKey/Logging never shipped)
 
 ---
@@ -527,21 +527,23 @@ dotnet run --project source/XeniaManager.BigScreen/XeniaManager.BigScreen.csproj
 - Covers: overlay screens (Library / Gallery / Settings), the game modal + its panes (T8–T14), the screenshot viewer modal, and screen-to-screen swaps on the dashboard.
 
 ### Hard constraints
-- **Avalonia-native only** — `Transitions` / `DoubleTransition` (opacity, translate, scale) / `ThicknessTransition`; no external animation libraries.
+- **First-party animation code only** — either XAML `Transitions` / `DoubleTransition` / `ThicknessTransition` for declarative property changes, or the in-repo tween engine (`XeniaManager.Core.Tweening`) whenever an animation needs manual control (stop/start/resume, latest-wins, completion callbacks). No external animation libraries.
 - **Cheap:** UI-thread property tweens only, no layout thrash, no re-renders of heavy content; long lists/cards animate via the container, not per-item (except a gentle stagger if trivial).
-- **Subtle:** ~150–250ms, ease-in-out, one or two properties max (e.g. opacity 0→1 + 8–16px translate / 1.02 scale). No bouncing, no overshoot.
+- **Subtle:** ~150–250ms, ease-in-out, one or two properties max (e.g. opacity 0→1 + 8–16px translate / 1.02 scale). No bouncing, no overshoot. The dashboard art crossfade is the one allowed exception (300ms legs).
 - Respect **reduced-motion** if cheap to add; never animate while a game is running (input already gated).
 
 ### Existing building blocks to reuse
-- `DoubleTransition` fade-through-black already on `MainWindow.axaml` (180ms) and the `ProgressBar` value tween on the splash
-- `ThicknessTransition` on the quit-toggle thumb; `Transitions` on `Border`/`ContentControl`
-- Core `AnimationExtensions.AnimateOpacity(Window, from, to)` (ease-in-out) — window-level fades
+- `XeniaManager.Core.Tweening` — first-party tween engine: `Tween.To` / `Tween.Opacity` / `Tween.Custom` returning controllable `Tween` handles (`Stop` / `Start` / `Pause` / `Resume` / `Complete` / `OnComplete`); one shared per-frame loop via `TopLevel.RequestAnimationFrame`; starting a tween on the same target property supersedes the previous one (latest-wins). **Slated for extraction into its own package** — keep its dependencies to Avalonia.Base/System so the folder can be lifted into a standalone project as-is.
+- `TweenEngine.Instance.Attach(topLevel)` — called in `MainWindow` ctor; ticks once per rendered frame.
+- Dashboard artwork crossfade: `Image` layer above the static window background, `ArtOpacity` tweened by `DashboardViewModel` (Dynamic mode only, 300ms `SineEaseInOut` legs, no black frames).
+- `DoubleTransition` on the splash `ProgressBar` value; `ThicknessTransition` on the quit-toggle thumb; `Transitions` on `Border`/`ContentControl`
+- Core `AnimationExtensions.AnimateOpacity(Window, from, to)` (ease-in-out) — window-level fades (legacy; prefer the tween engine for new code)
 
 ### Candidate approaches (for the details pass)
 - Overlays: fade + slight up/scale on the overlay `Panel` / `ContentControl` when `IsVisible` flips
 - Game modal + its panes (T8–T14): same fade+translate on the modal/pane root; viewer: fade + zoom-out on close
 - Selection feedback: keep existing `IsSelected` styling; optional 100ms grow/shrink on the selected card
-- **Single cancellable fade instance (T33):** store the fade like a tween in a local variable — stop and restart it on every art swap so exactly one animation plays at all times; rapid passes hold black until the selection settles
+- **Single cancellable fade instance (T33 — done):** the dashboard art fade is one held `Tween` handle that is stopped and replaced on every art swap; rapid passes fade the new artwork in from the static base (no black)
 
 ---
 

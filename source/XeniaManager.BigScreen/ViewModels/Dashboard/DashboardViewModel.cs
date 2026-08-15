@@ -1,5 +1,5 @@
+using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,22 +9,36 @@ using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Tweening;
 
 namespace XeniaManager.BigScreen.ViewModels.Dashboard;
 
 /// <summary>
-/// Dashboard state: recent games, option cards and the background brush
-/// (including the fade-through-black transition).
+/// Dashboard state: recent games, option cards, the static background brush and
+/// the fading dynamic artwork layer.
 /// </summary>
 public partial class DashboardViewModel : ViewModelBase
 {
     private readonly IBackgroundService _backgroundService;
 
     /// <summary>
-    /// The brush currently applied to the dashboard background.
+    /// The static base brush (solid/gradient/image) always applied to the window
+    /// background; dynamic artwork fades on its own layer above it.
     /// </summary>
     [ObservableProperty]
     public partial IBrush? Background { get; set; }
+
+    /// <summary>
+    /// The artwork currently shown on the fading image layer (Dynamic mode only).
+    /// </summary>
+    [ObservableProperty]
+    public partial Bitmap? Artwork { get; set; }
+
+    /// <summary>
+    /// Opacity of the artwork layer (0 = hidden, 1 = fully visible).
+    /// </summary>
+    [ObservableProperty]
+    public partial double ArtOpacity { get; set; }
 
     /// <summary>
     /// Whether the vignette overlay should be shown. Only for image-based backgrounds
@@ -34,40 +48,16 @@ public partial class DashboardViewModel : ViewModelBase
     public partial bool VignetteVisible { get; set; }
 
     /// <summary>
-    /// Opacity of the black fade overlay (0 = transparent, 1 = black). Used to
-    /// fade the background out to black and back in when the selected game changes.
+    /// The in-flight artwork fade; stopped and replaced on every art swap so
+    /// only one fade ever plays (latest request wins).
     /// </summary>
-    [ObservableProperty]
-    public partial double FadeOpacity { get; set; }
+    private Tween _artFade;
 
     /// <summary>
-    /// Cancels in-flight background fades; only the newest request completes.
+    /// Cached tween writer for <see cref="ArtOpacity"/> (avoids a closure
+    /// allocation on every fade start).
     /// </summary>
-    private int _fadeGeneration;
-
-    /// <summary>
-    /// The artwork of the currently displayed background, used to skip pointless
-    /// fades when the selection didn't actually change the image.
-    /// </summary>
-    private Bitmap? _currentBackgroundArt;
-
-    /// <summary>
-    /// The artwork of the background update in flight (set before the fade check).
-    /// </summary>
-    private Bitmap? _pendingArt;
-
-    /// <summary>
-    /// Whether the in-flight update requested a fade-through-black.
-    /// </summary>
-    private bool _fadeRequested;
-
-    /// <summary>
-    /// Whether the in-flight update should animate through black: a fade was
-    /// requested, the mode is Dynamic and the artwork actually changed.
-    /// </summary>
-    private bool ShouldFadeBackground => _fadeRequested
-                                         && _backgroundService.Settings.Mode == BackgroundMode.Dynamic
-                                         && !ReferenceEquals(_pendingArt, _currentBackgroundArt);
+    private readonly Action<double> _setArtOpacity;
 
     /// <summary>
     /// The first 6 games, shown on the dashboard.
@@ -90,62 +80,73 @@ public partial class DashboardViewModel : ViewModelBase
     public DashboardViewModel(IBackgroundService backgroundService)
     {
         _backgroundService = backgroundService;
+        _setArtOpacity = value => ArtOpacity = value;
         RecentGames.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
     }
 
     /// <summary>
-    /// Fades the background out to black, swaps the brush, then fades back in.
-    /// Superseded requests (rapid selection changes) abort without swapping.
+    /// Fades the artwork layer opacity to <paramref name="to"/>, starting from its
+    /// current value.
     /// </summary>
-    private async Task FadeBackgroundAsync(IBrush brush)
-    {
-        int generation = ++_fadeGeneration;
-        FadeOpacity = 1;
-        await Task.Delay(TimingConstants.FadeDuration);
-        if (generation != _fadeGeneration)
-        {
-            return;
-        }
-
-        Background = brush;
-        FadeOpacity = 0;
-    }
+    private Tween FadeArtOpacity(double to) =>
+        Tween.Custom(ArtOpacity, to, TimingConstants.ArtFadeDuration, _setArtOpacity, Tween.DefaultEasing);
 
     /// <summary>
-    /// Recomputes the background brush from the current settings and selection.
-    /// Falls back to the linear gradient when the requested brush can't be built.
-    /// When <paramref name="fade"/> is set, the swap animates through black
-    /// (used for selection-driven Dynamic changes; settings changes stay instant).
+    /// Recomputes the background from the current settings and selection. In Dynamic
+    /// mode the artwork crossfades on its own layer above the static base (no black);
+    /// all other modes and settings changes swap instantly.
     /// </summary>
     public void UpdateBackground(Bitmap? selectedArt, bool fade = false)
     {
-        _pendingArt = selectedArt;
-        _fadeRequested = fade;
-
         BackgroundMode mode = _backgroundService.Settings.Mode;
-        IBrush? brush = _backgroundService.GetBackground(selectedArt);
+        IBrush? brush = _backgroundService.GetBackground(null);
         if (brush == null)
         {
             _backgroundService.Settings.Mode = BackgroundMode.LinearGradient;
             brush = _backgroundService.GetBackground(null);
         }
 
+        Background = brush;
+
         // Vignette only belongs on image-based backgrounds
         VignetteVisible = mode == BackgroundMode.Image
                           || (mode == BackgroundMode.Dynamic && selectedArt != null);
 
-        if (ShouldFadeBackground)
+        Bitmap? newArt = mode == BackgroundMode.Dynamic ? selectedArt : null;
+        if (newArt == null)
         {
-            // The fallback above always produces a brush (linear gradient)
-            _ = FadeBackgroundAsync(brush!);
+            // Nothing to show on the artwork layer - hide it instantly
+            _artFade.Stop();
+            Artwork = null;
+            ArtOpacity = 0;
+        }
+        else if (ReferenceEquals(newArt, Artwork))
+        {
+            // Already displayed - cancel any lingering fade and show it fully
+            _artFade.Stop();
+            ArtOpacity = 1;
+        }
+        else if (fade)
+        {
+            // Supersede any in-flight fade, then fade the old artwork out (the
+            // static base shows through), swap, and fade the new artwork in.
+            _artFade.Stop();
+            _artFade = FadeArtOpacity(0).OnComplete(() =>
+            {
+                Artwork = newArt;
+                ArtOpacity = 0;
+                _artFade = FadeArtOpacity(1);
+            });
         }
         else
         {
-            Background = brush;
+            // Instant swap (settings changes)
+            _artFade.Stop();
+            Artwork = newArt;
+            ArtOpacity = 1;
         }
 
-        _currentBackgroundArt = selectedArt;
         Logger.Debug<DashboardViewModel>(
-            $"Background updated: mode={_backgroundService.Settings.Mode}, art={(selectedArt != null ? "game art" : "none")}");
+            $"Background updated: mode={_backgroundService.Settings.Mode}, art={(newArt != null ? "game art" : "none")}");
     }
 }
