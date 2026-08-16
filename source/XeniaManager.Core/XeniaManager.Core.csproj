@@ -4,7 +4,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>4.3.0</AssemblyVersion>
+        <AssemblyVersion>4.3.1</AssemblyVersion>
         <!-- Required for GamepadService.cs, which uses SDL3 native pointers (SDL_Gamepad*)
              via ppy.SDL3-CS for controller navigation support -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
