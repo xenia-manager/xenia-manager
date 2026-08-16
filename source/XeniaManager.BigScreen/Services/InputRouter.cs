@@ -204,6 +204,9 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
             case NavigationCommand.CycleSort:
                 vm.Gallery.CycleGallerySort();
                 break;
+            case NavigationCommand.Details:
+                vm.Gallery.CycleVersionFilter();
+                break;
             case NavigationCommand.Activate:
                 DashboardNavigationController.OpenSelectedScreenshot(vm.Gallery);
                 break;

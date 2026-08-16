@@ -52,18 +52,45 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     public string CountText => string.Format(LocalizationHelper.GetText("GameModal.Screenshots.Count"), Rows.Count);
 
     /// <summary>
+    /// Resolves the game's screenshots folder: the standard "{GameId}" subfolder
+    /// of the emulator's screenshots directory for installed versions; for Custom
+    /// games, the "screenshots" folder next to the custom executable. Returns
+    /// null when the folder cannot be derived (no custom executable set).
+    /// </summary>
+    private string? ResolveScreenshotsFolder()
+    {
+        if (_game.XeniaVersion != XeniaVersion.Custom)
+        {
+            return AppPathResolver.GetFullPath(
+                XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).EmulatorDir,
+                "screenshots",
+                _game.GameId.ToUpperInvariant());
+        }
+
+        string? executable = _game.FileLocations.CustomEmulatorExecutable;
+        if (string.IsNullOrEmpty(executable))
+        {
+            return null;
+        }
+
+        string emulatorDir = Path.IsPathRooted(executable)
+            ? Path.GetDirectoryName(executable) ?? string.Empty
+            : AppPathResolver.GetFullPath(Path.GetDirectoryName(executable) ?? string.Empty);
+        return emulatorDir.Length == 0
+            ? null
+            : Path.Combine(emulatorDir, "screenshots", _game.GameId.ToUpperInvariant());
+    }
+
+    /// <summary>
     /// Enumerates the game's screenshots folder (newest first), decoding each
     /// image; unreadable files are skipped with a warning.
     /// </summary>
     private List<ScreenshotItemViewModel> ScanScreenshots()
     {
-        string folder = AppPathResolver.GetFullPath(
-            XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).EmulatorDir,
-            "screenshots",
-            _game.GameId.ToUpperInvariant());
+        string? folder = ResolveScreenshotsFolder();
 
         List<ScreenshotItemViewModel> screenshots = [];
-        if (!Directory.Exists(folder))
+        if (folder == null || !Directory.Exists(folder))
         {
             return screenshots;
         }
@@ -78,6 +105,7 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
                 DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
                                       ?? File.GetLastWriteTime(file);
                 screenshots.Add(new ScreenshotItemViewModel(
+                    _game.XeniaVersion,
                     file,
                     fileName,
                     capturedAt,
@@ -96,7 +124,7 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
 
     /// <summary>
     /// Filters the gallery's preloaded (already decoded) screenshots for this
-    /// game by the parent-folder game ID.
+    /// game by the source version and parent-folder game ID.
     /// </summary>
     private void PopulateFromGalleryCache(TimeFormat timeFormat)
     {
@@ -104,7 +132,8 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
         foreach (ScreenshotItemViewModel screenshot in library.Screenshots)
         {
             string folder = Path.GetFileName(Path.GetDirectoryName(screenshot.Path) ?? string.Empty);
-            if (folder.Equals(_game.GameId, StringComparison.OrdinalIgnoreCase))
+            if (screenshot.Version == _game.XeniaVersion
+                && folder.Equals(_game.GameId, StringComparison.OrdinalIgnoreCase))
             {
                 screenshot.TimeFormat = timeFormat;
                 Rows.Add(screenshot);
@@ -191,9 +220,10 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     }
 
     /// <summary>
-    /// Fills the grid from the boot-time gallery cache for Canary games (the
-    /// screenshots are already scanned and decoded - no re-decode); other
-    /// emulator versions scan their own folder off the UI thread.
+    /// Fills the grid from the boot-time gallery cache for any game whose
+    /// version has cached screenshots (already scanned and decoded - no
+    /// re-decode); other games (e.g. Custom, or versions the gallery skipped)
+    /// scan their own folder off the UI thread.
     /// </summary>
     public GameScreenshotsPaneViewModel(Game game)
     {
@@ -201,7 +231,8 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
         _modalService = App.Services.GetRequiredService<IModalService>();
         Rows.CollectionChanged += (_, _) => OnPropertyChanged(nameof(CountText));
         TimeFormat timeFormat = App.Services.GetRequiredService<IBackgroundService>().Settings.TimeFormat;
-        if (game.XeniaVersion == XeniaVersion.Canary)
+        IScreenshotLibraryService library = App.Services.GetRequiredService<IScreenshotLibraryService>();
+        if (library.Screenshots.Any(s => s.Version == game.XeniaVersion))
         {
             PopulateFromGalleryCache(timeFormat);
         }

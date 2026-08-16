@@ -16,12 +16,20 @@
         <!-- CONTENT (header + gallery + hints), inset by the screen margin -->
         <Grid Margin="60" RowDefinitions="Auto, *, Auto">
 
-            <!-- HEADER: title left, sort indicator top right -->
-            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,45">
+            <!-- HEADER: title left, filter + sort indicators top right -->
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto" Margin="0,20,0,45">
                 <TextBlock Grid.Column="0"
                            Text="{DynamicResource Gallery.Title}"
                            Classes="screen-title" />
                 <prim:IconStat Grid.Column="1"
+                               Icon="Filter"
+                               Stat="{Binding VersionFilterText}"
+                               IconSize="26"
+                               Spacing="16"
+                               Margin="0,0,32,0"
+                               VerticalAlignment="Center"
+                               FontSize="24" />
+                <prim:IconStat Grid.Column="2"
                                Icon="ArrowSort"
                                Stat="{Binding GallerySortText}"
                                IconRotation="90"
@@ -75,6 +83,8 @@
                                 Text="{DynamicResource Gallery.Hint.Select}" />
                 <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
                                 Text="{DynamicResource Gallery.Hint.Sort}" />
+                <prim:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+                                Text="{DynamicResource Gallery.Hint.Filter}" />
             </StackPanel>
         </Grid>
     </Grid>

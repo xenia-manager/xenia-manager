@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Utilities;
+using XeniaManager.Core.Models;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
@@ -11,6 +12,7 @@ namespace XeniaManager.BigScreen.ViewModels.Items;
 /// ViewModel for a single screenshot tile in the gallery.
 /// </summary>
 public partial class ScreenshotItemViewModel(
+    XeniaVersion version,
     string path,
     string title,
     DateTime capturedAt,
@@ -29,6 +31,11 @@ public partial class ScreenshotItemViewModel(
     /// </summary>
     [ObservableProperty]
     public partial TimeFormat TimeFormat { get; set; } = TimeFormat.TwelveHour;
+
+    /// <summary>
+    /// The emulator version the screenshot was captured with.
+    /// </summary>
+    public XeniaVersion Version { get; } = version;
 
     /// <summary>
     /// The screenshot file name (shown in the modal as a subtitle).

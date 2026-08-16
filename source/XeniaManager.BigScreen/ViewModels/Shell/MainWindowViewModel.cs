@@ -514,6 +514,11 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(IsGalleryScreen));
         OnPropertyChanged(nameof(IsSettingsScreen));
 
+        if (value == Gallery)
+        {
+            TaskUtilities.RunSafely<MainWindowViewModel>(() => Gallery.RefreshAsync(), "Refreshing gallery");
+        }
+
         if (value == Library && LibraryHasUnselectedGames)
         {
             Library.Games[0].IsSelected = true;

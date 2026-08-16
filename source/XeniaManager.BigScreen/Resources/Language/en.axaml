@@ -48,7 +48,9 @@
     <sys:String x:Key="Gallery.Sort.OldestFirst">Oldest First</sys:String>
     <sys:String x:Key="Gallery.Sort.ByGame">By Game</sys:String>
     <sys:String x:Key="Gallery.UnknownGame">Unknown Game</sys:String>
+    <sys:String x:Key="Gallery.Filter.All">All</sys:String>
     <sys:String x:Key="Gallery.Hint.Sort">Sort</sys:String>
+    <sys:String x:Key="Gallery.Hint.Filter">Filter</sys:String>
     <sys:String x:Key="Gallery.Hint.Select">Select</sys:String>
     <sys:String x:Key="Gallery.Hint.Back">Back</sys:String>
 

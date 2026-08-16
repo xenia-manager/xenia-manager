@@ -44,6 +44,11 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly Core.Settings.Settings _desktopSettings = new();
 
     /// <summary>
+    /// The emulator versions currently installed on this machine.
+    /// </summary>
+    public IReadOnlyList<XeniaVersion> InstalledVersions { get; }
+
+    /// <summary>
     /// The loaded XConfig file (resolution card), or null when none exists.
     /// </summary>
     private XConfigFile? _xconfigFile;
@@ -548,7 +553,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void LoadXConfig()
     {
         XConfigVersions.Clear();
-        foreach (XeniaVersion version in _desktopSettings.GetInstalledVersions(_desktopSettings))
+        foreach (XeniaVersion version in InstalledVersions)
         {
             if (XConfigManager.XConfigExists(version))
             {
@@ -1157,6 +1162,7 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService = backgroundService;
         _profileService = profileService;
         _gamepadService = gamepadService;
+        InstalledVersions = _desktopSettings.GetInstalledVersions(_desktopSettings);
         modalService.StackChanged += () => IsHintBarVisible = !modalService.IsOpen;
 
         _profileService.ProfileChanged += () => OnPropertyChanged(nameof(ActiveGamertag));

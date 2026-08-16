@@ -4,17 +4,18 @@ using XeniaManager.BigScreen.ViewModels.Items;
 namespace XeniaManager.BigScreen.Services;
 
 /// <summary>
-/// Scans the Canary screenshots folder and builds the gallery items.
+/// Scans every installed emulator version's screenshots folder and builds the
+/// gallery items.
 /// </summary>
 public interface IScreenshotLibraryService
 {
     /// <summary>
-    /// All screenshots found in the Canary screenshots folder.
+    /// All screenshots found in every installed emulator's screenshots folder.
     /// </summary>
     IReadOnlyList<ScreenshotItemViewModel> Screenshots { get; }
 
     /// <summary>
-    /// Scans the screenshots folder and builds the gallery items.
+    /// Scans the screenshots folders and builds the gallery items.
     /// </summary>
     void Load();
 }

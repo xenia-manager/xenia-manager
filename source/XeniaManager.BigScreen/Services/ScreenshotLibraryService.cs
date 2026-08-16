@@ -13,13 +13,14 @@ using XeniaManager.Core.Utilities;
 namespace XeniaManager.BigScreen.Services;
 
 /// <summary>
-/// Scans the Canary screenshots folder (recursively, per-game subfolders) and
-/// builds the gallery items, matching each screenshot to a library game.
+/// Scans every installed emulator version's screenshots folder (recursively,
+/// per-game subfolders) and builds the gallery items, matching each screenshot
+/// to a library game and tagging it with its source version.
 /// </summary>
 public class ScreenshotLibraryService : IScreenshotLibraryService
 {
     /// <summary>
-    /// All screenshots found in the Canary screenshots folder.
+    /// All screenshots found in every installed emulator's screenshots folder.
     /// </summary>
     public IReadOnlyList<ScreenshotItemViewModel> Screenshots { get; private set; } = [];
 
@@ -39,44 +40,61 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
     }
 
     /// <summary>
-    /// Scans the screenshots folder and builds the gallery items.
+    /// Scans one installed version's screenshots folder and appends its items.
+    /// </summary>
+    private static void ScanVersion(XeniaVersion version, List<ScreenshotItemViewModel> screenshots)
+    {
+        string screenshotsFolder = AppPathResolver.GetFullPath(
+            XeniaVersionInfo.GetXeniaVersionInfo(version).ScreenshotsFolderLocation);
+
+        if (!Directory.Exists(screenshotsFolder))
+        {
+            return;
+        }
+
+        foreach (string file in Directory.EnumerateFiles(screenshotsFolder, "*", SearchOption.AllDirectories)
+                     .Where(f => ImageFormats.ScreenshotExtensions.Contains(Path.GetExtension(f)
+                         .ToLowerInvariant())))
+        {
+            try
+            {
+                string fileName = Path.GetFileName(file);
+                string gameId = ScreenshotFileNameParser.ExtractGameId(fileName);
+                if (gameId.Length == 0)
+                {
+                    gameId = Path.GetFileName(Path.GetDirectoryName(file) ?? string.Empty);
+                }
+
+                DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
+                                      ?? File.GetLastWriteTime(file);
+                screenshots.Add(new ScreenshotItemViewModel(
+                    version,
+                    file,
+                    fileName,
+                    capturedAt,
+                    ResolveGameTitle(gameId),
+                    new Bitmap(file)));
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<ScreenshotLibraryService>($"Failed to load screenshot '{file}', skipping");
+                Logger.LogExceptionDetails<ScreenshotLibraryService>(ex);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Scans the screenshots folder of every installed emulator version and
+    /// builds the gallery items (Custom is never scanned - it has no standard
+    /// folder).
     /// </summary>
     public void Load()
     {
-        string screenshotsFolder = AppPathResolver.GetFullPath(
-            XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion.Canary).ScreenshotsFolderLocation);
-
+        Core.Settings.Settings desktopSettings = new();
         List<ScreenshotItemViewModel> screenshots = [];
-        if (Directory.Exists(screenshotsFolder))
+        foreach (XeniaVersion version in desktopSettings.GetInstalledVersions(desktopSettings))
         {
-            foreach (string file in Directory.EnumerateFiles(screenshotsFolder, "*", SearchOption.AllDirectories)
-                         .Where(f => ImageFormats.ScreenshotExtensions.Contains(Path.GetExtension(f)
-                             .ToLowerInvariant())))
-            {
-                try
-                {
-                    string fileName = Path.GetFileName(file);
-                    string gameId = ScreenshotFileNameParser.ExtractGameId(fileName);
-                    if (gameId.Length == 0)
-                    {
-                        gameId = Path.GetFileName(Path.GetDirectoryName(file) ?? string.Empty);
-                    }
-
-                    DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
-                                          ?? File.GetLastWriteTime(file);
-                    screenshots.Add(new ScreenshotItemViewModel(
-                        file,
-                        fileName,
-                        capturedAt,
-                        ResolveGameTitle(gameId),
-                        new Bitmap(file)));
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warning<ScreenshotLibraryService>($"Failed to load screenshot '{file}', skipping");
-                    Logger.LogExceptionDetails<ScreenshotLibraryService>(ex);
-                }
-            }
+            ScanVersion(version, screenshots);
         }
 
         Screenshots = screenshots;
