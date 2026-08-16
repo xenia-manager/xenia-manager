@@ -15,9 +15,9 @@ using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Dashboard;
 using XeniaManager.BigScreen.ViewModels.Screens;
 using XeniaManager.BigScreen.ViewModels.Modals;
-using XeniaManager.Core.Logging;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Files;
+using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
@@ -373,7 +373,7 @@ public partial class MainWindowViewModel : ViewModelBase
         bool fullscreenForced = false;
         try
         {
-            if (Settings.LaunchGamesFullscreen && CanForceFullscreen(card.Game))
+            if (Settings.LaunchGamesFullscreen && CanManageGameConfig(card.Game))
             {
                 ConfigFile config = GameDataCache.GetConfig(card.Game);
                 originalFullscreen = config.GetValue<bool>(
@@ -425,11 +425,11 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Whether the fullscreen-forcing can be applied: the setting is on, the
-    /// game runs a managed Xenia version (Custom ignores the config) and its
-    /// config file exists on disk.
+    /// Whether the game's config file can be edited for the launch: it runs a
+    /// managed Xenia version (Custom ignores the config) and its config file
+    /// exists on disk.
     /// </summary>
-    private bool CanForceFullscreen(Game game) =>
+    private bool CanManageGameConfig(Game game) =>
         game.XeniaVersion != XeniaVersion.Custom
         && !string.IsNullOrEmpty(game.FileLocations.Config)
         && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config));
@@ -442,9 +442,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void InjectLaunchProfile(Game game)
     {
-        if (game.XeniaVersion == XeniaVersion.Custom
-            || string.IsNullOrEmpty(game.FileLocations.Config)
-            || !File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config)))
+        if (!CanManageGameConfig(game))
         {
             return;
         }

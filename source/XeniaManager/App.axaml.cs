@@ -258,6 +258,10 @@ public partial class App : Application
         mainWindow.Opened += OnMainWindowOpenedForBigScreen;
     }
 
+    /// <summary>
+    /// Launches BigScreen on the window's first show, then unsubscribes so a
+    /// later Show (BigScreen exit restore) can't relaunch it.
+    /// </summary>
     private async void OnMainWindowOpenedForBigScreen(object? sender, EventArgs e)
     {
         if (sender is not MainWindow mainWindow)
