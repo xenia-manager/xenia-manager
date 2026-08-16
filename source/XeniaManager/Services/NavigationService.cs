@@ -80,7 +80,8 @@ public class NavigationService
     /// <summary>
     /// Launches the BigScreen companion app. Resolves the executable side-by-side
     /// (production layout) or in the repo's sibling project folder (dev layout).
-    /// Warns when it can't be found anywhere.
+    /// Hides and disables the main window for the session, restoring it when
+    /// BigScreen exits (even if it crashed). Warns when it can't be found.
     /// </summary>
     private async Task LaunchBigScreen()
     {
@@ -95,7 +96,33 @@ public class NavigationService
         }
 
         Logger.Info<NavigationService>($"Launching BigScreen from '{bigScreenPath}'");
-        Process.Start(new ProcessStartInfo { FileName = bigScreenPath, UseShellExecute = true });
+        try
+        {
+            Process? bigScreen = Process.Start(new ProcessStartInfo { FileName = bigScreenPath, UseShellExecute = true });
+            if (bigScreen == null)
+            {
+                Logger.Error<NavigationService>("Failed to start BigScreen process");
+                return;
+            }
+
+            // Hide + disable the main window while BigScreen owns the screen
+            EventManager.Instance.DisableWindow();
+            App.MainWindow?.Hide();
+            Logger.Info<NavigationService>($"Main window hidden until BigScreen exits (PID {bigScreen.Id})");
+
+            await bigScreen.WaitForExitAsync();
+            Logger.Info<NavigationService>($"BigScreen exited with code {bigScreen.ExitCode}, restoring main window");
+
+            App.MainWindow?.Show();
+            EventManager.Instance.EnableWindow();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<NavigationService>("Failed to launch BigScreen");
+            Logger.LogExceptionDetails<NavigationService>(ex);
+            App.MainWindow?.Show();
+            EventManager.Instance.EnableWindow();
+        }
     }
 
     /// <summary>

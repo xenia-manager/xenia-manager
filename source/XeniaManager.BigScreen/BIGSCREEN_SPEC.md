@@ -34,6 +34,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **Gallery** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, **capture date decoded from the file name** (`{GAMEID} - {yyyy-MM-ddTHH-mm-ss}`, write time as fallback — `ScreenshotFileNameParser`)). Click/Enter → **screenshot viewer modal** (on the modal stack — see the viewer section below). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
 - **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker. **XConfig section** (bottom of the screen, hidden when no Canary XConfig exists): a single **Resolution** dropdown (`AvHdmiScreenSize`, "R" prefix stripped, instant-saved). **Controller navigation (T18):** D-pad walks the rows (fixed cards then connected gamepad rows — the `.settings-row` accent border marks the selection, rows start unselected, the first move selects the first row, the selection survives battery-poll rebuilds); **A** activates — gamepad rows set the primary controller, the quit toggle flips, Manage Profiles / Select Image act, dropdown rows open their native dropdown (**Up/Down** cycles, **A** commits, **B** restores the original), colour rows open the palette popup (**Left/Right** cycles), **the vignette slider steps directly with Left/Right on selection (no editor)**; **Back** closes an open editor first, then the screen. Keyboard input stays on the native controls (Tab, arrows, hex typing).
 - **Quit** — closes the app.
+- **Launch behaviour (T35):** when the **Launch Games in Fullscreen** toggle is on (default, Preferences section), `MainWindowViewModel.LaunchGame` forces the game's `Display.fullscreen` for the session via `GameDataCache.GetConfig` (original value captured, restored after the session; skipped when the game runs Custom Xenia or has no config file yet). Same launch path also injects the active profile into the game's `[Profiles] logged_profile_slot_0_xuid` so Xenia boots signed in (see Profiles & identity).
 - **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (X blue) → Details (Y amber) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Gallery = Back → Select (A) → Sort (X blue); Settings = Back → Select (A). **One hint bar at a time:** only the top modal's hint bar shows (`ModalViewModelBase.IsHintBarVisible`), and the overlay screens hide theirs while any modal is open.
 
 ### Base app data sharing (`Program.cs` + `Services/BaseAppLocator.cs`)
@@ -110,7 +111,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **Screenshots pane** reuses the gallery's boot-time items for Canary games (same decoded bitmaps — no duplicate decode).
 
 ### Profiles & identity
-- **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first. **XConfig sync:** every profile activation (boot, switch, refresh) writes the active profile's XUID, language and country into the Canary XConfig (`DefaultProfile` + `Language` + `Country`) so launched games run with the selected BigScreen profile; skipped when no XConfig file exists (no file creation), values de-duplicated, re-synced as a safety net at game launch (`MainWindowViewModel.LaunchGame`).
+- **ProfileService** loads **all** Canary profiles (`Profiles`); the active one is persisted as `profile_xuid` (hex PathXUID) and restored at boot (falls back to the first); `SwitchProfile` re-loads the profile GPD, saves and raises `ProfileChanged` (header identity + per-game achievement stats rebuild); `Refresh()` re-scans after external changes (Manage Profiles), keeping the active profile or falling back to the first. **Launch sign-in:** `MainWindowViewModel.LaunchGame` calls `EnsureActiveProfile()` (safety net — restores the persisted active profile when the boot-time restore fell back), then `InjectLaunchProfile(game)` writes the active profile's XUID into the game's config `[Profiles] logged_profile_slot_0_xuid` (the field Xenia itself persists after a manual sign-in — the only mechanism that actually signs a profile in on direct game boot; verified against the emulator's config template comment "XUID of the profile to load on boot in slot 0"); the config is copied to the emulator's default location at launch, so Xenia boots signed in. No restore — Xenia owns the slot, the value is re-injected on every launch and Xenia persists it after the session. **XConfig sync** (`SyncXConfigDefaultProfile`, boot/switch/refresh + launch): still writes `DefaultProfile` + `Language` + `Country` into the Canary XConfig — kept for dashboard-level defaults, but **not** what signs the game in (proven ineffective for direct game boots). Both edits guard on Custom-version games and missing config files.
 - **Boot reorder:** Settings stage now runs before the Profile stage (the persisted XUID is needed to pick the profile).
 - **Header `ProfileButton`** (avatar chip) — focusable + clickable; controller **Up** from the game row selects it (**Down** returns to the previously selected card; **Right** jumps to the next card after the current selection, wrapping from card 8 back to card 1); reserved 4px border that turns accent on selection/hover (no fill, no shadow — the icon floats inside the 40px circle).
 - **Profile picker modal** (`ProfilePickerView`) — opened from the header chip: all profiles (active first, then alphabetical) with gamertag, country · language and per-profile gamerscore; Up/Down + A switches + B closes, **Y opens Manage Profiles** on top of the picker; "no profiles" stub.
@@ -296,7 +297,7 @@ source/XeniaManager.BigScreen/
 - `AccountContent` + `GpdFile` — per-game achievement counts / gamerscore (`GpdFile.Achievements`, `GetTotalGamerscore()`).
 - `Launcher.LaunchGameASync(Game, Settings, ...)` — game launch (needs Core `Settings`).
 - `ProfileManager.LoadProfiles(XeniaVersion.Canary)` — profile/gamertag.
-- `GamepadInputService` / `IGamepadInputService` — SDL3 gamepad polling (moved from BigScreen; `GamepadButton` enum incl. `View`); multi-gamepad tracking via `GamepadDeviceCollection` (all pads open, per-pad battery/GUID, primary selection, `Rescan`/`ReloadMappings`), pure mapping in `GamepadButtonMapper` + `StickTracker`; input flows from the primary pad only.
+- `GamepadInputService` / `IGamepadInputService` — SDL3 gamepad polling (moved from BigScreen; `GamepadButton` enum incl. `View`); multi-gamepad tracking via `GamepadDeviceCollection` (all pads open, per-pad battery/GUID, primary selection, `Rescan`/`ReloadMappings`), pure mapping in `GamepadButtonMapper` + `StickTracker`; input flows from the primary pad only. **Hold-repeat (T32):** navigation directions (D-pad + left stick via `StickTracker.HeldButton`) raise once on entry, then re-raise after 400ms and every 100ms while held (button-up, stick-centered and controller-removed all cancel); action buttons raise exactly once per press.
 - `ReleaseDateFormatter.Format(...)` — ordinal release dates (+ unit tests).
 
 ---
@@ -453,20 +454,20 @@ source/XeniaManager.BigScreen/
 - [x] **T25.** Achievements unlocked-first sort + spoiler gating (secret achievements hidden while locked)
 - [x] **T26.** XConfig section — resolution dropdown only (bottom of settings, hidden without XConfig)
 - [x] **T27.** Input gating while a game runs (all window handlers)
-- [ ] **T35.** Launch games in fullscreen — Preferences toggle (default on, persisted); sets `Display.fullscreen` at launch, restores after
+- [x] **T35.** Launch games in fullscreen — Preferences toggle (default on, persisted); sets `Display.fullscreen` at launch, restores after
 
 ### 5.20 Desktop app integration
 - [ ] **T28.** Hide + disable the main window while BigScreen is open; restore on exit
 - [ ] **T29.** BigScreen start by default — `--bigscreen` CLI arg + "Start in Big Screen" toggle (persisted)
 
 ### 5.21 Gallery sort expansion (full desktop parity)
-- [ ] **T30.** Expand gallery sort with the desktop's full list: Title, Time Played, Compatibility, TitleId, MediaId, XeniaVersion, Last Played (alongside Newest/Oldest/By Game)
+- [ ] **T30.** ~~Expand gallery sort with the desktop's full list: Title, Time Played, Compatibility, TitleId, MediaId, XeniaVersion, Last Played (alongside Newest/Oldest/By Game)~~ — **cancelled by owner decision: the gallery keeps its three orders (Newest First / Oldest First / By Game); no sort modifications.**
 
 ### 5.22 Screen animations
 - [x] **T31.** Dashboard reveal fade — header + card rows fade in (500ms) after launch; overlays/modals open instantly (no tweens outside the dashboard)
 
 ### 5.23 Input, animation & config follow-ups
-- [ ] **T32.** Gamepad hold-repeat (Core) — held buttons re-raise after a delay at a repeat rate
+- [x] **T32.** Gamepad hold-repeat (Core) — held buttons re-raise after a delay at a repeat rate
 - [x] **T33.** Background fade hard reset — single cancellable fade instance, restarted on every art swap
 - [x] **T34.** Trim the config editor — superseded by the T14 curated rewrite (Notification Sound/WinKey/Logging never shipped)
 
