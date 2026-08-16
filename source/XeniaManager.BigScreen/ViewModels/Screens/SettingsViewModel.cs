@@ -21,6 +21,7 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.XConfig;
 using XeniaManager.Core.Services;
+using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Screens;
@@ -34,6 +35,12 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IBackgroundService _backgroundService;
     private readonly IProfileService _profileService;
     private readonly IGamepadInputService _gamepadService;
+
+    /// <summary>
+    /// The base Xenia Manager's settings (same file the desktop app uses), so
+    /// the "Start in Big Screen" toggle shares the desktop app's state.
+    /// </summary>
+    private readonly Core.Settings.Settings _desktopSettings = new();
 
     /// <summary>
     /// The loaded Canary XConfig file (resolution card), or null when none exists.
@@ -181,6 +188,11 @@ public partial class SettingsViewModel : ViewModelBase
     /// Row for the "launch games in fullscreen" toggle.
     /// </summary>
     public SettingsRowViewModel RowFullscreenToggle { get; } = new(SettingsRowKind.FullscreenToggle);
+
+    /// <summary>
+    /// Row for the "start in Big Screen" toggle (writes the desktop app's setting).
+    /// </summary>
+    public SettingsRowViewModel RowStartInBigScreenToggle { get; } = new(SettingsRowKind.StartInBigScreenToggle);
 
     /// <summary>
     /// Row for the background type dropdown card.
@@ -370,6 +382,13 @@ public partial class SettingsViewModel : ViewModelBase
     public partial bool LaunchGamesFullscreen { get; set; } = true;
 
     /// <summary>
+    /// Whether the base Xenia Manager starts in Big Screen on startup
+    /// (persisted through the desktop app's settings file).
+    /// </summary>
+    [ObservableProperty]
+    public partial bool StartInBigScreen { get; set; }
+
+    /// <summary>
     /// Whether this screen's hint bar is visible - hidden while any modal is
     /// open, so only the top modal's hints show.
     /// </summary>
@@ -508,6 +527,7 @@ public partial class SettingsViewModel : ViewModelBase
         _rows.Add(RowTimeFormat);
         _rows.Add(RowQuitToggle);
         _rows.Add(RowFullscreenToggle);
+        _rows.Add(RowStartInBigScreenToggle);
         _rows.Add(RowBackgroundMode);
         _rows.Add(RowPrimaryColour);
         _rows.Add(RowAccentColour);
@@ -738,6 +758,9 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.FullscreenToggle:
                 LaunchGamesFullscreen = !LaunchGamesFullscreen;
                 break;
+            case SettingsRowKind.StartInBigScreenToggle:
+                StartInBigScreen = !StartInBigScreen;
+                break;
             case SettingsRowKind.BackgroundImage:
                 SelectImageRequested?.Invoke();
                 break;
@@ -844,6 +867,7 @@ public partial class SettingsViewModel : ViewModelBase
         VignetteOpacity = _backgroundService.Settings.VignetteOpacity;
         ReturnToXeniaOnQuit = _backgroundService.Settings.ReturnToXeniaOnQuit;
         LaunchGamesFullscreen = _backgroundService.Settings.LaunchGamesFullscreen;
+        StartInBigScreen = _desktopSettings.Settings.General.StartInBigScreen;
         LibraryViewMode = _backgroundService.Settings.LibraryViewMode;
         SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == LibraryViewMode);
         CardImageMode = _backgroundService.Settings.CardImageMode;
@@ -940,6 +964,13 @@ public partial class SettingsViewModel : ViewModelBase
     {
         SaveAppearance(s => s.LaunchGamesFullscreen = value);
         Logger.Info<SettingsViewModel>($"Launch games in fullscreen: {value}");
+    }
+
+    partial void OnStartInBigScreenChanged(bool value)
+    {
+        _desktopSettings.Settings.General.StartInBigScreen = value;
+        _desktopSettings.SaveSettings();
+        Logger.Info<SettingsViewModel>($"Start in Big Screen: {value}");
     }
 
     partial void OnLibraryViewModeChanged(LibraryViewMode value)

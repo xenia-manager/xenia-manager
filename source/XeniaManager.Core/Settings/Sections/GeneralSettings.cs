@@ -37,4 +37,10 @@ public class GeneralSettings
     /// </summary>
     [JsonPropertyName("auto_merge_multi_disc")]
     public bool AutoMergeMultiDisc { get; set; } = false;
+
+    /// <summary>
+    /// Whether to launch BigScreen on startup instead of showing the main window
+    /// </summary>
+    [JsonPropertyName("start_in_big_screen")]
+    public bool StartInBigScreen { get; set; } = false;
 }

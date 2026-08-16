@@ -53,6 +53,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.ToolTip}"
                                             Icon="Games"
                                             IsChecked="{Binding AutoMergeMultiDisc, Mode=TwoWay}" />
+                    <!-- Start in Big Screen -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.StartInBigScreen}"
+                                            Description="{DynamicResource SettingsPage.General.StartInBigScreen.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.StartInBigScreen.ToolTip}"
+                                            Icon="Tv"
+                                            IsChecked="{Binding StartInBigScreen, Mode=TwoWay}" />
                 </StackPanel>
             </Expander>
             <!-- UI Settings -->

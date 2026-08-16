@@ -381,6 +381,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">正在加载 {0}</sys:String>

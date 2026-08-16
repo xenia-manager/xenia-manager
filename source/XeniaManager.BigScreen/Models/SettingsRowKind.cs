@@ -13,6 +13,7 @@ public enum SettingsRowKind
     TimeFormat,
     QuitToggle,
     FullscreenToggle,
+    StartInBigScreenToggle,
     BackgroundMode,
     PrimaryColour,
     AccentColour,

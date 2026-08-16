@@ -97,7 +97,7 @@
                                   IsChecked="{Binding ReturnToXeniaOnQuit}"
                                   Padding="12,8"
                                   VerticalAlignment="Center"
-                                   Classes="toggle-switch" />
+                                  Classes="toggle-switch" />
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
@@ -118,13 +118,34 @@
                                   IsChecked="{Binding LaunchGamesFullscreen}"
                                   Padding="12,8"
                                   VerticalAlignment="Center"
-                                   Classes="toggle-switch" />
+                                  Classes="toggle-switch" />
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
                             <TextBlock Classes="settings-label" Text="{DynamicResource Settings.LaunchGamesFullscreen}" />
                             <TextBlock Classes="settings-subtitle"
                                        Text="{DynamicResource Settings.LaunchGamesFullscreen.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- START IN BIG SCREEN -->
+                <Border x:Name="CardStartInBigScreenToggle"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowStartInBigScreenToggle.IsSelected}">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkStartInBigScreen"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding StartInBigScreen}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="toggle-switch" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.StartInBigScreen}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.StartInBigScreen.Description}" />
                         </StackPanel>
                     </DockPanel>
                 </Border>

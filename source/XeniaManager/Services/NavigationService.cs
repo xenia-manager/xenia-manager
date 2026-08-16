@@ -9,6 +9,7 @@ using FluentAvalonia.UI.Media.Animation;
 using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
@@ -83,7 +84,7 @@ public class NavigationService
     /// Hides and disables the main window for the session, restoring it when
     /// BigScreen exits (even if it crashed). Warns when it can't be found.
     /// </summary>
-    private async Task LaunchBigScreen()
+    public async Task LaunchBigScreen()
     {
         string? bigScreenPath = ResolveBigScreenPath();
         if (bigScreenPath == null)
@@ -111,7 +112,16 @@ public class NavigationService
             Logger.Info<NavigationService>($"Main window hidden until BigScreen exits (PID {bigScreen.Id})");
 
             await bigScreen.WaitForExitAsync();
-            Logger.Info<NavigationService>($"BigScreen exited with code {bigScreen.ExitCode}, restoring main window");
+            Logger.Info<NavigationService>($"BigScreen exited with code {bigScreen.ExitCode}");
+
+            // "Close everything" on BigScreen's quit toggle means the manager
+            // shuts down too; anything else restores the hidden window.
+            if (bigScreen.ExitCode == ProcessExitCodes.CloseEverything)
+            {
+                Logger.Info<NavigationService>("BigScreen closed everything - shutting down Xenia Manager");
+                App.MainWindow?.Close();
+                return;
+            }
 
             App.MainWindow?.Show();
             EventManager.Instance.EnableWindow();

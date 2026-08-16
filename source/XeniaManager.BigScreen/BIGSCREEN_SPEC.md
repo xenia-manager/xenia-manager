@@ -33,7 +33,7 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - **Library** — all games in a horizontal **carousel** (`LibraryCard`s: box art with a **13% top crop** (bottom-anchored, ~366px art region), title, playtime row, achievements/gamerscore row from the profile GPD) or a vertical **list** with a details pane (`LibraryListItem` + `GameDetailsPanel`). Left/Right iterates (clamped at both ends — no wrap), the row scrolls once the selection passes the middle; in list mode Up/Down iterates. **X** cycles the sort (Alphabetical → Time Played → Last Played; indicator top-right via `IconStat`). **View/V** swaps the layout (Carousel ↔ List, persisted via `library_view_mode`); the details pane shows marketplace DB info (bio, genre, developer, publisher, release date — loading/no-info states, stale-fetch guard + negative cache) plus a **Xenia version icon** opposite the title (bare build icon + hover tooltip via Core converters) and a **compatibility row** as the first metadata entry (rating label with the coloured dot to its right, DB URL as hover tooltip). Disc stub shown when the library is empty.
 - **Gallery** — screenshot gallery scanned from `Emulators/Xenia Canary/screenshots/**` (recursive, common image extensions), 4-across 16:9 grid that scrolls down (clamped at both ends — no wrap-back), **X** cycles the sort (Newest First / Oldest First / By Game; indicator top-right via `IconStat`, **capture date decoded from the file name** (`{GAMEID} - {yyyy-MM-ddTHH-mm-ss}`, write time as fallback — `ScreenshotFileNameParser`)). Click/Enter → **screenshot viewer modal** (on the modal stack — see the viewer section below). Camera stub shown when the gallery is empty. Hints: Back · Select (A) · Sort (X).
 - **Settings** — background type dropdown, library view dropdown, **card image dropdown** (Box Art / Icon, default Icon), primary/accent colour fields (swatch + hex + palette popup), vignette slider, background image picker. **XConfig section** (bottom of the screen, hidden when no Canary XConfig exists): a single **Resolution** dropdown (`AvHdmiScreenSize`, "R" prefix stripped, instant-saved). **Controller navigation (T18):** D-pad walks the rows (fixed cards then connected gamepad rows — the `.settings-row` accent border marks the selection, rows start unselected, the first move selects the first row, the selection survives battery-poll rebuilds); **A** activates — gamepad rows set the primary controller, the quit toggle flips, Manage Profiles / Select Image act, dropdown rows open their native dropdown (**Up/Down** cycles, **A** commits, **B** restores the original), colour rows open the palette popup (**Left/Right** cycles), **the vignette slider steps directly with Left/Right on selection (no editor)**; **Back** closes an open editor first, then the screen. Keyboard input stays on the native controls (Tab, arrows, hex typing).
-- **Quit** — closes the app.
+- **Quit** — closes the app. When "Return to Xenia Manager on Quit" is on, the base app is launched first if it isn't running; when **off**, BigScreen sets its process exit code to `ProcessExitCodes.CloseEverything` (shared Core constant) so the desktop app — if it launched BigScreen — shuts down too instead of restoring its window.
 - **Launch behaviour (T35):** when the **Launch Games in Fullscreen** toggle is on (default, Preferences section), `MainWindowViewModel.LaunchGame` forces the game's `Display.fullscreen` for the session via `GameDataCache.GetConfig` (original value captured, restored after the session; skipped when the game runs Custom Xenia or has no config file yet). Same launch path also injects the active profile into the game's `[Profiles] logged_profile_slot_0_xuid` so Xenia boots signed in (see Profiles & identity).
 - **Hint bars** — order per screen: Library = Back (B red) → Play (A green) → Sort (X blue) → Details (Y amber) → Swap View (faded-white `CaretLeft`, `HintKeyBack` token); Gallery = Back → Select (A) → Sort (X blue); Settings = Back → Select (A). **One hint bar at a time:** only the top modal's hint bar shows (`ModalViewModelBase.IsHintBarVisible`), and the overlay screens hide theirs while any modal is open.
 
@@ -57,8 +57,10 @@ Full-screen pages rendered over the dashboard; **Enter/click** opens, **B/Escape
 - Input (keyboard, gamepad, mouse activation) is **gated until `IsInitialized`** — no stray input can act during the splash.
 - Boot failures log and the window still reveals.
 
-### Main app integration (Feature 1)
+### Main app integration (Feature 1 + T28/T29)
 - **"Big Screen" nav button** in Xenia Manager (`MainView.axaml`, `Tv` icon, tooltip "Open Big Screen") → `NavigationService` `BigScreen` tag → launches `XeniaManager.BigScreen.exe` resolved **side-by-side or via the repo-sibling bin folder** (same config, matching `BaseAppLocator`); missing exe → localised warning box.
+- **T28 — hide + disable while BigScreen is open:** `LaunchBigScreen` keeps the `Process`, disables the main window (`EventManager`), hides it, `await`s `WaitForExitAsync()`, then restores (`Show()` + `EnableWindow()`). The catch path restores too, so a crashed BigScreen never strands the desktop UI. **Exit-code contract:** when BigScreen quit with "Return to Xenia Manager" off, its exit code is `ProcessExitCodes.CloseEverything` (`Core/Constants/ProcessExitCodes.cs`, exit code 1) and the desktop shuts down through the normal `MainWindow.Close()` cleanup path instead of restoring the window; any other exit (return-on, Alt+F4, crash) restores.
+- **T29 — start in Big Screen:** the `--bigscreen` CLI arg (case-insensitive) or the persisted **"Start in Big Screen"** toggle (`Core` `GeneralSettings.start_in_big_screen`, desktop Settings → General) launches BigScreen at startup. The hook runs on the **first window show only** — it unsubscribes itself, so the restore `Show()` after BigScreen exits can't relaunch it (this fixed a hard exit loop). The same toggle is mirrored in **BigScreen Settings → Preferences** ("Start in Big Screen"), reading and writing the same Core `Settings`/`config.json` so both apps share one state.
 
 ### Theming
 - `Resources/Themes/DarkGradient.axaml` — token dictionary: `CardBackground`, `CardTitleBar`, `CardBorder`, `AccentColor`, `TextPrimary/Secondary`, `HintKeyX/Y/A/B/Back`, `CardShadow`/`CardShadowSelected` (`BoxShadows`, **all offset 0,0 — even on every side, no directional angle**), `SystemAccentColor*` (Colour-typed variants), slider/control overrides, accent-fill family.
@@ -149,14 +151,14 @@ source/XeniaManager.BigScreen/
 │       └── ManageProfilesView.axaml(.cs) # Manage Profiles modal (rows + anchored create stub + edit panel)
 ├── ViewModels/
 │   ├── Shell/
-│   │   └── MainWindowViewModel.cs     # Composition root: child VMs, CurrentScreen navigation, launch/quit/refresh, IsModalOpen
+│   │   └── MainWindowViewModel.cs     # Composition root: child VMs, CurrentScreen navigation, launch/quit/refresh, IsModalOpen; launch config edits (fullscreen force + profile slot injection), quit exit-code (CloseEverything)
 │   ├── Dashboard/
 │   │   ├── HeaderViewModel.cs         # Profile, clock, wifi + controller battery state (+ IsSelected for the avatar chip)
 │   │   └── DashboardViewModel.cs      # RecentGames, Options, background brush + fade-through-black
 │   ├── Screens/
 │   │   ├── LibraryViewModel.cs        # Games carousel + sort (ScreenViewModel base)
 │   │   ├── GalleryViewModel.cs        # Screenshots + sort (ScreenViewModel base)
-│   │   ├── SettingsViewModel.cs       # Appearance options + persistence + quit toggle + library view + card image + Manage Profiles entry + controller row navigation (selection, row editors, primary switch)
+│   │   ├── SettingsViewModel.cs       # Appearance options + persistence + quit/fullscreen/start-in-Big-Screen toggles + library view + card image + Manage Profiles entry + controller row navigation (selection, row editors, primary switch)
 │   │   └── ScreenViewModel.cs         # Base for overlay screens: ScreenBackground brush + hint-bar visibility
 │   ├── Modals/
 │   │   ├── ModalViewModelBase.cs(.Generic.cs) # Modal lifecycle: close TCS, HandleInput (Back closes by default), Dispose hook, IsHintBarVisible (top modal only); generic result delivery
@@ -234,7 +236,7 @@ source/XeniaManager.BigScreen/
 │   ├── IBackgroundService.cs / IGameLibraryService.cs / IProfileService.cs / IScreenshotLibraryService.cs / IModalService.cs
 │   ├── InputRouter.cs               # Command-driven: key/gamepad → NavigationCommand → dispatcher (modal stack → viewer → overlay → dashboard)
 │   ├── ModalService.cs              # Push/pop modal stack: ShowAsync (typed result), Close pops + disposes, StackChanged (IModalService)
-│   ├── ProfileService.cs            # All Canary profiles, active profile (persisted profile_xuid), switch/refresh, per-game achievement/GPD stats, per-profile gamerscore, XConfig default-profile sync (IProfileService)
+│   ├── ProfileService.cs            # All Canary profiles, active profile (persisted profile_xuid), switch/refresh, EnsureActiveProfile launch safety net, per-game achievement/GPD stats, per-profile gamerscore, XConfig default-profile sync (IProfileService)
 │   ├── ScreenshotLibraryService.cs  # Recursive screenshot scan, extension filter, game-title matching, filename-decoded metadata (IScreenshotLibraryService)
 │   └── ServiceConfigurator.cs       # DI registration (mirrors the main app: singleton services + VMs, App.Services)
 ├── Constants/
@@ -457,8 +459,8 @@ source/XeniaManager.BigScreen/
 - [x] **T35.** Launch games in fullscreen — Preferences toggle (default on, persisted); sets `Display.fullscreen` at launch, restores after
 
 ### 5.20 Desktop app integration
-- [ ] **T28.** Hide + disable the main window while BigScreen is open; restore on exit
-- [ ] **T29.** BigScreen start by default — `--bigscreen` CLI arg + "Start in Big Screen" toggle (persisted)
+- [x] **T28.** Hide + disable the main window while BigScreen is open; restore on exit
+- [x] **T29.** BigScreen start by default — `--bigscreen` CLI arg + "Start in Big Screen" toggle (persisted)
 
 ### 5.21 Gallery sort expansion (full desktop parity)
 - [ ] **T30.** ~~Expand gallery sort with the desktop's full list: Title, Time Played, Compatibility, TitleId, MediaId, XeniaVersion, Last Played (alongside Newest/Oldest/By Game)~~ — **cancelled by owner decision: the gallery keeps its three orders (Newest First / Oldest First / By Game); no sort modifications.**

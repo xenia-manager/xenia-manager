@@ -16,6 +16,7 @@ using XeniaManager.BigScreen.ViewModels.Dashboard;
 using XeniaManager.BigScreen.ViewModels.Screens;
 using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
@@ -263,6 +264,8 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Requests the app to quit. When returning to Xenia Manager is enabled and the
     /// base app isn't running, it is launched first; BigScreen then closes.
+    /// When returning is off, the exit code tells the desktop app (if it launched
+    /// us) to shut down too instead of restoring its window.
     /// </summary>
     public void Quit()
     {
@@ -275,6 +278,10 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 Process.Start(new ProcessStartInfo { FileName = baseExe, UseShellExecute = true });
             }
+        }
+        else
+        {
+            Environment.ExitCode = ProcessExitCodes.CloseEverything;
         }
 
         QuitRequested?.Invoke(this, EventArgs.Empty);
@@ -529,33 +536,33 @@ public partial class MainWindowViewModel : ViewModelBase
 
         await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingSettings"), SplashStages.LoadingSettings,
             cancellationToken, () =>
-        {
-            Settings.Load();
-            Dashboard.UpdateBackground(null);
-            Header.ApplyTimeFormat(Settings.TimeFormat);
-
-            if (!string.IsNullOrEmpty(_backgroundService.Settings.PrimaryControllerGuid))
             {
-                _gamepadService.SetPrimaryByGuid(_backgroundService.Settings.PrimaryControllerGuid);
-            }
-        });
+                Settings.Load();
+                Dashboard.UpdateBackground(null);
+                Header.ApplyTimeFormat(Settings.TimeFormat);
+
+                if (!string.IsNullOrEmpty(_backgroundService.Settings.PrimaryControllerGuid))
+                {
+                    _gamepadService.SetPrimaryByGuid(_backgroundService.Settings.PrimaryControllerGuid);
+                }
+            });
 
         await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingProfile"), SplashStages.LoadingProfile,
             cancellationToken, () =>
-        {
-            _profileService.Load();
-            Header.ApplyProfile(_profileService);
-        });
+            {
+                _profileService.Load();
+                Header.ApplyProfile(_profileService);
+            });
 
         await StageAsync(progress, LocalizationHelper.GetText("Splash.LoadingDashboard"),
             SplashStages.LoadingDashboard, cancellationToken, () =>
-        {
-            _gameLibraryService.Load();
-            foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
             {
-                Dashboard.RecentGames.Add(CreateRecentGameCard(game));
-            }
-        });
+                _gameLibraryService.Load();
+                foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
+                {
+                    Dashboard.RecentGames.Add(CreateRecentGameCard(game));
+                }
+            });
 
         progress?.Report((LocalizationHelper.GetText("Splash.LoadingLibrary"), SplashStages.LoadingLibrary));
         cancellationToken.ThrowIfCancellationRequested();
