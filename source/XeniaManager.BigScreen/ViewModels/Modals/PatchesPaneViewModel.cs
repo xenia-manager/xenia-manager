@@ -43,6 +43,12 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     public ObservableCollection<PatchListRowViewModel> Rows { get; } = [];
 
     /// <summary>
+    /// Raised when the selection moves so the view can scroll the selected
+    /// row into view.
+    /// </summary>
+    public event Action? ScrollRequested;
+
+    /// <summary>
     /// The pane header: the patch's title name, or a "no patch" label.
     /// </summary>
     public string HeaderText => _patchFile?.TitleName
@@ -188,9 +194,11 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
         {
             case NavigationCommand.MoveUp:
                 SelectionHelper.MoveSelection(Rows, -1);
+                ScrollRequested?.Invoke();
                 return true;
             case NavigationCommand.MoveDown:
                 SelectionHelper.MoveSelection(Rows, 1);
+                ScrollRequested?.Invoke();
                 return true;
             case NavigationCommand.Activate:
                 ActivateSelectedRow();
