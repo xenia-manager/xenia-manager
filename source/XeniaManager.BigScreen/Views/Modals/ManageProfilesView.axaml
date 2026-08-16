@@ -50,11 +50,14 @@
     <Border Classes="modal-screen">
         <Grid Margin="48" RowDefinitions="Auto, *, Auto">
 
-            <!-- HEADER: title + status line -->
+            <!-- HEADER: title + version + status line -->
             <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,10,0,30">
-                <TextBlock Grid.Column="0"
-                           Text="{DynamicResource ManageProfiles.Title}"
-                           Classes="screen-title" />
+                <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="4">
+                    <TextBlock Text="{DynamicResource ManageProfiles.Title}"
+                               Classes="screen-title" />
+                    <TextBlock Text="{Binding VersionText}"
+                               Classes="settings-subtitle" />
+                </StackPanel>
                 <TextBlock Grid.Column="1"
                            Text="{Binding StatusText}"
                            IsVisible="{Binding HasStatus}"

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
 
 namespace XeniaManager.BigScreen.Utilities;
@@ -30,11 +31,11 @@ public static class ProfileRowsHelper
     /// updating each row as it lands.
     /// </summary>
     public static async Task LoadGamerscoresAsync(
-        IEnumerable<ProfileItemViewModel> rows, IProfileService profileService)
+        IEnumerable<ProfileItemViewModel> rows, IProfileService profileService, XeniaVersion version)
     {
         foreach (ProfileItemViewModel item in rows)
         {
-            int score = await Task.Run(() => profileService.GetGamerscore(item.Profile));
+            int score = await Task.Run(() => profileService.GetGamerscore(version, item.Profile));
             item.GamerscoreText = score.ToString();
         }
     }

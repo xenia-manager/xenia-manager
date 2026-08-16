@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Avalonia.Media;
+using XeniaManager.Core.Models;
 
 namespace XeniaManager.BigScreen.Models.Settings;
 
@@ -78,8 +80,22 @@ public class DashboardSettings
     public string? PrimaryControllerGuid { get; set; }
 
     /// <summary>
-    /// Hex PathXUID of the active Canary profile, restored at boot.
+    /// Hex PathXUID of the active profile per emulator version, restored at boot.
     /// </summary>
-    [JsonPropertyName("profile_xuid")]
-    public string? ProfileXuid { get; set; }
+    [JsonPropertyName("active_profiles")]
+    public Dictionary<XeniaVersion, string> ActiveProfiles { get; set; } = [];
+
+    /// <summary>
+    /// The emulator version whose profile is considered active (drives the
+    /// header identity and pickers), restored at boot.
+    /// </summary>
+    [JsonPropertyName("active_version")]
+    public XeniaVersion? ActiveVersion { get; set; }
+
+    /// <summary>
+    /// Whether the header identity automatically cycles through every version
+    /// that has an active profile (display only).
+    /// </summary>
+    [JsonPropertyName("rotate_profiles")]
+    public bool RotateProfiles { get; set; } = true;
 }

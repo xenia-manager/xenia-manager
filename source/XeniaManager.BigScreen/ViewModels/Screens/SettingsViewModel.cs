@@ -21,7 +21,6 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.XConfig;
 using XeniaManager.Core.Services;
-using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Screens;
@@ -193,6 +192,11 @@ public partial class SettingsViewModel : ViewModelBase
     /// Row for the "start in Big Screen" toggle (writes the desktop app's setting).
     /// </summary>
     public SettingsRowViewModel RowStartInBigScreenToggle { get; } = new(SettingsRowKind.StartInBigScreenToggle);
+
+    /// <summary>
+    /// Row for the "rotate profiles" toggle.
+    /// </summary>
+    public SettingsRowViewModel RowRotateProfiles { get; } = new(SettingsRowKind.RotateProfiles);
 
     /// <summary>
     /// Row for the background type dropdown card.
@@ -389,6 +393,13 @@ public partial class SettingsViewModel : ViewModelBase
     public partial bool StartInBigScreen { get; set; }
 
     /// <summary>
+    /// Whether the header identity automatically cycles through every version
+    /// that has an active profile.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool RotateProfiles { get; set; } = true;
+
+    /// <summary>
     /// Whether this screen's hint bar is visible - hidden while any modal is
     /// open, so only the top modal's hints show.
     /// </summary>
@@ -528,6 +539,7 @@ public partial class SettingsViewModel : ViewModelBase
         _rows.Add(RowQuitToggle);
         _rows.Add(RowFullscreenToggle);
         _rows.Add(RowStartInBigScreenToggle);
+        _rows.Add(RowRotateProfiles);
         _rows.Add(RowBackgroundMode);
         _rows.Add(RowPrimaryColour);
         _rows.Add(RowAccentColour);
@@ -646,9 +658,11 @@ public partial class SettingsViewModel : ViewModelBase
             return;
         }
 
-        Logger.Info<SettingsViewModel>("Opening manage profiles");
+        XeniaVersion version = App.Services.GetRequiredService<IProfileService>().ActiveVersion
+                               ?? XeniaVersion.Canary;
+        Logger.Info<SettingsViewModel>($"Opening manage profiles for {version}");
         TaskUtilities.RunSafely<SettingsViewModel>(
-            () => modalService.ShowAsync(new ManageProfilesViewModel()), "Opening manage profiles");
+            () => modalService.ShowAsync(new ManageProfilesViewModel(version)), "Opening manage profiles");
     }
 
     /// <summary>
@@ -761,6 +775,9 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.StartInBigScreenToggle:
                 StartInBigScreen = !StartInBigScreen;
                 break;
+            case SettingsRowKind.RotateProfiles:
+                RotateProfiles = !RotateProfiles;
+                break;
             case SettingsRowKind.BackgroundImage:
                 SelectImageRequested?.Invoke();
                 break;
@@ -868,6 +885,7 @@ public partial class SettingsViewModel : ViewModelBase
         ReturnToXeniaOnQuit = _backgroundService.Settings.ReturnToXeniaOnQuit;
         LaunchGamesFullscreen = _backgroundService.Settings.LaunchGamesFullscreen;
         StartInBigScreen = _desktopSettings.Settings.General.StartInBigScreen;
+        RotateProfiles = _backgroundService.Settings.RotateProfiles;
         LibraryViewMode = _backgroundService.Settings.LibraryViewMode;
         SelectedLibraryViewMode = LibraryViewModeOptions.FirstOrDefault(o => o.Mode == LibraryViewMode);
         CardImageMode = _backgroundService.Settings.CardImageMode;
@@ -971,6 +989,12 @@ public partial class SettingsViewModel : ViewModelBase
         _desktopSettings.Settings.General.StartInBigScreen = value;
         _desktopSettings.SaveSettings();
         Logger.Info<SettingsViewModel>($"Start in Big Screen: {value}");
+    }
+
+    partial void OnRotateProfilesChanged(bool value)
+    {
+        SaveAppearance(s => s.RotateProfiles = value);
+        Logger.Info<SettingsViewModel>($"Rotate profiles in header: {value}");
     }
 
     partial void OnLibraryViewModeChanged(LibraryViewMode value)

@@ -1,17 +1,21 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Converters;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Core.Models;
 
 namespace XeniaManager.BigScreen.ViewModels.Modals;
 
 /// <summary>
-/// Full-screen profile picker: lists all Canary profiles, A switches the active
+/// Full-screen profile picker: lists the profiles of one emulator version
+/// (selected via the version chips or left/right), A switches the active
 /// profile, Y opens Manage Profiles, B closes. Opened from the header avatar chip.
 /// </summary>
 public class ProfilePickerViewModel : ModalViewModelBase
@@ -19,10 +23,17 @@ public class ProfilePickerViewModel : ModalViewModelBase
     private readonly IProfileService _profileService;
     private readonly IModalService _modalService;
 
+    private XeniaVersion _version;
+
     /// <summary>
-    /// All Canary profiles, active one first.
+    /// All profiles of the selected version, active one first.
     /// </summary>
     public ObservableCollection<ProfileItemViewModel> Profiles { get; } = [];
+
+    /// <summary>
+    /// Emulator-version chips, one per version that has profiles.
+    /// </summary>
+    public ObservableCollection<VersionChipViewModel> VersionChips { get; } = [];
 
     /// <summary>
     /// Whether any profiles exist.
@@ -30,18 +41,23 @@ public class ProfilePickerViewModel : ModalViewModelBase
     public bool HasProfiles => Profiles.Count > 0;
 
     /// <summary>
+    /// Whether any version chips exist.
+    /// </summary>
+    public bool HasVersionChips => VersionChips.Count > 0;
+
+    /// <summary>
     /// Whether the "no profiles" stub should show.
     /// </summary>
     public bool ShowEmpty => !HasProfiles;
 
     /// <summary>
-    /// Rebuilds the profile list from the profile service, active first, then alphabetical.
+    /// Rebuilds the profile list and version chips from the profile service.
     /// </summary>
     public void Reload()
     {
+        VersionProfileState state = _profileService.StateFor(_version);
         Profiles.Clear();
-        AccountInfo? active = _profileService.ActiveProfile;
-        foreach (ProfileItemViewModel item in ProfileRowsHelper.BuildRows(_profileService.Profiles, active))
+        foreach (ProfileItemViewModel item in ProfileRowsHelper.BuildRows(state.Profiles, state.ActiveProfile))
         {
             Profiles.Add(item);
         }
@@ -51,8 +67,69 @@ public class ProfilePickerViewModel : ModalViewModelBase
             Profiles[0].IsSelected = true;
         }
 
+        BuildChips();
         TaskUtilities.RunSafely<ProfilePickerViewModel>(
-            () => ProfileRowsHelper.LoadGamerscoresAsync(Profiles, _profileService), "Loading profile gamerscores");
+            () => ProfileRowsHelper.LoadGamerscoresAsync(Profiles, _profileService, _version),
+            "Loading profile gamerscores");
+    }
+
+    /// <summary>
+    /// Rebuilds the version chips for every installed version that has profiles,
+    /// marking the selected one.
+    /// </summary>
+    private void BuildChips()
+    {
+        VersionChips.Clear();
+        IReadOnlyList<XeniaVersion> versions = _profileService.VersionsWithProfiles;
+        if (versions.Count == 0)
+        {
+            versions = _profileService.InstalledVersions;
+        }
+
+        foreach (XeniaVersion version in versions)
+        {
+            VersionChips.Add(new VersionChipViewModel(
+                version,
+                IconFactory.GetVersionIcon(version),
+                (string)XeniaVersionToStringConverter.Instance.Convert(version, typeof(string), null,
+                    System.Globalization.CultureInfo.InvariantCulture)!,
+                version == _version));
+        }
+    }
+
+    /// <summary>
+    /// Switches the shown version by the given step, wrapping around.
+    /// </summary>
+    public void SwitchVersion(int delta)
+    {
+        IReadOnlyList<XeniaVersion> versions = _profileService.VersionsWithProfiles;
+        if (versions.Count == 0)
+        {
+            versions = _profileService.InstalledVersions;
+        }
+
+        if (versions.Count == 0)
+        {
+            return;
+        }
+
+        int index = versions.ToList().IndexOf(_version);
+        if (index < 0)
+        {
+            index = 0;
+        }
+
+        _version = versions[(index + delta + versions.Count) % versions.Count];
+        Reload();
+    }
+
+    /// <summary>
+    /// Selects the given version chip (mouse click) and shows its profiles.
+    /// </summary>
+    public void SelectVersion(VersionChipViewModel chip)
+    {
+        _version = chip.Version;
+        Reload();
     }
 
     /// <summary>
@@ -68,7 +145,7 @@ public class ProfilePickerViewModel : ModalViewModelBase
         ProfileItemViewModel? selected = Profiles.FirstOrDefault(p => p.IsSelected);
         if (selected != null)
         {
-            _profileService.SwitchProfile(selected.Profile);
+            _profileService.SwitchProfile(_version, selected.Profile);
         }
 
         Close();
@@ -91,7 +168,7 @@ public class ProfilePickerViewModel : ModalViewModelBase
     {
         Logger.Debug<ProfilePickerViewModel>("Opening manage profiles from picker");
         TaskUtilities.RunSafely<ProfilePickerViewModel>(
-            () => _modalService.ShowAsync(new ManageProfilesViewModel()), "Opening manage profiles");
+            () => _modalService.ShowAsync(new ManageProfilesViewModel(_version)), "Opening manage profiles");
     }
 
     /// <inheritdoc />
@@ -104,6 +181,12 @@ public class ProfilePickerViewModel : ModalViewModelBase
                 return true;
             case NavigationCommand.MoveDown:
                 Move(1);
+                return true;
+            case NavigationCommand.MoveLeft:
+                SwitchVersion(-1);
+                return true;
+            case NavigationCommand.MoveRight:
+                SwitchVersion(1);
                 return true;
             case NavigationCommand.Activate:
                 SelectActive();
@@ -123,6 +206,7 @@ public class ProfilePickerViewModel : ModalViewModelBase
     {
         _profileService = App.Services.GetRequiredService<IProfileService>();
         _modalService = App.Services.GetRequiredService<IModalService>();
+        _version = _profileService.ActiveVersion ?? XeniaVersion.Canary;
         Reload();
     }
 }

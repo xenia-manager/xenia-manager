@@ -46,6 +46,7 @@ public class ProfileImportExportHelper
     public static async Task<ProfileOperationStatus> ExportAsync(
         IProfileService profileService,
         IModalService modalService,
+        XeniaVersion version,
         AccountInfo profile,
         string outputPath)
     {
@@ -57,7 +58,7 @@ public class ProfileImportExportHelper
 
         try
         {
-            return await ProfileManager.ExportProfile(XeniaVersion.Canary, profile, exportSaves, outputPath)
+            return await ProfileManager.ExportProfile(version, profile, exportSaves, outputPath)
                 ? ProfileOperationStatus.Success
                 : ProfileOperationStatus.Failed;
         }
@@ -93,12 +94,13 @@ public class ProfileImportExportHelper
     public static async Task<(ProfileOperationStatus Status, AccountInfo? Profile)> ImportAsync(
         IProfileService profileService,
         IModalService modalService,
+        XeniaVersion version,
         string zipPath)
     {
         try
         {
             AccountInfo? imported = await ProfileManager.ImportProfileWithReplacement(
-                XeniaVersion.Canary, zipPath, profileService.Profiles.ToList(),
+                version, zipPath, profileService.ProfilesFor(version).ToList(),
                 existing => ConfirmReplaceAsync(modalService, existing));
             return imported != null
                 ? (ProfileOperationStatus.Success, imported)

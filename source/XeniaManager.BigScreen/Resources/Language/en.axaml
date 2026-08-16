@@ -92,6 +92,8 @@
     <sys:String x:Key="Settings.LaunchGamesFullscreen.Description">On: Games start in Fullscreen · Off: Use the Game's Config Setting</sys:String>
     <sys:String x:Key="Settings.StartInBigScreen">Start in Big Screen</sys:String>
     <sys:String x:Key="Settings.StartInBigScreen.Description">On: Xenia Manager opens Big Screen on Startup · Off: Opens the Main Window</sys:String>
+    <sys:String x:Key="Settings.RotateProfiles">Rotate Header Profiles</sys:String>
+    <sys:String x:Key="Settings.RotateProfiles.Description">On: Cycles through every emulator version's Profile in the Header · Off: Shows the Active Version's Profile</sys:String>
     <sys:String x:Key="Settings.Controllers.None">No controllers connected</sys:String>
     <sys:String x:Key="Settings.Controllers.Primary">Primary</sys:String>
     <sys:String x:Key="Settings.Controllers.Secondary">Secondary</sys:String>

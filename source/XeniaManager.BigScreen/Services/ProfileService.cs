@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
@@ -16,43 +17,82 @@ using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Files.XConfig;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
+using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.Services;
 
 /// <summary>
-/// Loads all Canary profiles, tracks the active one (persisted as
-/// <c>profile_xuid</c>) and resolves per-game achievement/gamerscore stats from
-/// the active profile's GPD, falling back to each game's achievement GPD.
+/// Loads the profiles of every installed emulator version, tracks the active
+/// profile per version (persisted in <see cref="DashboardSettings.ActiveProfiles"/>)
+/// and resolves per-game achievement/gamerscore stats from each version's active
+/// profile GPD, falling back to each game's achievement GPD. When the unified
+/// content folder is enabled all versions share the primary version's profile set.
 /// </summary>
 public class ProfileService : IProfileService
 {
+    /// <summary>
+    /// Per-version profile state (profiles, active profile, gamerscore).
+    /// </summary>
+    private sealed class VersionState
+    {
+        public List<AccountInfo> Profiles { get; set; } = [];
+
+        public AccountInfo? ActiveProfile { get; set; }
+
+        /// <summary>
+        /// The profile GPD of the active profile, used for per-game achievement stats.
+        /// </summary>
+        public GpdFile? ProfileGpd { get; set; }
+
+        public string Gamertag { get; set; } = "Guest";
+
+        public string Gamerscore { get; set; } = "0";
+    }
+
+    private static readonly VersionState EmptyState = new();
+
     private readonly IBackgroundService _backgroundService;
+    private readonly Dictionary<XeniaVersion, VersionState> _states = [];
+
+    private List<XeniaVersion> _installedVersions = [];
+    private bool _unifiedContentFolder;
 
     /// <summary>
-    /// The profile GPD of the active profile, used for per-game achievement stats.
+    /// The version whose profile drives the header and default pickers.
     /// </summary>
-    private GpdFile? _profileGpd;
+    public XeniaVersion? ActiveVersion { get; private set; }
 
     /// <summary>
-    /// Gamertag of the active Canary profile, or "Guest" when none exists.
+    /// Gamertag of the active version's profile, or "Guest" when none exists.
     /// </summary>
-    public string Gamertag { get; private set; } = "Guest";
+    public string Gamertag => StateForVersion(ActiveVersion).Gamertag;
 
     /// <summary>
-    /// Total gamerscore of the active profile, or "0" when none exists.
+    /// Total gamerscore of the active version's profile, or "0" when none exists.
     /// </summary>
-    public string Gamerscore { get; private set; } = "0";
+    public string Gamerscore => StateForVersion(ActiveVersion).Gamerscore;
 
     /// <summary>
-    /// All Canary profiles found on disk.
+    /// All profiles of the active version found on disk.
     /// </summary>
-    public IReadOnlyList<AccountInfo> Profiles { get; private set; } = [];
+    public IReadOnlyList<AccountInfo> Profiles => StateForVersion(ActiveVersion).Profiles;
 
     /// <summary>
-    /// The active profile, or null when no profiles exist.
+    /// The active version's active profile, or null when no profiles exist.
     /// </summary>
-    public AccountInfo? ActiveProfile { get; private set; }
+    public AccountInfo? ActiveProfile => StateForVersion(ActiveVersion).ActiveProfile;
+
+    /// <summary>
+    /// Installed versions (in installation order) that have at least one profile.
+    /// </summary>
+    public IReadOnlyList<XeniaVersion> VersionsWithProfiles =>
+        _installedVersions.Where(v => StateForVersion(v).Profiles.Count > 0).ToList();
+
+    /// <summary>
+    /// All installed emulator versions (in installation order).
+    /// </summary>
+    public IReadOnlyList<XeniaVersion> InstalledVersions => _installedVersions;
 
     /// <summary>
     /// Raised after the active profile changes, so the header and game stats refresh.
@@ -76,24 +116,166 @@ public class ProfileService : IProfileService
     }
 
     /// <summary>
-    /// Writes the active profile's XUID, language and country into the Canary
-    /// XConfig (the emulator's default profile), so launched games run with the
-    /// selected BigScreen profile. Skipped when no XConfig file exists.
+    /// Returns the state of the given version. With a unified content folder all
+    /// versions share the primary version's state; never-loaded versions report
+    /// an empty state.
     /// </summary>
-    public void SyncXConfigDefaultProfile()
+    private VersionState StateForVersion(XeniaVersion? version)
     {
+        if (_unifiedContentFolder)
+        {
+            return _states.Count > 0 ? _states.Values.First() : EmptyState;
+        }
+
+        return version is { } v && _states.TryGetValue(v, out VersionState? state) ? state : EmptyState;
+    }
+
+    /// <summary>
+    /// The versions whose profile sets are actually loaded (single version when
+    /// the content folders are unified).
+    /// </summary>
+    private List<XeniaVersion> VersionsToLoad()
+    {
+        if (_unifiedContentFolder && _installedVersions.Count > 0)
+        {
+            return [_installedVersions[0]];
+        }
+
+        return _installedVersions;
+    }
+
+    /// <summary>
+    /// The persisted XUID of the given version, or null when none was saved.
+    /// </summary>
+    private string? PersistedXuid(XeniaVersion version) =>
+        _backgroundService.Settings.ActiveProfiles.GetValueOrDefault(version);
+
+    /// <summary>
+    /// The version whose profile drives the header: the persisted active version
+    /// when it still has profiles, otherwise the first version with profiles.
+    /// </summary>
+    private XeniaVersion? ResolveActiveVersion()
+    {
+        if (_backgroundService.Settings.ActiveVersion is { } saved
+            && _installedVersions.Contains(saved)
+            && StateForVersion(saved).Profiles.Count > 0)
+        {
+            return saved;
+        }
+
+        return _installedVersions.FirstOrDefault(v => StateForVersion(v).Profiles.Count > 0);
+    }
+
+    /// <summary>
+    /// Loads the given version's profiles and activates its persisted profile
+    /// (falling back to the first when the saved XUID no longer exists).
+    /// </summary>
+    private void LoadVersion(XeniaVersion version)
+    {
+        if (version == XeniaVersion.Custom
+            || !_installedVersions.Contains(version)
+            || _states.ContainsKey(version))
+        {
+            return;
+        }
+
+        if (_unifiedContentFolder && _states.Count > 0)
+        {
+            return;
+        }
+
         try
         {
-            XConfigFile? xconfig = XConfigManager.LoadXConfig(XeniaVersion.Canary);
+            VersionState state = new VersionState { Profiles = ProfileManager.LoadProfiles(version) };
+            _states[version] = state;
+            ActivatePersisted(version, state);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<ProfileService>($"Failed to load profiles for {version}, keeping empty state");
+            Logger.LogExceptionDetails<ProfileService>(ex);
+            _states[version] = new VersionState();
+        }
+    }
+
+    /// <summary>
+    /// Restores the persisted active profile of the given version, persisting a
+    /// fallback selection when the saved XUID no longer exists.
+    /// </summary>
+    private void ActivatePersisted(XeniaVersion version, VersionState state)
+    {
+        if (state.Profiles.Count == 0)
+        {
+            return;
+        }
+
+        string? savedXuid = PersistedXuid(version);
+        AccountInfo? profile = state.Profiles.FirstOrDefault(p => MatchesXuid(p, savedXuid)) ?? state.Profiles[0];
+        ActivateProfile(version, profile);
+
+        if (profile.PathXuidText() != savedXuid)
+        {
+            _backgroundService.Settings.ActiveProfiles[version] = profile.PathXuidText()!;
+            _backgroundService.Save();
+        }
+    }
+
+    /// <summary>
+    /// Applies the given profile as the version's active profile and loads its
+    /// gamerscore from the profile GPD.
+    /// </summary>
+    private void ActivateProfile(XeniaVersion version, AccountInfo profile)
+    {
+        VersionState state = StateForVersion(version);
+        state.ActiveProfile = profile;
+        state.Gamertag = profile.Gamertag;
+        state.ProfileGpd = null;
+        state.Gamerscore = "0";
+
+        try
+        {
+            AccountContent content = new AccountContent(profile, version, XboxConstants.ProfileContentTitleId);
+            if (content.ProfileGpd != null)
+            {
+                state.ProfileGpd = content.ProfileGpd;
+                state.Gamerscore = content.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked).ToString();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<ProfileService>(
+                $"Failed to load the profile GPD for '{profile.Gamertag}' ({version}), gamerscore kept at 0");
+            Logger.LogExceptionDetails<ProfileService>(ex);
+        }
+
+        SyncXConfigDefaultProfile(version);
+    }
+
+    /// <summary>
+    /// Writes the active profile's XUID, language and country into the given
+    /// version's XConfig (the emulator's default profile), so launched games run
+    /// with the selected BigScreen profile. Skipped when no XConfig file exists.
+    /// </summary>
+    public void SyncXConfigDefaultProfile(XeniaVersion version)
+    {
+        if (version == XeniaVersion.Custom)
+        {
+            return;
+        }
+
+        try
+        {
+            XConfigFile? xconfig = XConfigManager.LoadXConfig(version);
             if (xconfig == null)
             {
-                Logger.Debug<ProfileService>("No Canary XConfig file - default profile sync skipped");
+                Logger.Debug<ProfileService>($"No {version} XConfig file - default profile sync skipped");
                 return;
             }
 
-            ulong xuid = ActiveProfile?.PathXuid?.Value ?? 0;
-            XLanguage language = ActiveProfile != null ? (XLanguage)ActiveProfile.Language : XLanguage.Invalid;
-            XOnlineCountry country = ActiveProfile != null ? (XOnlineCountry)ActiveProfile.Country : (XOnlineCountry)0;
+            VersionState state = StateForVersion(version);
+            ulong xuid = state.ActiveProfile?.PathXuid?.Value ?? 0;
+            XLanguage language = state.ActiveProfile != null ? (XLanguage)state.ActiveProfile.Language : XLanguage.Invalid;
+            XOnlineCountry country = state.ActiveProfile != null ? (XOnlineCountry)state.ActiveProfile.Country : (XOnlineCountry)0;
 
             if (IsProfileSynced(xconfig, xuid, language, country))
             {
@@ -103,112 +285,98 @@ public class ProfileService : IProfileService
             xconfig.DefaultProfile = xuid;
             xconfig.Language = language;
             xconfig.Country = country;
-            XConfigManager.SaveXConfig(xconfig, XeniaVersion.Canary);
+            XConfigManager.SaveXConfig(xconfig, version);
             Logger.Info<ProfileService>(
-                $"XConfig synced: default profile 0x{xuid:X16}, language {language}, country {country}");
+                $"XConfig synced ({version}): default profile 0x{xuid:X16}, language {language}, country {country}");
         }
         catch (Exception ex)
         {
-            Logger.Error<ProfileService>("Failed to sync the Canary XConfig default profile");
+            Logger.Error<ProfileService>($"Failed to sync the {version} XConfig default profile");
             Logger.LogExceptionDetails<ProfileService>(ex);
         }
     }
 
     /// <summary>
-    /// Applies the given profile as active and loads its gamerscore from the profile GPD.
-    /// </summary>
-    private void ActivateProfile(AccountInfo profile)
-    {
-        ActiveProfile = profile;
-        Gamertag = profile.Gamertag;
-        _profileGpd = null;
-        Gamerscore = "0";
-
-        try
-        {
-            AccountContent content = new(profile, XeniaVersion.Canary, XboxConstants.ProfileContentTitleId);
-            if (content.ProfileGpd != null)
-            {
-                _profileGpd = content.ProfileGpd;
-                Gamerscore = content.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked).ToString();
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.Warning<ProfileService>(
-                $"Failed to load the profile GPD for '{profile.Gamertag}', gamerscore kept at 0");
-            Logger.LogExceptionDetails<ProfileService>(ex);
-        }
-
-        SyncXConfigDefaultProfile();
-    }
-
-    /// <summary>
-    /// Loads all Canary profiles and activates the persisted one (falling back
-    /// to the first profile when the saved XUID no longer exists).
+    /// Loads the profiles of every installed version and restores each version's
+    /// persisted active profile. The active version is the persisted one when it
+    /// still has profiles, otherwise the first version with profiles.
     /// </summary>
     public void Load()
     {
         try
         {
-            Profiles = ProfileManager.LoadProfiles(XeniaVersion.Canary);
-            if (Profiles.Count == 0)
+            Settings desktopSettings = new Settings();
+            _unifiedContentFolder = desktopSettings.Settings.Emulator.Settings.UnifiedContentFolder;
+            _installedVersions = desktopSettings.GetInstalledVersions(desktopSettings);
+            _states.Clear();
+
+            foreach (XeniaVersion version in VersionsToLoad())
+            {
+                LoadVersion(version);
+            }
+
+            ActiveVersion = ResolveActiveVersion();
+            if (ActiveVersion == null)
             {
                 return;
             }
 
-            string? savedXuid = _backgroundService.Settings.ProfileXuid;
-            AccountInfo? profile = Profiles.FirstOrDefault(p => MatchesXuid(p, savedXuid)) ?? Profiles[0];
-            ActivateProfile(profile);
             ProfileChanged?.Invoke();
             Logger.Info<ProfileService>(
-                $"Loaded {Profiles.Count} profiles, active: '{Gamertag}'");
+                $"Loaded profiles for {_states.Count} version(s), active version: {ActiveVersion}");
         }
         catch (Exception ex)
         {
-            Logger.Warning<ProfileService>("Failed to load Canary profiles, keeping defaults");
+            Logger.Warning<ProfileService>("Failed to load profiles, keeping defaults");
             Logger.LogExceptionDetails<ProfileService>(ex);
         }
     }
 
     /// <summary>
-    /// Safety net: makes sure the active profile matches the persisted
-    /// <c>profile_xuid</c>, reloading the profile list when needed. Called at
-    /// game launch so sessions always run under the right profile even when
-    /// the boot-time restore fell back to the first profile.
+    /// Safety net: makes sure the given version's active profile matches its
+    /// persisted XUID, loading the version's profile list when needed. Called at
+    /// game launch so sessions always run under the right profile even when the
+    /// boot-time restore fell back to the first profile.
     /// </summary>
-    public void EnsureActiveProfile()
+    public void EnsureActiveProfile(XeniaVersion version)
     {
+        if (version == XeniaVersion.Custom)
+        {
+            return;
+        }
+
         try
         {
-            string? savedXuid = _backgroundService.Settings.ProfileXuid;
+            if (!_states.ContainsKey(version) && !(_unifiedContentFolder && _states.Count > 0))
+            {
+                LoadVersion(version);
+            }
+
+            string? savedXuid = PersistedXuid(version);
             if (string.IsNullOrEmpty(savedXuid))
             {
-                Logger.Debug<ProfileService>("No persisted profile XUID - launch safety net skipped");
+                Logger.Debug<ProfileService>($"No persisted profile XUID for {version} - launch safety net skipped");
                 return;
             }
 
-            if (ActiveProfile != null && MatchesXuid(ActiveProfile, savedXuid))
+            VersionState state = StateForVersion(version);
+            if (state.ActiveProfile != null && MatchesXuid(state.ActiveProfile, savedXuid))
             {
                 return;
             }
 
-            if (Profiles.Count == 0)
-            {
-                Profiles = ProfileManager.LoadProfiles(XeniaVersion.Canary);
-            }
-
-            AccountInfo? profile = Profiles.FirstOrDefault(p => MatchesXuid(p, savedXuid));
+            AccountInfo? profile = state.Profiles.FirstOrDefault(p => MatchesXuid(p, savedXuid));
             if (profile == null)
             {
                 Logger.Warning<ProfileService>(
-                    "Persisted profile XUID no longer exists - keeping the current active profile");
+                    $"Persisted profile XUID for {version} no longer exists - keeping the current active profile");
                 return;
             }
 
-            ActivateProfile(profile);
+            ActivateProfile(version, profile);
             ProfileChanged?.Invoke();
-            Logger.Info<ProfileService>($"Launch safety net restored the active profile: '{Gamertag}'");
+            Logger.Info<ProfileService>(
+                $"Launch safety net restored the active profile for {version}: '{state.Gamertag}'");
         }
         catch (Exception ex)
         {
@@ -218,75 +386,91 @@ public class ProfileService : IProfileService
     }
 
     /// <summary>
-    /// Re-scans the profile list after external changes, keeping the active
-    /// profile when it still exists (falling back to the first otherwise) and
-    /// refreshing the header and per-game stats.
+    /// Re-scans the profile lists after external changes, keeping each version's
+    /// active profile when it still exists (falling back to the first otherwise)
+    /// and refreshing the header and per-game stats.
     /// </summary>
     public void Refresh()
     {
         try
         {
-            IReadOnlyList<AccountInfo> loaded = ProfileManager.LoadProfiles(XeniaVersion.Canary);
-            if (loaded.Count == 0)
+            _states.Clear();
+            foreach (XeniaVersion version in VersionsToLoad())
             {
-                Profiles = [];
-                ActiveProfile = null;
-                _profileGpd = null;
-                Gamertag = "Guest";
-                Gamerscore = "0";
-                SyncXConfigDefaultProfile();
-                Logger.Warning<ProfileService>("No profiles remain after refresh");
-                ProfileChanged?.Invoke();
-                return;
+                LoadVersion(version);
             }
 
-            string? activeXuid = ActiveProfile.PathXuidText();
-            AccountInfo? profile = loaded.FirstOrDefault(p => MatchesXuid(p, activeXuid)) ?? loaded[0];
-            Profiles = loaded;
-            ActivateProfile(profile);
-
-            if (profile.PathXuidText() != activeXuid)
+            XeniaVersion? resolved = ResolveActiveVersion();
+            if (resolved != null)
             {
-                _backgroundService.Settings.ProfileXuid = profile.PathXuidText();
-                _backgroundService.Save();
+                ActiveVersion = resolved;
             }
 
             ProfileChanged?.Invoke();
-            Logger.Info<ProfileService>($"Profiles refreshed: {Profiles.Count} loaded, active: '{Gamertag}'");
+            Logger.Info<ProfileService>($"Profiles refreshed for {_states.Count} version(s)");
         }
         catch (Exception ex)
         {
-            Logger.Warning<ProfileService>("Failed to refresh Canary profiles");
+            Logger.Warning<ProfileService>("Failed to refresh profiles");
             Logger.LogExceptionDetails<ProfileService>(ex);
         }
     }
 
     /// <summary>
-    /// Activates the given profile, persists the selection as <c>profile_xuid</c>
-    /// and raises <see cref="ProfileChanged"/> so the header and game stats refresh.
+    /// Activates the given profile for the given version, persists the selection
+    /// (all versions when the content folders are unified) and raises
+    /// <see cref="ProfileChanged"/> so the header and game stats refresh.
     /// </summary>
-    public void SwitchProfile(AccountInfo profile)
+    public void SwitchProfile(XeniaVersion version, AccountInfo profile)
     {
-        if (!Profiles.Contains(profile))
+        if (version == XeniaVersion.Custom)
         {
-            Logger.Warning<ProfileService>($"Cannot switch to unknown profile '{profile.Gamertag}'");
             return;
         }
 
-        ActivateProfile(profile);
-        _backgroundService.Settings.ProfileXuid = profile.PathXuidText();
-        _backgroundService.Save();
+        if (!StateForVersion(version).Profiles.Contains(profile))
+        {
+            Logger.Warning<ProfileService>($"Cannot switch to unknown profile '{profile.Gamertag}' for {version}");
+            return;
+        }
+
+        ActivateProfile(version, profile);
+        PersistActive(version, profile);
+        ActiveVersion = version;
         ProfileChanged?.Invoke();
-        Logger.Info<ProfileService>($"Switched to profile '{Gamertag}' ({Gamerscore}G)");
+        Logger.Info<ProfileService>($"Switched to profile '{profile.Gamertag}' for {version}");
+    }
+
+    /// <summary>
+    /// Persists the active profile selection: the given version only, or every
+    /// installed version when the content folders are unified (they share the
+    /// same profile set).
+    /// </summary>
+    private void PersistActive(XeniaVersion version, AccountInfo profile)
+    {
+        DashboardSettings settings = _backgroundService.Settings;
+        List<XeniaVersion> targets = _unifiedContentFolder ? _installedVersions : [version];
+        foreach (XeniaVersion target in targets)
+        {
+            settings.ActiveProfiles[target] = profile.PathXuidText()!;
+        }
+
+        settings.ActiveVersion = version;
+        _backgroundService.Save();
     }
 
     /// <summary>
     /// Loads the per-game achievement GPD ({titleId}.gpd next to the profile GPD)
-    /// for the active profile, or null when no profile or GPD exists.
+    /// of the given version's active profile, or null when no profile or GPD exists.
     /// </summary>
-    public GpdFile? LoadGameAchievementGpd(string gameId)
+    public GpdFile? LoadGameAchievementGpd(XeniaVersion version, string gameId)
     {
-        AccountInfo? profileAccount = ActiveProfile;
+        if (version == XeniaVersion.Custom)
+        {
+            return null;
+        }
+
+        AccountInfo? profileAccount = StateForVersion(version).ActiveProfile;
         if (profileAccount == null || string.IsNullOrEmpty(gameId))
         {
             return null;
@@ -297,7 +481,7 @@ public class ProfileService : IProfileService
             string xuid =
                 (profileAccount.PathXuid?.Value ?? profileAccount.Xuid.Value).ToString(FormatConstants.XuidFormat);
             string contentFolder = AppPathResolver.GetFullPath(
-                XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion.Canary).ContentFolderLocation);
+                XeniaVersionInfo.GetXeniaVersionInfo(version).ContentFolderLocation);
             string gpdPath = Path.Combine(contentFolder, xuid, XboxConstants.ProfileContentTitleId,
                 ContentType.Profile.ToHexString(), xuid, $"{gameId.ToUpperInvariant()}.gpd");
 
@@ -310,7 +494,7 @@ public class ProfileService : IProfileService
         }
         catch (Exception ex)
         {
-            Logger.Error<ProfileService>($"Failed to load achievement GPD for '{gameId}'");
+            Logger.Error<ProfileService>($"Failed to load achievement GPD for '{gameId}' ({version})");
             Logger.LogExceptionDetails<ProfileService>(ex);
             return null;
         }
@@ -318,18 +502,19 @@ public class ProfileService : IProfileService
 
     /// <summary>
     /// Resolves the given profile's total gamerscore from its profile GPD,
-    /// reusing the loaded GPD when the profile is the active one.
+    /// reusing the loaded GPD when the profile is the version's active one.
     /// </summary>
-    public int GetGamerscore(AccountInfo profile)
+    public int GetGamerscore(XeniaVersion version, AccountInfo profile)
     {
-        if (ReferenceEquals(profile, ActiveProfile) && _profileGpd != null)
+        VersionState state = StateForVersion(version);
+        if (ReferenceEquals(profile, state.ActiveProfile) && state.ProfileGpd != null)
         {
-            return _profileGpd.Titles.Sum(t => t.GamerscoreUnlocked);
+            return state.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked);
         }
 
         try
         {
-            AccountContent content = new(profile, XeniaVersion.Canary, XboxConstants.ProfileContentTitleId);
+            AccountContent content = new AccountContent(profile, version, XboxConstants.ProfileContentTitleId);
             if (content.ProfileGpd == null)
             {
                 return 0;
@@ -346,19 +531,19 @@ public class ProfileService : IProfileService
     }
 
     /// <summary>
-    /// Resolves achievement/gamerscore counters from the profile GPD TitleEntry
-    /// matching the game's title id.
+    /// Resolves achievement/gamerscore counters from the version's profile GPD
+    /// TitleEntry matching the game's title id.
     /// </summary>
-    private bool TryGetProfileGpdStats(Game game, out GameStatInfo? stats)
+    private bool TryGetProfileGpdStats(VersionState state, Game game, out GameStatInfo? stats)
     {
-        if (_profileGpd == null ||
+        if (state.ProfileGpd == null ||
             !uint.TryParse(game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
         {
             stats = null;
             return false;
         }
 
-        TitleEntry? entry = _profileGpd.Titles.FirstOrDefault(t => t.TitleId == titleId);
+        TitleEntry? entry = state.ProfileGpd.Titles.FirstOrDefault(t => t.TitleId == titleId);
         if (entry == null)
         {
             stats = null;
@@ -373,16 +558,18 @@ public class ProfileService : IProfileService
 
     /// <summary>
     /// Resolves achievement/gamerscore counters for the given game. Preferred source is the
-    /// profile GPD TitleEntry; falls back to the per-game achievement GPD ({titleId}.gpd).
+    /// version's profile GPD TitleEntry; falls back to the per-game achievement GPD
+    /// ({titleId}.gpd).
     /// </summary>
     public GameStatInfo? GetGameStats(Game game)
     {
-        if (TryGetProfileGpdStats(game, out GameStatInfo? profileStats))
+        VersionState state = StateForVersion(game.XeniaVersion);
+        if (TryGetProfileGpdStats(state, game, out GameStatInfo? profileStats))
         {
             return profileStats;
         }
 
-        GpdFile? achievementGpd = LoadGameAchievementGpd(game.GameId);
+        GpdFile? achievementGpd = LoadGameAchievementGpd(game.XeniaVersion, game.GameId);
         if (achievementGpd != null)
         {
             return new GameStatInfo(
@@ -394,6 +581,33 @@ public class ProfileService : IProfileService
 
         return null;
     }
+
+    /// <summary>
+    /// Returns the profile state of the given version, loading it on demand when
+    /// it hasn't been loaded yet.
+    /// </summary>
+    public VersionProfileState StateFor(XeniaVersion version)
+    {
+        if (version != XeniaVersion.Custom
+            && !_states.ContainsKey(version)
+            && !(_unifiedContentFolder && _states.Count > 0))
+        {
+            LoadVersion(version);
+        }
+
+        VersionState state = StateForVersion(version);
+        return new VersionProfileState(state.Profiles, state.ActiveProfile, state.Gamertag, state.Gamerscore);
+    }
+
+    /// <summary>
+    /// All profiles of the given version.
+    /// </summary>
+    public IReadOnlyList<AccountInfo> ProfilesFor(XeniaVersion version) => StateForVersion(version).Profiles;
+
+    /// <summary>
+    /// The active profile of the given version, or null when none exists.
+    /// </summary>
+    public AccountInfo? ActiveProfileFor(XeniaVersion version) => StateForVersion(version).ActiveProfile;
 
     public ProfileService(IBackgroundService backgroundService)
     {

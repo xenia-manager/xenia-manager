@@ -20,11 +20,11 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 
 /// <summary>
 /// Full-screen profile management overlay: create, delete, import, export and
-/// edit Canary profiles. B closes (confirming unsaved edits), X deletes the
-/// selected profile, View imports, Start exports, A or Right on a profile row
-/// moves the controller into the edit panel (B or Left returns; A activates
-/// the panel rows - toggles, dropdown editors, gamertag focus, save).
-/// Opened from Settings or the profile picker.
+/// edit the profiles of one emulator version. B closes (confirming unsaved
+/// edits), X deletes the selected profile, View imports, Start exports, A or
+/// Right on a profile row moves the controller into the edit panel (B or Left
+/// returns; A activates the panel rows - toggles, dropdown editors, gamertag
+/// focus, save). Opened from Settings or the profile picker.
 /// </summary>
 public partial class ManageProfilesViewModel : ModalViewModelBase
 {
@@ -38,6 +38,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         bool IsLiveEnabled,
         int SubscriptionTierIndex);
 
+    private readonly XeniaVersion _version;
     private readonly IProfileService _profileService;
     private readonly IModalService _modalService;
     private EditBaseline _baseline;
@@ -191,6 +192,13 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// The list of available subscription tiers for the ComboBox.
     /// </summary>
     public ObservableCollection<EnumDisplayItem<SubscriptionTier>> SubscriptionTiers { get; }
+
+    /// <summary>
+    /// The version whose profiles are managed, shown in the title.
+    /// </summary>
+    public string VersionText =>
+        (string)Core.Converters.XeniaVersionToStringConverter.Instance.Convert(
+            _version, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture)!;
 
     /// <summary>
     /// The currently selected (edited) profile.
@@ -561,8 +569,8 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     {
         string? previousXuid = SelectedProfile.PathXuidText();
         Rows.Clear();
-        AccountInfo? active = _profileService.ActiveProfile;
-        foreach (ProfileItemViewModel item in ProfileRowsHelper.BuildRows(_profileService.Profiles, active))
+        VersionProfileState state = _profileService.StateFor(_version);
+        foreach (ProfileItemViewModel item in ProfileRowsHelper.BuildRows(state.Profiles, state.ActiveProfile))
         {
             Rows.Add(item);
         }
@@ -578,7 +586,8 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
 
         ScrollRequested?.Invoke();
         TaskUtilities.RunSafely<ManageProfilesViewModel>(
-            () => ProfileRowsHelper.LoadGamerscoresAsync(Rows, _profileService), "Loading profile gamerscores");
+            () => ProfileRowsHelper.LoadGamerscoresAsync(Rows, _profileService, _version),
+            "Loading profile gamerscores");
     }
 
     /// <summary>
@@ -605,7 +614,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
             profile.SubscriptionTier = SubscriptionTiers[SelectedSubscriptionTierIndex].Value;
         }
 
-        int savedCount = ProfileManager.SaveProfiles(_profileService.Profiles.ToList(), XeniaVersion.Canary);
+        int savedCount = ProfileManager.SaveProfiles(_profileService.ProfilesFor(_version).ToList(), _version);
         _profileService.Refresh();
         Reload();
         if (savedCount > 0)
@@ -623,7 +632,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// </summary>
     public void CreateAccount()
     {
-        AccountInfo newAccount = ProfileManager.CreateAccount(XeniaVersion.Canary, "New User");
+        AccountInfo newAccount = ProfileManager.CreateAccount(_version, "New User");
         Rows.Add(new ProfileItemViewModel(newAccount, false));
         CreateStub.IsSelected = false;
         SelectByXuid(newAccount.PathXuidText());
@@ -885,7 +894,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
             return;
         }
 
-        if (ProfileManager.DeleteAccount(XeniaVersion.Canary, SelectedProfile))
+        if (ProfileManager.DeleteAccount(_version, SelectedProfile))
         {
             ProfileItemViewModel? row = Rows.FirstOrDefault(r => ReferenceEquals(r.Profile, SelectedProfile));
             if (row != null)
@@ -917,7 +926,8 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         }
 
         ProfileOperationStatus status =
-            await ProfileImportExportHelper.ExportAsync(_profileService, _modalService, SelectedProfile, outputPath);
+            await ProfileImportExportHelper.ExportAsync(_profileService, _modalService, _version, SelectedProfile,
+                outputPath);
         SetStatus(status == ProfileOperationStatus.Success
                 ? string.Format(LocalizationHelper.GetText("ManageProfiles.Export.Success"), SelectedProfile.Gamertag)
                 : LocalizationHelper.GetText("ManageProfiles.Export.Failed"),
@@ -931,7 +941,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     public async Task ImportFromAsync(string zipPath)
     {
         (ProfileOperationStatus status, AccountInfo? imported) =
-            await ProfileImportExportHelper.ImportAsync(_profileService, _modalService, zipPath);
+            await ProfileImportExportHelper.ImportAsync(_profileService, _modalService, _version, zipPath);
         if (status == ProfileOperationStatus.Success && imported is { } account)
         {
             _profileService.Refresh();
@@ -1005,8 +1015,9 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
 
     partial void OnSelectedSubscriptionTierIndexChanged(int value) => OnPropertyChanged(nameof(IsDirty));
 
-    public ManageProfilesViewModel()
+    public ManageProfilesViewModel(XeniaVersion version)
     {
+        _version = version;
         _profileService = App.Services.GetRequiredService<IProfileService>();
         _modalService = App.Services.GetRequiredService<IModalService>();
         Countries = new ObservableCollection<EnumDisplayItem<XboxLiveCountry>>(

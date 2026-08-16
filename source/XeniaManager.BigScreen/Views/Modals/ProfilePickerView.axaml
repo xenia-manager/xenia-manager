@@ -15,11 +15,32 @@
     <Border Classes="modal-screen">
         <Grid Margin="48" RowDefinitions="Auto, *, Auto">
 
-            <!-- HEADER: title -->
-            <TextBlock Grid.Row="0"
-                       Text="{DynamicResource Profiles.Title}"
-                       Classes="screen-title"
-                       Margin="0,10,0,35" />
+            <!-- HEADER: title + version chips -->
+            <StackPanel Grid.Row="0" Margin="0,10,0,35" Spacing="16">
+                <TextBlock Text="{DynamicResource Profiles.Title}"
+                           Classes="screen-title" />
+                <ItemsControl x:Name="VersionChipsList"
+                              ItemsSource="{Binding VersionChips}"
+                              IsVisible="{Binding HasVersionChips}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:VersionChipViewModel">
+                            <Button Classes="version-chip" Classes.selected="{Binding IsSelected}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <fluent:SymbolIcon Symbol="{Binding Icon}"
+                                                       FontSize="14"
+                                                       VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
 
             <!-- PROFILE LIST -->
             <Grid Grid.Row="1">

@@ -150,6 +150,27 @@
                     </DockPanel>
                 </Border>
 
+                <!-- ROTATE PROFILES -->
+                <Border x:Name="CardRotateProfiles"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowRotateProfiles.IsSelected}">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkRotateProfiles"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding RotateProfiles}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="toggle-switch" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.RotateProfiles}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.RotateProfiles.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
                 <!-- THEME -->
                 <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Theme}" />
 

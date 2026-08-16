@@ -1,6 +1,7 @@
 using System;
 using FluentIcons.Common;
 using XeniaManager.BigScreen.Models;
+using XeniaManager.Core.Models;
 
 namespace XeniaManager.BigScreen.Factories;
 
@@ -80,4 +81,16 @@ public static class IconFactory
             _ => Symbol.WiFiOff
         };
     }
+
+    /// <summary>
+    /// Returns the icon representing the given emulator version.
+    /// </summary>
+    public static Symbol GetVersionIcon(XeniaVersion version) => version switch
+    {
+        XeniaVersion.Canary => Symbol.XboxController,
+        XeniaVersion.Mousehook => Symbol.Keyboard,
+        XeniaVersion.Netplay => Symbol.Globe,
+        XeniaVersion.Custom => Symbol.AppFolder,
+        _ => Symbol.XboxController
+    };
 }

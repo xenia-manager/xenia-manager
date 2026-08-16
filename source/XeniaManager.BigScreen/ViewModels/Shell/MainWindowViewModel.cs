@@ -20,7 +20,6 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -387,9 +386,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
 
-            _profileService.EnsureActiveProfile();
+            _profileService.EnsureActiveProfile(card.Game.XeniaVersion);
             InjectLaunchProfile(card.Game);
-            _profileService.SyncXConfigDefaultProfile();
+            _profileService.SyncXConfigDefaultProfile(card.Game.XeniaVersion);
             EventManager.Instance.DisableWindow();
             Settings settings = new();
             await Launcher.LaunchGameASync(card.Game, settings, discNumber: discNumber);
@@ -447,7 +446,7 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        if (_profileService.ActiveProfile is not { } profile)
+        if (_profileService.ActiveProfileFor(game.XeniaVersion) is not { } profile)
         {
             Logger.Debug<MainWindowViewModel>("No active profile - launch profile injection skipped");
             return;
@@ -639,7 +638,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _gamepadService = gamepadService;
         _modalService = modalService;
 
-        Header = new HeaderViewModel();
+        Header = new HeaderViewModel(backgroundService);
         Settings = new SettingsViewModel(backgroundService, profileService, gamepadService, modalService);
         Library = new LibraryViewModel(Settings, modalService);
         Gallery = new GalleryViewModel(Settings, screenshotLibraryService, modalService);

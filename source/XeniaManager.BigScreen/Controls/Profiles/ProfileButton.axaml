@@ -46,6 +46,11 @@
                            FontSize="13"
                            Foreground="{DynamicResource TextPrimary}"
                            VerticalAlignment="Center" />
+                <fluent:SymbolIcon Symbol="{Binding Header.VersionIcon}"
+                                   IsVisible="{Binding Header.HasVersionIcon}"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center" />
             </StackPanel>
         </StackPanel>
     </StackPanel>

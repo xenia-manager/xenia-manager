@@ -18,6 +18,12 @@ public static class TimingConstants
     public static readonly TimeSpan WifiPollInterval = TimeSpan.FromSeconds(10);
 
     /// <summary>
+    /// How often the header identity cycles to the next version with an active
+    /// profile (when the rotate-profiles setting is on).
+    /// </summary>
+    public static readonly TimeSpan ProfileCycleInterval = TimeSpan.FromSeconds(4);
+
+    /// <summary>
     /// Duration of one artwork fade leg (out to the static base, or in from it).
     /// </summary>
     public static readonly TimeSpan ArtFadeDuration = TimeSpan.FromMilliseconds(300);

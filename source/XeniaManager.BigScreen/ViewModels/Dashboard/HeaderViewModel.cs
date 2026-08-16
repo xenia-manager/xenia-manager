@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.NetworkInformation;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,17 +11,26 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Dashboard;
 
 /// <summary>
 /// Header state: profile identity, live clock, wifi and controller battery status.
+/// The profile identity shows the active version's profile, and - when the
+/// rotate-profiles setting is on and several versions have an active profile -
+/// automatically cycles through every version (display only; the active version
+/// and pickers are untouched).
 /// </summary>
 public partial class HeaderViewModel : ViewModelBase
 {
+    private readonly IBackgroundService _backgroundService;
     private readonly DispatcherTimer _clockTimer;
     private readonly DispatcherTimer _networkTimer;
+    private readonly DispatcherTimer _profileTimer;
+    private IProfileService? _profileService;
+    private XeniaVersion? _displayedVersion;
 
     /// <summary>
     /// Whether the profile row (avatar chip) is currently selected.
@@ -28,16 +39,30 @@ public partial class HeaderViewModel : ViewModelBase
     public partial bool IsSelected { get; set; }
 
     /// <summary>
-    /// Gamertag of the active profile (Canary)
+    /// Gamertag of the displayed profile (the active version's, or the version
+    /// currently shown by the rotation).
     /// </summary>
     [ObservableProperty]
     public partial string Gamertag { get; set; } = LocalizationHelper.GetText("Header.Guest");
 
     /// <summary>
-    /// Total gamerscore of the active profile
+    /// Total gamerscore of the displayed profile
     /// </summary>
     [ObservableProperty]
     public partial string Gamerscore { get; set; } = "0";
+
+    /// <summary>
+    /// Icon of the displayed emulator version, shown in the profile chip.
+    /// </summary>
+    [ObservableProperty]
+    public partial Symbol VersionIcon { get; set; } = Symbol.XboxController;
+
+    /// <summary>
+    /// Whether the version icon is shown (hidden when no emulator version is
+    /// installed or none has profiles).
+    /// </summary>
+    [ObservableProperty]
+    public partial bool HasVersionIcon { get; set; }
 
     /// <summary>
     /// Whether a controller is connected
@@ -133,14 +158,70 @@ public partial class HeaderViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Shows the identity of the given version (or the guest defaults when no
+    /// version is given).
+    /// </summary>
+    private void ShowVersion(XeniaVersion? version)
+    {
+        _displayedVersion = version;
+        if (version == null || _profileService == null)
+        {
+            Gamertag = LocalizationHelper.GetText("Header.Guest");
+            Gamerscore = "0";
+            HasVersionIcon = false;
+            return;
+        }
+
+        VersionProfileState state = _profileService.StateFor(version.Value);
+        Gamertag = state.Gamertag;
+        Gamerscore = state.Gamerscore;
+        VersionIcon = IconFactory.GetVersionIcon(version.Value);
+        HasVersionIcon = true;
+    }
+
+    /// <summary>
+    /// Resets the displayed identity to the active version's profile.
+    /// </summary>
+    private void SyncToActive() => ShowVersion(_profileService?.ActiveVersion);
+
+    /// <summary>
+    /// Advances the displayed identity to the next version with an active
+    /// profile. Falls back to the active version when the setting is off, fewer
+    /// than two versions have profiles, or the displayed version is gone.
+    /// </summary>
+    private void RotateProfile()
+    {
+        if (_profileService is not { } profileService)
+        {
+            return;
+        }
+
+        IReadOnlyList<XeniaVersion> versions = profileService.VersionsWithProfiles;
+        if (!_backgroundService.Settings.RotateProfiles || versions.Count < 2)
+        {
+            SyncToActive();
+            return;
+        }
+
+        int index = _displayedVersion is { } displayed ? versions.ToList().IndexOf(displayed) : -1;
+        if (index < 0)
+        {
+            SyncToActive();
+            return;
+        }
+
+        ShowVersion(versions[(index + 1) % versions.Count]);
+    }
+
+    /// <summary>
     /// Applies the loaded profile's identity. Called once the profile has been
     /// loaded during the boot pipeline (the constructor stays cheap so the
-    /// splash screen can appear immediately).
+    /// splash screen can appear immediately) and after every profile change.
     /// </summary>
     public void ApplyProfile(IProfileService profileService)
     {
-        Gamertag = profileService.Gamertag;
-        Gamerscore = profileService.Gamerscore;
+        _profileService = profileService;
+        SyncToActive();
         Logger.Debug<HeaderViewModel>($"Profile loaded: {Gamertag} ({Gamerscore}G)");
     }
 
@@ -186,8 +267,10 @@ public partial class HeaderViewModel : ViewModelBase
         Logger.Debug<HeaderViewModel>($"Clock format: {value}");
     }
 
-    public HeaderViewModel()
+    public HeaderViewModel(IBackgroundService backgroundService)
     {
+        _backgroundService = backgroundService;
+
         _clockTimer = new DispatcherTimer
         {
             Interval = TimingConstants.ClockUpdateInterval
@@ -202,5 +285,12 @@ public partial class HeaderViewModel : ViewModelBase
         _networkTimer.Tick += (_, _) => CheckNetwork();
         _networkTimer.Start();
         CheckNetwork();
+
+        _profileTimer = new DispatcherTimer
+        {
+            Interval = TimingConstants.ProfileCycleInterval
+        };
+        _profileTimer.Tick += (_, _) => RotateProfile();
+        _profileTimer.Start();
     }
 }

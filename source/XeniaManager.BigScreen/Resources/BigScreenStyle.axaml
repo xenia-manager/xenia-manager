@@ -649,4 +649,41 @@
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
     </Style>
 
+    <!-- VERSION CHIP (profile picker): compact accent-outlined button -->
+    <Style Selector="Button.version-chip">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="RowBorder"
+                            Background="{DynamicResource CardBackground}"
+                            BorderBrush="{DynamicResource CardBorderInner}"
+                            BorderThickness="3"
+                            CornerRadius="10"
+                            Padding="14,6">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        Selector="Button.version-chip:pointerover /template/ Border#RowBorder, Button.version-chip:focus-visible /template/ Border#RowBorder, Button.version-chip.selected /template/ Border#RowBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="Button.version-chip TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+    </Style>
+
+    <Style Selector="Button.version-chip.selected TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+    </Style>
+
 </Styles>

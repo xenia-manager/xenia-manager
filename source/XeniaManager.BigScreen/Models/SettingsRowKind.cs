@@ -14,6 +14,7 @@ public enum SettingsRowKind
     QuitToggle,
     FullscreenToggle,
     StartInBigScreenToggle,
+    RotateProfiles,
     BackgroundMode,
     PrimaryColour,
     AccentColour,
