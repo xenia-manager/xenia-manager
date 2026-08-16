@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using XeniaManager.BigScreen.Constants;
-using XeniaManager.Core.Tweening;
+using TweenAvalonia;
 
 namespace XeniaManager.BigScreen.Views.Dashboard;
 

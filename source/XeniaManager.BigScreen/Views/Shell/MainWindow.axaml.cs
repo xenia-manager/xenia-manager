@@ -20,7 +20,7 @@ using XeniaManager.BigScreen.Views.Screens;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
-using XeniaManager.Core.Tweening;
+using TweenAvalonia;
 
 namespace XeniaManager.BigScreen.Views.Shell;
 
@@ -397,8 +397,6 @@ public partial class MainWindow : FAAppWindow
         WindowState = Avalonia.Controls.WindowState.FullScreen;
 
         InitializeComponent();
-
-        XeniaManager.Core.Tweening.TweenEngine.Instance.Attach(this);
 
         if (TitleBar != null)
         {

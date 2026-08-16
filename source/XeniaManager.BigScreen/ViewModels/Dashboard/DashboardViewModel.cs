@@ -9,13 +9,14 @@ using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Tweening;
+using TweenAvalonia;
 
 namespace XeniaManager.BigScreen.ViewModels.Dashboard;
 
 /// <summary>
 /// Dashboard state: recent games, option cards, the static background brush and
-/// the fading dynamic artwork layer.
+/// the fading dynamic artwork layer. The artwork crossfade runs here on the
+/// bound <see cref="ArtOpacity"/> value; the view just binds it to the layer.
 /// </summary>
 public partial class DashboardViewModel : ViewModelBase
 {
@@ -54,10 +55,10 @@ public partial class DashboardViewModel : ViewModelBase
     private Tween _artFade;
 
     /// <summary>
-    /// Cached tween writer for <see cref="ArtOpacity"/> (avoids a closure
-    /// allocation on every fade start).
+    /// The artwork queued for the fade-in leg of the crossfade; committed by
+    /// <see cref="CommitArtwork"/> once the layer has faded out.
     /// </summary>
-    private readonly Action<double> _setArtOpacity;
+    private Bitmap? _pendingArtwork;
 
     /// <summary>
     /// The first 6 games, shown on the dashboard.
@@ -80,16 +81,27 @@ public partial class DashboardViewModel : ViewModelBase
     public DashboardViewModel(IBackgroundService backgroundService)
     {
         _backgroundService = backgroundService;
-        _setArtOpacity = value => ArtOpacity = value;
         RecentGames.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
     }
 
     /// <summary>
     /// Fades the artwork layer opacity to <paramref name="to"/>, starting from its
-    /// current value.
+    /// current value. Target-based on this view model, so the callback is cached
+    /// and allocation-free.
     /// </summary>
     private Tween FadeArtOpacity(double to) =>
-        Tween.Custom(ArtOpacity, to, TimingConstants.ArtFadeDuration, _setArtOpacity, Tween.DefaultEasing);
+        Tween.Custom(this, ArtOpacity, to, static (vm, v) => vm.ArtOpacity = v, TimingConstants.ArtFadeDuration);
+
+    /// <summary>
+    /// Swaps in the queued artwork and fades the layer back in. Runs when the
+    /// fade-out leg completes naturally.
+    /// </summary>
+    private void CommitArtwork()
+    {
+        Artwork = _pendingArtwork;
+        ArtOpacity = 0;
+        _artFade = FadeArtOpacity(1);
+    }
 
     /// <summary>
     /// Resolves the static base brush, falling back to a linear gradient when
@@ -139,12 +151,8 @@ public partial class DashboardViewModel : ViewModelBase
         if (fade)
         {
             _artFade.Stop();
-            _artFade = FadeArtOpacity(0).OnComplete(() =>
-            {
-                Artwork = newArt;
-                ArtOpacity = 0;
-                _artFade = FadeArtOpacity(1);
-            });
+            _pendingArtwork = newArt;
+            _artFade = FadeArtOpacity(0).OnComplete(target: this, static t => t.CommitArtwork());
             return;
         }
 
