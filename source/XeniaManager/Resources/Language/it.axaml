@@ -1165,32 +1165,24 @@
     <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Comment">Mostra la notifica degli obiettivi sullo schermo</sys:String>
 
     <!-- Config UI Settings - Video Options -->
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Title">Risoluzione Display Interna</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Comment">Consenti ai giochi di renderizzare in una risoluzione specifica</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.0">640x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.1">640x576</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.2">720x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.3">720x576</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.4">800x600</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.5">848x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.6">1024x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.7">1152x864</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.8">1280x720</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.9">1280x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.10">1280x960</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.11">1280x1024</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.12">1360x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.13">1440x900</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.14">1680x1050</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.15">1920x540</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Personalizzata (X/Y)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Larghezza Risoluzione Personalizzata</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Larghezza personalizzata per la risoluzione display interna&#10;NOTA: Richiede Risoluzione impostata su "Personalizzata (X/Y)"</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Altezza Risoluzione Personalizzata</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Altezza personalizzata per la risoluzione display interna&#10;NOTA: Richiede Risoluzione impostata su "Personalizzata (X/Y)"</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Widescreen</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Passa tra rapporto d'aspetto 16:9 e 4:3</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.Title">Modalità Video</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.Comment">La modalità video/AV pack riportata ai giochi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.0">PAL-60 Component (SD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.2">PAL-60 SCART</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.3">480p Component (HD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.4">HDMI+A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.5">PAL-60 Composite/S-Video</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.6">VGA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.7">TV PAL-60</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.8">HDMI (predefinito)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_x.Title">Larghezza Risoluzione Personalizzata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_x.Comment">Larghezza personalizzata della risoluzione display interna. Intervallo 1-1920, 0 per disabilitare.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_y.Title">Altezza Risoluzione Personalizzata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_y.Comment">Altezza personalizzata della risoluzione display interna. Intervallo 1-1080, 0 per disabilitare.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.enable_3d_mode.Title">Modalità 3D</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.enable_3d_mode.Comment">Abilita l'uso della modalità stereoscopica nei giochi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.interlaced.Title">Interlacciato</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.interlaced.Comment">Attiva/disattiva la modalità interlacciata</sys:String>
 
     <!-- Config UI Settings - Vulkan Options -->
     <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Title">Consenti Modalità Immediata</sys:String>

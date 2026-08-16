@@ -463,34 +463,31 @@ public static class ConfigUiSettings
             {
                 DisplayName = LocalizationHelper.GetText("ConfigUiSettings.Section.Video")
             }
-            .AddComboBox("internal_display_resolution", new Dictionary<object, string>
+            // Xenia Canary's [Video] section no longer has "internal_display_resolution" or
+            // "widescreen" (both removed at some point) - this used to reference those and
+            // ended up with zero matching options, making the section appear empty. Rewritten
+            // to match the keys actually present in the config file now: avpack (video mode),
+            // custom_internal_display_resolution_x/y, enable_3d_mode, interlaced.
+            .AddComboBox("avpack", new Dictionary<object, string>
                 {
-                    { 0, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.0") },
-                    { 1, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.1") },
-                    { 2, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.2") },
-                    { 3, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.3") },
-                    { 4, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.4") },
-                    { 5, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.5") },
-                    { 6, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.6") },
-                    { 7, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.7") },
-                    { 8, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.8") },
-                    { 9, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.9") },
-                    { 10, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.10") },
-                    { 11, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.11") },
-                    { 12, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.12") },
-                    { 13, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.13") },
-                    { 14, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.14") },
-                    { 15, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.15") },
-                    { 16, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.16") },
-                    { 17, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.17") }
-                }, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.Title"),
-                LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.Comment"))
-            .AddNumberBox("internal_display_resolution_x", 1, 1920, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution_x.Title"),
-                LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution_x.Comment"))
-            .AddNumberBox("internal_display_resolution_y", 1, 1080, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution_y.Title"),
-                LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution_y.Comment"))
-            .AddToggle("widescreen", LocalizationHelper.GetText("ConfigUiSettings.Video.widescreen.Title"),
-                LocalizationHelper.GetText("ConfigUiSettings.Video.widescreen.Comment"))
+                    { 0, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.0") },
+                    { 2, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.2") },
+                    { 3, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.3") },
+                    { 4, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.4") },
+                    { 5, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.5") },
+                    { 6, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.6") },
+                    { 7, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.7") },
+                    { 8, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.option.8") }
+                }, LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.Video.avpack.Comment"))
+            .AddNumberBox("custom_internal_display_resolution_x", 0, 1920, LocalizationHelper.GetText("ConfigUiSettings.Video.custom_internal_display_resolution_x.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.Video.custom_internal_display_resolution_x.Comment"))
+            .AddNumberBox("custom_internal_display_resolution_y", 0, 1080, LocalizationHelper.GetText("ConfigUiSettings.Video.custom_internal_display_resolution_y.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.Video.custom_internal_display_resolution_y.Comment"))
+            .AddToggle("enable_3d_mode", LocalizationHelper.GetText("ConfigUiSettings.Video.enable_3d_mode.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.Video.enable_3d_mode.Comment"))
+            .AddToggle("interlaced", LocalizationHelper.GetText("ConfigUiSettings.Video.interlaced.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.Video.interlaced.Comment"))
     )
     {
         Title = LocalizationHelper.GetText("ConfigUiSettings.Section.Video")
