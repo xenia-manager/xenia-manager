@@ -283,6 +283,22 @@
                            Text="{DynamicResource Settings.Section.XConfig}"
                            IsVisible="{Binding HasXConfig}" />
 
+                <!-- XCONFIG VERSION -->
+                <Border x:Name="CardXConfigVersion"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowXConfigVersion.IsSelected}"
+                        IsVisible="{Binding HasXConfig}">
+                    <DockPanel>
+                        <ComboBox x:Name="XConfigVersionCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding XConfigVersions}"
+                                  SelectedItem="{Binding SelectedXConfigVersion}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.XConfig.Version}" />
+                    </DockPanel>
+                </Border>
+
                 <!-- XCONFIG RESOLUTION -->
                 <Border x:Name="CardXConfig"
                         Classes="settings-card settings-row"

@@ -21,5 +21,6 @@ public enum SettingsRowKind
     Vignette,
     BackgroundImage,
     Gamepad,
+    XConfigVersion,
     XConfig
 }

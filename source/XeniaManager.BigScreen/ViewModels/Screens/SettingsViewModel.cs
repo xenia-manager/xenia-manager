@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Avalonia.Media;
@@ -15,6 +16,7 @@ using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Modals;
+using XeniaManager.Core.Converters;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
@@ -42,9 +44,16 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly Core.Settings.Settings _desktopSettings = new();
 
     /// <summary>
-    /// The loaded Canary XConfig file (resolution card), or null when none exists.
+    /// The loaded XConfig file (resolution card), or null when none exists.
     /// </summary>
     private XConfigFile? _xconfigFile;
+
+    /// <summary>
+    /// Suppresses the resolution save while the dropdown is being re-synced
+    /// after a version switch (the selection would otherwise write the new
+    /// version's file with the old version's resolution).
+    /// </summary>
+    private bool _syncingXConfig;
 
     /// <summary>
     /// Every controller-navigable row in display order (fixed rows followed by
@@ -63,6 +72,7 @@ public partial class SettingsViewModel : ViewModelBase
     private Color _originalPrimary;
     private Color _originalAccent;
     private XConfigResolutionOption? _originalXConfigResolution;
+    private XConfigVersionOption? _originalXConfigVersion;
 
     /// <summary>
     /// Builds a settings dropdown option per enum member, in declaration order
@@ -128,9 +138,10 @@ public partial class SettingsViewModel : ViewModelBase
     public bool HasNoControllers => Controllers.Count == 0;
 
     /// <summary>
-    /// Whether a Canary XConfig file exists (the resolution card shows only then).
+    /// Whether any installed version has an XConfig file (the resolution card
+    /// shows only then).
     /// </summary>
-    public bool HasXConfig => XConfigManager.XConfigExists(XeniaVersion.Canary);
+    public bool HasXConfig => XConfigVersions.Count > 0;
 
     /// <summary>
     /// Whether a row's editor is open and takes value input.
@@ -146,6 +157,7 @@ public partial class SettingsViewModel : ViewModelBase
             or SettingsRowKind.CardImage
             or SettingsRowKind.TimeFormat
             or SettingsRowKind.BackgroundMode
+            or SettingsRowKind.XConfigVersion
             or SettingsRowKind.XConfig;
 
     /// <summary>
@@ -229,6 +241,11 @@ public partial class SettingsViewModel : ViewModelBase
     public SettingsRowViewModel RowXConfig { get; } = new(SettingsRowKind.XConfig);
 
     /// <summary>
+    /// Row for the XConfig version card (bottom of the screen).
+    /// </summary>
+    public SettingsRowViewModel RowXConfigVersion { get; } = new(SettingsRowKind.XConfigVersion);
+
+    /// <summary>
     /// Options shown in the settings background-type dropdown, in enum order
     /// (the default leads).
     /// </summary>
@@ -269,6 +286,12 @@ public partial class SettingsViewModel : ViewModelBase
             .Select(value => new XConfigResolutionOption(value, value.ToString().TrimStart('R'))));
 
     /// <summary>
+    /// Options shown in the XConfig version dropdown: installed versions that
+    /// have an XConfig file (Custom never appears - it has no standard config).
+    /// </summary>
+    public ObservableCollection<XConfigVersionOption> XConfigVersions { get; } = [];
+
+    /// <summary>
     /// Brush used as the overlay/menu background, derived from the primary colour
     /// so menus match the dashboard instead of being pitch black.
     /// </summary>
@@ -304,6 +327,12 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     public partial XConfigResolutionOption? SelectedXConfigResolution { get; set; }
+
+    /// <summary>
+    /// The selected option in the XConfig version dropdown.
+    /// </summary>
+    [ObservableProperty]
+    public partial XConfigVersionOption? SelectedXConfigVersion { get; set; }
 
     /// <summary>
     /// The selected option in the background-type dropdown.
@@ -451,6 +480,9 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.XConfig:
                 SelectedXConfigResolution = _originalXConfigResolution;
                 break;
+            case SettingsRowKind.XConfigVersion:
+                SelectedXConfigVersion = _originalXConfigVersion;
+                break;
         }
     }
 
@@ -509,20 +541,53 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Loads the Canary XConfig file and syncs the resolution dropdown to it.
+    /// Rebuilds the XConfig version list from the installed versions that have
+    /// an XConfig file, keeping the previously selected version when it still
+    /// exists (falling back to the first otherwise) and loads its file.
     /// </summary>
     private void LoadXConfig()
     {
+        XConfigVersions.Clear();
+        foreach (XeniaVersion version in _desktopSettings.GetInstalledVersions(_desktopSettings))
+        {
+            if (XConfigManager.XConfigExists(version))
+            {
+                XConfigVersions.Add(new XConfigVersionOption(version,
+                    (string)XeniaVersionToStringConverter.Instance.Convert(
+                        version, typeof(string), null, CultureInfo.InvariantCulture)!));
+            }
+        }
+
         OnPropertyChanged(nameof(HasXConfig));
-        if (!HasXConfig)
+        if (XConfigVersions.Count == 0)
         {
             _xconfigFile = null;
+            SelectedXConfigVersion = null;
             return;
         }
 
-        _xconfigFile = XConfigManager.LoadXConfig(XeniaVersion.Canary);
-        SelectedXConfigResolution =
-            XConfigResolutions.FirstOrDefault(r => r.Value == _xconfigFile?.AvHdmiScreenSize);
+        XConfigVersionOption? previous = SelectedXConfigVersion;
+        SelectedXConfigVersion =
+            XConfigVersions.FirstOrDefault(v => v.Version == previous?.Version) ?? XConfigVersions[0];
+    }
+
+    /// <summary>
+    /// Loads the given version's XConfig file and syncs the resolution
+    /// dropdown to it (without persisting - the sync is suppressed).
+    /// </summary>
+    private void LoadXConfigFile(XeniaVersion version)
+    {
+        _syncingXConfig = true;
+        try
+        {
+            _xconfigFile = XConfigManager.LoadXConfig(version);
+            SelectedXConfigResolution =
+                XConfigResolutions.FirstOrDefault(r => r.Value == _xconfigFile?.AvHdmiScreenSize);
+        }
+        finally
+        {
+            _syncingXConfig = false;
+        }
     }
 
     /// <summary>
@@ -552,6 +617,7 @@ public partial class SettingsViewModel : ViewModelBase
 
         if (HasXConfig)
         {
+            _rows.Add(RowXConfigVersion);
             _rows.Add(RowXConfig);
         }
     }
@@ -638,6 +704,9 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.XConfig:
                 _originalXConfigResolution = SelectedXConfigResolution;
                 break;
+            case SettingsRowKind.XConfigVersion:
+                _originalXConfigVersion = SelectedXConfigVersion;
+                break;
         }
 
         ActiveEditor = kind;
@@ -694,6 +763,9 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.XConfig:
                 CycleXConfigResolution(delta);
                 break;
+            case SettingsRowKind.XConfigVersion:
+                CycleXConfigVersion(delta);
+                break;
         }
     }
 
@@ -742,10 +814,10 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Steps the selected row's vignette slider directly when it is the vignette
-    /// row; returns false so other rows fall through (Left/Right stays unused).
+    /// Steps the selected row's immediate-commit value directly (vignette
+    /// slider); returns false so other rows fall through (Left/Right stays unused).
     /// </summary>
-    private bool StepSelectedSlider(int delta)
+    private bool StepSelectedRow(int delta)
     {
         if (_rows.FirstOrDefault(r => r.IsSelected) is SettingsRowViewModel { Kind: SettingsRowKind.Vignette })
         {
@@ -788,6 +860,7 @@ public partial class SettingsViewModel : ViewModelBase
             case SettingsRowKind.PrimaryColour:
             case SettingsRowKind.AccentColour:
             case SettingsRowKind.XConfig:
+            case SettingsRowKind.XConfigVersion:
                 OpenEditor(kind);
                 break;
         }
@@ -824,6 +897,28 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Cycles the XConfig version by the given step, wrapping at both ends.
+    /// Immediate-commit: reloads the selected version's file and re-syncs the
+    /// resolution dropdown.
+    /// </summary>
+    private void CycleXConfigVersion(int delta)
+    {
+        int count = XConfigVersions.Count;
+        if (count == 0 || SelectedXConfigVersion == null)
+        {
+            return;
+        }
+
+        int current = XConfigVersions.IndexOf(SelectedXConfigVersion);
+        if (current < 0)
+        {
+            current = 0;
+        }
+
+        SelectedXConfigVersion = XConfigVersions[(current + delta + count) % count];
+    }
+
+    /// <summary>
     /// Handles a gamepad navigation command: row movement while no editor is
     /// open, value cycling while one is. Returns whether the command was consumed.
     /// </summary>
@@ -843,9 +938,9 @@ public partial class SettingsViewModel : ViewModelBase
                 MoveSelection(1);
                 return true;
             case NavigationCommand.MoveLeft:
-                return StepSelectedSlider(-1);
+                return StepSelectedRow(-1);
             case NavigationCommand.MoveRight:
-                return StepSelectedSlider(1);
+                return StepSelectedRow(1);
             case NavigationCommand.Activate:
                 ActivateRow();
                 return true;
@@ -925,14 +1020,25 @@ public partial class SettingsViewModel : ViewModelBase
 
     partial void OnSelectedXConfigResolutionChanged(XConfigResolutionOption? value)
     {
-        if (value == null || _xconfigFile == null)
+        if (_syncingXConfig || value == null || _xconfigFile == null || SelectedXConfigVersion == null)
         {
             return;
         }
 
         _xconfigFile.AvHdmiScreenSize = value.Value;
-        XConfigManager.SaveXConfig(_xconfigFile, XeniaVersion.Canary);
-        Logger.Info<SettingsViewModel>($"XConfig resolution set to {value.Value}");
+        XConfigManager.SaveXConfig(_xconfigFile, SelectedXConfigVersion.Version);
+        Logger.Info<SettingsViewModel>($"XConfig resolution set to {value.Value} ({SelectedXConfigVersion.DisplayName})");
+    }
+
+    partial void OnSelectedXConfigVersionChanged(XConfigVersionOption? value)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        LoadXConfigFile(value.Version);
+        Logger.Info<SettingsViewModel>($"XConfig version set to {value.DisplayName}");
     }
 
     partial void OnModeChanged(BackgroundMode value)

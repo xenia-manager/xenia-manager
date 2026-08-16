@@ -96,6 +96,7 @@ public partial class SettingsView : UserControl
         _rowCards[vm.RowAccentColour] = CardAccentColour;
         _rowCards[vm.RowVignette] = CardVignette;
         _rowCards[vm.RowBackgroundImage] = CardBackgroundImage;
+        _rowCards[vm.RowXConfigVersion] = CardXConfigVersion;
         _rowCards[vm.RowXConfig] = CardXConfig;
     }
 
@@ -146,6 +147,10 @@ public partial class SettingsView : UserControl
                 XConfigResolutionCombo.IsDropDownOpen = true;
                 XConfigResolutionCombo.Focus();
                 break;
+            case SettingsRowKind.XConfigVersion:
+                XConfigVersionCombo.IsDropDownOpen = true;
+                XConfigVersionCombo.Focus();
+                break;
         }
     }
 
@@ -160,6 +165,7 @@ public partial class SettingsView : UserControl
         BackgroundModeCombo.IsDropDownOpen = false;
         PrimaryColorField.ClosePalette();
         AccentColorField.ClosePalette();
+        XConfigVersionCombo.IsDropDownOpen = false;
         XConfigResolutionCombo.IsDropDownOpen = false;
     }
 

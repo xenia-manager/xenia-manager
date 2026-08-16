@@ -62,6 +62,7 @@
     <sys:String x:Key="Settings.Section.Controllers">Controllers</sys:String>
     <sys:String x:Key="Settings.Section.XConfig">XConfig</sys:String>
     <sys:String x:Key="Settings.XConfig.Resolution">Resolution</sys:String>
+    <sys:String x:Key="Settings.XConfig.Version">Version</sys:String>
     <sys:String x:Key="Settings.ActiveProfile">Active Profile</sys:String>
     <sys:String x:Key="Settings.ManageProfiles">Manage Profiles</sys:String>
     <sys:String x:Key="Settings.BackgroundType">Background Type</sys:String>
