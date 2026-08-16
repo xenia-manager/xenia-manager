@@ -1,6 +1,7 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.VisualTree;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.Views.Screens;
@@ -327,10 +328,26 @@ public class InputRouter(DashboardNavigationController navigation, IModalService
     }
 
     /// <summary>
+    /// Whether the focused element is a text-entry control (a <see cref="TextBox"/>
+    /// or anything containing one, e.g. AutoCompleteBox's inner field). While it is,
+    /// typed keys must reach the field, so navigation routing is skipped.
+    /// </summary>
+    private static bool IsTypingInTextEntry(IFocusManager? focusManager)
+    {
+        return focusManager?.GetFocusedElement() is Control focus
+               && focus.GetSelfAndVisualAncestors().OfType<TextBox>().Any();
+    }
+
+    /// <summary>
     /// Routes a keyboard key to the matching navigation command.
     /// </summary>
     public void HandleKey(MainWindowViewModel vm, KeyEventArgs e, IFocusManager? focusManager)
     {
+        if (IsTypingInTextEntry(focusManager) && e.Key != Key.Escape)
+        {
+            return;
+        }
+
         NavigationCommand? command = ToCommand(e.Key);
         if (command == null)
         {
