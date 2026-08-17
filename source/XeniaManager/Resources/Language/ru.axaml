@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Запуск Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Библиотека</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Настр. Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Управ. Xenia</sys:String>
@@ -408,6 +410,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Не найдены скриншоты для {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Не удалось открыть папку</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Ошибка при открытии папки со скриншотами.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Патчи</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Скачать</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Скачать патчи из репозитория</sys:String>
@@ -525,6 +533,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Патчи</sys:String>

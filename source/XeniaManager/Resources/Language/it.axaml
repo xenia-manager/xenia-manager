@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Apri Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Libreria Giochi</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Impostazioni Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Gestisci Xenia</sys:String>
@@ -408,6 +410,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nessuno screenshot trovato per {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Impossibile Aprire la Cartella</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Si è verificato un errore durante l'apertura della cartella screenshot.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patch</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Scarica</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Scarica le patch dal repository</sys:String>
@@ -525,6 +533,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Xenia Non Installato</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Nessuna installazione di Xenia trovata. Installa Xenia prima di tentare di avviarlo.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patch</sys:String>

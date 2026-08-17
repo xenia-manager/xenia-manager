@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Xenia'yı Aç</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Oyun Kütüphanesi</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Seçenekleri</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Xenia'yı Yönet</sys:String>
@@ -408,6 +410,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">{0} için ekran görüntüsü bulunamadı.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Klasör Açılamadı</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Ekran görüntüleri klasörü açılırken bir hata oluştu.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Yamalar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">İndir</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Depodan yama indirir</sys:String>
@@ -525,6 +533,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Xenia Yüklü Değil</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Xenia kurulumu bulunamadı. Lütfen başlatmadan önce Xenia'yı yükleyin.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Yamalar</sys:String>
