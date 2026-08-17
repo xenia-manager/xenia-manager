@@ -62,16 +62,6 @@
         <Setter Property="BorderThickness" Value="5" />
     </Style>
 
-    <!-- Subtle dark halo around card text so it stays readable on any background -->
-    <Style
-        Selector="card|GameCard TextBlock, card|OptionsCard TextBlock, card|LibraryCard TextBlock, card|ScreenshotCard TextBlock, prim|IconStat TextBlock">
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect BlurRadius="2" OffsetX="0" OffsetY="0" Color="Black" Opacity="0.55" />
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <!-- Subtle dark halo behind the dashboard header text -->
     <Style Selector="TextBlock.header-text">
         <Setter Property="Effect">
