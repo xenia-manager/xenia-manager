@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using FluentAvalonia.UI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls.Cards;
 using XeniaManager.Core.Services;
 
@@ -38,6 +41,7 @@ public class PageGamepadNavigator
         typeof(Expander),
         typeof(ToggleSwitch),
         typeof(ComboBox),
+        typeof(TextBox),
         typeof(ToggleSwitchCard),
         typeof(ComboBoxCard),
         typeof(NumberBoxCard),
@@ -51,6 +55,7 @@ public class PageGamepadNavigator
     private readonly object _owner = new object();
     private readonly Action<int>? _onCycleTab;
     private readonly Visual? _tabContentRoot;
+    private readonly Action? _onBack;
 
     private List<Control> _items = [];
     private int _cursorIndex = -1;
@@ -70,13 +75,55 @@ public class PageGamepadNavigator
     /// - otherwise it would land on whatever page-level control (e.g. a config-file picker
     /// ComboBox) happens to sit above the tab strip, not the newly-selected tab's own content.
     /// Ignored if <paramref name="onCycleTab"/> is null.</param>
-    public PageGamepadNavigator(GamepadService gamepadService, NavigationService navigationService, Control root, Action<int>? onCycleTab = null, Visual? tabContentRoot = null)
+    /// <param name="onBack">Called instead of the default "focus the side navigation menu"
+    /// behavior when Back (B) is pressed - used when this navigator is attached to a modal
+    /// dialog rather than a page, where B should close the dialog instead (see
+    /// <see cref="AttachToDialog"/>).</param>
+    public PageGamepadNavigator(GamepadService gamepadService, NavigationService navigationService, Control root, Action<int>? onCycleTab = null, Visual? tabContentRoot = null, Action? onBack = null)
     {
         _gamepadService = gamepadService;
         _navigationService = navigationService;
         _root = root;
         _onCycleTab = onCycleTab;
         _tabContentRoot = tabContentRoot;
+        _onBack = onBack;
+    }
+
+    /// <summary>
+    /// Wires up controller navigation for the lifetime of an FAContentDialog that hosts a
+    /// custom UserControl as its Content (e.g. ManageProfilesDialog, EditXConfigDialog).
+    /// Without this, the dialog's own controls are unreachable by controller, and the page
+    /// underneath keeps reacting to D-Pad input while the (visually blocking) dialog is open,
+    /// since GamepadService's navigation context stack doesn't know about the dialog at all -
+    /// found the same way DiscSelectionDialog and IMessageBoxService's dialogs did earlier.
+    /// Unlike those (1-3 known buttons, manual text-prefix cursor), these dialogs have real
+    /// multi-control forms, so a full PageGamepadNavigator is used instead, over the whole
+    /// FAContentDialog (its own Primary/Close buttons are reachable too, alongside the embedded
+    /// content). Call once, right after constructing the dialog and before ShowAsync().
+    /// </summary>
+    public static void AttachToDialog(FAContentDialog dialog)
+    {
+        GamepadService gamepadService = App.Services.GetRequiredService<GamepadService>();
+        NavigationService navigationService = App.Services.GetRequiredService<NavigationService>();
+        PageGamepadNavigator? navigator = null;
+
+        dialog.Opened += (_, _) =>
+        {
+            // Deferred: same reason as CycleTab/Activate elsewhere in this class - the
+            // dialog's content isn't necessarily fully settled in the visual tree at the exact
+            // moment Opened fires.
+            Dispatcher.UIThread.Post(() =>
+            {
+                navigator = new PageGamepadNavigator(gamepadService, navigationService, dialog, onBack: () => dialog.Hide(FAContentDialogResult.None));
+                navigator.Activate();
+            });
+        };
+
+        dialog.Closed += (_, _) =>
+        {
+            navigator?.Deactivate();
+            navigator = null;
+        };
     }
 
     /// <summary>
@@ -202,7 +249,50 @@ public class PageGamepadNavigator
         }
     }
 
-    private void MoveCursor(int delta)
+    // How close together (in device-independent pixels) two controls' top edges need to be to
+    // count as "the same row" - e.g. an Install/Update/Uninstall button trio laid out in a
+    // horizontal StackPanel. Comfortably smaller than the vertical gap between separate rows
+    // (typically tens of pixels, given this app's usual 8-16px spacing plus control heights),
+    // while tolerant of the sub-pixel differences two same-row siblings can have.
+    private const double RowTolerance = 10;
+
+    /// <summary>
+    /// Groups <see cref="_items"/> into visual rows (by top-edge Y position, within
+    /// <see cref="RowTolerance"/>) so Up/Down can move a whole row at a time and Left/Right can
+    /// move within one - otherwise a row of several buttons (e.g. Install/Update/Check for
+    /// Updates/Uninstall) would need one Up/Down press per button just to get past it. Each row
+    /// is sorted left-to-right. Assumes <see cref="_items"/> is already close to reading order
+    /// (true here, since CollectItems walks the visual tree depth-first), so only the
+    /// most-recently-started row is checked for a Y match rather than all of them.
+    /// </summary>
+    private List<List<Control>> GroupIntoRows()
+    {
+        List<List<(Control Control, double Y, double X)>> rows = [];
+
+        foreach (Control control in _items)
+        {
+            Point topLeft = control.TranslatePoint(new Point(0, 0), _root) ?? new Point(0, 0);
+            List<(Control, double, double)>? lastRow = rows.Count > 0 ? rows[^1] : null;
+
+            if (lastRow != null && Math.Abs(lastRow[0].Item2 - topLeft.Y) <= RowTolerance)
+            {
+                lastRow.Add((control, topLeft.Y, topLeft.X));
+            }
+            else
+            {
+                rows.Add([(control, topLeft.Y, topLeft.X)]);
+            }
+        }
+
+        return rows.Select(row => row.OrderBy(entry => entry.X).Select(entry => entry.Control).ToList()).ToList();
+    }
+
+    /// <summary>
+    /// Moves the cursor to the equivalent column of the row above/below the current one
+    /// (Up/Down), rather than just the next item in document order - see
+    /// <see cref="GroupIntoRows"/>.
+    /// </summary>
+    private void MoveCursorVertical(int rowDelta)
     {
         RefreshItemsPreservingCursor();
 
@@ -211,8 +301,46 @@ public class PageGamepadNavigator
             return;
         }
 
-        int newIndex = Math.Clamp(_cursorIndex < 0 ? 0 : _cursorIndex + delta, 0, _items.Count - 1);
-        SetCursor(newIndex);
+        List<List<Control>> rows = GroupIntoRows();
+        Control? current = _cursorIndex >= 0 && _cursorIndex < _items.Count ? _items[_cursorIndex] : null;
+        int currentRowIndex = current != null ? rows.FindIndex(row => row.Contains(current)) : -1;
+        int currentColumnIndex = currentRowIndex >= 0 ? rows[currentRowIndex].IndexOf(current!) : 0;
+
+        int targetRowIndex = Math.Clamp((currentRowIndex < 0 ? 0 : currentRowIndex) + rowDelta, 0, rows.Count - 1);
+        List<Control> targetRow = rows[targetRowIndex];
+        int targetColumnIndex = Math.Min(currentColumnIndex, targetRow.Count - 1);
+
+        SetCursor(_items.IndexOf(targetRow[targetColumnIndex]));
+    }
+
+    /// <summary>
+    /// Moves the cursor within the current row only (Left/Right), clamped at the row's edges
+    /// rather than spilling into the next/previous row - see <see cref="GroupIntoRows"/>.
+    /// </summary>
+    private void MoveCursorHorizontal(int columnDelta)
+    {
+        RefreshItemsPreservingCursor();
+
+        if (_items.Count == 0)
+        {
+            return;
+        }
+
+        List<List<Control>> rows = GroupIntoRows();
+        Control? current = _cursorIndex >= 0 && _cursorIndex < _items.Count ? _items[_cursorIndex] : null;
+        int currentRowIndex = current != null ? rows.FindIndex(row => row.Contains(current)) : -1;
+
+        if (currentRowIndex < 0)
+        {
+            SetCursor(_items.IndexOf(rows[0][0]));
+            return;
+        }
+
+        List<Control> row = rows[currentRowIndex];
+        int currentColumnIndex = row.IndexOf(current!);
+        int targetColumnIndex = Math.Clamp(currentColumnIndex + columnDelta, 0, row.Count - 1);
+
+        SetCursor(_items.IndexOf(row[targetColumnIndex]));
     }
 
     private void OnNavigationAction(object? sender, ControllerNavigationAction action)
@@ -236,10 +364,10 @@ public class PageGamepadNavigator
         switch (action)
         {
             case ControllerNavigationAction.Up:
-                MoveCursor(-1);
+                MoveCursorVertical(-1);
                 break;
             case ControllerNavigationAction.Down:
-                MoveCursor(1);
+                MoveCursorVertical(1);
                 break;
             case ControllerNavigationAction.Left:
                 HandleLeftRight(-1);
@@ -251,11 +379,20 @@ public class PageGamepadNavigator
                 HandleConfirm();
                 break;
             case ControllerNavigationAction.Back:
-                // Matches LibraryPage: don't pop our own context here, just hand focus back
-                // to the side menu (which pushes its own context on top of ours). Our context
-                // gets popped later, when this page is actually navigated away from.
                 SetCursor(-1);
-                _navigationService.FocusNavigationMenu();
+                if (_onBack != null)
+                {
+                    // Attached to a dialog (see AttachToDialog) - B closes it, rather than the
+                    // page-navigation "focus the side menu" behavior below.
+                    _onBack();
+                }
+                else
+                {
+                    // Matches LibraryPage: don't pop our own context here, just hand focus back
+                    // to the side menu (which pushes its own context on top of ours). Our
+                    // context gets popped later, when this page is actually navigated away from.
+                    _navigationService.FocusNavigationMenu();
+                }
                 break;
             case ControllerNavigationAction.PreviousTab:
                 CycleTab(-1);
@@ -308,9 +445,9 @@ public class PageGamepadNavigator
     }
 
     /// <summary>
-    /// Left/Right normally just move the cursor (single-column layout, same as List view in
-    /// the Library), except for SliderCard/NumberBoxCard, where they adjust the value instead
-    /// - the natural axis for a horizontal slider/stepper.
+    /// Left/Right move within the current row (see <see cref="GroupIntoRows"/>) - e.g. between
+    /// Install/Update/Uninstall buttons sharing a row - except for SliderCard/NumberBoxCard,
+    /// where they adjust the value instead, the natural axis for a horizontal slider/stepper.
     /// </summary>
     private void HandleLeftRight(int delta)
     {
@@ -330,7 +467,7 @@ public class PageGamepadNavigator
                 numberBox.Value = Math.Clamp(numberBox.Value + delta, numberBox.Minimum, max);
                 break;
             default:
-                MoveCursor(delta);
+                MoveCursorHorizontal(delta);
                 break;
         }
     }
@@ -365,6 +502,21 @@ public class PageGamepadNavigator
                 {
                     button.Command.Execute(button.CommandParameter);
                 }
+                else if (button.Command == null)
+                {
+                    // Some buttons aren't Command-bound and only respond to a real Click event
+                    // internally - e.g. FAContentDialog's own Primary/Close buttons (see
+                    // AttachToDialog), which fire PrimaryButtonClick/close the dialog from
+                    // their own Click handling, not a Command. Only done when there's no
+                    // Command at all, so a normal Command-bound button never fires twice.
+                    button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                }
+                break;
+
+            case TextBox textBox:
+                // Not controller-editable (no on-screen keyboard support), but focusing it on
+                // Confirm is harmless and lets a physical keyboard be used afterward.
+                textBox.Focus();
                 break;
 
             case Expander expander:

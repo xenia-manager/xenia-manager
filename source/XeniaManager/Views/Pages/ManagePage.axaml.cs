@@ -30,7 +30,12 @@ public partial class ManagePage : UserControl
         _gamepadNavigator = new PageGamepadNavigator(
             App.Services.GetRequiredService<GamepadService>(),
             App.Services.GetRequiredService<NavigationService>(),
-            this);
+            this,
+            // LB/RB cycle the Emulator Management/Content Management tabs.
+            direction => _viewModel.CycleSelectedTab(direction),
+            // Land the cursor on the new tab's first control after cycling, not literally the
+            // first navigable item on the page (matches XeniaSettingsPage/SettingsPage).
+            ManageContentPanel);
         _gamepadNavigator.Activate();
     }
 

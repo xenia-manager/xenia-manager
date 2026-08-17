@@ -72,6 +72,10 @@ public partial class ManageProfilesDialog : UserControl
         contentDialog.Resources.Add("ContentDialogMinHeight", 400.0);
         contentDialog.Resources.Add("ContentDialogMaxHeight", 670.0);
 
+        // Experimental: controller navigation for this dialog's form (and its own Save/Cancel
+        // buttons) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
+
         // Set the initial button state
         contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanSave;
 
