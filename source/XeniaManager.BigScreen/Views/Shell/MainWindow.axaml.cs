@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -60,12 +62,23 @@ public partial class MainWindow : FAAppWindow
     }
 
     /// <summary>
-    /// Closes the window when the view model requests a quit.
+    /// Shuts the app down through the desktop lifetime when the view model
+    /// requests a quit, so the view model's exit code survives: a bare
+    /// <see cref="Environment.ExitCode"/> assignment (or a plain <see cref="Window.Close"/>)
+    /// is overwritten with 0 by <see cref="ClassicDesktopStyleApplicationLifetime.StartCore"/>.
     /// </summary>
-    private void OnQuitRequested(object? sender, System.EventArgs e)
+    private void OnQuitRequested(object? sender, EventArgs e)
     {
-        Logger.Info<MainWindow>("Quit requested, closing window");
-        Close();
+        int exitCode = DataContext is MainWindowViewModel vm ? vm.ExitCode : 0;
+        Logger.Info<MainWindow>($"Quit requested, shutting down with exit code {exitCode}");
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
+        {
+            lifetime.Shutdown(exitCode);
+        }
+        else
+        {
+            Close();
+        }
     }
 
     /// <summary>

@@ -87,6 +87,14 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsInitialized { get; private set; }
 
     /// <summary>
+    /// The exit code to report when the app quits: <see cref="ProcessExitCodes.CloseEverything"/>
+    /// when "Return to Xenia Manager on Quit" is off, otherwise 0. Routed through the
+    /// desktop lifetime on quit (<see cref="QuitRequested"/>), since a bare
+    /// <see cref="Environment.ExitCode"/> assignment is overwritten by Avalonia's shutdown.
+    /// </summary>
+    public int ExitCode { get; private set; }
+
+    /// <summary>
     /// Raised when the user chooses to quit BigScreen.
     /// </summary>
     public event EventHandler? QuitRequested;
@@ -280,7 +288,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         else
         {
-            Environment.ExitCode = ProcessExitCodes.CloseEverything;
+            ExitCode = ProcessExitCodes.CloseEverything;
         }
 
         QuitRequested?.Invoke(this, EventArgs.Empty);
