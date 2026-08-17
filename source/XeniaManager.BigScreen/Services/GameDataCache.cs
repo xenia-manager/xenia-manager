@@ -233,4 +233,26 @@ public class GameDataCache
         AchievementGpds.Clear();
         Logger.Debug<GameDataCache>("Achievement GPD cache cleared (profile switched)");
     }
+
+    /// <summary>
+    /// Disposes the cached achievement GPDs and clears every cached data source
+    /// (configs, content, patches, achievement GPDs). Called after a game session
+    /// so stale Game references (replaced by GameManager.LoadLibrary) and their
+    /// cached values are released, and achievement data is reloaded fresh on the
+    /// next pane open.
+    /// </summary>
+    public static void Clear()
+    {
+        foreach (GpdFile? gpd in AchievementGpds.Values)
+        {
+            gpd?.Dispose();
+        }
+
+        Configs.Clear();
+        Contents.Clear();
+        Patches.Clear();
+        PatchPaths.Clear();
+        AchievementGpds.Clear();
+        Logger.Debug<GameDataCache>("Game data cache cleared (session ended)");
+    }
 }

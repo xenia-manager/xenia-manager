@@ -353,6 +353,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private async Task RefreshLibrary()
     {
+        GameDataCache.Clear();
         _gameLibraryService.Load();
         await RebuildCards();
         Logger.Debug<MainWindowViewModel>("Library refreshed from disk");
