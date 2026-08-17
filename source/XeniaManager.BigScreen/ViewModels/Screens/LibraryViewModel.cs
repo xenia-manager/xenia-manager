@@ -35,6 +35,12 @@ public partial class LibraryViewModel : ScreenViewModel
     private readonly Dictionary<string, GameDetailedInfo?> _detailsCache = [];
 
     /// <summary>
+    /// Serializes the details cache: the boot preload fills it on a background
+    /// thread while the UI thread reads it on selection.
+    /// </summary>
+    private readonly Lock _detailsLock = new();
+
+    /// <summary>
     /// Monotonic generation counter so a slow fetch can't overwrite the pane for a
     /// game the user already navigated away from.
     /// </summary>
@@ -163,7 +169,14 @@ public partial class LibraryViewModel : ScreenViewModel
     private async Task LoadDetailsAsync(GameCardViewModel card)
     {
         string gameId = card.Game.GameId;
-        if (_detailsCache.TryGetValue(gameId, out GameDetailedInfo? cached))
+        GameDetailedInfo? cached = null;
+        bool hasCached;
+        lock (_detailsLock)
+        {
+            hasCached = _detailsCache.TryGetValue(gameId, out cached);
+        }
+
+        if (hasCached)
         {
             ApplyDetails(cached);
             return;
@@ -175,7 +188,11 @@ public partial class LibraryViewModel : ScreenViewModel
         try
         {
             GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(gameId);
-            _detailsCache[gameId] = info;
+            lock (_detailsLock)
+            {
+                _detailsCache[gameId] = info;
+            }
+
             if (generation == _detailsLoadGeneration && ReferenceEquals(SelectedCard, card))
             {
                 ApplyDetails(info);
@@ -185,7 +202,11 @@ public partial class LibraryViewModel : ScreenViewModel
         {
             Logger.Warning<LibraryViewModel>($"Failed to fetch database info for '{card.Game.Title}'");
             Logger.LogExceptionDetails<LibraryViewModel>(ex);
-            _detailsCache[gameId] = null;
+            lock (_detailsLock)
+            {
+                _detailsCache[gameId] = null;
+            }
+
             if (generation == _detailsLoadGeneration && ReferenceEquals(SelectedCard, card))
             {
                 ApplyDetails(null);
@@ -241,25 +262,37 @@ public partial class LibraryViewModel : ScreenViewModel
         foreach (GameCardViewModel card in Games)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (!_detailsCache.ContainsKey(card.Game.GameId))
+            lock (_detailsLock)
             {
-                try
+                if (_detailsCache.ContainsKey(card.Game.GameId))
                 {
-                    Stopwatch sw = Stopwatch.StartNew();
-                    GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(card.Game.GameId, cancellationToken);
-                    sw.Stop();
+                    continue;
+                }
+            }
+
+            try
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(card.Game.GameId, cancellationToken);
+                sw.Stop();
+                lock (_detailsLock)
+                {
                     _detailsCache[card.Game.GameId] = info;
-                    Logger.Info<LibraryViewModel>(
-                        $"Details for '{card.Game.Title}' in {sw.ElapsedMilliseconds}ms");
                 }
-                catch (OperationCanceledException)
+
+                Logger.Info<LibraryViewModel>(
+                    $"Details for '{card.Game.Title}' in {sw.ElapsedMilliseconds}ms");
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<LibraryViewModel>($"Failed to preload details for '{card.Game.Title}'");
+                Logger.LogExceptionDetails<LibraryViewModel>(ex);
+                lock (_detailsLock)
                 {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warning<LibraryViewModel>($"Failed to preload details for '{card.Game.Title}'");
-                    Logger.LogExceptionDetails<LibraryViewModel>(ex);
                     _detailsCache[card.Game.GameId] = null;
                 }
             }

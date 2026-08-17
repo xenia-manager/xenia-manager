@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
@@ -16,9 +17,21 @@ namespace XeniaManager.BigScreen.Services;
 /// scans, patch files and achievement GPDs. Populated for every game at boot
 /// (behind the splash) so the game modal's panes open instantly; refreshed
 /// in place whenever BigScreen itself edits the underlying data.
+/// The boot preload and the stats resolution run on background threads while
+/// the UI thread reads the same caches (launch, modal panes), so every cache
+/// operation is serialized through <see cref="CacheLock"/>. The mutating
+/// lifetime methods (<see cref="Clear"/>, <see cref="ClearAchievementGpds"/>,
+/// Refresh*) remain UI-thread-only: the lock protects the dictionaries, and
+/// that UI-confined ordering keeps disposal from racing a reader.
 /// </summary>
 public class GameDataCache
 {
+    /// <summary>
+    /// Serializes every cache dictionary access (loads included - contention
+    /// is negligible: one background pass at boot plus rare lazy first-use).
+    /// </summary>
+    private static readonly Lock CacheLock = new();
+
     private static readonly Dictionary<Game, ConfigFile> Configs = [];
     private static readonly Dictionary<Game, GameContent> Contents = [];
     private static readonly Dictionary<Game, PatchFile?> Patches = [];
@@ -59,56 +72,65 @@ public class GameDataCache
 
     private static long LoadAndCacheContent(Game game)
     {
-        Stopwatch sw = Stopwatch.StartNew();
-        try
+        lock (CacheLock)
         {
-            GameContent content = LoadContent(game);
-            Contents[game] = content;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<GameDataCache>($"Failed to preload content for '{game.Title}'");
-            Logger.LogExceptionDetails<GameDataCache>(ex);
-        }
+            Stopwatch sw = Stopwatch.StartNew();
+            try
+            {
+                GameContent content = LoadContent(game);
+                Contents[game] = content;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<GameDataCache>($"Failed to preload content for '{game.Title}'");
+                Logger.LogExceptionDetails<GameDataCache>(ex);
+            }
 
-        sw.Stop();
-        return sw.ElapsedMilliseconds;
+            sw.Stop();
+            return sw.ElapsedMilliseconds;
+        }
     }
 
     private static long LoadAndCachePatch(Game game)
     {
-        Stopwatch sw = Stopwatch.StartNew();
-        try
+        lock (CacheLock)
         {
-            (PatchFile? patch, PatchPaths[game]) = LoadPatch(game);
-            Patches[game] = patch;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<GameDataCache>($"Failed to preload patch for '{game.Title}'");
-            Logger.LogExceptionDetails<GameDataCache>(ex);
-        }
+            Stopwatch sw = Stopwatch.StartNew();
+            try
+            {
+                (PatchFile? patch, PatchPaths[game]) = LoadPatch(game);
+                Patches[game] = patch;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<GameDataCache>($"Failed to preload patch for '{game.Title}'");
+                Logger.LogExceptionDetails<GameDataCache>(ex);
+            }
 
-        sw.Stop();
-        return sw.ElapsedMilliseconds;
+            sw.Stop();
+            return sw.ElapsedMilliseconds;
+        }
     }
 
     private static long LoadAndCacheAchievementGpd(Game game)
     {
-        Stopwatch sw = Stopwatch.StartNew();
-        try
+        lock (CacheLock)
         {
-            GpdFile? gpd = LoadAchievementGpd(game);
-            AchievementGpds[game] = gpd;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<GameDataCache>($"Failed to preload achievement GPD for '{game.Title}'");
-            Logger.LogExceptionDetails<GameDataCache>(ex);
-        }
+            Stopwatch sw = Stopwatch.StartNew();
+            try
+            {
+                GpdFile? gpd = LoadAchievementGpd(game);
+                AchievementGpds[game] = gpd;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<GameDataCache>($"Failed to preload achievement GPD for '{game.Title}'");
+                Logger.LogExceptionDetails<GameDataCache>(ex);
+            }
 
-        sw.Stop();
-        return sw.ElapsedMilliseconds;
+            sw.Stop();
+            return sw.ElapsedMilliseconds;
+        }
     }
 
     /// <summary>
@@ -116,13 +138,16 @@ public class GameDataCache
     /// </summary>
     public static ConfigFile GetConfig(Game game)
     {
-        if (!Configs.TryGetValue(game, out ConfigFile? config))
+        lock (CacheLock)
         {
-            config = LoadConfig(game);
-            Configs[game] = config;
-        }
+            if (!Configs.TryGetValue(game, out ConfigFile? config))
+            {
+                config = LoadConfig(game);
+                Configs[game] = config;
+            }
 
-        return config;
+            return config;
+        }
     }
 
     /// <summary>
@@ -131,13 +156,16 @@ public class GameDataCache
     /// </summary>
     public static GameContent GetContent(Game game)
     {
-        if (!Contents.TryGetValue(game, out GameContent? content))
+        lock (CacheLock)
         {
-            content = LoadContent(game);
-            Contents[game] = content;
-        }
+            if (!Contents.TryGetValue(game, out GameContent? content))
+            {
+                content = LoadContent(game);
+                Contents[game] = content;
+            }
 
-        return content;
+            return content;
+        }
     }
 
     /// <summary>
@@ -146,13 +174,16 @@ public class GameDataCache
     /// </summary>
     public static (PatchFile? File, string? Path) GetPatch(Game game)
     {
-        if (!Patches.TryGetValue(game, out PatchFile? patch))
+        lock (CacheLock)
         {
-            (patch, PatchPaths[game]) = LoadPatch(game);
-            Patches[game] = patch;
-        }
+            if (!Patches.TryGetValue(game, out PatchFile? patch))
+            {
+                (patch, PatchPaths[game]) = LoadPatch(game);
+                Patches[game] = patch;
+            }
 
-        return (patch, PatchPaths[game]);
+            return (patch, PatchPaths[game]);
+        }
     }
 
     /// <summary>
@@ -161,13 +192,16 @@ public class GameDataCache
     /// </summary>
     public static GpdFile? GetAchievementGpd(Game game)
     {
-        if (!AchievementGpds.TryGetValue(game, out GpdFile? gpd))
+        lock (CacheLock)
         {
-            gpd = LoadAchievementGpd(game);
-            AchievementGpds[game] = gpd;
-        }
+            if (!AchievementGpds.TryGetValue(game, out GpdFile? gpd))
+            {
+                gpd = LoadAchievementGpd(game);
+                AchievementGpds[game] = gpd;
+            }
 
-        return gpd;
+            return gpd;
+        }
     }
 
     /// <summary>
@@ -193,9 +227,12 @@ public class GameDataCache
     /// </summary>
     public static ConfigFile ReloadConfig(Game game)
     {
-        ConfigFile config = LoadConfig(game);
-        Configs[game] = config;
-        return config;
+        lock (CacheLock)
+        {
+            ConfigFile config = LoadConfig(game);
+            Configs[game] = config;
+            return config;
+        }
     }
 
     /// <summary>
@@ -204,8 +241,11 @@ public class GameDataCache
     /// </summary>
     public static void RefreshContent(Game game)
     {
-        Contents[game] = LoadContent(game);
-        Logger.Debug<GameDataCache>($"Content cache refreshed for '{game.Title}'");
+        lock (CacheLock)
+        {
+            Contents[game] = LoadContent(game);
+            Logger.Debug<GameDataCache>($"Content cache refreshed for '{game.Title}'");
+        }
     }
 
     /// <summary>
@@ -214,9 +254,12 @@ public class GameDataCache
     /// </summary>
     public static void RefreshPatch(Game game)
     {
-        (PatchFile? patch, PatchPaths[game]) = LoadPatch(game);
-        Patches[game] = patch;
-        Logger.Debug<GameDataCache>($"Patch cache refreshed for '{game.Title}'");
+        lock (CacheLock)
+        {
+            (PatchFile? patch, PatchPaths[game]) = LoadPatch(game);
+            Patches[game] = patch;
+            Logger.Debug<GameDataCache>($"Patch cache refreshed for '{game.Title}'");
+        }
     }
 
     /// <summary>
@@ -225,13 +268,16 @@ public class GameDataCache
     /// </summary>
     public static void ClearAchievementGpds()
     {
-        foreach (GpdFile? gpd in AchievementGpds.Values)
+        lock (CacheLock)
         {
-            gpd?.Dispose();
-        }
+            foreach (GpdFile? gpd in AchievementGpds.Values)
+            {
+                gpd?.Dispose();
+            }
 
-        AchievementGpds.Clear();
-        Logger.Debug<GameDataCache>("Achievement GPD cache cleared (profile switched)");
+            AchievementGpds.Clear();
+            Logger.Debug<GameDataCache>("Achievement GPD cache cleared (profile switched)");
+        }
     }
 
     /// <summary>
@@ -243,16 +289,19 @@ public class GameDataCache
     /// </summary>
     public static void Clear()
     {
-        foreach (GpdFile? gpd in AchievementGpds.Values)
+        lock (CacheLock)
         {
-            gpd?.Dispose();
-        }
+            foreach (GpdFile? gpd in AchievementGpds.Values)
+            {
+                gpd?.Dispose();
+            }
 
-        Configs.Clear();
-        Contents.Clear();
-        Patches.Clear();
-        PatchPaths.Clear();
-        AchievementGpds.Clear();
-        Logger.Debug<GameDataCache>("Game data cache cleared (session ended)");
+            Configs.Clear();
+            Contents.Clear();
+            Patches.Clear();
+            PatchPaths.Clear();
+            AchievementGpds.Clear();
+            Logger.Debug<GameDataCache>("Game data cache cleared (session ended)");
+        }
     }
 }
