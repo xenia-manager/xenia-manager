@@ -25,6 +25,31 @@ public partial class SettingsPageViewModel : ViewModelBase
     private bool _firstStartup = true;
     private bool _suppressUpdates = false;
 
+    // Tab selection (General/UI/Debug) - drives which section's content is shown below the
+    // tab strip in SettingsPage.axaml, and which one LB/RB (PreviousTab/NextTab) cycles
+    // between (see PageGamepadNavigator).
+    private const int TabCount = 3;
+    [ObservableProperty] private int _selectedTabIndex;
+    [ObservableProperty] private bool _isGeneralTabVisible = true;
+    [ObservableProperty] private bool _isUiTabVisible;
+    [ObservableProperty] private bool _isDebugTabVisible;
+
+    partial void OnSelectedTabIndexChanged(int value)
+    {
+        IsGeneralTabVisible = value == 0;
+        IsUiTabVisible = value == 1;
+        IsDebugTabVisible = value == 2;
+    }
+
+    /// <summary>
+    /// Moves the selected tab by <paramref name="direction"/> (-1/+1), wrapping around.
+    /// Called by PageGamepadNavigator when LB/RB (PreviousTab/NextTab) is pressed.
+    /// </summary>
+    public void CycleSelectedTab(int direction)
+    {
+        SelectedTabIndex = ((SelectedTabIndex + direction) % TabCount + TabCount) % TabCount;
+    }
+
     // General Settings
     [ObservableProperty] private bool parseGameDetailsWithXenia;
     partial void OnParseGameDetailsWithXeniaChanged(bool oldValue, bool newValue)

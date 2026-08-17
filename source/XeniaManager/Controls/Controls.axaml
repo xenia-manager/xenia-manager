@@ -37,5 +37,22 @@
         </Setter>
     </Style>
 
+    <!-- Horizontal tab strip used by pages with a LB/RB-cycled tab bar (Xenia Settings'
+         config editor, Settings) - see PageGamepadNavigator's onCycleTab/tabContentRoot.
+         Each tab gets its own individually-boxed card-styled pill, not one shared container
+         around the whole strip. -->
+    <Style Selector="ListBox.pageTabStrip ListBoxItem">
+        <Setter Property="Margin" Value="0,0,6,6" />
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+        <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+    </Style>
+    <Style Selector="ListBox.pageTabStrip ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+    </Style>
+
     <!-- Add other Control Styles here -->
 </Styles>

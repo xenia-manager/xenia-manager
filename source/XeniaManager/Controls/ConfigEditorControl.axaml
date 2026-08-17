@@ -18,23 +18,6 @@
         <converters:NotNullConverter x:Key="NotNullConverter" />
     </UserControl.Resources>
 
-    <UserControl.Styles>
-        <!-- Each section tab gets its own individual card-styled box (border, background,
-             rounded corners), rather than one shared container around the whole strip. -->
-        <Style Selector="ListBox.configSectionTabs ListBoxItem">
-            <Setter Property="Margin" Value="0,0,6,6" />
-            <Setter Property="Padding" Value="12,6" />
-            <Setter Property="CornerRadius" Value="4" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
-        </Style>
-        <Style Selector="ListBox.configSectionTabs ListBoxItem:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
-        </Style>
-    </UserControl.Styles>
-
     <Grid RowDefinitions="Auto,*">
         <!-- Section Tab Strip - each section gets its own individually-boxed tab (styled via
              UserControl.Styles above), in a single row that scrolls horizontally without
@@ -52,7 +35,7 @@
                      SelectionMode="Single"
                      Background="Transparent"
                      BorderThickness="0"
-                     Classes="configSectionTabs">
+                     Classes="pageTabStrip">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />

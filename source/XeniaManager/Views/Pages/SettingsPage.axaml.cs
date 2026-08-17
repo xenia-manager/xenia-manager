@@ -38,7 +38,12 @@ public partial class SettingsPage : UserControl
         _gamepadNavigator = new PageGamepadNavigator(
             App.Services.GetRequiredService<GamepadService>(),
             App.Services.GetRequiredService<NavigationService>(),
-            this);
+            this,
+            // LB/RB cycle the General/UI/Debug tabs.
+            direction => _viewModel.CycleSelectedTab(direction),
+            // Land the cursor on the new tab's first control after cycling, not literally the
+            // first navigable item on the page (matches XeniaSettingsPage).
+            SettingsContentPanel);
         _gamepadNavigator.Activate();
     }
 
