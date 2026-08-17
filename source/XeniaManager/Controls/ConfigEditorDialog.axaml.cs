@@ -6,6 +6,7 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -82,6 +83,14 @@ public partial class ConfigEditorDialog : UserControl
         // Controlling ContentDialog
         contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
         contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
+
+        // Experimental: controller navigation for this dialog's form (and its own Save/Cancel
+        // buttons), including LB/RB cycling ConfigEditorControl's section tabs - see
+        // PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(
+            contentDialog,
+            onCycleTab: direction => viewModel.CycleSelectedSection(direction),
+            tabContentRoot: dialog.ConfigEditorControlInstance);
 
         // Handle primary button (Save)
         contentDialog.PrimaryButtonClick += async (_, e) =>

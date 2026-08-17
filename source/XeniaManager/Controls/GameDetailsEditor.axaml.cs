@@ -59,6 +59,10 @@ public partial class GameDetailsEditor : UserControl
             DefaultButton = FAContentDialogButton.Primary
         };
 
+        // Experimental: controller navigation for this dialog's form (and its own Save/Cancel
+        // buttons) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
+
         // Handle the primary button (Save) using deferral to properly handle async operation
         bool saveSuccessful = false;
         contentDialog.PrimaryButtonClick += async (_, e) =>

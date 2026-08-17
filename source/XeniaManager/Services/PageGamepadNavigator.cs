@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -41,6 +42,7 @@ public class PageGamepadNavigator
         typeof(Expander),
         typeof(ToggleSwitch),
         typeof(ComboBox),
+        typeof(ListBox),
         typeof(TextBox),
         typeof(ToggleSwitchCard),
         typeof(ComboBoxCard),
@@ -60,11 +62,14 @@ public class PageGamepadNavigator
     private List<Control> _items = [];
     private int _cursorIndex = -1;
 
-    // Set while a ComboBox/ComboBoxCard's dropdown is "open" for D-Pad navigation: Up/Down
-    // move its selection instead of the page cursor, Confirm/Back close it and return to
-    // normal page navigation - mirrors the (deeper) submenu navigation already built for the
-    // game context menu in LibraryPage, just flattened since there's no nesting here.
-    private ComboBox? _openComboBox;
+    // Set while a ComboBox/ComboBoxCard's dropdown, or a ListBox (e.g. PatchSelectionDialog's
+    // patch list), is "open" for D-Pad navigation: Up/Down move its selection instead of the
+    // page cursor, Confirm/Back close it and return to normal page navigation - mirrors the
+    // (deeper) submenu navigation already built for the game context menu in LibraryPage, just
+    // flattened since there's no nesting here. SelectingItemsControl is ComboBox and ListBox's
+    // common base, exposing SelectedIndex/ItemCount for both uniformly; only ComboBox has an
+    // actual dropdown to open/close (see OpenSelectingItemsControl).
+    private SelectingItemsControl? _openList;
 
     /// <param name="onCycleTab">Called with -1/+1 when LB/RB (PreviousTab/NextTab) is pressed,
     /// for pages with their own tab strip (e.g. Xenia Settings' config editor sections). Null
@@ -101,7 +106,13 @@ public class PageGamepadNavigator
     /// FAContentDialog (its own Primary/Close buttons are reachable too, alongside the embedded
     /// content). Call once, right after constructing the dialog and before ShowAsync().
     /// </summary>
-    public static void AttachToDialog(FAContentDialog dialog)
+    /// <param name="onCycleTab">Same as the constructor param - pass when the dialog's content
+    /// has its own tab strip (e.g. ConfigEditorDialog wrapping ConfigEditorControl, used for
+    /// per-game settings) so LB/RB cycle it.</param>
+    /// <param name="tabContentRoot">Same as the constructor param - required alongside
+    /// <paramref name="onCycleTab"/> for the cursor to land inside the active tab rather than
+    /// the dialog's own chrome after a tab switch.</param>
+    public static void AttachToDialog(FAContentDialog dialog, Action<int>? onCycleTab = null, Visual? tabContentRoot = null)
     {
         GamepadService gamepadService = App.Services.GetRequiredService<GamepadService>();
         NavigationService navigationService = App.Services.GetRequiredService<NavigationService>();
@@ -114,7 +125,7 @@ public class PageGamepadNavigator
             // moment Opened fires.
             Dispatcher.UIThread.Post(() =>
             {
-                navigator = new PageGamepadNavigator(gamepadService, navigationService, dialog, onBack: () => dialog.Hide(FAContentDialogResult.None));
+                navigator = new PageGamepadNavigator(gamepadService, navigationService, dialog, onCycleTab, tabContentRoot, onBack: () => dialog.Hide(FAContentDialogResult.None));
                 navigator.Activate();
             });
         };
@@ -176,7 +187,7 @@ public class PageGamepadNavigator
     public void Deactivate()
     {
         SetCursor(-1);
-        _openComboBox = null;
+        _openList = null;
         _gamepadService.NavigationActionTriggered -= OnNavigationAction;
         _gamepadService.PopNavigationContext(_owner);
     }
@@ -355,9 +366,9 @@ public class PageGamepadNavigator
 
     private void Handle(ControllerNavigationAction action)
     {
-        if (_openComboBox != null)
+        if (_openList != null)
         {
-            HandleComboBoxOpen(action);
+            HandleSelectingItemsControlOpen(action);
             return;
         }
 
@@ -533,28 +544,44 @@ public class PageGamepadNavigator
                 break;
 
             case ComboBox comboBox:
-                OpenComboBox(comboBox);
+                OpenSelectingItemsControl(comboBox);
                 break;
 
             case ComboBoxCard comboBoxCard:
                 ComboBox? inner = comboBoxCard.GetVisualDescendants().OfType<ComboBox>().FirstOrDefault();
                 if (inner != null)
                 {
-                    OpenComboBox(inner);
+                    OpenSelectingItemsControl(inner);
                 }
+                break;
+
+            case ListBox listBox:
+                // Unlike ComboBox, a ListBox has no dropdown to open - it's already fully
+                // visible, so Confirm just starts D-Pad-driven browsing of its items (e.g.
+                // PatchSelectionDialog's patch list).
+                OpenSelectingItemsControl(listBox);
                 break;
         }
     }
 
-    private void OpenComboBox(ComboBox comboBox)
+    /// <summary>
+    /// Enters "list browsing" sub-mode for a ComboBox or ListBox: Up/Down move its
+    /// SelectedIndex instead of the page cursor, Confirm/Back exit back to normal page
+    /// navigation (see <see cref="HandleSelectingItemsControlOpen"/>). Opens the dropdown too,
+    /// for a ComboBox specifically - a ListBox has no dropdown, it's already showing its items.
+    /// </summary>
+    private void OpenSelectingItemsControl(SelectingItemsControl control)
     {
-        _openComboBox = comboBox;
-        comboBox.IsDropDownOpen = true;
+        _openList = control;
+        if (control is ComboBox comboBox)
+        {
+            comboBox.IsDropDownOpen = true;
+        }
     }
 
-    private void HandleComboBoxOpen(ControllerNavigationAction action)
+    private void HandleSelectingItemsControlOpen(ControllerNavigationAction action)
     {
-        if (_openComboBox == null)
+        if (_openList == null)
         {
             return;
         }
@@ -562,21 +589,24 @@ public class PageGamepadNavigator
         switch (action)
         {
             case ControllerNavigationAction.Up:
-                if (_openComboBox.SelectedIndex > 0)
+                if (_openList.SelectedIndex > 0)
                 {
-                    _openComboBox.SelectedIndex--;
+                    _openList.SelectedIndex--;
                 }
                 break;
             case ControllerNavigationAction.Down:
-                if (_openComboBox.SelectedIndex < _openComboBox.ItemCount - 1)
+                if (_openList.SelectedIndex < _openList.ItemCount - 1)
                 {
-                    _openComboBox.SelectedIndex++;
+                    _openList.SelectedIndex++;
                 }
                 break;
             case ControllerNavigationAction.Confirm:
             case ControllerNavigationAction.Back:
-                _openComboBox.IsDropDownOpen = false;
-                _openComboBox = null;
+                if (_openList is ComboBox openComboBox)
+                {
+                    openComboBox.IsDropDownOpen = false;
+                }
+                _openList = null;
                 break;
         }
     }

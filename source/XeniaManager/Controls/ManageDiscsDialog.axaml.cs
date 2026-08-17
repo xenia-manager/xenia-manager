@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -65,6 +66,10 @@ public partial class ManageDiscsDialog : UserControl
             CloseButtonText = LocalizationHelper.GetText("ManageDiscsDialog.CloseButton"),
             DefaultButton = FAContentDialogButton.Close
         };
+
+        // Experimental: controller navigation for this dialog's form (and its own Close
+        // button) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
 
         await contentDialog.ShowAsync();
         return true;

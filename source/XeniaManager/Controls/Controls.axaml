@@ -31,7 +31,7 @@
          own Background in their control template (see CustomCard.axaml), so a Background
          setter here wouldn't actually be visible on them, while Effect is applied by the
          renderer on top of a control's whole visual output regardless of its template. -->
-    <Style Selector="Button.controllerCursor, Expander.controllerCursor, ToggleSwitch.controllerCursor, ComboBox.controllerCursor, cards|ToggleSwitchCard.controllerCursor, cards|ComboBoxCard.controllerCursor, cards|NumberBoxCard.controllerCursor, cards|SliderCard.controllerCursor, cards|TextBoxCard.controllerCursor">
+    <Style Selector="Button.controllerCursor, Expander.controllerCursor, ToggleSwitch.controllerCursor, ComboBox.controllerCursor, ListBox.controllerCursor, TextBox.controllerCursor, cards|ToggleSwitchCard.controllerCursor, cards|ComboBoxCard.controllerCursor, cards|NumberBoxCard.controllerCursor, cards|SliderCard.controllerCursor, cards|TextBoxCard.controllerCursor">
         <Setter Property="Effect">
             <DropShadowEffect Color="{DynamicResource SystemAccentColor}" BlurRadius="16" OffsetX="0" OffsetY="0" />
         </Setter>

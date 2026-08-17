@@ -6,6 +6,7 @@ using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 using XeniaManager.ViewModels.Items;
 
@@ -76,6 +77,10 @@ public partial class OptimizedSettingsDialog : UserControl
         // Controlling ContentDialog
         contentDialog.Resources.Add("ContentDialogMinWidth", 400.0);
         contentDialog.Resources.Add("ContentDialogMaxWidth", 700.0);
+
+        // Experimental: controller navigation for this dialog's form (and its own
+        // Apply/Cancel buttons) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
 
         // Handle primary button (Apply)
         contentDialog.PrimaryButtonClick += async (_, e) =>
