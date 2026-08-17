@@ -1032,7 +1032,8 @@ public partial class SettingsViewModel : ViewModelBase
 
         _xconfigFile.AvHdmiScreenSize = value.Value;
         XConfigManager.SaveXConfig(_xconfigFile, SelectedXConfigVersion.Version);
-        Logger.Info<SettingsViewModel>($"XConfig resolution set to {value.Value} ({SelectedXConfigVersion.DisplayName})");
+        Logger.Info<SettingsViewModel>(
+            $"XConfig resolution set to {value.Value} ({SelectedXConfigVersion.DisplayName})");
     }
 
     partial void OnSelectedXConfigVersionChanged(XConfigVersionOption? value)

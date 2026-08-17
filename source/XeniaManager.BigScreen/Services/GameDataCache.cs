@@ -67,7 +67,8 @@ public class GameDataCache
 
     private static GpdFile? LoadAchievementGpd(Game game)
     {
-        return App.Services.GetRequiredService<IProfileService>().LoadGameAchievementGpd(game.XeniaVersion, game.GameId);
+        return App.Services.GetRequiredService<IProfileService>()
+            .LoadGameAchievementGpd(game.XeniaVersion, game.GameId);
     }
 
     private static long LoadAndCacheContent(Game game)

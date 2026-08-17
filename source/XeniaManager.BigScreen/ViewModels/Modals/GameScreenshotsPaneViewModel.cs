@@ -117,7 +117,7 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
             {
                 string fileName = Path.GetFileName(file);
                 DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
-                                       ?? File.GetLastWriteTime(file);
+                                      ?? File.GetLastWriteTime(file);
                 using FileStream imageStream = File.OpenRead(file);
                 screenshots.Add(new ScreenshotItemViewModel(
                     _game.XeniaVersion,
