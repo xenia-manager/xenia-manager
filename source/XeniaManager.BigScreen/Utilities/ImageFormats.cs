@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace XeniaManager.BigScreen.Utilities;
@@ -10,7 +11,7 @@ public static class ImageFormats
     /// <summary>
     /// Common image extensions (lowercase, with leading dots) accepted as screenshots.
     /// </summary>
-    public static readonly string[] ScreenshotExtensions = [".png", ".jpg", ".jpeg", ".bmp", ".webp", ".gif"];
+    public static readonly HashSet<string> ScreenshotExtensions = [".png", ".jpg", ".jpeg", ".bmp", ".webp", ".gif"];
 
     /// <summary>
     /// The same formats as file-picker patterns (asterisk-prefixed).

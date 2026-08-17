@@ -63,9 +63,10 @@ public class ModalService : IModalService
     }
 
     /// <inheritdoc />
-    public Task<TResult?> ShowAsync<TResult>(ModalViewModelBase<TResult> modal)
+    public async Task<TResult?> ShowAsync<TResult>(ModalViewModelBase<TResult> modal)
     {
-        return ShowAsyncCore(modal).ContinueWith(_ => modal.Result, TaskContinuationOptions.ExecuteSynchronously);
+        await ShowAsyncCore(modal);
+        return modal.Result;
     }
 
     /// <inheritdoc />

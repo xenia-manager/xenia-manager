@@ -569,7 +569,7 @@ public class ProfileService : IProfileService
             return profileStats;
         }
 
-        GpdFile? achievementGpd = LoadGameAchievementGpd(game.XeniaVersion, game.GameId);
+        GpdFile? achievementGpd = GameDataCache.GetAchievementGpd(game);
         if (achievementGpd != null)
         {
             return new GameStatInfo(

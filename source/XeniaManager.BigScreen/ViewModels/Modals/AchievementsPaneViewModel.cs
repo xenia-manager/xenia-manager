@@ -165,9 +165,21 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
         _allAchievements = _gpdFile.Achievements
             .Select(achievement => new AchievementItemViewModel(achievement, _gpdFile))
             .ToList();
-        AchievementText = $"{_allAchievements.Count(achievement => achievement.IsUnlocked)} / {_allAchievements.Count}";
-        GamerscoreText =
-            $"{_allAchievements.Where(achievement => achievement.IsUnlocked).Sum(achievement => achievement.Gamerscore)} / {_allAchievements.Sum(achievement => achievement.Gamerscore)}";
+        int unlockedCount = 0;
+        int unlockedGamerscore = 0;
+        int totalGamerscore = 0;
+        foreach (AchievementItemViewModel achievement in _allAchievements)
+        {
+            totalGamerscore += achievement.Gamerscore;
+            if (achievement.IsUnlocked)
+            {
+                unlockedCount++;
+                unlockedGamerscore += achievement.Gamerscore;
+            }
+        }
+
+        AchievementText = $"{unlockedCount} / {_allAchievements.Count}";
+        GamerscoreText = $"{unlockedGamerscore} / {totalGamerscore}";
         foreach (AchievementItemViewModel achievement in SortAchievements(_allAchievements))
         {
             Rows.Add(achievement);
