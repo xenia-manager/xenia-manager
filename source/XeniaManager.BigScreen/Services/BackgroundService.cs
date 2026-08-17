@@ -37,6 +37,18 @@ public class BackgroundService : IBackgroundService
     public DashboardSettings Settings { get; private set; } = new();
 
     /// <summary>
+    /// The cached decoded background image bitmap, reused while the image path
+    /// is unchanged so background rebuilds don't re-decode the file on disk.
+    /// </summary>
+    private Bitmap? _backgroundBitmap;
+
+    /// <summary>
+    /// The image path the cached bitmap was loaded from, so a path change
+    /// triggers a re-decode and disposal of the previous bitmap.
+    /// </summary>
+    private string? _backgroundBitmapPath;
+
+    /// <summary>
     /// Lightens (positive) or darkens (negative) the accent colour by the given amount.
     /// </summary>
     private Color AdjustAccent(double amount)
@@ -51,7 +63,9 @@ public class BackgroundService : IBackgroundService
     }
 
     /// <summary>
-    /// Creates an image brush from the configured image path, or null when unavailable.
+    /// Creates an image brush from the configured image path, reusing the cached
+    /// decoded bitmap while the path is unchanged. Returns null when no image is
+    /// configured, the file is missing, or decoding fails.
     /// </summary>
     private IBrush? CreateImageBrush()
     {
@@ -59,7 +73,14 @@ public class BackgroundService : IBackgroundService
         {
             if (!string.IsNullOrEmpty(Settings.ImagePath) && File.Exists(Settings.ImagePath))
             {
-                return new ImageBrush(new Bitmap(Settings.ImagePath))
+                if (_backgroundBitmap == null || _backgroundBitmapPath != Settings.ImagePath)
+                {
+                    _backgroundBitmap?.Dispose();
+                    _backgroundBitmap = new Bitmap(Settings.ImagePath);
+                    _backgroundBitmapPath = Settings.ImagePath;
+                }
+
+                return new ImageBrush(_backgroundBitmap)
                 {
                     Stretch = Stretch.UniformToFill
                 };
@@ -71,6 +92,9 @@ public class BackgroundService : IBackgroundService
             Logger.LogExceptionDetails<BackgroundService>(ex);
         }
 
+        _backgroundBitmap?.Dispose();
+        _backgroundBitmap = null;
+        _backgroundBitmapPath = null;
         return null;
     }
 

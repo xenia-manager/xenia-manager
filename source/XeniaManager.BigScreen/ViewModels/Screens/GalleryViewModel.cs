@@ -201,6 +201,11 @@ public partial class GalleryViewModel : ScreenViewModel
         await Task.Run(() => _screenshotLibraryService.Load(), cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
+        foreach (ScreenshotItemViewModel screenshot in _allScreenshots)
+        {
+            screenshot.Image?.Dispose();
+        }
+
         _allScreenshots.Clear();
         foreach (ScreenshotItemViewModel screenshot in _screenshotLibraryService.Screenshots)
         {
@@ -222,6 +227,11 @@ public partial class GalleryViewModel : ScreenViewModel
     public async Task RefreshAsync()
     {
         await Task.Run(_screenshotLibraryService.Load);
+        foreach (ScreenshotItemViewModel screenshot in _allScreenshots)
+        {
+            screenshot.Image?.Dispose();
+        }
+
         _allScreenshots.Clear();
         foreach (ScreenshotItemViewModel screenshot in _screenshotLibraryService.Screenshots)
         {
