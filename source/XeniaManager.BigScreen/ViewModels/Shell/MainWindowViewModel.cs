@@ -615,6 +615,19 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
 
+            foreach (Game game in _gameLibraryService.GetRecentGames(AppConstants.RecentGamesLimit))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                game.Artwork.PreloadBackground();
+                game.Artwork.PreloadBoxart();
+            }
+
+            if (_gameLibraryService.Games.FirstOrDefault() is { } firstGame)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                firstGame.Artwork.PreloadBackground();
+            }
+
             await Library.PreloadDetailsAsync(cancellationToken);
         }, cancellationToken);
         dataSw.Stop();

@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Models;
@@ -36,6 +38,11 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     /// </summary>
     [ObservableProperty]
     public partial Bitmap? BackgroundArt { get; set; }
+
+    /// <summary>
+    /// Whether a background-art decode is currently in flight (guards duplicate loads).
+    /// </summary>
+    private bool _backgroundLoadInFlight;
 
     /// <summary>
     /// The image shown on this card (box art or disc icon).
@@ -136,13 +143,36 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     }
 
     /// <summary>
-    /// Loads the card's background art from the cached artwork (no-op once loaded).
+    /// Loads the card's background art off the UI thread (no-op once loaded or
+    /// while a load is in flight). The art is published on the UI thread when
+    /// the decode completes, so selection stays instant instead of blocking.
     /// </summary>
     public void EnsureBackgroundLoaded()
     {
-        if (BackgroundArt == null)
+        if (BackgroundArt == null && !_backgroundLoadInFlight)
         {
-            BackgroundArt = Game.Artwork.CachedBackground;
+            _backgroundLoadInFlight = true;
+            TaskUtilities.RunSafely<GameCardViewModel>(LoadBackgroundAsync, "Loading card background art");
+        }
+    }
+
+    /// <summary>
+    /// Decodes the game's background art on a background thread (the artwork
+    /// cache is thread-safe) and publishes it on the UI thread.
+    /// </summary>
+    private async Task LoadBackgroundAsync()
+    {
+        try
+        {
+            Bitmap? art = await Task.Run(() => Game.Artwork.CachedBackground);
+            if (BackgroundArt == null)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() => BackgroundArt = art);
+            }
+        }
+        finally
+        {
+            _backgroundLoadInFlight = false;
         }
     }
 
