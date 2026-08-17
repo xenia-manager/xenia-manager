@@ -25,10 +25,24 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 /// ({GameId} under the emulator's screenshots directory) as a 4-across grid;
 /// the full-screen viewer opens as a modal on the modal stack.
 /// </summary>
-public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPane
+public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPane, IDisposable
 {
     private readonly Game _game;
     private readonly IModalService _modalService;
+
+    /// <summary>
+    /// Whether this pane created its screenshot items itself (self-scan path)
+    /// and therefore owns - and must dispose - their thumbnails. Items reused
+    /// from the gallery cache stay owned by the gallery.
+    /// </summary>
+    private bool _ownsItems;
+
+    /// <summary>
+    /// Whether the pane has been disposed (the game modal closed). Guards the
+    /// in-flight self-scan: results landing after disposal are released
+    /// immediately instead of leaking.
+    /// </summary>
+    private bool _disposed;
 
     /// <summary>
     /// Whether the pane shows the empty state (scan finished, no screenshots).
@@ -129,6 +143,7 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     /// </summary>
     private void PopulateFromGalleryCache(TimeFormat timeFormat)
     {
+        _ownsItems = false;
         IScreenshotLibraryService library = App.Services.GetRequiredService<IScreenshotLibraryService>();
         foreach (ScreenshotItemViewModel screenshot in library.Screenshots)
         {
@@ -151,7 +166,18 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     /// </summary>
     private async Task LoadAsync(TimeFormat timeFormat)
     {
+        _ownsItems = true;
         List<ScreenshotItemViewModel> loaded = await Task.Run(ScanScreenshots);
+        if (_disposed)
+        {
+            foreach (ScreenshotItemViewModel screenshot in loaded)
+            {
+                screenshot.Thumbnail?.Dispose();
+            }
+
+            return;
+        }
+
         IsLoading = false;
 
         foreach (ScreenshotItemViewModel screenshot in loaded)
@@ -218,6 +244,24 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     public void OnPaneExited()
     {
         SelectionHelper.ClearSelection(Rows);
+    }
+
+    /// <summary>
+    /// Releases the pane's self-scanned thumbnails when the game modal closes.
+    /// Gallery-cache items are skipped - the gallery owns and recycles those.
+    /// </summary>
+    public void Dispose()
+    {
+        _disposed = true;
+        if (!_ownsItems)
+        {
+            return;
+        }
+
+        foreach (ScreenshotItemViewModel screenshot in Rows)
+        {
+            screenshot.Thumbnail?.Dispose();
+        }
     }
 
     /// <summary>
