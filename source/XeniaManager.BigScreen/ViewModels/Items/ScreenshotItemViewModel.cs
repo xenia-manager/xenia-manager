@@ -17,7 +17,7 @@ public partial class ScreenshotItemViewModel(
     string title,
     DateTime capturedAt,
     string gameTitle,
-    Bitmap? image)
+    Bitmap? thumbnail)
     : ObservableObject, ISelectable
 {
     /// <summary>
@@ -63,14 +63,14 @@ public partial class ScreenshotItemViewModel(
     public string Path { get; } = path;
 
     /// <summary>
-    /// The screenshot image, or null when unreadable.
+    /// The screenshot's decoded thumbnail (card-sized), or null when unreadable.
     /// </summary>
-    public Bitmap? Image { get; } = image;
+    public Bitmap? Thumbnail { get; } = thumbnail;
 
     /// <summary>
-    /// Whether the image loaded successfully.
+    /// Whether the thumbnail loaded successfully.
     /// </summary>
-    public bool HasImage => Image != null;
+    public bool HasImage => Thumbnail != null;
 
     partial void OnTimeFormatChanged(TimeFormat value) => OnPropertyChanged(nameof(CapturedAtText));
 }

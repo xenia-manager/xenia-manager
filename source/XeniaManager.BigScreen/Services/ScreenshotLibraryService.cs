@@ -66,14 +66,15 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
                 }
 
                 DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
-                                      ?? File.GetLastWriteTime(file);
+                                       ?? File.GetLastWriteTime(file);
+                using FileStream imageStream = File.OpenRead(file);
                 screenshots.Add(new ScreenshotItemViewModel(
                     version,
                     file,
                     fileName,
                     capturedAt,
                     ResolveGameTitle(gameId),
-                    new Bitmap(file)));
+                    Bitmap.DecodeToHeight(imageStream, ScreenshotGridLayout.ThumbnailHeight)));
             }
             catch (Exception ex)
             {

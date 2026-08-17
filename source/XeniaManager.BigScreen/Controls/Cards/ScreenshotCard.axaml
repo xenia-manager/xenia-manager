@@ -11,7 +11,7 @@
     <Grid>
         <Border x:Name="Tile" CornerRadius="6" Background="{DynamicResource CardBackground}" />
         <Border x:Name="ArtClip" CornerRadius="6" ClipToBounds="True">
-            <Image Source="{Binding Image}"
+            <Image Source="{Binding Thumbnail}"
                    IsVisible="{Binding HasImage}"
                    Stretch="UniformToFill"
                    VerticalAlignment="Bottom"

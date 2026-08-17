@@ -28,6 +28,13 @@ public static class ScreenshotGridLayout
     public const double AspectRatio = 9.0 / 16.0;
 
     /// <summary>
+    /// The pixel height gallery thumbnails are decoded at: twice the tallest
+    /// card height so cards stay sharp on HiDPI displays, while using a
+    /// fraction of the memory a full-resolution decode needs.
+    /// </summary>
+    public const int ThumbnailHeight = 432;
+
+    /// <summary>
     /// Fits a card width so exactly <see cref="CardsPerRow"/> fit per row,
     /// capped at <see cref="MaxCardWidth"/>.
     /// </summary>

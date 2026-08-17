@@ -203,7 +203,7 @@ public partial class GalleryViewModel : ScreenViewModel
 
         foreach (ScreenshotItemViewModel screenshot in _allScreenshots)
         {
-            screenshot.Image?.Dispose();
+            screenshot.Thumbnail?.Dispose();
         }
 
         _allScreenshots.Clear();
@@ -229,7 +229,7 @@ public partial class GalleryViewModel : ScreenViewModel
         await Task.Run(_screenshotLibraryService.Load);
         foreach (ScreenshotItemViewModel screenshot in _allScreenshots)
         {
-            screenshot.Image?.Dispose();
+            screenshot.Thumbnail?.Dispose();
         }
 
         _allScreenshots.Clear();
