@@ -138,6 +138,12 @@ public partial class SettingsViewModel : ViewModelBase
     public event Action? SelectImageRequested;
 
     /// <summary>
+    /// Raised when the controller opens or closes the colour row's palette
+    /// popup (activate on the preview swatch), so the view can show/hide it.
+    /// </summary>
+    public event Action<bool>? ColourPaletteStateChanged;
+
+    /// <summary>
     /// Whether no gamepads are currently connected.
     /// </summary>
     public bool HasNoControllers => Controllers.Count == 0;
@@ -164,6 +170,36 @@ public partial class SettingsViewModel : ViewModelBase
             or SettingsRowKind.BackgroundMode
             or SettingsRowKind.XConfigVersion
             or SettingsRowKind.XConfig;
+
+    /// <summary>
+    /// Whether the open editor is a colour row (RGB sliders + preview swatch).
+    /// </summary>
+    private bool IsColourEditor =>
+        ActiveEditor is SettingsRowKind.PrimaryColour or SettingsRowKind.AccentColour;
+
+    /// <summary>
+    /// Whether the primary colour row's editor is open (drives its field's
+    /// highlight).
+    /// </summary>
+    public bool IsPrimaryColourEditorActive => ActiveEditor == SettingsRowKind.PrimaryColour;
+
+    /// <summary>
+    /// Whether the accent colour row's editor is open (drives its field's
+    /// highlight).
+    /// </summary>
+    public bool IsAccentColourEditorActive => ActiveEditor == SettingsRowKind.AccentColour;
+
+    /// <summary>
+    /// Whether the colour editor's palette popup is currently open.
+    /// </summary>
+    private bool _colourPaletteOpen;
+
+    /// <summary>
+    /// The RGB slider or preview swatch the controller is currently focused on
+    /// inside the colour editor. Resets to the red slider on editor open.
+    /// </summary>
+    [ObservableProperty]
+    public partial ColourEditorTarget ActiveColourTarget { get; set; }
 
     /// <summary>
     /// Connected gamepads shown in the Controllers section.
@@ -478,6 +514,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     private void CloseEditor()
     {
+        _colourPaletteOpen = false;
         ActiveEditor = null;
         EditorClosed?.Invoke();
     }
@@ -740,6 +777,12 @@ public partial class SettingsViewModel : ViewModelBase
         }
 
         ActiveEditor = kind;
+        if (IsColourEditor)
+        {
+            ActiveColourTarget = ColourEditorTarget.Red;
+            _colourPaletteOpen = false;
+        }
+
         EditorOpened?.Invoke(kind);
         Logger.Debug<SettingsViewModel>($"Opened {kind} editor");
     }
@@ -804,10 +847,17 @@ public partial class SettingsViewModel : ViewModelBase
 
     /// <summary>
     /// Handles gamepad input while a row editor is open: dropdown rows cycle
-    /// with Up/Down, palette colours with Left/Right, A commits.
+    /// with Up/Down, palette colours with Left/Right, A commits. Colour rows
+    /// navigate their RGB sliders with Up/Down, step values with Left/Right,
+    /// move right to the preview swatch and open the palette there.
     /// </summary>
     private bool HandleEditorInput(NavigationCommand command)
     {
+        if (IsColourEditor)
+        {
+            return HandleColourEditorInput(command);
+        }
+
         switch (command)
         {
             case NavigationCommand.MoveUp:
@@ -844,6 +894,119 @@ public partial class SettingsViewModel : ViewModelBase
             default:
                 return false;
         }
+    }
+
+    /// <summary>
+    /// Handles gamepad input for the colour editor: Up/Down cycles the three
+    /// sliders then the preview swatch (Red → Green → Blue → Preview), Left/Right
+    /// steps the focused slider's value (or cycles the palette while it is open),
+    /// A on the preview toggles the palette.
+    /// </summary>
+    private bool HandleColourEditorInput(NavigationCommand command)
+    {
+        switch (command)
+        {
+            case NavigationCommand.MoveUp:
+                if (!_colourPaletteOpen)
+                {
+                    ActiveColourTarget = EnumCycleHelper.Next(ActiveColourTarget, -1);
+                }
+
+                return true;
+            case NavigationCommand.MoveDown:
+                if (!_colourPaletteOpen)
+                {
+                    ActiveColourTarget = EnumCycleHelper.Next(ActiveColourTarget, 1);
+                }
+
+                return true;
+            case NavigationCommand.MoveLeft:
+                if (_colourPaletteOpen)
+                {
+                    CycleValue(-1);
+                }
+                else
+                {
+                    StepChannel(ActiveColourTarget, -1);
+                }
+
+                return true;
+            case NavigationCommand.MoveRight:
+                if (_colourPaletteOpen)
+                {
+                    CycleValue(1);
+                }
+                else
+                {
+                    StepChannel(ActiveColourTarget, 1);
+                }
+
+                return true;
+            case NavigationCommand.Activate:
+                if (ActiveColourTarget == ColourEditorTarget.Preview)
+                {
+                    ToggleColourPalette();
+                }
+
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Steps the given RGB channel of the open colour row by
+    /// <see cref="LayoutConstants.ColourChannelStep"/>, clamped to 0-255.
+    /// </summary>
+    private void StepChannel(ColourEditorTarget target, int delta)
+    {
+        byte red = (byte)(ActiveEditor == SettingsRowKind.AccentColour ? AccentColor.R : PrimaryColor.R);
+        byte green = (byte)(ActiveEditor == SettingsRowKind.AccentColour ? AccentColor.G : PrimaryColor.G);
+        byte blue = (byte)(ActiveEditor == SettingsRowKind.AccentColour ? AccentColor.B : PrimaryColor.B);
+
+        int step = delta * (int)LayoutConstants.ColourChannelStep;
+        switch (target)
+        {
+            case ColourEditorTarget.Red:
+                red = (byte)Math.Clamp(red + step, 0, 255);
+                break;
+            case ColourEditorTarget.Green:
+                green = (byte)Math.Clamp(green + step, 0, 255);
+                break;
+            case ColourEditorTarget.Blue:
+                blue = (byte)Math.Clamp(blue + step, 0, 255);
+                break;
+        }
+
+        Color updated = Color.FromRgb(red, green, blue);
+        if (ActiveEditor == SettingsRowKind.AccentColour)
+        {
+            AccentColor = updated;
+        }
+        else
+        {
+            PrimaryColor = updated;
+        }
+    }
+
+    /// <summary>
+    /// Opens or closes the colour row's palette popup (activated on the preview
+    /// swatch). While it is open Left/Right cycles the palette colours.
+    /// </summary>
+    private void ToggleColourPalette()
+    {
+        _colourPaletteOpen = !_colourPaletteOpen;
+        ColourPaletteStateChanged?.Invoke(_colourPaletteOpen);
+        Logger.Debug<SettingsViewModel>($"Colour palette {(IsColourEditor ? "opened" : "closed")}");
+    }
+
+    /// <summary>
+    /// Synchronises the palette-open state when the popup is dismissed by
+    /// clicking outside (mouse light-dismiss).
+    /// </summary>
+    public void NotifyColourPaletteClosed()
+    {
+        _colourPaletteOpen = false;
     }
 
     /// <summary>
@@ -983,11 +1146,19 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Handles Back: cancels the open row editor first, returning whether Back
-    /// was consumed (the router closes the settings screen otherwise).
+    /// Handles Back: closes the open colour palette first (keeping the editor),
+    /// then cancels the open row editor. Returns whether Back was consumed
+    /// (the router closes the settings screen otherwise).
     /// </summary>
     public bool HandleBack()
     {
+        if (_colourPaletteOpen)
+        {
+            _colourPaletteOpen = false;
+            ColourPaletteStateChanged?.Invoke(false);
+            return true;
+        }
+
         if (IsEditorOpen)
         {
             CancelEditor();
@@ -1049,8 +1220,12 @@ public partial class SettingsViewModel : ViewModelBase
         _backgroundService.Save();
     }
 
-    partial void OnActiveEditorChanged(SettingsRowKind? value) =>
+    partial void OnActiveEditorChanged(SettingsRowKind? value)
+    {
         OnPropertyChanged(nameof(IsEditorOpen));
+        OnPropertyChanged(nameof(IsPrimaryColourEditorActive));
+        OnPropertyChanged(nameof(IsAccentColourEditorActive));
+    }
 
     partial void OnSelectedXConfigResolutionChanged(XConfigResolutionOption? value)
     {

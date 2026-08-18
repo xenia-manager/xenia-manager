@@ -18,7 +18,7 @@
                    Text="{DynamicResource Settings.Title}"
                    Margin="0,20,0,30" />
 
-        <ScrollViewer x:Name="SvSettings" Grid.Row="1">
+        <ScrollViewer x:Name="SvSettings" Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
             <StackPanel Orientation="Vertical" Spacing="14">
 
                 <!-- PREFERENCES -->
@@ -204,6 +204,8 @@
                         <set:ColorPickerField x:Name="PrimaryColorField"
                                               DockPanel.Dock="Right"
                                               Color="{Binding PrimaryColor, Mode=TwoWay}"
+                                              ActiveTarget="{Binding ActiveColourTarget, Mode=TwoWay}"
+                                              IsEditorActive="{Binding IsPrimaryColourEditorActive}"
                                               VerticalAlignment="Center" />
                         <TextBlock Classes="settings-label" Text="{DynamicResource Settings.PrimaryColour}" />
                     </DockPanel>
@@ -217,6 +219,8 @@
                         <set:ColorPickerField x:Name="AccentColorField"
                                               DockPanel.Dock="Right"
                                               Color="{Binding AccentColor, Mode=TwoWay}"
+                                              ActiveTarget="{Binding ActiveColourTarget, Mode=TwoWay}"
+                                              IsEditorActive="{Binding IsAccentColourEditorActive}"
                                               VerticalAlignment="Center" />
                         <TextBlock Classes="settings-label" Text="{DynamicResource Settings.AccentColour}" />
                     </DockPanel>

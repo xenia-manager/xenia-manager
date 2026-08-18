@@ -1,29 +1,127 @@
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
+using XeniaManager.BigScreen.Models;
 
 namespace XeniaManager.BigScreen.Controls.Settings;
 
 /// <summary>
-/// A colour setting: shows a preview swatch + hex field; clicking the swatch
-/// opens a dropdown of palette colours to pick from.
+/// A colour setting: shows a preview swatch + RGB sliders; clicking the swatch
+/// opens a dropdown of palette colours to pick from. While its row's editor is
+/// open (<see cref="IsEditorActive"/>) the slider or swatch matching
+/// <see cref="ActiveTarget"/> is highlighted for the controller.
 /// </summary>
 public class ColorPickerField : TemplatedControl
 {
-    /// <summary>
-    /// Length of a 24-bit hex colour string (e.g. "1C1F25").
-    /// </summary>
-    private const int HexColorLength = 6;
-
     private Border? _swatch;
-    private TextBox? _hexBox;
     private Popup? _popup;
     private PalettePicker? _palettePicker;
+    private Slider? _sliderR;
+    private Slider? _sliderG;
+    private Slider? _sliderB;
+    private TextBlock? _valueR;
+    private TextBlock? _valueG;
+    private TextBlock? _valueB;
     private bool _syncing;
+
+    /// <summary>
+    /// Defines the <see cref="ActiveTarget"/> property.
+    /// </summary>
+    public static readonly StyledProperty<ColourEditorTarget> ActiveTargetProperty =
+        AvaloniaProperty.Register<ColorPickerField, ColourEditorTarget>(nameof(ActiveTarget));
+
+    /// <summary>
+    /// Defines the <see cref="IsEditorActive"/> property.
+    /// </summary>
+    public static readonly StyledProperty<bool> IsEditorActiveProperty =
+        AvaloniaProperty.Register<ColorPickerField, bool>(nameof(IsEditorActive));
+
+    /// <summary>
+    /// Defines the computed red-slider focus state.
+    /// </summary>
+    public static readonly DirectProperty<ColorPickerField, bool> IsRedActiveProperty =
+        AvaloniaProperty.RegisterDirect<ColorPickerField, bool>(nameof(IsRedActive), field => field.IsRedActive);
+
+    /// <summary>
+    /// Defines the computed green-slider focus state.
+    /// </summary>
+    public static readonly DirectProperty<ColorPickerField, bool> IsGreenActiveProperty =
+        AvaloniaProperty.RegisterDirect<ColorPickerField, bool>(nameof(IsGreenActive), field => field.IsGreenActive);
+
+    /// <summary>
+    /// Defines the computed blue-slider focus state.
+    /// </summary>
+    public static readonly DirectProperty<ColorPickerField, bool> IsBlueActiveProperty =
+        AvaloniaProperty.RegisterDirect<ColorPickerField, bool>(nameof(IsBlueActive), field => field.IsBlueActive);
+
+    /// <summary>
+    /// Defines the computed preview focus state.
+    /// </summary>
+    public static readonly DirectProperty<ColorPickerField, bool> IsPreviewActiveProperty =
+        AvaloniaProperty.RegisterDirect<ColorPickerField, bool>(nameof(IsPreviewActive), field => field.IsPreviewActive);
+
+    private bool _isRedActive;
+    private bool _isGreenActive;
+    private bool _isBlueActive;
+    private bool _isPreviewActive;
+
+    /// <summary>
+    /// The slider or preview swatch the controller is currently focused on.
+    /// </summary>
+    public ColourEditorTarget ActiveTarget
+    {
+        get => GetValue(ActiveTargetProperty);
+        set => SetValue(ActiveTargetProperty, value);
+    }
+
+    /// <summary>
+    /// Whether this row's colour editor is open (only the active row highlights).
+    /// </summary>
+    public bool IsEditorActive
+    {
+        get => GetValue(IsEditorActiveProperty);
+        set => SetValue(IsEditorActiveProperty, value);
+    }
+
+    /// <summary>
+    /// Whether the red slider is the controller's focused target.
+    /// </summary>
+    public bool IsRedActive => _isRedActive;
+
+    /// <summary>
+    /// Whether the green slider is the controller's focused target.
+    /// </summary>
+    public bool IsGreenActive => _isGreenActive;
+
+    /// <summary>
+    /// Whether the blue slider is the controller's focused target.
+    /// </summary>
+    public bool IsBlueActive => _isBlueActive;
+
+    /// <summary>
+    /// Whether the preview swatch is the controller's focused target.
+    /// </summary>
+    public bool IsPreviewActive => _isPreviewActive;
+
+    /// <summary>
+    /// Re-evaluates the four target highlights after the active target or the
+    /// editor-active state changed through Avalonia's direct-property system.
+    /// </summary>
+    private void OnTargetStateChanged()
+    {
+        SetAndRaise(IsRedActiveProperty, ref _isRedActive,
+            IsEditorActive && ActiveTarget == ColourEditorTarget.Red);
+        SetAndRaise(IsGreenActiveProperty, ref _isGreenActive,
+            IsEditorActive && ActiveTarget == ColourEditorTarget.Green);
+        SetAndRaise(IsBlueActiveProperty, ref _isBlueActive,
+            IsEditorActive && ActiveTarget == ColourEditorTarget.Blue);
+        SetAndRaise(IsPreviewActiveProperty, ref _isPreviewActive,
+            IsEditorActive && ActiveTarget == ColourEditorTarget.Preview);
+    }
 
     /// <summary>
     /// Defines the <see cref="Color"/> property.
@@ -121,40 +219,25 @@ public class ColorPickerField : TemplatedControl
     }
 
     /// <summary>
-    /// Parses the hex box and applies the colour when valid.
+    /// Converts a slider value to a colour channel byte.
     /// </summary>
-    private void OnHexTextChanged(object? sender, TextChangedEventArgs e)
+    private static byte ToByte(double value) => (byte)Math.Clamp(Math.Round(value), 0, 255);
+
+    /// <summary>
+    /// Rebuilds the colour from the three sliders as any of them changes.
+    /// </summary>
+    private void OnRgbSliderChanged(object? sender, RangeBaseValueChangedEventArgs e)
     {
-        if (_syncing || _hexBox == null)
+        if (_syncing || _sliderR == null || _sliderG == null || _sliderB == null)
         {
             return;
         }
 
-        string text = _hexBox.Text?.Trim().TrimStart('#') ?? string.Empty;
-        if (text.Length == HexColorLength &&
-            uint.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint value))
-        {
-            Color = Color.FromRgb(
-                (byte)((value >> 16) & 0xFF),
-                (byte)((value >> 8) & 0xFF),
-                (byte)(value & 0xFF));
-        }
+        Color = Color.FromRgb(ToByte(_sliderR.Value), ToByte(_sliderG.Value), ToByte(_sliderB.Value));
     }
 
     /// <summary>
-    /// Applies the current colour on Enter without losing focus.
-    /// </summary>
-    private void OnHexKeyDown(object? sender, KeyEventArgs e)
-    {
-        if (e.Key is Key.Enter or Key.Tab)
-        {
-            e.Handled = true;
-            OnHexTextChanged(_hexBox, new TextChangedEventArgs(TextBox.TextChangedEvent, _hexBox));
-        }
-    }
-
-    /// <summary>
-    /// Pushes the current colour into the swatch, hex box and palette picker.
+    /// Pushes the current colour into the swatch, palette picker and RGB sliders.
     /// </summary>
     private void SyncFromColor()
     {
@@ -163,9 +246,15 @@ public class ColorPickerField : TemplatedControl
         {
             _swatch?.Background = new SolidColorBrush(Color);
 
-            _hexBox?.Text = $"#{Color.R:X2}{Color.G:X2}{Color.B:X2}";
-
             _palettePicker?.SelectedColor = Color;
+
+            _sliderR?.SetValue(Slider.ValueProperty, Color.R);
+            _sliderG?.SetValue(Slider.ValueProperty, Color.G);
+            _sliderB?.SetValue(Slider.ValueProperty, Color.B);
+
+            _valueR?.SetValue(TextBlock.TextProperty, Color.R.ToString());
+            _valueG?.SetValue(TextBlock.TextProperty, Color.G.ToString());
+            _valueB?.SetValue(TextBlock.TextProperty, Color.B.ToString());
         }
         finally
         {
@@ -201,9 +290,14 @@ public class ColorPickerField : TemplatedControl
         base.OnApplyTemplate(e);
 
         _swatch = e.NameScope.Get<Border>("PART_Swatch");
-        _hexBox = e.NameScope.Get<TextBox>("PART_HexBox");
         _popup = e.NameScope.Get<Popup>("PART_Popup");
         _palettePicker = e.NameScope.Get<PalettePicker>("PART_Palette");
+        _sliderR = e.NameScope.Get<Slider>("PART_SliderR");
+        _sliderG = e.NameScope.Get<Slider>("PART_SliderG");
+        _sliderB = e.NameScope.Get<Slider>("PART_SliderB");
+        _valueR = e.NameScope.Get<TextBlock>("PART_ValueR");
+        _valueG = e.NameScope.Get<TextBlock>("PART_ValueG");
+        _valueB = e.NameScope.Get<TextBlock>("PART_ValueB");
 
         if (_swatch != null)
         {
@@ -212,15 +306,17 @@ public class ColorPickerField : TemplatedControl
 
         _popup?.PlacementTarget = this;
 
-        if (_hexBox != null)
-        {
-            _hexBox.TextChanged += OnHexTextChanged;
-            _hexBox.KeyDown += OnHexKeyDown;
-        }
-
         if (_palettePicker != null)
         {
             _palettePicker.SelectedColorChanged += OnPickerColourChanged;
+        }
+
+        foreach (Slider? slider in new[] { _sliderR, _sliderG, _sliderB })
+        {
+            if (slider != null)
+            {
+                slider.ValueChanged += OnRgbSliderChanged;
+            }
         }
 
         SyncPalette();
@@ -231,6 +327,8 @@ public class ColorPickerField : TemplatedControl
     {
         ColorProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.SyncFromColor());
         PaletteProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.SyncPalette());
+        ActiveTargetProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.OnTargetStateChanged());
+        IsEditorActiveProperty.Changed.AddClassHandler<ColorPickerField>((field, _) => field.OnTargetStateChanged());
     }
 
     public ColorPickerField()

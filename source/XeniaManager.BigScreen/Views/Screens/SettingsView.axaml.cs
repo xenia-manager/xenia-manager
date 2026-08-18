@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
@@ -137,12 +138,6 @@ public partial class SettingsView : UserControl
                 BackgroundModeCombo.IsDropDownOpen = true;
                 BackgroundModeCombo.Focus();
                 break;
-            case SettingsRowKind.PrimaryColour:
-                PrimaryColorField.OpenPalette();
-                break;
-            case SettingsRowKind.AccentColour:
-                AccentColorField.OpenPalette();
-                break;
             case SettingsRowKind.XConfig:
                 XConfigResolutionCombo.IsDropDownOpen = true;
                 XConfigResolutionCombo.Focus();
@@ -152,6 +147,39 @@ public partial class SettingsView : UserControl
                 XConfigVersionCombo.Focus();
                 break;
         }
+    }
+
+    /// <summary>
+    /// The colour popups that already have a close handler wired (each popup
+    /// instance lives as long as its control's template, so the handler is
+    /// subscribed once per popup).
+    /// </summary>
+    private readonly HashSet<Popup> _colourPopups = [];
+
+    /// <summary>
+    /// Shows or hides the open colour row's palette popup when the controller
+    /// toggles it (activate on the preview swatch).
+    /// </summary>
+    private void OnColourPaletteStateChanged(bool open)
+    {
+        if (DataContext is not SettingsViewModel vm)
+        {
+            return;
+        }
+
+        ColorPickerField field = vm.ActiveEditor == SettingsRowKind.AccentColour ? AccentColorField : PrimaryColorField;
+        Popup? popup = field.GetVisualDescendants().OfType<Popup>().FirstOrDefault();
+        if (popup == null)
+        {
+            return;
+        }
+
+        if (_colourPopups.Add(popup))
+        {
+            popup.Closed += (_, _) => vm.NotifyColourPaletteClosed();
+        }
+
+        popup.IsOpen = open;
     }
 
     /// <summary>
@@ -204,6 +232,7 @@ public partial class SettingsView : UserControl
             vm.EditorOpened += OnEditorOpened;
             vm.EditorClosed += OnEditorClosed;
             vm.SelectImageRequested += OnSelectImageRequested;
+            vm.ColourPaletteStateChanged += OnColourPaletteStateChanged;
             BuildRowMap(vm);
         }
     }

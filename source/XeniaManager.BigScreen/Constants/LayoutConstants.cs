@@ -50,6 +50,11 @@ public static class LayoutConstants
     public const double VignetteStep = 0.05;
 
     /// <summary>
+    /// RGB channel step (0-255) per controller press in the colour editor.
+    /// </summary>
+    public const double ColourChannelStep = 5;
+
+    /// <summary>
     /// Fallback width of a library carousel card before the first real layout.
     /// </summary>
     public const double LibraryCardDefaultWidth = 420;

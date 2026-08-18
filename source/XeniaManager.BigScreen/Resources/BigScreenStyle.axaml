@@ -129,6 +129,26 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
+    <!-- COLOUR EDITOR: slider target highlight - reserved 2px border, accent
+         when the controller's focus is on this slider -->
+    <Style Selector="Border.colour-slider-target">
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="Border.colour-slider-target.active">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- COLOUR EDITOR: preview swatch border - accent when focused -->
+    <Style Selector="Border.colour-swatch">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    <Style Selector="Border.colour-swatch.active">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
     <!-- GAMEPAD CARD (settings controller row): subtle black fill,
          reserved border that turns accent on hover/selection -->
     <Style Selector="set|GamepadCard">
