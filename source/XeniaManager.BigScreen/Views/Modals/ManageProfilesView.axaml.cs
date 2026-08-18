@@ -123,6 +123,20 @@ public partial class ManageProfilesView : UserControl
     }
 
     /// <summary>
+    /// Switches the managed version when its chip is clicked.
+    /// </summary>
+    private void OnVersionChipClick(object? sender, RoutedEventArgs e)
+    {
+        if (e.Source is not Button { DataContext: VersionChipViewModel chip } ||
+            DataContext is not ManageProfilesViewModel vm)
+        {
+            return;
+        }
+
+        vm.SelectVersion(chip);
+    }
+
+    /// <summary>
     /// Creates a new profile when the anchored create row is clicked.
     /// </summary>
     private void OnCreateRowClick(object? sender, RoutedEventArgs e)
@@ -265,5 +279,6 @@ public partial class ManageProfilesView : UserControl
         DetachedFromVisualTree += OnDetachedFromVisualTree;
 
         RowsList.AddHandler(Button.ClickEvent, OnProfileRowClick, RoutingStrategies.Bubble);
+        VersionChipsList.AddHandler(Button.ClickEvent, OnVersionChipClick, RoutingStrategies.Bubble);
     }
 }

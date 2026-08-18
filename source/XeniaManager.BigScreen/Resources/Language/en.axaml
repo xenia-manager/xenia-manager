@@ -65,7 +65,6 @@
     <sys:String x:Key="Settings.Section.XConfig">XConfig</sys:String>
     <sys:String x:Key="Settings.XConfig.Resolution">Resolution</sys:String>
     <sys:String x:Key="Settings.XConfig.Version">Version</sys:String>
-    <sys:String x:Key="Settings.ActiveProfile">Active Profile</sys:String>
     <sys:String x:Key="Settings.ManageProfiles">Manage Profiles</sys:String>
     <sys:String x:Key="Settings.BackgroundType">Background Type</sys:String>
     <sys:String x:Key="Settings.LibraryView">Library View</sys:String>
@@ -134,6 +133,7 @@
     <sys:String x:Key="ManageProfiles.Hint.Back">Back</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Edit">Edit</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Delete">Delete</sys:String>
+    <sys:String x:Key="ManageProfiles.Hint.Version">Change Version</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Import">Import</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Export">Export</sys:String>
     <sys:String x:Key="ManageProfiles.Save.Button">Save</sys:String>

@@ -6,6 +6,7 @@
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:set="using:XeniaManager.BigScreen.Controls.Settings"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:sys="using:System"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="XeniaManager.BigScreen.Views.Screens.SettingsView"
              x:DataType="vm:SettingsViewModel"
@@ -36,8 +37,14 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ActiveProfile}" />
-                            <TextBlock Classes="settings-subtitle" Text="{Binding ActiveGamertag}" />
+                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ManageProfiles}" />
+                            <ItemsControl ItemsSource="{Binding ActiveProfiles}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="sys:String">
+                                        <TextBlock Classes="settings-subtitle" Text="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                     </DockPanel>
                 </Border>

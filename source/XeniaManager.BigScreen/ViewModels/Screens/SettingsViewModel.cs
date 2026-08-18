@@ -171,9 +171,34 @@ public partial class SettingsViewModel : ViewModelBase
     public ObservableCollection<GamepadItemViewModel> Controllers { get; } = [];
 
     /// <summary>
-    /// Gamertag of the active profile, shown in the Profiles section.
+    /// The active profile of every installed version, one entry per version
+    /// (e.g. "Xenia Canary: Alice"), shown as a list in the Manage Profiles card.
     /// </summary>
-    public string ActiveGamertag => _profileService.Gamertag;
+    public IReadOnlyList<string> ActiveProfiles { get; private set; } = [];
+
+    /// <summary>
+    /// Display name of the given emulator version.
+    /// </summary>
+    private static string VersionDisplayName(XeniaVersion version) =>
+        (string)XeniaVersionToStringConverter.Instance.Convert(
+            version, typeof(string), null, CultureInfo.InvariantCulture)!;
+
+    /// <summary>
+    /// Rebuilds the per-version active profile entries from the installed versions.
+    /// </summary>
+    private void RefreshActiveProfiles()
+    {
+        List<string> entries = [];
+        foreach (XeniaVersion version in InstalledVersions)
+        {
+            string gamertag = _profileService.ActiveProfileFor(version)?.Gamertag
+                              ?? LocalizationHelper.GetText("Header.Guest");
+            entries.Add($"{VersionDisplayName(version)}: {gamertag}");
+        }
+
+        ActiveProfiles = entries;
+        OnPropertyChanged(nameof(ActiveProfiles));
+    }
 
     /// <summary>
     /// Row for the Manage Profiles card.
@@ -732,8 +757,11 @@ public partial class SettingsViewModel : ViewModelBase
             return;
         }
 
-        XeniaVersion version = App.Services.GetRequiredService<IProfileService>().ActiveVersion
-                               ?? XeniaVersion.Canary;
+        IProfileService profileService = App.Services.GetRequiredService<IProfileService>();
+        XeniaVersion version = profileService.ActiveVersion
+                               ?? (profileService.InstalledVersions.Count > 0
+                                   ? profileService.InstalledVersions[0]
+                                   : XeniaVersion.Canary);
         Logger.Info<SettingsViewModel>($"Opening manage profiles for {version}");
         TaskUtilities.RunSafely<SettingsViewModel>(
             () => modalService.ShowAsync(new ManageProfilesViewModel(version)), "Opening manage profiles");
@@ -993,6 +1021,7 @@ public partial class SettingsViewModel : ViewModelBase
         TimeFormat = _backgroundService.Settings.TimeFormat;
         SelectedTimeFormat = TimeFormatOptions.FirstOrDefault(o => o.Format == TimeFormat);
         LoadXConfig();
+        RefreshActiveProfiles();
         RefreshControllers();
     }
 
@@ -1164,9 +1193,13 @@ public partial class SettingsViewModel : ViewModelBase
         _profileService = profileService;
         _gamepadService = gamepadService;
         InstalledVersions = _desktopSettings.GetInstalledVersions(_desktopSettings);
-        modalService.StackChanged += () => IsHintBarVisible = !modalService.IsOpen;
+        modalService.StackChanged += () =>
+        {
+            IsHintBarVisible = !modalService.IsOpen;
+            RefreshActiveProfiles();
+        };
 
-        _profileService.ProfileChanged += () => OnPropertyChanged(nameof(ActiveGamertag));
+        _profileService.ProfileChanged += RefreshActiveProfiles;
 
         if (_gamepadService.IsActive)
         {

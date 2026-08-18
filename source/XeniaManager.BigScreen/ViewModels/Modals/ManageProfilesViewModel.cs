@@ -10,6 +10,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Converters;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
@@ -20,11 +21,12 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 
 /// <summary>
 /// Full-screen profile management overlay: create, delete, import, export and
-/// edit the profiles of one emulator version. B closes (confirming unsaved
-/// edits), X deletes the selected profile, View imports, Start exports, A or
-/// Right on a profile row moves the controller into the edit panel (B or Left
-/// returns; A activates the panel rows - toggles, dropdown editors, gamertag
-/// focus, save). Opened from Settings or the profile picker.
+/// edit the profiles of one emulator version, switchable via the version chips
+/// or Y. B closes (confirming unsaved edits), X deletes the selected profile,
+/// Y cycles the managed version, View imports, Start exports, A or Right on a
+/// profile row moves the controller into the edit panel (B or Left returns; A
+/// activates the panel rows - toggles, dropdown editors, gamertag focus, save).
+/// Opened from Settings or the profile picker.
 /// </summary>
 public partial class ManageProfilesViewModel : ModalViewModelBase
 {
@@ -38,7 +40,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         bool IsLiveEnabled,
         int SubscriptionTierIndex);
 
-    private readonly XeniaVersion _version;
+    private XeniaVersion _version;
     private readonly IProfileService _profileService;
     private readonly IModalService _modalService;
     private EditBaseline _baseline;
@@ -194,11 +196,88 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     public ObservableCollection<EnumDisplayItem<SubscriptionTier>> SubscriptionTiers { get; }
 
     /// <summary>
-    /// The version whose profiles are managed, shown in the title.
+    /// Emulator-version chips, one per installed version, used to switch which
+    /// version's profile set is managed.
     /// </summary>
-    public string VersionText =>
-        (string)Core.Converters.XeniaVersionToStringConverter.Instance.Convert(
-            _version, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture)!;
+    public ObservableCollection<VersionChipViewModel> VersionChips { get; } = [];
+
+    /// <summary>
+    /// Whether any version chips exist.
+    /// </summary>
+    public bool HasVersionChips => VersionChips.Count > 0;
+
+    /// <summary>
+    /// Rebuilds the version chips for every installed version, marking the
+    /// managed one as selected.
+    /// </summary>
+    private void BuildChips()
+    {
+        VersionChips.Clear();
+        foreach (XeniaVersion version in _profileService.InstalledVersions)
+        {
+            VersionChips.Add(new VersionChipViewModel(
+                version,
+                IconFactory.GetVersionIcon(version),
+                (string)XeniaVersionToStringConverter.Instance.Convert(version, typeof(string), null,
+                    System.Globalization.CultureInfo.InvariantCulture)!,
+                version == _version));
+        }
+
+        OnPropertyChanged(nameof(HasVersionChips));
+    }
+
+    /// <summary>
+    /// Switches the managed version to the given one, confirming pending edits
+    /// to the current profile first (Cancelling the prompt stays put).
+    /// </summary>
+    private async Task SwitchVersionAsync(XeniaVersion version)
+    {
+        if (version == _version)
+        {
+            return;
+        }
+
+        if (!await ConfirmOrSaveAsync())
+        {
+            return;
+        }
+
+        _version = version;
+        ResetPanel();
+        StatusText = string.Empty;
+        HasStatus = false;
+        Reload();
+        BuildChips();
+        Logger.Info<ManageProfilesViewModel>($"Switched to managing {version}");
+    }
+
+    /// <summary>
+    /// Cycles the managed version by the given step, wrapping at both ends,
+    /// confirming pending edits first.
+    /// </summary>
+    private async Task CycleVersionAsync(int delta)
+    {
+        IReadOnlyList<XeniaVersion> versions = _profileService.InstalledVersions;
+        if (versions.Count < 2)
+        {
+            return;
+        }
+
+        int current = versions.ToList().IndexOf(_version);
+        if (current < 0)
+        {
+            current = 0;
+        }
+
+        await SwitchVersionAsync(versions[(current + delta + versions.Count) % versions.Count]);
+    }
+
+    /// <summary>
+    /// Selects the given version chip (mouse click) and manages its profiles.
+    /// </summary>
+    public void SelectVersion(VersionChipViewModel chip) =>
+        TaskUtilities.RunSafely<ManageProfilesViewModel>(
+            () => SwitchVersionAsync(chip.Version), "Switching managed version");
 
     /// <summary>
     /// The currently selected (edited) profile.
@@ -985,6 +1064,10 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
             case NavigationCommand.CycleSort:
                 TaskUtilities.RunSafely<ManageProfilesViewModel>(DeleteSelectedAsync, "Deleting profile");
                 return true;
+            case NavigationCommand.Details:
+                TaskUtilities.RunSafely<ManageProfilesViewModel>(() => CycleVersionAsync(1),
+                    "Cycling managed version");
+                return true;
             case NavigationCommand.ToggleView:
                 ImportRequested?.Invoke();
                 return true;
@@ -1036,5 +1119,6 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         _panelRows.Add(RowSave);
 
         Reload();
+        BuildChips();
     }
 }
