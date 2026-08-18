@@ -59,11 +59,18 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
             try
             {
                 string fileName = Path.GetFileName(file);
-                string gameId = ScreenshotFileNameParser.ExtractGameId(fileName);
-                if (gameId.Length == 0)
-                {
-                    gameId = Path.GetFileName(Path.GetDirectoryName(file) ?? string.Empty);
-                }
+
+                // Xenia stores screenshots in a per-game subfolder named after
+                // the game ID, so the folder name is the authoritative source;
+                // the file name is the fallback for files outside their folder.
+                string folderName = Path.GetFileName(Path.GetDirectoryName(file) ?? string.Empty);
+                string gameId = ScreenshotFileNameParser.IsGameId(folderName)
+                    ? folderName
+                    : ScreenshotFileNameParser.ExtractGameId(fileName);
+                string title = ResolveGameTitle(gameId);
+
+                Logger.Info<ScreenshotLibraryService>(
+                    $"Screenshot '{fileName}' -> folder: '{folderName}', game ID: '{gameId}', title: {title}");
 
                 DateTime capturedAt = ScreenshotFileNameParser.ExtractCapturedAt(fileName)
                                       ?? File.GetLastWriteTime(file);
@@ -73,7 +80,7 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
                     file,
                     fileName,
                     capturedAt,
-                    ResolveGameTitle(gameId),
+                    title,
                     Bitmap.DecodeToHeight(imageStream, ScreenshotGridLayout.ThumbnailHeight)));
             }
             catch (Exception ex)
