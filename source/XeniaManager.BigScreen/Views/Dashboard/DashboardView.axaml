@@ -11,9 +11,10 @@
 
     <!-- Row 2 = 271 (LayoutConstants.DashboardCardBoxArtSelectedHeight), so the
          selected box-art card is never cut vertically -->
-    <Grid RowDefinitions="*, 271, 145"
+    <Grid RowDefinitions="*, Auto, Auto"
           Margin="{x:Static const:LayoutConstants.DashboardContentMargin}"
-          RowSpacing="{x:Static const:LayoutConstants.DashboardRowSpacing}">
+          RowSpacing="{x:Static const:LayoutConstants.DashboardRowSpacing}"
+          HorizontalAlignment="Center">
 
         <!-- GAME CARDS ROW -->
         <Grid Grid.Row="1" VerticalAlignment="Bottom">
