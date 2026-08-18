@@ -8,7 +8,8 @@ const LANGUAGE_NAMES = {
     'ru': "Russian",
     'zh-CN': 'Simplified Chinese',
     'pt-BR': 'Brazilian Portuguese',
-    'tr': 'Turkish'
+    'tr': 'Turkish',
+    'it': 'Italian'
     // Add more here
 };
 

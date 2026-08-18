@@ -229,6 +229,15 @@ public partial class AboutPageViewModel : ViewModelBase
                     Logger.Info<AboutPageViewModel>($"Backed up old executable to {backupPath}");
                 }
 
+                // Back up the old BigScreen executable if it exists
+                string bigScreenExecutable = AppPathResolver.GetFullPath("XeniaManager.BigScreen.exe");
+                if (File.Exists(bigScreenExecutable))
+                {
+                    string backupPath = Path.Combine(backupDir, "XeniaManager.BigScreen.exe");
+                    File.Copy(bigScreenExecutable, backupPath, true);
+                    Logger.Info<AboutPageViewModel>($"Backed up old BigScreen executable to {backupPath}");
+                }
+
                 // Create the batch script
                 string batPath = Path.Combine(AppPaths.DownloadsDirectory, "UpdateAndRelaunch.bat");
                 string currentProcessPath = Environment.ProcessPath ?? "";
@@ -246,6 +255,9 @@ public partial class AboutPageViewModel : ViewModelBase
                                           timeout /T 1 /NOBREAK >nul
                                           goto waitloop
                                       )
+
+                                      :: Stop BigScreen if it is still running
+                                      taskkill /IM "XeniaManager.BigScreen.exe" /F >nul 2>&1
 
                                       echo Moving files...
                                       xcopy /E /I /Y "{{extractDir}}\*.*" "{{baseDir}}\"

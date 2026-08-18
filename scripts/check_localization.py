@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Localization Checker Script
-Extracts keys from en.axaml and checks which ones are used in code files.
+Extracts keys from the en.axaml files (XeniaManager and XeniaManager.BigScreen)
+and checks which ones are used in code files.
 Also detects hardcoded text in AXAML files that should be localized.
 """
 
@@ -14,7 +15,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 SOURCE_PATH = Path("source")
-LANGUAGE_FILE = SOURCE_PATH / "XeniaManager" / "Resources" / "Language" / "en.axaml"
+LANGUAGE_FILES = [
+    SOURCE_PATH / "XeniaManager" / "Resources" / "Language" / "en.axaml",
+    SOURCE_PATH / "XeniaManager.BigScreen" / "Resources" / "Language" / "en.axaml",
+]
 IGNORE_FOLDERS = {"Resources", "obj", "bin"}
 
 DYNAMIC_RESOURCE_PATTERN = re.compile(r"\{DynamicResource\s+([^}]+)\}")
@@ -68,10 +72,10 @@ class ScanResults:
 
 
 def extract_keys_from_en_axaml(file_path: Path) -> set[str]:
-    """Extract all localization keys from en.axaml."""
+    """Extract all localization keys from an en.axaml file."""
     content = file_path.read_text(encoding="utf-8")
     keys = set(KEY_PATTERN.findall(content))
-    logger.info("Found %d keys in en.axaml", len(keys))
+    logger.info("Found %d keys in %s", len(keys), file_path)
     return keys
 
 
@@ -233,13 +237,13 @@ def scan_messagebox_service(file_path: Path) -> ScanResults:
 
 
 def collect_source_files(
-    source_path: Path, language_file: Path
+    source_path: Path, language_files: list[Path]
 ) -> tuple[list[Path], list[Path]]:
-    """Return (axaml_files, cs_files), excluding ignored folders and the language file."""
+    """Return (axaml_files, cs_files), excluding ignored folders and language files."""
     axaml_files = [
         f
         for f in source_path.rglob("*.axaml")
-        if f != language_file and not should_ignore_file(f)
+        if f not in language_files and not should_ignore_file(f)
     ]
     cs_files = [f for f in source_path.rglob("*.cs") if not should_ignore_file(f)]
     return axaml_files, cs_files
@@ -313,10 +317,13 @@ def main() -> None:
     )
 
     logger.info("Source path: %s", SOURCE_PATH.absolute())
-    logger.info("Language file: %s", LANGUAGE_FILE.absolute())
+    for language_file in LANGUAGE_FILES:
+        logger.info("Language file: %s", language_file.absolute())
 
-    en_keys = extract_keys_from_en_axaml(LANGUAGE_FILE)
-    axaml_files, cs_files = collect_source_files(SOURCE_PATH, LANGUAGE_FILE)
+    en_keys = set()
+    for language_file in LANGUAGE_FILES:
+        en_keys |= extract_keys_from_en_axaml(language_file)
+    axaml_files, cs_files = collect_source_files(SOURCE_PATH, LANGUAGE_FILES)
 
     logger.info(
         "Found %d .axaml files and %d .cs files to scan",
