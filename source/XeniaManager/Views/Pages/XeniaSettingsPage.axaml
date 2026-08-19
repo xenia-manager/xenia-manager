@@ -19,7 +19,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
         <!-- Search Bar - filters options across all sections in the config editor below -->
         <Border Grid.Row="0"
                 Margin="16,16,16,8"
@@ -126,5 +126,9 @@
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                        FontSize="12" />
         </StackPanel>
+
+        <!-- Controller button hint bar (experimental controller navigation) - see
+             ControllerHintBar. Shown only while the feature is enabled in Settings. -->
+        <controls:ControllerHintBar Grid.Row="3" ShowTabHint="True" ShowAdjustHint="True" />
     </Grid>
 </UserControl>

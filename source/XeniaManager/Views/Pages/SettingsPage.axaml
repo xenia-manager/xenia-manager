@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:controls="using:XeniaManager.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsPageViewModel">
@@ -11,7 +12,7 @@
         <vm:SettingsPageViewModel />
     </Design.DataContext>
     <!-- UI -->
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*,Auto">
         <!-- Tab Strip - single row, scrolls horizontally without a visible scrollbar, each
              tab individually boxed (style shared with Xenia Settings' config editor, see
              Controls.axaml's ListBox.pageTabStrip). LB/RB (PreviousTab/NextTab) cycle through
@@ -136,5 +137,9 @@
                 </Border>
             </StackPanel>
         </ScrollViewer>
+
+        <!-- Controller button hint bar (experimental controller navigation) - see
+             ControllerHintBar. Shown only while the feature is enabled in Settings. -->
+        <controls:ControllerHintBar Grid.Row="2" ShowTabHint="True" />
     </Grid>
 </UserControl>

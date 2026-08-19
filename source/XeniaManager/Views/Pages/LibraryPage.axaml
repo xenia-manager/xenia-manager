@@ -1351,26 +1351,26 @@
                 Padding="12,6">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Text="A" FontWeight="Bold" />
+                    <Image Source="{DynamicResource ControllerIcon.A}" Width="18" Height="18" />
                     <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Confirm}" Opacity="0.8" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Text="B" FontWeight="Bold" />
+                    <Image Source="{DynamicResource ControllerIcon.B}" Width="18" Height="18" />
                     <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Back}" Opacity="0.8" />
                 </StackPanel>
                 <!-- X (info popup) only works in Grid view (the List view's columns already
                      show the same details inline), so the hint is hidden in List view to avoid
                      advertising a button that wouldn't do anything there -->
                 <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsGridView}">
-                    <TextBlock Text="X" FontWeight="Bold" />
+                    <Image Source="{DynamicResource ControllerIcon.X}" Width="18" Height="18" />
                     <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Info}" Opacity="0.8" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Text="Y" FontWeight="Bold" />
+                    <Image Source="{DynamicResource ControllerIcon.Y}" Width="18" Height="18" />
                     <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Menu}" Opacity="0.8" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Text="⇕" FontWeight="Bold" />
+                    <Image Source="{DynamicResource ControllerIcon.View}" Width="18" Height="18" />
                     <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.ToggleView}" Opacity="0.8" />
                 </StackPanel>
             </StackPanel>

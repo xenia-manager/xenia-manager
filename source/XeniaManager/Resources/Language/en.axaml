@@ -390,6 +390,14 @@
     <sys:String x:Key="LibraryPage.ControllerHints.Menu">Menu</sys:String>
     <sys:String x:Key="LibraryPage.ControllerHints.ToggleView">Switch View</sys:String>
 
+    <!-- Generic controller hint bar (ControllerHintBar control) - used by the "form-style" pages
+         (Manage Xenia, Xenia Settings, Settings, About), where every hint means the same thing
+         regardless of page, unlike LibraryPage's page-specific hints above -->
+    <sys:String x:Key="ControllerHints.Confirm">Select</sys:String>
+    <sys:String x:Key="ControllerHints.Back">Back</sys:String>
+    <sys:String x:Key="ControllerHints.SwitchTab">Switch Tab</sys:String>
+    <sys:String x:Key="ControllerHints.AdjustValue">Adjust Value</sys:String>
+
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>
 

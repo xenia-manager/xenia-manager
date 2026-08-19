@@ -402,6 +402,11 @@
     <sys:String x:Key="LibraryPage.ControllerHints.Menu">Menu</sys:String>
     <sys:String x:Key="LibraryPage.ControllerHints.ToggleView">Cambia Vista</sys:String>
 
+    <sys:String x:Key="ControllerHints.Confirm">Seleziona</sys:String>
+    <sys:String x:Key="ControllerHints.Back">Indietro</sys:String>
+    <sys:String x:Key="ControllerHints.SwitchTab">Cambia Scheda</sys:String>
+    <sys:String x:Key="ControllerHints.AdjustValue">Regola Valore</sys:String>
+
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Caricamento {0}</sys:String>
 
