@@ -284,7 +284,7 @@ public class ArchiveExtractor
     /// <param name="entryKey">The entry key/path from the archive.</param>
     /// <returns>The safe, fully resolved output file path.</returns>
     /// <exception cref="IOException">Thrown when the entry path would escape the output directory.</exception>
-    private static string GetSafeEntryOutputPath(string resolvedOutputPath, string? entryKey)
+    internal static string GetSafeEntryOutputPath(string resolvedOutputPath, string? entryKey)
     {
         string key = entryKey ?? string.Empty;
         string fullPath = Path.GetFullPath(Path.Combine(resolvedOutputPath, key));

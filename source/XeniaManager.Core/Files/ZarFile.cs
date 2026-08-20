@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Zar;
+using XeniaManager.Core.Utilities;
 using ZstdSharp;
 
 namespace XeniaManager.Core.Files;
@@ -575,7 +576,7 @@ public sealed class ZarFile : IDisposable
         if (entry.IsFile)
         {
             byte[] data = ReadFile(entry);
-            string filePath = Path.Combine(outputDir, currentPath);
+            string filePath = ArchiveExtractor.GetSafeEntryOutputPath(outputDir, currentPath);
             string? parentDir = Path.GetDirectoryName(filePath);
             if (!string.IsNullOrEmpty(parentDir))
             {

@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Files;
 
@@ -842,7 +843,7 @@ public class StfsFile : IDisposable
                     Logger.Warning<StfsFile>($"File '{entry.FileName}' has invalid path indicator {parentIndex}, placing at root");
                 }
 
-                string outputPath = Path.Combine(packageFolderPath, relativePath);
+                string outputPath = ArchiveExtractor.GetSafeEntryOutputPath(packageFolderPath, relativePath);
                 string? directoryPath = Path.GetDirectoryName(outputPath);
 
                 if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
