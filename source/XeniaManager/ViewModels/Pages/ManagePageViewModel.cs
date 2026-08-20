@@ -32,6 +32,29 @@ public partial class ManagePageViewModel : ViewModelBase
     private IReleaseService _releaseService { get; set; }
     private LibraryPageViewModel _libraryPageViewModel { get; set; }
 
+    // Tab selection (Emulator Management/Content Management) - drives which section's content
+    // is shown below the tab strip in ManagePage.axaml, and which one LB/RB
+    // (PreviousTab/NextTab) cycles between (see PageGamepadNavigator).
+    private const int TabCount = 2;
+    [ObservableProperty] private int _selectedTabIndex;
+    [ObservableProperty] private bool _isEmulatorTabVisible = true;
+    [ObservableProperty] private bool _isContentTabVisible;
+
+    partial void OnSelectedTabIndexChanged(int value)
+    {
+        IsEmulatorTabVisible = value == 0;
+        IsContentTabVisible = value == 1;
+    }
+
+    /// <summary>
+    /// Moves the selected tab by <paramref name="direction"/> (-1/+1), wrapping around.
+    /// Called by PageGamepadNavigator when LB/RB (PreviousTab/NextTab) is pressed.
+    /// </summary>
+    public void CycleSelectedTab(int direction)
+    {
+        SelectedTabIndex = ((SelectedTabIndex + direction) % TabCount + TabCount) % TabCount;
+    }
+
     // Download Progress Card
     [ObservableProperty] private int downloadProgress;
     [ObservableProperty] private bool isDownloading = false;

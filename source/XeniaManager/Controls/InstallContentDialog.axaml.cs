@@ -68,6 +68,10 @@ public partial class InstallContentDialog : UserControl
         contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
         contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
 
+        // Experimental: controller navigation for this dialog's form (and its own
+        // Install/Cancel buttons) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
+
         // Set the initial button state (disabled when no content items)
         contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanInstall;
 

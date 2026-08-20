@@ -381,6 +381,22 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Auto-Merge Multi-Disc Games</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Automatically merge detected discs of the same game during library scan</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">When enabled, additional discs matching an existing game in the library are merged automatically without prompting</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation">Controller Navigation (Experimental)</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.Description">Navigate the game library using an Xbox controller</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.ToolTip">Experimental: use the D-Pad or left stick to move between games in the library grid, A to launch, and B to go back. Currently limited to the Library page grid view.</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Confirm">Select</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Back">Back</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Info">Info</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Menu">Menu</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.ToggleView">Switch View</sys:String>
+
+    <!-- Generic controller hint bar (ControllerHintBar control) - used by the "form-style" pages
+         (Manage Xenia, Xenia Settings, Settings, About), where every hint means the same thing
+         regardless of page, unlike LibraryPage's page-specific hints above -->
+    <sys:String x:Key="ControllerHints.Confirm">Select</sys:String>
+    <sys:String x:Key="ControllerHints.Back">Back</sys:String>
+    <sys:String x:Key="ControllerHints.SwitchTab">Switch Tab</sys:String>
+    <sys:String x:Key="ControllerHints.AdjustValue">Adjust Value</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>
@@ -1151,32 +1167,24 @@
     <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Comment">Show achievement notification on screen</sys:String>
 
     <!-- Config UI Settings - Video Options -->
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Title">Internal Display Resolution</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Comment">Allow games that support different resolutions to render in a specific resolution</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.0">640x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.1">640x576</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.2">720x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.3">720x576</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.4">800x600</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.5">848x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.6">1024x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.7">1152x864</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.8">1280x720</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.9">1280x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.10">1280x960</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.11">1280x1024</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.12">1360x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.13">1440x900</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.14">1680x1050</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.15">1920x540</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Custom (X/Y)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Custom Resolution Width</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Custom width for internal display resolution&#10;NOTE: Requires Internal Display Resolution to be set to "Custom (X/Y)" in order to take affect</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Custom Resolution Height</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Custom height for internal display resolution&#10;NOTE: Requires Internal Display Resolution to be set to "Custom (X/Y)" in order to take affect</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Widescreen</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Toggles between 16:9 and 4:3 aspect ratio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.Title">Video Mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.Comment">The AV pack/video mode reported to games</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.0">PAL-60 Component (SD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.2">PAL-60 SCART</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.3">480p Component (HD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.4">HDMI+A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.5">PAL-60 Composite/S-Video</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.6">VGA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.7">TV PAL-60</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.8">HDMI (default)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_x.Title">Custom Resolution Width</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_x.Comment">Custom internal display resolution width. Range 1-1920, 0 to disable.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_y.Title">Custom Resolution Height</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_y.Comment">Custom internal display resolution height. Range 1-1080, 0 to disable.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.enable_3d_mode.Title">3D Mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.enable_3d_mode.Comment">Enables usage of stereoscopic mode in titles</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.interlaced.Title">Interlaced</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.interlaced.Comment">Toggles interlaced mode</sys:String>
 
     <!-- Config UI Settings - Vulkan Options -->
     <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Title">Allow Immediate Present Mode</sys:String>

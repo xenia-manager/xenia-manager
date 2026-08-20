@@ -22,31 +22,31 @@
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Cerca...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">Ricarica la libreria giochi</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">Ordina giochi</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">Passa alla vista elenco</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">Passa alla vista griglia</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">Direzione Ordinamento</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">Titolo</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">Compatibilità</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">Tempo di Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Versione Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">Ultimo Giocato</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Modifica Vista Griglia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Mostra/Nascondi informazioni aggiuntive sulle copertine</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Titolo Gioco</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Valutazione Compatibilità</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Versione Xenia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Mostra l'icona della versione Xenia per ogni gioco</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">Modifica Vista Elenco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">Mostra/Nascondi colonne nella vista elenco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">Valutazione Compatibilità</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">Tempo di Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Versione Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">Mostra l'icona della versione Xenia per ogni gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">Ultimo Giocato</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">Icona Gioco</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">Title ID</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">Media ID</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Avvia con Doppio Click</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Passa da singolo a doppio click per avviare i giochi</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scansiona Cartella</sys:String>
@@ -133,11 +133,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Aggiornati con successo {0} gioco/i.&#10;Invariati: {1}&#10;Falliti: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Aggiornamento Fallito</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Si è verificato un errore durante l'aggiornamento delle valutazioni.&#10;{0}</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Aggiorna Valutazioni Compatibilità</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Compatibilità Gioco</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Compatibilità Mousehook</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Compatibilità Netplay</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Aggiorna</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Ottimizza Giochi</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Applica le impostazioni ottimizzate dal database online a tutti i giochi della libreria</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Ottimizzazione Completata</sys:String>
@@ -192,23 +192,23 @@
     <sys:String x:Key="CompatibilityRating.Playable">Giocabile</sys:String>
 
     <!-- Mousehook Support Rating -->
-    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Unknown">Sconosciuta</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">Scarsa</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Discreta</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">Buona</sys:String>
 
     <!-- Netplay Status -->
-    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Unknown">Sconosciuto</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">OK</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">Parziale</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">Fallito</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Supporto Mousehook:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Funzionante Pubblico:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Testato Localmente:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Solo Locale:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Gestione Emulatore</sys:String>
@@ -381,6 +381,31 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Unisci Automaticamente Giochi Multi-Disco</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Unisce automaticamente i dischi rilevati dello stesso gioco durante la scansione della libreria</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Se abilitato, i dischi aggiuntivi che corrispondono a un gioco già presente in libreria vengono uniti automaticamente senza chiedere conferma</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation">Navigazione con Controller (Sperimentale)</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.Description">Naviga la libreria giochi usando un controller Xbox</sys:String>
+    <sys:String x:Key="SettingsPage.General.EnableControllerNavigation.ToolTip">Sperimentale: usa il D-Pad o lo stick sinistro per spostarti tra i giochi nella griglia della libreria, A per avviare e B per tornare indietro. Attualmente limitato alla vista Griglia della pagina Libreria.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">Readback Memexport</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">Legge sulla CPU i dati scritti dal memory export negli shader.&#10;Potrebbe essere necessario per alcuni giochi, ma causa una sincronizzazione a metà frame con un forte impatto sulle prestazioni</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">Apri Posizione Gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">Apre la cartella contenente il file di gioco</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">File di Gioco Non Trovato</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">Impossibile trovare la cartella del file di gioco.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">Apertura Cartella Fallita</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">Si è verificato un errore durante l'apertura della posizione del gioco.&#10;{0}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">Seleziona Account Steam</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">Trovati più account Steam</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">Seleziona per quale account creare il collegamento:</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">Annulla</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Confirm">Seleziona</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Back">Indietro</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Info">Informazioni</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.Menu">Menu</sys:String>
+    <sys:String x:Key="LibraryPage.ControllerHints.ToggleView">Cambia Vista</sys:String>
+
+    <sys:String x:Key="ControllerHints.Confirm">Seleziona</sys:String>
+    <sys:String x:Key="ControllerHints.Back">Indietro</sys:String>
+    <sys:String x:Key="ControllerHints.SwitchTab">Cambia Scheda</sys:String>
+    <sys:String x:Key="ControllerHints.AdjustValue">Regola Valore</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Caricamento {0}</sys:String>
@@ -475,10 +500,6 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Collegamento Steam creato con successo per '{0}' nella tua libreria Steam.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Impossibile Creare il Collegamento Steam</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Impossibile creare il collegamento Steam per '{0}'.&#10;{1}</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Pagina Compatibilità</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Apre la pagina di compatibilità</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Nessuna Pagina di Compatibilità</sys:String>
@@ -594,14 +615,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Valutazione Compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL Pagina Compatibilità</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Inserisci URL della pagina compatibilità</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Compatibilità Mousehook</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">Nessuna nota mousehook disponibile</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Compatibilità Netplay</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Funzionante Pubblico</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Testato Localmente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Solo Locale</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">Systemlink</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">Nessun commento netplay disponibile</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Cambia percorso del gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Seleziona File di Gioco</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Provider di Archiviazione Mancante</sys:String>
@@ -1002,8 +1023,6 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">Nessuno</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Veloce</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Completo</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Scala Risoluzione X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Scala in pixel interi della larghezza per scalare la risoluzione di rendering</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Scala Risoluzione Y</sys:String>
@@ -1145,32 +1164,24 @@
     <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Comment">Mostra la notifica degli obiettivi sullo schermo</sys:String>
 
     <!-- Config UI Settings - Video Options -->
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Title">Risoluzione Display Interna</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Comment">Consenti ai giochi di renderizzare in una risoluzione specifica</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.0">640x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.1">640x576</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.2">720x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.3">720x576</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.4">800x600</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.5">848x480</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.6">1024x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.7">1152x864</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.8">1280x720</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.9">1280x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.10">1280x960</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.11">1280x1024</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.12">1360x768</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.13">1440x900</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.14">1680x1050</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.15">1920x540</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Personalizzata (X/Y)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Larghezza Risoluzione Personalizzata</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Larghezza personalizzata per la risoluzione display interna&#10;NOTA: Richiede Risoluzione impostata su "Personalizzata (X/Y)"</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Altezza Risoluzione Personalizzata</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Altezza personalizzata per la risoluzione display interna&#10;NOTA: Richiede Risoluzione impostata su "Personalizzata (X/Y)"</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Widescreen</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Passa tra rapporto d'aspetto 16:9 e 4:3</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.Title">Modalità Video</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.Comment">La modalità video/AV pack riportata ai giochi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.0">PAL-60 Component (SD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.2">PAL-60 SCART</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.3">480p Component (HD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.4">HDMI+A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.5">PAL-60 Composite/S-Video</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.6">VGA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.7">TV PAL-60</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.avpack.option.8">HDMI (predefinito)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_x.Title">Larghezza Risoluzione Personalizzata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_x.Comment">Larghezza personalizzata della risoluzione display interna. Intervallo 1-1920, 0 per disabilitare.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_y.Title">Altezza Risoluzione Personalizzata</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.custom_internal_display_resolution_y.Comment">Altezza personalizzata della risoluzione display interna. Intervallo 1-1080, 0 per disabilitare.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.enable_3d_mode.Title">Modalità 3D</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.enable_3d_mode.Comment">Abilita l'uso della modalità stereoscopica nei giochi</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.interlaced.Title">Interlacciato</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.interlaced.Comment">Attiva/disattiva la modalità interlacciata</sys:String>
 
     <!-- Config UI Settings - Vulkan Options -->
     <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Title">Consenti Modalità Immediata</sys:String>

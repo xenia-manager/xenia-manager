@@ -115,6 +115,10 @@ public partial class PatchSelectionDialog : UserControl
             DefaultButton = FAContentDialogButton.Primary
         };
 
+        // Experimental: controller navigation for this dialog's form (and its own
+        // Select/Close buttons) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
+
         // Set the initial button state (disabled if no patch is selected)
         contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.SelectedPatch != null;
 

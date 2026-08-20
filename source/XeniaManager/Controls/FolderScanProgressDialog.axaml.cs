@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -66,6 +67,10 @@ public partial class FolderScanProgressDialog : UserControl
         contentDialog.Resources.Add("ContentDialogMaxWidth", 600.0);
         contentDialog.Resources.Add("ContentDialogMinHeight", 400.0);
         contentDialog.Resources.Add("ContentDialogMaxHeight", 600.0);
+
+        // Experimental: controller navigation for this dialog's own Cancel/Close buttons - see
+        // PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
 
         // Initially: Cancel enabled, Close (Secondary) disabled while scanning
         contentDialog.IsPrimaryButtonEnabled = true;

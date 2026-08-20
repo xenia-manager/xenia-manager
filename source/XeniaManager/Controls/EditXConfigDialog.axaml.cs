@@ -72,6 +72,10 @@ public partial class EditXConfigDialog : UserControl
             DefaultButton = FAContentDialogButton.Primary
         };
 
+        // Experimental: controller navigation for this dialog's form (and its own Save/Cancel
+        // buttons) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
+
         // Set dialog size constraints
         contentDialog.Resources.Add("ContentDialogMinWidth", 200.0);
         contentDialog.Resources.Add("ContentDialogMaxWidth", 800.0);

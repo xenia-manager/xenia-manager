@@ -5,7 +5,6 @@
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              xmlns:controls="using:XeniaManager.Controls"
-             xmlns:ic="using:FluentIcons.Avalonia.Fluent"
              xmlns:converters="using:XeniaManager.Core.Converters"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="500"
              x:Class="XeniaManager.Controls.ConfigEditorControl"
@@ -20,28 +19,37 @@
     </UserControl.Resources>
 
     <Grid RowDefinitions="Auto,*">
-        <!-- Search Bar -->
-        <Border Grid.Row="0"
-                Margin="16,16,16,8"
-                Padding="8"
-                CornerRadius="6"
-                BorderThickness="1"
-                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
-            <Grid ColumnDefinitions="Auto,*">
-                <ic:SymbolIcon Grid.Column="0"
-                               Symbol="Search"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Margin="8,0,8,0"
-                               VerticalAlignment="Center" />
-                <TextBox Grid.Column="1"
-                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         PlaceholderText="{DynamicResource Controls.ConfigEditorControl.Search.PlaceholderText}"
-                         HorizontalAlignment="Stretch" />
-            </Grid>
-        </Border>
+        <!-- Section Tab Strip - each section gets its own individually-boxed tab (styled via
+             UserControl.Styles above), in a single row that scrolls horizontally without
+             showing a scrollbar (HorizontalScrollBarVisibility="Hidden" keeps scrolling itself
+             working - e.g. BringIntoView when the selection changes - just without the visible
+             track/thumb). LB/RB (PreviousTab/NextTab) cycle through it (see
+             PageGamepadNavigator.CycleTab / XeniaSettingsPage). The search bar lives in
+             XeniaSettingsPage, above the config-file selector, not in here. -->
+        <ScrollViewer Grid.Row="0"
+                      Margin="16,16,16,8"
+                      HorizontalScrollBarVisibility="Hidden"
+                      VerticalScrollBarVisibility="Disabled">
+            <ListBox ItemsSource="{Binding Sections}"
+                     SelectedIndex="{Binding SelectedSectionIndex, Mode=TwoWay}"
+                     SelectionMode="Single"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Classes="pageTabStrip">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ConfigSectionViewModel">
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
 
-        <!-- Sections List with virtualization -->
+        <!-- Selected section's options (all matching sections instead, while searching) -->
         <ScrollViewer Grid.Row="1"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
@@ -49,82 +57,77 @@
                           Margin="16">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:ConfigSectionViewModel">
-                        <Border Margin="0,0,0,8"
-                                IsVisible="{Binding IsVisible}">
-                            <Expander IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
-                                <Expander.Header>
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="{Binding DisplayName}"
-                                                   FontSize="16"
-                                                   FontWeight="SemiBold" />
-                                        <TextBlock Text="{Binding Description}"
-                                                   FontSize="12"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                                    </StackPanel>
-                                </Expander.Header>
-                                <Expander.Content>
-                                    <ItemsControl ItemsSource="{Binding Options}"
-                                                  Margin="0,8,0,0">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate x:DataType="vm:ConfigOptionViewModel">
-                                                <Border IsVisible="{Binding IsVisible}" Margin="0,0,0,8">
-                                                    <StackPanel Spacing="8">
-                                                        <!-- ToggleSwitch Card -->
-                                                        <cards:ToggleSwitchCard
-                                                                            Title="{Binding DisplayName}"
-                                                                            Tooltip="{Binding Comment}"
-                                                                            IsChecked="{Binding BoolValue, Mode=TwoWay}"
-                                                                            IsEnabled="{Binding IsEditable}"
-                                                                            IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=ToggleSwitch}" />
-
-                                                        <!-- Slider Card -->
-                                                        <cards:SliderCard
-                                                                      Title="{Binding DisplayName}"
-                                                                      Tooltip="{Binding Comment}"
-                                                                      Minimum="{Binding Minimum, TargetNullValue=0}"
-                                                                      Maximum="{Binding Maximum, TargetNullValue=100}"
-                                                                      Value="{Binding FloatValue, Mode=TwoWay}"
-                                                                      TickFrequency="{Binding Step, TargetNullValue=1}"
-                                                                      ValueFormat="{Binding ValueFormat, TargetNullValue=F0}"
-                                                                      IsSnapToTickEnabled="{Binding Step, Converter={StaticResource NotNullConverter}}"
-                                                                      IsEnabled="{Binding IsEditable}"
-                                                                      IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=Slider}" />
-
-                                                        <!-- NumberBox Card -->
-                                                        <cards:NumberBoxCard
-                                                                         Title="{Binding DisplayName}"
-                                                                         Tooltip="{Binding Comment}"
-                                                                         Minimum="{Binding Minimum, TargetNullValue=0}"
-                                                                         Maximum="{Binding Maximum}"
-                                                                         Value="{Binding FloatValue, Mode=TwoWay}"
-                                                                         IsEnabled="{Binding IsEditable}"
-                                                                         IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=NumberBox}" />
-
-                                                        <!-- ComboBox Card -->
-                                                        <cards:ComboBoxCard
+                        <Border Margin="0,0,0,16"
+                                IsVisible="{Binding IsContentVisible}">
+                            <StackPanel Spacing="8">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Text="{Binding DisplayName}"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Description}"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding Options}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ConfigOptionViewModel">
+                                            <Border IsVisible="{Binding IsVisible}" Margin="0,0,0,8">
+                                                <StackPanel Spacing="8">
+                                                    <!-- ToggleSwitch Card -->
+                                                    <cards:ToggleSwitchCard
                                                                         Title="{Binding DisplayName}"
                                                                         Tooltip="{Binding Comment}"
-                                                                        ItemsSource="{Binding ComboBoxOptions}"
-                                                                        SelectedIndex="{Binding SelectedComboBoxIndex, Mode=TwoWay}"
-                                                                        ItemTemplate="{StaticResource ComboBoxOptionTemplate}"
+                                                                        IsChecked="{Binding BoolValue, Mode=TwoWay}"
                                                                         IsEnabled="{Binding IsEditable}"
-                                                                        IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=ComboBox}" />
+                                                                        IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=ToggleSwitch}" />
 
-                                                        <!-- TextBox Card -->
-                                                        <cards:TextBoxCard
-                                                                       Title="{Binding DisplayName}"
-                                                                       Tooltip="{Binding Comment}"
-                                                                       Text="{Binding StringValue, Mode=TwoWay}"
-                                                                       IsEnabled="{Binding IsEditable}"
-                                                                       IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=TextBox}" />
-                                                    </StackPanel>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </Expander.Content>
-                            </Expander>
+                                                    <!-- Slider Card -->
+                                                    <cards:SliderCard
+                                                                  Title="{Binding DisplayName}"
+                                                                  Tooltip="{Binding Comment}"
+                                                                  Minimum="{Binding Minimum, TargetNullValue=0}"
+                                                                  Maximum="{Binding Maximum, TargetNullValue=100}"
+                                                                  Value="{Binding FloatValue, Mode=TwoWay}"
+                                                                  TickFrequency="{Binding Step, TargetNullValue=1}"
+                                                                  ValueFormat="{Binding ValueFormat, TargetNullValue=F0}"
+                                                                  IsSnapToTickEnabled="{Binding Step, Converter={StaticResource NotNullConverter}}"
+                                                                  IsEnabled="{Binding IsEditable}"
+                                                                  IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=Slider}" />
+
+                                                    <!-- NumberBox Card -->
+                                                    <cards:NumberBoxCard
+                                                                     Title="{Binding DisplayName}"
+                                                                     Tooltip="{Binding Comment}"
+                                                                     Minimum="{Binding Minimum, TargetNullValue=0}"
+                                                                     Maximum="{Binding Maximum}"
+                                                                     Value="{Binding FloatValue, Mode=TwoWay}"
+                                                                     IsEnabled="{Binding IsEditable}"
+                                                                     IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=NumberBox}" />
+
+                                                    <!-- ComboBox Card -->
+                                                    <cards:ComboBoxCard
+                                                                    Title="{Binding DisplayName}"
+                                                                    Tooltip="{Binding Comment}"
+                                                                    ItemsSource="{Binding ComboBoxOptions}"
+                                                                    SelectedIndex="{Binding SelectedComboBoxIndex, Mode=TwoWay}"
+                                                                    ItemTemplate="{StaticResource ComboBoxOptionTemplate}"
+                                                                    IsEnabled="{Binding IsEditable}"
+                                                                    IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=ComboBox}" />
+
+                                                    <!-- TextBox Card -->
+                                                    <cards:TextBoxCard
+                                                                   Title="{Binding DisplayName}"
+                                                                   Tooltip="{Binding Comment}"
+                                                                   Text="{Binding StringValue, Mode=TwoWay}"
+                                                                   IsEnabled="{Binding IsEditable}"
+                                                                   IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=TextBox}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

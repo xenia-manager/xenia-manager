@@ -8,6 +8,7 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Bindings;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -69,6 +70,10 @@ public partial class MousehookControlsEditorDialog : UserControl
         contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
         contentDialog.Resources.Add("ContentDialogMinHeight", 600.0);
         contentDialog.Resources.Add("ContentDialogMaxHeight", 800.0);
+
+        // Experimental: controller navigation for this dialog's form (and its own Save/Cancel
+        // buttons) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
 
         // Handle the primary button (Save) using deferral to properly handle async operation
         bool saveSuccessful = false;

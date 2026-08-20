@@ -17,7 +17,7 @@
                              IsBackButtonVisible="False"
                              IsSettingsVisible="False"
                              PaneDisplayMode="Left"
-                             IsPaneOpen="False"
+                             IsPaneOpen="True"
                              IsPaneToggleButtonVisible="True"
                               ItemInvoked="NavigationView_OnItemInvoked">
         <!-- Navigation Items -->

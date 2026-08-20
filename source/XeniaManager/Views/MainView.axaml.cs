@@ -5,9 +5,11 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels;
@@ -20,6 +22,13 @@ public partial class MainView : UserControl
     private MainViewModel _viewModel { get; set; }
     private NavigationService _navigationService { get; set; }
     private IMessageBoxService _messageBoxService { get; set; }
+    private GamepadService? _gamepadService;
+
+    // Experimental controller navigation of the side menu: tracks the currently
+    // highlighted item and whether the menu is the active navigation context
+    private readonly object _navigationOwner = new object();
+    private List<FANavigationViewItem> _menuItems = [];
+    private int _menuCursorIndex = -1;
 
     // Constructor
     public MainView()
@@ -33,9 +42,14 @@ public partial class MainView : UserControl
         _navigationService = App.Services.GetRequiredService<NavigationService>();
         _navigationService.SetContentFrame(ContentFrame);
         _navigationService.SetNavigationView(NavigationView);
+        _navigationService.SetControllerMenuActivator(ActivateControllerMenuNavigation);
 
         // Auto-fit pane width to content when opening
         NavigationView.PaneOpening += NavigationView_OnPaneOpening;
+
+        // Experimental: controller navigation of the side menu
+        _gamepadService = App.Services.GetRequiredService<GamepadService>();
+        _gamepadService.NavigationActionTriggered += OnControllerNavigationAction;
 
         // Navigate to Library (Default Page)
         _ = _navigationService.NavigateToTag("Library");
@@ -107,6 +121,105 @@ public partial class MainView : UserControl
             Logger.LogExceptionDetails<MainView>(ex);
             await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("MainView.Navigation.Error.Title"),
                 string.Format(LocalizationHelper.GetText("MainView.Navigation.Error.Message"), ex));
+        }
+    }
+
+    // --- Controller navigation of the side menu (experimental) ------------
+
+    /// <summary>
+    /// Makes the side navigation menu (Open Xenia, Library, Xenia Settings, Manage Xenia,
+    /// plus the footer items Settings/About) the active controller navigation context, and
+    /// highlights the first item. Called by <see cref="NavigationService.FocusNavigationMenu"/>
+    /// when the user presses B on a page, mimicking backing out to a console dashboard menu.
+    /// </summary>
+    private void ActivateControllerMenuNavigation()
+    {
+        if (_gamepadService == null)
+        {
+            return;
+        }
+
+        _menuItems = NavigationView.MenuItems
+            .Concat(NavigationView.FooterMenuItems)
+            .OfType<FANavigationViewItem>()
+            .Where(i => i.IsEnabled)
+            .ToList();
+
+        if (_menuItems.Count == 0)
+        {
+            return;
+        }
+
+        _gamepadService.PushNavigationContext(_navigationOwner);
+        SetMenuCursor(0);
+    }
+
+    /// <summary>
+    /// Deactivates controller navigation of the side menu, e.g. once a page has been chosen
+    /// and that page becomes the active navigation context instead.
+    /// </summary>
+    private void DeactivateControllerMenuNavigation()
+    {
+        if (_gamepadService == null || !_gamepadService.IsActiveNavigationContext(_navigationOwner))
+        {
+            return;
+        }
+
+        SetMenuCursor(-1);
+        _gamepadService.PopNavigationContext(_navigationOwner);
+    }
+
+    private void SetMenuCursor(int newIndex)
+    {
+        if (_menuCursorIndex >= 0 && _menuCursorIndex < _menuItems.Count)
+        {
+            _menuItems[_menuCursorIndex].Classes.Remove("controllerCursor");
+        }
+        _menuCursorIndex = newIndex;
+        if (_menuCursorIndex >= 0 && _menuCursorIndex < _menuItems.Count)
+        {
+            _menuItems[_menuCursorIndex].Classes.Add("controllerCursor");
+        }
+    }
+
+    private async void OnControllerNavigationAction(object? sender, ControllerNavigationAction action)
+    {
+        if (_gamepadService == null || !_gamepadService.IsActiveNavigationContext(_navigationOwner))
+        {
+            return;
+        }
+
+        switch (action)
+        {
+            case ControllerNavigationAction.Up:
+                Dispatcher.UIThread.Post(() => SetMenuCursor(_menuCursorIndex <= 0 ? _menuItems.Count - 1 : _menuCursorIndex - 1));
+                break;
+            case ControllerNavigationAction.Down:
+                Dispatcher.UIThread.Post(() => SetMenuCursor(_menuCursorIndex < 0 ? 0 : (_menuCursorIndex + 1) % _menuItems.Count));
+                break;
+            case ControllerNavigationAction.Confirm:
+                if (_menuCursorIndex < 0 || _menuCursorIndex >= _menuItems.Count)
+                {
+                    break;
+                }
+
+                FANavigationViewItem selected = _menuItems[_menuCursorIndex];
+                await Dispatcher.UIThread.InvokeAsync(async () =>
+                {
+                    try
+                    {
+                        DeactivateControllerMenuNavigation();
+                        await _navigationService.Navigate(selected, ContentFrame);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error<MainView>("Failed to navigate to page via controller");
+                        Logger.LogExceptionDetails<MainView>(ex);
+                    }
+                });
+                break;
+            // Back (B) isn't handled here: if the user is already on the menu, B has
+            // nowhere further to go back to in this first pass
         }
     }
 }

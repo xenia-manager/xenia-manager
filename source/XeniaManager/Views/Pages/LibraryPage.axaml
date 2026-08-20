@@ -16,7 +16,7 @@
     </Design.DataContext>
 
     <!-- UI -->
-    <Grid RowDefinitions="48,Auto,*,Auto"
+    <Grid RowDefinitions="48,Auto,*,Auto,Auto"
           DragDrop.AllowDrop="True"
           DragDrop.DragEnter="OnDragEnter"
           DragDrop.DragOver="OnDragOver"
@@ -376,7 +376,8 @@
                       Padding="8"
                       IsVisible="{Binding IsGridView}"
                       PointerReleased="OnScrollViewerPointerReleased">
-            <controls:FAItemsRepeater Margin="0,0,10,0"
+            <controls:FAItemsRepeater x:Name="GamesGridRepeater"
+                                      Margin="0,0,10,0"
                                       ItemsSource="{Binding Games}">
                 <controls:FAItemsRepeater.Layout>
                     <controls:FAUniformGridLayout MinItemWidth="{Binding MinItemWidth}"
@@ -399,10 +400,15 @@
                                 Tapped="OnGameButtonTapped"
                                 DoubleTapped="OnGameButtonDoubleTapped"
                                 Tag="{Binding}"
-                                Classes.selected="{Binding IsSelected}">
+                                Classes.selected="{Binding IsSelected}"
+                                Classes.controllerFocused="{Binding IsControllerFocused}">
                             <Button.Styles>
                                 <Style Selector="Button.selected">
                                     <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                </Style>
+                                <Style Selector="Button.controllerFocused">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                    <Setter Property="BorderThickness" Value="4" />
                                 </Style>
                             </Button.Styles>
                             <ToolTip.Tip>
@@ -797,6 +803,26 @@
                                                               FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=14}"
                                                               Foreground="White" />
                                         </Border>
+
+                                        <!-- Disc Count Badge (multi-disc games only) -->
+                                        <Border Background="#99000000"
+                                                CornerRadius="4"
+                                                Padding="4,2"
+                                                IsVisible="{Binding Game.FileLocations.IsMultiDisc}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{Binding Game.FileLocations.DiscCount, Converter={StaticResource DiscCountConverter}}" />
+                                            </ToolTip.Tip>
+
+                                            <StackPanel Orientation="Horizontal" Spacing="2">
+                                                <icons:SymbolIcon Symbol="Games"
+                                                                  FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=12}"
+                                                                  Foreground="White" />
+                                                <TextBlock Text="{Binding Game.FileLocations.DiscCount}"
+                                                           FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=12}"
+                                                           FontWeight="Bold"
+                                                           Foreground="White" />
+                                            </StackPanel>
+                                        </Border>
                                     </StackPanel>
 
                                     <!-- Game Title Overlay (shown when enabled) -->
@@ -829,11 +855,10 @@
                       IsVisible="{Binding !IsGridView}"
                       PointerReleased="OnListPointerReleased"
                       HorizontalScrollBarVisibility="Disabled">
-            <controls:FAItemsRepeater ItemsSource="{Binding Games}">
+            <controls:FAItemsRepeater x:Name="GamesListRepeater" ItemsSource="{Binding Games}">
                 <controls:FAItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="itemVm:GameItemViewModel">
-                        <Border Background="Transparent"
-                                Padding="8,6"
+                        <Border Padding="8,6"
                                 Margin="0,0"
                                 CornerRadius="0"
                                 BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
@@ -842,12 +867,26 @@
                                 Tag="{Binding}"
                                 Tapped="OnListItemTapped"
                                 DoubleTapped="OnListItemDoubleTapped"
-                                Classes.selected="{Binding IsSelected}">
+                                Classes.selected="{Binding IsSelected}"
+                                Classes.controllerFocused="{Binding IsControllerFocused}">
                             <Border.Styles>
                                 <Style Selector="Border.selected">
                                     <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
                                     <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
                                     <Setter Property="BorderThickness" Value="2,0,0,1" />
+                                </Style>
+                                <!-- Highlights the whole row for the controller-focused game
+                                     (not just a thin bar). Uses Opacity on the Brush itself
+                                     (not on the Border element), so only the background fill is
+                                     translucent while text/icons on top of it stay fully opaque
+                                     and readable, plus a solid accent bar on the left edge for
+                                     extra visibility -->
+                                <Style Selector="Border.controllerFocused">
+                                    <Setter Property="Background">
+                                        <SolidColorBrush Color="{DynamicResource SystemAccentColor}" Opacity="0.5" />
+                                    </Setter>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                    <Setter Property="BorderThickness" Value="6,0,0,1" />
                                 </Style>
                             </Border.Styles>
                             <Border.ContextFlyout>
@@ -1212,6 +1251,25 @@
                                             <TextBlock Text="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToStringConverter}}" />
                                         </ToolTip.Tip>
                                     </icons:SymbolIcon>
+
+                                    <!-- Disc Count (multi-disc games only) -->
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="4"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{Binding Game.FileLocations.IsMultiDisc}">
+                                        <icons:SymbolIcon Symbol="Games"
+                                                          FontSize="14"
+                                                          VerticalAlignment="Center"
+                                                          Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{Binding Game.FileLocations.DiscCount}"
+                                                   FontSize="12"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{Binding Game.FileLocations.DiscCount, Converter={StaticResource DiscCountConverter}}" />
+                                        </ToolTip.Tip>
+                                    </StackPanel>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -1278,6 +1336,43 @@
                            FontSize="14"
                            Foreground="#CCFFFFFF"
                            TextAlignment="Center" />
+            </StackPanel>
+        </Border>
+
+        <!-- Controller button hint bar (experimental controller navigation). Only shown while
+             the feature is enabled in Settings, as a quick reminder of what each button does -
+             useful since this isn't how a mouse/keyboard user would normally interact with the
+             library, so the mapping isn't otherwise obvious. -->
+        <Border Grid.Row="4"
+                IsVisible="{Binding IsControllerNavigationEnabled}"
+                Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="12,6">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Image Source="{DynamicResource ControllerIcon.A}" Width="18" Height="18" />
+                    <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Confirm}" Opacity="0.8" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Image Source="{DynamicResource ControllerIcon.B}" Width="18" Height="18" />
+                    <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Back}" Opacity="0.8" />
+                </StackPanel>
+                <!-- X (info popup) only works in Grid view (the List view's columns already
+                     show the same details inline), so the hint is hidden in List view to avoid
+                     advertising a button that wouldn't do anything there -->
+                <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsGridView}">
+                    <Image Source="{DynamicResource ControllerIcon.X}" Width="18" Height="18" />
+                    <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Info}" Opacity="0.8" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Image Source="{DynamicResource ControllerIcon.Y}" Width="18" Height="18" />
+                    <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.Menu}" Opacity="0.8" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Image Source="{DynamicResource ControllerIcon.View}" Width="18" Height="18" />
+                    <TextBlock Text="{DynamicResource LibraryPage.ControllerHints.ToggleView}" Opacity="0.8" />
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>

@@ -73,6 +73,8 @@ public class ServiceConfigurator
         services.AddSingleton<IReleaseService, ReleaseService>();
         // GameDirectoryWatcherService
         services.AddSingleton<GameDirectoryWatcherService>();
+        // GamepadService (experimental controller navigation, SDL2-based)
+        services.AddSingleton<GamepadService>();
 
         // Controls
         services.AddSingleton<PatchSelectionDialogViewModel>();

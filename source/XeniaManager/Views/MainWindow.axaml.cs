@@ -26,6 +26,7 @@ public partial class MainWindow : FAAppWindow
     private INotificationService _notificationService { get; set; }
     private Settings _settings { get; set; }
     private GameDirectoryWatcherService _watcherService { get; set; }
+    private GamepadService _gamepadService { get; set; }
 
     // Constructor
     public MainWindow()
@@ -36,6 +37,7 @@ public partial class MainWindow : FAAppWindow
         _notificationService = App.Services.GetRequiredService<INotificationService>();
         _settings = App.Services.GetRequiredService<Settings>();
         _watcherService = App.Services.GetRequiredService<GameDirectoryWatcherService>();
+        _gamepadService = App.Services.GetRequiredService<GamepadService>();
         DataContext = _viewModel;
 
         // Subscribe to EventManager for window state changes
@@ -62,6 +64,13 @@ public partial class MainWindow : FAAppWindow
             {
                 Logger.Debug<MainWindow>("Auto-detect new games is enabled, starting directory watcher");
                 _watcherService.Start();
+            }
+
+            // Start controller navigation polling if enabled (experimental)
+            if (_settings.Settings.General.EnableControllerNavigation)
+            {
+                Logger.Debug<MainWindow>("Controller navigation is enabled, starting gamepad polling");
+                _gamepadService.Start();
             }
         }
         catch

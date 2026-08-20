@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -62,6 +63,10 @@ public partial class AddGamesProgressDialog : UserControl
         contentDialog.Resources.Add("ContentDialogMaxWidth", 600.0);
         contentDialog.Resources.Add("ContentDialogMinHeight", 450.0);
         contentDialog.Resources.Add("ContentDialogMaxHeight", 550.0);
+
+        // Experimental: controller navigation for this dialog's own Close button - see
+        // PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
 
         // Disable the close button while processing
         contentDialog.IsPrimaryButtonEnabled = false;

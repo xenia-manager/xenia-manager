@@ -1,5 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:FluentAvalonia.UI.Controls"
+        xmlns:cards="using:XeniaManager.Controls.Cards">
     <!-- Card Controls -->
     <StyleInclude Source="/Controls/Cards/CardHeader.axaml" />
     <StyleInclude Source="/Controls/Cards/CustomCard.axaml" />
@@ -9,6 +11,48 @@
     <StyleInclude Source="/Controls/Cards/SliderCard.axaml" />
     <StyleInclude Source="/Controls/Cards/TextBoxCard.axaml" />
     <StyleInclude Source="/Controls/Cards/ToggleSwitchCard.axaml" />
+
+    <!-- Marks the currently controller-selected item in a context menu (experimental
+         controller navigation), since arrow-key navigation isn't reliably simulatable
+         for MenuFlyout popups, so a manual cursor + this highlight style are used instead -->
+    <Style Selector="MenuItem.controllerCursor">
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+    </Style>
+
+    <!-- Same idea, applied to the side navigation menu items (experimental controller
+         navigation of Open Xenia/Library/Xenia Settings/Manage Xenia) -->
+    <Style Selector="controls|FANavigationViewItem.controllerCursor">
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+    </Style>
+
+    <!-- Marks the currently controller-selected control on "form-style" pages (Manage Xenia,
+         Xenia Settings, Settings, About) - see PageGamepadNavigator. Uses a drop-shadow glow
+         via Effect rather than Background: several of the custom Card controls hardcode their
+         own Background in their control template (see CustomCard.axaml), so a Background
+         setter here wouldn't actually be visible on them, while Effect is applied by the
+         renderer on top of a control's whole visual output regardless of its template. -->
+    <Style Selector="Button.controllerCursor, Expander.controllerCursor, ToggleSwitch.controllerCursor, ComboBox.controllerCursor, ListBox.controllerCursor, TextBox.controllerCursor, cards|ToggleSwitchCard.controllerCursor, cards|ComboBoxCard.controllerCursor, cards|NumberBoxCard.controllerCursor, cards|SliderCard.controllerCursor, cards|TextBoxCard.controllerCursor">
+        <Setter Property="Effect">
+            <DropShadowEffect Color="{DynamicResource SystemAccentColor}" BlurRadius="16" OffsetX="0" OffsetY="0" />
+        </Setter>
+    </Style>
+
+    <!-- Horizontal tab strip used by pages with a LB/RB-cycled tab bar (Xenia Settings'
+         config editor, Settings) - see PageGamepadNavigator's onCycleTab/tabContentRoot.
+         Each tab gets its own individually-boxed card-styled pill, not one shared container
+         around the whole strip. -->
+    <Style Selector="ListBox.pageTabStrip ListBoxItem">
+        <Setter Property="Margin" Value="0,0,6,6" />
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+        <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+    </Style>
+    <Style Selector="ListBox.pageTabStrip ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+    </Style>
 
     <!-- Add other Control Styles here -->
 </Styles>

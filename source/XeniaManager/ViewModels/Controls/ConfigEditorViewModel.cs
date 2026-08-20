@@ -28,6 +28,8 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
     [ObservableProperty] private ObservableCollection<ConfigSectionViewModel> _sections = [];
     [ObservableProperty] private bool _hasUnsavedChanges;
     [ObservableProperty] private string _searchText = string.Empty;
+    [ObservableProperty] private int _selectedSectionIndex;
+    [ObservableProperty] private bool _isSearching;
 
     /// <summary>
     /// Gets the message box service for showing dialogs.
@@ -49,7 +51,40 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
     /// </summary>
     partial void OnSearchTextChanged(string value)
     {
+        IsSearching = !string.IsNullOrWhiteSpace(value);
         FilterSections(value);
+        UpdateSectionContentVisibility();
+    }
+
+    /// <summary>
+    /// Moves the selected tab by <paramref name="direction"/> (-1/+1), wrapping around.
+    /// Called by PageGamepadNavigator when LB/RB (PreviousTab/NextTab) is pressed.
+    /// </summary>
+    public void CycleSelectedSection(int direction)
+    {
+        if (Sections.Count == 0)
+        {
+            return;
+        }
+
+        SelectedSectionIndex = ((SelectedSectionIndex + direction) % Sections.Count + Sections.Count) % Sections.Count;
+    }
+
+    partial void OnSelectedSectionIndexChanged(int value)
+    {
+        UpdateSectionContentVisibility();
+    }
+
+    /// <summary>
+    /// Recomputes IsContentVisible on every section: visible while searching if it has a
+    /// matching option, otherwise only when it's the selected tab.
+    /// </summary>
+    private void UpdateSectionContentVisibility()
+    {
+        for (int i = 0; i < Sections.Count; i++)
+        {
+            Sections[i].IsContentVisible = Sections[i].IsVisible && (IsSearching || i == SelectedSectionIndex);
+        }
     }
 
     /// <summary>
@@ -90,6 +125,9 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
         {
             //
         }
+
+        SelectedSectionIndex = 0;
+        UpdateSectionContentVisibility();
     }
 
     /// <summary>

@@ -70,6 +70,37 @@ public class NavigationService
         Logger.Debug<NavigationService>($"Navigation view set");
     }
 
+    private Action? _controllerMenuActivator;
+
+    /// <summary>
+    /// Registers a callback that activates controller navigation of the side menu
+    /// (highlighting items and letting the D-Pad move between them). Set by MainView,
+    /// since it owns the actual list of FANavigationViewItems and the controller
+    /// navigation state for them - NavigationService only needs to know how to trigger it.
+    /// </summary>
+    public void SetControllerMenuActivator(Action activator)
+    {
+        _controllerMenuActivator = activator;
+    }
+
+    /// <summary>
+    /// Moves keyboard/controller focus to the side navigation menu (Open Xenia, Library,
+    /// Xenia Settings, Manage Xenia). Used by the controller navigation experiment so
+    /// pressing B on a page returns the user to the menu, similar to a console dashboard.
+    /// </summary>
+    public void FocusNavigationMenu()
+    {
+        if (_navigationView == null)
+        {
+            Logger.Warning<NavigationService>("FocusNavigationMenu called but no NavigationView is set");
+            return;
+        }
+
+        Logger.Debug<NavigationService>("Moving focus to the navigation menu");
+        _navigationView.Focus();
+        _controllerMenuActivator?.Invoke();
+    }
+
     /// <summary>
     /// Extracts tag from the NavigationViewItem and navigates to it
     /// </summary>

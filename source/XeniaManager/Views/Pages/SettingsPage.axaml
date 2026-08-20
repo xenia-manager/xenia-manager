@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:controls="using:XeniaManager.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsPageViewModel">
@@ -11,100 +12,134 @@
         <vm:SettingsPageViewModel />
     </Design.DataContext>
     <!-- UI -->
-    <ScrollViewer>
-        <StackPanel Spacing="16" Margin="24">
-            <!-- General Settings -->
-            <Expander>
-                <Expander.Header>
-                    <cards:CardHeader Title="{DynamicResource SettingsPage.General.Title}"
-                                      Description="{DynamicResource SettingsPage.General.Description}"
-                                      Icon="Settings"
-                                      MinHeight="64" />
-                </Expander.Header>
-                <!-- Items -->
-                <StackPanel Spacing="8">
-                    <!-- Parse Game Details with Xenia -->
-                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia}"
-                                            Description="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.Description}"
-                                            ToolTip.Tip="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.ToolTip}"
-                                            Icon="Document"
-                                            IsChecked="{Binding ParseGameDetailsWithXenia, Mode=TwoWay}" />
-                    <!-- Use MediaId for Title -->
-                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.UseMediaIdForTitle}"
-                                            Description="{DynamicResource SettingsPage.General.UseMediaIdForTitle.Description}"
-                                            ToolTip.Tip="{DynamicResource SettingsPage.General.UseMediaIdForTitle.ToolTip}"
-                                            Icon="Tag"
-                                            IsChecked="{Binding UseMediaIdForTitle, Mode=TwoWay}" />
-                    <!-- Check for Updates on Startup -->
-                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup}"
-                                            Description="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Description}"
-                                            ToolTip.Tip="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.ToolTip}"
-                                            Icon="ArrowClockwise"
-                                            IsChecked="{Binding CheckForUpdatesOnStartup, Mode=TwoWay}" />
-                    <!-- Auto Detect New Games -->
-                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.AutoDetectNewGames}"
-                                            Description="{DynamicResource SettingsPage.General.AutoDetectNewGames.Description}"
-                                            ToolTip.Tip="{DynamicResource SettingsPage.General.AutoDetectNewGames.ToolTip}"
-                                            Icon="Scan"
-                                            IsChecked="{Binding AutoDetectNewGames, Mode=TwoWay}" />
-                    <!-- Auto Merge Multi-Disc -->
-                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.AutoMergeMultiDisc}"
-                                            Description="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.Description}"
-                                            ToolTip.Tip="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.ToolTip}"
-                                            Icon="Games"
-                                            IsChecked="{Binding AutoMergeMultiDisc, Mode=TwoWay}" />
-                </StackPanel>
-            </Expander>
-            <!-- UI Settings -->
-            <Expander>
-                <Expander.Header>
-                    <cards:CardHeader Title="{DynamicResource SettingsPage.Ui.Title}"
-                                      Description="{DynamicResource SettingsPage.Ui.Description}"
-                                      Icon="WindowWrench"
-                                      MinHeight="64" />
-                </Expander.Header>
-                <!-- Items -->
-                <StackPanel Spacing="8">
-                    <!-- Language -->
-                    <cards:ComboBoxCard Icon="WindowText"
-                                        Title="{DynamicResource SettingsPage.Ui.Language.Title}"
-                                        Description="{DynamicResource SettingsPage.Ui.Language.Description}"
-                                        ToolTip.Tip="{DynamicResource SettingsPage.Ui.Language.ToolTip}"
-                                        ItemsSource="{Binding AppLanguages}"
-                                        SelectedIndex="{Binding SelectedLanguageIndex}" />
-                    <!-- Theme -->
-                    <cards:ComboBoxCard Icon="WindowBrush"
-                                        Title="{DynamicResource SettingsPage.Ui.Theme.Title}"
-                                        Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
-                                        ItemsSource="{Binding AppThemeOptions}"
-                                        SelectedIndex="{Binding SelectedThemeIndex}">
-                    </cards:ComboBoxCard>
-                    <!-- Loading Screen -->
-                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.Ui.LoadingScreen.Title}"
-                                            Description="{DynamicResource SettingsPage.Ui.LoadingScreen.Description}"
-                                            ToolTip.Tip="{DynamicResource SettingsPage.Ui.LoadingScreen.ToolTip}"
-                                            Icon="SlidePlay"
-                                            IsChecked="{Binding LoadingScreen, Mode=TwoWay}" />
-                </StackPanel>
-            </Expander>
-            <!-- Debug Settings -->
-            <Expander>
-                <Expander.Header>
-                    <cards:CardHeader Title="{DynamicResource SettingsPage.Debug.Title}"
-                                      Description="{DynamicResource SettingsPage.Debug.Description}"
-                                      Icon="List"
-                                      MinHeight="64" />
-                </Expander.Header>
-                <!-- Items -->
-                <StackPanel Spacing="8">
-                    <!-- Log Level -->
-                    <cards:ComboBoxCard Icon="WindowText"
-                                        Title="{DynamicResource SettingsPage.Debug.LogLevel.Title}"
-                                        Description="{DynamicResource SettingsPage.Debug.LogLevel.Description}"
-                                        ItemsSource="{Binding LogLevels}"
-                                        SelectedIndex="{Binding SelectedLogLevelIndex}" />
-                </StackPanel>
-            </Expander>
-        </StackPanel>
-    </ScrollViewer>
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Tab Strip - single row, scrolls horizontally without a visible scrollbar, each
+             tab individually boxed (style shared with Xenia Settings' config editor, see
+             Controls.axaml's ListBox.pageTabStrip). LB/RB (PreviousTab/NextTab) cycle through
+             it - see PageGamepadNavigator / SettingsPage.axaml.cs. -->
+        <ScrollViewer Grid.Row="0"
+                      Margin="24,24,24,8"
+                      HorizontalScrollBarVisibility="Hidden"
+                      VerticalScrollBarVisibility="Disabled">
+            <ListBox SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Classes="pageTabStrip">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBoxItem>
+                    <TextBlock Text="{DynamicResource SettingsPage.General.Title}" />
+                </ListBoxItem>
+                <ListBoxItem>
+                    <TextBlock Text="{DynamicResource SettingsPage.Ui.Title}" />
+                </ListBoxItem>
+                <ListBoxItem>
+                    <TextBlock Text="{DynamicResource SettingsPage.Debug.Title}" />
+                </ListBoxItem>
+            </ListBox>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Name="SettingsContentPanel" Spacing="16" Margin="24">
+                <!-- General Settings -->
+                <Border IsVisible="{Binding IsGeneralTabVisible}">
+                    <StackPanel Spacing="8">
+                        <cards:CardHeader Title="{DynamicResource SettingsPage.General.Title}"
+                                          Description="{DynamicResource SettingsPage.General.Description}"
+                                          Icon="Settings"
+                                          MinHeight="64" />
+                        <!-- Parse Game Details with Xenia -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia}"
+                                                Description="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.Description}"
+                                                ToolTip.Tip="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.ToolTip}"
+                                                Icon="Document"
+                                                IsChecked="{Binding ParseGameDetailsWithXenia, Mode=TwoWay}" />
+                        <!-- Use MediaId for Title -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.UseMediaIdForTitle}"
+                                                Description="{DynamicResource SettingsPage.General.UseMediaIdForTitle.Description}"
+                                                ToolTip.Tip="{DynamicResource SettingsPage.General.UseMediaIdForTitle.ToolTip}"
+                                                Icon="Tag"
+                                                IsChecked="{Binding UseMediaIdForTitle, Mode=TwoWay}" />
+                        <!-- Check for Updates on Startup -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup}"
+                                                Description="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Description}"
+                                                ToolTip.Tip="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.ToolTip}"
+                                                Icon="ArrowClockwise"
+                                                IsChecked="{Binding CheckForUpdatesOnStartup, Mode=TwoWay}" />
+                        <!-- Auto Detect New Games -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.AutoDetectNewGames}"
+                                                Description="{DynamicResource SettingsPage.General.AutoDetectNewGames.Description}"
+                                                ToolTip.Tip="{DynamicResource SettingsPage.General.AutoDetectNewGames.ToolTip}"
+                                                Icon="Scan"
+                                                IsChecked="{Binding AutoDetectNewGames, Mode=TwoWay}" />
+                        <!-- Auto Merge Multi-Disc -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.AutoMergeMultiDisc}"
+                                                Description="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.Description}"
+                                                ToolTip.Tip="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.ToolTip}"
+                                                Icon="Games"
+                                                IsChecked="{Binding AutoMergeMultiDisc, Mode=TwoWay}" />
+                        <!-- Controller Navigation (Experimental) -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.EnableControllerNavigation}"
+                                                Description="{DynamicResource SettingsPage.General.EnableControllerNavigation.Description}"
+                                                ToolTip.Tip="{DynamicResource SettingsPage.General.EnableControllerNavigation.ToolTip}"
+                                                Icon="Games"
+                                                IsChecked="{Binding EnableControllerNavigation, Mode=TwoWay}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- UI Settings -->
+                <Border IsVisible="{Binding IsUiTabVisible}">
+                    <StackPanel Spacing="8">
+                        <cards:CardHeader Title="{DynamicResource SettingsPage.Ui.Title}"
+                                          Description="{DynamicResource SettingsPage.Ui.Description}"
+                                          Icon="WindowWrench"
+                                          MinHeight="64" />
+                        <!-- Language -->
+                        <cards:ComboBoxCard Icon="WindowText"
+                                            Title="{DynamicResource SettingsPage.Ui.Language.Title}"
+                                            Description="{DynamicResource SettingsPage.Ui.Language.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.Ui.Language.ToolTip}"
+                                            ItemsSource="{Binding AppLanguages}"
+                                            SelectedIndex="{Binding SelectedLanguageIndex}" />
+                        <!-- Theme -->
+                        <cards:ComboBoxCard Icon="WindowBrush"
+                                            Title="{DynamicResource SettingsPage.Ui.Theme.Title}"
+                                            Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
+                                            ItemsSource="{Binding AppThemeOptions}"
+                                            SelectedIndex="{Binding SelectedThemeIndex}">
+                        </cards:ComboBoxCard>
+                        <!-- Loading Screen -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.Ui.LoadingScreen.Title}"
+                                                Description="{DynamicResource SettingsPage.Ui.LoadingScreen.Description}"
+                                                ToolTip.Tip="{DynamicResource SettingsPage.Ui.LoadingScreen.ToolTip}"
+                                                Icon="SlidePlay"
+                                                IsChecked="{Binding LoadingScreen, Mode=TwoWay}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Debug Settings -->
+                <Border IsVisible="{Binding IsDebugTabVisible}">
+                    <StackPanel Spacing="8">
+                        <cards:CardHeader Title="{DynamicResource SettingsPage.Debug.Title}"
+                                          Description="{DynamicResource SettingsPage.Debug.Description}"
+                                          Icon="List"
+                                          MinHeight="64" />
+                        <!-- Log Level -->
+                        <cards:ComboBoxCard Icon="WindowText"
+                                            Title="{DynamicResource SettingsPage.Debug.LogLevel.Title}"
+                                            Description="{DynamicResource SettingsPage.Debug.LogLevel.Description}"
+                                            ItemsSource="{Binding LogLevels}"
+                                            SelectedIndex="{Binding SelectedLogLevelIndex}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Controller button hint bar (experimental controller navigation) - see
+             ControllerHintBar. Shown only while the feature is enabled in Settings. -->
+        <controls:ControllerHintBar Grid.Row="2" ShowTabHint="True" />
+    </Grid>
 </UserControl>

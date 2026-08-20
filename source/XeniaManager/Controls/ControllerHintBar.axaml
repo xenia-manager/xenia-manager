@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="40"
+             x:Class="XeniaManager.Controls.ControllerHintBar">
+    <!-- Own IsVisible (not the inner Border's) is toggled in code-behind, based on whether
+         controller navigation is enabled - see ControllerHintBar.axaml.cs. -->
+    <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+            BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+            BorderThickness="0,1,0,0"
+            Padding="12,6">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <Image Source="{DynamicResource ControllerIcon.A}" Width="18" Height="18" />
+                <TextBlock Text="{DynamicResource ControllerHints.Confirm}" Opacity="0.8" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <Image Source="{DynamicResource ControllerIcon.B}" Width="18" Height="18" />
+                <TextBlock Text="{DynamicResource ControllerHints.Back}" Opacity="0.8" />
+            </StackPanel>
+            <!-- Only shown on pages with their own LB/RB-cycled tab strip - see ShowTabHint. -->
+            <StackPanel x:Name="TabHintPanel" Orientation="Horizontal" Spacing="6">
+                <Image Source="{DynamicResource ControllerIcon.LB}" Width="18" Height="18" />
+                <Image Source="{DynamicResource ControllerIcon.RB}" Width="18" Height="18" />
+                <TextBlock Text="{DynamicResource ControllerHints.SwitchTab}" Opacity="0.8" />
+            </StackPanel>
+            <!-- Only shown on pages that can show a Slider/NumberBoxCard control (Left/Right
+                 adjusts its value instead of moving the cursor there) - see ShowAdjustHint. -->
+            <StackPanel x:Name="AdjustHintPanel" Orientation="Horizontal" Spacing="6">
+                <Image Source="{DynamicResource ControllerIcon.DPad}" Width="18" Height="18" />
+                <TextBlock Text="{DynamicResource ControllerHints.AdjustValue}" Opacity="0.8" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -6,6 +6,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -57,6 +58,10 @@ public partial class ContentViewerDialog : UserControl
         contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
         contentDialog.Resources.Add("ContentDialogMinHeight", 700.0);
         contentDialog.Resources.Add("ContentDialogMaxHeight", 900.0);
+
+        // Experimental: controller navigation for this dialog's content (and its own Close
+        // button) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
 
         try
         {

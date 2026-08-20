@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:controls="using:XeniaManager.Controls"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.AboutPage"
@@ -12,7 +13,7 @@
         <vm:AboutPageViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*,Auto">
         <!-- Download Progress Card -->
         <cards:DownloadProgressCard Grid.Row="0"
                                     IsOpen="{Binding IsDownloading}"
@@ -398,5 +399,10 @@
                 </cards:CustomCard>
             </StackPanel>
         </ScrollViewer>
+
+        <!-- Controller button hint bar (experimental controller navigation) - see
+             ControllerHintBar. Shown only while the feature is enabled in Settings. No tab
+             strip on this page, so the LB/RB hint is left off. -->
+        <controls:ControllerHintBar Grid.Row="2" />
     </Grid>
 </UserControl>

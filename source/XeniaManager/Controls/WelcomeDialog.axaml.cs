@@ -5,6 +5,7 @@ using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -48,6 +49,10 @@ public partial class WelcomeDialog : UserControl
             PrimaryButtonText = LocalizationHelper.GetText("WelcomeDialog.ContinueButton"),
             DefaultButton = FAContentDialogButton.Primary
         };
+
+        // Experimental: controller navigation for this dialog's theme selection (and its own
+        // Continue button) - see PageGamepadNavigator.AttachToDialog.
+        PageGamepadNavigator.AttachToDialog(contentDialog);
 
         Theme? selectedTheme = null;
 

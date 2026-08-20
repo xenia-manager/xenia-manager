@@ -19,7 +19,7 @@
             <Border.Background>
                 <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
             </Border.Background>
-            <controls:ConfigEditorControl MinWidth="650" />
+            <controls:ConfigEditorControl x:Name="ConfigEditorControlInstance" MinWidth="650" />
         </Border>
     </Grid>
 </UserControl>

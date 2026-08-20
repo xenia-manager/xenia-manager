@@ -19,9 +19,31 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <!-- Search Bar - filters options across all sections in the config editor below -->
+        <Border Grid.Row="0"
+                Margin="16,16,16,8"
+                Padding="8"
+                CornerRadius="6"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                IsVisible="{Binding HasConfigFile}">
+            <Grid ColumnDefinitions="Auto,*">
+                <ic:SymbolIcon Grid.Column="0"
+                               Symbol="Search"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Margin="8,0,8,0"
+                               VerticalAlignment="Center" />
+                <TextBox Grid.Column="1"
+                         Text="{Binding ConfigEditorViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="{DynamicResource Controls.ConfigEditorControl.Search.PlaceholderText}"
+                         HorizontalAlignment="Stretch" />
+            </Grid>
+        </Border>
+
         <!-- Config File Selection ComboBox and Save Button -->
-        <Grid Grid.Row="0"
+        <Grid Grid.Row="1"
               Margin="16"
               ColumnDefinitions="*,Auto">
             <ComboBox Grid.Column="0"
@@ -75,7 +97,7 @@
         </Grid>
 
         <!-- Config Editor Control -->
-        <Border Grid.Row="1"
+        <Border Grid.Row="2"
                 BorderThickness="1"
                 CornerRadius="6"
                 Margin="16,0,16,16"
@@ -86,11 +108,11 @@
             <Border.Background>
                 <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
             </Border.Background>
-            <controls:ConfigEditorControl DataContext="{Binding ConfigEditorViewModel}" />
+            <controls:ConfigEditorControl x:Name="ConfigEditorControlInstance" DataContext="{Binding ConfigEditorViewModel}" />
         </Border>
 
         <!-- No Config File Message -->
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Spacing="16"
@@ -104,5 +126,9 @@
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                        FontSize="12" />
         </StackPanel>
+
+        <!-- Controller button hint bar (experimental controller navigation) - see
+             ControllerHintBar. Shown only while the feature is enabled in Settings. -->
+        <controls:ControllerHintBar Grid.Row="3" ShowTabHint="True" ShowAdjustHint="True" />
     </Grid>
 </UserControl>

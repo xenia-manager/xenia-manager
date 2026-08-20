@@ -37,4 +37,11 @@ public class GeneralSettings
     /// </summary>
     [JsonPropertyName("auto_merge_multi_disc")]
     public bool AutoMergeMultiDisc { get; set; } = false;
+
+    /// <summary>
+    /// Whether to enable Xbox controller (XInput) navigation of the library UI.
+    /// Experimental: currently limited to the Library page grid view.
+    /// </summary>
+    [JsonPropertyName("enable_controller_navigation")]
+    public bool EnableControllerNavigation { get; set; } = false;
 }
