@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Models.Files.SteamShortcuts;
 
@@ -41,8 +42,8 @@ public class SteamShortcutsFileTests
         // Act
         SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Load(_testShortcutsFilePath);
 
-        // Assert - User-provided file formats may vary, just verify it loads with shortcuts
-        Assert.That(shortcutsFile.Shortcuts, Is.Not.Null);
+        // Assert
+        Assert.That(shortcutsFile.Shortcuts, Has.Count.EqualTo(2));
     }
 
     [Test]
@@ -51,16 +52,53 @@ public class SteamShortcutsFileTests
         // Act
         SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Load(_testShortcutsFilePath);
 
-        // Assert - The file may have shortcuts with various properties
-        // Note: User-provided files may have different format, so we just verify it loads
-        Assert.That(shortcutsFile.Shortcuts, Has.Count.GreaterThan(0));
+        // Assert
+        Assert.That(shortcutsFile.Shortcuts, Has.Count.EqualTo(2));
 
-        // Check that at least some properties are populated for any shortcut
-        SteamShortcut? shortcutWithAppName = shortcutsFile.Shortcuts.FirstOrDefault(s => !string.IsNullOrEmpty(s.AppName));
-        if (shortcutWithAppName != null)
-        {
-            Assert.That(shortcutWithAppName.AppName, Is.Not.Null.And.Not.Empty);
-        }
+        SteamShortcut xenia = shortcutsFile.Shortcuts[0];
+        Assert.That(xenia.AppName, Is.EqualTo("Xenia Manager"));
+        Assert.That(xenia.Exe, Is.EqualTo("\"E:\\XeniaManager\\XeniaManager.exe\""));
+        Assert.That(xenia.StartDir, Is.EqualTo("E:\\XeniaManager\\"));
+        Assert.That(xenia.LaunchOptions, Is.EqualTo("-skiplauncher"));
+        Assert.That(xenia.AllowDesktopConfig, Is.True);
+        Assert.That(xenia.AllowOverlay, Is.True);
+        Assert.That(xenia.OpenVR, Is.True);
+        Assert.That(xenia.GetAppIdAsUint(), Is.EqualTo(0x8A12BC34));
+        Assert.That(xenia.GetLastPlayTimeAsInt(), Is.EqualTo(1773906253));
+        Assert.That(xenia.Tags, Is.EqualTo(new List<string> { "Finished" }));
+
+        SteamShortcut foreign = shortcutsFile.Shortcuts[1];
+        Assert.That(foreign.AppName, Is.EqualTo("Halo: Reach \U0001F3AE"));
+        Assert.That(foreign.Exe, Is.EqualTo(@"D:\Games\halo.exe"));
+        Assert.That(foreign.SortAs, Is.EqualTo("halo reach"));
+        Assert.That(foreign.GetAppIdAsUint(), Is.EqualTo(0x8F0E5D21));
+    }
+
+    [Test]
+    public void Load_ValidShortcutsFile_PreservesUnknownFields()
+    {
+        // Act
+        SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Load(_testShortcutsFilePath);
+
+        // Assert - unrecognized fields must be captured, not dropped
+        SteamShortcut xenia = shortcutsFile.Shortcuts[0];
+        Assert.That(xenia.UnknownFields, Has.Count.EqualTo(1));
+        UnknownVdfField compatField = xenia.UnknownFields[0];
+        Assert.That(compatField.Type, Is.EqualTo(0x01));
+        Assert.That(compatField.Key, Is.EqualTo("XeniaCompat"));
+        Assert.That(System.Text.Encoding.UTF8.GetString(compatField.Value), Is.EqualTo("v2\0"));
+
+        SteamShortcut foreign = shortcutsFile.Shortcuts[1];
+        Assert.That(foreign.UnknownFields, Has.Count.EqualTo(2));
+
+        UnknownVdfField intField = foreign.UnknownFields.First(f => f.Key == "SteamNewFlag");
+        Assert.That(intField.Type, Is.EqualTo(0x02));
+        Assert.That(BitConverter.ToInt32(intField.Value, 0), Is.EqualTo(7));
+
+        UnknownVdfField dictField = foreign.UnknownFields.First(f => f.Key == "metadata");
+        Assert.That(dictField.Type, Is.EqualTo(0x00));
+        // Dictionary payload includes its terminating End marker
+        Assert.That(dictField.Value.Last(), Is.EqualTo(0x08));
     }
 
     [Test]
@@ -529,7 +567,7 @@ public class SteamShortcutsFileTests
     }
 
     [Test]
-    public void Save_DuplicateAppIds_ThrowsInvalidOperationException()
+    public void Save_DuplicateAppIds_KeepsAllEntries()
     {
         // Arrange
         string tempPath = Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid()}.vdf");
@@ -541,8 +579,25 @@ public class SteamShortcutsFileTests
         shortcutsFile.AddShortcut(shortcut1);
         shortcutsFile.AddShortcut(shortcut2);
 
-        // Act & Assert
-        Assert.Throws<InvalidOperationException>(() => shortcutsFile.Save(tempPath));
+        try
+        {
+            // Act - duplicates are warned about but never block saving (no data loss)
+            shortcutsFile.Save(tempPath);
+
+            // Assert
+            SteamShortcutsFile loaded = SteamShortcutsFile.Load(tempPath);
+            Assert.That(loaded.Shortcuts, Has.Count.EqualTo(2));
+            Assert.That(loaded.Shortcuts[0].AppName, Is.EqualTo("App 1"));
+            Assert.That(loaded.Shortcuts[1].AppName, Is.EqualTo("App 2"));
+        }
+        finally
+        {
+            // Cleanup
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 
     #endregion
@@ -584,6 +639,27 @@ public class SteamShortcutsFileTests
         Assert.That(bytes.Length, Is.GreaterThan(10)); // Should have some content
     }
 
+    [Test]
+    public void ToBytes_WritesCanonicalTerminators()
+    {
+        // Arrange - tagless shortcut so no tag entries are written
+        SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Create();
+        SteamShortcut shortcut = new SteamShortcut { AppName = "App", Exe = "app.exe" };
+        shortcut.SetAppIdFromUint(0x80001234);
+        shortcutsFile.AddShortcut(shortcut);
+
+        // Act
+        byte[] bytes = shortcutsFile.ToBytes();
+
+        // Assert - the writer always emits the "tags" container, so the tail is:
+        // 0x08 (tags dict end) + 0x08 (entry end) + 0x08 (root end)
+        // No fourth End marker may follow (older versions wrote an extra one).
+        Assert.That(bytes[^1], Is.EqualTo(0x08));
+        Assert.That(bytes[^2], Is.EqualTo(0x08));
+        Assert.That(bytes[^3], Is.EqualTo(0x08));
+        Assert.That(bytes[^4], Is.Not.EqualTo(0x08));
+    }
+
     #endregion
 
     #region Round-Trip Tests
@@ -608,7 +684,8 @@ public class SteamShortcutsFileTests
             OpenVR = true,
             Devkit = false,
             FlatpakAppID = "com.test.app",
-            SortAs = "Test"
+            SortAs = "Test",
+            IsCreatedByXenia = true
         };
         shortcut.SetAppIdFromUint(0x80001234);
         shortcut.SetLastPlayTimeFromInt(1773906253);
@@ -713,6 +790,132 @@ public class SteamShortcutsFileTests
                 File.Delete(tempPath);
             }
         }
+    }
+
+    #endregion
+
+    #region Regression Tests (Issue #577)
+
+    [Test]
+    public void LoadAddSave_PreservesExistingTitlesAndForeignData()
+    {
+        // Arrange - simulate the exact scenario from issue #577:
+        // an existing shortcuts.vdf contains foreign entries, Xenia Manager adds a game
+        string tempPath = Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid()}.vdf");
+
+        try
+        {
+            SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Load(_testShortcutsFilePath);
+
+            // Act - add a new game like ShortcutManager does
+            SteamShortcut newShortcut = new SteamShortcut
+            {
+                AppName = "New Game",
+                Exe = @"C:\Program Files\Xenia Manager\XeniaManager.exe",
+                IsCreatedByXenia = true
+            };
+            newShortcut.SetAppIdFromUint(0x8D11AA22);
+            shortcutsFile.AddShortcut(newShortcut);
+            shortcutsFile.Save(tempPath);
+
+            // Assert - reload and verify nothing was stripped or mutated
+            SteamShortcutsFile reloaded = SteamShortcutsFile.Load(tempPath);
+            Assert.That(reloaded.Shortcuts, Has.Count.EqualTo(3));
+
+            SteamShortcut xenia = reloaded.Shortcuts[0];
+            Assert.That(xenia.AppName, Is.EqualTo("Xenia Manager"), "Original title must survive");
+            Assert.That(xenia.Exe, Is.EqualTo("\"E:\\XeniaManager\\XeniaManager.exe\""));
+            Assert.That(xenia.GetLastPlayTimeAsInt(), Is.EqualTo(1773906253));
+            Assert.That(xenia.Tags, Is.EqualTo(new List<string> { "Finished" }));
+            Assert.That(xenia.UnknownFields.Any(f => f.Key == "XeniaCompat"), Is.True, "Unknown field must survive");
+
+            SteamShortcut foreign = reloaded.Shortcuts[1];
+            Assert.That(foreign.AppName, Is.EqualTo("Halo: Reach \U0001F3AE"), "Original title must survive");
+            Assert.That(foreign.Exe, Is.EqualTo(@"D:\Games\halo.exe"), "Foreign paths must not be reformatted");
+            Assert.That(foreign.UnknownFields.Count(f => f.Key == "SteamNewFlag"), Is.EqualTo(1), "Unknown int must survive");
+            Assert.That(foreign.UnknownFields.Count(f => f.Key == "metadata"), Is.EqualTo(1), "Unknown dictionary must survive");
+
+            Assert.That(reloaded.Shortcuts[2].AppName, Is.EqualTo("New Game"));
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
+    [Test]
+    public void FromBytes_UnknownTypeByte_ThrowsFormatException()
+    {
+        // Arrange - valid structure with an injected unknown type marker (0x05)
+        List<byte> bytes =
+        [
+            0x00, // root dictionary
+            .. Encoding.UTF8.GetBytes("shortcuts"),
+            0x00,
+            0x00, // entry dictionary
+            .. Encoding.UTF8.GetBytes("0"),
+            0x00,
+            0x02, .. Encoding.UTF8.GetBytes("appid"), 0x00, 0x34, 0xBC, 0x12, 0x8A,
+            0x01, .. Encoding.UTF8.GetBytes("AppName"), 0x00, (byte)'X', 0x00,
+            0x05, .. Encoding.UTF8.GetBytes("badkey"), 0x00, // unknown type
+            0x08, // entry end
+            0x08 // root end
+        ];
+
+        // Act & Assert - must fail loudly instead of silently desyncing and stripping data
+        FormatException? ex = Assert.Throws<FormatException>(() => SteamShortcutsFile.FromBytes([.. bytes]));
+        Assert.That(ex!.Message, Does.Contain("0x05"));
+    }
+
+    [Test]
+    public void FromBytes_TruncatedData_ThrowsFormatException()
+    {
+        // Arrange - a valid file cut short mid-entry
+        SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Create();
+        SteamShortcut shortcut = new SteamShortcut { AppName = "App", Exe = "app.exe" };
+        shortcut.SetAppIdFromUint(0x80001234);
+        shortcutsFile.AddShortcut(shortcut);
+        byte[] valid = shortcutsFile.ToBytes();
+
+        // Act & Assert
+        Assert.Throws<FormatException>(() => SteamShortcutsFile.FromBytes(valid[..^3]));
+    }
+
+    [Test]
+    public void FromBytes_TrailingGarbage_ThrowsFormatException()
+    {
+        // Arrange - valid file followed by unparsed data
+        SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Create();
+        SteamShortcut shortcut = new SteamShortcut { AppName = "App", Exe = "app.exe" };
+        shortcut.SetAppIdFromUint(0x80001234);
+        shortcutsFile.AddShortcut(shortcut);
+
+        List<byte> corrupted = [.. shortcutsFile.ToBytes(), 0x01, (byte)'A', 0x00];
+
+        // Act & Assert
+        Assert.Throws<FormatException>(() => SteamShortcutsFile.FromBytes([.. corrupted]));
+    }
+
+    [Test]
+    public void FromBytes_LegacyExtraTerminators_LoadsSuccessfully()
+    {
+        // Arrange - files written by older Xenia Manager versions had extra End markers
+        SteamShortcutsFile shortcutsFile = SteamShortcutsFile.Create();
+        SteamShortcut shortcut = new SteamShortcut { AppName = "App", Exe = "app.exe" };
+        shortcut.SetAppIdFromUint(0x80001234);
+        shortcutsFile.AddShortcut(shortcut);
+
+        List<byte> legacy = [.. shortcutsFile.ToBytes(), 0x08, 0x08];
+
+        // Act
+        SteamShortcutsFile loaded = SteamShortcutsFile.FromBytes([.. legacy]);
+
+        // Assert
+        Assert.That(loaded.Shortcuts, Has.Count.EqualTo(1));
+        Assert.That(loaded.Shortcuts[0].AppName, Is.EqualTo("App"));
     }
 
     #endregion

@@ -98,7 +98,7 @@ public class SteamShortcutsFile
         {
             Logger.Error<SteamShortcutsFile>($"Failed to parse Steam shortcuts file");
             Logger.LogExceptionDetails<SteamShortcutsFile>(ex);
-            throw new FormatException($"Invalid binary VDF content.", ex);
+            throw new FormatException($"Invalid binary VDF content: {ex.Message}", ex);
         }
     }
 
@@ -116,7 +116,7 @@ public class SteamShortcutsFile
 
         if (rootType != VdfType.Dictionary)
         {
-            throw new FormatException($"Expected root dictionary (0x00), got 0x{(byte)rootType:X2}");
+            throw new FormatException($"Expected root dictionary (0x00), got 0x{(byte)rootType:X2} at offset 0");
         }
 
         if (rootKey != "shortcuts")
@@ -135,26 +135,40 @@ public class SteamShortcutsFile
 
             if (type != VdfType.Dictionary)
             {
-                throw new FormatException($"Expected dictionary key (0x00), got 0x{(byte)type:X2}");
+                throw new FormatException($"Expected dictionary key (0x00), got 0x{(byte)type:X2} at offset {reader.BaseStream.Position - 1}");
             }
 
             // Read and discard the index key (e.g., "0", "1", etc.)
             ReadNullTerminatedString(reader);
 
-            SteamShortcut shortcut = ParseShortcut(reader);
+            SteamShortcut shortcut = ParseShortcut(reader, bytes);
             shortcutsFile.Shortcuts.Add(shortcut);
+        }
+
+        // Tolerate legacy extra End markers written by older Xenia Manager versions,
+        // but reject any other trailing data - saving would silently strip it.
+        while (reader.BaseStream.Position < bytes.Length)
+        {
+            long offset = reader.BaseStream.Position;
+            VdfType trailingType = ReadVdfType(reader);
+            if (trailingType != VdfType.End)
+            {
+                throw new FormatException($"Unexpected data after end of shortcuts: type 0x{(byte)trailingType:X2} at offset {offset}. The file may be corrupted.");
+            }
         }
     }
 
     /// <summary>
     /// Parses a single shortcut from the binary reader.
+    /// Unrecognized fields are captured as raw bytes so they survive save round-trips.
     /// </summary>
-    private static SteamShortcut ParseShortcut(BinaryReader reader)
+    private static SteamShortcut ParseShortcut(BinaryReader reader, byte[] source)
     {
         SteamShortcut shortcut = new SteamShortcut();
 
         while (true)
         {
+            long typeOffset = reader.BaseStream.Position;
             VdfType type = ReadVdfType(reader);
             if (type == VdfType.End)
             {
@@ -167,29 +181,43 @@ public class SteamShortcutsFile
             {
                 case VdfType.Dictionary:
                     // Nested dictionary, e.g., tags
-                    if (key == "tags")
+                    if (string.Equals(key, "tags", StringComparison.OrdinalIgnoreCase))
                     {
                         shortcut.Tags = ParseTags(reader);
                     }
                     else
                     {
-                        SkipDictionary(reader);
+                        shortcut.UnknownFields.Add(CaptureDictionary(key, reader, source));
                     }
+
                     break;
 
                 case VdfType.String:
+                {
+                    long valueOffset = reader.BaseStream.Position;
                     string val = ReadNullTerminatedString(reader);
-                    AssignString(shortcut, key, val);
+                    if (!TryAssignString(shortcut, key, val))
+                    {
+                        int length = (int)(reader.BaseStream.Position - valueOffset);
+                        shortcut.UnknownFields.Add(new UnknownVdfField((byte)type, key, SliceSourceBytes(source, valueOffset, length)));
+                    }
+
                     break;
+                }
 
                 case VdfType.Int32:
+                {
                     int intval = reader.ReadInt32();
-                    AssignInt(shortcut, key, intval);
+                    if (!TryAssignInt(shortcut, key, intval))
+                    {
+                        shortcut.UnknownFields.Add(new UnknownVdfField((byte)type, key, BitConverter.GetBytes(intval)));
+                    }
+
                     break;
+                }
 
                 default:
-                    Logger.Warning<SteamShortcutsFile>($"Unknown type 0x{(byte)type:X2} for key '{key}', skipping");
-                    break;
+                    throw new FormatException($"Unknown VDF type 0x{(byte)type:X2} for key '{key}' at offset {typeOffset}. The file may be corrupted or use an unsupported format.");
             }
         }
 
@@ -205,6 +233,7 @@ public class SteamShortcutsFile
 
         while (true)
         {
+            long typeOffset = reader.BaseStream.Position;
             VdfType type = ReadVdfType(reader);
             if (type == VdfType.End)
             {
@@ -213,8 +242,7 @@ public class SteamShortcutsFile
 
             if (type != VdfType.String)
             {
-                Logger.Warning<SteamShortcutsFile>($"Unexpected type in tags dict: 0x{(byte)type:X2}, skipping");
-                continue;
+                throw new FormatException($"Unexpected type 0x{(byte)type:X2} in tags dictionary at offset {typeOffset}. The file may be corrupted.");
             }
 
             // Read and discard the index key
@@ -228,12 +256,24 @@ public class SteamShortcutsFile
     }
 
     /// <summary>
+    /// Captures an unrecognized dictionary field as raw bytes so it can be replayed verbatim when saving.
+    /// </summary>
+    private static UnknownVdfField CaptureDictionary(string key, BinaryReader reader, byte[] source)
+    {
+        long startOffset = reader.BaseStream.Position;
+        SkipDictionary(reader);
+        int length = (int)(reader.BaseStream.Position - startOffset);
+        return new UnknownVdfField((byte)VdfType.Dictionary, key, SliceSourceBytes(source, startOffset, length));
+    }
+
+    /// <summary>
     /// Skips a dictionary and all its contents.
     /// </summary>
     private static void SkipDictionary(BinaryReader reader)
     {
         while (true)
         {
+            long typeOffset = reader.BaseStream.Position;
             VdfType type = ReadVdfType(reader);
             if (type == VdfType.End)
             {
@@ -255,87 +295,95 @@ public class SteamShortcutsFile
                     reader.ReadInt32();
                     break;
                 default:
-                    Logger.Warning<SteamShortcutsFile>($"Unknown type 0x{(byte)type:X2} while skipping dictionary");
-                    break;
+                    throw new FormatException($"Unknown VDF type 0x{(byte)type:X2} at offset {typeOffset} while skipping dictionary. The file may be corrupted.");
             }
         }
     }
 
     /// <summary>
     /// Assigns a string value to the appropriate shortcut property.
+    /// Keys are matched case-insensitively - Steam itself rewrites keys to lower case
+    /// (e.g. "AppName" becomes "appname"), so exact-case matching would silently drop titles.
     /// </summary>
-    private static void AssignString(SteamShortcut shortcut, string key, string val)
+    /// <returns>True if the key was recognized, false if it should be preserved as an unknown field.</returns>
+    private static bool TryAssignString(SteamShortcut shortcut, string key, string val)
     {
-        switch (key)
+        switch (key.ToUpperInvariant())
         {
-            case "AppName":
+            case "APPNAME":
                 shortcut.AppName = val;
                 break;
-            case "Exe":
+            case "EXE":
                 shortcut.Exe = val;
                 break;
-            case "StartDir":
+            case "STARTDIR":
                 shortcut.StartDir = val;
                 break;
-            case "icon":
+            case "ICON":
                 shortcut.Icon = val;
                 break;
-            case "ShortcutPath":
+            case "SHORTCUTPATH":
                 shortcut.ShortcutPath = val;
                 break;
-            case "LaunchOptions":
+            case "LAUNCHOPTIONS":
                 shortcut.LaunchOptions = val;
                 break;
-            case "FlatpakAppID":
+            case "FLATPAKAPPID":
                 shortcut.FlatpakAppID = val;
                 break;
-            case "sortas":
+            case "SORTAS":
                 shortcut.SortAs = val;
                 break;
-            case "DevkitGameID":
+            case "DEVKITGAMEID":
                 shortcut.DevkitGameID = val;
                 break;
             default:
-                Logger.Trace<SteamShortcutsFile>($"Unknown string key '{key}', ignoring");
-                break;
+                Logger.Trace<SteamShortcutsFile>($"Unknown string key '{key}', preserving as unknown field");
+                return false;
         }
+
+        return true;
     }
 
     /// <summary>
     /// Assigns an int value to the appropriate shortcut property.
+    /// Keys are matched case-insensitively - see <see cref="TryAssignString"/>.
     /// </summary>
-    private static void AssignInt(SteamShortcut shortcut, string key, int val)
+    /// <returns>True if the key was recognized, false if it should be preserved as an unknown field.</returns>
+    private static bool TryAssignInt(SteamShortcut shortcut, string key, int val)
     {
-        switch (key)
+        switch (key.ToUpperInvariant())
         {
-            case "appid":
+            case "APPID":
                 shortcut.AppId = BitConverter.GetBytes(val);
                 break;
-            case "IsHidden":
+            case "ISHIDDEN":
                 shortcut.IsHidden = val != 0;
                 break;
-            case "AllowDesktopConfig":
+            case "ALLOWDESKTOPCONFIG":
                 shortcut.AllowDesktopConfig = val != 0;
                 break;
-            case "AllowOverlay":
+            case "ALLOWOVERLAY":
                 shortcut.AllowOverlay = val != 0;
                 break;
-            case "OpenVR":
+            case "OPENVR":
                 shortcut.OpenVR = val != 0;
                 break;
-            case "Devkit":
+            case "DEVKIT":
                 shortcut.Devkit = val != 0;
                 break;
-            case "DevkitOverrideAppID":
+            case "DEVKITOVERRIDEAPPID":
                 shortcut.DevkitOverrideAppID = BitConverter.GetBytes(val);
                 break;
-            case "LastPlayTime":
+            case "LASTPLAYTIME":
                 shortcut.LastPlayTime = BitConverter.GetBytes(val);
                 break;
             default:
-                Logger.Trace<SteamShortcutsFile>($"Unknown int key '{key}', ignoring");
-                break;
+                Logger.Trace<SteamShortcutsFile>($"Unknown int key '{key}', preserving as unknown field");
+                return false;
         }
+
+        return true;
     }
 
     /// <summary>
@@ -343,17 +391,39 @@ public class SteamShortcutsFile
     /// </summary>
     private static string ReadNullTerminatedString(BinaryReader reader)
     {
+        long startOffset = reader.BaseStream.Position;
         List<byte> bytes = [];
         while (true)
         {
-            byte b = reader.ReadByte();
+            byte b;
+            try
+            {
+                b = reader.ReadByte();
+            }
+            catch (EndOfStreamException)
+            {
+                throw new FormatException($"Unexpected end of stream while reading string at offset {startOffset}. The file may be truncated.");
+            }
+
             if (b == '\0')
             {
                 break;
             }
+
             bytes.Add(b);
         }
+
         return Encoding.UTF8.GetString(bytes.ToArray());
+    }
+
+    /// <summary>
+    /// Copies a range of raw bytes from the source buffer.
+    /// </summary>
+    private static byte[] SliceSourceBytes(byte[] source, long offset, int length)
+    {
+        byte[] result = new byte[length];
+        Array.Copy(source, offset, result, 0, length);
+        return result;
     }
 
     /// <summary>
@@ -413,21 +483,24 @@ public class SteamShortcutsFile
     {
         Logger.Trace<SteamShortcutsFile>("Converting Steam shortcuts to binary VDF");
 
-        // Check for duplicate AppIds
-        HashSet<string> seenAppIds = [];
+        // Warn about duplicate AppIds instead of throwing - throwing would block saving
+        // entirely and pre-existing duplicates in foreign entries must not lose any data.
+        Dictionary<uint, string> seenAppIds = [];
         foreach (SteamShortcut shortcut in Shortcuts)
         {
-            if (shortcut.AppId == null)
+            uint appId = shortcut.GetAppIdAsUint();
+            if (appId == 0)
             {
                 continue;
             }
 
-            string appIdString = BitConverter.ToString(shortcut.AppId);
-            if (!seenAppIds.Add(appIdString))
+            if (seenAppIds.TryGetValue(appId, out string? existingName))
             {
-                Logger.Error<SteamShortcutsFile>("Duplicate AppId detected, cannot save");
-                throw new InvalidOperationException("Duplicate AppId detected. Each shortcut must have a unique AppId.");
+                Logger.Warning<SteamShortcutsFile>($"Duplicate AppId 0x{appId:X8} detected on shortcuts '{existingName}' and '{shortcut.AppName}'. Keeping both entries.");
+                continue;
             }
+
+            seenAppIds[appId] = shortcut.AppName ?? "Unknown";
         }
 
         using MemoryStream ms = new MemoryStream();
@@ -448,10 +521,12 @@ public class SteamShortcutsFile
             WriteShortcut(writer, Shortcuts[i]);
         }
 
-        // Write end markers
-        WriteVdfType(writer, VdfType.End); // End-of-shortcuts dictionary
-        WriteVdfType(writer, VdfType.End); // End of root dictionary
-        WriteVdfType(writer, VdfType.End); // Extra terminator per VDF spec
+        // Write end markers. The last entry's own End was already written by WriteShortcut.
+        // One End closes the root dictionary, then one extra End terminator is appended -
+        // files written by Steam itself always contain it, and Steam deletes shortcuts.vdf
+        // as corrupted when it is missing.
+        WriteVdfType(writer, VdfType.End);
+        WriteVdfType(writer, VdfType.End);
 
         byte[] result = ms.ToArray();
         Logger.Debug<SteamShortcutsFile>($"Generated binary VDF: {result.Length} bytes");
@@ -460,6 +535,8 @@ public class SteamShortcutsFile
 
     /// <summary>
     /// Writes a single shortcut to the binary writer.
+    /// Path formatting is only applied to Xenia-managed shortcuts; foreign entries
+    /// are written back exactly as they were parsed to avoid mutating other tools' data.
     /// </summary>
     private static void WriteShortcut(BinaryWriter writer, SteamShortcut shortcut)
     {
@@ -476,10 +553,11 @@ public class SteamShortcutsFile
             writer.Write([0, 0, 0, 0]);
         }
 
+        bool applyFormatting = shortcut.IsCreatedByXenia;
         WriteStringField(writer, "AppName", shortcut.AppName ?? "");
-        WriteStringField(writer, "Exe", FixFormatting(shortcut.Exe, true));
-        WriteStringField(writer, "StartDir", FixFormatting(shortcut.StartDir));
-        WriteStringField(writer, "icon", FixFormatting(shortcut.Icon));
+        WriteStringField(writer, "Exe", applyFormatting ? FixFormatting(shortcut.Exe, true) : shortcut.Exe ?? "");
+        WriteStringField(writer, "StartDir", applyFormatting ? FixFormatting(shortcut.StartDir) : shortcut.StartDir ?? "");
+        WriteStringField(writer, "icon", applyFormatting ? FixFormatting(shortcut.Icon) : shortcut.Icon ?? "");
         WriteStringField(writer, "ShortcutPath", shortcut.ShortcutPath ?? "");
         WriteStringField(writer, "LaunchOptions", shortcut.LaunchOptions ?? "");
         WriteBoolField(writer, "IsHidden", shortcut.IsHidden);
@@ -492,6 +570,16 @@ public class SteamShortcutsFile
         WriteIntField(writer, "LastPlayTime", GetIntFromBytes(shortcut.LastPlayTime ?? []));
         WriteStringField(writer, "FlatpakAppID", shortcut.FlatpakAppID ?? "");
         WriteStringField(writer, "sortas", shortcut.SortAs ?? "");
+
+        // Replay unrecognized fields preserved from the original file so nothing is stripped
+        foreach (UnknownVdfField field in shortcut.UnknownFields)
+        {
+            writer.Write(field.Type);
+            writer.Write(Encoding.UTF8.GetBytes(field.Key));
+            WriteVdfType(writer, VdfType.Separator);
+            writer.Write(field.Value);
+        }
+
         WriteTags(writer, shortcut.Tags);
 
         // End of this shortcut dictionary

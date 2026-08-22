@@ -154,6 +154,24 @@ public class ShortcutManager
 
         // Create and add the game shortcut
         (SteamShortcut gameShortcut, uint appId) = CreateSteamShortcutFromGame(game, discNumber);
+
+        // Resolve AppId collisions against existing shortcuts (e.g., CRC32 hash collisions)
+        if (shortcutsFile.GetShortcutByAppId(appId) != null)
+        {
+            appId = ResolveAppIdCollision(shortcutsFile, gameShortcut, appId);
+            gameShortcut.SetAppIdFromUint(appId);
+        }
+
+        // Back up the existing shortcuts file before modifying it.
+        // Steam deletes shortcuts.vdf entirely when it considers the content corrupted,
+        // so keeping a backup limits the damage of any write that goes wrong.
+        if (File.Exists(shortcutsFilePath))
+        {
+            string backupPath = shortcutsFilePath + ".bak";
+            Logger.Info<ShortcutManager>($"Backing up existing shortcuts file to {backupPath}");
+            File.Copy(shortcutsFilePath, backupPath, true);
+        }
+
         shortcutsFile.AddShortcut(gameShortcut);
         shortcutsFile.Save(shortcutsFilePath);
 
@@ -297,7 +315,8 @@ public class ShortcutManager
             AllowOverlay = true,
             AllowDesktopConfig = true,
             IsHidden = false,
-            OpenVR = false
+            OpenVR = false,
+            IsCreatedByXenia = true
         };
 
         // Set icon if available
@@ -314,6 +333,33 @@ public class ShortcutManager
         Logger.Debug<ShortcutManager>($"Computed AppId: {appId}");
 
         return (shortcut, appId);
+    }
+
+    /// <summary>
+    /// Resolves an AppId collision with an existing shortcut by recomputing the AppId with a salt.
+    /// </summary>
+    /// <param name="shortcutsFile">The shortcuts file containing existing shortcuts.</param>
+    /// <param name="shortcut">The new shortcut whose AppId collides.</param>
+    /// <param name="appId">The colliding AppId.</param>
+    /// <returns>A unique AppId, or the last computed AppId if uniqueness could not be achieved.</returns>
+    private static uint ResolveAppIdCollision(SteamShortcutsFile shortcutsFile, SteamShortcut shortcut, uint appId)
+    {
+        const int MaxAttempts = 64;
+
+        Logger.Warning<ShortcutManager>($"Steam shortcut AppId 0x{appId:X8} is already in use by another shortcut, recomputing with salt");
+
+        for (int attempt = 0; attempt < MaxAttempts; attempt++)
+        {
+            appId = shortcut.ComputeAppId($"#{attempt}");
+            if (shortcutsFile.GetShortcutByAppId(appId) == null)
+            {
+                Logger.Info<ShortcutManager>($"Resolved AppId collision: 0x{appId:X8}");
+                return appId;
+            }
+        }
+
+        Logger.Warning<ShortcutManager>($"Could not resolve AppId collision after {MaxAttempts} attempts, using last computed AppId");
+        return appId;
     }
 
     /// <summary>
