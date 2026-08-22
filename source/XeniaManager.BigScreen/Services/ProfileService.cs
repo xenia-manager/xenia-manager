@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -53,7 +54,7 @@ public class ProfileService : IProfileService
     private static readonly VersionState EmptyState = new();
 
     private readonly IBackgroundService _backgroundService;
-    private readonly Dictionary<XeniaVersion, VersionState> _states = [];
+    private readonly ConcurrentDictionary<XeniaVersion, VersionState> _states = [];
 
     private List<XeniaVersion> _installedVersions = [];
     private bool _unifiedContentFolder;
@@ -510,14 +511,14 @@ public class ProfileService : IProfileService
     /// </summary>
     public int GetGamerscore(XeniaVersion version, AccountInfo profile)
     {
-        VersionState state = StateForVersion(version);
-        if (ReferenceEquals(profile, state.ActiveProfile) && state.ProfileGpd != null)
-        {
-            return state.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked);
-        }
-
         try
         {
+            VersionState state = StateForVersion(version);
+            if (ReferenceEquals(profile, state.ActiveProfile) && state.ProfileGpd != null)
+            {
+                return state.ProfileGpd.Titles.Sum(t => t.GamerscoreUnlocked);
+            }
+
             AccountContent content = new AccountContent(profile, version, XboxConstants.ProfileContentTitleId);
             if (content.ProfileGpd == null)
             {
