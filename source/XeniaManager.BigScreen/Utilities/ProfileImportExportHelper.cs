@@ -99,12 +99,22 @@ public class ProfileImportExportHelper
     {
         try
         {
+            bool declinedReplace = false;
             AccountInfo? imported = await ProfileManager.ImportProfileWithReplacement(
                 version, zipPath, profileService.ProfilesFor(version).ToList(),
-                existing => ConfirmReplaceAsync(modalService, existing));
-            return imported != null
-                ? (ProfileOperationStatus.Success, imported)
-                : (ProfileOperationStatus.Cancelled, null);
+                async existing =>
+                {
+                    bool replace = await ConfirmReplaceAsync(modalService, existing);
+                    declinedReplace |= !replace;
+                    return replace;
+                });
+
+            ProfileOperationStatus status = imported != null
+                ? ProfileOperationStatus.Success
+                : declinedReplace
+                    ? ProfileOperationStatus.Cancelled
+                    : ProfileOperationStatus.Failed;
+            return (status, imported);
         }
         catch (Exception ex)
         {
