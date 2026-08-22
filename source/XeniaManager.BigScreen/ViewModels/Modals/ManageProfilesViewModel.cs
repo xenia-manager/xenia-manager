@@ -712,6 +712,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     public void CreateAccount()
     {
         AccountInfo newAccount = ProfileManager.CreateAccount(_version, "New User");
+        _profileService.AddProfile(_version, newAccount);
         Rows.Add(new ProfileItemViewModel(newAccount, false));
         CreateStub.IsSelected = false;
         SelectByXuid(newAccount.PathXuidText());

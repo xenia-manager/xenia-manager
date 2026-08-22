@@ -613,6 +613,33 @@ public class ProfileService : IProfileService
     /// </summary>
     public AccountInfo? ActiveProfileFor(XeniaVersion version) => StateForVersion(version).ActiveProfile;
 
+    /// <summary>
+    /// Adds a newly created account to the given version's in-memory profile list,
+    /// so subsequent saves include it. The caller owns creating the account on disk.
+    /// </summary>
+    public void AddProfile(XeniaVersion version, AccountInfo profile)
+    {
+        if (version == XeniaVersion.Custom)
+        {
+            return;
+        }
+
+        if (!_states.ContainsKey(version) && !(_unifiedContentFolder && _states.Count > 0))
+        {
+            LoadVersion(version);
+        }
+
+        VersionState state = StateForVersion(version);
+        if (ReferenceEquals(state, EmptyState))
+        {
+            Logger.Warning<ProfileService>($"Cannot add profile '{profile.Gamertag}': no loaded state for {version}");
+            return;
+        }
+
+        state.Profiles.Add(profile);
+        Logger.Info<ProfileService>($"Added profile '{profile.Gamertag}' to {version}'s profile list");
+    }
+
     public ProfileService(IBackgroundService backgroundService)
     {
         _backgroundService = backgroundService;

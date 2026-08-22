@@ -130,4 +130,11 @@ public interface IProfileService
     /// The active profile of the given version, or null when none exists.
     /// </summary>
     AccountInfo? ActiveProfileFor(XeniaVersion version);
+
+    /// <summary>
+    /// Adds a newly created account to the given version's in-memory profile list,
+    /// so subsequent saves (<see cref="ProfilesFor"/>) include it. The caller owns
+    /// creating the account on disk.
+    /// </summary>
+    void AddProfile(XeniaVersion version, AccountInfo profile);
 }

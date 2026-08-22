@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models;
@@ -161,14 +162,14 @@ public class ProfilePickerViewModel : ModalViewModelBase
     }
 
     /// <summary>
-    /// Opens the Manage Profiles overlay on top of the picker; closing it
-    /// returns to the (refreshed) picker.
+    /// Opens the Manage Profiles overlay on top of the picker; when it closes,
+    /// the picker reloads so created/edited profiles show up immediately.
     /// </summary>
-    public void OpenManageProfiles()
+    public async Task OpenManageProfilesAsync()
     {
         Logger.Debug<ProfilePickerViewModel>("Opening manage profiles from picker");
-        TaskUtilities.RunSafely<ProfilePickerViewModel>(
-            () => _modalService.ShowAsync(new ManageProfilesViewModel(_version)), "Opening manage profiles");
+        await _modalService.ShowAsync(new ManageProfilesViewModel(_version));
+        Reload();
     }
 
     /// <inheritdoc />
@@ -192,7 +193,7 @@ public class ProfilePickerViewModel : ModalViewModelBase
                 SelectActive();
                 return true;
             case NavigationCommand.Details:
-                OpenManageProfiles();
+                TaskUtilities.RunSafely<ProfilePickerViewModel>(OpenManageProfilesAsync, "Opening manage profiles");
                 return true;
             case NavigationCommand.Back:
                 Close();
