@@ -96,6 +96,18 @@ public partial class SettingsPageViewModel : ViewModelBase
         _settings.SaveSettings();
     }
 
+    [ObservableProperty] private bool startInBigScreen;
+    partial void OnStartInBigScreenChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Start in Big Screen changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.StartInBigScreen = newValue;
+        _settings.SaveSettings();
+    }
+
     // UI Settings
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
@@ -255,6 +267,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         UseMediaIdForTitle = _settings.Settings.General.UseMediaIdForTitle;
         AutoDetectNewGames = _settings.Settings.General.AutoDetectNewGames;
         AutoMergeMultiDisc = _settings.Settings.General.AutoMergeMultiDisc;
+        StartInBigScreen = _settings.Settings.General.StartInBigScreen;
 
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();

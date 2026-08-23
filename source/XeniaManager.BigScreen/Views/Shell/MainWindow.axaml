@@ -1,0 +1,122 @@
+<windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Shell"
+                       xmlns:prof="using:XeniaManager.BigScreen.Controls.Profiles"
+                       xmlns:modal="using:XeniaManager.BigScreen.Controls.Modals"
+                       xmlns:views="using:XeniaManager.BigScreen.Views.Screens"
+                       xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+                       xmlns:const="using:XeniaManager.BigScreen.Constants"
+                       xmlns:windowing="using:FluentAvalonia.UI.Windowing"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+                       x:Class="XeniaManager.BigScreen.Views.Shell.MainWindow"
+                       x:DataType="vm:MainWindowViewModel"
+                       Icon="/Assets/icon.ico"
+                       Title="{DynamicResource MainWindow.Title}"
+                       Width="1920" Height="1080"
+                       WindowState="FullScreen"
+                       WindowDecorations="None"
+                       WindowStartupLocation="CenterScreen"
+                       Background="{Binding Dashboard.Background}">
+
+    <Panel>
+        <!-- Full-width grid; the header and dashboard carry their own concrete
+             horizontal padding so both rows always share the same boundaries -->
+        <Grid RowDefinitions="100, *">
+
+            <!-- Dynamic artwork layer: fades in/out on top of the static window
+                 background (no black frames; the base brush shows through) -->
+            <Image Grid.RowSpan="2"
+                   Source="{Binding Dashboard.Artwork}"
+                   Opacity="{Binding Dashboard.ArtOpacity}"
+                   Stretch="UniformToFill"
+                   IsHitTestVisible="False" />
+
+            <!-- Vignette overlay over the background (ignores input, images only) -->
+            <Border Grid.RowSpan="2"
+                    IsVisible="{Binding Dashboard.VignetteVisible}"
+                    IsHitTestVisible="False"
+                    Background="{DynamicResource BackgroundVignette}" />
+
+            <!-- TOP DASHBOARD HEADER: top inset = the dashboard's bottom inset
+                 (LayoutConstants.DashboardInsetY), so the frame is uniform on all
+                 sides; fades in with the dashboard elements after the splash reveal -->
+            <Grid x:Name="HeaderRow"
+                  Grid.Row="0"
+                  Margin="{x:Static const:LayoutConstants.MainWindowContentMargin}"
+                  ColumnDefinitions="Auto, *, Auto"
+                  VerticalAlignment="Top">
+
+                <!-- PROFILE (LEFT): focusable chip - opens the profile picker -->
+                <prof:ProfileButton Grid.Column="0"
+                                    VerticalAlignment="Center" />
+
+                <!-- SYSTEM STATUS (RIGHT) -->
+                <StackPanel Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Spacing="16"
+                            VerticalAlignment="Center">
+                    <Grid Height="26" Width="26">
+                        <fluent:SymbolIcon Symbol="{Binding Header.NetworkIcon}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="24"
+                                           Foreground="{DynamicResource TextPrimary}" />
+                    </Grid>
+                    <Grid Height="26" Width="26">
+                        <fluent:SymbolIcon Symbol="{Binding Header.BatteryIcon}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="24"
+                                           Foreground="{DynamicResource TextPrimary}" />
+                    </Grid>
+                    <TextBlock Text="{Binding Header.Time}"
+                               MinWidth="{Binding Header.ClockMinWidth}"
+                               VerticalAlignment="Center"
+                               Classes="header-text"
+                               FontSize="18"
+                               Foreground="{DynamicResource TextPrimary}"
+                               TextAlignment="Right" />
+                </StackPanel>
+            </Grid>
+
+            <!-- MAIN DASHBOARD CONTENT (owns its own padding) -->
+            <ContentControl Grid.Row="1"
+                            Content="{Binding Dashboard}" />
+
+            <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
+            <Panel Grid.Row="0" Grid.RowSpan="2"
+                   IsVisible="{Binding IsOverlayOpen}"
+                   IsHitTestVisible="{Binding IsOverlayOpen}">
+                <!-- Full-screen backdrop -->
+                <Border Background="{DynamicResource OverlayBackdrop}" />
+                <!-- Screens are created at startup; opening just flips visibility -->
+                <Grid IsVisible="{Binding IsLibraryScreen}">
+                    <views:LibraryView DataContext="{Binding Library}" />
+                </Grid>
+                <Grid IsVisible="{Binding IsGalleryScreen}">
+                    <views:GalleryView DataContext="{Binding Gallery}" />
+                </Grid>
+                <Grid IsVisible="{Binding IsSettingsScreen}">
+                    <views:SettingsView DataContext="{Binding Settings}" />
+                </Grid>
+            </Panel>
+        </Grid>
+
+        <!-- MODAL LAYER: covers the ENTIRE window - a sibling of the content grid,
+             not a grid child, so the backdrop is always full-screen. The backdrop
+             hides while the screenshot viewer is the top modal (its own opaque
+             backdrop covers the window) -->
+        <Panel IsVisible="{Binding IsModalOpen}"
+               IsHitTestVisible="{Binding IsModalOpen}">
+            <!-- Transparent black backdrop over everything -->
+            <Border Background="{DynamicResource ModalBackdrop}"
+                    IsVisible="{Binding ModalBackdropVisible}" />
+            <!-- The top modal's view, rebuilt on every stack change -->
+            <modal:ModalHost />
+        </Panel>
+    </Panel>
+
+</windowing:FAAppWindow>

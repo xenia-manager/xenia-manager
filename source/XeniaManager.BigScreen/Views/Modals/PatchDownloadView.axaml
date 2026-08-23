@@ -1,0 +1,125 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.Modals.PatchDownloadView"
+             x:DataType="vm:PatchDownloadViewModel">
+
+    <UserControl.Styles>
+        <!-- Download result rows -->
+        <Style Selector="Border.download-row">
+            <Setter Property="Padding" Value="18,14" />
+            <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSoft}" />
+            <Setter Property="CornerRadius" Value="10" />
+        </Style>
+        <Style Selector="Border.download-row.selected">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- The modal: regular card background + card border over the transparent black backdrop -->
+    <Border Classes="modal-screen">
+        <Grid Margin="48" RowDefinitions="Auto, Auto, *, Auto, Auto" RowSpacing="20">
+
+            <!-- HEADER: title + game name -->
+            <prim:IconStat Grid.Row="0"
+                           Icon="ArrowDownload"
+                           Stat="{Binding HeaderText}"
+                           IconSize="28"
+                           Spacing="14"
+                           FontSize="26"
+                           VerticalAlignment="Center" />
+
+            <!-- SEARCH -->
+            <TextBox Grid.Row="1"
+                     Text="{Binding SearchText, Mode=TwoWay}"
+                     PlaceholderText="{DynamicResource GameModal.Patches.Download.SearchWatermark}"
+                     FontSize="20"
+                     Padding="14,10" />
+
+            <!-- RESULTS -->
+            <Grid Grid.Row="2">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden">
+                    <ItemsControl x:Name="ResultsList" ItemsSource="{Binding Results}" Margin="0,0,0,20">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="items:PatchDownloadItemViewModel">
+                                <Border Classes="download-row" Classes.selected="{Binding IsSelected}">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+                                        <fluent:SymbolIcon Grid.Column="0"
+                                                           Symbol="DocumentText"
+                                                           FontSize="24"
+                                                           Foreground="{DynamicResource TextSecondary}"
+                                                           VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Name}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   FontSize="20"
+                                                   Foreground="{DynamicResource TextPrimary}"
+                                                   VerticalAlignment="Center" />
+                                        <Border Grid.Column="2"
+                                                Background="{DynamicResource CardBorder}"
+                                                CornerRadius="6"
+                                                Padding="10,4"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Source}"
+                                                       FontSize="16"
+                                                       Foreground="{DynamicResource TextSecondary}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Spacing="8" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Searching state -->
+                <prim:EmptyState IsVisible="{Binding ShowSearching}"
+                                 Symbol="Search"
+                                 Text="{DynamicResource GameModal.Patches.Download.Searching}"
+                                 Width="520"
+                                 Height="200"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
+
+                <!-- Empty state: no search results -->
+                <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                                 Symbol="Search"
+                                 Text="{DynamicResource GameModal.Patches.Download.Empty}"
+                                 Width="520"
+                                 Height="200"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
+            </Grid>
+
+            <!-- FAILURE STATUS -->
+            <TextBlock Grid.Row="3"
+                       Text="{Binding StatusText}"
+                       IsVisible="{Binding ShowStatus}"
+                       Foreground="{DynamicResource TextError}"
+                       FontSize="18"
+                       HorizontalAlignment="Center" />
+
+            <!-- HINTS: B back · A download (top modal only) -->
+            <StackPanel Grid.Row="4" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
+                <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource GameModal.Hint.Back}" />
+                <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                                Text="{DynamicResource GameModal.Hint.Download}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

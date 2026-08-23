@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Dashboard"
+             xmlns:const="using:XeniaManager.BigScreen.Constants"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.Dashboard.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+    <!-- Row 2 = 271 (LayoutConstants.DashboardCardBoxArtSelectedHeight), so the
+         selected box-art card is never cut vertically -->
+    <Grid RowDefinitions="*, Auto, Auto"
+          Margin="{x:Static const:LayoutConstants.DashboardContentMargin}"
+          RowSpacing="{x:Static const:LayoutConstants.DashboardRowSpacing}"
+          HorizontalAlignment="Center">
+
+        <!-- GAME CARDS ROW -->
+        <Grid Grid.Row="1" VerticalAlignment="Bottom">
+
+            <!-- Empty-library stub: subtle disc card, shown when there are no games -->
+            <Border IsVisible="{Binding ShowEmptyStub}"
+                    CornerRadius="8"
+                    Height="{x:Static const:LayoutConstants.DashboardCardWidth}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Width="{x:Static const:LayoutConstants.DashboardCardWidth}"
+                    Classes="empty-state">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Spacing="10">
+                    <fluent:SymbolIcon Symbol="PlayCircle"
+                                       FontSize="52" />
+                    <TextBlock Text="{DynamicResource Dashboard.NoGamesFound}"
+                               FontSize="14" />
+                </StackPanel>
+            </Border>
+
+            <!-- Cards grow to DashboardCardSelectedWidth on selection; the
+                 transition on GameCard makes the row reflow smoothly -->
+            <ItemsControl x:Name="GamesRow"
+                          ItemsSource="{Binding RecentGames}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="{x:Static const:LayoutConstants.DashboardCardSpacing}"
+                                    VerticalAlignment="Bottom" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+
+        <!-- OPTION CARDS ROW: 4 x 393 + 3 x 16 = 1620, exactly filling the
+             content region between the dashboard insets -->
+        <ItemsControl x:Name="OptionsRow"
+                      Grid.Row="2"
+                      ItemsSource="{Binding Options}"
+                      VerticalAlignment="Bottom">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="{x:Static const:LayoutConstants.DashboardOptionSpacing}"
+                                VerticalAlignment="Bottom" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+    </Grid>
+</UserControl>

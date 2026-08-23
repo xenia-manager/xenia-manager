@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:prof="using:XeniaManager.BigScreen.Controls.Profiles"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.Modals.ProfilePickerView"
+             x:DataType="vm:ProfilePickerViewModel">
+
+    <!-- The modal: regular card background + card border over the transparent black backdrop -->
+    <Border Classes="modal-screen">
+        <Grid Margin="48" RowDefinitions="Auto, *, Auto">
+
+            <!-- HEADER: title + version chips -->
+            <StackPanel Grid.Row="0" Margin="0,10,0,35" Spacing="16">
+                <TextBlock Text="{DynamicResource Profiles.Title}"
+                           Classes="screen-title" />
+                <ItemsControl x:Name="VersionChipsList"
+                              ItemsSource="{Binding VersionChips}"
+                              IsVisible="{Binding HasVersionChips}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:VersionChipViewModel">
+                            <Button Classes="version-chip" Classes.selected="{Binding IsSelected}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <fluent:SymbolIcon Symbol="{Binding Icon}"
+                                                       FontSize="14"
+                                                       VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <!-- PROFILE LIST -->
+            <Grid Grid.Row="1">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden">
+                    <ItemsControl x:Name="ProfileList" ItemsSource="{Binding Profiles}" Margin="0,0,0,40">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="items:ProfileItemViewModel">
+                                <prof:ProfileRow />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Empty-state stub: no profiles to pick -->
+                <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                                 Symbol="PersonQuestionMark"
+                                 Text="{DynamicResource Profiles.NoProfilesFound}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="520"
+                                 Height="220"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
+            </Grid>
+
+            <!-- HINTS -->
+            <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
+                <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource Profiles.Hint.Back}" />
+                <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                                Text="{DynamicResource Profiles.Hint.Select}" />
+                <prim:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+                                Text="{DynamicResource Profiles.Hint.Manage}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

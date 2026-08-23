@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">打开 Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">游戏库</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia 设置</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">管理 Xenia</sys:String>
@@ -381,6 +383,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">正在加载 {0}</sys:String>
@@ -405,6 +410,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">未找到 {0} 的屏幕截图。</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">打开文件夹失败</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">打开屏幕截图文件夹时出错。&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">补丁</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">下载</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">从仓库下载补丁</sys:String>
@@ -522,6 +533,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">未安装 Xenia</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">未找到任何 Xenia 安装。请先安装 Xenia 再尝试启动。</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - 补丁</sys:String>

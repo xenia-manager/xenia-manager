@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Big Screen</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Open Big Screen</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Settings</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Manage Xenia</sys:String>
@@ -381,6 +383,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Auto-Merge Multi-Disc Games</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Automatically merge detected discs of the same game during library scan</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">When enabled, additional discs matching an existing game in the library are merged automatically without prompting</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">Start in Big Screen</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">Launch Big Screen instead of the main window on startup</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">When enabled, Xenia Manager opens Big Screen mode directly on launch</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>
@@ -528,6 +533,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">No Xenia Installed</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">No Xenia installations were found. Please install Xenia first before trying to launch.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">Big Screen Not Found</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">Couldn't find XeniaManager.BigScreen.exe next to Xenia Manager.</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>

@@ -30,6 +30,15 @@
                 </controls:FANavigationViewItem.IconSource>
             </controls:FANavigationViewItem>
 
+            <!-- Big Screen -->
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.BigScreen}"
+                                         Tag="BigScreen"
+                                         ToolTip.Tip="{DynamicResource MainView.Navigation.BigScreen.ToolTip}">
+                <controls:FANavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="Tv" />
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
+
             <!-- Game Library -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.Library}"
                                          Tag="Library">

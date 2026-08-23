@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Controls.Splash.SplashScreenView">
+
+    <!-- Background is the dashboard's radial gradient, built from the saved
+         primary colour in code (see SplashScreenView.axaml.cs) -->
+
+    <StackPanel HorizontalAlignment="Center"
+                Orientation="Vertical"
+                Spacing="32"
+                VerticalAlignment="Center">
+
+        <fluent:SymbolIcon x:Name="LogoIcon"
+                           Symbol="Tv"
+                           HorizontalAlignment="Center"
+                           FontSize="96" />
+
+        <TextBlock Text="{DynamicResource Splash.Title}"
+                   HorizontalAlignment="Center"
+                   FontSize="40"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource TextPrimary}" />
+
+        <TextBlock x:Name="StatusText"
+                   Text="{DynamicResource Splash.Loading}"
+                   HorizontalAlignment="Center"
+                   FontSize="20"
+                   Foreground="{DynamicResource TextSecondary}" />
+
+        <ProgressBar x:Name="LoadBar"
+                     Minimum="0"
+                     Maximum="100"
+                     Value="0"
+                     Height="6"
+                     Width="420"
+                     Background="#33FFFFFF">
+            <ProgressBar.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Value" Duration="0:0:0.4" />
+                </Transitions>
+            </ProgressBar.Transitions>
+        </ProgressBar>
+    </StackPanel>
+</UserControl>

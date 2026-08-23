@@ -8,7 +8,21 @@ namespace XeniaManager.Core.Utilities;
 /// </summary>
 public class AppPathResolver
 {
-    private static readonly string _baseDirectory = ResolveBaseDirectory();
+    private static string _baseDirectory = ResolveBaseDirectory();
+
+    /// <summary>
+    /// Redirects the base directory to the given absolute path. Used by companion
+    /// executables (e.g. BigScreen) to share the main application's data folders.
+    /// Must be called before any path resolution.
+    /// </summary>
+    /// <param name="path">Absolute path to use as the base directory.</param>
+    public static void SetBaseDirectory(string path)
+    {
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            _baseDirectory = Path.GetFullPath(path);
+        }
+    }
 
     /// <summary>
     /// Resolves the most appropriate base directory for the application at runtime.

@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             xmlns:self="using:XeniaManager.BigScreen.Controls.Primitives"
+             x:Class="XeniaManager.BigScreen.Controls.Primitives.EmptyState">
+    <Border Classes="empty-state">
+        <StackPanel Orientation="Vertical"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Spacing="16">
+            <fluent:SymbolIcon Symbol="{Binding Symbol, RelativeSource={RelativeSource AncestorType=self:EmptyState}}"
+                               FontSize="{Binding SymbolSize, RelativeSource={RelativeSource AncestorType=self:EmptyState}}" />
+            <TextBlock Text="{Binding Text, RelativeSource={RelativeSource AncestorType=self:EmptyState}}"
+                       FontSize="{Binding TextSize, RelativeSource={RelativeSource AncestorType=self:EmptyState}}" />
+        </StackPanel>
+    </Border>
+</UserControl>

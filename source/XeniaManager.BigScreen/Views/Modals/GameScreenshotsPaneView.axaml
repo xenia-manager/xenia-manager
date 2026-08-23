@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             x:Class="XeniaManager.BigScreen.Views.Modals.GameScreenshotsPaneView"
+             x:DataType="vm:GameScreenshotsPaneViewModel">
+    <Grid>
+        <!-- GRID VIEW (pane content) -->
+        <Grid RowDefinitions="Auto, *" RowSpacing="24">
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                <prim:IconStat Grid.Column="0"
+                               Icon="Camera"
+                               Stat="{Binding CountText}"
+                               Classes="pane-header-stat"
+                               VerticalAlignment="Center" />
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <ScrollViewer x:Name="SvScreenshots"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden">
+                    <ItemsControl x:Name="ScreenshotsGrid"
+                                  ItemsSource="{Binding Rows}"
+                                  Margin="0,0,0,20">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="items:ScreenshotItemViewModel">
+                                <card:ScreenshotCard />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel ItemsAlignment="Start"
+                                           ItemSpacing="16"
+                                           LineSpacing="16"
+                                           Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Loading state -->
+                <prim:EmptyState IsVisible="{Binding IsLoading}"
+                                 Symbol="Camera"
+                                 Text="{DynamicResource GameModal.Screenshots.Loading}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="360"
+                                 Height="220"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
+
+                <!-- Empty state: no screenshots for this game -->
+                <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                                 Symbol="Camera"
+                                 Text="{DynamicResource GameModal.Screenshots.Empty}"
+                                 SymbolSize="72"
+                                 TextSize="24"
+                                 Width="360"
+                                 Height="220"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

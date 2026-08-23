@@ -1,0 +1,74 @@
+using System;
+using System.Linq;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.BigScreen.ViewModels.Modals;
+
+namespace XeniaManager.BigScreen.Views.Modals;
+
+/// <summary>
+/// The game modal's game settings pane: curated config rows as scannable
+/// settings cards. Opens/focuses the combo editor control on demand; sliders
+/// are stepped directly from the controller.
+/// </summary>
+public partial class GameSettingsPaneView : UserControl
+{
+    /// <summary>
+    /// Scrolls the newly selected row into view (controller navigation).
+    /// </summary>
+    private void OnRowSelectionChanged(ConfigRowViewModel row)
+    {
+        Border? card = SvSettings.GetVisualDescendants().OfType<Border>()
+            .FirstOrDefault(b => ReferenceEquals(b.DataContext, row));
+        card?.BringIntoView();
+    }
+
+    /// <summary>
+    /// Opens the combo editor control for the given row: its native dropdown
+    /// opens and takes focus.
+    /// </summary>
+    private void OnEditorOpened(ConfigRowViewModel row)
+    {
+        foreach (ComboBox combo in SvSettings.GetVisualDescendants().OfType<ComboBox>())
+        {
+            if (ReferenceEquals(combo.DataContext, row))
+            {
+                combo.IsDropDownOpen = true;
+                combo.Focus();
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Closes the editor control (commit or cancel).
+    /// </summary>
+    private void OnEditorClosed()
+    {
+        foreach (ComboBox combo in SvSettings.GetVisualDescendants().OfType<ComboBox>())
+        {
+            combo.IsDropDownOpen = false;
+        }
+    }
+
+    private void OnDataContextChanged(object? sender, EventArgs e)
+    {
+        if (DataContext is GameSettingsPaneViewModel vm)
+        {
+            vm.EditorOpened += OnEditorOpened;
+            vm.EditorClosed += OnEditorClosed;
+            vm.RowSelectionChanged += OnRowSelectionChanged;
+            Core.Logging.Logger.Debug<GameSettingsPaneView>(
+                $"Game settings pane attached: {vm.Rows.Count} rows");
+        }
+    }
+
+    public GameSettingsPaneView()
+    {
+        InitializeComponent();
+        DataContextChanged += OnDataContextChanged;
+    }
+}

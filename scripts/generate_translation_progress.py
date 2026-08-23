@@ -5,10 +5,12 @@ Translation Progress Generator
 Compares translation keys between English (en.axaml) and other language files
 to identify missing or extra translations.
 
-Automatically finds all .axaml language files and compares them against en.axaml.
+Automatically finds all .axaml language files across every language folder
+(XeniaManager and XeniaManager.BigScreen) and compares them against their
+respective en.axaml.
 
 Usage:
-    python generate_translation_progress.py [--directory DIR] [--verbose] [--json]
+    python generate_translation_progress.py [--directory DIR [DIR ...]] [--verbose] [--json]
 
 Examples:
     python generate_translation_progress.py
@@ -335,7 +337,11 @@ def main():
         epilog=__doc__,
     )
     parser.add_argument(
-        "--directory", "-d", default=None, help="Directory containing language files"
+        "--directory",
+        "-d",
+        nargs="+",
+        default=None,
+        help="Directories containing language files (default: all known language folders)",
     )
     parser.add_argument(
         "--verbose",
@@ -368,13 +374,12 @@ def main():
         format="[%(levelname)s] %(message)s",
     )
 
-    # Determine the language files directory
+    # Determine the language files directories
     if args.directory:
-        lang_dir = args.directory
+        lang_dirs = list(args.directory)
     else:
-        # Try to find the directory relative to the script
         script_dir = Path(__file__).parent
-        possible_dirs = [
+        candidates = [
             script_dir.parent / "source" / "XeniaManager" / "Resources" / "Language",
             script_dir.parent.parent
             / "source"
@@ -382,101 +387,153 @@ def main():
             / "Resources"
             / "Language",
         ]
+        bigscreen_dir = (
+            script_dir.parent
+            / "source"
+            / "XeniaManager.BigScreen"
+            / "Resources"
+            / "Language"
+        )
+        lang_dirs = [str(d) for d in candidates if d.exists()]
+        if bigscreen_dir.exists():
+            lang_dirs.append(str(bigscreen_dir))
 
-        lang_dir = None
-        for dir_path in possible_dirs:
-            if dir_path.exists():
-                lang_dir = str(dir_path)
-                break
-
-        if not lang_dir:
+        if not lang_dirs:
             logger.error("Could not find language files directory.")
             logger.error("Please specify it with --directory")
             sys.exit(1)
 
-    # Check if language directory exists
-    if not os.path.isdir(lang_dir):
-        logger.error("Language directory not found: %s", lang_dir)
-        sys.exit(1)
-
-    logger.info("Scanning directory: %s", lang_dir)
-
-    # Find all language files
-    language_files = find_language_files(lang_dir)
-
-    if not language_files:
-        logger.error("No .axaml files found in language directory")
-        sys.exit(1)
-
-    logger.info("Found languages: %s", ", ".join(sorted(language_files.keys())))
-
-    base_file = language_files.get(args.base)
-    if not base_file:
-        logger.error("Main %s.axaml file not found in language directory", args.base)
-        sys.exit(1)
-
-    # Get total strings from English file
-    total_strings = count_translations(base_file, is_main_file=True)
-    logger.info("Total strings to translate: %d", total_strings)
-
-    # Compare all languages against base
-    languages_to_compare = [lang for lang in language_files if lang != args.base]
-
+    total_strings = 0
     all_complete = True
-    results = {}
+    results: Dict[str, Dict] = {}
 
-    # Add base language (en) with 100% progress
-    results[args.base] = {
-        "missing": set(),
-        "extra": set(),
-        "untranslated": [],
-        "base_count": total_strings,
-        "compare_count": total_strings,
-        "translated_count": total_strings,
-        "percentage": 100,
-    }
-    logger.info("%s: %d/%d (100%%)", args.base, total_strings, total_strings)
+    # First pass: validate directories and find language files in each
+    all_language_files: Dict[str, Dict[str, str]] = {}
+    for lang_dir in lang_dirs:
+        # Check if language directory exists
+        if not os.path.isdir(lang_dir):
+            logger.error("Language directory not found: %s", lang_dir)
+            sys.exit(1)
 
-    for lang in sorted(languages_to_compare):
-        compare_file = language_files[lang]
+        logger.info("Scanning directory: %s", lang_dir)
 
-        try:
-            missing_keys, extra_keys, base_translations = compare_translations(
-                base_file, compare_file, args.base, lang
-            )
+        # Find all language files
+        language_files = find_language_files(lang_dir)
 
-            compare_translations_dict = extract_keys(compare_file)
-            untranslated_keys = check_untranslated(
-                base_translations, compare_translations_dict
-            )
+        if not language_files:
+            logger.error("No .axaml files found in language directory")
+            sys.exit(1)
 
-            # Count translated strings (excluding empty and #NOTTRANSLATED#)
-            translated_count = count_translations(compare_file, is_main_file=False)
+        logger.info("Found languages: %s", ", ".join(sorted(language_files.keys())))
+        all_language_files[lang_dir] = language_files
 
-            # Calculate percentage
-            if total_strings > 0:
-                percentage = round((translated_count / total_strings) * 100)
-            else:
-                percentage = 0
+    all_langs = sorted({lang for files in all_language_files.values() for lang in files})
+    logger.info("Languages across all directories: %s", ", ".join(all_langs))
 
-            results[lang] = {
-                "missing": missing_keys,
-                "extra": extra_keys,
-                "untranslated": untranslated_keys,
-                "base_count": len(base_translations),
-                "compare_count": len(compare_translations_dict),
-                "translated_count": translated_count,
-                "percentage": percentage,
+    for lang_dir, language_files in all_language_files.items():
+        base_file = language_files.get(args.base)
+        if not base_file:
+            logger.error("Main %s.axaml file not found in language directory", args.base)
+            sys.exit(1)
+
+        # Get total strings from English file
+        dir_total_strings = count_translations(base_file, is_main_file=True)
+        total_strings += dir_total_strings
+        logger.info(
+            "Strings to translate in %s: %d", os.path.basename(lang_dir), dir_total_strings
+        )
+
+        # Initialize the base language entry (en) once with full progress
+        if args.base not in results:
+            results[args.base] = {
+                "missing": set(),
+                "extra": set(),
+                "untranslated": [],
+                "base_count": 0,
+                "compare_count": 0,
+                "translated_count": 0,
+                "percentage": 100,
             }
+        results[args.base]["base_count"] += dir_total_strings
+        results[args.base]["compare_count"] += dir_total_strings
+        results[args.base]["translated_count"] += dir_total_strings
 
-            logger.info("%s: %d/%d (%d%%)", lang, translated_count, total_strings, percentage)
+        base_translations = extract_keys(base_file)
+
+        for lang in all_langs:
+            if lang == args.base:
+                continue
+
+            if lang not in results:
+                results[lang] = {
+                    "missing": set(),
+                    "extra": set(),
+                    "untranslated": [],
+                    "base_count": 0,
+                    "compare_count": 0,
+                    "translated_count": 0,
+                    "percentage": 0,
+                }
+
+            r = results[lang]
+            compare_file = language_files.get(lang)
+
+            if compare_file is None:
+                # Language has no file in this directory: contributes 0 translations,
+                # but its keys are not counted as missing
+                missing_keys = set()
+                extra_keys: Set[str] = set()
+                untranslated_keys: List[str] = []
+                translated_count = 0
+                compare_count = 0
+            else:
+                missing_keys, extra_keys, _ = compare_translations(
+                    base_file, compare_file, args.base, lang
+                )
+                compare_translations_dict = extract_keys(compare_file)
+                untranslated_keys = check_untranslated(
+                    base_translations, compare_translations_dict
+                )
+                translated_count = count_translations(compare_file, is_main_file=False)
+                compare_count = len(compare_translations_dict)
+
+            r["missing"] |= missing_keys
+            r["extra"] |= extra_keys
+            r["untranslated"].extend(untranslated_keys)
+            r["base_count"] += len(base_translations)
+            r["compare_count"] += compare_count
+            r["translated_count"] += translated_count
+
+            logger.info(
+                "%s: +%d/%d translated in %s%s",
+                lang,
+                translated_count,
+                dir_total_strings,
+                os.path.basename(lang_dir),
+                " (no locale file)" if compare_file is None else "",
+            )
 
             if missing_keys:
                 all_complete = False
 
-        except FileNotFoundError as e:
-            logger.error("%s", e)
-            all_complete = False
+    logger.info("%s: %d/%d (100%%)", args.base, total_strings, total_strings)
+
+    # Calculate overall percentages once all directories are combined
+    for lang, r in results.items():
+        if lang == args.base:
+            continue
+        r["percentage"] = (
+            round((r["translated_count"] / total_strings) * 100)
+            if total_strings > 0
+            else 0
+        )
+        logger.info(
+            "%s: %d/%d (%d%%)",
+            lang,
+            r["translated_count"],
+            total_strings,
+            r["percentage"],
+        )
 
     if not results:
         logger.error("No translations found")

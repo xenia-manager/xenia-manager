@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Pokreni Emulator</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Biblioteka igara</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Postavke Emulatora</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Upravljanje Emulatora</sys:String>
@@ -381,6 +383,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Automatski spoji igre s više diskova</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Tijekom skeniranja biblioteke automatski spoji prepoznate diskove iste igre</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Kada je omogućeno, dodatni diskovi koji odgovaraju postojećoj igri u biblioteci automatski se spajaju bez traženja potvrde</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Učitavanje {0}</sys:String>
@@ -405,6 +410,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nema pronađenih snimaka zaslona za {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Otvaranje mape nije uspjelo</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Došlo je do greške prilikom otvaranja mape sa snimkama zaslona.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Zakrpe</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Preuzmi</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Preuzmite zakrpe iz repozitorija</sys:String>
@@ -522,6 +533,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Nema instaliranog emulatora</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Nije pronađena nijedna instalacija Xenia emulatora. Molimo instalirajte Xenia emulator.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Zakrpe</sys:String>

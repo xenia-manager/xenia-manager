@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="238"
+             x:Class="XeniaManager.BigScreen.Controls.Cards.GameCard"
+             x:DataType="vm:GameCardViewModel"
+             Width="{Binding CardWidth}"
+             Height="{Binding CardHeight}"
+             Focusable="True"
+             Classes.selected="{Binding IsSelected}">
+    <Panel>
+        <Border x:Name="Tile" CornerRadius="10" Background="{DynamicResource CardBackground}" Margin="2" />
+        <Border x:Name="ArtClip" Background="Transparent" CornerRadius="10" Margin="2">
+            <Panel>
+                <Grid IsVisible="{Binding ShowBoxArt}"
+                      Height="{Binding BoxArtFullHeight}"
+                      VerticalAlignment="Bottom">
+                    <Grid.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
+                        </Transitions>
+                    </Grid.Transitions>
+                    <Image Source="{Binding BoxArt}" Stretch="UniformToFill" />
+                </Grid>
+                <Grid IsVisible="{Binding ShowDiscArt}"
+                      VerticalAlignment="Bottom">
+                    <Image Source="{Binding DiscArt}" Stretch="Uniform" />
+                </Grid>
+            </Panel>
+        </Border>
+        <Border x:Name="TitleBar"
+                Background="{DynamicResource CardTitleBar}"
+                CornerRadius="0,0,8,8"
+                VerticalAlignment="Bottom"
+                IsVisible="{Binding IsSelected}">
+            <TextBlock Text="{Binding Title}"
+                       Classes="card-title" />
+        </Border>
+        <Border x:Name="BorderOverlay"
+                CornerRadius="10"
+                IsHitTestVisible="False" />
+    </Panel>
+</UserControl>

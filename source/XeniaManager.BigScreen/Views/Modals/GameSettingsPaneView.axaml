@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:conv="using:Avalonia.Data.Converters"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             x:Class="XeniaManager.BigScreen.Views.Modals.GameSettingsPaneView"
+             x:DataType="vm:GameSettingsPaneViewModel">
+
+    <Grid RowDefinitions="Auto, *" RowSpacing="20">
+
+        <!-- HEADER: title -->
+        <prim:IconStat Grid.Row="0"
+                       Icon="Settings"
+                       Stat="{DynamicResource GameModal.Settings.Title}"
+                       IconSize="26"
+                       Spacing="14"
+                       FontSize="24"
+                       VerticalAlignment="Center" />
+
+        <!-- CURATED ROWS: scannable settings cards (label + one control per
+             row), styled exactly like the main settings screen -->
+        <ScrollViewer x:Name="SvSettings"
+                      Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Hidden">
+            <ItemsControl ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="items:ConfigRowViewModel">
+                        <StackPanel>
+                            <!-- Section header (first row of each section only) -->
+                            <TextBlock Text="{Binding SectionTitle}"
+                                       IsVisible="{Binding HasSectionTitle}"
+                                       Classes="settings-section"
+                                       Margin="0,18,0,10" />
+
+                            <!-- Settings card row -->
+                            <Border Classes="settings-card settings-row"
+                                    Classes.selected="{Binding IsSelected}"
+                                    Margin="0,0,0,12">
+                                <DockPanel>
+                                    <!-- TOGGLE -->
+                                    <CheckBox DockPanel.Dock="Right"
+                                              IsChecked="{Binding BoolValue, Mode=TwoWay}"
+                                              IsVisible="{Binding IsToggle}"
+                                              VerticalAlignment="Center" />
+                                    <!-- SLIDER (value to the right, like the main settings) -->
+                                    <StackPanel DockPanel.Dock="Right"
+                                                Orientation="Vertical"
+                                                Spacing="6"
+                                                IsVisible="{Binding IsSlider}"
+                                                VerticalAlignment="Center">
+                                        <Slider Width="340"
+                                                Minimum="{Binding Minimum, TargetNullValue=0}"
+                                                Maximum="{Binding Maximum, TargetNullValue=100}"
+                                                TickFrequency="{Binding Step, TargetNullValue=1}"
+                                                IsSnapToTickEnabled="{Binding Step, Converter={x:Static conv:ObjectConverters.IsNotNull}}"
+                                                Value="{Binding FloatValue, Mode=TwoWay}" />
+                                        <TextBlock Text="{Binding SliderValueText}"
+                                                   Classes="settings-value"
+                                                   HorizontalAlignment="Right" />
+                                    </StackPanel>
+                                    <!-- COMBO BOX -->
+                                    <ComboBox DockPanel.Dock="Right"
+                                              Width="320"
+                                              ItemsSource="{Binding ComboBoxOptions}"
+                                              SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                                              DisplayMemberBinding="{Binding DisplayName}"
+                                              IsVisible="{Binding IsComboBox}"
+                                              VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Label}"
+                                               Classes="settings-label" />
+                                </DockPanel>
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

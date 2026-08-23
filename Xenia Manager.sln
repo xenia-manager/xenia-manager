@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Tests", "tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Core", "source\XeniaManager.Core\XeniaManager.Core.csproj", "{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.BigScreen", "source\XeniaManager.BigScreen\XeniaManager.BigScreen.csproj", "{823BCB3C-82FD-40BB-9CE9-AF2BACE9A2DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{823BCB3C-82FD-40BB-9CE9-AF2BACE9A2DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{823BCB3C-82FD-40BB-9CE9-AF2BACE9A2DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{823BCB3C-82FD-40BB-9CE9-AF2BACE9A2DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{823BCB3C-82FD-40BB-9CE9-AF2BACE9A2DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

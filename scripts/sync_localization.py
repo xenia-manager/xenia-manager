@@ -4,6 +4,9 @@
 - Removes stale keys (present in locale but absent from en.axaml)
 - Preserves comment section headers and all key ordering from en.axaml
 
+By default both language folders are synced (XeniaManager and
+XeniaManager.BigScreen). Pass -l to sync a single directory instead.
+
 Usage:
     python scripts/sync_localization.py              # normal output
     python scripts/sync_localization.py -v           # verbose (per-key debug)
@@ -19,14 +22,24 @@ import sys
 
 logger = logging.getLogger("sync_localization")
 
-DEFAULT_LANG_DIR = os.path.join(
-    os.path.dirname(__file__),
-    "..",
-    "source",
-    "XeniaManager",
-    "Resources",
-    "Language",
-)
+DEFAULT_LANG_DIRS = [
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "source",
+        "XeniaManager",
+        "Resources",
+        "Language",
+    ),
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "source",
+        "XeniaManager.BigScreen",
+        "Resources",
+        "Language",
+    ),
+]
 REFERENCE = "en.axaml"
 
 KEY_RE = re.compile(r'(\s*)<sys:String x:Key="([^"]*)">(.*)</sys:String>')
@@ -129,30 +142,11 @@ def rebuild(entries, locale_map, locale_name):
     return output
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Sync locale files with en.axaml")
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        help="Show per-key debug output",
-    )
-    parser.add_argument(
-        "-n",
-        "--dry-run",
-        action="store_true",
-        help="Log changes without writing to files",
-    )
-    parser.add_argument(
-        "-l",
-        "--lang-dir",
-        default=DEFAULT_LANG_DIR,
-        help="Path to the language directory (default: ../source/XeniaManager/Resources/Language)",
-    )
-    args = parser.parse_args()
-    setup_logging(args.verbose)
+def sync_dir(lang_dir: str, dry_run: bool) -> tuple[int, int, int, int]:
+    """Sync all locale files in a single language directory.
 
-    lang_dir = args.lang_dir
+    Returns (locales_synced, locales_total, keys_added, keys_removed).
+    """
     locales = sorted(
         f for f in os.listdir(lang_dir)
         if f.endswith(".axaml") and f != REFERENCE
@@ -188,7 +182,7 @@ def main():
             for k in sorted(stale):
                 logger.warning("  - %s  (STALE — removed)", k)
 
-        if args.dry_run:
+        if dry_run:
             logger.info(
                 "[DRY-RUN] %s — %d keys, +%d added, -%d removed (not written)",
                 locale,
@@ -213,14 +207,58 @@ def main():
         total_added += len(missing)
         total_removed += len(stale)
 
-    action = "would be" if args.dry_run else ""
+    return total_ok, len(locales), total_added, total_removed
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Sync locale files with en.axaml")
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Show per-key debug output",
+    )
+    parser.add_argument(
+        "-n",
+        "--dry-run",
+        action="store_true",
+        help="Log changes without writing to files",
+    )
+    parser.add_argument(
+        "-l",
+        "--lang-dir",
+        default=None,
+        help="Path to a language directory (default: both XeniaManager and XeniaManager.BigScreen language folders)",
+    )
+    args = parser.parse_args()
+    setup_logging(args.verbose)
+
+    lang_dirs = [args.lang_dir] if args.lang_dir else DEFAULT_LANG_DIRS
+    grand_ok = 0
+    grand_total = 0
+    grand_added = 0
+    grand_removed = 0
+
+    for lang_dir in lang_dirs:
+        if not os.path.isdir(lang_dir):
+            logger.error("Language directory not found: %s", lang_dir)
+            sys.exit(1)
+        logger.info("Syncing directory: %s", lang_dir)
+        total_ok, total_locales, total_added, total_removed = sync_dir(
+            lang_dir, args.dry_run
+        )
+        grand_ok += total_ok
+        grand_total += total_locales
+        grand_added += total_added
+        grand_removed += total_removed
+
     logger.info(
         "Done. %d/%d locales %s (+%d added, -%d removed)",
-        total_ok,
-        len(locales),
+        grand_ok,
+        grand_total,
         "checked (dry-run)" if args.dry_run else "synced",
-        total_added,
-        total_removed,
+        grand_added,
+        grand_removed,
     )
 
 

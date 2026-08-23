@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             x:Class="XeniaManager.BigScreen.Views.Modals.AchievementsPaneView"
+             x:DataType="vm:AchievementsPaneViewModel">
+    <Grid RowDefinitions="Auto, *" RowSpacing="24">
+
+        <!-- HEADER: stats (left) + filter indicator (right) -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" ColumnSpacing="40">
+            <StackPanel Orientation="Horizontal" Spacing="40" VerticalAlignment="Center">
+                <prim:IconStat Icon="Trophy"
+                               Stat="{Binding AchievementText}"
+                               Classes="pane-header-stat" />
+                <prim:IconStat Icon="Star"
+                               Stat="{Binding GamerscoreText}"
+                               Classes="pane-header-stat" />
+            </StackPanel>
+            <prim:IconStat Grid.Column="1"
+                           Icon="ArrowSort"
+                           Stat="{Binding SortText}"
+                           IconRotation="90"
+                           IconSize="24"
+                           Spacing="12"
+                           VerticalAlignment="Center"
+                           FontSize="22" />
+        </Grid>
+
+        <!-- BODY: scrollable flat list of achievement rows -->
+        <Grid Grid.Row="1">
+            <ScrollViewer x:Name="SvAchievements"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Hidden">
+                <ItemsControl ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:AchievementItemViewModel">
+                            <card:AchievementRow />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Empty state: no GPD or no achievements -->
+            <prim:EmptyState IsVisible="{Binding ShowEmpty}"
+                             Symbol="Trophy"
+                             Text="{DynamicResource GameModal.Achievements.Empty}"
+                             Width="520"
+                             Height="220"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center" />
+        </Grid>
+    </Grid>
+</UserControl>
