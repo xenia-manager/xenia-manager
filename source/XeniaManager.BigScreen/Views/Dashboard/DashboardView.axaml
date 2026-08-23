@@ -44,7 +44,7 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"
-                                    Spacing="{x:Static const:LayoutConstants.DashboardCardSpacing}"
+                                    Spacing="{Binding CardSpacing}"
                                     VerticalAlignment="Bottom" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>

@@ -26,6 +26,8 @@ public static class LayoutConstants
     /// Gap between the dashboard game cards.
     /// </summary>
     public const double DashboardCardSpacing = 15;
+    
+    public const double DashboardCardSpacingUnfocused = DashboardCardSpacing + (DashboardCardSelectedWidth - DashboardCardWidth) / 7;
 
     /// <summary>
     /// Gap between the dashboard option cards.

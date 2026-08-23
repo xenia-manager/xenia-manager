@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -43,16 +42,24 @@ public partial class DashboardViewModel : ViewModelBase
 
     /// <summary>
     /// Whether the vignette overlay should be shown. Only for image-based backgrounds
-    /// (Image mode, or Dynamic with artwork) - it ruins flat color/gradient backgrounds.
+    /// (Image mode, or Dynamic with artwork) - it ruins flat colour/gradient backgrounds.
     /// </summary>
     [ObservableProperty]
     public partial bool VignetteVisible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsGameRowFocused { get; set; } = true;
+    
+    [ObservableProperty]
+    public partial double CardSpacing { get; set; } = LayoutConstants.DashboardCardSpacing;
 
     /// <summary>
     /// The in-flight artwork fade; stopped and replaced on every art swap so
     /// only one fade ever plays (latest request wins).
     /// </summary>
     private Tween _artFade;
+
+    private Tween _cardSpacing;
 
     /// <summary>
     /// The artwork queued for the fade-in leg of the crossfade; committed by
@@ -61,7 +68,7 @@ public partial class DashboardViewModel : ViewModelBase
     private Bitmap? _pendingArtwork;
 
     /// <summary>
-    /// The first 6 games, shown on the dashboard.
+    /// The first 8 games, shown on the dashboard.
     /// </summary>
     public ObservableCollection<GameCardViewModel> RecentGames { get; } = [];
 
@@ -83,6 +90,9 @@ public partial class DashboardViewModel : ViewModelBase
         _backgroundService = backgroundService;
         RecentGames.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
     }
+    
+    private Tween SpacingTween(double spacing) => 
+        Tween.Custom(this, CardSpacing, spacing, static(vm, v) => vm.CardSpacing = v, TimingConstants.CardRowAnimationDuration);
 
     /// <summary>
     /// Fades the artwork layer opacity to <paramref name="to"/>, starting from its
@@ -92,6 +102,24 @@ public partial class DashboardViewModel : ViewModelBase
     private Tween FadeArtOpacity(double to) =>
         Tween.Custom(this, ArtOpacity, to, static (vm, v) => vm.ArtOpacity = v, TimingConstants.ArtFadeDuration);
 
+    private Tween CardSpacingFocused() => SpacingTween(LayoutConstants.DashboardCardSpacing);
+    
+    private Tween CardSpacingUnfocused() => SpacingTween(LayoutConstants.DashboardCardSpacingUnfocused);
+
+    private void UpdateCardSpacing(bool focus)
+    {
+        _cardSpacing.Stop();
+        _cardSpacing = focus ? CardSpacingFocused() : CardSpacingUnfocused();
+        
+        // CardSpacing = focus ? LayoutConstants.DashboardCardSpacingUnfocused : LayoutConstants.DashboardCardSpacing;
+        Logger.Debug<DashboardViewModel>($"Card spacing: {CardSpacing}");
+    }
+    
+    partial void OnIsGameRowFocusedChanged(bool value)
+    {
+        UpdateCardSpacing(value);
+    }
+    
     /// <summary>
     /// Swaps in the queued artwork and fades the layer back in. Runs when the
     /// fade-out leg completes naturally.
