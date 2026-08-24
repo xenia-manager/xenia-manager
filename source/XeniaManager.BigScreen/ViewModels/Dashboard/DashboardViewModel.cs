@@ -59,8 +59,6 @@ public partial class DashboardViewModel : ViewModelBase
     /// </summary>
     private Tween _artFade;
 
-    private Tween _cardSpacing;
-
     /// <summary>
     /// The artwork queued for the fade-in leg of the crossfade; committed by
     /// <see cref="CommitArtwork"/> once the layer has faded out.
@@ -91,9 +89,6 @@ public partial class DashboardViewModel : ViewModelBase
         RecentGames.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
     }
     
-    private Tween SpacingTween(double spacing) => 
-        Tween.Custom(this, CardSpacing, spacing, static(vm, v) => vm.CardSpacing = v, TimingConstants.CardRowAnimationDuration);
-
     /// <summary>
     /// Fades the artwork layer opacity to <paramref name="to"/>, starting from its
     /// current value. Target-based on this view model, so the callback is cached
@@ -102,16 +97,9 @@ public partial class DashboardViewModel : ViewModelBase
     private Tween FadeArtOpacity(double to) =>
         Tween.Custom(this, ArtOpacity, to, static (vm, v) => vm.ArtOpacity = v, TimingConstants.ArtFadeDuration);
 
-    private Tween CardSpacingFocused() => SpacingTween(LayoutConstants.DashboardCardSpacing);
-    
-    private Tween CardSpacingUnfocused() => SpacingTween(LayoutConstants.DashboardCardSpacingUnfocused);
-
     private void UpdateCardSpacing(bool focus)
     {
-        _cardSpacing.Stop();
-        _cardSpacing = focus ? CardSpacingFocused() : CardSpacingUnfocused();
-        
-        // CardSpacing = focus ? LayoutConstants.DashboardCardSpacingUnfocused : LayoutConstants.DashboardCardSpacing;
+        CardSpacing = focus ? LayoutConstants.DashboardCardSpacing : LayoutConstants.DashboardCardSpacingUnfocused;
         Logger.Debug<DashboardViewModel>($"Card spacing: {CardSpacing}");
     }
     

@@ -17,11 +17,6 @@
                 <Grid IsVisible="{Binding ShowBoxArt}"
                       Height="{Binding BoxArtFullHeight}"
                       VerticalAlignment="Bottom">
-                    <Grid.Transitions>
-                        <Transitions>
-                            <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
-                        </Transitions>
-                    </Grid.Transitions>
                     <Image Source="{Binding BoxArt}" Stretch="UniformToFill" />
                 </Grid>
                 <Grid IsVisible="{Binding ShowDiscArt}"

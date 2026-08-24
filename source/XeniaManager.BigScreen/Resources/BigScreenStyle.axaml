@@ -20,8 +20,6 @@
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="Transitions">
             <Transitions>
-                <DoubleTransition Property="Width" Duration="0:0:0.18" Easing="CubicEaseOut" />
-                <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
                 <ThicknessTransition Property="BorderThickness" Duration="0:0:0.1" />
             </Transitions>
         </Setter>
@@ -37,15 +35,10 @@
     </Style>
 
     <!-- Size is bound to the ViewModel (mode + selection), so the tile stays square
-         in Icon mode and turns portrait in Box Art mode; the growth tweens -->
+         in Icon mode and turns portrait in Box Art mode. The growth (Width/Height)
+         animation is temporarily disabled - see the note in the CARD BASE style. -->
     <Style Selector="card|GameCard">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Transitions">
-            <Transitions>
-                <DoubleTransition Property="Width" Duration="0:0:0.18" Easing="CubicEaseOut" />
-                <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
-            </Transitions>
-        </Setter>
     </Style>
 
     <!-- Border overlay above the box art: reserves the stroke area; the base

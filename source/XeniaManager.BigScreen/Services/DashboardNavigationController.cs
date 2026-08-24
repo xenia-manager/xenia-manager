@@ -97,7 +97,9 @@ public class DashboardNavigationController
         int gameIndex = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
         int mapped = GameToOptionColumn[Math.Clamp(gameIndex, 0, GameToOptionColumn.Length - 1)];
         int target = Math.Clamp(mapped, 0, dashboard.Options.Count - 1);
+        _lastSelectedGameIndex = gameIndex;
         SelectionHelper.SelectOnlyAt(dashboard.Options, target);
+        SelectionHelper.ClearSelection(dashboard.RecentGames);
         dashboard.IsGameRowFocused = false;
 
         OptionFocusRequested?.Invoke(dashboard.Options[target]);
@@ -127,7 +129,7 @@ public class DashboardNavigationController
 
         int optionIndex = SelectionHelper.IndexOfSelected(dashboard.Options);
         int mapped = fromProfileRow
-            ? SelectionHelper.IndexOfSelected(dashboard.RecentGames)
+            ? _lastSelectedGameIndex
             : OptionToGameColumn[Math.Clamp(optionIndex, 0, OptionToGameColumn.Length - 1)];
         int target = Math.Clamp(mapped, 0, dashboard.RecentGames.Count - 1);
         SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
@@ -148,7 +150,15 @@ public class DashboardNavigationController
         IsOnProfileRow = true;
         IsOnOptionsRow = false;
         dashboard.IsGameRowFocused = false;
-        
+
+        int gameIndex = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
+        if (gameIndex >= 0)
+        {
+            _lastSelectedGameIndex = gameIndex;
+        }
+
+        SelectionHelper.ClearSelection(dashboard.RecentGames);
+
         ProfileFocusRequested?.Invoke();
         Logger.Debug<DashboardNavigationController>("Switched to profile row");
     }
@@ -197,8 +207,7 @@ public class DashboardNavigationController
         IsOnProfileRow = false;
         IsOnOptionsRow = false;
 
-        int current = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
-        int target = (Math.Max(current, 0) + 1) % dashboard.RecentGames.Count;
+        int target = (_lastSelectedGameIndex + 1) % dashboard.RecentGames.Count;
         SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
         SelectionHelper.ClearSelection(dashboard.Options);
         dashboard.IsGameRowFocused = true;
