@@ -1161,7 +1161,15 @@ public partial class SettingsViewModel : ViewModelBase
 
         if (IsEditorOpen)
         {
-            CancelEditor();
+            if (IsColourEditor)
+            {
+                CommitEditor();
+            }
+            else
+            {
+                CancelEditor();
+            }
+
             return true;
         }
 
