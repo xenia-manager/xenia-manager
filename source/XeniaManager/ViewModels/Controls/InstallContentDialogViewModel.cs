@@ -8,7 +8,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels.Items;
@@ -109,10 +111,11 @@ public partial class InstallContentDialogViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Starts the installation of all content items in the list.
+    /// Starts the installation of all content items in the list using the given installation method.
     /// </summary>
+    /// <param name="installationMethod">The installation method to use for the content items.</param>
     [RelayCommand]
-    private async Task InstallAsync()
+    private async Task InstallAsync(ContentInstallationMethod installationMethod)
     {
         if (ContentItems.Count == 0)
         {
@@ -155,21 +158,42 @@ public partial class InstallContentDialogViewModel : ViewModelBase
                     string contentFolder = Path.Combine(AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion).ContentFolderLocation),
                         "0000000000000000");
 
-                    // Extract the STFS file to Xenia's structure with progress reporting on a background thread
+                    // Install with progress reporting on a background thread
                     await Task.Run(() =>
                     {
-                        stfsFile.ExtractToXeniaStructure(
-                            contentFolder,
-                            progressCallback: (extractedFiles, totalFiles) =>
-                            {
-                                // Update progress based on extracted files count
-                                // Must be dispatched to UI thread
-                                double progress = (extractedFiles / (double)totalFiles) * 100;
-                                Dispatcher.UIThread.Post(() =>
+                        if (installationMethod == ContentInstallationMethod.PackageFile)
+                        {
+                            // Copy the package file into Xenia's content directory as-is
+                            ContentPackageManager.InstallPackageAsFile(
+                                stfsFile.PackagePath ?? throw new InvalidOperationException("Package file path is unknown"),
+                                contentFolder,
+                                stfsFile.Metadata.TitleIdHex,
+                                stfsFile.Metadata.ContentType.ToHexString(),
+                                (copiedBytes, totalBytes) =>
                                 {
-                                    contentItem.InstallationProgress = progress;
+                                    double progress = totalBytes > 0 ? copiedBytes * 100.0 / totalBytes : 100;
+                                    Dispatcher.UIThread.Post(() =>
+                                    {
+                                        contentItem.InstallationProgress = Math.Min(progress, 100);
+                                    });
                                 });
-                            });
+                        }
+                        else
+                        {
+                            // Extract the STFS file to Xenia's structure with progress reporting
+                            stfsFile.ExtractToXeniaStructure(
+                                contentFolder,
+                                progressCallback: (extractedFiles, totalFiles) =>
+                                {
+                                    // Update progress based on extracted files count
+                                    // Must be dispatched to UI thread
+                                    double progress = (extractedFiles / (double)totalFiles) * 100;
+                                    Dispatcher.UIThread.Post(() =>
+                                    {
+                                        contentItem.InstallationProgress = progress;
+                                    });
+                                });
+                        }
                     });
 
                     // Mark as complete

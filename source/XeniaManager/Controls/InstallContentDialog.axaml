@@ -150,18 +150,36 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <!-- Add Content Button -->
-            <Button Grid.Row="1"
-                    x:Name="AddContentButton"
-                    HorizontalAlignment="Right"
-                    Margin="8">
-                <ToolTip.Tip>
-                    <TextBlock Text="{DynamicResource InstallContentDialog.AddContent.Button}" />
-                </ToolTip.Tip>
-                <Button.Content>
-                    <fluent:SymbolIcon Symbol="Add" />
-                </Button.Content>
-            </Button>
+            <!-- Install and Add Content Buttons -->
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="Auto,*,Auto"
+                  Margin="8">
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                    <!-- Extract install button (compatible with all Xenia versions) -->
+                    <Button x:Name="InstallExtractedButton"
+                            Content="{DynamicResource InstallContentDialog.InstallExtracted.Button}"
+                            IsEnabled="{Binding CanInstall}" />
+                    <!-- Package install button (requires the latest Xenia Canary) -->
+                    <Button x:Name="InstallPackageButton"
+                            Content="{DynamicResource InstallContentDialog.InstallPackage.Button}"
+                            ToolTip.Tip="{DynamicResource InstallContentDialog.Method.Package.ToolTip}"
+                            IsEnabled="{Binding CanInstall}" />
+                </StackPanel>
+
+                <!-- Add Content Button -->
+                <Button Grid.Column="2"
+                        x:Name="AddContentButton"
+                        HorizontalAlignment="Right">
+                    <ToolTip.Tip>
+                        <TextBlock Text="{DynamicResource InstallContentDialog.AddContent.Button}" />
+                    </ToolTip.Tip>
+                    <Button.Content>
+                        <fluent:SymbolIcon Symbol="Add" />
+                    </Button.Content>
+                </Button>
+            </Grid>
         </Grid>
     </cards:CustomCard>
 </UserControl>

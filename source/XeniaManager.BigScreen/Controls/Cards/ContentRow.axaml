@@ -24,10 +24,19 @@
         </ControlTemplate>
     </Button.Template>
     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
-        <fluent:SymbolIcon Symbol="Document"
-                           FontSize="26"
-                           Foreground="{DynamicResource TextSecondary}"
-                           VerticalAlignment="Center" />
+        <!-- Icon: package thumbnail when available, document fallback otherwise -->
+        <Panel VerticalAlignment="Center">
+            <Image Source="{Binding ThumbnailImage}"
+                   IsVisible="{Binding HasThumbnail}"
+                   Width="48"
+                   Height="48"
+                   Stretch="Uniform" />
+            <fluent:SymbolIcon Symbol="Document"
+                               FontSize="26"
+                               Foreground="{DynamicResource TextSecondary}"
+                               VerticalAlignment="Center"
+                               IsVisible="{Binding !HasThumbnail}" />
+        </Panel>
         <StackPanel Grid.Column="1"
                     VerticalAlignment="Center"
                     Spacing="2">

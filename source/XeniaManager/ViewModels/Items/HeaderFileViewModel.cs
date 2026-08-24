@@ -1,8 +1,10 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files;
+using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Stfs;
 
 namespace XeniaManager.ViewModels.Items;
@@ -16,6 +18,16 @@ public partial class HeaderFileViewModel : ViewModelBase
     /// The underlying header file.
     /// </summary>
     public HeaderFile Header { get; }
+
+    /// <summary>
+    /// The thumbnail image embedded in the package (only available for package entries).
+    /// </summary>
+    [ObservableProperty] private Bitmap? _thumbnailImage;
+
+    /// <summary>
+    /// Gets whether a thumbnail image is available for display.
+    /// </summary>
+    public bool HasThumbnail => ThumbnailImage != null;
 
     /// <summary>
     /// Gets the display name of the header file.
@@ -49,6 +61,12 @@ public partial class HeaderFileViewModel : ViewModelBase
     {
         get
         {
+            // Package-file content points directly at the package itself (no sidecar header)
+            if (Header.IsPackageEntry)
+            {
+                return Header.FilePath;
+            }
+
             // Split the path to get the base directory (remove "\Headers\...")
             string[] parts = Regex.Split(HeaderFilePath, @"\\Headers", RegexOptions.IgnoreCase);
             string basePath = parts[0];
@@ -83,5 +101,20 @@ public partial class HeaderFileViewModel : ViewModelBase
     public HeaderFileViewModel(HeaderFile header)
     {
         Header = header;
+
+        // Package entries carry their icon inside the package metadata
+        if (header.IsPackageEntry && header.ThumbnailImage.Length > 0)
+        {
+            try
+            {
+                using MemoryStream ms = new MemoryStream(header.ThumbnailImage);
+                ThumbnailImage = new Bitmap(ms);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<HeaderFileViewModel>($"Failed to load package thumbnail for '{header.FileName}'");
+                Logger.LogExceptionDetails<HeaderFileViewModel>(ex);
+            }
+        }
     }
 }

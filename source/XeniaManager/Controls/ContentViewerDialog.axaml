@@ -95,15 +95,23 @@
                         <DataTemplate x:DataType="itemsvm:HeaderFileViewModel">
                             <Border Padding="12,8" Margin="4,2">
                                 <Grid ColumnDefinitions="Auto,*,Auto">
-                                    <!-- Icon -->
-                                    <fluent:SymbolIcon Symbol="Document"
-                                                       Grid.Column="0"
-                                                       VerticalAlignment="Center"
-                                                       Margin="0,0,12,0">
-                                        <fluent:SymbolIcon.Foreground>
-                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                        </fluent:SymbolIcon.Foreground>
-                                    </fluent:SymbolIcon>
+                                    <!-- Icon: package thumbnail when available, document fallback otherwise -->
+                                    <Panel Grid.Column="0"
+                                           Width="32"
+                                           Height="32"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,12,0">
+                                        <Image Source="{Binding ThumbnailImage}"
+                                               IsVisible="{Binding HasThumbnail}"
+                                               Stretch="Uniform" />
+                                        <fluent:SymbolIcon Symbol="Document"
+                                                           VerticalAlignment="Center"
+                                                           IsVisible="{Binding HasThumbnail, Converter={StaticResource InverseBoolConverter}}">
+                                            <fluent:SymbolIcon.Foreground>
+                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                            </fluent:SymbolIcon.Foreground>
+                                        </fluent:SymbolIcon>
+                                    </Panel>
 
                                     <!-- Content details -->
                                     <StackPanel Grid.Column="1"
