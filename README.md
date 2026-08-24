@@ -109,10 +109,15 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 ### Libraries Used
 
 - [Avalonia UI](https://avaloniaui.net/) – cross-platform UI framework
+- [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) – MVVM framework for .NET
 - [FluentAvalonia](https://github.com/amwx/FluentAvalonia/) – Fluent Design controls for Avalonia
 - [FluentIcons](https://github.com/davidxuang/FluentIcons) – Fluent Design icon library
+- [Microsoft.Extensions.DependencyInjection](https://github.com/dotnet/runtime) – dependency injection container
 - [NLog](https://github.com/NLog/NLog) – logging and diagnostics
+- [ppy.SDL3-CS](https://github.com/ppy/SDL3-CS) – SDL3 bindings for gamepad input support
 - [SharpCompress](https://github.com/adamhathcock/sharpcompress) – archive compression handling
+- [System.IO.Hashing](https://learn.microsoft.com/en-us/dotnet/api/system.io.hashing) – fast hashing algorithms (XxHash)
+- [TweenAvalonia](https://github.com/SBUplakankus/tween-avalonia) – programmatic tween animations for Avalonia
 - [ZstdSharp.Port](https://github.com/oleg-st/ZstdSharp) – Zstandard compression for .NET
 
 ---

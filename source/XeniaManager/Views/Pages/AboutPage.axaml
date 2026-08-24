@@ -288,6 +288,40 @@
                                                     Background="Transparent"
                                                     BorderThickness="0"
                                                     Command="{Binding OpenUrlCommand}"
+                                                    CommandParameter="https://github.com/CommunityToolkit/dotnet"
+                                                    Cursor="Hand"
+                                                    Foreground="{DynamicResource SystemAccentColorLight2Brush}"
+                                                    HorizontalAlignment="Left">
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.CommunityToolkitMvvm.Title}" />
+                                            </Button>
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Text="{DynamicResource AboutPage.Credits.CommunityToolkitMvvm.ToolTip}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                <Run Text="• " />
+                                            </TextBlock>
+                                            <Button Padding="0"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Command="{Binding OpenUrlCommand}"
+                                                    CommandParameter="https://github.com/dotnet/runtime"
+                                                    Cursor="Hand"
+                                                    Foreground="{DynamicResource SystemAccentColorLight2Brush}"
+                                                    HorizontalAlignment="Left">
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.DependencyInjection.Title}" />
+                                            </Button>
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Text="{DynamicResource AboutPage.Credits.DependencyInjection.ToolTip}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                <Run Text="• " />
+                                            </TextBlock>
+                                            <Button Padding="0"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Command="{Binding OpenUrlCommand}"
                                                     CommandParameter="https://github.com/amwx/FluentAvalonia/"
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
@@ -356,6 +390,23 @@
                                                     Background="Transparent"
                                                     BorderThickness="0"
                                                     Command="{Binding OpenUrlCommand}"
+                                                    CommandParameter="https://github.com/ppy/SDL3-CS"
+                                                    Cursor="Hand"
+                                                    Foreground="{DynamicResource SystemAccentColorLight2Brush}"
+                                                    HorizontalAlignment="Left">
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.Sdl3Cs.Title}" />
+                                            </Button>
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Text="{DynamicResource AboutPage.Credits.Sdl3Cs.ToolTip}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                <Run Text="• " />
+                                            </TextBlock>
+                                            <Button Padding="0"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Command="{Binding OpenUrlCommand}"
                                                     CommandParameter="https://github.com/adamhathcock/sharpcompress"
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
@@ -364,6 +415,40 @@
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                                        Text="{DynamicResource AboutPage.Credits.SharpCompress.ToolTip}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                <Run Text="• " />
+                                            </TextBlock>
+                                            <Button Padding="0"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Command="{Binding OpenUrlCommand}"
+                                                    CommandParameter="https://learn.microsoft.com/en-us/dotnet/api/system.io.hashing"
+                                                    Cursor="Hand"
+                                                    Foreground="{DynamicResource SystemAccentColorLight2Brush}"
+                                                    HorizontalAlignment="Left">
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.SystemIOHashing.Title}" />
+                                            </Button>
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Text="{DynamicResource AboutPage.Credits.SystemIOHashing.ToolTip}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                <Run Text="• " />
+                                            </TextBlock>
+                                            <Button Padding="0"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Command="{Binding OpenUrlCommand}"
+                                                    CommandParameter="https://github.com/SBUplakankus/tween-avalonia"
+                                                    Cursor="Hand"
+                                                    Foreground="{DynamicResource SystemAccentColorLight2Brush}"
+                                                    HorizontalAlignment="Left">
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.TweenAvalonia.Title}" />
+                                            </Button>
+                                            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Text="{DynamicResource AboutPage.Credits.TweenAvalonia.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
