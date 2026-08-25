@@ -26,8 +26,9 @@ public static class LayoutConstants
     /// Gap between the dashboard game cards.
     /// </summary>
     public const double DashboardCardSpacing = 15;
-    
-    public const double DashboardCardSpacingUnfocused = DashboardCardSpacing + (DashboardCardSelectedWidth - DashboardCardWidth) / 7;
+
+    public const double DashboardCardSpacingUnfocused =
+        DashboardCardSpacing + (DashboardCardSelectedWidth - DashboardCardWidth) / 7;
 
     /// <summary>
     /// Gap between the dashboard option cards.
@@ -158,4 +159,24 @@ public static class LayoutConstants
     /// Dashboard game tile art inset (2px card margin on both sides).
     /// </summary>
     public const double DashboardCardArtMargin = 4;
+
+    /// <summary>
+    /// Dashboard row unfocused gap – 20% taken from spacing and given to cards.
+    /// </summary>
+    public const double DashboardCardRowUnfocusedGap = 20;
+
+    /// <summary>
+    /// Dashboard row unfocused width – spacing taken added to cards, exact ratio kept.
+    /// </summary>
+    public const double DashboardCardRowUnfocusedWidth = 158;
+
+    /// <summary>
+    /// Dashboard row unfocused BoxArt height – exact 182/153 ratio.
+    /// </summary>
+    public const double DashboardCardRowUnfocusedBoxArtHeight = 188;
+
+    /// <summary>
+    /// Sentinel index indicating no card has focus.
+    /// </summary>
+    public const int DashboardNoFocusIndex = -1;
 }

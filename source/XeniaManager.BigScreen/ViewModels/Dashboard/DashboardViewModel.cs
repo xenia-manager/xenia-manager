@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -13,13 +14,13 @@ using TweenAvalonia;
 namespace XeniaManager.BigScreen.ViewModels.Dashboard;
 
 /// <summary>
-/// Dashboard state: recent games, option cards, the static background brush and
-/// the fading dynamic artwork layer. The artwork crossfade runs here on the
-/// bound <see cref="ArtOpacity"/> value; the view just binds it to the layer.
+/// Dashboard state: recent games, options, background and focus animations.
 /// </summary>
 public partial class DashboardViewModel : ViewModelBase
 {
     private readonly IBackgroundService _backgroundService;
+    private const double FocusIndexEpsilon = 0.001;
+    private const double MaxSmoothDistance = 1.0;
 
     /// <summary>
     /// The static base brush (solid/gradient/image) always applied to the window
@@ -47,11 +48,24 @@ public partial class DashboardViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool VignetteVisible { get; set; }
 
+    [ObservableProperty] public partial bool IsGameRowFocused { get; set; } = true;
+
+    /// <summary>
+    /// Index of the focused card. Driven by selection and animated.
+    /// </summary>
     [ObservableProperty]
-    public partial bool IsGameRowFocused { get; set; } = true;
-    
+    public partial double FocusedIndex { get; set; } = LayoutConstants.DashboardNoFocusIndex;
+
+    /// <summary>
+    /// Amount the row is focused. 1 when game row is active, 0 when not.
+    /// </summary>
     [ObservableProperty]
-    public partial double CardSpacing { get; set; } = LayoutConstants.DashboardCardSpacing;
+    public partial double FocusAmount { get; set; } = 1.0;
+
+    private Tween _focusedTween;
+    private Tween _focusAmountTween;
+
+    [ObservableProperty] public partial double CardSpacing { get; set; } = LayoutConstants.DashboardCardSpacing;
 
     /// <summary>
     /// The in-flight artwork fade; stopped and replaced on every art swap so
@@ -86,9 +100,45 @@ public partial class DashboardViewModel : ViewModelBase
     public DashboardViewModel(IBackgroundService backgroundService)
     {
         _backgroundService = backgroundService;
-        RecentGames.CollectionChanged += (_, _) => OnPropertyChanged(nameof(ShowEmptyStub));
+        RecentGames.CollectionChanged += (_, args) =>
+        {
+            OnPropertyChanged(nameof(ShowEmptyStub));
+            if (args.NewItems != null)
+            {
+                foreach (GameCardViewModel card in args.NewItems)
+                {
+                    card.PropertyChanged += OnGameCardPropertyChanged;
+                }
+            }
+
+            if (args.OldItems != null)
+            {
+                foreach (GameCardViewModel card in args.OldItems)
+                {
+                    card.PropertyChanged -= OnGameCardPropertyChanged;
+                }
+            }
+
+            if (args.NewItems != null || args.OldItems != null)
+            {
+                SyncFocusedIndexToSelection();
+            }
+        };
     }
-    
+
+    private void OnGameCardPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(GameCardViewModel.IsSelected) && sender is GameCardViewModel vm && vm.IsSelected)
+        {
+            SyncFocusedIndexToSelection();
+        }
+        else if (e.PropertyName == nameof(GameCardViewModel.IsSelected) &&
+                 Utilities.SelectionHelper.IndexOfSelected(RecentGames) < 0)
+        {
+            SyncFocusedIndexToSelection();
+        }
+    }
+
     /// <summary>
     /// Fades the artwork layer opacity to <paramref name="to"/>, starting from its
     /// current value. Target-based on this view model, so the callback is cached
@@ -102,12 +152,70 @@ public partial class DashboardViewModel : ViewModelBase
         CardSpacing = focus ? LayoutConstants.DashboardCardSpacing : LayoutConstants.DashboardCardSpacingUnfocused;
         Logger.Debug<DashboardViewModel>($"Card spacing: {CardSpacing}");
     }
-    
+
+    public void SyncFocusedIndexToSelection()
+    {
+        if (RecentGames.Count == 0)
+        {
+            AnimateFocusedIndex(LayoutConstants.DashboardNoFocusIndex);
+            AnimateFocusAmount(0.0);
+            return;
+        }
+
+        int idx = Utilities.SelectionHelper.IndexOfSelected(RecentGames);
+        if (idx >= 0)
+        {
+            AnimateFocusedIndex(idx);
+        }
+
+        AnimateFocusAmount(IsGameRowFocused ? 1.0 : 0.0);
+    }
+
+    private void AnimateFocusedIndex(int targetIndex)
+    {
+        _focusedTween.Stop();
+        double target = targetIndex < 0 ? LayoutConstants.DashboardNoFocusIndex : targetIndex;
+        if (Math.Abs(FocusedIndex - target) < FocusIndexEpsilon)
+        {
+            FocusedIndex = target;
+            return;
+        }
+
+        if (RecentGames.Count == 0)
+        {
+            FocusedIndex = target;
+            return;
+        }
+
+        if (Math.Abs(FocusedIndex - target) > MaxSmoothDistance)
+        {
+            FocusedIndex = target;
+            return;
+        }
+
+        _focusedTween = Tween.Custom(this, FocusedIndex, target, static (vm, v) => vm.FocusedIndex = v,
+            TimingConstants.CardRowAnimationDuration);
+    }
+
+    private void AnimateFocusAmount(double target)
+    {
+        _focusAmountTween.Stop();
+        if (Math.Abs(FocusAmount - target) < FocusIndexEpsilon)
+        {
+            FocusAmount = target;
+            return;
+        }
+
+        _focusAmountTween = Tween.Custom(this, FocusAmount, target, static (vm, v) => vm.FocusAmount = v,
+            TimingConstants.CardRowAnimationDuration);
+    }
+
     partial void OnIsGameRowFocusedChanged(bool value)
     {
         UpdateCardSpacing(value);
+        SyncFocusedIndexToSelection();
     }
-    
+
     /// <summary>
     /// Swaps in the queued artwork and fades the layer back in. Runs when the
     /// fade-out leg completes naturally.
@@ -186,11 +294,9 @@ public partial class DashboardViewModel : ViewModelBase
     {
         BackgroundMode mode = _backgroundService.Settings.Mode;
         bool hasArtwork = mode == BackgroundMode.Dynamic && selectedArt != null;
-
         Background = ResolveBackgroundBrush();
         VignetteVisible = ShouldShowVignette(mode, hasArtwork);
         UpdateArtworkLayer(selectedArt, hasArtwork, fade);
-
         Logger.Debug<DashboardViewModel>(
             $"Background updated: mode={_backgroundService.Settings.Mode}, art={(hasArtwork ? "game art" : "none")}");
     }

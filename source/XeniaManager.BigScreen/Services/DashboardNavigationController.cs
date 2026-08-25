@@ -79,7 +79,7 @@ public class DashboardNavigationController
     private static readonly int[] OptionToGameColumn = [0, 2, 4, 6];
 
     private int _lastSelectedGameIndex = 0;
-    
+
     /// <summary>
     /// Switches the dashboard to the option row, selecting the option card in the
     /// column underneath the current game selection (clamped to the option count).
@@ -135,7 +135,7 @@ public class DashboardNavigationController
         SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
         SelectionHelper.ClearSelection(dashboard.Options);
         dashboard.IsGameRowFocused = true;
-        
+
         GameFocusRequested?.Invoke(dashboard.RecentGames[target]);
         Logger.Debug<DashboardNavigationController>("Switched to game row");
     }
