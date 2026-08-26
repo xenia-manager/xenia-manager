@@ -646,10 +646,12 @@
 
     <!-- Install Content Dialog -->
     <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Instaliraj sadržaj</sys:String>
-    <sys:String x:Key="InstallContentDialog.ContentDialog.InstallButton.Text">Instaliraj</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Otkaži</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">Dodaj sadržaj</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">Odaberite datoteke sadržaja</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">Instaliraj (Raspakiraj)</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">Instaliraj (Paket)</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">Zadržava paketnu datoteku netaknutom. Potreban je najnoviji Xenia Canary.</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">Instalacija uspješna</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">Sljedeći sadržaj je uspješno instaliran:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Instalacija djelomično uspješna</sys:String>

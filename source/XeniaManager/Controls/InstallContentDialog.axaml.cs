@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
@@ -58,60 +57,22 @@ public partial class InstallContentDialog : UserControl
         {
             Title = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.Title"),
             Content = dialog,
-            PrimaryButtonText = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.InstallButton.Text"),
             CloseButtonText = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.CancelButton.Text"),
-            FullSizeDesired = true,
-            DefaultButton = FAContentDialogButton.Primary
+            FullSizeDesired = true
         };
 
         // Controlling ContentDialog
         contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
         contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
 
-        // Set the initial button state (disabled when no content items)
-        contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanInstall;
-
-        // Bind button states to ViewModel
-        dialog._viewModel.PropertyChanged += (s, e) =>
+        // Handle install buttons click
+        dialog.InstallExtractedButton.Click += async (_, _) =>
         {
-            if (e.PropertyName == nameof(InstallContentDialogViewModel.CanInstall))
-            {
-                contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanInstall;
-            }
+            await ExecuteInstallation(contentDialog, dialog._viewModel, ContentInstallationMethod.ExtractedFolder);
         };
-
-        // Handle primary button (Install) using deferral to properly handle async operation
-        contentDialog.PrimaryButtonClick += async (_, e) =>
+        dialog.InstallPackageButton.Click += async (_, _) =>
         {
-            FADeferral? deferral = e.GetDeferral();
-            try
-            {
-                // Start the installation
-                await dialog._viewModel.InstallCommand.ExecuteAsync(null);
-
-                // Wait for installation to complete
-                while (dialog._viewModel.IsInstalling)
-                {
-                    await Task.Delay(100);
-                }
-
-                // Show the messagebox with installation results
-                await ShowInstallationResults(dialog._viewModel);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error<InstallContentDialog>("Installation failed");
-                Logger.LogExceptionDetails<InstallContentDialog>(ex);
-                e.Cancel = true;
-                IMessageBoxService messageBox = App.Services.GetRequiredService<IMessageBoxService>();
-                await messageBox.ShowErrorAsync(
-                    LocalizationHelper.GetText("InstallContentDialog.Results.Failed.Title"),
-                    ex.Message);
-            }
-            finally
-            {
-                deferral.Complete();
-            }
+            await ExecuteInstallation(contentDialog, dialog._viewModel, ContentInstallationMethod.PackageFile);
         };
 
         // Handle Add Content button click
@@ -128,6 +89,33 @@ public partial class InstallContentDialog : UserControl
         {
             Logger.Error<InstallContentDialog>("Error showing install content dialog");
             Logger.LogExceptionDetails<InstallContentDialog>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Runs the installation with the given method, closes the dialog and shows the installation results.
+    /// </summary>
+    private static async Task ExecuteInstallation(FAContentDialog contentDialog, InstallContentDialogViewModel viewModel,
+        ContentInstallationMethod installationMethod)
+    {
+        try
+        {
+            // Start the installation
+            await viewModel.InstallCommand.ExecuteAsync(installationMethod);
+
+            contentDialog.Hide();
+
+            // Show the messagebox with installation results
+            await ShowInstallationResults(viewModel);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<InstallContentDialog>("Installation failed");
+            Logger.LogExceptionDetails<InstallContentDialog>(ex);
+            IMessageBoxService messageBox = App.Services.GetRequiredService<IMessageBoxService>();
+            await messageBox.ShowErrorAsync(
+                LocalizationHelper.GetText("InstallContentDialog.Results.Failed.Title"),
+                ex.Message);
         }
     }
 

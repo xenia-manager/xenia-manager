@@ -79,8 +79,22 @@ public class HeaderFile
 
     /// <summary>
     /// Gets or sets the file path.
+    /// For regular entries this is the sidecar .header file path.
+    /// For package entries (<see cref="IsPackageEntry"/>) this is the package file itself.
     /// </summary>
     public string FilePath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets whether this entry represents a package file kept intact in Xenia's content directory
+    /// (XContent package support, Xenia Canary b11458e+) instead of an extracted directory with a sidecar .header file.
+    /// </summary>
+    public bool IsPackageEntry { get; set; }
+
+    /// <summary>
+    /// Gets or sets the thumbnail image data embedded in the package.
+    /// Only populated for package entries (<see cref="IsPackageEntry"/>); empty for extracted content.
+    /// </summary>
+    public byte[] ThumbnailImage { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the XUID (defaults to 0 for installed content).
