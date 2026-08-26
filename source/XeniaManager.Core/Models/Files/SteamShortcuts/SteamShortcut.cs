@@ -100,6 +100,19 @@ public class SteamShortcut
     public List<string> Tags { get; set; } = [];
 
     /// <summary>
+    /// Gets the list of unrecognized fields preserved from the original file.
+    /// These are replayed verbatim when saving so fields written by Steam or other tools are never stripped.
+    /// </summary>
+    public List<UnknownVdfField> UnknownFields { get; } = [];
+
+    /// <summary>
+    /// Gets or sets whether this shortcut was created by Xenia Manager.
+    /// Only Xenia-managed shortcuts get path formatting (quoting/slash fixes) applied when saving;
+    /// foreign entries are written back exactly as they were parsed.
+    /// </summary>
+    public bool IsCreatedByXenia { get; set; }
+
+    /// <summary>
     /// Creates a new Steam shortcut.
     /// </summary>
     public SteamShortcut()
@@ -176,10 +189,11 @@ public class SteamShortcut
     /// Computes the AppId for this shortcut based on AppName and Exe.
     /// Uses CRC32 algorithm with the high bit set for non-Steam games.
     /// </summary>
+    /// <param name="salt">Optional salt appended to the hash input, used to resolve AppId collisions.</param>
     /// <returns>The computed AppId.</returns>
-    public uint ComputeAppId()
+    public uint ComputeAppId(string? salt = null)
     {
-        string combined = (AppName ?? "") + (Exe ?? "");
+        string combined = (AppName ?? "") + (Exe ?? "") + (salt ?? "");
         byte[] data = Encoding.UTF8.GetBytes(combined);
         uint crc = ComputeCRC32(data);
         return crc | 0x80000000;
