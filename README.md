@@ -58,10 +58,10 @@ If you have any questions, check out the [Frequently Asked Questions](https://gi
 
 ## Contributing
 
-We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
+We welcome contributions! Please read our [Contributing Guide](docs/CONTRIBUTING.md) to get started.
 
 - Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) and our [TODO list](https://github.com/orgs/xenia-manager/projects/2/) for ideas.
-- Want to help with translations? See our [Translations Guide](TRANSLATIONS.md)!
+- Want to help with translations? See our [Translations Guide](docs/TRANSLATIONS.md)!
 
 ---
 
