@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;

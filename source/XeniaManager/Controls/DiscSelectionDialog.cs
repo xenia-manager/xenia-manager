@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 

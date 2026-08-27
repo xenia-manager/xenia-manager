@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.IO.Compression;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Files.Stfs;

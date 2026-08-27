@@ -5,7 +5,7 @@ using System.Linq;
 using Avalonia.Media.Imaging;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Utilities;

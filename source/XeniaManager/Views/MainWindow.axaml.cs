@@ -7,7 +7,7 @@ using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Installation;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;

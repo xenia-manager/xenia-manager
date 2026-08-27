@@ -2,7 +2,7 @@ using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
 using SharpCompress.Readers;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Utilities;
 

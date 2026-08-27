@@ -11,7 +11,7 @@ using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;

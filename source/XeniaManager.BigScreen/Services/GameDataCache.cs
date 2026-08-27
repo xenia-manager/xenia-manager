@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;

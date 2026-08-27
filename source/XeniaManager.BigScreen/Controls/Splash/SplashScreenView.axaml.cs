@@ -7,7 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Factories;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.BigScreen.Controls.Splash;
 

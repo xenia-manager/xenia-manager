@@ -8,7 +8,7 @@ using XeniaManager.ViewModels;
 using XeniaManager.ViewModels.Controls;
 using XeniaManager.ViewModels.Pages;
 using XeniaManager.Views;
-using Logger = XeniaManager.Core.Logging.Logger;
+using Logger = XeniaManager.Logging.Logger;
 
 namespace XeniaManager.Services;
 

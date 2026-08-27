@@ -1,4 +1,4 @@
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.InputListener;
 
 namespace XeniaManager.Core.Utilities;

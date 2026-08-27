@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Views.Shell;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;

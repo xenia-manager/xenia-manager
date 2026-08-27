@@ -1,5 +1,5 @@
 using System.Security.Cryptography;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Utilities;
 

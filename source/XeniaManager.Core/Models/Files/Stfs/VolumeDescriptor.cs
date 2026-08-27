@@ -1,5 +1,5 @@
 using System.Buffers.Binary;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Models.Files.Stfs;
 

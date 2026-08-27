@@ -4,7 +4,7 @@ using Avalonia.Media.Imaging;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.BigScreen.ViewModels.Modals;
 

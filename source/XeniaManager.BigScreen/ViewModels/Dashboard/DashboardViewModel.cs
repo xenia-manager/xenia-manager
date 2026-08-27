@@ -8,7 +8,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using TweenAvalonia;
 
 namespace XeniaManager.BigScreen.ViewModels.Dashboard;

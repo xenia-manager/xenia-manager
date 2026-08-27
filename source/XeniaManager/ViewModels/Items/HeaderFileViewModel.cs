@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Stfs;
 
 namespace XeniaManager.ViewModels.Items;

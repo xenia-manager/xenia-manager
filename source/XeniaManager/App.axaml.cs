@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using FluentAvalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;

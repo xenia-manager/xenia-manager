@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels.Controls;
 

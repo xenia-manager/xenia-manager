@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.BigScreen.Utilities;
 

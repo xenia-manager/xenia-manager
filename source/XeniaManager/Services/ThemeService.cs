@@ -7,7 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;

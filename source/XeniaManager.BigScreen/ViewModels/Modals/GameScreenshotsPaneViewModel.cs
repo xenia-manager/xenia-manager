@@ -13,7 +13,7 @@ using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.Views.Screens;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;

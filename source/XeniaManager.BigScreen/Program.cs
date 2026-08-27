@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia;
 using XeniaManager.BigScreen.Services;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen;

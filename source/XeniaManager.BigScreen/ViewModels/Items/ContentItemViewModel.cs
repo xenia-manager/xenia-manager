@@ -5,7 +5,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Stfs;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;

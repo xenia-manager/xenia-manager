@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Services;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;

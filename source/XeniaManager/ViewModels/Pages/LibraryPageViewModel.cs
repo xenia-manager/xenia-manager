@@ -17,7 +17,7 @@ using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;

@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Modals;
+using XeniaManager.Logging;
 
 namespace XeniaManager.BigScreen.Views.Modals;
 
@@ -61,7 +62,7 @@ public partial class GameSettingsPaneView : UserControl
             vm.EditorOpened += OnEditorOpened;
             vm.EditorClosed += OnEditorClosed;
             vm.RowSelectionChanged += OnRowSelectionChanged;
-            Core.Logging.Logger.Debug<GameSettingsPaneView>(
+            Logger.Debug<GameSettingsPaneView>(
                 $"Game settings pane attached: {vm.Rows.Count} rows");
         }
     }

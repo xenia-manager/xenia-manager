@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Threading;
 using SDL;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 
 namespace XeniaManager.Core.Services;

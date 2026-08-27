@@ -1,6 +1,6 @@
 using System.Text.Json;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Database.MousehookCompatibility;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;

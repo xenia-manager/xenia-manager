@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files;
 
 namespace XeniaManager.Core.Utilities;

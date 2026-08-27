@@ -4,7 +4,7 @@ using Avalonia.Media.Imaging;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
