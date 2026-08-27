@@ -3,7 +3,6 @@ using System.Text;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Core.Logging;
 
@@ -46,9 +45,10 @@ public static class Logger
         _config.AddRule(LogLevel.Trace, LogLevel.Fatal, consoleTarget);
 
         // File target
+        string logsDirectory = Path.Combine(AppContext.BaseDirectory, "Logs");
         FileTarget fileTarget = new FileTarget("file")
         {
-            FileName = $"{AppPaths.LogsDirectory}/Log-${{shortdate}}.log",
+            FileName = $"{logsDirectory}/Log-${{shortdate}}.log",
             Layout = @"[${longdate:format=HH\:mm\:ss.fff}][${level:uppercase=true:format=FirstCharacter}] ${message}",
             KeepFileOpen = false,
             Encoding = Encoding.UTF8
