@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Extensions;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Bindings;
 using XeniaManager.Core.Models.InputListener;
 using XeniaManager.Core.Utilities;

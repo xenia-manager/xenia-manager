@@ -19,7 +19,7 @@ using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Shell;
 using XeniaManager.BigScreen.Views.Dashboard;
 using XeniaManager.BigScreen.Views.Screens;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 using TweenAvalonia;

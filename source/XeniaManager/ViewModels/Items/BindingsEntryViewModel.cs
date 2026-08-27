@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Bindings;
 using XeniaManager.ViewModels.Controls;
 

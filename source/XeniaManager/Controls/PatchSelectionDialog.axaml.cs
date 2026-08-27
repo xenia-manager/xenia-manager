@@ -6,7 +6,7 @@ using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Database;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;

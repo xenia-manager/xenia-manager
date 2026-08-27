@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Gpd;
 using XeniaManager.Core.Utilities;
 

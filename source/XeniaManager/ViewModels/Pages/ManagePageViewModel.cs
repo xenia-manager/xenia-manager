@@ -12,7 +12,7 @@ using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Installation;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;

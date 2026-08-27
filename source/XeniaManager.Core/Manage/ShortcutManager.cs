@@ -3,7 +3,7 @@ using Microsoft.Win32;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Shortcut;
 using XeniaManager.Core.Models.Files.SteamShortcuts;

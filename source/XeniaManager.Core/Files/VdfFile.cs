@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Vdf;
 
 namespace XeniaManager.Core.Files;

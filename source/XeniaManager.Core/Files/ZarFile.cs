@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 using System.Text;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Zar;
 using XeniaManager.Core.Utilities;
 using ZstdSharp;

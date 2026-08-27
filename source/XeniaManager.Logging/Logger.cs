@@ -4,7 +4,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace XeniaManager.Core.Logging;
+namespace XeniaManager.Logging;
 
 /// <summary>
 /// Provides centralized logging functionality with support for console and file output,

@@ -6,7 +6,7 @@ using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Models.Files;

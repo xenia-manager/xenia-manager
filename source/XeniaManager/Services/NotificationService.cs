@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Views;
 
 namespace XeniaManager.Services;

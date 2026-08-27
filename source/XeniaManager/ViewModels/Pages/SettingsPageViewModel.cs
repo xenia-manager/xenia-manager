@@ -6,14 +6,14 @@ using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
-using Logger = XeniaManager.Core.Logging.Logger;
+using Logger = XeniaManager.Logging.Logger;
 
 namespace XeniaManager.ViewModels.Pages;
 

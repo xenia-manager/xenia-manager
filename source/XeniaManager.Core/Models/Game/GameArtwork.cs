@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using Avalonia.Media.Imaging;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Utilities;
 

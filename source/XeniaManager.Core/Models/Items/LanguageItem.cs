@@ -1,5 +1,5 @@
 using System.Globalization;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Models.Items;
 

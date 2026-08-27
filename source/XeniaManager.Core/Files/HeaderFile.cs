@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Files.Stfs;
 

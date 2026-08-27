@@ -7,7 +7,7 @@ using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.ViewModels.Shell;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.BigScreen.Controls.Splash;
 

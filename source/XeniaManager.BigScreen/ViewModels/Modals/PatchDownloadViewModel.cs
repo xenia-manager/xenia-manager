@@ -7,7 +7,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Database;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;

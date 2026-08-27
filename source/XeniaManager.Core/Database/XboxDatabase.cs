@@ -1,7 +1,7 @@
 using System.Text.Json;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Utilities;

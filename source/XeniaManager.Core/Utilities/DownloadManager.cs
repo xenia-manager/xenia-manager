@@ -1,6 +1,6 @@
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 
 namespace XeniaManager.Core.Utilities;

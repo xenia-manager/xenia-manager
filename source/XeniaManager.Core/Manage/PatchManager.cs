@@ -1,5 +1,5 @@
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;

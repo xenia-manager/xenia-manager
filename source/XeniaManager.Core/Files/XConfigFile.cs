@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 using System.Runtime.InteropServices;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Files.XConfig;
 
 namespace XeniaManager.Core.Files;
