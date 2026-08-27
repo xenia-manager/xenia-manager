@@ -32,6 +32,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\XeniaManager.Logging\XeniaManager.Logging.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="Assets\Artwork\Background.jpg" />
       <EmbeddedResource Include="Assets\Artwork\Background.jpg" />
       <None Remove="Assets\Artwork\Boxart.jpg" />
