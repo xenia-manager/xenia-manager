@@ -62,7 +62,8 @@ public class ColorPickerField : TemplatedControl
     /// Defines the computed preview focus state.
     /// </summary>
     public static readonly DirectProperty<ColorPickerField, bool> IsPreviewActiveProperty =
-        AvaloniaProperty.RegisterDirect<ColorPickerField, bool>(nameof(IsPreviewActive), field => field.IsPreviewActive);
+        AvaloniaProperty.RegisterDirect<ColorPickerField, bool>(nameof(IsPreviewActive),
+            field => field.IsPreviewActive);
 
     private bool _isRedActive;
     private bool _isGreenActive;

@@ -78,6 +78,8 @@ public class DashboardNavigationController
     /// </summary>
     private static readonly int[] OptionToGameColumn = [0, 2, 4, 6];
 
+    private int _lastSelectedGameIndex = 0;
+
     /// <summary>
     /// Switches the dashboard to the option row, selecting the option card in the
     /// column underneath the current game selection (clamped to the option count).
@@ -95,7 +97,10 @@ public class DashboardNavigationController
         int gameIndex = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
         int mapped = GameToOptionColumn[Math.Clamp(gameIndex, 0, GameToOptionColumn.Length - 1)];
         int target = Math.Clamp(mapped, 0, dashboard.Options.Count - 1);
+        _lastSelectedGameIndex = gameIndex;
         SelectionHelper.SelectOnlyAt(dashboard.Options, target);
+        SelectionHelper.ClearSelection(dashboard.RecentGames);
+        dashboard.IsGameRowFocused = false;
 
         OptionFocusRequested?.Invoke(dashboard.Options[target]);
         Logger.Debug<DashboardNavigationController>("Switched to option row");
@@ -124,11 +129,12 @@ public class DashboardNavigationController
 
         int optionIndex = SelectionHelper.IndexOfSelected(dashboard.Options);
         int mapped = fromProfileRow
-            ? SelectionHelper.IndexOfSelected(dashboard.RecentGames)
+            ? _lastSelectedGameIndex
             : OptionToGameColumn[Math.Clamp(optionIndex, 0, OptionToGameColumn.Length - 1)];
         int target = Math.Clamp(mapped, 0, dashboard.RecentGames.Count - 1);
         SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
         SelectionHelper.ClearSelection(dashboard.Options);
+        dashboard.IsGameRowFocused = true;
 
         GameFocusRequested?.Invoke(dashboard.RecentGames[target]);
         Logger.Debug<DashboardNavigationController>("Switched to game row");
@@ -143,6 +149,15 @@ public class DashboardNavigationController
     {
         IsOnProfileRow = true;
         IsOnOptionsRow = false;
+        dashboard.IsGameRowFocused = false;
+
+        int gameIndex = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
+        if (gameIndex >= 0)
+        {
+            _lastSelectedGameIndex = gameIndex;
+        }
+
+        SelectionHelper.ClearSelection(dashboard.RecentGames);
 
         ProfileFocusRequested?.Invoke();
         Logger.Debug<DashboardNavigationController>("Switched to profile row");
@@ -192,10 +207,10 @@ public class DashboardNavigationController
         IsOnProfileRow = false;
         IsOnOptionsRow = false;
 
-        int current = SelectionHelper.IndexOfSelected(dashboard.RecentGames);
-        int target = (Math.Max(current, 0) + 1) % dashboard.RecentGames.Count;
+        int target = (_lastSelectedGameIndex + 1) % dashboard.RecentGames.Count;
         SelectionHelper.SelectOnlyAt(dashboard.RecentGames, target);
         SelectionHelper.ClearSelection(dashboard.Options);
+        dashboard.IsGameRowFocused = true;
 
         GameFocusRequested?.Invoke(dashboard.RecentGames[target]);
         Logger.Debug<DashboardNavigationController>($"Advanced from profile row to game card {target + 1}");
@@ -323,6 +338,7 @@ public class DashboardNavigationController
         _lastActivationWasMouse = true;
         ActivateOption(vm, option);
         SelectionHelper.ClearSelection(dashboard.Options);
+        dashboard.IsGameRowFocused = false;
         Logger.Debug<DashboardNavigationController>($"Option card clicked: '{option.Title}'");
     }
 
@@ -353,6 +369,7 @@ public class DashboardNavigationController
     {
         IsOnOptionsRow = false;
         IsOnProfileRow = false;
+        dashboard.IsGameRowFocused = true;
         SelectionHelper.SelectOnly(dashboard.RecentGames, game);
     }
 
@@ -363,6 +380,7 @@ public class DashboardNavigationController
     {
         IsOnOptionsRow = true;
         IsOnProfileRow = false;
+        dashboard.IsGameRowFocused = false;
         SelectionHelper.SelectOnly(dashboard.Options, option);
     }
 }

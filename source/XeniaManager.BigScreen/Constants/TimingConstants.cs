@@ -49,6 +49,8 @@ public static class TimingConstants
     /// </summary>
     public static readonly TimeSpan SplashMinimumShowTime = TimeSpan.FromSeconds(2);
 
+    public static readonly TimeSpan CardRowAnimationDuration = TimeSpan.FromMilliseconds(180);
+
     /// <summary>
     /// How often the library load progress is reported while cards are built
     /// (every Nth game).

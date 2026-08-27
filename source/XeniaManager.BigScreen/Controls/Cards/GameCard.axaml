@@ -6,27 +6,26 @@
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="238"
              x:Class="XeniaManager.BigScreen.Controls.Cards.GameCard"
              x:DataType="vm:GameCardViewModel"
-             Width="{Binding CardWidth}"
-             Height="{Binding CardHeight}"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
     <Panel>
         <Border x:Name="Tile" CornerRadius="10" Background="{DynamicResource CardBackground}" Margin="2" />
         <Border x:Name="ArtClip" Background="Transparent" CornerRadius="10" Margin="2">
             <Panel>
-                <Grid IsVisible="{Binding ShowBoxArt}"
-                      Height="{Binding BoxArtFullHeight}"
+                <Grid x:Name="BoxArtHost"
+                      IsVisible="{Binding ShowBoxArt}"
+                      HorizontalAlignment="Stretch"
                       VerticalAlignment="Bottom">
-                    <Grid.Transitions>
-                        <Transitions>
-                            <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
-                        </Transitions>
-                    </Grid.Transitions>
-                    <Image Source="{Binding BoxArt}" Stretch="UniformToFill" />
+                    <Image Source="{Binding BoxArt}" Stretch="UniformToFill" VerticalAlignment="Bottom" />
                 </Grid>
-                <Grid IsVisible="{Binding ShowDiscArt}"
+                <Grid x:Name="DiscArtHost"
+                      IsVisible="{Binding ShowDiscArt}"
+                      HorizontalAlignment="Stretch"
                       VerticalAlignment="Bottom">
-                    <Image Source="{Binding DiscArt}" Stretch="Uniform" />
+                    <Image Source="{Binding DiscArt}" Stretch="Uniform" VerticalAlignment="Bottom"
+                           HorizontalAlignment="Center" />
                 </Grid>
             </Panel>
         </Border>

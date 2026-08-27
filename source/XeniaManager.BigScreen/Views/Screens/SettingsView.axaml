@@ -18,7 +18,8 @@
                    Text="{DynamicResource Settings.Title}"
                    Margin="0,20,0,30" />
 
-        <ScrollViewer x:Name="SvSettings" Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer x:Name="SvSettings" Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Hidden">
             <StackPanel Orientation="Vertical" Spacing="14">
 
                 <!-- PREFERENCES -->
