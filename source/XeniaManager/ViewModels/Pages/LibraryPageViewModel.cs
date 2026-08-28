@@ -473,13 +473,63 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void Refresh()
+    private async Task Refresh()
     {
         Logger.Info<LibraryPageViewModel>("Refreshing game library");
         GameManager.LoadLibrary();
         RefreshLibrary();
         _lastNotificationTime = DateTime.MinValue;
         Logger.Debug<LibraryPageViewModel>("Library refreshed, notification cooldown reset");
+
+        await CheckForNewGameFilesAsync();
+    }
+
+    /// <summary>
+    /// Scans the Games directory for game files that are not yet in the library
+    /// and shows a notification with a rescan action when new files are found.
+    /// </summary>
+    private async Task CheckForNewGameFilesAsync()
+    {
+        if (_isScanning)
+        {
+            Logger.Trace<LibraryPageViewModel>("Skipping new game file check (scan already in progress)");
+            return;
+        }
+
+        if (!Directory.Exists(AppPaths.GamesDirectory))
+        {
+            Logger.Trace<LibraryPageViewModel>($"Skipping new game file check (Games directory does not exist: {AppPaths.GamesDirectory})");
+            return;
+        }
+
+        List<string> discoveredGameFiles;
+        try
+        {
+            discoveredGameFiles = await Task.Run(() => GameManager.DiscoverGameFiles(AppPaths.GamesDirectory));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>($"Failed to scan Games directory for new files: {ex.Message}");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            return;
+        }
+
+        List<string> newGameFiles = discoveredGameFiles.Where(file => !GameManager.IsDuplicateGame(file)).ToList();
+        if (newGameFiles.Count == 0)
+        {
+            Logger.Debug<LibraryPageViewModel>("No new game files found in Games directory");
+            return;
+        }
+
+        // Suppress the watcher notification so it doesn't immediately duplicate this one
+        _lastNotificationTime = DateTime.UtcNow;
+        Logger.Info<LibraryPageViewModel>($"Found {newGameFiles.Count} new game files in Games directory, showing notification");
+
+        _notificationService.ShowAction(
+            LocalizationHelper.GetText("InfoBar.NewGamesDetected.Message"),
+            FAInfoBarSeverity.Informational,
+            LocalizationHelper.GetText("InfoBar.NewGamesDetected.Action"),
+            async void () => await ScanGamesDirectoryAsync());
     }
 
     /// <summary>
