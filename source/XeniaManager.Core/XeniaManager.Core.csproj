@@ -25,13 +25,12 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
       <PackageReference Include="NLog" Version="6.2.0" />
       <PackageReference Include="ppy.SDL3-CS" Version="2026.722.0" />
-      <PackageReference Include="SharpCompress" Version="0.50.4" />
       <PackageReference Include="System.IO.Hashing" Version="10.0.11" />
       <PackageReference Include="Tmds.DBus.Protocol" Version="0.95.0" />
-      <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\XeniaManager.Files\XeniaManager.Files.csproj" />
       <ProjectReference Include="..\XeniaManager.Logging\XeniaManager.Logging.csproj" />
     </ItemGroup>
 

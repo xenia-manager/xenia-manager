@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.BigScreen", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Logging", "source\XeniaManager.Logging\XeniaManager.Logging.csproj", "{CDBCAF3C-0FB6-420B-98B6-480B7AEF11EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Files", "source\XeniaManager.Files\XeniaManager.Files.csproj", "{67BE7047-BF58-4C3E-AC3B-B94E27E0B158}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{CDBCAF3C-0FB6-420B-98B6-480B7AEF11EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDBCAF3C-0FB6-420B-98B6-480B7AEF11EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDBCAF3C-0FB6-420B-98B6-480B7AEF11EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67BE7047-BF58-4C3E-AC3B-B94E27E0B158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67BE7047-BF58-4C3E-AC3B-B94E27E0B158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67BE7047-BF58-4C3E-AC3B-B94E27E0B158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67BE7047-BF58-4C3E-AC3B-B94E27E0B158}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -28,6 +28,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\source\XeniaManager.Core\XeniaManager.Core.csproj" />
+      <ProjectReference Include="..\..\source\XeniaManager.Files\XeniaManager.Files.csproj" />
+      <ProjectReference Include="..\..\source\XeniaManager.Logging\XeniaManager.Logging.csproj" />
     </ItemGroup>
 
     <ItemGroup>

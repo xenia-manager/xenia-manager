@@ -26,12 +26,15 @@ code quality and consistency across the project.
 
 ## Project Structure
 
-The project is organized into two main projects:
+The project is organized into the following projects:
 
 - **XeniaManager**: Main application project containing Views, ViewModels, and UI-related logic
-- **XeniaManager.Core**: Core library containing all business logic, services, models, and utilities
+- **XeniaManager.BigScreen**: Fullscreen application project for TV/big-screen usage
+- **XeniaManager.Core**: Core library containing business logic, services, and utilities
+- **XeniaManager.Files**: File format parsers and their models for Xbox/Xenia file types (ISO, XEX, STFS, GPD, ZAR, etc.)
+- **XeniaManager.Logging**: Logging infrastructure built on NLog
 
-All core logic should be placed in **XeniaManager.Core** to facilitate easier implementation of features across different UI platforms (Desktop App, Fullscreen App, etc.).
+All core logic should be placed in the appropriate library (**XeniaManager.Core**, **XeniaManager.Files** or **XeniaManager.Logging**) to facilitate easier implementation of features across different UI platforms (Desktop App, Fullscreen App, etc.).
 
 ---
 
@@ -118,7 +121,7 @@ All core logic should be placed in **XeniaManager.Core** to facilitate easier im
 
 ### File Organization
 
-- Place all business logic in **XeniaManager.Core** project
+- Place all business logic in the library projects (**XeniaManager.Core**, **XeniaManager.Files**, **XeniaManager.Logging**)
 - Keep Views lightweight, delegating logic to ViewModels and Core services
 - Organize files by feature/namespace rather than type when possible
 

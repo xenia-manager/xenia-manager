@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="SharpCompress" Version="0.50.4" />
+        <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\XeniaManager.Logging\XeniaManager.Logging.csproj" />
+    </ItemGroup>
+</Project>
