@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.XConfig;
+namespace XeniaManager.Files.Models.XConfig;
 
 /// <summary>
 /// Byte offsets and sizes for the XConfigData binary blob (6680 bytes).

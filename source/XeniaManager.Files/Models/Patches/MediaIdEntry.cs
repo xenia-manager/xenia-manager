@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Patches;
+namespace XeniaManager.Files.Models.Patches;
 
 /// <summary>
 /// Represents a media ID with optional comment (e.g., redump link and region info).

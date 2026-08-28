@@ -1,7 +1,7 @@
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Iso;
+using XeniaManager.Files.Models.Iso;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading and parsing of ISO files containing Xbox disc images.

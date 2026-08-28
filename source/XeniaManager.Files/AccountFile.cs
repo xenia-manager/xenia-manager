@@ -2,10 +2,10 @@ using System.Buffers.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Utilities;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles the loading, saving, encryption, and decryption of Xbox 360 account files used by the Xenia emulator.

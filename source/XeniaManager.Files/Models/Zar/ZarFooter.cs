@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 
-namespace XeniaManager.Core.Models.Files.Zar;
+namespace XeniaManager.Files.Models.Zar;
 
 /// <summary>
 /// Represents the 144-byte footer structure found at the end of a ZAR archive.

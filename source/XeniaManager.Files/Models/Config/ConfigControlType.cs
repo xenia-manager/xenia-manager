@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Config;
+namespace XeniaManager.Files.Models.Config;
 
 /// <summary>
 /// Defines the type of control to use for displaying a configuration option.

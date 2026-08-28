@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 

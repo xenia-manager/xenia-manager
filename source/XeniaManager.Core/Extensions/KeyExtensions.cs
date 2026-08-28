@@ -1,5 +1,5 @@
 using Avalonia.Input;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Files.Models.Bindings;
 
 namespace XeniaManager.Core.Extensions;
 

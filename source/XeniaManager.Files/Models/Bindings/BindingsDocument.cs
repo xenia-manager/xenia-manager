@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Bindings;
+namespace XeniaManager.Files.Models.Bindings;
 
 /// <summary>
 /// Represents the entire bindings document containing all sections.

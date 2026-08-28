@@ -1,11 +1,11 @@
 using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Zar;
-using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Models.Zar;
+using XeniaManager.Files.Utilities;
 using ZstdSharp;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, parsing, and extraction of files from ZArchive (.zar) archives.

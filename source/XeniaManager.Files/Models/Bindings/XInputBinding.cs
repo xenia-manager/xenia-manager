@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Bindings;
+namespace XeniaManager.Files.Models.Bindings;
 
 /// <summary>
 /// Enumeration of Xbox 360 controller inputs that can be bound to keyboard keys.

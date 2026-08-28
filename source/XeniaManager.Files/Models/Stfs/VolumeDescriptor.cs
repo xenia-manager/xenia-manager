@@ -1,7 +1,7 @@
 using System.Buffers.Binary;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Stfs;
+namespace XeniaManager.Files.Models.Stfs;
 
 /// <summary>
 /// Represents the STFS Volume Descriptor structure.

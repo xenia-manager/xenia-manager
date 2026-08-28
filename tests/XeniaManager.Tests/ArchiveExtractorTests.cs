@@ -1,6 +1,6 @@
 using System.Reflection;
 using System.Text;
-using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Utilities;
 
 namespace XeniaManager.Tests;
 

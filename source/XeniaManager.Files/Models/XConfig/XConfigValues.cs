@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.XConfig;
+namespace XeniaManager.Files.Models.XConfig;
 
 /// <summary>
 /// Xbox 360 dashboard language IDs (XLanguage).

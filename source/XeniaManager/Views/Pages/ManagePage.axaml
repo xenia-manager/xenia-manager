@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
-             xmlns:core="using:XeniaManager.Core.Models.Files.Account"
+             xmlns:core="using:XeniaManager.Files.Models.Account"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"

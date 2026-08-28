@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 
-namespace XeniaManager.Core.Models.Files.Zar;
+namespace XeniaManager.Files.Models.Zar;
 
 /// <summary>
 /// Represents a section descriptor in the ZAR footer, specifying the offset and size of a data section within the archive.

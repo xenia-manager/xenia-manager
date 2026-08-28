@@ -1,9 +1,9 @@
 using System.Buffers.Binary;
 using System.Runtime.InteropServices;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.XConfig;
+using XeniaManager.Files.Models.XConfig;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles reading, writing, and serialization of Xbox 360 XConfig settings.

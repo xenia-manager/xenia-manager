@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace XeniaManager.Core.Models.Files.Stfs;
+namespace XeniaManager.Files.Models.Stfs;
 
 /// <summary>
 /// Represents the different types of content that can be stored on Xbox 360 storage devices.

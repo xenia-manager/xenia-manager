@@ -1,7 +1,7 @@
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;

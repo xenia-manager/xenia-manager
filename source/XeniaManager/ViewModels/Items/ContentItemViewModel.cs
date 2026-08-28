@@ -4,8 +4,8 @@ using System.Windows.Input;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.Stfs;
 
 namespace XeniaManager.ViewModels.Items;
 

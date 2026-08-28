@@ -1,5 +1,5 @@
 using XeniaManager.Core.Database;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Core.Models.Database.OptimizedSettings;
 using XeniaManager.Core.Models.Game;
 

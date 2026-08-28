@@ -1,4 +1,4 @@
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Utilities;

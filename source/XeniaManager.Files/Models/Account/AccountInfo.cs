@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Account;
+namespace XeniaManager.Files.Models.Account;
 
 /// <summary>
 /// Represents the decrypted account data structure as stored in the Xenia emulator profile.

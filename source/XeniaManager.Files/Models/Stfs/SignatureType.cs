@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Stfs;
+namespace XeniaManager.Files.Models.Stfs;
 
 /// <summary>
 /// Represents the signature type of STFS package.

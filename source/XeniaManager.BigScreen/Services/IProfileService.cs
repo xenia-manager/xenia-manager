@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Models.Game;
 
 namespace XeniaManager.BigScreen.Services;
@@ -96,7 +96,7 @@ public interface IProfileService
     /// Loads the per-game achievement GPD of the given version's active profile,
     /// or null when no profile or GPD exists.
     /// </summary>
-    Core.Files.GpdFile? LoadGameAchievementGpd(XeniaVersion version, string gameId);
+    XeniaManager.Files.GpdFile? LoadGameAchievementGpd(XeniaVersion version, string gameId);
 
     /// <summary>
     /// Resolves achievement/gamerscore counters for the given game.

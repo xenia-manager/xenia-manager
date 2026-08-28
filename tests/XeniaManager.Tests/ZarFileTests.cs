@@ -1,7 +1,7 @@
 using System.Reflection;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Zar;
+using XeniaManager.Files.Models.Zar;
 
 namespace XeniaManager.Tests;
 

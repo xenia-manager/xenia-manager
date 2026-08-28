@@ -1,7 +1,7 @@
 using System.Globalization;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Patches;
+namespace XeniaManager.Files.Models.Patches;
 
 /// <summary>
 /// Represents a single patch command with an address and value.

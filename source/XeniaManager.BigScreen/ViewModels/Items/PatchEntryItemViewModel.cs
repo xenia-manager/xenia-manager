@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
-using XeniaManager.Core.Models.Files.Patches;
+using XeniaManager.Files.Models.Patches;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 

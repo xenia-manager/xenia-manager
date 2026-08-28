@@ -1,8 +1,8 @@
 using System.Globalization;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.Stfs;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Models.Items;

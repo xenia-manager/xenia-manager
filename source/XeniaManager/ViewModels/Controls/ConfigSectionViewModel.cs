@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 
 namespace XeniaManager.ViewModels.Controls;
 

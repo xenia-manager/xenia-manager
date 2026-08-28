@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Bindings;
+namespace XeniaManager.Files.Models.Bindings;
 
 /// <summary>
 /// Enumeration of virtual key codes for keyboard and mouse inputs.

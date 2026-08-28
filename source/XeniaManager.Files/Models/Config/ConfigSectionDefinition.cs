@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Config;
+namespace XeniaManager.Files.Models.Config;
 
 /// <summary>
 /// Configuration for how a section and its options should be displayed in the UI.

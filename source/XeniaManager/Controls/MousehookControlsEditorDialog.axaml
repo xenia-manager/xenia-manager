@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
              xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
-             xmlns:core="using:XeniaManager.Core.Models.Files.Bindings"
+             xmlns:core="using:XeniaManager.Files.Models.Bindings"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550"

@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Bindings;
+namespace XeniaManager.Files.Models.Bindings;
 
 /// <summary>
 /// Attribute to specify the string representation of a binding key or value.

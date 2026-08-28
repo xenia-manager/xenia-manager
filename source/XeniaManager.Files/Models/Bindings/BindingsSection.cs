@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Bindings;
+namespace XeniaManager.Files.Models.Bindings;
 
 /// <summary>
 /// Represents a section in a bindings file (e.g., [4D5307D3 Default - Perfect Dark Zero]).

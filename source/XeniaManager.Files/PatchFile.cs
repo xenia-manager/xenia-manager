@@ -2,9 +2,9 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Patches;
+using XeniaManager.Files.Models.Patches;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, saving, and manipulation of Xenia game patch files (.patch.toml).

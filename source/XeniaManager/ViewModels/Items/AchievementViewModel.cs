@@ -3,8 +3,8 @@ using System.IO;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.Gpd;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.Gpd;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.ViewModels.Items;

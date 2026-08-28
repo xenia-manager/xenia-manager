@@ -3,9 +3,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files.Models.Stfs;
 
 namespace XeniaManager.ViewModels.Items;
 

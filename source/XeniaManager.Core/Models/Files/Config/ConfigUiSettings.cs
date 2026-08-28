@@ -1,4 +1,5 @@
 using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Models.Config;
 
 namespace XeniaManager.Core.Models.Files.Config;
 

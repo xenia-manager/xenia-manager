@@ -1,7 +1,7 @@
 using System.Buffers.Binary;
 using System.Text;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.Zar;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.Zar;
 
 namespace XeniaManager.Tests;
 

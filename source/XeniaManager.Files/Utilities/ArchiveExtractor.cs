@@ -4,7 +4,7 @@ using SharpCompress.Common;
 using SharpCompress.Readers;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Utilities;
+namespace XeniaManager.Files.Utilities;
 
 /// <summary>
 /// Provides methods for extracting files from various archive formats including ZIP, RAR, TAR, and 7-Zip.

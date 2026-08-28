@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Vdf;
+using XeniaManager.Files.Models.Vdf;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, saving, and manipulation of Steam VDF (Valve Data File) files.

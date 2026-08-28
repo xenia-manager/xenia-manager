@@ -1,10 +1,10 @@
 using System.Globalization;
 using System.Text;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.Stfs;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Represents an STFS header file structure.

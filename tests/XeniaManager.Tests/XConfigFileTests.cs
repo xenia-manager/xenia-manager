@@ -1,8 +1,8 @@
 using System.Buffers.Binary;
 using System.Reflection;
 using System.Text;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.XConfig;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.XConfig;
 
 namespace XeniaManager.Tests;
 

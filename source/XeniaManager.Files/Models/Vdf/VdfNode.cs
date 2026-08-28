@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Vdf;
+namespace XeniaManager.Files.Models.Vdf;
 
 /// <summary>
 /// Represents a single node (key-value pair) in a VDF file.

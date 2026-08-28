@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Iso;
+namespace XeniaManager.Files.Models.Iso;
 
 /// <summary>
 /// Internal structure holding information about an ISO file slice.

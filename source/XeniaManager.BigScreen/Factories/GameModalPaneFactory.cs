@@ -2,7 +2,7 @@ using System;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.ViewModels;
 using XeniaManager.BigScreen.ViewModels.Modals;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files.Models.Stfs;
 using XeniaManager.Core.Models.Game;
 
 namespace XeniaManager.BigScreen.Factories;

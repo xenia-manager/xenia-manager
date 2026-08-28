@@ -1,9 +1,9 @@
 using System.Buffers.Binary;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files;
+using XeniaManager.Files.Models;
 
-namespace XeniaManager.Core.Utilities;
+namespace XeniaManager.Files.Utilities;
 
 /// <summary>
 /// Utility class for identifying Xbox file types by reading their headers.
