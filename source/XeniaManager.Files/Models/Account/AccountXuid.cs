@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Account;
+namespace XeniaManager.Files.Models.Account;
 
 /// <summary>
 /// Represents an Xbox User Identifier (XUID) used in the Xenia emulator.

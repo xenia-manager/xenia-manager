@@ -2,7 +2,7 @@ using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Gpd;
+namespace XeniaManager.Files.Models.Gpd;
 
 /// <summary>
 /// Represents a title entry in a GPD file.

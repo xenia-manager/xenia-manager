@@ -1,5 +1,5 @@
 using XeniaManager.BigScreen.Constants;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 
 namespace XeniaManager.BigScreen.Utilities;
 

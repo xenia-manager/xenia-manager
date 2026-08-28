@@ -1,5 +1,5 @@
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.Patches;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.Patches;
 
 namespace XeniaManager.Tests;
 

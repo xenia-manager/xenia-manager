@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Config;
+namespace XeniaManager.Files.Models.Config;
 
 /// <summary>
 /// Represents a configuration section in a Xenia config file (e.g., [APU], [CPU], [GPU]).

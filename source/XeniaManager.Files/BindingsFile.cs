@@ -2,9 +2,9 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Files.Models.Bindings;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, saving, and manipulation of Xenia bindings files (bindings.ini).

@@ -1,7 +1,7 @@
 using System.Reflection;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Files.Models.Bindings;
 
-namespace XeniaManager.Core.Extensions;
+namespace XeniaManager.Files.Extensions;
 
 /// <summary>
 /// Extension methods for binding enums.

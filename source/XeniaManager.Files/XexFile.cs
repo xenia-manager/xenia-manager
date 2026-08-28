@@ -1,9 +1,9 @@
 using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Xex;
+using XeniaManager.Files.Models.Xex;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading and parsing of XEX (Xbox Executable) files.

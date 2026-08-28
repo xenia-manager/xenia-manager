@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Iso;
+namespace XeniaManager.Files.Models.Iso;
 
 /// <summary>
 /// Contains information about an XGD (Xbox Disc Format) image.

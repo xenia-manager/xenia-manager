@@ -1,6 +1,6 @@
 using System.Reflection;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.Stfs;
 
 namespace XeniaManager.Tests;
 

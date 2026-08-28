@@ -1,7 +1,7 @@
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Gpd;
+using XeniaManager.Files.Models.Gpd;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, saving, and manipulation of XDBF/GPD (Xbox Database File / Game Profile Data) files.

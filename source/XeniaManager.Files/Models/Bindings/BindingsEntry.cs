@@ -1,6 +1,6 @@
-using XeniaManager.Core.Extensions;
+using XeniaManager.Files.Extensions;
 
-namespace XeniaManager.Core.Models.Files.Bindings;
+namespace XeniaManager.Files.Models.Bindings;
 
 /// <summary>
 /// Represents a single entry (key-value pair) in a bindings file section.

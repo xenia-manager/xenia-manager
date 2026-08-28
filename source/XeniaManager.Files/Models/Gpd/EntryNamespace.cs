@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Gpd;
+namespace XeniaManager.Files.Models.Gpd;
 
 /// <summary>
 /// Represents the namespace types used in XDBF/GPD entry tables.

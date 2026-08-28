@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Account;
+namespace XeniaManager.Files.Models.Account;
 
 /// <summary>
 /// Flags used in the reserved flags field of the account data structure.

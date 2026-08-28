@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 
 namespace XeniaManager.BigScreen.Utilities;
 

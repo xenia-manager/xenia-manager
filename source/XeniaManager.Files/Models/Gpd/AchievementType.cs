@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Gpd;
+namespace XeniaManager.Files.Models.Gpd;
 
 /// <summary>
 /// Represents the type of achievement based on the Flags field.

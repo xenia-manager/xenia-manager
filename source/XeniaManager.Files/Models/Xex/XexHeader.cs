@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace XeniaManager.Core.Models.Files.Xex;
+namespace XeniaManager.Files.Models.Xex;
 
 /// <summary>
 /// XEX header structure.

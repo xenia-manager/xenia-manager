@@ -6,7 +6,7 @@ using XeniaManager.BigScreen.Services;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.Utilities;

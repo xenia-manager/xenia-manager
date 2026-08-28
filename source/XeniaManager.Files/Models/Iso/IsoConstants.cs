@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Iso;
+namespace XeniaManager.Files.Models.Iso;
 
 /// <summary>
 /// Constants used for Xbox ISO (XGD) format parsing.

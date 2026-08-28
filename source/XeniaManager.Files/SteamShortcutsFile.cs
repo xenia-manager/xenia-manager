@@ -1,8 +1,8 @@
 using System.Text;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.SteamShortcuts;
+using XeniaManager.Files.Models.SteamShortcuts;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, saving, and manipulation of Steam shortcuts.vdf files.

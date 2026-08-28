@@ -1,6 +1,6 @@
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Iso;
+namespace XeniaManager.Files.Models.Iso;
 
 /// <summary>
 /// Handles reading sectors from an ISO file.

@@ -1,11 +1,11 @@
 using System.Globalization;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 

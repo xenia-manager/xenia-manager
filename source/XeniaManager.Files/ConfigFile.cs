@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, saving, and manipulation of Xenia configuration files (.config.toml).

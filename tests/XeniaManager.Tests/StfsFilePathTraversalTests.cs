@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 using System.Text;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 
 namespace XeniaManager.Tests;
 

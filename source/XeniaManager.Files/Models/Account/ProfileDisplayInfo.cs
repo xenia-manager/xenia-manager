@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Account;
+namespace XeniaManager.Files.Models.Account;
 
 /// <summary>
 /// Represents a profile's display information for the ComboBox.

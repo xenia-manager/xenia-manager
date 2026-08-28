@@ -2,12 +2,12 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Shortcut;
-using XeniaManager.Core.Models.Files.SteamShortcuts;
-using XeniaManager.Core.Models.Files.Vdf;
+using XeniaManager.Files.Models.SteamShortcuts;
+using XeniaManager.Files.Models.Vdf;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 

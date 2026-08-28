@@ -4,12 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Models.Files.XConfig;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.XConfig;
 
 namespace XeniaManager.ViewModels.Controls;
 

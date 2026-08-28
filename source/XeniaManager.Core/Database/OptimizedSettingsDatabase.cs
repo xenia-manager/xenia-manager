@@ -1,6 +1,6 @@
 using System.Text.Json;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models.Database.OptimizedSettings;
 using XeniaManager.Core.Models.Game;

@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Utilities;
+namespace XeniaManager.Files.Utilities;
 
 /// <summary>
 /// Provides cryptographic utilities for various encryption and hashing operations.

@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Files.Models.Bindings;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.ViewModels.Items;

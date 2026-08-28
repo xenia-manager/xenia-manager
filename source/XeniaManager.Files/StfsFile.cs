@@ -1,10 +1,10 @@
 using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Stfs;
-using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Models.Stfs;
+using XeniaManager.Files.Utilities;
 
-namespace XeniaManager.Core.Files;
+namespace XeniaManager.Files;
 
 /// <summary>
 /// Handles loading, parsing, and extraction of files from STFS (Secure Transacted File System) packages.

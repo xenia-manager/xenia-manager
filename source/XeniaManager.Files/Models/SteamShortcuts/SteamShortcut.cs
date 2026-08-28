@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace XeniaManager.Core.Models.Files.SteamShortcuts;
+namespace XeniaManager.Files.Models.SteamShortcuts;
 
 /// <summary>
 /// Represents a Steam non-Steam game shortcut.

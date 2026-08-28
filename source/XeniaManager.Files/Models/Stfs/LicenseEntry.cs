@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 
-namespace XeniaManager.Core.Models.Files.Stfs;
+namespace XeniaManager.Files.Models.Stfs;
 
 /// <summary>
 /// Represents a license entry in the STFS package licensing data.

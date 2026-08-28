@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 
-namespace XeniaManager.Core.Models.Files.Zar;
+namespace XeniaManager.Files.Models.Zar;
 
 /// <summary>
 /// Represents a single entry in the ZAR file tree directory structure.

@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Patches;
+namespace XeniaManager.Files.Models.Patches;
 
 /// <summary>
 /// Represents the root structure of a patch TOML file.

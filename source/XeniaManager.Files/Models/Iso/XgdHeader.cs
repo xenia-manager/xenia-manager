@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace XeniaManager.Core.Models.Files.Iso;
+namespace XeniaManager.Files.Models.Iso;
 
 /// <summary>
 /// Internal structure representing the XGD (Xbox Disc Format) header.

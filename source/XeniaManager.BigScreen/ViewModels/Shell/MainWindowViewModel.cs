@@ -16,7 +16,7 @@ using XeniaManager.BigScreen.ViewModels.Dashboard;
 using XeniaManager.BigScreen.ViewModels.Screens;
 using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;

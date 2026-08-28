@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files;
+namespace XeniaManager.Files.Models;
 
 /// <summary>
 /// Represents the type of Xbox file detected.

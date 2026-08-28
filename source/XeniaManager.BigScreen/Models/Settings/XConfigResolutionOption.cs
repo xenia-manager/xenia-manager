@@ -1,4 +1,4 @@
-using XeniaManager.Core.Models.Files.XConfig;
+using XeniaManager.Files.Models.XConfig;
 
 namespace XeniaManager.BigScreen.Models.Settings;
 

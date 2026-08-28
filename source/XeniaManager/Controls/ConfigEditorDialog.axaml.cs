@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels.Controls;
 

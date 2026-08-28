@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 

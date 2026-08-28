@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.SteamShortcuts;
+namespace XeniaManager.Files.Models.SteamShortcuts;
 
 /// <summary>
 /// Represents a field from a shortcuts.vdf entry that is not modeled by <see cref="SteamShortcut"/>,

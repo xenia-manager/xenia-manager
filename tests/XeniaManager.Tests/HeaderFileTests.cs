@@ -1,5 +1,5 @@
 using System.Reflection;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 
 namespace XeniaManager.Tests;
 

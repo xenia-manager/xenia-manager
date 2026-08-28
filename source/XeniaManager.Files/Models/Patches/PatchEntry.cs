@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Patches;
+namespace XeniaManager.Files.Models.Patches;
 
 /// <summary>
 /// Represents a single patch entry with metadata and commands.

@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.XConfig;
+namespace XeniaManager.Files.Models.XConfig;
 
 /// <summary>
 /// Category identifiers for Xbox 360 XConfig settings storage.

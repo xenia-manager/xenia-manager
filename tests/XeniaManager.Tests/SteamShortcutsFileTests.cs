@@ -1,6 +1,6 @@
 using System.Text;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.SteamShortcuts;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.SteamShortcuts;
 
 namespace XeniaManager.Tests;
 

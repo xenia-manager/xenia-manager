@@ -17,11 +17,11 @@ using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.ViewModels.Modals;
 using XeniaManager.Core.Converters;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.XConfig;
+using XeniaManager.Files.Models.XConfig;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 

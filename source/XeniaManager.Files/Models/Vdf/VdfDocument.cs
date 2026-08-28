@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Vdf;
+namespace XeniaManager.Files.Models.Vdf;
 
 /// <summary>
 /// Represents the entire VDF document containing the root node.

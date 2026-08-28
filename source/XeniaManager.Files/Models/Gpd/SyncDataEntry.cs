@@ -1,7 +1,7 @@
 using System.Buffers.Binary;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Gpd;
+namespace XeniaManager.Files.Models.Gpd;
 
 /// <summary>
 /// Represents a Sync Data entry in a GPD file.

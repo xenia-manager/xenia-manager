@@ -1,6 +1,6 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 
 namespace XeniaManager.Core.Converters;
 

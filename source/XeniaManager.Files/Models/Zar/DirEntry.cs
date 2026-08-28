@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Zar;
+namespace XeniaManager.Files.Models.Zar;
 
 /// <summary>
 /// Represents a single entry in a directory listing, returned by ZarFile.ListDirectory.

@@ -1,9 +1,9 @@
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;
-using XeniaManager.Core.Models.Files.Patches;
+using XeniaManager.Files.Models.Patches;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Manage;

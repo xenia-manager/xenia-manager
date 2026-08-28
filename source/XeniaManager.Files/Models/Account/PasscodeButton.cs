@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Account;
+namespace XeniaManager.Files.Models.Account;
 
 /// <summary>
 /// Represents the buttons that can be used in an Xbox passcode.

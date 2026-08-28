@@ -5,14 +5,15 @@ using System.Text.RegularExpressions;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
-using XeniaManager.Core.Models.Files;
+using XeniaManager.Files.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Utilities;
 
 namespace XeniaManager.Core.Manage;
 

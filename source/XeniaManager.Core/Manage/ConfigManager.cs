@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Manage;

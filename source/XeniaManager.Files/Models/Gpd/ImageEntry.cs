@@ -1,6 +1,6 @@
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Gpd;
+namespace XeniaManager.Files.Models.Gpd;
 
 /// <summary>
 /// Represents an image entry in a GPD file.

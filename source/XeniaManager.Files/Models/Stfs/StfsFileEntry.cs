@@ -2,7 +2,7 @@ using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Logging;
 
-namespace XeniaManager.Core.Models.Files.Stfs;
+namespace XeniaManager.Files.Models.Stfs;
 
 /// <summary>
 /// Represents a file entry in the STFS file table.

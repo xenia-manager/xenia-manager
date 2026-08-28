@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models.Files.Config;
+namespace XeniaManager.Files.Models.Config;
 
 /// <summary>
 /// Represents a single configuration option in a Xenia config file.

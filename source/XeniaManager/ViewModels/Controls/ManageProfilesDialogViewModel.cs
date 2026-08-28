@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 

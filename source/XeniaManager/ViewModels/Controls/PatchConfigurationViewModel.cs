@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Files.Patches;
+using XeniaManager.Files.Models.Patches;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 

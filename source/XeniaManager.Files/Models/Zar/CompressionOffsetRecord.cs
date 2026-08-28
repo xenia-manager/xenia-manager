@@ -1,6 +1,6 @@
 using System.Buffers.Binary;
 
-namespace XeniaManager.Core.Models.Files.Zar;
+namespace XeniaManager.Files.Models.Zar;
 
 /// <summary>
 /// Maps block indices to their positions within the compressed data section.
