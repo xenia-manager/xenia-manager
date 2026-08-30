@@ -275,6 +275,17 @@ Xenia Manager supports custom themes. To create a new theme:
       ```bash
       python scripts/lint.py --check
       ```
+    - To format only specific files or globs (repeatable, supports `*` and `**`):
+      ```bash
+      python scripts/lint.py --include "source/XeniaManager.Core/Services/EventManager.cs"
+      python scripts/lint.py --include "source/XeniaManager.Core/**/*.cs" --include "source/XeniaManager/ViewModels/Foo.cs"
+      ```
+    - To format only changed files:
+      ```bash
+      python scripts/lint.py --changed          # staged + unstaged + untracked
+      python scripts/lint.py --staged           # staged only
+      python scripts/lint.py --changed --include "source/**/*.cs"  # intersection: changed files matching glob
+      ```
 
 3. **Write Meaningful Commits**:
    - Use conventional commit format:
