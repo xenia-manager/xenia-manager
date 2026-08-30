@@ -25,6 +25,7 @@ sealed class Program
     {
         string? baseDirectory = BaseAppLocator.Resolve(args);
         AppPathResolver.SetBaseDirectory(baseDirectory ?? string.Empty);
+        Logger.Initialize(AppPathResolver.GetFullPath("Logs"));
         Logger.Info<Program>($"Starting BigScreen (base directory: {baseDirectory ?? "own folder"})");
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);

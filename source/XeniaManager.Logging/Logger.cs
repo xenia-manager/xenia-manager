@@ -15,6 +15,9 @@ public static class Logger
     // Properties
     private static readonly NLog.Logger _logger;
     private static readonly LoggingConfiguration _config;
+    private static readonly FileTarget _fileTarget;
+    private static readonly Lock _syncRoot = new Lock();
+    private static string _logsDirectory = Path.Combine(AppContext.BaseDirectory, "Logs");
 
     // Constructor
     static Logger()
@@ -44,20 +47,49 @@ public static class Logger
         _config.AddTarget(consoleTarget);
         _config.AddRule(LogLevel.Trace, LogLevel.Fatal, consoleTarget);
 
-        // File target
-        string logsDirectory = Path.Combine(AppContext.BaseDirectory, "Logs");
-        FileTarget fileTarget = new FileTarget("file")
+        // File target — default location, can be overridden via Initialize(logsDirectory)
+        _fileTarget = new FileTarget("file")
         {
-            FileName = $"{logsDirectory}/Log-${{shortdate}}.log",
+            FileName = $"{_logsDirectory}/Log-${{shortdate}}.log",
             Layout = @"[${longdate:format=HH\:mm\:ss.fff}][${level:uppercase=true:format=FirstCharacter}] ${message}",
             KeepFileOpen = false,
             Encoding = Encoding.UTF8
         };
-        _config.AddTarget(fileTarget);
-        _config.AddRule(LogLevel.Trace, LogLevel.Fatal, fileTarget);
+        _config.AddTarget(_fileTarget);
+        _config.AddRule(LogLevel.Trace, LogLevel.Fatal, _fileTarget);
 
         LogManager.Configuration = _config;
         _logger = LogManager.GetCurrentClassLogger();
+    }
+
+    /// <summary>
+    /// Current logs directory. Defaults to <c>AppContext.BaseDirectory/Logs</c> until <see cref="Initialize"/> is called.
+    /// </summary>
+    public static string LogsDirectory => _logsDirectory;
+
+    /// <summary>
+    /// Initializes or re-configures the file log target to write to the given directory.
+    /// Call once at app startup before the first log write. Safe to call multiple times;
+    /// subsequent calls with the same path are no-ops, different paths reconfigure the target.
+    /// </summary>
+    /// <param name="logsDirectory">Absolute path to the logs folder. When null or whitespace, falls back to <c>AppContext.BaseDirectory/Logs</c>.</param>
+    public static void Initialize(string? logsDirectory = null)
+    {
+        string targetDirectory = string.IsNullOrWhiteSpace(logsDirectory)
+            ? Path.Combine(AppContext.BaseDirectory, "Logs")
+            : logsDirectory;
+
+        lock (_syncRoot)
+        {
+            if (string.Equals(_logsDirectory, targetDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            _logsDirectory = targetDirectory;
+            _fileTarget.FileName = $"{_logsDirectory}/Log-${{shortdate}}.log";
+            LogManager.ReconfigExistingLoggers();
+        }
     }
 
     // Functions
