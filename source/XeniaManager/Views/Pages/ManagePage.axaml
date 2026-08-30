@@ -6,7 +6,9 @@
              xmlns:core="using:XeniaManager.Files.Models.Account"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.ManagePage"
              x:DataType="vm:ManagePageViewModel">
     <Design.DataContext>
@@ -19,8 +21,11 @@
                                     StatusText="{Binding DownloadProgressStatus}"
                                     Progress="{Binding DownloadProgress}"
                                     ShowIconBackground="True" />
-        <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <StackPanel Spacing="16" Margin="24">
+        <ScrollViewer Grid.Row="1"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch">
+            <StackPanel Spacing="16"
+                        Margin="24">
                 <!-- Emulator Management -->
                 <cards:CustomCard>
                     <StackPanel Spacing="12">
@@ -372,8 +377,7 @@
                                 <cards:CardHeader.ActionContent>
                                     <Button Cursor="Hand"
                                             Content="{DynamicResource ManagePage.ManageProfiles.Button}"
-                                            Command="{Binding ManageProfilesCommand}">
-                                    </Button>
+                                            Command="{Binding ManageProfilesCommand}" />
                                 </cards:CardHeader.ActionContent>
                             </cards:CardHeader>
                         </cards:CustomCard>
@@ -387,8 +391,7 @@
                                 <cards:CardHeader.ActionContent>
                                     <Button Cursor="Hand"
                                             Content="{DynamicResource ManagePage.EditXConfig.Button}"
-                                            Command="{Binding EditXConfigCommand}">
-                                    </Button>
+                                            Command="{Binding EditXConfigCommand}" />
                                 </cards:CardHeader.ActionContent>
                             </cards:CardHeader>
                         </cards:CustomCard>

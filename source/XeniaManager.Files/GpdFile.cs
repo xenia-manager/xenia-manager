@@ -37,68 +37,146 @@ public class GpdFile : IDisposable
     /// Gets the base offset where entry data begins (after header and tables).
     /// Formula: ((EntryTableLength * 18) + (FreeSpaceTableLength * 8)) + 24
     /// </summary>
-    public uint DataOffset => ((Header.EntryTableLength * 18) + (Header.FreeSpaceTableLength * 8)) + 24;
+    public uint DataOffset
+    {
+        get
+        {
+            return Header.EntryTableLength * 18 + Header.FreeSpaceTableLength * 8 + 24;
+        }
+    }
 
     /// <summary>
     /// Gets whether the file is in big-endian (Xbox) format.
     /// </summary>
-    public bool IsBigEndian => _isBigEndian;
+    public bool IsBigEndian
+    {
+        get
+        {
+            return _isBigEndian;
+        }
+    }
 
     /// <summary>
     /// Gets whether the file is in little-endian (GFWL) format.
     /// </summary>
-    public bool IsLittleEndian => !_isBigEndian;
+    public bool IsLittleEndian
+    {
+        get
+        {
+            return !_isBigEndian;
+        }
+    }
 
     /// <summary>
     /// Gets all valid achievement entries (skips invalid/corrupted entries).
     /// Invalid entries are kept in the file but excluded from this collection.
     /// </summary>
-    public IEnumerable<AchievementEntry> Achievements => GetEntriesByNamespace<AchievementEntry>(EntryNamespace.Achievement).Where(a => a.IsValid);
+    public IEnumerable<AchievementEntry> Achievements
+    {
+        get
+        {
+            return GetEntriesByNamespace<AchievementEntry>(EntryNamespace.Achievement).Where(a => a.IsValid);
+        }
+    }
 
     /// <summary>
     /// Gets all achievement entries, including invalid/corrupted ones.
     /// </summary>
-    public IEnumerable<AchievementEntry> AllAchievements => GetEntriesByNamespace<AchievementEntry>(EntryNamespace.Achievement);
+    public IEnumerable<AchievementEntry> AllAchievements
+    {
+        get
+        {
+            return GetEntriesByNamespace<AchievementEntry>(EntryNamespace.Achievement);
+        }
+    }
 
     /// <summary>
     /// Gets all valid image entries (skips invalid/corrupted entries).
     /// </summary>
-    public IEnumerable<ImageEntry> Images => GetEntriesByNamespace<ImageEntry>(EntryNamespace.Image).Where(i => i.IsValid);
+    public IEnumerable<ImageEntry> Images
+    {
+        get
+        {
+            return GetEntriesByNamespace<ImageEntry>(EntryNamespace.Image).Where(i => i.IsValid);
+        }
+    }
 
     /// <summary>
     /// Gets all image entries, including invalid/corrupted ones.
     /// </summary>
-    public IEnumerable<ImageEntry> AllImages => GetEntriesByNamespace<ImageEntry>(EntryNamespace.Image);
+    public IEnumerable<ImageEntry> AllImages
+    {
+        get
+        {
+            return GetEntriesByNamespace<ImageEntry>(EntryNamespace.Image);
+        }
+    }
 
     /// <summary>
     /// Gets all valid setting entries (skips invalid/corrupted entries).
     /// </summary>
-    public IEnumerable<SettingEntry> Settings => GetEntriesByNamespace<SettingEntry>(EntryNamespace.Setting).Where(s => s.IsValid);
+    public IEnumerable<SettingEntry> Settings
+    {
+        get
+        {
+            return GetEntriesByNamespace<SettingEntry>(EntryNamespace.Setting).Where(s => s.IsValid);
+        }
+    }
 
     /// <summary>
     /// Gets all setting entries, including invalid/corrupted ones.
     /// </summary>
-    public IEnumerable<SettingEntry> AllSettings => GetEntriesByNamespace<SettingEntry>(EntryNamespace.Setting);
+    public IEnumerable<SettingEntry> AllSettings
+    {
+        get
+        {
+            return GetEntriesByNamespace<SettingEntry>(EntryNamespace.Setting);
+        }
+    }
 
     /// <summary>
     /// Gets all valid title entries (skips invalid/corrupted entries).
     /// </summary>
-    public IEnumerable<TitleEntry> Titles => GetEntriesByNamespace<TitleEntry>(EntryNamespace.Title).Where(t => t.IsValid);
+    public IEnumerable<TitleEntry> Titles
+    {
+        get
+        {
+            return GetEntriesByNamespace<TitleEntry>(EntryNamespace.Title).Where(t => t.IsValid);
+        }
+    }
 
     /// <summary>
     /// Gets all title entries, including invalid/corrupted ones.
     /// </summary>
-    public IEnumerable<TitleEntry> AllTitles => GetEntriesByNamespace<TitleEntry>(EntryNamespace.Title);
+    public IEnumerable<TitleEntry> AllTitles
+    {
+        get
+        {
+            return GetEntriesByNamespace<TitleEntry>(EntryNamespace.Title);
+        }
+    }
 
     /// <summary>
     /// Gets all valid string entries (skips invalid/corrupted entries).
     /// </summary>
-    public IEnumerable<StringEntry> Strings => GetEntriesByNamespace<StringEntry>(EntryNamespace.String).Where(s => s.IsValid);
+    public IEnumerable<StringEntry> Strings
+    {
+        get
+        {
+            return GetEntriesByNamespace<StringEntry>(EntryNamespace.String).Where(s => s.IsValid);
+        }
+    }
 
     /// <summary>
     /// Gets all string entries, including invalid/corrupted ones.
     /// </summary>
-    public IEnumerable<StringEntry> AllStrings => GetEntriesByNamespace<StringEntry>(EntryNamespace.String);
+    public IEnumerable<StringEntry> AllStrings
+    {
+        get
+        {
+            return GetEntriesByNamespace<StringEntry>(EntryNamespace.String);
+        }
+    }
 
     /// <summary>
     /// Gets the sync list entry if it exists.
@@ -111,7 +189,10 @@ public class GpdFile : IDisposable
             SyncListEntry? syncList = _syncList;
             return syncList?.IsValid == true ? syncList : null;
         }
-        private set => _syncList = value;
+        private set
+        {
+            _syncList = value;
+        }
     }
 
     private SyncListEntry? _syncList;
@@ -127,7 +208,10 @@ public class GpdFile : IDisposable
             SyncDataEntry? syncData = _syncData;
             return syncData?.IsValid == true ? syncData : null;
         }
-        private set => _syncData = value;
+        private set
+        {
+            _syncData = value;
+        }
     }
 
     private SyncDataEntry? _syncData;
@@ -195,7 +279,8 @@ public class GpdFile : IDisposable
 
         // Parse header
         XdbfHeader header = XdbfHeader.FromBytes(data);
-        Logger.Debug<GpdFile>($"XDBF Magic: 0x{header.Magic:X8}, Entries: {header.EntryCount}/{header.EntryTableLength}, Free Space: {header.FreeSpaceTableEntryCount}/{header.FreeSpaceTableLength}");
+        Logger.Debug<GpdFile>(
+            $"XDBF Magic: 0x{header.Magic:X8}, Entries: {header.EntryCount}/{header.EntryTableLength}, Free Space: {header.FreeSpaceTableEntryCount}/{header.FreeSpaceTableLength}");
 
         GpdFile gpd = new GpdFile(header.IsBigEndian);
         gpd.Header = header;
@@ -204,7 +289,7 @@ public class GpdFile : IDisposable
         int entryTableOffset = 24;
         for (int i = 0; i < header.EntryCount; i++)
         {
-            EntryTableEntry entry = EntryTableEntry.FromBytes(data, entryTableOffset + (i * 18), header.IsBigEndian);
+            EntryTableEntry entry = EntryTableEntry.FromBytes(data, entryTableOffset + i * 18, header.IsBigEndian);
             gpd.Entries.Add(entry);
             Logger.Trace<GpdFile>($"Entry {i}: Namespace={entry.Namespace}, ID=0x{entry.Id:X16}, Offset=0x{entry.OffsetSpecifier:X8}, Length={entry.Length}");
         }
@@ -213,7 +298,7 @@ public class GpdFile : IDisposable
         int freeSpaceTableOffset = entryTableOffset + (int)(header.EntryTableLength * 18);
         for (int i = 0; i < header.FreeSpaceTableEntryCount; i++)
         {
-            FreeSpaceEntry entry = FreeSpaceEntry.FromBytes(data, freeSpaceTableOffset + (i * 8), header.IsBigEndian);
+            FreeSpaceEntry entry = FreeSpaceEntry.FromBytes(data, freeSpaceTableOffset + i * 8, header.IsBigEndian);
             gpd.FreeSpaceEntries.Add(entry);
         }
 
@@ -296,7 +381,7 @@ public class GpdFile : IDisposable
             byte[] entryBytes = i < Entries.Count
                 ? Entries[i].ToBytes(_isBigEndian)
                 : new byte[18]; // Zero-fill unused entries
-            entryBytes.CopyTo(fileData, offset + (i * 18));
+            entryBytes.CopyTo(fileData, offset + i * 18);
         }
 
         // Write a free space table
@@ -306,7 +391,7 @@ public class GpdFile : IDisposable
             byte[] entryBytes = i < FreeSpaceEntries.Count
                 ? FreeSpaceEntries[i].ToBytes(_isBigEndian)
                 : new byte[8]; // Zero-fill unused entries
-            entryBytes.CopyTo(fileData, offset + (i * 8));
+            entryBytes.CopyTo(fileData, offset + i * 8);
         }
 
         // Write data section
@@ -636,92 +721,62 @@ public class GpdFile : IDisposable
     /// </summary>
     /// <param name="titleId">The title ID to filter by.</param>
     /// <returns>A list of achievements for the specified title.</returns>
-    public List<AchievementEntry> GetAchievementsForTitle(uint titleId)
-    {
-        return Achievements.Where(a => a.AchievementId >> 16 == titleId).ToList();
-    }
+    public List<AchievementEntry> GetAchievementsForTitle(uint titleId) => Achievements.Where(a => a.AchievementId >> 16 == titleId).ToList();
 
     /// <summary>
     /// Gets the total gamerscore from unlocked achievements.
     /// </summary>
     /// <returns>The total unlocked gamerscore.</returns>
-    public int GetTotalGamerscore()
-    {
-        return Achievements.Where(a => a.IsEarned).Sum(a => a.Gamerscore);
-    }
+    public int GetTotalGamerscore() => Achievements.Where(a => a.IsEarned).Sum(a => a.Gamerscore);
 
     /// <summary>
     /// Gets the count of unlocked achievements.
     /// </summary>
     /// <returns>The number of unlocked achievements.</returns>
-    public int GetUnlockedAchievementCount()
-    {
-        return Achievements.Count(a => a.IsEarned);
-    }
+    public int GetUnlockedAchievementCount() => Achievements.Count(a => a.IsEarned);
 
     /// <summary>
     /// Gets the total possible gamerscore.
     /// </summary>
     /// <returns>The total possible gamerscore from valid achievements only.</returns>
-    public int GetTotalPossibleGamerscore()
-    {
-        return Achievements.Sum(a => a.Gamerscore);
-    }
+    public int GetTotalPossibleGamerscore() => Achievements.Sum(a => a.Gamerscore);
 
     /// <summary>
     /// Gets the total possible achievement count (valid achievements only).
     /// </summary>
     /// <returns>The total number of valid achievements.</returns>
-    public int GetTotalAchievementCount()
-    {
-        return Achievements.Count();
-    }
+    public int GetTotalAchievementCount() => Achievements.Count();
 
     /// <summary>
     /// Gets all invalid/corrupted achievement entries.
     /// These entries are kept in the file but cannot be used.
     /// </summary>
     /// <returns>A list of invalid achievement entries with error information.</returns>
-    public List<AchievementEntry> GetInvalidAchievements()
-    {
-        return AllAchievements.Where(a => !a.IsValid).ToList();
-    }
+    public List<AchievementEntry> GetInvalidAchievements() => AllAchievements.Where(a => !a.IsValid).ToList();
 
     /// <summary>
     /// Gets all invalid/corrupted image entries.
     /// </summary>
     /// <returns>A list of invalid image entries with error information.</returns>
-    public List<ImageEntry> GetInvalidImages()
-    {
-        return AllImages.Where(i => !i.IsValid).ToList();
-    }
+    public List<ImageEntry> GetInvalidImages() => AllImages.Where(i => !i.IsValid).ToList();
 
     /// <summary>
     /// Gets all invalid/corrupted setting entries.
     /// </summary>
     /// <returns>A list of invalid setting entries with error information.</returns>
-    public List<SettingEntry> GetInvalidSettings()
-    {
-        return AllSettings.Where(s => !s.IsValid).ToList();
-    }
+    public List<SettingEntry> GetInvalidSettings() => AllSettings.Where(s => !s.IsValid).ToList();
 
     /// <summary>
     /// Gets all invalid/corrupted title entries.
     /// </summary>
     /// <returns>A list of invalid title entries with error information.</returns>
-    public List<TitleEntry> GetInvalidTitles()
-    {
-        return AllTitles.Where(t => !t.IsValid).ToList();
-    }
+    public List<TitleEntry> GetInvalidTitles() => AllTitles.Where(t => !t.IsValid).ToList();
 
     /// <summary>
     /// Gets all invalid/corrupted string entries.
     /// </summary>
     /// <returns>A list of invalid string entries with error information.</returns>
-    public List<StringEntry> GetInvalidStrings()
-    {
-        return AllStrings.Where(s => !s.IsValid).ToList();
-    }
+    public List<StringEntry> GetInvalidStrings() => AllStrings.Where(s => !s.IsValid).ToList();
 
     /// <summary>
     /// Gets all invalid entries in the GPD file.

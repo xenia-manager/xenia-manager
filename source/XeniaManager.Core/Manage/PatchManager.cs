@@ -116,7 +116,8 @@ public class PatchManager
     /// <exception cref="ArgumentException">Thrown when the patch TitleId doesn't match the game's IDs and confirmation is not provided.</exception>
     /// <exception cref="IOException">Thrown when the patch file cannot be copied to the patch folder.</exception>
     /// <exception cref="UnauthorizedAccessException">Thrown when access to the patch folder is denied.</exception>
-    public static async Task InstallLocalPatchAsync(Game game, PatchFile patchFile, string patchFileLocation, Func<string, string, string, Task<bool>>? confirmMismatch = null)
+    public static async Task InstallLocalPatchAsync(Game game, PatchFile patchFile, string patchFileLocation,
+        Func<string, string, string, Task<bool>>? confirmMismatch = null)
     {
         Logger.Trace<PatchManager>($"Starting InstallLocalPatchAsync operation for game: '{game.Title}', patch file: '{patchFileLocation}'");
 
@@ -232,7 +233,8 @@ public class PatchManager
                 // Load the new patch file
                 Logger.Debug<PatchManager>($"Loading new patch file: '{newPatchFileLocation}'");
                 PatchFile newPatchFile = PatchFile.Load(newPatchFileLocation);
-                Logger.Info<PatchManager>($"Loaded new patch file: TitleId='{newPatchFile.TitleId}', TitleName='{newPatchFile.TitleName}', Hashes={newPatchFile.Hashes.Count}");
+                Logger.Info<PatchManager>(
+                    $"Loaded new patch file: TitleId='{newPatchFile.TitleId}', TitleName='{newPatchFile.TitleName}', Hashes={newPatchFile.Hashes.Count}");
 
                 // Check if the hashes match between current and new patch files
                 bool hasMatchingHash = newPatchFile.Hashes.Any(hash => currentPatchFile.Hashes.Contains(hash, StringComparer.OrdinalIgnoreCase));

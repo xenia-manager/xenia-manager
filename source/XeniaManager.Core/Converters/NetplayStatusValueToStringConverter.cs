@@ -7,7 +7,7 @@ namespace XeniaManager.Core.Converters;
 
 public class NetplayStatusValueToStringConverter : IValueConverter
 {
-    public static readonly NetplayStatusValueToStringConverter Instance = new();
+    public static readonly NetplayStatusValueToStringConverter Instance = new NetplayStatusValueToStringConverter();
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -19,8 +19,5 @@ public class NetplayStatusValueToStringConverter : IValueConverter
         return string.Empty;
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }

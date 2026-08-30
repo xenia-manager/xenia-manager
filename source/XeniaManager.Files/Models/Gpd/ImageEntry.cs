@@ -57,10 +57,10 @@ public class ImageEntry
     /// </summary>
     /// <param name="pngData">The PNG image bytes.</param>
     /// <returns>A new ImageEntry instance.</returns>
-    public static ImageEntry FromPngData(byte[] pngData)
+    public static ImageEntry FromPngData(byte[] pngData) => new ImageEntry
     {
-        return new ImageEntry { ImageData = pngData };
-    }
+        ImageData = pngData
+    };
 
     /// <summary>
     /// Creates a new ImageEntry from raw entry data.

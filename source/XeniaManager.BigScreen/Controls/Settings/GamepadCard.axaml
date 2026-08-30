@@ -4,7 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="64"
+        mc:Ignorable="d"
+        d:DesignWidth="1100"
+        d:DesignHeight="64"
         x:Class="XeniaManager.BigScreen.Controls.Settings.GamepadCard"
         x:DataType="vm:GamepadItemViewModel"
         Classes.selected="{Binding IsSelected}">

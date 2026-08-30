@@ -50,7 +50,13 @@ public partial class ScreenshotItemViewModel(
     /// <summary>
     /// The capture date formatted for display (e.g. "5 Aug 2026, 14:30").
     /// </summary>
-    public string CapturedAtText => CapturedAt.ToString(FormatConstants.GetCaptureDateFormat(TimeFormat));
+    public string CapturedAtText
+    {
+        get
+        {
+            return CapturedAt.ToString(FormatConstants.GetCaptureDateFormat(TimeFormat));
+        }
+    }
 
     /// <summary>
     /// The game title the screenshot belongs to, when it can be matched to the library.
@@ -70,7 +76,13 @@ public partial class ScreenshotItemViewModel(
     /// <summary>
     /// Whether the thumbnail loaded successfully.
     /// </summary>
-    public bool HasImage => Thumbnail != null;
+    public bool HasImage
+    {
+        get
+        {
+            return Thumbnail != null;
+        }
+    }
 
     partial void OnTimeFormatChanged(TimeFormat value) => OnPropertyChanged(nameof(CapturedAtText));
 }

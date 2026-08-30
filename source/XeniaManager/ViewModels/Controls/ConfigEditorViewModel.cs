@@ -32,7 +32,13 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
     /// <summary>
     /// Gets the message box service for showing dialogs.
     /// </summary>
-    public IMessageBoxService MessageBoxService => _messageBoxService;
+    public IMessageBoxService MessageBoxService
+    {
+        get
+        {
+            return _messageBoxService;
+        }
+    }
 
     public ConfigEditorViewModel(ConfigFile configFile, string? configFilePath = null, ConfigUiDefinition? uiDefinition = null)
     {
@@ -47,10 +53,7 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
     /// <summary>
     /// Handles changes to the search text and filters sections/options.
     /// </summary>
-    partial void OnSearchTextChanged(string value)
-    {
-        FilterSections(value);
-    }
+    partial void OnSearchTextChanged(string value) => FilterSections(value);
 
     /// <summary>
     /// Loads the sections and options based on the UI definition or defaults.
@@ -107,6 +110,7 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
                 {
                     optionVm.IsVisible = true;
                 }
+
                 sectionVm.UpdateVisibilityFromOptions();
             }
         }
@@ -147,10 +151,7 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
     /// <summary>
     /// Updates the overall unsaved changes status based on all sections.
     /// </summary>
-    private void UpdateUnsavedChangesStatus()
-    {
-        HasUnsavedChanges = Sections.Any(s => s.HasUnsavedChanges);
-    }
+    private void UpdateUnsavedChangesStatus() => HasUnsavedChanges = Sections.Any(s => s.HasUnsavedChanges);
 
     /// <summary>
     /// Saves all changes to the config file.

@@ -27,32 +27,68 @@ public partial class HeaderFileViewModel : ViewModelBase
     /// <summary>
     /// Gets whether a thumbnail image is available for display.
     /// </summary>
-    public bool HasThumbnail => ThumbnailImage != null;
+    public bool HasThumbnail
+    {
+        get
+        {
+            return ThumbnailImage != null;
+        }
+    }
 
     /// <summary>
     /// Gets the display name of the header file.
     /// </summary>
-    public string DisplayName => Header.DisplayName;
+    public string DisplayName
+    {
+        get
+        {
+            return Header.DisplayName;
+        }
+    }
 
     /// <summary>
     /// Gets the file name of the header file.
     /// </summary>
-    public string FileName => Header.FileName;
+    public string FileName
+    {
+        get
+        {
+            return Header.FileName;
+        }
+    }
 
     /// <summary>
     /// Gets the content type of the header file.
     /// </summary>
-    public string ContentType => Header.ContentType.ToDisplayString();
+    public string ContentType
+    {
+        get
+        {
+            return Header.ContentType.ToDisplayString();
+        }
+    }
 
     /// <summary>
     /// Gets the title ID of the header file.
     /// </summary>
-    public string TitleId => $"{Header.TitleId:X8}";
+    public string TitleId
+    {
+        get
+        {
+            return $"{Header.TitleId:X8}";
+        }
+    }
 
     /// <summary>
     /// Gets the original file path of the header file.
     /// </summary>
-    public string HeaderFilePath => Header.FilePath;
+    public string HeaderFilePath
+    {
+        get
+        {
+            return Header.FilePath;
+        }
+    }
 
     /// <summary>
     /// Gets the reconstructed file path from the content type and file name.

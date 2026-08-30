@@ -42,25 +42,37 @@ public class PatchesDatabase
         [PatchDatabaseType.Canary] = DatabaseUrls.PatchesDatabase.CanaryPatches,
         [PatchDatabaseType.Netplay] = DatabaseUrls.PatchesDatabase.NetplayPatches
     };
-    
+
     /// <summary>
     /// Gets the filtered Canary patches database (used for displaying patches after search)
     /// </summary>
     public static List<PatchInfo> CanaryFilteredDatabase
     {
-        get => _databaseStates[PatchDatabaseType.Canary].FilteredDatabase;
-        private set => _databaseStates[PatchDatabaseType.Canary].FilteredDatabase = value;
+        get
+        {
+            return _databaseStates[PatchDatabaseType.Canary].FilteredDatabase;
+        }
+        private set
+        {
+            _databaseStates[PatchDatabaseType.Canary].FilteredDatabase = value;
+        }
     }
-    
+
     /// <summary>
     /// Gets the filtered Netplay patches database (used for displaying patches after search)
     /// </summary>
     public static List<PatchInfo> NetplayFilteredDatabase
     {
-        get => _databaseStates[PatchDatabaseType.Netplay].FilteredDatabase;
-        private set => _databaseStates[PatchDatabaseType.Netplay].FilteredDatabase = value;
+        get
+        {
+            return _databaseStates[PatchDatabaseType.Netplay].FilteredDatabase;
+        }
+        private set
+        {
+            _databaseStates[PatchDatabaseType.Netplay].FilteredDatabase = value;
+        }
     }
-    
+
     /// <summary>
     /// Loads the Canary patches database from the marketplace into memory.
     /// The database is only loaded once; further calls will be skipped if already loaded.
@@ -71,7 +83,7 @@ public class PatchesDatabase
     /// <exception cref="AggregateException">Thrown when all database URLs fail to provide data</exception>
     public static async Task LoadCanaryAsync(CancellationToken cancellationToken = default, string? cacheDirectory = null)
         => await LoadDatabaseAsync(PatchDatabaseType.Canary, cancellationToken, cacheDirectory);
-    
+
     /// <summary>
     /// Loads the Netplay patches database from the marketplace into memory.
     /// The database is only loaded once; further calls will be skipped if already loaded.
@@ -103,7 +115,7 @@ public class PatchesDatabase
         {
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: cacheKey, cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                response = await _client.GetAsync(url, cancellationToken, cacheKey, ApiCacheDuration, cacheDirectory);
                 Logger.Info<PatchesDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -142,7 +154,7 @@ public class PatchesDatabase
         state.FilteredDatabase = state.PatchNameMap.Values.ToList();
         Logger.Info<PatchesDatabase>($"{type} patches loaded: {state.PatchNameMap.Count} patches");
     }
-    
+
     /// <summary>
     /// Adds a patch to the Canary index.
     /// The patch name is normalized to uppercase for consistent comparisons.
@@ -150,7 +162,7 @@ public class PatchesDatabase
     /// <param name="patch">The PatchInfo object to add to the index</param>
     public static void AddPatchToIndex(PatchInfo patch)
         => AddPatchToIndex(patch, _databaseStates[PatchDatabaseType.Canary]);
-    
+
     /// <summary>
     /// Adds a patch to the Netplay index.
     /// The patch name is normalized to uppercase for consistent comparisons.
@@ -175,7 +187,7 @@ public class PatchesDatabase
             state.PatchNames.Add(normalized);
         }
     }
-    
+
     /// <summary>
     /// Filters the Canary patches database based on the provided search query.
     /// If the search query is empty or whitespace, the full database is restored.
@@ -184,7 +196,7 @@ public class PatchesDatabase
     /// <param name="searchQuery">The query string to search for</param>
     public static Task SearchCanaryDatabase(string searchQuery)
         => SearchDatabaseAsync(PatchDatabaseType.Canary, searchQuery);
-    
+
     /// <summary>
     /// Filters the Netplay patches database based on the provided search query.
     /// If the search query is empty or whitespace, the full database is restored.
@@ -221,7 +233,7 @@ public class PatchesDatabase
             Logger.Debug<PatchesDatabase>($"Search completed, found {state.FilteredDatabase.Count} matching {variantName.ToLowerInvariant()} patches");
         });
     }
-    
+
     /// <summary>
     /// Retrieves PatchInfo for a patch with the specified name from the Canary database.
     /// Performs a case-insensitive lookup using the internal index.
@@ -230,7 +242,7 @@ public class PatchesDatabase
     /// <returns>The PatchInfo object if found, null otherwise</returns>
     public static PatchInfo? GetCanaryPatchInfo(string? patchName)
         => GetPatchInfo(patchName, _databaseStates[PatchDatabaseType.Canary]);
-    
+
     /// <summary>
     /// Retrieves PatchInfo for a patch with the specified name from the Netplay database.
     /// Performs a case-insensitive lookup using the internal index.
@@ -250,7 +262,7 @@ public class PatchesDatabase
         string normalized = patchName.ToUpperInvariant();
         return state.PatchNameMap.GetValueOrDefault(normalized);
     }
-    
+
     /// <summary>
     /// Resets all static states. Intended for test isolation only.
     /// </summary>
@@ -263,6 +275,7 @@ public class PatchesDatabase
             state.FilteredDatabase = [];
             state.IsLoaded = false;
         }
+
         Logger.Info<PatchesDatabase>("PatchesDatabase reset complete");
     }
 }

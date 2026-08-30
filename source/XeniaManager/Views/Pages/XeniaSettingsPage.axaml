@@ -5,7 +5,9 @@
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:controls="using:XeniaManager.Controls"
              xmlns:ic="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             mc:Ignorable="d"
+             d:DesignWidth="900"
+             d:DesignHeight="600"
              x:Class="XeniaManager.Views.Pages.XeniaSettingsPage"
              x:DataType="vm:XeniaSettingsPageViewModel">
     <Design.DataContext>
@@ -14,7 +16,8 @@
 
     <UserControl.Resources>
         <!-- ComboBox Item Template for ConfigFileItem -->
-        <DataTemplate x:Key="ConfigFileItemTemplate" x:DataType="vm:ConfigFileItem">
+        <DataTemplate x:Key="ConfigFileItemTemplate"
+                      x:DataType="vm:ConfigFileItem">
             <TextBlock Text="{Binding DisplayName}" />
         </DataTemplate>
     </UserControl.Resources>

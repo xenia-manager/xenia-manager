@@ -49,12 +49,24 @@ public struct XdbfHeader
     /// <summary>
     /// Gets whether the file is in big-endian (Xbox) format.
     /// </summary>
-    public bool IsBigEndian => Magic == 0x58444246;
+    public bool IsBigEndian
+    {
+        get
+        {
+            return Magic == 0x58444246;
+        }
+    }
 
     /// <summary>
     /// Gets whether the file is in little-endian (GFWL) format.
     /// </summary>
-    public bool IsLittleEndian => Magic == 0x46424458;
+    public bool IsLittleEndian
+    {
+        get
+        {
+            return Magic == 0x46424458;
+        }
+    }
 
     /// <summary>
     /// Parses an XDBF header from raw bytes.
@@ -98,7 +110,8 @@ public struct XdbfHeader
                 : BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset + 0x14))
         };
 
-        Logger.Debug<XdbfHeader>($"Version: 0x{header.Version:X8}, Entry Table: {header.EntryCount}/{header.EntryTableLength}, Free Space: {header.FreeSpaceTableEntryCount}/{header.FreeSpaceTableLength}");
+        Logger.Debug<XdbfHeader>(
+            $"Version: 0x{header.Version:X8}, Entry Table: {header.EntryCount}/{header.EntryTableLength}, Free Space: {header.FreeSpaceTableEntryCount}/{header.FreeSpaceTableLength}");
 
         if (header is { IsBigEndian: false, IsLittleEndian: false })
         {

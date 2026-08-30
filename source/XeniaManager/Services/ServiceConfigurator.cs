@@ -44,6 +44,7 @@ public class ServiceConfigurator
                 Logger.LogExceptionDetails<ServiceConfigurator>(ex);
                 // Settings will fall back to defaults, which is handled by the settings system
             }
+
             return settings;
         });
         // NavigationService
@@ -63,6 +64,7 @@ public class ServiceConfigurator
             {
                 Logger.Error<ServiceConfigurator>($"Failed to apply saved theme: {ex.Message}");
             }
+
             return themeService;
         });
         // MessageBoxService

@@ -31,7 +31,7 @@ public static class XConfigOffsets
         XConfigCategory.Dvd => Dvd,
         XConfigCategory.Iptv => Iptv,
         XConfigCategory.System => System,
-        _ => 0,
+        _ => 0
     };
 
     public static int CategorySize(XConfigCategory category) => category switch
@@ -47,7 +47,7 @@ public static class XConfigOffsets
         XConfigCategory.Dvd => 664,
         XConfigCategory.Iptv => 512,
         XConfigCategory.System => 16,
-        _ => 0,
+        _ => 0
     };
 }
 
@@ -79,6 +79,7 @@ public static class XConfigFields
         {
             return desc;
         }
+
         return null;
     }
 
@@ -172,8 +173,6 @@ public static class XConfigFields
     }
 
     private static void Add(Dictionary<(XConfigCategory, ushort), FieldDescriptor> map, XConfigCategory category,
-        ushort settingId, int size, int absoluteOffset)
-    {
+        ushort settingId, int size, int absoluteOffset) =>
         map[(category, settingId)] = new FieldDescriptor(category, settingId, (ushort)size, absoluteOffset);
-    }
 }

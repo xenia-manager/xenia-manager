@@ -34,8 +34,14 @@ public class SecretCodeListener : IDisposable
     /// </summary>
     public bool AutoStopAfterSuccess
     {
-        get => _autoStopAfterSuccess;
-        set => _autoStopAfterSuccess = value;
+        get
+        {
+            return _autoStopAfterSuccess;
+        }
+        set
+        {
+            _autoStopAfterSuccess = value;
+        }
     }
 
     /// <summary>
@@ -55,7 +61,13 @@ public class SecretCodeListener : IDisposable
     /// <summary>
     /// Gets whether the listener is currently active.
     /// </summary>
-    public bool IsListening => _isListening;
+    public bool IsListening
+    {
+        get
+        {
+            return _isListening;
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SecretCodeListener"/> class.
@@ -215,7 +227,7 @@ public class SecretCodeListener : IDisposable
             return;
         }
 
-        Stop(stopInputListener: true);
+        Stop(true);
         _disposed = true;
         GC.SuppressFinalize(this);
     }

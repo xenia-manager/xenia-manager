@@ -38,33 +38,21 @@ public partial class InstallContentDialogViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private ContentItemViewModel? _selectedContent;
 
-    partial void OnSelectedContentChanged(ContentItemViewModel? value)
-    {
-        UpdateCanInstall();
-    }
+    partial void OnSelectedContentChanged(ContentItemViewModel? value) => UpdateCanInstall();
 
-    partial void OnContentItemsChanged(ObservableCollection<ContentItemViewModel> value)
-    {
-        UpdateCanInstall();
-    }
+    partial void OnContentItemsChanged(ObservableCollection<ContentItemViewModel> value) => UpdateCanInstall();
 
     /// <summary>
     /// Updates the CanInstall property based on whether there are items in the list.
     /// </summary>
-    private void UpdateCanInstall()
-    {
-        CanInstall = ContentItems.Count > 0 && !IsInstalling;
-    }
+    private void UpdateCanInstall() => CanInstall = ContentItems.Count > 0 && !IsInstalling;
 
     /// <summary>
     /// Indicates whether an installation is currently in progress.
     /// </summary>
     [ObservableProperty] private bool _isInstalling;
 
-    partial void OnIsInstallingChanged(bool value)
-    {
-        UpdateCanInstall();
-    }
+    partial void OnIsInstallingChanged(bool value) => UpdateCanInstall();
 
     /// <summary>
     /// Indicates whether the Installation button should be enabled.
@@ -187,7 +175,7 @@ public partial class InstallContentDialogViewModel : ViewModelBase
                                 {
                                     // Update progress based on extracted files count
                                     // Must be dispatched to UI thread
-                                    double progress = (extractedFiles / (double)totalFiles) * 100;
+                                    double progress = extractedFiles / (double)totalFiles * 100;
                                     Dispatcher.UIThread.Post(() =>
                                     {
                                         contentItem.InstallationProgress = progress;

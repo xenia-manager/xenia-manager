@@ -15,9 +15,9 @@ namespace XeniaManager.BigScreen.Utilities;
 /// </summary>
 public static class ScreenshotFileNameParser
 {
-    private static readonly Regex GameIdPattern = new(@"^([0-9A-Fa-f]{8})", RegexOptions.Compiled);
+    private static readonly Regex GameIdPattern = new Regex(@"^([0-9A-Fa-f]{8})", RegexOptions.Compiled);
 
-    private static readonly Regex GameIdFullPattern = new(@"^[0-9A-Fa-f]{8}$", RegexOptions.Compiled);
+    private static readonly Regex GameIdFullPattern = new Regex(@"^[0-9A-Fa-f]{8}$", RegexOptions.Compiled);
 
     /// <summary>
     /// The 8-hex-digit game ID prefix of a Xenia screenshot file name, or an

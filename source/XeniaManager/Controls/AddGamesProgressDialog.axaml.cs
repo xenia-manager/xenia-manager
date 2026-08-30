@@ -32,7 +32,13 @@ public partial class AddGamesProgressDialog : UserControl
     /// <summary>
     /// Gets the ViewModel for this dialog.
     /// </summary>
-    public AddGamesProgressDialogViewModel ViewModel => _viewModel;
+    public AddGamesProgressDialogViewModel ViewModel
+    {
+        get
+        {
+            return _viewModel;
+        }
+    }
 
     /// <summary>
     /// Shows a dialog to display the progress of adding games to the library.
@@ -44,7 +50,8 @@ public partial class AddGamesProgressDialog : UserControl
     /// <returns>
     /// A tuple containing the results: (gamesAdded, gamesSkipped, gamesFailed)
     /// </returns>
-    public static async Task<(int GamesAdded, int GamesSkipped, int GamesFailed)> ShowAsync(Func<Action<string, string, int, int, int, int, int, int>, Task<(int, int, int)>> addGamesAction)
+    public static async Task<(int GamesAdded, int GamesSkipped, int GamesFailed)> ShowAsync(
+        Func<Action<string, string, int, int, int, int, int, int>, Task<(int, int, int)>> addGamesAction)
     {
         AddGamesProgressDialog dialog = new AddGamesProgressDialog();
 

@@ -24,7 +24,7 @@ public class XConfigFileTests
     {
         if (Directory.Exists(_testFileLocation))
         {
-            Directory.Delete(_testFileLocation, recursive: true);
+            Directory.Delete(_testFileLocation, true);
         }
     }
 
@@ -89,10 +89,7 @@ public class XConfigFileTests
     }
 
     [Test]
-    public void FromBytes_NullData_ThrowsArgumentNullException()
-    {
-        Assert.Throws<ArgumentNullException>(() => XConfigFile.FromBytes(null!));
-    }
+    public void FromBytes_NullData_ThrowsArgumentNullException() => Assert.Throws<ArgumentNullException>(() => XConfigFile.FromBytes(null!));
 
     [Test]
     public void FromBytes_WrongSize_ThrowsArgumentException()
@@ -187,7 +184,9 @@ public class XConfigFileTests
         XConfigFile xconfig = XConfigFile.Create();
         byte[] written = new byte[256];
         for (int i = 0; i < written.Length; i++)
+        {
             written[i] = (byte)(i ^ 0xA5);
+        }
 
         xconfig.WriteSetting(XConfigCategory.Console, (ushort)XConfigConsoleSetting.WirelessSettings, written);
 
@@ -348,9 +347,12 @@ public class XConfigFileTests
     {
         XConfigFile xconfig = XConfigFile.Create();
 
-        var fields = new (XConfigCategory Cat, ushort Id, int Size, object Value)[]
+        (XConfigCategory Cat, ushort Id, int Size, object Value)[] fields = new (XConfigCategory Cat, ushort Id, int Size, object Value)[]
         {
-            (XConfigCategory.Static, (ushort)XConfigStaticSetting.FirstPowerOnDate, 5, new byte[] { 1, 2, 3, 4, 5 }),
+            (XConfigCategory.Static, (ushort)XConfigStaticSetting.FirstPowerOnDate, 5, new byte[]
+            {
+                1, 2, 3, 4, 5
+            }),
             (XConfigCategory.Secured, (ushort)XConfigSecuredSetting.OnlineNetworkId, 4, 0x01020304u),
             (XConfigCategory.Secured, (ushort)XConfigSecuredSetting.AvRegion, 4, 0xDEADBEEFu),
             (XConfigCategory.Secured, (ushort)XConfigSecuredSetting.GameRegion, 2, (ushort)0x1234),
@@ -360,10 +362,10 @@ public class XConfigFileTests
             (XConfigCategory.Console, (ushort)XConfigConsoleSetting.AutoShutOff, 2, (short)456),
             (XConfigCategory.Console, (ushort)XConfigConsoleSetting.KeyboardLayout, 2, (short)0x7F),
             (XConfigCategory.System, (ushort)XConfigSystemSetting.AlarmTime, 8, 0xABCDEF0123456789ul),
-            (XConfigCategory.System, (ushort)XConfigSystemSetting.PreviousFlashVersion, 4, 0x00010002u),
+            (XConfigCategory.System, (ushort)XConfigSystemSetting.PreviousFlashVersion, 4, 0x00010002u)
         };
 
-        foreach (var (cat, id, size, value) in fields)
+        foreach ((XConfigCategory cat, ushort id, int size, object value) in fields)
         {
             switch (value)
             {
@@ -400,7 +402,7 @@ public class XConfigFileTests
         int threadCount = 8;
         int iterationsPerThread = 100;
 
-        var tasks = new Task[threadCount];
+        Task[] tasks = new Task[threadCount];
         for (int t = 0; t < threadCount; t++)
         {
             tasks[t] = Task.Run(() =>
@@ -424,9 +426,9 @@ public class XConfigFileTests
         int threadCount = 4;
         int iterationsPerThread = 50;
         int completedWrites = 0;
-        object counterLock = new();
+        object counterLock = new object();
 
-        var tasks = new Task[threadCount];
+        Task[] tasks = new Task[threadCount];
         for (int t = 0; t < threadCount; t++)
         {
             uint threadValue = (uint)(t + 1);
@@ -488,18 +490,26 @@ public class XConfigFileTests
 
         // Default values preserved from SetDefaults()
         Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.Language), Is.EqualTo(1u), "Language should be English (1)");
-        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.AvRegion), Is.EqualTo(0x00400100u), "AV region should be NTSCM");
-        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.AudioFlags), Is.EqualTo(0x00010001u), "Audio should be DolbyDigital | DolbyProLogic");
-        Assert.That(xconfig.ReadSetting<float>(XConfigCategory.User, (ushort)XConfigUserSetting.MusicVolume), Is.EqualTo(0.7f).Within(0.001f), "Music volume should be 0.7");
-        Assert.That(xconfig.ReadSetting<int>(XConfigCategory.User, (ushort)XConfigUserSetting.TimeZoneDltBias), Is.EqualTo(-60), "DLT bias should be -60 (BST)");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.AvRegion), Is.EqualTo(0x00400100u),
+            "AV region should be NTSCM");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.AudioFlags), Is.EqualTo(0x00010001u),
+            "Audio should be DolbyDigital | DolbyProLogic");
+        Assert.That(xconfig.ReadSetting<float>(XConfigCategory.User, (ushort)XConfigUserSetting.MusicVolume), Is.EqualTo(0.7f).Within(0.001f),
+            "Music volume should be 0.7");
+        Assert.That(xconfig.ReadSetting<int>(XConfigCategory.User, (ushort)XConfigUserSetting.TimeZoneDltBias), Is.EqualTo(-60),
+            "DLT bias should be -60 (BST)");
 
         // PcGame set to 0x000000FF by defaults
-        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.PcGame), Is.EqualTo(0x000000FFu), "PC game should be NoGameRestrictions");
-        Assert.That(xconfig.ReadSetting<byte>(XConfigCategory.User, (ushort)XConfigUserSetting.PcFlags), Is.EqualTo(0x03), "PC flags should be XBLAllowed | XBLMembershipCreationAllowed");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.PcGame), Is.EqualTo(0x000000FFu),
+            "PC game should be NoGameRestrictions");
+        Assert.That(xconfig.ReadSetting<byte>(XConfigCategory.User, (ushort)XConfigUserSetting.PcFlags), Is.EqualTo(0x03),
+            "PC flags should be XBLAllowed | XBLMembershipCreationAllowed");
 
         // Modified values in test asset (deviations from defaults)
-        Assert.That(xconfig.ReadSetting<byte>(XConfigCategory.User, (ushort)XConfigUserSetting.Country), Is.EqualTo(0x67), "Country should be 0x67 (103) in test asset");
-        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.RetailFlags), Is.EqualTo(0x00000000u), "Retail flags should be 0 in test asset");
+        Assert.That(xconfig.ReadSetting<byte>(XConfigCategory.User, (ushort)XConfigUserSetting.Country), Is.EqualTo(0x67),
+            "Country should be 0x67 (103) in test asset");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.RetailFlags), Is.EqualTo(0x00000000u),
+            "Retail flags should be 0 in test asset");
 
         // Timezone strings are fixed byte buffers, not null-terminated strings
         byte[] tzStdName = new byte[4];
@@ -510,10 +520,14 @@ public class XConfigFileTests
         Assert.That(Encoding.ASCII.GetString(tzDltName).TrimEnd('\0'), Is.EqualTo("BST"));
 
         // Values that were not set should be zero
-        Assert.That(xconfig.ReadSetting<ushort>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.GameRegion), Is.EqualTo(0), "Game region should be 0 (unset)");
-        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.DvdRegion), Is.EqualTo(0u), "DVD region should be 0 (unset)");
-        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.ResetKey), Is.EqualTo(0u), "Reset key should be 0 (unset)");
-        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.PcGame), Is.EqualTo(0x000000FFu), "PC game should be NoGameRestrictions");
+        Assert.That(xconfig.ReadSetting<ushort>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.GameRegion), Is.EqualTo(0),
+            "Game region should be 0 (unset)");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.DvdRegion), Is.EqualTo(0u),
+            "DVD region should be 0 (unset)");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.Secured, (ushort)XConfigSecuredSetting.ResetKey), Is.EqualTo(0u),
+            "Reset key should be 0 (unset)");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.PcGame), Is.EqualTo(0x000000FFu),
+            "PC game should be NoGameRestrictions");
     }
 
     [Test]
@@ -696,7 +710,8 @@ public class XConfigFileTests
         xconfig.IsPcEnabled = true;
         Assert.That(xconfig.IsXboxOneGameAllowed, Is.True);
         Assert.That(xconfig.IsPcEnabled, Is.True);
-        Assert.That(xconfig.PcFlags, Is.EqualTo(XPcFlags.XblAllowed | XPcFlags.XblMembershipCreationAllowed | XPcFlags.XboxOneGameAllowed | XPcFlags.PcEnabled));
+        Assert.That(xconfig.PcFlags,
+            Is.EqualTo(XPcFlags.XblAllowed | XPcFlags.XblMembershipCreationAllowed | XPcFlags.XboxOneGameAllowed | XPcFlags.PcEnabled));
         xconfig.IsXblAllowed = false;
         Assert.That(xconfig.IsXblAllowed, Is.False);
         Assert.That(xconfig.IsXblMembershipCreationAllowed, Is.True);
@@ -719,7 +734,10 @@ public class XConfigFileTests
         xconfig.OnlineNetworkId = 0xDEADBEEFu;
         xconfig.MacAddress = [0x00, 0x1A, 0x38, 0x4B, 0x9C, 0x2D];
         Assert.That(xconfig.OnlineNetworkId, Is.EqualTo(0xDEADBEEFu));
-        Assert.That(xconfig.MacAddress, Is.EqualTo(new byte[] { 0x00, 0x1A, 0x38, 0x4B, 0x9C, 0x2D }));
+        Assert.That(xconfig.MacAddress, Is.EqualTo(new byte[]
+        {
+            0x00, 0x1A, 0x38, 0x4B, 0x9C, 0x2D
+        }));
     }
 
     [Test]

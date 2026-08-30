@@ -15,7 +15,7 @@ public class ByteArrayToImageSourceConverter : IValueConverter
 {
     public static readonly ByteArrayToImageSourceConverter Instance = new ByteArrayToImageSourceConverter();
 
-    private static readonly ConcurrentDictionary<string, WeakReference<Bitmap>> _cache = new();
+    private static readonly ConcurrentDictionary<string, WeakReference<Bitmap>> _cache = new ConcurrentDictionary<string, WeakReference<Bitmap>>();
     private const int MaxCacheSize = 200;
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -27,7 +27,7 @@ public class ByteArrayToImageSourceConverter : IValueConverter
 
         try
         {
-            string hash = global::System.Convert.ToHexString(MD5.HashData(bytes));
+            string hash = System.Convert.ToHexString(MD5.HashData(bytes));
 
             if (_cache.TryGetValue(hash, out WeakReference<Bitmap>? weakRef) &&
                 weakRef.TryGetTarget(out Bitmap? cached))
@@ -62,14 +62,12 @@ public class ByteArrayToImageSourceConverter : IValueConverter
                 staleKeys.Add(entry.Key);
             }
         }
+
         foreach (string key in staleKeys)
         {
             _cache.TryRemove(key, out _);
         }
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotSupportedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }

@@ -6,7 +6,9 @@
              xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
-             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+             mc:Ignorable="d"
+             d:DesignWidth="600"
+             d:DesignHeight="500"
              x:Class="XeniaManager.Controls.InstallContentDialog"
              x:DataType="vm:InstallContentDialogViewModel"
              Width="600">
@@ -39,7 +41,8 @@
                                         <Image Source="{Binding ThumbnailImage}"
                                                Stretch="UniformToFill">
                                             <Image.IsVisible>
-                                                <Binding Path="ThumbnailImage" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                                                <Binding Path="ThumbnailImage"
+                                                         Converter="{x:Static ObjectConverters.IsNotNull}" />
                                             </Image.IsVisible>
                                         </Image>
                                         <!-- Title Thumbnail image (shown if ThumbnailImage is null) -->
@@ -47,8 +50,10 @@
                                                Stretch="UniformToFill">
                                             <Image.IsVisible>
                                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                    <Binding Path="TitleThumbnailImage" Converter="{x:Static ObjectConverters.IsNotNull}" />
-                                                    <Binding Path="ThumbnailImage" Converter="{x:Static ObjectConverters.IsNull}" />
+                                                    <Binding Path="TitleThumbnailImage"
+                                                             Converter="{x:Static ObjectConverters.IsNotNull}" />
+                                                    <Binding Path="ThumbnailImage"
+                                                             Converter="{x:Static ObjectConverters.IsNull}" />
                                                 </MultiBinding>
                                             </Image.IsVisible>
                                         </Image>
@@ -61,8 +66,10 @@
                                             </fluent:SymbolIcon.Foreground>
                                             <fluent:SymbolIcon.IsVisible>
                                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                    <Binding Path="ThumbnailImage" Converter="{x:Static ObjectConverters.IsNull}" />
-                                                    <Binding Path="TitleThumbnailImage" Converter="{x:Static ObjectConverters.IsNull}" />
+                                                    <Binding Path="ThumbnailImage"
+                                                             Converter="{x:Static ObjectConverters.IsNull}" />
+                                                    <Binding Path="TitleThumbnailImage"
+                                                             Converter="{x:Static ObjectConverters.IsNull}" />
                                                 </MultiBinding>
                                             </fluent:SymbolIcon.IsVisible>
                                         </fluent:SymbolIcon>
@@ -86,22 +93,19 @@
                                     <!-- Content Type (below) -->
                                     <TextBlock Text="{Binding ContentType}"
                                                FontSize="11"
-                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                                    </TextBlock>
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                     <!-- Progress bar (shown during installation) -->
                                     <ProgressBar Value="{Binding InstallationProgress}"
                                                  Minimum="0"
                                                  Maximum="100"
-                                                 IsVisible="{Binding IsInstalling}">
-                                    </ProgressBar>
+                                                 IsVisible="{Binding IsInstalling}" />
                                     <!-- Status indicators -->
                                     <StackPanel Spacing="4"
                                                 IsVisible="{Binding InstallationComplete}">
                                         <TextBlock Text="{DynamicResource InstallContentDialog.Progress.Complete}"
                                                    FontSize="11"
                                                    Foreground="{DynamicResource SystemAccentColor}"
-                                                   IsVisible="{Binding InstallationComplete}">
-                                        </TextBlock>
+                                                   IsVisible="{Binding InstallationComplete}" />
                                     </StackPanel>
                                     <StackPanel Spacing="4"
                                                 IsVisible="{Binding InstallationFailed}">
@@ -116,8 +120,7 @@
                                                    FontSize="10"
                                                    TextWrapping="Wrap"
                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   IsVisible="{Binding InstallationFailed}">
-                                        </TextBlock>
+                                                   IsVisible="{Binding InstallationFailed}" />
                                     </StackPanel>
                                 </StackPanel>
 
@@ -127,7 +130,8 @@
                                         ToolTip.Tip="{DynamicResource InstallContentDialog.ContentItem.RemoveToolTip}"
                                         HorizontalAlignment="Right">
                                     <Button.IsVisible>
-                                        <Binding Path="IsInstalling" Converter="{x:Static BoolConverters.Not}" />
+                                        <Binding Path="IsInstalling"
+                                                 Converter="{x:Static BoolConverters.Not}" />
                                     </Button.IsVisible>
                                     <Button.Content>
                                         <fluent:SymbolIcon Symbol="Delete" />
@@ -138,8 +142,7 @@
                                                    Symbol="ArrowUpload"
                                                    HorizontalAlignment="Right"
                                                    Foreground="{DynamicResource SystemAccentColor}"
-                                                   IsVisible="{Binding IsInstalling}">
-                                </fluent:SymbolIcon>
+                                                   IsVisible="{Binding IsInstalling}" />
                             </Grid>
                             <!-- Tooltip showing the file path -->
                             <ToolTip.Tip>

@@ -21,7 +21,9 @@ public enum VirtualKeyCode : ushort
     // Modifier keys
     [BindingName("LShift", "Shift")] LShift = 0xA0,
     [BindingName("RShift")] RShift = 0xA1,
-    [BindingName("LControl", "Control", "Ctrl")] LControl = 0xA2,
+
+    [BindingName("LControl", "Control", "Ctrl")]
+    LControl = 0xA2,
     [BindingName("RControl")] RControl = 0xA3,
     [BindingName("LAlt", "Alt")] LAlt = 0xA4,
     [BindingName("RAlt", "AltGr")] RAlt = 0xA5,
@@ -31,7 +33,9 @@ public enum VirtualKeyCode : ushort
     [BindingName("Backspace")] Back = 0x08,
     [BindingName("Tab")] Tab = 0x09,
     [BindingName("Enter", "Return")] Enter = 0x0D,
-    [BindingName("REnter", "NumEnter", "Separator")] REnter = 0x6C,
+
+    [BindingName("REnter", "NumEnter", "Separator")]
+    REnter = 0x6C,
     [BindingName("Escape")] Escape = 0x1B,
     [BindingName("Space")] Space = 0x20,
     [BindingName("PgUp", "Prior")] PgUp = 0x21,
@@ -152,5 +156,5 @@ public enum VirtualKeyCode : ushort
     [BindingName("]")] Oem6 = 0xDD,
     [BindingName("}")] Oem6Brace = 0xDD,
     [BindingName("#")] Oem7 = 0xDE,
-    [BindingName("\"")] Oem7Quote = 0xDE,
+    [BindingName("\"")] Oem7Quote = 0xDE
 }

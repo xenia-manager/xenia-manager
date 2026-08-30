@@ -1,19 +1,21 @@
 <windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:vm="using:XeniaManager.ViewModels"
-                     xmlns:windowing="using:FluentAvalonia.UI.Windowing"
-                     xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-                     mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-                     x:Class="XeniaManager.Views.LoadingScreenWindow"
-                     x:DataType="vm:LoadingScreenWindowViewModel"
-                     WindowStartupLocation="CenterScreen"
-                     WindowDecorations="None"
-                     CanResize="false"
-                     ShowAsDialog="false"
-                     Topmost="True"
-                     Opacity="0">
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:vm="using:XeniaManager.ViewModels"
+                       xmlns:windowing="using:FluentAvalonia.UI.Windowing"
+                       xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                       mc:Ignorable="d"
+                       d:DesignWidth="1920"
+                       d:DesignHeight="1080"
+                       x:Class="XeniaManager.Views.LoadingScreenWindow"
+                       x:DataType="vm:LoadingScreenWindowViewModel"
+                       WindowStartupLocation="CenterScreen"
+                       WindowDecorations="None"
+                       CanResize="false"
+                       ShowAsDialog="false"
+                       Topmost="True"
+                       Opacity="0">
     <Design.DataContext>
         <vm:LoadingScreenWindowViewModel />
     </Design.DataContext>
@@ -34,8 +36,8 @@
                     VerticalAlignment="Center"
                     Spacing="16">
             <controls:FAProgressRing IsIndeterminate="True"
-                                   Width="64"
-                                   Height="64" />
+                                     Width="64"
+                                     Height="64" />
             <TextBlock x:Name="LoadingTextBlock"
                        FontSize="24"
                        FontWeight="SemiBold"

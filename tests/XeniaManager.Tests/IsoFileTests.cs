@@ -35,7 +35,8 @@ public class IsoFileTests
     public void Load_LocalIsoFile_ParsesSuccessfully()
     {
         // Arrange - Skip if the test file is not present
-        Assume.That(File.Exists(_testIsoPath), Is.True, $"Test ISO file not found at {_testIsoPath}. Place a test.iso file in the Assets folder to run this test.");
+        Assume.That(File.Exists(_testIsoPath), Is.True,
+            $"Test ISO file not found at {_testIsoPath}. Place a test.iso file in the Assets folder to run this test.");
 
         // Act
         using IsoFile iso = IsoFile.Load(_testIsoPath);
@@ -100,7 +101,8 @@ public class IsoFileTests
     public void Load_LocalIsoFile_HasExpectedProperties()
     {
         // Arrange - Skip if the test file is not present
-        Assume.That(File.Exists(_testIsoPath), Is.True, $"Test ISO file not found at {_testIsoPath}. Place a test.iso file in the Assets folder to run this test.");
+        Assume.That(File.Exists(_testIsoPath), Is.True,
+            $"Test ISO file not found at {_testIsoPath}. Place a test.iso file in the Assets folder to run this test.");
 
         // Act
         using IsoFile iso = IsoFile.Load(_testIsoPath);
@@ -124,7 +126,8 @@ public class IsoFileTests
     public void Load_ValidIsoFile_HasXgdInformation()
     {
         // Arrange - Skip if the test file is not present
-        Assume.That(File.Exists(_testIsoPath), Is.True, $"Test ISO file not found at {_testIsoPath}. Place a test.iso file in the Assets folder to run this test.");
+        Assume.That(File.Exists(_testIsoPath), Is.True,
+            $"Test ISO file not found at {_testIsoPath}. Place a test.iso file in the Assets folder to run this test.");
 
         // Act
         using IsoFile iso = IsoFile.Load(_testIsoPath);

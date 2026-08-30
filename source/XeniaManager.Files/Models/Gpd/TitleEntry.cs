@@ -120,32 +120,53 @@ public class TitleEntry
     /// Gets whether achievements need to be synced (unlocked offline).
     /// Uses bit 0 (0x1) of the Flags field.
     /// </summary>
-    public bool NeedsSync => (Flags & 0x1) == 0x1;
+    public bool NeedsSync
+    {
+        get
+        {
+            return (Flags & 0x1) == 0x1;
+        }
+    }
 
     /// <summary>
     /// Gets whether the achievement image needs to be downloaded.
     /// Uses bit 1 (0x2) of the Flags field.
     /// </summary>
-    public bool ImageNeedsDownload => (Flags & 0x2) == 0x2;
+    public bool ImageNeedsDownload
+    {
+        get
+        {
+            return (Flags & 0x2) == 0x2;
+        }
+    }
 
     /// <summary>
     /// Gets whether an avatar award needs to be downloaded.
     /// Uses bit 4 (0x10) of the Flags field.
     /// </summary>
-    public bool AvatarAwardNeedsDownload => (Flags & 0x10) == 0x10;
+    public bool AvatarAwardNeedsDownload
+    {
+        get
+        {
+            return (Flags & 0x10) == 0x10;
+        }
+    }
 
     /// <summary>
     /// Gets a DateTime representation of the last played time.
     /// </summary>
-    public DateTime? LastPlayedDateTime => LastPlayedTime != 0 ? DateTime.FromFileTime(LastPlayedTime) : null;
+    public DateTime? LastPlayedDateTime
+    {
+        get
+        {
+            return LastPlayedTime != 0 ? DateTime.FromFileTime(LastPlayedTime) : null;
+        }
+    }
 
     /// <summary>
     /// Sets the last played time from a DateTime.
     /// </summary>
-    public void SetLastPlayedTime(DateTime time)
-    {
-        LastPlayedTime = time.ToFileTime();
-    }
+    public void SetLastPlayedTime(DateTime time) => LastPlayedTime = time.ToFileTime();
 
     /// <summary>
     /// Parses a title entry from raw bytes.
@@ -191,7 +212,8 @@ public class TitleEntry
             int stringOffset = offset + 0x28;
             entry.TitleName = ReadNullTerminatedUnicodeString(data, ref stringOffset);
 
-            Logger.Debug<TitleEntry>($"Parsed '{entry.TitleName}' (0x{entry.TitleId:X8}) - {entry.AchievementUnlockedCount}/{entry.AchievementCount} achievements, {entry.GamerscoreUnlocked}/{entry.GamerscoreTotal}G");
+            Logger.Debug<TitleEntry>(
+                $"Parsed '{entry.TitleName}' (0x{entry.TitleId:X8}) - {entry.AchievementUnlockedCount}/{entry.AchievementCount} achievements, {entry.GamerscoreUnlocked}/{entry.GamerscoreTotal}G");
             entry.IsValid = true;
         }
         catch (Exception ex)
@@ -249,13 +271,16 @@ public class TitleEntry
                 offset += 2;
                 return result;
             }
+
             offset += 2;
         }
+
         return string.Empty;
     }
 
     /// <summary>
     /// Returns a string representation of the title entry.
     /// </summary>
-    public override string ToString() => $"{TitleName} (0x{TitleId:X8}) - {AchievementUnlockedCount}/{AchievementCount} achievements, {GamerscoreUnlocked}/{GamerscoreTotal}G";
+    public override string ToString() =>
+        $"{TitleName} (0x{TitleId:X8}) - {AchievementUnlockedCount}/{AchievementCount} achievements, {GamerscoreUnlocked}/{GamerscoreTotal}G";
 }

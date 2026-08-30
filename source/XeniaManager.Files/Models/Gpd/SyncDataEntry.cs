@@ -64,10 +64,7 @@ public class SyncDataEntry
     /// <summary>
     /// Sets the last synced time from a DateTime.
     /// </summary>
-    public void SetLastSyncedTime(DateTime time)
-    {
-        LastSyncedTime = time.ToFileTime();
-    }
+    public void SetLastSyncedTime(DateTime time) => LastSyncedTime = time.ToFileTime();
 
     /// <summary>
     /// Parses a sync data entry from raw bytes.

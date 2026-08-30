@@ -46,7 +46,12 @@ public abstract class CompatibilityRatingSelectionDialog
 
         StackPanel content = new StackPanel
         {
-            Children = { gameCheckBox, mousehookCheckBox, netplayCheckBox }
+            Children =
+            {
+                gameCheckBox,
+                mousehookCheckBox,
+                netplayCheckBox
+            }
         };
 
         FAContentDialog dialog = new FAContentDialog

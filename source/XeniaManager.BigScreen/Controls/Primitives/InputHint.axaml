@@ -3,10 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
              x:Class="XeniaManager.BigScreen.Controls.Primitives.InputHint"
              x:Name="Root">
-    <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+    <StackPanel Orientation="Horizontal"
+                Spacing="14"
+                VerticalAlignment="Center">
         <Border x:Name="KeyBox"
                 CornerRadius="16"
                 MinHeight="32"

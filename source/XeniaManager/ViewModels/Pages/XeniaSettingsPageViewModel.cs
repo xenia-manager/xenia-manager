@@ -40,6 +40,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
 {
     [ObservableProperty] private ObservableCollection<ConfigFileItem> _configFiles = [];
     [ObservableProperty] private ConfigFileItem? _selectedConfigFile;
+
     /// <summary>
     /// Handles when a config file is selected to load it.
     /// </summary>
@@ -58,6 +59,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
         CanOptimizeSettings = !value.IsEmulatorConfig;
         LoadConfigFile(value);
     }
+
     [ObservableProperty] private ConfigEditorViewModel? _configEditorViewModel;
     [ObservableProperty] private bool _hasConfigFile;
     [ObservableProperty] private bool _isSelectedConfigEmulatorConfig;
@@ -89,10 +91,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
     /// <summary>
     /// Handles game library changes by refreshing the config file list.
     /// </summary>
-    private void OnGameLibraryChanged()
-    {
-        LoadAllConfigFiles();
-    }
+    private void OnGameLibraryChanged() => LoadAllConfigFiles();
 
     /// <summary>
     /// Loads all emulator and game config files into a single list.
@@ -110,6 +109,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
             {
                 continue;
             }
+
             try
             {
                 XeniaVersionInfo versionInfo = XeniaVersionInfo.GetXeniaVersionInfo(version);
@@ -197,12 +197,14 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
                 {
                     configPath = Path.Combine(emulatorFolder, $"{emulatorExecutableName}.config.toml");
                 }
+
                 if (string.IsNullOrEmpty(configPath) || !File.Exists(configPath))
                 {
                     HasConfigFile = false;
                     ConfigEditorViewModel = null;
                     return;
                 }
+
                 HasConfigFile = true;
                 CurrentConfigFilePath = configPath;
                 // Load the config file and create the ConfigEditorViewModel
@@ -264,6 +266,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
                     File.Delete(AppPathResolver.GetFullPath(xeniaVersionInfo.ConfigLocation));
                     Logger.Debug<XeniaSettingsPageViewModel>($"Deleted config file: {xeniaVersionInfo.ConfigLocation}");
                 }
+
                 // Delete the default config file if it exists
                 if (File.Exists(AppPathResolver.GetFullPath(xeniaVersionInfo.DefaultConfigLocation)))
                 {
@@ -332,7 +335,8 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
         try
         {
             // Fetch optimized settings from the database
-            ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+            ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title,
+                cacheDirectory: AppPaths.DatabaseCacheDirectory);
 
             if (optimizedConfigFile == null)
             {

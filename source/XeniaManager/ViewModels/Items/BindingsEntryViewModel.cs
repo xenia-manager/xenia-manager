@@ -22,7 +22,13 @@ public partial class BindingsEntryViewModel : ObservableObject
     /// <summary>
     /// Gets the underlying bindings entry.
     /// </summary>
-    public BindingsEntry Entry => _entry;
+    public BindingsEntry Entry
+    {
+        get
+        {
+            return _entry;
+        }
+    }
 
     public BindingsEntryViewModel(BindingsEntry entry, int index, MousehookControlsEditorDialogViewModel parent)
     {

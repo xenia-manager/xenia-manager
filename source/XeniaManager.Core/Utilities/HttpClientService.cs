@@ -53,7 +53,8 @@ public sealed class HttpClientService : IDisposable
     /// <returns>The response body as a string</returns>
     /// <exception cref="HttpRequestException">Thrown when there's an error connecting to the server</exception>
     /// <exception cref="TimeoutException">Thrown when the request times out</exception>
-    public async Task<string> GetAsync(string url, CancellationToken cancellationToken = default, string? cacheKey = null, TimeSpan? cacheDuration = null, string? cacheDirectory = null)
+    public async Task<string> GetAsync(string url, CancellationToken cancellationToken = default, string? cacheKey = null, TimeSpan? cacheDuration = null,
+        string? cacheDirectory = null)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
 

@@ -39,8 +39,14 @@ public class MousehookCompatibilityDatabase
     /// </summary>
     public static List<MousehookCompatibilityEntry> FilteredDatabase
     {
-        get => _databaseState.FilteredDatabase;
-        private set => _databaseState.FilteredDatabase = value;
+        get
+        {
+            return _databaseState.FilteredDatabase;
+        }
+        private set
+        {
+            _databaseState.FilteredDatabase = value;
+        }
     }
 
     /// <summary>
@@ -66,7 +72,7 @@ public class MousehookCompatibilityDatabase
         {
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: "mousehook_compatibility_database", cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                response = await _client.GetAsync(url, cancellationToken, "mousehook_compatibility_database", ApiCacheDuration, cacheDirectory);
                 Logger.Info<MousehookCompatibilityDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -115,7 +121,8 @@ public class MousehookCompatibilityDatabase
             .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        Logger.Info<MousehookCompatibilityDatabase>($"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
+        Logger.Info<MousehookCompatibilityDatabase>(
+            $"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
     }
 
     /// <summary>
@@ -217,7 +224,8 @@ public class MousehookCompatibilityDatabase
     /// <param name="cancellationToken">Token to cancel the operation if needed</param>
     /// <param name="cacheDirectory">Optional cache directory override</param>
     /// <returns>The matching MousehookCompatibilityEntry if found, null otherwise</returns>
-    public static async Task<MousehookCompatibilityEntry?> ResolveAsync(string? gameId, IReadOnlyList<string>? alternativeIds, string? title, CancellationToken cancellationToken = default, string? cacheDirectory = null)
+    public static async Task<MousehookCompatibilityEntry?> ResolveAsync(string? gameId, IReadOnlyList<string>? alternativeIds, string? title,
+        CancellationToken cancellationToken = default, string? cacheDirectory = null)
     {
         Logger.Debug<MousehookCompatibilityDatabase>($"Resolving mousehook for '{title}' (ID: {gameId})");
         await LoadAsync(cancellationToken, cacheDirectory);
@@ -240,7 +248,11 @@ public class MousehookCompatibilityDatabase
             foreach (string altId in alternativeIds)
             {
                 MousehookCompatibilityEntry? match = GetGameCompatibilityById(altId);
-                if (match == null) continue;
+                if (match == null)
+                {
+                    continue;
+                }
+
                 matches.Add(match);
                 Logger.Debug<MousehookCompatibilityDatabase>($"Found mousehook entry by alternative ID '{altId}': {match.MouseSupport}");
             }
@@ -262,6 +274,7 @@ public class MousehookCompatibilityDatabase
                     Logger.Debug<MousehookCompatibilityDatabase>($"Found title match for '{title}': {resultEntry.MouseSupport}");
                     return resultEntry;
                 }
+
                 resultEntry = matches[0];
                 Logger.Debug<MousehookCompatibilityDatabase>($"No title match found, using first entry for '{title}': {resultEntry.MouseSupport}");
                 return resultEntry;
@@ -289,13 +302,20 @@ public class MousehookCompatibilityDatabase
         if (!string.IsNullOrEmpty(cacheDirectory))
         {
             string cacheFile = Path.Combine(cacheDirectory, "mousehook_compatibility_database.json");
-            if (File.Exists(cacheFile)) File.Delete(cacheFile);
+            if (File.Exists(cacheFile))
+            {
+                File.Delete(cacheFile);
+            }
         }
         else
         {
             string defaultCache = Path.Combine(AppContext.BaseDirectory, "Cache", "Database", "mousehook_compatibility_database.json");
-            if (File.Exists(defaultCache)) File.Delete(defaultCache);
+            if (File.Exists(defaultCache))
+            {
+                File.Delete(defaultCache);
+            }
         }
+
         Reset();
         await LoadAsync(cancellationToken, cacheDirectory);
     }

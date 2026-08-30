@@ -7,7 +7,9 @@
              xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Views.Modals.DiscSelectionView"
              x:DataType="vm:DiscSelectionViewModel">
 
@@ -25,7 +27,9 @@
             <Grid RowDefinitions="Auto, *, Auto">
 
                 <!-- HEADER: game icon + name, disc selection line underneath -->
-                <Grid Grid.Row="0" ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="Auto, *"
+                      ColumnSpacing="20">
                     <Border Width="56"
                             Height="56"
                             VerticalAlignment="Center"
@@ -44,7 +48,9 @@
                                                VerticalAlignment="Center" />
                         </Grid>
                     </Border>
-                    <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                    <StackPanel Grid.Column="1"
+                                Spacing="4"
+                                VerticalAlignment="Center">
                         <TextBlock Text="{Binding Title}"
                                    TextTrimming="CharacterEllipsis"
                                    FontSize="24"
@@ -70,16 +76,22 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="20" />
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="20" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
 
                 <!-- HINTS: B back · A select (top modal only) -->
-                <StackPanel Grid.Row="2" Classes="hint-bar" Margin="0,36,0,0" IsVisible="{Binding IsHintBarVisible}">
-                    <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+                <StackPanel Grid.Row="2"
+                            Classes="hint-bar"
+                            Margin="0,36,0,0"
+                            IsVisible="{Binding IsHintBarVisible}">
+                    <prim:InputHint Char="B"
+                                    KeyColour="{DynamicResource HintKeyB}"
                                     Text="{DynamicResource DiscSelection.Hint.Back}" />
-                    <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                    <prim:InputHint Char="A"
+                                    KeyColour="{DynamicResource HintKeyA}"
                                     Text="{DynamicResource DiscSelection.Hint.Select}" />
                 </StackPanel>
             </Grid>

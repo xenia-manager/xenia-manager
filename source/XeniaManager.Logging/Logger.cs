@@ -65,7 +65,13 @@ public static class Logger
     /// <summary>
     /// Current logs directory. Defaults to <c>AppContext.BaseDirectory/Logs</c> until <see cref="Initialize"/> is called.
     /// </summary>
-    public static string LogsDirectory => _logsDirectory;
+    public static string LogsDirectory
+    {
+        get
+        {
+            return _logsDirectory;
+        }
+    }
 
     /// <summary>
     /// Initializes or re-configures the file log target to write to the given directory.
@@ -113,10 +119,7 @@ public static class Logger
     /// <summary>
     /// Flushes NLog's LogManager, ensuring logs are written before potential crash
     /// </summary>
-    public static void Flush()
-    {
-        LogManager.Flush();
-    }
+    public static void Flush() => LogManager.Flush();
 
     /// <summary>
     /// Extracts a clean type name from a generic type parameter, handling generic types
@@ -142,12 +145,14 @@ public static class Logger
         {
             return typeName;
         }
+
         string declaringName = type.DeclaringType.Name;
         int declaringBacktick = declaringName.IndexOf('`');
         if (declaringBacktick > 0)
         {
             declaringName = declaringName.Substring(0, declaringBacktick);
         }
+
         return $"{declaringName}.{typeName}";
     }
 
@@ -157,60 +162,42 @@ public static class Logger
     /// </summary>
     /// <typeparam name="T">The type to use for class name resolution.</typeparam>
     /// <param name="message">The message to log.</param>
-    public static void Trace<T>(string message)
-    {
-        _logger.Trace($"[{GetTypeName<T>()}] {message}");
-    }
+    public static void Trace<T>(string message) => _logger.Trace($"[{GetTypeName<T>()}] {message}");
 
     /// <summary>
     /// Logs a debug-level message with the specified type's class name as a prefix.
     /// </summary>
     /// <typeparam name="T">The type to use for class name resolution.</typeparam>
     /// <param name="message">The message to log.</param>
-    public static void Debug<T>(string message)
-    {
-        _logger.Debug($"[{GetTypeName<T>()}] {message}");
-    }
+    public static void Debug<T>(string message) => _logger.Debug($"[{GetTypeName<T>()}] {message}");
 
     /// <summary>
     /// Logs an info-level message with the specified type's class name as a prefix.
     /// </summary>
     /// <typeparam name="T">The type to use for class name resolution.</typeparam>
     /// <param name="message">The message to log.</param>
-    public static void Info<T>(string message)
-    {
-        _logger.Info($"[{GetTypeName<T>()}] {message}");
-    }
+    public static void Info<T>(string message) => _logger.Info($"[{GetTypeName<T>()}] {message}");
 
     /// <summary>
     /// Logs a warning-level message with the specified type's class name as a prefix.
     /// </summary>
     /// <typeparam name="T">The type to use for class name resolution.</typeparam>
     /// <param name="message">The message to log.</param>
-    public static void Warning<T>(string message)
-    {
-        _logger.Warn($"[{GetTypeName<T>()}] {message}");
-    }
+    public static void Warning<T>(string message) => _logger.Warn($"[{GetTypeName<T>()}] {message}");
 
     /// <summary>
     /// Logs an error-level message with the specified type's class name as a prefix.
     /// </summary>
     /// <typeparam name="T">The type to use for class name resolution.</typeparam>
     /// <param name="message">The message to log.</param>
-    public static void Error<T>(string message)
-    {
-        _logger.Error($"[{GetTypeName<T>()}] {message}");
-    }
+    public static void Error<T>(string message) => _logger.Error($"[{GetTypeName<T>()}] {message}");
 
     /// <summary>
     /// Logs a fatal-level message with the specified type's class name as a prefix.
     /// </summary>
     /// <typeparam name="T">The type to use for class name resolution.</typeparam>
     /// <param name="message">The message to log.</param>
-    public static void Fatal<T>(string message)
-    {
-        _logger.Fatal($"[{GetTypeName<T>()}] {message}");
-    }
+    public static void Fatal<T>(string message) => _logger.Fatal($"[{GetTypeName<T>()}] {message}");
 
     // Type-based logging WITH method names
     /// <summary>
@@ -442,6 +429,7 @@ public static class Logger
                 depth = depth + 1;
                 continue;
             }
+
             break;
         }
     }
@@ -450,8 +438,5 @@ public static class Logger
     /// Flushes all pending log messages and shuts down the logging system.
     /// Should be called before application exit to ensure all logs are written.
     /// </summary>
-    public static void Shutdown()
-    {
-        LogManager.Shutdown();
-    }
+    public static void Shutdown() => LogManager.Shutdown();
 }

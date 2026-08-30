@@ -47,22 +47,46 @@ public class FileDirectoryEntry
     /// <summary>
     /// Gets whether this entry represents a file (true) or a directory (false).
     /// </summary>
-    public bool IsFile => (NameOffsetAndTypeFlag & 0x80000000) != 0;
+    public bool IsFile
+    {
+        get
+        {
+            return (NameOffsetAndTypeFlag & 0x80000000) != 0;
+        }
+    }
 
     /// <summary>
     /// Gets the offset into the name table for this entry's name.
     /// </summary>
-    public uint NameOffset => NameOffsetAndTypeFlag & 0x7FFFFFFF;
+    public uint NameOffset
+    {
+        get
+        {
+            return NameOffsetAndTypeFlag & 0x7FFFFFFF;
+        }
+    }
 
     /// <summary>
     /// Gets the index of the first child entry in the file tree (directory entries only).
     /// </summary>
-    internal uint NodeStartIndex => FileOffsetLow;
+    internal uint NodeStartIndex
+    {
+        get
+        {
+            return FileOffsetLow;
+        }
+    }
 
     /// <summary>
     /// Gets the number of child entries (directory entries only).
     /// </summary>
-    internal uint Count => FileSizeLow;
+    internal uint Count
+    {
+        get
+        {
+            return FileSizeLow;
+        }
+    }
 
     /// <summary>
     /// Computes the 48-bit file data offset by combining the low and high portions.

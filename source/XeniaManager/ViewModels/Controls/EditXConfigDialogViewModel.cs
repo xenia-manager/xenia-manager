@@ -113,7 +113,8 @@ public partial class EditXConfigDialogViewModel : ViewModelBase
         SelectedLanguageIndex = FindIndex(Languages, l => (uint)l.Value == (uint)Xconfig.Language);
         SelectedCountryIndex = FindIndex(Countries, c => (byte)c.Value == (byte)Xconfig.Country);
 
-        Logger.Debug<EditXConfigDialogViewModel>($"Initial selection indices - Resolution: {SelectedResolutionIndex}, Language: {SelectedLanguageIndex}, Country: {SelectedCountryIndex}");
+        Logger.Debug<EditXConfigDialogViewModel>(
+            $"Initial selection indices - Resolution: {SelectedResolutionIndex}, Language: {SelectedLanguageIndex}, Country: {SelectedCountryIndex}");
 
         // Add available profiles to the combobox
         foreach (AccountInfo account in accounts)
@@ -160,6 +161,7 @@ public partial class EditXConfigDialogViewModel : ViewModelBase
                 return i;
             }
         }
+
         return -1;
     }
 

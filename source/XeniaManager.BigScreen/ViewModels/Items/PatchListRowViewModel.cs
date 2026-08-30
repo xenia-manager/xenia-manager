@@ -50,38 +50,80 @@ public partial class PatchListRowViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether this row is an action row rather than a patch entry.
     /// </summary>
-    public bool IsAction => Entry == null;
+    public bool IsAction
+    {
+        get
+        {
+            return Entry == null;
+        }
+    }
 
     /// <summary>
     /// Whether this row is the download action.
     /// </summary>
-    public bool IsDownloadAction => IsAction && ActionType == PatchActionType.Download;
+    public bool IsDownloadAction
+    {
+        get
+        {
+            return IsAction && ActionType == PatchActionType.Download;
+        }
+    }
 
     /// <summary>
     /// Whether this row is the remove action.
     /// </summary>
-    public bool IsRemoveAction => IsAction && ActionType == PatchActionType.Remove;
+    public bool IsRemoveAction
+    {
+        get
+        {
+            return IsAction && ActionType == PatchActionType.Remove;
+        }
+    }
 
     /// <summary>
     /// The patch author and description for entry rows.
     /// </summary>
-    public string Subtitle => Entry?.Author ?? string.Empty;
+    public string Subtitle
+    {
+        get
+        {
+            return Entry?.Author ?? string.Empty;
+        }
+    }
 
     /// <summary>
     /// Whether the subtitle line is shown (hidden when empty, so action rows
     /// and author-less entries stay vertically centered).
     /// </summary>
-    public bool HasSubtitle => !string.IsNullOrEmpty(Subtitle);
+    public bool HasSubtitle
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Subtitle);
+        }
+    }
 
     /// <summary>
     /// The "X commands" summary for entry rows.
     /// </summary>
-    public string CommandCountText => Entry?.CommandCountText ?? string.Empty;
+    public string CommandCountText
+    {
+        get
+        {
+            return Entry?.CommandCountText ?? string.Empty;
+        }
+    }
 
     /// <summary>
     /// Whether the patch entry is enabled (entry rows only).
     /// </summary>
-    public bool IsEnabled => Entry?.IsEnabled ?? false;
+    public bool IsEnabled
+    {
+        get
+        {
+            return Entry?.IsEnabled ?? false;
+        }
+    }
 
     public PatchListRowViewModel(string actionTitle, PatchActionType actionType)
     {

@@ -34,7 +34,7 @@ public static class GamepadButtonMapper
             SDL_GamepadButton.SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER => GamepadButton.RightShoulder,
             SDL_GamepadButton.SDL_GAMEPAD_BUTTON_BACK => GamepadButton.View,
             SDL_GamepadButton.SDL_GAMEPAD_BUTTON_START => GamepadButton.Start,
-            _ => null,
+            _ => null
         };
     }
 }

@@ -39,8 +39,14 @@ public partial class EmptyState : UserControl
     /// </summary>
     public Symbol? Symbol
     {
-        get => GetValue(SymbolProperty);
-        set => SetValue(SymbolProperty, value);
+        get
+        {
+            return GetValue(SymbolProperty);
+        }
+        set
+        {
+            SetValue(SymbolProperty, value);
+        }
     }
 
     /// <summary>
@@ -48,8 +54,14 @@ public partial class EmptyState : UserControl
     /// </summary>
     public string Text
     {
-        get => GetValue(TextProperty);
-        set => SetValue(TextProperty, value);
+        get
+        {
+            return GetValue(TextProperty);
+        }
+        set
+        {
+            SetValue(TextProperty, value);
+        }
     }
 
     /// <summary>
@@ -57,8 +69,14 @@ public partial class EmptyState : UserControl
     /// </summary>
     public double SymbolSize
     {
-        get => GetValue(SymbolSizeProperty);
-        set => SetValue(SymbolSizeProperty, value);
+        get
+        {
+            return GetValue(SymbolSizeProperty);
+        }
+        set
+        {
+            SetValue(SymbolSizeProperty, value);
+        }
     }
 
     /// <summary>
@@ -66,8 +84,14 @@ public partial class EmptyState : UserControl
     /// </summary>
     public double TextSize
     {
-        get => GetValue(TextSizeProperty);
-        set => SetValue(TextSizeProperty, value);
+        get
+        {
+            return GetValue(TextSizeProperty);
+        }
+        set
+        {
+            SetValue(TextSizeProperty, value);
+        }
     }
 
     public EmptyState()

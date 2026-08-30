@@ -8,6 +8,7 @@ using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.Services;
@@ -98,7 +99,7 @@ public class ScreenshotLibraryService : IScreenshotLibraryService
     /// </summary>
     public void Load()
     {
-        Core.Settings.Settings desktopSettings = new();
+        Settings desktopSettings = new Settings();
         List<ScreenshotItemViewModel> screenshots = [];
         foreach (XeniaVersion version in desktopSettings.GetInstalledVersions(desktopSettings))
         {

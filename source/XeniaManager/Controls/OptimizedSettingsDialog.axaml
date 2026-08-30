@@ -6,13 +6,17 @@
              xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="600"
              x:Class="XeniaManager.Controls.OptimizedSettingsDialog"
              x:DataType="vm:OptimizedSettingsDialogViewModel">
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
-        <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
+        <StackPanel Grid.Row="0"
+                    Spacing="8"
+                    Margin="0,0,0,16">
             <TextBlock Text="{DynamicResource OptimizedSettingsDialog.Header.Subtitle}"
                        FontSize="14"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"

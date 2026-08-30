@@ -40,20 +40,14 @@ public class VdfDocument
     /// Gets the root node's value.
     /// </summary>
     /// <returns>The root node's value, or null if no root exists.</returns>
-    public string? GetRootValue()
-    {
-        return Root?.Value;
-    }
+    public string? GetRootValue() => Root?.Value;
 
     /// <summary>
     /// Gets a child node from the root by key.
     /// </summary>
     /// <param name="key">The key/name of the child node to find.</param>
     /// <returns>The child node if found, null otherwise.</returns>
-    public VdfNode? GetChild(string key)
-    {
-        return Root?.GetChild(key);
-    }
+    public VdfNode? GetChild(string key) => Root?.GetChild(key);
 
     /// <summary>
     /// Gets or creates a child node from the root by key.
@@ -72,10 +66,7 @@ public class VdfDocument
     /// <param name="key">The key/name of the child node.</param>
     /// <param name="defaultValue">The default value if not found.</param>
     /// <returns>The value of the child node, or the default value if not found.</returns>
-    public string? GetValue(string key, string? defaultValue = null)
-    {
-        return Root?.GetValue(key, defaultValue);
-    }
+    public string? GetValue(string key, string? defaultValue = null) => Root?.GetValue(key, defaultValue);
 
     /// <summary>
     /// Sets a value in a child node of the root. Creates the child if it doesn't exist.
@@ -94,10 +85,7 @@ public class VdfDocument
     /// <param name="key">The key/name of the child node.</param>
     /// <param name="defaultValue">The default value if not found or parsing fails.</param>
     /// <returns>The integer value of the child node, or the default value if not found.</returns>
-    public int GetIntValue(string key, int defaultValue = 0)
-    {
-        return Root?.GetIntValue(key, defaultValue) ?? defaultValue;
-    }
+    public int GetIntValue(string key, int defaultValue = 0) => Root?.GetIntValue(key, defaultValue) ?? defaultValue;
 
     /// <summary>
     /// Gets a boolean value from a child node of the root.
@@ -105,10 +93,7 @@ public class VdfDocument
     /// <param name="key">The key/name of the child node.</param>
     /// <param name="defaultValue">The default value if not found or parsing fails.</param>
     /// <returns>The boolean value of the child node, or the default value if not found.</returns>
-    public bool GetBoolValue(string key, bool defaultValue = false)
-    {
-        return Root?.GetBoolValue(key, defaultValue) ?? defaultValue;
-    }
+    public bool GetBoolValue(string key, bool defaultValue = false) => Root?.GetBoolValue(key, defaultValue) ?? defaultValue;
 
     /// <summary>
     /// Gets a nested value by traversing a path of keys.

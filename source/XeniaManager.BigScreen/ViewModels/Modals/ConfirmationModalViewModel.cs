@@ -40,12 +40,24 @@ public partial class ConfirmationModalViewModel : ModalViewModelBase<bool?>
     /// <summary>
     /// Whether the right (second) option is selected.
     /// </summary>
-    public bool IsOption2Selected => !IsOption1Selected;
+    public bool IsOption2Selected
+    {
+        get
+        {
+            return !IsOption1Selected;
+        }
+    }
 
     /// <summary>
     /// Text of the currently selected option (drives the A hint).
     /// </summary>
-    public string ActiveOptionText => IsOption1Selected ? Option1Text : Option2Text;
+    public string ActiveOptionText
+    {
+        get
+        {
+            return IsOption1Selected ? Option1Text : Option2Text;
+        }
+    }
 
     public ConfirmationModalViewModel(string title, string message, string option1Text, string option2Text)
     {

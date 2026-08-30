@@ -3,14 +3,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-             mc:Ignorable="d" d:DesignWidth="384" d:DesignHeight="216"
+             mc:Ignorable="d"
+             d:DesignWidth="384"
+             d:DesignHeight="216"
              x:Class="XeniaManager.BigScreen.Controls.Cards.ScreenshotCard"
              x:DataType="vm:ScreenshotItemViewModel"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
     <Grid>
-        <Border x:Name="Tile" CornerRadius="6" Background="{DynamicResource CardBackground}" />
-        <Border x:Name="ArtClip" CornerRadius="6" ClipToBounds="True">
+        <Border x:Name="Tile"
+                CornerRadius="6"
+                Background="{DynamicResource CardBackground}" />
+        <Border x:Name="ArtClip"
+                CornerRadius="6"
+                ClipToBounds="True">
             <Image Source="{Binding Thumbnail}"
                    IsVisible="{Binding HasImage}"
                    Stretch="UniformToFill"

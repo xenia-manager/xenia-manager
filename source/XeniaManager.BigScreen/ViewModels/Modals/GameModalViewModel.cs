@@ -35,12 +35,24 @@ public partial class GameModalViewModel : ModalViewModelBase
     /// <summary>
     /// Whether disc art is available to show.
     /// </summary>
-    public bool HasIcon => Icon != null;
+    public bool HasIcon
+    {
+        get
+        {
+            return Icon != null;
+        }
+    }
 
     /// <summary>
     /// Whether the X hint is shown (the shown pane has an X action).
     /// </summary>
-    public bool IsXHintVisible => XHintText.Length > 0;
+    public bool IsXHintVisible
+    {
+        get
+        {
+            return XHintText.Length > 0;
+        }
+    }
 
     /// <summary>
     /// The Core game model this dialog describes.
@@ -50,12 +62,24 @@ public partial class GameModalViewModel : ModalViewModelBase
     /// <summary>
     /// The game's display title.
     /// </summary>
-    public string Title => Game.Title;
+    public string Title
+    {
+        get
+        {
+            return Game.Title;
+        }
+    }
 
     /// <summary>
     /// The game's disc art (icon), or null when missing/unreadable.
     /// </summary>
-    public Bitmap? Icon => Game.Artwork.CachedIcon;
+    public Bitmap? Icon
+    {
+        get
+        {
+            return Game.Artwork.CachedIcon;
+        }
+    }
 
     /// <summary>
     /// The options list shown on the left column.
@@ -66,26 +90,38 @@ public partial class GameModalViewModel : ModalViewModelBase
     /// The X hint label while a pane is shown (sort), or empty when the shown
     /// pane has no X action.
     /// </summary>
-    public string XHintText => Pane switch
+    public string XHintText
     {
-        AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Sort"),
-        GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Save"),
-        _ => string.Empty
-    };
+        get
+        {
+            return Pane switch
+            {
+                AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Sort"),
+                GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Save"),
+                _ => string.Empty
+            };
+        }
+    }
 
     /// <summary>
     /// The A hint label: what activating does in the current column (enter the
     /// pane from the nav list, or the pane's own A action).
     /// </summary>
-    public string AHintText => Pane switch
+    public string AHintText
     {
-        AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Select"),
-        GameScreenshotsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.View"),
-        InstalledContentPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Delete"),
-        PatchesPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Toggle"),
-        GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Edit"),
-        _ => LocalizationHelper.GetText("GameModal.Hint.Select")
-    };
+        get
+        {
+            return Pane switch
+            {
+                AchievementsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Select"),
+                GameScreenshotsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.View"),
+                InstalledContentPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Delete"),
+                PatchesPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Toggle"),
+                GameSettingsPaneViewModel => LocalizationHelper.GetText("GameModal.Hint.Edit"),
+                _ => LocalizationHelper.GetText("GameModal.Hint.Select")
+            };
+        }
+    }
 
     /// <summary>
     /// The currently selected option row.

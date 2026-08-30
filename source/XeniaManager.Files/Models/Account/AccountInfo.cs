@@ -91,10 +91,16 @@ public class AccountInfo
     /// </summary>
     public bool IsPasscodeEnabled
     {
-        get => ReservedFlags.HasFlag(ReservedFlags.PasscodeEnabled);
-        set => ReservedFlags = value
-            ? ReservedFlags | ReservedFlags.PasscodeEnabled
-            : ReservedFlags & ~ReservedFlags.PasscodeEnabled;
+        get
+        {
+            return ReservedFlags.HasFlag(ReservedFlags.PasscodeEnabled);
+        }
+        set
+        {
+            ReservedFlags = value
+                ? ReservedFlags | ReservedFlags.PasscodeEnabled
+                : ReservedFlags & ~ReservedFlags.PasscodeEnabled;
+        }
     }
 
     /// <summary>
@@ -103,10 +109,16 @@ public class AccountInfo
     /// </summary>
     public bool IsLiveEnabled
     {
-        get => ReservedFlags.HasFlag(ReservedFlags.LiveEnabled);
-        set => ReservedFlags = value
-            ? ReservedFlags | ReservedFlags.LiveEnabled
-            : ReservedFlags & ~ReservedFlags.LiveEnabled;
+        get
+        {
+            return ReservedFlags.HasFlag(ReservedFlags.LiveEnabled);
+        }
+        set
+        {
+            ReservedFlags = value
+                ? ReservedFlags | ReservedFlags.LiveEnabled
+                : ReservedFlags & ~ReservedFlags.LiveEnabled;
+        }
     }
 
     /// <summary>
@@ -115,10 +127,16 @@ public class AccountInfo
     /// </summary>
     public bool IsRecovering
     {
-        get => ReservedFlags.HasFlag(ReservedFlags.Recovering);
-        set => ReservedFlags = value
-            ? ReservedFlags | ReservedFlags.Recovering
-            : ReservedFlags & ~ReservedFlags.Recovering;
+        get
+        {
+            return ReservedFlags.HasFlag(ReservedFlags.Recovering);
+        }
+        set
+        {
+            ReservedFlags = value
+                ? ReservedFlags | ReservedFlags.Recovering
+                : ReservedFlags & ~ReservedFlags.Recovering;
+        }
     }
 
     /// <summary>
@@ -127,10 +145,16 @@ public class AccountInfo
     /// </summary>
     public bool PaymentInstrumentCreditCard
     {
-        get => (CachedUserFlags & 1u) != 0;
-        set => CachedUserFlags = value
-            ? CachedUserFlags | 1u
-            : CachedUserFlags & ~1u;
+        get
+        {
+            return (CachedUserFlags & 1u) != 0;
+        }
+        set
+        {
+            CachedUserFlags = value
+                ? CachedUserFlags | 1u
+                : CachedUserFlags & ~1u;
+        }
     }
 
     /// <summary>
@@ -139,9 +163,15 @@ public class AccountInfo
     /// </summary>
     public XboxLiveCountry Country
     {
-        get => (XboxLiveCountry)((CachedUserFlags >> 8) & 0xFF);
-        set => CachedUserFlags = (CachedUserFlags & ~(0xFFu << 8))
-                                 | ((uint)(byte)value << 8);
+        get
+        {
+            return (XboxLiveCountry)((CachedUserFlags >> 8) & 0xFF);
+        }
+        set
+        {
+            CachedUserFlags = (CachedUserFlags & ~(0xFFu << 8))
+                              | ((uint)(byte)value << 8);
+        }
     }
 
     /// <summary>
@@ -150,9 +180,15 @@ public class AccountInfo
     /// </summary>
     public SubscriptionTier SubscriptionTier
     {
-        get => (SubscriptionTier)((CachedUserFlags >> 20) & 0xF);
-        set => CachedUserFlags = (CachedUserFlags & ~(0xFu << 20))
-                                 | ((uint)(byte)value << 20);
+        get
+        {
+            return (SubscriptionTier)((CachedUserFlags >> 20) & 0xF);
+        }
+        set
+        {
+            CachedUserFlags = (CachedUserFlags & ~(0xFu << 20))
+                              | ((uint)(byte)value << 20);
+        }
     }
 
     /// <summary>
@@ -161,10 +197,16 @@ public class AccountInfo
     /// </summary>
     public bool ParentalControlsEnabled
     {
-        get => (CachedUserFlags & (1u << 24)) != 0;
-        set => CachedUserFlags = value
-            ? CachedUserFlags | (1u << 24)
-            : CachedUserFlags & ~(1u << 24);
+        get
+        {
+            return (CachedUserFlags & (1u << 24)) != 0;
+        }
+        set
+        {
+            CachedUserFlags = value
+                ? CachedUserFlags | (1u << 24)
+                : CachedUserFlags & ~(1u << 24);
+        }
     }
 
     /// <summary>
@@ -173,8 +215,14 @@ public class AccountInfo
     /// </summary>
     public ConsoleLanguage Language
     {
-        get => (ConsoleLanguage)((CachedUserFlags >> 25) & 0x1F);
-        set => CachedUserFlags = (CachedUserFlags & ~(0x1Fu << 25))
-                                 | (((uint)value & 0x1F) << 25);
+        get
+        {
+            return (ConsoleLanguage)((CachedUserFlags >> 25) & 0x1F);
+        }
+        set
+        {
+            CachedUserFlags = (CachedUserFlags & ~(0x1Fu << 25))
+                              | (((uint)value & 0x1F) << 25);
+        }
     }
 }

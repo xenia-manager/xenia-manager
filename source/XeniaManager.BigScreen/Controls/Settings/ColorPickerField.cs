@@ -75,8 +75,14 @@ public class ColorPickerField : TemplatedControl
     /// </summary>
     public ColourEditorTarget ActiveTarget
     {
-        get => GetValue(ActiveTargetProperty);
-        set => SetValue(ActiveTargetProperty, value);
+        get
+        {
+            return GetValue(ActiveTargetProperty);
+        }
+        set
+        {
+            SetValue(ActiveTargetProperty, value);
+        }
     }
 
     /// <summary>
@@ -84,29 +90,59 @@ public class ColorPickerField : TemplatedControl
     /// </summary>
     public bool IsEditorActive
     {
-        get => GetValue(IsEditorActiveProperty);
-        set => SetValue(IsEditorActiveProperty, value);
+        get
+        {
+            return GetValue(IsEditorActiveProperty);
+        }
+        set
+        {
+            SetValue(IsEditorActiveProperty, value);
+        }
     }
 
     /// <summary>
     /// Whether the red slider is the controller's focused target.
     /// </summary>
-    public bool IsRedActive => _isRedActive;
+    public bool IsRedActive
+    {
+        get
+        {
+            return _isRedActive;
+        }
+    }
 
     /// <summary>
     /// Whether the green slider is the controller's focused target.
     /// </summary>
-    public bool IsGreenActive => _isGreenActive;
+    public bool IsGreenActive
+    {
+        get
+        {
+            return _isGreenActive;
+        }
+    }
 
     /// <summary>
     /// Whether the blue slider is the controller's focused target.
     /// </summary>
-    public bool IsBlueActive => _isBlueActive;
+    public bool IsBlueActive
+    {
+        get
+        {
+            return _isBlueActive;
+        }
+    }
 
     /// <summary>
     /// Whether the preview swatch is the controller's focused target.
     /// </summary>
-    public bool IsPreviewActive => _isPreviewActive;
+    public bool IsPreviewActive
+    {
+        get
+        {
+            return _isPreviewActive;
+        }
+    }
 
     /// <summary>
     /// Re-evaluates the four target highlights after the active target or the
@@ -173,8 +209,14 @@ public class ColorPickerField : TemplatedControl
     /// </summary>
     public Color Color
     {
-        get => GetValue(ColorProperty);
-        set => SetValue(ColorProperty, value);
+        get
+        {
+            return GetValue(ColorProperty);
+        }
+        set
+        {
+            SetValue(ColorProperty, value);
+        }
     }
 
     /// <summary>
@@ -182,8 +224,14 @@ public class ColorPickerField : TemplatedControl
     /// </summary>
     public IReadOnlyList<Color> Palette
     {
-        get => GetValue(PaletteProperty);
-        set => SetValue(PaletteProperty, value);
+        get
+        {
+            return GetValue(PaletteProperty);
+        }
+        set
+        {
+            SetValue(PaletteProperty, value);
+        }
     }
 
     /// <summary>
@@ -312,7 +360,10 @@ public class ColorPickerField : TemplatedControl
             _palettePicker.SelectedColorChanged += OnPickerColourChanged;
         }
 
-        foreach (Slider? slider in new[] { _sliderR, _sliderG, _sliderB })
+        foreach (Slider? slider in new[]
+                 {
+                     _sliderR, _sliderG, _sliderB
+                 })
         {
             if (slider != null)
             {

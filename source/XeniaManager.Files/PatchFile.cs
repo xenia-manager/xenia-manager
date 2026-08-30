@@ -25,32 +25,68 @@ public class PatchFile
     /// <summary>
     /// Gets the title name from the document.
     /// </summary>
-    public string TitleName => Document.TitleName;
+    public string TitleName
+    {
+        get
+        {
+            return Document.TitleName;
+        }
+    }
 
     /// <summary>
     /// Gets the title ID from the document.
     /// </summary>
-    public string TitleId => Document.TitleId;
+    public string TitleId
+    {
+        get
+        {
+            return Document.TitleId;
+        }
+    }
 
     /// <summary>
     /// Gets the list of module hashes from the document.
     /// </summary>
-    public IReadOnlyList<string> Hashes => Document.Hashes.AsReadOnly();
+    public IReadOnlyList<string> Hashes
+    {
+        get
+        {
+            return Document.Hashes.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Gets the list of media IDs from the document.
     /// </summary>
-    public IReadOnlyList<MediaIdEntry> MediaIds => Document.MediaIds.AsReadOnly();
+    public IReadOnlyList<MediaIdEntry> MediaIds
+    {
+        get
+        {
+            return Document.MediaIds.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Gets all patch entries in this file.
     /// </summary>
-    public IReadOnlyList<PatchEntry> Patches => Document.Patches.AsReadOnly();
+    public IReadOnlyList<PatchEntry> Patches
+    {
+        get
+        {
+            return Document.Patches.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Gets only the enabled patch entries.
     /// </summary>
-    public IEnumerable<PatchEntry> EnabledPatches => Document.Patches.Where(p => p.IsEnabled);
+    public IEnumerable<PatchEntry> EnabledPatches
+    {
+        get
+        {
+            return Document.Patches.Where(p => p.IsEnabled);
+        }
+    }
 
     /// <summary>
     /// Private constructor to enforce factory methods.
@@ -231,6 +267,7 @@ public class PatchFile
                 {
                     patchFile.Document.Patches.Add(currentPatch);
                 }
+
                 currentPatch = new PatchEntry
                 {
                     HeaderComment = patchHeaderComment
@@ -247,33 +284,37 @@ public class PatchFile
                 continue;
             }
 
-            if (currentPatch != null && (lineToProcess.StartsWith("name", StringComparison.OrdinalIgnoreCase)))
+            if (currentPatch != null && lineToProcess.StartsWith("name", StringComparison.OrdinalIgnoreCase))
             {
                 Match m = Regex.Match(lineToProcess, @"^name\s*=\s*""([^""]*)""", RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
                     currentPatch.Name = m.Groups[1].Value;
                 }
+
                 continue;
             }
 
-            if (currentPatch != null && (lineToProcess.StartsWith("author", StringComparison.OrdinalIgnoreCase)))
+            if (currentPatch != null && lineToProcess.StartsWith("author", StringComparison.OrdinalIgnoreCase))
             {
                 Match m = Regex.Match(lineToProcess, @"^author\s*=\s*""([^""]*)""", RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
                     currentPatch.Author = m.Groups[1].Value;
                 }
+
                 continue;
             }
 
-            if (currentPatch != null && (lineToProcess.StartsWith("desc", StringComparison.OrdinalIgnoreCase) || lineToProcess.StartsWith("Desc", StringComparison.OrdinalIgnoreCase)))
+            if (currentPatch != null && (lineToProcess.StartsWith("desc", StringComparison.OrdinalIgnoreCase) ||
+                                         lineToProcess.StartsWith("Desc", StringComparison.OrdinalIgnoreCase)))
             {
                 Match m = Regex.Match(lineToProcess, @"^(desc|Desc)\s*=\s*""([^""]*)""", RegexOptions.IgnoreCase);
                 if (m.Success)
                 {
                     currentPatch.Description = m.Groups[2].Value;
                 }
+
                 continue;
             }
 
@@ -284,6 +325,7 @@ public class PatchFile
                 {
                     currentPatch.IsEnabled = m.Groups[1].Value.Equals("true", StringComparison.OrdinalIgnoreCase);
                 }
+
                 continue;
             }
         }
@@ -300,6 +342,7 @@ public class PatchFile
                 Logger.Warning<PatchFile>($"Skipping patch entry '{patch.Name}' with no valid commands");
                 continue;
             }
+
             Logger.Debug<PatchFile>($"Parsed patch: {patch.Name} by {patch.Author} ({patch.Commands.Count} commands)");
         }
     }
@@ -391,6 +434,7 @@ public class PatchFile
                     {
                         Logger.Debug<PatchFile>($"Hash (disabled): {commentedMatch.Groups[1].Value}");
                     }
+
                     continue;
                 }
 
@@ -482,11 +526,12 @@ public class PatchFile
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
-                string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : (headerComment ?? string.Empty);
+                string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : headerComment ?? string.Empty;
                 patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, false));
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                 return;
             }
+
             m = Regex.Match(rawLine, @"^media_id\s*=\s*""([A-Fa-f0-9]+)""");
             if (m.Success)
             {
@@ -502,11 +547,12 @@ public class PatchFile
             if (m.Success)
             {
                 string mediaId = m.Groups[1].Value.ToUpper();
-                string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : (headerComment ?? string.Empty);
+                string comment = m.Groups[2].Success ? m.Groups[2].Value.Trim() : headerComment ?? string.Empty;
                 patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, comment, true));
                 Logger.Debug<PatchFile>($"Media ID: {mediaId}");
                 return;
             }
+
             m = Regex.Match(rawLine, @"^#media_id\s*=\s*""([A-Fa-f0-9]+)""");
             if (m.Success)
             {
@@ -656,6 +702,7 @@ public class PatchFile
             {
                 valueStr = valueStr.Substring(1, valueStr.Length - 2);
             }
+
             return valueStr;
         }
 
@@ -692,6 +739,7 @@ public class PatchFile
                     Logger.Warning<PatchFile>($"Hex float format not supported: {valueStr}");
                     return null;
                 }
+
                 return typeLower switch
                 {
                     "f32" => (object)float.Parse(valueStr, CultureInfo.InvariantCulture),
@@ -714,6 +762,7 @@ public class PatchFile
             {
                 command.UseArrayPrefix = usePrefix;
             }
+
             return bytes;
         }
 
@@ -896,6 +945,7 @@ public class PatchFile
                     sb.AppendLine($" \"{hash}\"");
                 }
             }
+
             sb.AppendLine("]");
         }
 
@@ -928,6 +978,7 @@ public class PatchFile
                         sb.AppendLine($"#    \"{entry.Id}\"");
                     }
                 }
+
                 sb.AppendLine("#]");
             }
         }
@@ -946,6 +997,7 @@ public class PatchFile
             {
                 sb.AppendLine("[[patch]]");
             }
+
             sb.AppendLine($"    name = \"{patch.Name}\"");
 
             if (!string.IsNullOrEmpty(patch.Description))
@@ -1084,8 +1136,5 @@ public class PatchFile
     /// </summary>
     /// <param name="name">The name of the patch to find.</param>
     /// <returns>The PatchEntry if found, null otherwise.</returns>
-    public PatchEntry? GetPatch(string name)
-    {
-        return Document.Patches.FirstOrDefault(p => p.Name == name);
-    }
+    public PatchEntry? GetPatch(string name) => Document.Patches.FirstOrDefault(p => p.Name == name);
 }

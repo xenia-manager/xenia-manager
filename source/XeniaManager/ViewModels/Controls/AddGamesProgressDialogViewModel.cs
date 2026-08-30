@@ -89,6 +89,7 @@ public partial class AddGamesProgressDialogViewModel : ViewModelBase
         {
             LogMessages.RemoveAt(0);
         }
+
         LogMessages.Add($"[{DateTime.Now:HH:mm:ss}] {statusMessage}");
     }
 
@@ -96,10 +97,7 @@ public partial class AddGamesProgressDialogViewModel : ViewModelBase
     /// Updates the processing state.
     /// </summary>
     /// <param name="isProcessing">Whether processing is in progress.</param>
-    public void UpdateProcessingState(bool isProcessing)
-    {
-        IsProcessing = isProcessing;
-    }
+    public void UpdateProcessingState(bool isProcessing) => IsProcessing = isProcessing;
 
     /// <summary>
     /// Completes the add games operation.

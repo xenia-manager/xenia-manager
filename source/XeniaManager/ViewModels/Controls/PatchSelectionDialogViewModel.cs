@@ -92,8 +92,5 @@ public partial class PatchSelectionDialogViewModel : ViewModelBase
     /// Invoked when the user clicks the Cancel button.
     /// </summary>
     [RelayCommand]
-    private void Cancel()
-    {
-        SelectedPatch = null;
-    }
+    private void Cancel() => SelectedPatch = null;
 }

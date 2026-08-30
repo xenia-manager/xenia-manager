@@ -127,7 +127,10 @@ public class ArtworkManagerTests
         string imagePath = Path.Combine(_testArtworkDirectory, "Boxart.jpg");
         byte[] imageData = File.ReadAllBytes(imagePath);
         string outputPath = Path.Combine(_tempOutputDirectory, "icon_custom.ico");
-        int[] customSizes = { 16, 32, 64 };
+        int[] customSizes =
+        {
+            16, 32, 64
+        };
 
         // Act
         ArtworkManager.ConvertToIcon(imageData, outputPath, customSizes);
@@ -160,7 +163,10 @@ public class ArtworkManagerTests
         // Arrange
         string inputPath = Path.Combine(_testArtworkDirectory, "Background.jpg");
         string outputPath = Path.Combine(_tempOutputDirectory, "icon_file_custom.ico");
-        int[] customSizes = { 24, 48, 96 };
+        int[] customSizes =
+        {
+            24, 48, 96
+        };
 
         // Act
         ArtworkManager.ConvertToIcon(inputPath, outputPath, customSizes);
@@ -241,7 +247,7 @@ public class ArtworkManagerTests
         string cacheDirectory = Path.Combine(_tempOutputDirectory, "Cache", "Images");
         Directory.CreateDirectory(cacheDirectory);
         string orphanedFile = Path.Combine(cacheDirectory, "orphaned_test.png");
-        File.Copy(imagePath, orphanedFile, overwrite: true);
+        File.Copy(imagePath, orphanedFile, true);
 
         // Act - This won't delete the orphaned file because it's in a different directory
         // than AppPaths.ImageCacheDirectory, but it verifies the method doesn't throw

@@ -6,7 +6,9 @@
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:coreconv="using:XeniaManager.Core.Converters"
-             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
+             mc:Ignorable="d"
+             d:DesignWidth="1100"
+             d:DesignHeight="800"
              x:Class="XeniaManager.BigScreen.Controls.Cards.GameDetailsPanel"
              x:DataType="vm:GameDetailsViewModel">
     <Border Padding="30"
@@ -15,10 +17,13 @@
             BorderThickness="4"
             BoxShadow="{DynamicResource CardShadow}"
             CornerRadius="12">
-        <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="24">
+        <Grid RowDefinitions="Auto,Auto,*,Auto"
+              RowSpacing="24">
 
             <!-- Game name + Xenia version badge (opposite the title) -->
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="24">
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*,Auto"
+                  ColumnSpacing="24">
                 <TextBlock Grid.Column="0"
                            Text="{Binding Title}"
                            TextTrimming="CharacterEllipsis"
@@ -34,14 +39,15 @@
                                    VerticalAlignment="Center"
                                    Foreground="{DynamicResource TextPrimary}">
                     <ToolTip.Tip>
-                        <TextBlock
-                            Text="{Binding Card.Game.XeniaVersion, Converter={x:Static coreconv:XeniaVersionToStringConverter.Instance}}" />
+                        <TextBlock Text="{Binding Card.Game.XeniaVersion, Converter={x:Static coreconv:XeniaVersionToStringConverter.Instance}}" />
                     </ToolTip.Tip>
                 </fluent:SymbolIcon>
             </Grid>
 
             <!-- Stats box: icon left, playtime/achievements/gamerscore stacked -->
-            <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="28">
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="Auto,*"
+                  ColumnSpacing="28">
                 <Border Width="150"
                         Height="150"
                         Background="{DynamicResource CardBorder}"
@@ -63,11 +69,20 @@
                             Orientation="Vertical"
                             Spacing="14"
                             VerticalAlignment="Center">
-                    <prim:IconStat Icon="Clock" Stat="{Binding Card.PlaytimeText}" IconSize="26" FontSize="22" />
-                    <StackPanel Orientation="Horizontal" Spacing="24">
-                        <prim:IconStat Icon="Trophy" Stat="{Binding Card.AchievementsText}" IconSize="26"
+                    <prim:IconStat Icon="Clock"
+                                   Stat="{Binding Card.PlaytimeText}"
+                                   IconSize="26"
+                                   FontSize="22" />
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="24">
+                        <prim:IconStat Icon="Trophy"
+                                       Stat="{Binding Card.AchievementsText}"
+                                       IconSize="26"
                                        FontSize="22" />
-                        <prim:IconStat Icon="Star" Stat="{Binding Card.GamerscoreText}" IconSize="26" FontSize="22" />
+                        <prim:IconStat Icon="Star"
+                                       Stat="{Binding Card.GamerscoreText}"
+                                       IconSize="26"
+                                       FontSize="22" />
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -120,17 +135,17 @@
                                 Spacing="12"
                                 VerticalAlignment="Center"
                                 ToolTip.Tip="{Binding Card.Game.Compatibility.Url}">
-                        <TextBlock
-                            Text="{Binding Card.Game.Compatibility.Rating, Converter={x:Static coreconv:CompatibilityRatingToStringConverter.Instance}}"
-                            FontSize="20"
-                            Foreground="{DynamicResource TextPrimary}" />
+                        <TextBlock Text="{Binding Card.Game.Compatibility.Rating, Converter={x:Static coreconv:CompatibilityRatingToStringConverter.Instance}}"
+                                   FontSize="20"
+                                   Foreground="{DynamicResource TextPrimary}" />
                         <Ellipse Width="16"
                                  Height="16"
                                  VerticalAlignment="Center"
                                  Fill="{Binding Card.Game.Compatibility.Rating, Converter={x:Static coreconv:CompatibilityRatingColorConverter.Instance}}" />
                     </StackPanel>
                 </Grid>
-                <Grid ColumnDefinitions="150,*" IsVisible="{Binding HasGenre}">
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasGenre}">
                     <TextBlock Grid.Column="0"
                                Text="{DynamicResource Library.Details.Genre}"
                                FontSize="20"
@@ -141,7 +156,8 @@
                                FontSize="20"
                                Foreground="{DynamicResource TextPrimary}" />
                 </Grid>
-                <Grid ColumnDefinitions="150,*" IsVisible="{Binding HasDeveloper}">
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasDeveloper}">
                     <TextBlock Grid.Column="0"
                                Text="{DynamicResource Library.Details.Developer}"
                                FontSize="20"
@@ -152,7 +168,8 @@
                                FontSize="20"
                                Foreground="{DynamicResource TextPrimary}" />
                 </Grid>
-                <Grid ColumnDefinitions="150,*" IsVisible="{Binding HasPublisher}">
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasPublisher}">
                     <TextBlock Grid.Column="0"
                                Text="{DynamicResource Library.Details.Publisher}"
                                FontSize="20"
@@ -163,7 +180,8 @@
                                FontSize="20"
                                Foreground="{DynamicResource TextPrimary}" />
                 </Grid>
-                <Grid ColumnDefinitions="150,*" IsVisible="{Binding HasReleased}">
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasReleased}">
                     <TextBlock Grid.Column="0"
                                Text="{DynamicResource Library.Details.Released}"
                                FontSize="20"

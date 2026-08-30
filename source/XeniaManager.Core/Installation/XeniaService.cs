@@ -5,6 +5,7 @@ using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
+
 namespace XeniaManager.Core.Installation;
 
 /// <summary>

@@ -17,51 +17,94 @@ public class CardHeader : TemplatedControl
 
     public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
         nameof(ShowIconBackground),
-        defaultValue: false);
+        false);
 
     public static readonly StyledProperty<object?> ActionContentProperty = AvaloniaProperty.Register<CardHeader, object?>(nameof(ActionContent));
 
-    public static readonly StyledProperty<IDataTemplate?> ActionContentTemplateProperty = AvaloniaProperty.Register<CardHeader, IDataTemplate?>(nameof(ActionContentTemplate));
+    public static readonly StyledProperty<IDataTemplate?> ActionContentTemplateProperty =
+        AvaloniaProperty.Register<CardHeader, IDataTemplate?>(nameof(ActionContentTemplate));
 
     public string? Title
     {
-        get => GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+        get
+        {
+            return GetValue(TitleProperty);
+        }
+        set
+        {
+            SetValue(TitleProperty, value);
+        }
     }
 
     public string? Description
     {
-        get => GetValue(DescriptionProperty);
-        set => SetValue(DescriptionProperty, value);
+        get
+        {
+            return GetValue(DescriptionProperty);
+        }
+        set
+        {
+            SetValue(DescriptionProperty, value);
+        }
     }
 
     public string? Tooltip
     {
-        get => GetValue(TooltipProperty);
-        set => SetValue(TooltipProperty, value);
+        get
+        {
+            return GetValue(TooltipProperty);
+        }
+        set
+        {
+            SetValue(TooltipProperty, value);
+        }
     }
 
     public Symbol? Icon
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get
+        {
+            return GetValue(IconProperty);
+        }
+        set
+        {
+            SetValue(IconProperty, value);
+        }
     }
 
     public bool ShowIconBackground
     {
-        get => GetValue(ShowIconBackgroundProperty);
-        set => SetValue(ShowIconBackgroundProperty, value);
+        get
+        {
+            return GetValue(ShowIconBackgroundProperty);
+        }
+        set
+        {
+            SetValue(ShowIconBackgroundProperty, value);
+        }
     }
 
     public object? ActionContent
     {
-        get => GetValue(ActionContentProperty);
-        set => SetValue(ActionContentProperty, value);
+        get
+        {
+            return GetValue(ActionContentProperty);
+        }
+        set
+        {
+            SetValue(ActionContentProperty, value);
+        }
     }
 
     public IDataTemplate? ActionContentTemplate
     {
-        get => GetValue(ActionContentTemplateProperty);
-        set => SetValue(ActionContentTemplateProperty, value);
+        get
+        {
+            return GetValue(ActionContentTemplateProperty);
+        }
+        set
+        {
+            SetValue(ActionContentTemplateProperty, value);
+        }
     }
 }

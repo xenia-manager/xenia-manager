@@ -48,7 +48,13 @@ public class StfsMetadata
     /// Media ID converted as Hex string
     /// Returns "00000000" if Media ID is not set.
     /// </summary>
-    public string MediaIdHex => MediaId != 0 ? MediaId.ToString("X8") : "00000000";
+    public string MediaIdHex
+    {
+        get
+        {
+            return MediaId != 0 ? MediaId.ToString("X8") : "00000000";
+        }
+    }
 
     /// <summary>
     /// Version (for system/title updates).
@@ -69,7 +75,13 @@ public class StfsMetadata
     /// Title ID converted as Hex string
     /// Returns "00000000" if Title ID is not set.
     /// </summary>
-    public string TitleIdHex => TitleId != 0 ? TitleId.ToString("X8") : "00000000";
+    public string TitleIdHex
+    {
+        get
+        {
+            return TitleId != 0 ? TitleId.ToString("X8") : "00000000";
+        }
+    }
 
     /// <summary>
     /// Platform (Xbox 360 = 2, PC = 4).
@@ -223,7 +235,7 @@ public class StfsMetadata
         // Parse license entries (0x100 bytes = 0x10 entries of 0xC bytes each)
         for (int i = 0; i < 0x10; i++)
         {
-            int entryOffset = 0x22C + (i * LicenseEntry.Size);
+            int entryOffset = 0x22C + i * LicenseEntry.Size;
             Logger.Trace<StfsMetadata>($"License entry {i} at 0x{entryOffset:X4}: {BitConverter.ToString(data.Skip(entryOffset).Take(16).ToArray())}");
 
             LicenseEntry entry = LicenseEntry.FromBytes(data, entryOffset);
@@ -306,7 +318,8 @@ public class StfsMetadata
         // Volume Descriptor (0x24 bytes) - at offset 0x0379
         Logger.Trace<StfsMetadata>($"Volume Descriptor block (0x0379): {BitConverter.ToString(data.Skip(0x0379).Take(36).ToArray())}");
         metadata.VolumeDescriptor = StfsVolumeDescriptor.FromBytes(data, 0x0379);
-        Logger.Trace<StfsMetadata>($"VolumeDescriptor: Size={metadata.VolumeDescriptor.VolumeDescriptorSize}, BlockCount={metadata.VolumeDescriptor.FileTableBlockCount}, BlockNumber={metadata.VolumeDescriptor.FileTableBlockNumber}");
+        Logger.Trace<StfsMetadata>(
+            $"VolumeDescriptor: Size={metadata.VolumeDescriptor.VolumeDescriptorSize}, BlockCount={metadata.VolumeDescriptor.FileTableBlockCount}, BlockNumber={metadata.VolumeDescriptor.FileTableBlockNumber}");
 
         // Data File Count - at offset 0x039D
         metadata.DataFileCount = BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(0x039D));
@@ -331,15 +344,18 @@ public class StfsMetadata
         // Display Name (0x900 bytes, UTF-16 BE) - at offset 0x0411
         // Note: 0x900 bytes total, but each locale is 0x80 bytes (multiple locales possible)
         metadata.DisplayName = ReadUtf16BeString(data, 0x0411, 0x900);
-        Logger.Trace<StfsMetadata>($"DisplayName: '{metadata.DisplayName}' (raw bytes at 0x0411: {BitConverter.ToString(data.Skip(0x0411).Take(32).ToArray())})");
+        Logger.Trace<StfsMetadata>(
+            $"DisplayName: '{metadata.DisplayName}' (raw bytes at 0x0411: {BitConverter.ToString(data.Skip(0x0411).Take(32).ToArray())})");
 
         // Display Description (0x900 bytes, UTF-16 BE) - at offset 0x0D11
         metadata.DisplayDescription = ReadUtf16BeString(data, 0x0D11, 0x900);
-        Logger.Trace<StfsMetadata>($"DisplayDescription: '{metadata.DisplayDescription}' (raw bytes at 0x0D11: {BitConverter.ToString(data.Skip(0x0D11).Take(32).ToArray())})");
+        Logger.Trace<StfsMetadata>(
+            $"DisplayDescription: '{metadata.DisplayDescription}' (raw bytes at 0x0D11: {BitConverter.ToString(data.Skip(0x0D11).Take(32).ToArray())})");
 
         // Publisher Name (0x80 bytes, UTF-16 BE) - at offset 0x1611
         metadata.PublisherName = ReadUtf16BeString(data, 0x1611, 0x80);
-        Logger.Trace<StfsMetadata>($"PublisherName: '{metadata.PublisherName}' (raw bytes at 0x1611: {BitConverter.ToString(data.Skip(0x1611).Take(32).ToArray())})");
+        Logger.Trace<StfsMetadata>(
+            $"PublisherName: '{metadata.PublisherName}' (raw bytes at 0x1611: {BitConverter.ToString(data.Skip(0x1611).Take(32).ToArray())})");
 
         // Title Name (0x80 bytes, UTF-16 BE) - at offset 0x1691
         metadata.TitleName = ReadUtf16BeString(data, 0x1691, 0x80);
@@ -364,7 +380,8 @@ public class StfsMetadata
         {
             metadata.ThumbnailImage = new byte[metadata.ThumbnailImageSize];
             Array.Copy(data, 0x171A, metadata.ThumbnailImage, 0, metadata.ThumbnailImageSize);
-            Logger.Trace<StfsMetadata>($"ThumbnailImage: {metadata.ThumbnailImageSize} bytes, first 16: {BitConverter.ToString(metadata.ThumbnailImage.Take(16).ToArray())}");
+            Logger.Trace<StfsMetadata>(
+                $"ThumbnailImage: {metadata.ThumbnailImageSize} bytes, first 16: {BitConverter.ToString(metadata.ThumbnailImage.Take(16).ToArray())}");
         }
 
         // Version 2 specific fields
@@ -402,7 +419,8 @@ public class StfsMetadata
             {
                 metadata.TitleThumbnailImage = new byte[metadata.TitleThumbnailImageSize];
                 Array.Copy(data, 0x571A, metadata.TitleThumbnailImage, 0, metadata.TitleThumbnailImageSize);
-                Logger.Trace<StfsMetadata>($"TitleThumbnailImage (V2): {metadata.TitleThumbnailImageSize} bytes, first 16: {BitConverter.ToString(metadata.TitleThumbnailImage.Take(16).ToArray())}");
+                Logger.Trace<StfsMetadata>(
+                    $"TitleThumbnailImage (V2): {metadata.TitleThumbnailImageSize} bytes, first 16: {BitConverter.ToString(metadata.TitleThumbnailImage.Take(16).ToArray())}");
             }
 
             // Additional Display Descriptions (Version 2) - at offset 0x941A, 0x300 bytes, UTF-16 BE
@@ -416,7 +434,8 @@ public class StfsMetadata
             {
                 metadata.TitleThumbnailImage = new byte[metadata.TitleThumbnailImageSize];
                 Array.Copy(data, 0x571A, metadata.TitleThumbnailImage, 0, metadata.TitleThumbnailImageSize);
-                Logger.Trace<StfsMetadata>($"TitleThumbnailImage (V1): {metadata.TitleThumbnailImageSize} bytes, first 16: {BitConverter.ToString(metadata.TitleThumbnailImage.Take(16).ToArray())}");
+                Logger.Trace<StfsMetadata>(
+                    $"TitleThumbnailImage (V1): {metadata.TitleThumbnailImageSize} bytes, first 16: {BitConverter.ToString(metadata.TitleThumbnailImage.Take(16).ToArray())}");
             }
         }
 
@@ -442,6 +461,7 @@ public class StfsMetadata
             {
                 break;
             }
+
             endOffset += 2;
         }
 
@@ -465,8 +485,5 @@ public class StfsMetadata
     /// Returns a string representation of the metadata.
     /// </summary>
     /// <returns>A string describing the metadata.</returns>
-    public override string ToString()
-    {
-        return $"STFS Metadata: {DisplayName} ({ContentType}, Version {MetadataVersion})";
-    }
+    public override string ToString() => $"STFS Metadata: {DisplayName} ({ContentType}, Version {MetadataVersion})";
 }

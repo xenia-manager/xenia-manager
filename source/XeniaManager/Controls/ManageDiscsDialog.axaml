@@ -5,7 +5,9 @@
              xmlns:cards="using:XeniaManager.Controls.Cards"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="440"
+             mc:Ignorable="d"
+             d:DesignWidth="480"
+             d:DesignHeight="440"
              x:Class="XeniaManager.Controls.ManageDiscsDialog"
              x:DataType="vm:ManageDiscsViewModel"
              Margin="20"
@@ -13,20 +15,30 @@
 
     <UserControl.Styles>
         <Style Selector="TextBlock.discPath">
-            <Setter Property="FontSize" Value="11" />
-            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
-            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="FontSize"
+                    Value="11" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="TextTrimming"
+                    Value="CharacterEllipsis" />
         </Style>
         <Style Selector="Border.discRow">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="Padding" Value="10,8" />
-            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="Background"
+                    Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="CornerRadius"
+                    Value="6" />
+            <Setter Property="Padding"
+                    Value="10,8" />
+            <Setter Property="Margin"
+                    Value="0,0,0,6" />
         </Style>
         <Style Selector="Border.discRow.invalid">
-            <Setter Property="BorderBrush" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource SystemFillColorCriticalBrush}" />
         </Style>
     </UserControl.Styles>
 
@@ -47,7 +59,8 @@
                 <ItemsControl ItemsSource="{Binding Discs}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="vm:DiscRowViewModel">
-                            <Border Classes="discRow" Classes.invalid="{Binding !IsPathValid}">
+                            <Border Classes="discRow"
+                                    Classes.invalid="{Binding !IsPathValid}">
                                 <Grid ColumnDefinitions="Auto,*,Auto">
                                     <!-- Disc number badge -->
                                     <Border Grid.Column="0"
@@ -62,7 +75,8 @@
                                     </Border>
 
                                     <!-- Label + path -->
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center">
                                         <TextBox Text="{Binding Label}"
                                                  IsEnabled="{Binding IsRemovable}"
                                                  IsReadOnly="{Binding !IsRemovable}"
@@ -71,7 +85,8 @@
                                                  Padding="0"
                                                  FontWeight="Medium"
                                                  LostFocus="OnDiscLabelLostFocus" />
-                                        <TextBlock Classes="discPath" Text="{Binding Path}" />
+                                        <TextBlock Classes="discPath"
+                                                   Text="{Binding Path}" />
                                         <TextBlock Classes="discPath"
                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                                    Text="{DynamicResource ManageDiscsDialog.MissingFile}"
@@ -100,7 +115,8 @@
                         HorizontalContentAlignment="Center"
                         Margin="0,4,0,0"
                         Padding="12,8">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="6">
                         <icons:SymbolIcon Symbol="Add" />
                         <TextBlock Text="{DynamicResource ManageDiscsDialog.AddDisc.Button}" />
                     </StackPanel>

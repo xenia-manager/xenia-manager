@@ -17,14 +17,14 @@ public class ArchiveExtractorTests
     {
         // Get the directory where the test assembly is located
         string testAssemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        
+
         // Set up paths for test archives that should be copied to output
         _testZipPath = Path.Combine(testAssemblyLocation, "Assets", "TestFile.zip");
         _test7zPath = Path.Combine(testAssemblyLocation, "Assets", "TestFile.7z");
-        
+
         // Create a temporary output directory for extraction tests
         _testOutputPath = Path.Combine(Path.GetTempPath(), "XeniaManagerTestExtraction");
-        
+
         // Clean up any existing test files
         if (Directory.Exists(_testOutputPath))
         {
@@ -41,7 +41,7 @@ public class ArchiveExtractorTests
             Directory.Delete(_testOutputPath, true);
         }
     }
-    
+
     [Test]
     public void ExtractArchive_ZipArchive_ValidExtraction()
     {
@@ -90,7 +90,7 @@ public class ArchiveExtractorTests
         // First, extract all files to see what's in the archive
         string tempOutputPath = Path.Combine(_testOutputPath, "temp");
         ArchiveExtractor.ExtractArchive(_testZipPath, tempOutputPath);
-        
+
         string[] allFiles = Directory.GetFiles(tempOutputPath, "*", SearchOption.AllDirectories);
         if (allFiles.Length == 0)
         {
@@ -99,7 +99,10 @@ public class ArchiveExtractorTests
 
         // Use the first file found in the archive for specific extraction test
         string fileToExtract = Path.GetFileName(allFiles[0]);
-        string[] filesToExtract = { fileToExtract };
+        string[] filesToExtract =
+        {
+            fileToExtract
+        };
 
         // Clean up and test specific extraction
         if (Directory.Exists(_testOutputPath))
@@ -115,7 +118,7 @@ public class ArchiveExtractorTests
         string[] extractedFiles = Directory.GetFiles(_testOutputPath, "*", SearchOption.AllDirectories);
         Assert.That(extractedFiles.Length, Is.GreaterThanOrEqualTo(0), "Specified files should be extracted from the archive");
     }
-    
+
     [Test]
     public async Task ExtractArchiveAsync_ZipArchive_ValidExtraction()
     {
@@ -164,7 +167,7 @@ public class ArchiveExtractorTests
         // First, extract all files to see what's in the archive
         string tempOutputPath = Path.Combine(_testOutputPath, "temp");
         await ArchiveExtractor.ExtractArchiveAsync(_testZipPath, tempOutputPath);
-        
+
         string[] allFiles = Directory.GetFiles(tempOutputPath, "*", SearchOption.AllDirectories);
         if (allFiles.Length == 0)
         {
@@ -173,7 +176,10 @@ public class ArchiveExtractorTests
 
         // Use the first file found in the archive for specific extraction test
         string fileToExtract = Path.GetFileName(allFiles[0]);
-        string[] filesToExtract = { fileToExtract };
+        string[] filesToExtract =
+        {
+            fileToExtract
+        };
 
         // Clean up and test specific extraction
         if (Directory.Exists(_testOutputPath))
@@ -199,15 +205,15 @@ public class ArchiveExtractorTests
             Assert.Inconclusive("TestFile.zip not found in Assets folder");
         }
 
-        using var cts = new CancellationTokenSource();
+        using CancellationTokenSource cts = new CancellationTokenSource();
         cts.Cancel(); // Cancel immediately to test cancellation
 
         // Act & Assert
-        var exception = Assert.ThrowsAsync<OperationCanceledException>(async () =>
+        OperationCanceledException? exception = Assert.ThrowsAsync<OperationCanceledException>(async () =>
         {
             await ArchiveExtractor.ExtractArchiveAsync(_testZipPath, _testOutputPath, cancellationToken: cts.Token);
         });
-        
+
         Assert.That(exception, Is.Not.Null);
     }
 
@@ -215,7 +221,7 @@ public class ArchiveExtractorTests
     public void ExtractArchive_WithNullArchivePath_ThrowsArgumentException()
     {
         // Act & Assert
-        ArgumentException? exception = Assert.Throws<ArgumentException>(() => 
+        ArgumentException? exception = Assert.Throws<ArgumentException>(() =>
             ArchiveExtractor.ExtractArchive(null!, _testOutputPath));
         Assert.That(exception!.ParamName, Is.EqualTo("archivePath"));
     }
@@ -224,7 +230,7 @@ public class ArchiveExtractorTests
     public void ExtractArchive_WithEmptyArchivePath_ThrowsArgumentException()
     {
         // Act & Assert
-        ArgumentException? exception = Assert.Throws<ArgumentException>(() => 
+        ArgumentException? exception = Assert.Throws<ArgumentException>(() =>
             ArchiveExtractor.ExtractArchive("", _testOutputPath));
         Assert.That(exception!.ParamName, Is.EqualTo("archivePath"));
     }
@@ -233,7 +239,7 @@ public class ArchiveExtractorTests
     public void ExtractArchive_WithWhitespaceArchivePath_ThrowsArgumentException()
     {
         // Act & Assert
-        ArgumentException? exception = Assert.Throws<ArgumentException>(() => 
+        ArgumentException? exception = Assert.Throws<ArgumentException>(() =>
             ArchiveExtractor.ExtractArchive("   ", _testOutputPath));
         Assert.That(exception!.ParamName, Is.EqualTo("archivePath"));
     }
@@ -242,7 +248,7 @@ public class ArchiveExtractorTests
     public void ExtractArchive_WithNullOutputPath_ThrowsArgumentException()
     {
         // Act & Assert
-        ArgumentException? exception = Assert.Throws<ArgumentException>(() => 
+        ArgumentException? exception = Assert.Throws<ArgumentException>(() =>
             ArchiveExtractor.ExtractArchive(_testZipPath, null!));
         Assert.That(exception!.ParamName, Is.EqualTo("outputPath"));
     }
@@ -251,7 +257,7 @@ public class ArchiveExtractorTests
     public void ExtractArchive_WithEmptyOutputPath_ThrowsArgumentException()
     {
         // Act & Assert
-        ArgumentException? exception = Assert.Throws<ArgumentException>(() => 
+        ArgumentException? exception = Assert.Throws<ArgumentException>(() =>
             ArchiveExtractor.ExtractArchive(_testZipPath, ""));
         Assert.That(exception!.ParamName, Is.EqualTo("outputPath"));
     }
@@ -260,11 +266,11 @@ public class ArchiveExtractorTests
     public void ExtractArchive_WithWhitespaceOutputPath_ThrowsArgumentException()
     {
         // Act & Assert
-        ArgumentException? exception = Assert.Throws<ArgumentException>(() => 
+        ArgumentException? exception = Assert.Throws<ArgumentException>(() =>
             ArchiveExtractor.ExtractArchive(_testZipPath, "   "));
         Assert.That(exception!.ParamName, Is.EqualTo("outputPath"));
     }
-    
+
     [Test]
     public void ExtractArchive_WithNonExistentArchive_ThrowsFileNotFoundException()
     {
@@ -272,7 +278,7 @@ public class ArchiveExtractorTests
         string nonExistentArchive = Path.Combine(Path.GetTempPath(), "nonexistent.zip");
 
         // Act & Assert
-        Assert.Throws<FileNotFoundException>(() => 
+        Assert.Throws<FileNotFoundException>(() =>
             ArchiveExtractor.ExtractArchive(nonExistentArchive, _testOutputPath));
     }
 
@@ -286,7 +292,7 @@ public class ArchiveExtractorTests
         try
         {
             // Act & Assert
-            Assert.Throws<NotSupportedException>(() => 
+            Assert.Throws<NotSupportedException>(() =>
                 ArchiveExtractor.ExtractArchive(tempFilePath, _testOutputPath));
         }
         finally
@@ -309,7 +315,7 @@ public class ArchiveExtractorTests
         }
 
         // Act & Assert - This should not throw any exceptions
-        Assert.DoesNotThrow(() => 
+        Assert.DoesNotThrow(() =>
             ArchiveExtractor.ExtractArchive(_testZipPath, _testOutputPath));
     }
 }

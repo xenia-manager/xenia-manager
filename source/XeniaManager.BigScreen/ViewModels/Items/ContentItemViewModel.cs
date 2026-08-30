@@ -35,22 +35,46 @@ public partial class ContentItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Gets whether a thumbnail image is available for display.
     /// </summary>
-    public bool HasThumbnail => ThumbnailImage != null;
+    public bool HasThumbnail
+    {
+        get
+        {
+            return ThumbnailImage != null;
+        }
+    }
 
     /// <summary>
     /// The content's display name.
     /// </summary>
-    public string DisplayName => Header.DisplayName;
+    public string DisplayName
+    {
+        get
+        {
+            return Header.DisplayName;
+        }
+    }
 
     /// <summary>
     /// The content's file (package) name.
     /// </summary>
-    public string FileName => Header.FileName;
+    public string FileName
+    {
+        get
+        {
+            return Header.FileName;
+        }
+    }
 
     /// <summary>
     /// The path to the header file on disk.
     /// </summary>
-    public string HeaderFilePath => Header.FilePath;
+    public string HeaderFilePath
+    {
+        get
+        {
+            return Header.FilePath;
+        }
+    }
 
     /// <summary>
     /// Whether the given path exists as a file or a directory.
@@ -79,8 +103,8 @@ public partial class ContentItemViewModel : ObservableObject, ISelectable
             }
 
             string backupPath = HeaderFilePath
-                .Replace(@"\Headers\", @"\", System.StringComparison.OrdinalIgnoreCase)
-                .Replace(".header", "", System.StringComparison.OrdinalIgnoreCase);
+                .Replace(@"\Headers\", @"\", StringComparison.OrdinalIgnoreCase)
+                .Replace(".header", "", StringComparison.OrdinalIgnoreCase);
             if (ExistsOnDisk(backupPath))
             {
                 return backupPath;

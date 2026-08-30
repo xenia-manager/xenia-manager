@@ -27,15 +27,18 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
     /// <summary>
     /// Gets the default settings instance.
     /// </summary>
-    protected virtual T DefaultSettings => new T();
+    protected virtual T DefaultSettings
+    {
+        get
+        {
+            return new T();
+        }
+    }
 
     /// <summary>
     /// Raises the SettingsChanged event.
     /// </summary>
-    protected virtual void OnSettingsChanged()
-    {
-        SettingsChanged?.Invoke(this, EventArgs.Empty);
-    }
+    protected virtual void OnSettingsChanged() => SettingsChanged?.Invoke(this, EventArgs.Empty);
 
     /// <summary>
     /// Gets the currently loaded settings instance, loading them if necessary.
@@ -48,6 +51,7 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
             {
                 LoadSettings();
             }
+
             return _settings!;
         }
     }
@@ -59,7 +63,10 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
     {
         _jsonSerializerOptions = new JsonSerializerOptions
         {
-            Converters = { new JsonStringEnumConverter() },
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            },
             WriteIndented = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.Never
         };
@@ -76,7 +83,10 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
     {
         JsonSerializerOptions options = new JsonSerializerOptions
         {
-            Converters = { new JsonStringEnumConverter() },
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            },
             WriteIndented = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.Never
         };
@@ -242,10 +252,7 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
     /// Asynchronously loads settings from the persistent storage.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation. The task result contains the loaded settings instance, or default settings if loading fails.</returns>
-    public async virtual Task<T> LoadSettingsAsync()
-    {
-        return await Task.Run(LoadSettings);
-    }
+    public virtual async Task<T> LoadSettingsAsync() => await Task.Run(LoadSettings);
 
     /// <summary>
     /// Saves the current settings instance to persistent storage.
@@ -312,10 +319,7 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
     /// </summary>
     /// <param name="settings">The settings instance to save.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    public async Task SaveSettingsAsync(T settings)
-    {
-        await Task.Run(() => SaveSettings(settings));
-    }
+    public async Task SaveSettingsAsync(T settings) => await Task.Run(() => SaveSettings(settings));
 
     /// <summary>
     /// Compares two settings instances for equality to determine if a save operation is necessary.
@@ -329,6 +333,7 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
         {
             return true;
         }
+
         if (settings1 == null || settings2 == null)
         {
             return false;
@@ -360,7 +365,7 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
         {
             if (File.Exists(_settingsPath))
             {
-                File.Copy(_settingsPath, _settingsBackupPath, overwrite: true);
+                File.Copy(_settingsPath, _settingsBackupPath, true);
             }
         }
         catch (Exception ex)

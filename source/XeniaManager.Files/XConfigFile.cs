@@ -34,7 +34,13 @@ public class XConfigFile
     /// <summary>
     /// Gets the file path this XConfig was loaded from, or null if created in memory.
     /// </summary>
-    public string? FilePath => _filePath;
+    public string? FilePath
+    {
+        get
+        {
+            return _filePath;
+        }
+    }
 
     // User category properties
     /// <summary>
@@ -42,8 +48,14 @@ public class XConfigFile
     /// </summary>
     public XLanguage Language
     {
-        get => (XLanguage)ReadUInt32(UserBase + 0x02C);
-        set => WriteUInt32(UserBase + 0x02C, (uint)value);
+        get
+        {
+            return (XLanguage)ReadUInt32(UserBase + 0x02C);
+        }
+        set
+        {
+            WriteUInt32(UserBase + 0x02C, (uint)value);
+        }
     }
 
     /// <summary>
@@ -54,8 +66,14 @@ public class XConfigFile
     /// </summary>
     public XAudioFlags AudioFlags
     {
-        get => (XAudioFlags)ReadUInt32(UserBase + 0x034);
-        set => WriteUInt32(UserBase + 0x034, (uint)value);
+        get
+        {
+            return (XAudioFlags)ReadUInt32(UserBase + 0x034);
+        }
+        set
+        {
+            WriteUInt32(UserBase + 0x034, (uint)value);
+        }
     }
 
     /// <summary>
@@ -66,8 +84,14 @@ public class XConfigFile
     /// </summary>
     public XVideoFlags VideoFlags
     {
-        get => (XVideoFlags)ReadUInt32(UserBase + 0x030);
-        set => WriteUInt32(UserBase + 0x030, (uint)value);
+        get
+        {
+            return (XVideoFlags)ReadUInt32(UserBase + 0x030);
+        }
+        set
+        {
+            WriteUInt32(UserBase + 0x030, (uint)value);
+        }
     }
 
     /// <summary>
@@ -78,8 +102,14 @@ public class XConfigFile
     /// </summary>
     public XOnlineCountry Country
     {
-        get => (XOnlineCountry)ReadByte(UserBase + 0x040);
-        set => WriteByte(UserBase + 0x040, (byte)value);
+        get
+        {
+            return (XOnlineCountry)ReadByte(UserBase + 0x040);
+        }
+        set
+        {
+            WriteByte(UserBase + 0x040, (byte)value);
+        }
     }
 
     /// <summary>
@@ -90,8 +120,14 @@ public class XConfigFile
     /// </summary>
     public float MusicVolume
     {
-        get => ReadSingle(UserBase + 0x1C1);
-        set => WriteSingle(UserBase + 0x1C1, value);
+        get
+        {
+            return ReadSingle(UserBase + 0x1C1);
+        }
+        set
+        {
+            WriteSingle(UserBase + 0x1C1, value);
+        }
     }
 
     /// <summary>
@@ -102,8 +138,14 @@ public class XConfigFile
     /// </summary>
     public int TimeZoneBias
     {
-        get => ReadInt32(UserBase + 0x008);
-        set => WriteInt32(UserBase + 0x008, value);
+        get
+        {
+            return ReadInt32(UserBase + 0x008);
+        }
+        set
+        {
+            WriteInt32(UserBase + 0x008, value);
+        }
     }
 
     /// <summary>
@@ -114,8 +156,14 @@ public class XConfigFile
     /// </summary>
     public int TimeZoneDltBias
     {
-        get => ReadInt32(UserBase + 0x020);
-        set => WriteInt32(UserBase + 0x020, value);
+        get
+        {
+            return ReadInt32(UserBase + 0x020);
+        }
+        set
+        {
+            WriteInt32(UserBase + 0x020, value);
+        }
     }
 
     /// <summary>
@@ -126,8 +174,14 @@ public class XConfigFile
     /// </summary>
     public XRetailFlags RetailFlags
     {
-        get => (XRetailFlags)ReadUInt32(UserBase + 0x038);
-        set => WriteUInt32(UserBase + 0x038, (uint)value);
+        get
+        {
+            return (XRetailFlags)ReadUInt32(UserBase + 0x038);
+        }
+        set
+        {
+            WriteUInt32(UserBase + 0x038, (uint)value);
+        }
     }
 
     /// <summary>
@@ -138,8 +192,14 @@ public class XConfigFile
     /// </summary>
     public ulong DefaultProfile
     {
-        get => ReadUInt64(UserBase + 0x024);
-        set => WriteUInt64(UserBase + 0x024, value);
+        get
+        {
+            return ReadUInt64(UserBase + 0x024);
+        }
+        set
+        {
+            WriteUInt64(UserBase + 0x024, value);
+        }
     }
 
     /// <summary>
@@ -150,8 +210,14 @@ public class XConfigFile
     /// </summary>
     public XBlackLevel VideoOutputBlackLevels
     {
-        get => (XBlackLevel)ReadUInt32(UserBase + 0x1E9);
-        set => WriteUInt32(UserBase + 0x1E9, (uint)value);
+        get
+        {
+            return (XBlackLevel)ReadUInt32(UserBase + 0x1E9);
+        }
+        set
+        {
+            WriteUInt32(UserBase + 0x1E9, (uint)value);
+        }
     }
 
     // Resolution (packed (width << 16) | height)
@@ -163,8 +229,14 @@ public class XConfigFile
     /// </summary>
     public XConfigResolution AvHdmiScreenSize
     {
-        get => (XConfigResolution)ReadInt32(UserBase + 0x15C);
-        set => WriteInt32(UserBase + 0x15C, (int)value);
+        get
+        {
+            return (XConfigResolution)ReadInt32(UserBase + 0x15C);
+        }
+        set
+        {
+            WriteInt32(UserBase + 0x15C, (int)value);
+        }
     }
 
     /// <summary>
@@ -175,8 +247,14 @@ public class XConfigFile
     /// </summary>
     public XConfigResolution AvComponentScreenSize
     {
-        get => (XConfigResolution)ReadInt32(UserBase + 0x160);
-        set => WriteInt32(UserBase + 0x160, (int)value);
+        get
+        {
+            return (XConfigResolution)ReadInt32(UserBase + 0x160);
+        }
+        set
+        {
+            WriteInt32(UserBase + 0x160, (int)value);
+        }
     }
 
     /// <summary>
@@ -187,8 +265,14 @@ public class XConfigFile
     /// </summary>
     public XConfigResolution AvVgaScreenSize
     {
-        get => (XConfigResolution)ReadInt32(UserBase + 0x164);
-        set => WriteInt32(UserBase + 0x164, (int)value);
+        get
+        {
+            return (XConfigResolution)ReadInt32(UserBase + 0x164);
+        }
+        set
+        {
+            WriteInt32(UserBase + 0x164, (int)value);
+        }
     }
 
     /// <summary>
@@ -215,8 +299,14 @@ public class XConfigFile
     /// </summary>
     public XPcFlags PcFlags
     {
-        get => (XPcFlags)ReadByte(UserBase + 0x041);
-        set => WriteByte(UserBase + 0x041, (byte)value);
+        get
+        {
+            return (XPcFlags)ReadByte(UserBase + 0x041);
+        }
+        set
+        {
+            WriteByte(UserBase + 0x041, (byte)value);
+        }
     }
 
     /// <summary>
@@ -224,8 +314,14 @@ public class XConfigFile
     /// </summary>
     public bool IsXblAllowed
     {
-        get => (PcFlags & XPcFlags.XblAllowed) != 0;
-        set => PcFlags = value ? PcFlags | XPcFlags.XblAllowed : PcFlags & ~XPcFlags.XblAllowed;
+        get
+        {
+            return (PcFlags & XPcFlags.XblAllowed) != 0;
+        }
+        set
+        {
+            PcFlags = value ? PcFlags | XPcFlags.XblAllowed : PcFlags & ~XPcFlags.XblAllowed;
+        }
     }
 
     /// <summary>
@@ -233,8 +329,14 @@ public class XConfigFile
     /// </summary>
     public bool IsXblMembershipCreationAllowed
     {
-        get => (PcFlags & XPcFlags.XblMembershipCreationAllowed) != 0;
-        set => PcFlags = value ? PcFlags | XPcFlags.XblMembershipCreationAllowed : PcFlags & ~XPcFlags.XblMembershipCreationAllowed;
+        get
+        {
+            return (PcFlags & XPcFlags.XblMembershipCreationAllowed) != 0;
+        }
+        set
+        {
+            PcFlags = value ? PcFlags | XPcFlags.XblMembershipCreationAllowed : PcFlags & ~XPcFlags.XblMembershipCreationAllowed;
+        }
     }
 
     /// <summary>
@@ -242,8 +344,14 @@ public class XConfigFile
     /// </summary>
     public bool IsXboxOneGameAllowed
     {
-        get => (PcFlags & XPcFlags.XboxOneGameAllowed) != 0;
-        set => PcFlags = value ? PcFlags | XPcFlags.XboxOneGameAllowed : PcFlags & ~XPcFlags.XboxOneGameAllowed;
+        get
+        {
+            return (PcFlags & XPcFlags.XboxOneGameAllowed) != 0;
+        }
+        set
+        {
+            PcFlags = value ? PcFlags | XPcFlags.XboxOneGameAllowed : PcFlags & ~XPcFlags.XboxOneGameAllowed;
+        }
     }
 
     /// <summary>
@@ -251,8 +359,14 @@ public class XConfigFile
     /// </summary>
     public bool IsPcEnabled
     {
-        get => (PcFlags & XPcFlags.PcEnabled) != 0;
-        set => PcFlags = value ? PcFlags | XPcFlags.PcEnabled : PcFlags & ~XPcFlags.PcEnabled;
+        get
+        {
+            return (PcFlags & XPcFlags.PcEnabled) != 0;
+        }
+        set
+        {
+            PcFlags = value ? PcFlags | XPcFlags.PcEnabled : PcFlags & ~XPcFlags.PcEnabled;
+        }
     }
 
     // Secured category properties
@@ -264,8 +378,14 @@ public class XConfigFile
     /// </summary>
     public uint OnlineNetworkId
     {
-        get => ReadUInt32(SecuredBase + 0x08);
-        set => WriteUInt32(SecuredBase + 0x08, value);
+        get
+        {
+            return ReadUInt32(SecuredBase + 0x08);
+        }
+        set
+        {
+            WriteUInt32(SecuredBase + 0x08, value);
+        }
     }
 
     /// <summary>
@@ -276,7 +396,10 @@ public class XConfigFile
     /// </summary>
     public byte[] MacAddress
     {
-        get => ReadBytes(SecuredBase + 0x20, 6);
+        get
+        {
+            return ReadBytes(SecuredBase + 0x20, 6);
+        }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
@@ -284,6 +407,7 @@ public class XConfigFile
             {
                 throw new ArgumentException("MAC address must be exactly 6 bytes", nameof(value));
             }
+
             WriteBytes(SecuredBase + 0x20, value);
         }
     }
@@ -296,8 +420,14 @@ public class XConfigFile
     /// </summary>
     public XAvRegion AvRegion
     {
-        get => (XAvRegion)ReadUInt32(SecuredBase + 0x28);
-        set => WriteUInt32(SecuredBase + 0x28, (uint)value);
+        get
+        {
+            return (XAvRegion)ReadUInt32(SecuredBase + 0x28);
+        }
+        set
+        {
+            WriteUInt32(SecuredBase + 0x28, (uint)value);
+        }
     }
 
     /// <summary>
@@ -308,8 +438,14 @@ public class XConfigFile
     /// </summary>
     public ushort GameRegion
     {
-        get => ReadUInt16(SecuredBase + 0x2C);
-        set => WriteUInt16(SecuredBase + 0x2C, value);
+        get
+        {
+            return ReadUInt16(SecuredBase + 0x2C);
+        }
+        set
+        {
+            WriteUInt16(SecuredBase + 0x2C, value);
+        }
     }
 
     /// <summary>
@@ -320,8 +456,14 @@ public class XConfigFile
     /// </summary>
     public uint DvdRegion
     {
-        get => ReadUInt32(SecuredBase + 0x34);
-        set => WriteUInt32(SecuredBase + 0x34, value);
+        get
+        {
+            return ReadUInt32(SecuredBase + 0x34);
+        }
+        set
+        {
+            WriteUInt32(SecuredBase + 0x34, value);
+        }
     }
 
     /// <summary>
@@ -332,8 +474,14 @@ public class XConfigFile
     /// </summary>
     public uint ResetKey
     {
-        get => ReadUInt32(SecuredBase + 0x38);
-        set => WriteUInt32(SecuredBase + 0x38, value);
+        get
+        {
+            return ReadUInt32(SecuredBase + 0x38);
+        }
+        set
+        {
+            WriteUInt32(SecuredBase + 0x38, value);
+        }
     }
 
     /// <summary>
@@ -344,8 +492,14 @@ public class XConfigFile
     /// </summary>
     public uint SystemFlags
     {
-        get => ReadUInt32(SecuredBase + 0x3C);
-        set => WriteUInt32(SecuredBase + 0x3C, value);
+        get
+        {
+            return ReadUInt32(SecuredBase + 0x3C);
+        }
+        set
+        {
+            WriteUInt32(SecuredBase + 0x3C, value);
+        }
     }
 
     // Console category properties
@@ -357,8 +511,14 @@ public class XConfigFile
     /// </summary>
     public XScreenSaver ScreenSaver
     {
-        get => (XScreenSaver)ReadInt16(ConsoleBase + 0x008);
-        set => WriteInt16(ConsoleBase + 0x008, (short)value);
+        get
+        {
+            return (XScreenSaver)ReadInt16(ConsoleBase + 0x008);
+        }
+        set
+        {
+            WriteInt16(ConsoleBase + 0x008, (short)value);
+        }
     }
 
     /// <summary>
@@ -369,8 +529,14 @@ public class XConfigFile
     /// </summary>
     public XAutoShutOff AutoShutOff
     {
-        get => (XAutoShutOff)ReadInt16(ConsoleBase + 0x00A);
-        set => WriteInt16(ConsoleBase + 0x00A, (short)value);
+        get
+        {
+            return (XAutoShutOff)ReadInt16(ConsoleBase + 0x00A);
+        }
+        set
+        {
+            WriteInt16(ConsoleBase + 0x00A, (short)value);
+        }
     }
 
     /// <summary>
@@ -381,8 +547,14 @@ public class XConfigFile
     /// </summary>
     public XKeyboardLayout KeyboardLayout
     {
-        get => (XKeyboardLayout)ReadInt16(ConsoleBase + 0x142);
-        set => WriteInt16(ConsoleBase + 0x142, (short)value);
+        get
+        {
+            return (XKeyboardLayout)ReadInt16(ConsoleBase + 0x142);
+        }
+        set
+        {
+            WriteInt16(ConsoleBase + 0x142, (short)value);
+        }
     }
 
     // System category properties
@@ -394,8 +566,14 @@ public class XConfigFile
     /// </summary>
     public ulong AlarmTime
     {
-        get => ReadUInt64(SystemBase + 0x04);
-        set => WriteUInt64(SystemBase + 0x04, value);
+        get
+        {
+            return ReadUInt64(SystemBase + 0x04);
+        }
+        set
+        {
+            WriteUInt64(SystemBase + 0x04, value);
+        }
     }
 
     /// <summary>
@@ -406,8 +584,14 @@ public class XConfigFile
     /// </summary>
     public uint PreviousFlashVersion
     {
-        get => ReadUInt32(SystemBase + 0x0C);
-        set => WriteUInt32(SystemBase + 0x0C, value);
+        get
+        {
+            return ReadUInt32(SystemBase + 0x0C);
+        }
+        set
+        {
+            WriteUInt32(SystemBase + 0x0C, value);
+        }
     }
 
     /// <summary>
@@ -416,7 +600,7 @@ public class XConfigFile
     public static XConfigFile Create()
     {
         Logger.Trace<XConfigFile>("Creating new XConfig settings with defaults");
-        var xconfig = new XConfigFile();
+        XConfigFile xconfig = new XConfigFile();
         xconfig.SetDefaults();
         Logger.Info<XConfigFile>("Created new XConfig file with defaults");
         return xconfig;
@@ -450,7 +634,8 @@ public class XConfigFile
             }
             else
             {
-                Logger.Warning<XConfigFile>($"XConfig file has unexpected size {fileBytes.Length} (expected {XConfigOffsets.TotalSize}), resetting to defaults");
+                Logger.Warning<XConfigFile>(
+                    $"XConfig file has unexpected size {fileBytes.Length} (expected {XConfigOffsets.TotalSize}), resetting to defaults");
                 xconfig = Create();
                 xconfig.FlushToFile(filePath);
             }
@@ -535,6 +720,7 @@ public class XConfigFile
             Logger.Debug<XConfigFile>($"Setting not found: category={category}, settingId={settingId}");
             return 0;
         }
+
         Logger.Trace<XConfigFile>($"Setting size for category={category}, settingId={settingId}: {field.Value.Size} bytes");
         return field.Value.Size;
     }
@@ -554,7 +740,8 @@ public class XConfigFile
             return;
         }
 
-        Logger.Trace<XConfigFile>($"Reading setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, size={field.Value.Size}");
+        Logger.Trace<XConfigFile>(
+            $"Reading setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, size={field.Value.Size}");
 
         lock (_lock)
         {
@@ -578,7 +765,8 @@ public class XConfigFile
             return;
         }
 
-        Logger.Trace<XConfigFile>($"Writing setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, size={field.Value.Size}");
+        Logger.Trace<XConfigFile>(
+            $"Writing setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, size={field.Value.Size}");
 
         lock (_lock)
         {
@@ -611,7 +799,8 @@ public class XConfigFile
             return default;
         }
 
-        Logger.Trace<XConfigFile>($"Reading typed setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, type={typeof(T).Name}");
+        Logger.Trace<XConfigFile>(
+            $"Reading typed setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, type={typeof(T).Name}");
 
         lock (_lock)
         {
@@ -622,6 +811,7 @@ public class XConfigFile
             {
                 Array.Reverse(buffer);
             }
+
             return MemoryMarshal.Read<T>(buffer.AsSpan());
         }
     }
@@ -649,7 +839,8 @@ public class XConfigFile
             return;
         }
 
-        Logger.Trace<XConfigFile>($"Writing typed setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, type={typeof(T).Name}");
+        Logger.Trace<XConfigFile>(
+            $"Writing typed setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, type={typeof(T).Name}");
 
         lock (_lock)
         {
@@ -660,6 +851,7 @@ public class XConfigFile
             {
                 Array.Reverse(buffer);
             }
+
             Buffer.BlockCopy(buffer, 0, _data, field.Value.AbsoluteOffset, size);
             FlushToFile();
         }

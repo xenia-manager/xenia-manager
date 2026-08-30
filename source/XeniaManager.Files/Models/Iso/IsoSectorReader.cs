@@ -113,10 +113,7 @@ internal sealed class IsoSectorReader : IDisposable
     /// </summary>
     /// <returns>The XGD information.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the sector reader is not initialized.</exception>
-    public XgdInfo GetXgdInfo()
-    {
-        return _xgdInfo ?? throw new InvalidOperationException("Sector reader not initialized. Call Initialize() first.");
-    }
+    public XgdInfo GetXgdInfo() => _xgdInfo ?? throw new InvalidOperationException("Sector reader not initialized. Call Initialize() first.");
 
     /// <summary>
     /// Gets the total number of sectors across all ISO slices.
@@ -158,6 +155,7 @@ internal sealed class IsoSectorReader : IDisposable
                     return bytesRead == IsoConstants.SECTOR_SIZE;
                 }
             }
+
             return false;
         }
     }
@@ -204,6 +202,7 @@ internal sealed class IsoSectorReader : IDisposable
         {
             return false;
         }
+
         string magic = System.Text.Encoding.ASCII.GetString(header.Value.Magic).Trim('\0');
         string magicTail = System.Text.Encoding.ASCII.GetString(header.Value.MagicTail).Trim('\0');
         return magic == IsoConstants.XGD_IMAGE_MAGIC && magicTail == IsoConstants.XGD_IMAGE_MAGIC;
@@ -218,10 +217,12 @@ internal sealed class IsoSectorReader : IDisposable
         {
             return;
         }
+
         foreach (IsoDetail isoDetail in _isoDetails)
         {
             isoDetail.Stream.Dispose();
         }
+
         _disposed = true;
     }
 }

@@ -84,7 +84,10 @@ public class AppPathResolver
     /// </summary>
     /// <param name="relativePaths">An ordered set of relative path segments.</param>
     /// <returns>The resulting absolute path.</returns>
-    public static string GetFullPath(params string[] relativePaths) => Path.Combine(new[] { _baseDirectory }.Concat(relativePaths).ToArray());
+    public static string GetFullPath(params string[] relativePaths) => Path.Combine(new[]
+    {
+        _baseDirectory
+    }.Concat(relativePaths).ToArray());
 
     /// <summary>
     /// Replaces all characters invalid for use in Windows filenames with spaces.
@@ -99,11 +102,13 @@ public class AppPathResolver
         {
             input = input.Replace(c, ' ');
         }
+
         string result = input;
         while (result.Contains("  "))
         {
             result = result.Replace("  ", " ");
         }
+
         result = result.Trim();
         Logger.Debug<AppPathResolver>($"Sanitized filename result: '{result}'");
         return result;

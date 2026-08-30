@@ -96,7 +96,7 @@ public interface IProfileService
     /// Loads the per-game achievement GPD of the given version's active profile,
     /// or null when no profile or GPD exists.
     /// </summary>
-    XeniaManager.Files.GpdFile? LoadGameAchievementGpd(XeniaVersion version, string gameId);
+    Files.GpdFile? LoadGameAchievementGpd(XeniaVersion version, string gameId);
 
     /// <summary>
     /// Resolves achievement/gamerscore counters for the given game.

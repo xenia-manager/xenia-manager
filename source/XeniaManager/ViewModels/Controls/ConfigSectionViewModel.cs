@@ -114,10 +114,7 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
     /// <summary>
     /// Updates the HasUnsavedChanges flag based on whether any options have unsaved changes.
     /// </summary>
-    private void UpdateUnsavedChangesStatus()
-    {
-        HasUnsavedChanges = Options.Any(o => o.HasUnsavedChanges);
-    }
+    private void UpdateUnsavedChangesStatus() => HasUnsavedChanges = Options.Any(o => o.HasUnsavedChanges);
 
     /// <summary>
     /// Applies all changes from the option ViewModels back to the underlying ConfigSection.

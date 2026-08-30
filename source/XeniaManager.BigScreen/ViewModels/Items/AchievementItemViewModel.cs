@@ -23,19 +23,37 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether the active profile has earned this achievement.
     /// </summary>
-    public bool IsUnlocked => Achievement.IsEarned;
+    public bool IsUnlocked
+    {
+        get
+        {
+            return Achievement.IsEarned;
+        }
+    }
 
     /// <summary>
     /// Whether this achievement is a secret/hidden achievement (its name and
     /// description should stay hidden until unlocked).
     /// </summary>
-    public bool IsSecret => !Achievement.ShowUnachieved;
+    public bool IsSecret
+    {
+        get
+        {
+            return !Achievement.ShowUnachieved;
+        }
+    }
 
     /// <summary>
     /// Whether this row is spoiler-gated: locked AND secret, so its name,
     /// description and gamerscore are hidden behind placeholders.
     /// </summary>
-    public bool IsSpoilerGated => !IsUnlocked && IsSecret;
+    public bool IsSpoilerGated
+    {
+        get
+        {
+            return !IsUnlocked && IsSecret;
+        }
+    }
 
     /// <summary>
     /// Whether this row currently has selection in the achievements list.
@@ -47,17 +65,35 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     /// Whether the achievement image can be decoded: the achievement is
     /// unlocked, a GPD is available and the achievement carries an image.
     /// </summary>
-    public bool CanLoadImage => IsUnlocked && _gpdFile != null && Achievement.ImageId != 0;
+    public bool CanLoadImage
+    {
+        get
+        {
+            return IsUnlocked && _gpdFile != null && Achievement.ImageId != 0;
+        }
+    }
 
     /// <summary>
     /// Whether the achievement image is available to show.
     /// </summary>
-    public bool HasAchievementImage => AchievementImage != null;
+    public bool HasAchievementImage
+    {
+        get
+        {
+            return AchievementImage != null;
+        }
+    }
 
     /// <summary>
     /// Whether a lock-open icon shows instead of the image (unlocked without art).
     /// </summary>
-    public bool ShowLockOpenIcon => IsUnlocked && !HasAchievementImage;
+    public bool ShowLockOpenIcon
+    {
+        get
+        {
+            return IsUnlocked && !HasAchievementImage;
+        }
+    }
 
     /// <summary>
     /// The Core achievement entry this row represents.
@@ -67,36 +103,66 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// The achievement's display name (raw GPD name, used for sorting).
     /// </summary>
-    public string Name => Achievement.Name;
+    public string Name
+    {
+        get
+        {
+            return Achievement.Name;
+        }
+    }
 
     /// <summary>
     /// The achievement name as shown: hidden behind a placeholder while
     /// spoiler-gated (secret locked achievements reveal surprises).
     /// </summary>
-    public string DisplayName => IsSpoilerGated
-        ? LocalizationHelper.GetText("GameModal.Achievements.HiddenName")
-        : Achievement.Name;
+    public string DisplayName
+    {
+        get
+        {
+            return IsSpoilerGated
+                ? LocalizationHelper.GetText("GameModal.Achievements.HiddenName")
+                : Achievement.Name;
+        }
+    }
 
     /// <summary>
     /// The gamerscore awarded by this achievement.
     /// </summary>
-    public int Gamerscore => Achievement.Gamerscore;
+    public int Gamerscore
+    {
+        get
+        {
+            return Achievement.Gamerscore;
+        }
+    }
 
     /// <summary>
     /// The achievement description (unlocked or locked variant); spoiler-gated
     /// rows show a spoiler warning instead of the real text.
     /// </summary>
-    public string Description => IsSpoilerGated
-        ? LocalizationHelper.GetText("GameModal.Achievements.SpoilerWarning")
-        : Achievement.IsEarned
-            ? Achievement.UnlockedDescription
-            : Achievement.LockedDescription;
+    public string Description
+    {
+        get
+        {
+            return IsSpoilerGated
+                ? LocalizationHelper.GetText("GameModal.Achievements.SpoilerWarning")
+                : Achievement.IsEarned
+                    ? Achievement.UnlockedDescription
+                    : Achievement.LockedDescription;
+        }
+    }
 
     /// <summary>
     /// The unlock date, or a "not unlocked" label when locked.
     /// </summary>
-    public string UnlockDateDisplay => Achievement.UnlockDateTime?.ToString(FormatConstants.AchievementUnlockFormat)
-                                       ?? LocalizationHelper.GetText("GameModal.Achievements.NotUnlocked");
+    public string UnlockDateDisplay
+    {
+        get
+        {
+            return Achievement.UnlockDateTime?.ToString(FormatConstants.AchievementUnlockFormat)
+                   ?? LocalizationHelper.GetText("GameModal.Achievements.NotUnlocked");
+        }
+    }
 
     /// <summary>
     /// Decodes the achievement image from the GPD. Returns null when the
@@ -117,7 +183,7 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
                 return null;
             }
 
-            using MemoryStream stream = new(image.ImageData);
+            using MemoryStream stream = new MemoryStream(image.ImageData);
             return new Bitmap(stream);
         }
         catch (Exception ex)

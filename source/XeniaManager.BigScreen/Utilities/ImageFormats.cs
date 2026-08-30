@@ -16,5 +16,11 @@ public static class ImageFormats
     /// <summary>
     /// The same formats as file-picker patterns (asterisk-prefixed).
     /// </summary>
-    public static string[] FilePickerPatterns => ScreenshotExtensions.Select(e => $"*{e}").ToArray();
+    public static string[] FilePickerPatterns
+    {
+        get
+        {
+            return ScreenshotExtensions.Select(e => $"*{e}").ToArray();
+        }
+    }
 }

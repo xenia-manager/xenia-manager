@@ -71,6 +71,7 @@ public class ShortcutManager
         {
             arguments += $" {ArgumentFlags.Disc[0]} {discNumber}";
         }
+
         link.SetArguments(arguments);
         Logger.Debug<ShortcutManager>($"Shortcut arguments set to: {arguments}");
 
@@ -116,6 +117,7 @@ public class ShortcutManager
         {
             throw new Exception("Steam loginusers.vdf file not found");
         }
+
         Logger.Debug<ShortcutManager>($"Steam loginusers file found: {loggedInUsersFilePath}");
 
         // Load loginusers
@@ -128,7 +130,8 @@ public class ShortcutManager
     /// <summary>
     /// Shared logic for creating a Steam shortcut with a known user ID.
     /// </summary>
-    private static void CreateSteamShortcutInternal(Game game, string steamInstallPath, VdfFile loggedUsersFile, string userId, bool restartSteam, int? discNumber)
+    private static void CreateSteamShortcutInternal(Game game, string steamInstallPath, VdfFile loggedUsersFile, string userId, bool restartSteam,
+        int? discNumber)
     {
         // Find the userdata directory (try 32-bit ID first, then 64-bit)
         string? userDataDirectory = FindSteamUserDataDirectory(steamInstallPath, loggedUsersFile, userId);
@@ -136,6 +139,7 @@ public class ShortcutManager
         {
             throw new Exception("Steam user data directory not found");
         }
+
         Logger.Debug<ShortcutManager>($"Steam userdata directory found: {userDataDirectory}");
 
         // Load or create a shortcuts file
@@ -456,6 +460,7 @@ public class ShortcutManager
                 Logger.Info<ShortcutManager>($"Found Steam installation: {path}");
                 return path;
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in 64-bit registry");
 
             // 2. Fallback to the 32-bit registry view
@@ -467,6 +472,7 @@ public class ShortcutManager
                 Logger.Info<ShortcutManager>($"Found Steam installation: {path}");
                 return path;
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in 32-bit registry");
 
             // 3. Default locations: Program Files (x86)
@@ -481,6 +487,7 @@ public class ShortcutManager
                     return defaultX86;
                 }
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in Program Files (x86)");
 
             // 4. Default locations: Program Files
@@ -495,6 +502,7 @@ public class ShortcutManager
                     return default64;
                 }
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in Program Files");
         }
         else

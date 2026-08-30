@@ -107,7 +107,8 @@ public class LenientJsonDeserializer
                                 // Invalid enum value, replace with default
                                 object defaultValue = Enum.ToObject(property.PropertyType, 0);
                                 node[jsonPropName] = JsonSerializer.SerializeToNode(defaultValue, property.PropertyType, options);
-                                Logger.Debug<LenientJsonDeserializer>($"Replaced invalid enum value '{valueStr}' with default '{defaultValue}' for property '{jsonPropName}'");
+                                Logger.Debug<LenientJsonDeserializer>(
+                                    $"Replaced invalid enum value '{valueStr}' with default '{defaultValue}' for property '{jsonPropName}'");
                             }
                         }
                     }

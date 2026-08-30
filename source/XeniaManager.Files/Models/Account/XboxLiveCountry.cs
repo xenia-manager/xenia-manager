@@ -549,5 +549,5 @@ public enum XboxLiveCountry : byte
     /// <summary>
     /// Zimbabwe.
     /// </summary>
-    Zimbabwe = 0x6E,
+    Zimbabwe = 0x6E
 }

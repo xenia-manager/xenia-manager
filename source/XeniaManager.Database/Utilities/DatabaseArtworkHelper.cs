@@ -7,14 +7,25 @@ namespace XeniaManager.Database.Utilities;
 /// </summary>
 internal static class DatabaseArtworkHelper
 {
-    private static readonly Dictionary<string, SKEncodedImageFormat> SupportedExtensions = new Dictionary<string, SKEncodedImageFormat>(StringComparer.OrdinalIgnoreCase)
-    {
-        { ".jpg", SKEncodedImageFormat.Jpeg },
-        { ".jpeg", SKEncodedImageFormat.Jpeg },
-        { ".png", SKEncodedImageFormat.Png },
-        { ".bmp", SKEncodedImageFormat.Bmp },
-        { ".webp", SKEncodedImageFormat.Webp }
-    };
+    private static readonly Dictionary<string, SKEncodedImageFormat> SupportedExtensions =
+        new Dictionary<string, SKEncodedImageFormat>(StringComparer.OrdinalIgnoreCase)
+        {
+            {
+                ".jpg", SKEncodedImageFormat.Jpeg
+            },
+            {
+                ".jpeg", SKEncodedImageFormat.Jpeg
+            },
+            {
+                ".png", SKEncodedImageFormat.Png
+            },
+            {
+                ".bmp", SKEncodedImageFormat.Bmp
+            },
+            {
+                ".webp", SKEncodedImageFormat.Webp
+            }
+        };
 
     public static string? ParseArtworkFileNameFromUrl(string url)
     {
@@ -26,10 +37,12 @@ internal static class DatabaseArtworkHelper
                 string fileName = url.Substring(lastSlashIndex + 1);
                 if (fileName.Contains('.'))
                 {
-                    fileName = System.Text.RegularExpressions.Regex.Replace(fileName, @"(lg|sm)\d*\.(\w+)$", ".$2", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    fileName = System.Text.RegularExpressions.Regex.Replace(fileName, @"(lg|sm)\d*\.(\w+)$", ".$2",
+                        System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                     return fileName.ToLowerInvariant();
                 }
             }
+
             return null;
         }
         catch
@@ -41,7 +54,11 @@ internal static class DatabaseArtworkHelper
     public static SKEncodedImageFormat? InferImageFormatFromFileName(string fileName)
     {
         string extension = Path.GetExtension(fileName).ToLowerInvariant();
-        if (extension == ".ico") return SKEncodedImageFormat.Ico;
+        if (extension == ".ico")
+        {
+            return SKEncodedImageFormat.Ico;
+        }
+
         return SupportedExtensions.TryGetValue(extension, out SKEncodedImageFormat format) ? format : null;
     }
 
@@ -51,10 +68,7 @@ internal static class DatabaseArtworkHelper
         EncodeTo(original, savePath, format);
     }
 
-    public static void ConvertToIcon(byte[] artworkData, string savePath)
-    {
-        IcoEncoder.Encode(artworkData, savePath);
-    }
+    public static void ConvertToIcon(byte[] artworkData, string savePath) => IcoEncoder.Encode(artworkData, savePath);
 
     private static void EncodeTo(SKBitmap bitmap, string savePath, SKEncodedImageFormat format, int quality = 95)
     {
@@ -63,6 +77,7 @@ internal static class DatabaseArtworkHelper
             ConvertToIcon(SKImage.FromBitmap(bitmap).Encode(SKEncodedImageFormat.Png, 100)!.ToArray(), savePath);
             return;
         }
+
         using SKImage image = SKImage.FromBitmap(bitmap);
         using SKData data = image.Encode(format, quality) ?? throw new InvalidOperationException($"Failed to encode image as {format}");
         Directory.CreateDirectory(Path.GetDirectoryName(savePath) ?? ".");
@@ -93,12 +108,13 @@ internal static class IcoEncoder
             using SKData pngData = image.Encode(SKEncodedImageFormat.Png, 100) ?? throw new InvalidOperationException($"Failed to encode {size}x{size}");
             frames.Add(pngData.ToArray());
         }
+
         using FileStream output = File.Create(savePath);
         using BinaryWriter writer = new BinaryWriter(output);
         writer.Write((ushort)0);
         writer.Write((ushort)1);
         writer.Write((ushort)frames.Count);
-        int dataOffset = 6 + (frames.Count * 16);
+        int dataOffset = 6 + frames.Count * 16;
         for (int i = 0; i < frames.Count; i++)
         {
             byte w = sizes[i] == 256 ? (byte)0 : (byte)sizes[i];
@@ -113,6 +129,10 @@ internal static class IcoEncoder
             writer.Write((uint)dataOffset);
             dataOffset += frames[i].Length;
         }
-        foreach (byte[] frame in frames) writer.Write(frame);
+
+        foreach (byte[] frame in frames)
+        {
+            writer.Write(frame);
+        }
     }
 }

@@ -109,7 +109,13 @@ public class SyncListEntry
     /// <summary>
     /// Gets the total number of sync items (excluding the header entry).
     /// </summary>
-    public int TotalSyncItems => Math.Max(0, Items.Count - 1);
+    public int TotalSyncItems
+    {
+        get
+        {
+            return Math.Max(0, Items.Count - 1);
+        }
+    }
 
     /// <summary>
     /// Parses a sync list entry from raw bytes.
@@ -134,7 +140,7 @@ public class SyncListEntry
 
             for (int i = 0; i < itemCount; i++)
             {
-                entry.Items.Add(SyncItem.FromBytes(data, offset + (i * 16), isBigEndian));
+                entry.Items.Add(SyncItem.FromBytes(data, offset + i * 16, isBigEndian));
             }
 
             entry.IsValid = true;
@@ -179,7 +185,11 @@ public class SyncListEntry
     public void AddItem(ulong entryId, ulong syncId)
     {
         Logger.Debug<SyncListEntry>($"Adding sync item - Entry ID: 0x{entryId:X16}, Sync ID: 0x{syncId:X16}");
-        Items.Add(new SyncItem { EntryId = entryId, SyncId = syncId });
+        Items.Add(new SyncItem
+        {
+            EntryId = entryId,
+            SyncId = syncId
+        });
         Logger.Info<SyncListEntry>($"Sync item added (total items: {TotalSyncItems})");
     }
 

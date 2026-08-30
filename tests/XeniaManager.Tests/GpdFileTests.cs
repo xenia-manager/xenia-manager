@@ -753,7 +753,7 @@ public class GpdFileTests
     public void Create_LittleEndianGpdFile_ReturnsValidInstance()
     {
         // Act
-        using GpdFile gpd = GpdFile.Create(isBigEndian: false);
+        using GpdFile gpd = GpdFile.Create(false);
 
         // Assert
         Assert.That(gpd, Is.Not.Null);
@@ -812,7 +812,10 @@ public class GpdFileTests
     public void SyncDataEntry_GetNextSyncId_IncrementsCounter()
     {
         // Arrange
-        SyncDataEntry syncData = new SyncDataEntry { NextSyncId = 100 };
+        SyncDataEntry syncData = new SyncDataEntry
+        {
+            NextSyncId = 100
+        };
 
         // Act
         ulong id1 = syncData.GetNextSyncId();
@@ -896,8 +899,8 @@ public class GpdFileTests
         };
 
         // Act
-        byte[] bytes = entry.ToBytes(isBigEndian: true);
-        EntryTableEntry loaded = EntryTableEntry.FromBytes(bytes, 0, isBigEndian: true);
+        byte[] bytes = entry.ToBytes(true);
+        EntryTableEntry loaded = EntryTableEntry.FromBytes(bytes, 0, true);
 
         // Assert
         Assert.That(loaded.Namespace, Is.EqualTo(entry.Namespace));
@@ -919,8 +922,8 @@ public class GpdFileTests
         };
 
         // Act
-        byte[] bytes = entry.ToBytes(isBigEndian: false);
-        EntryTableEntry loaded = EntryTableEntry.FromBytes(bytes, 0, isBigEndian: false);
+        byte[] bytes = entry.ToBytes(false);
+        EntryTableEntry loaded = EntryTableEntry.FromBytes(bytes, 0, false);
 
         // Assert
         Assert.That(loaded.Namespace, Is.EqualTo(entry.Namespace));

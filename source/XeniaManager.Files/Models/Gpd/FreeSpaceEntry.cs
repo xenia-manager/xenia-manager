@@ -27,7 +27,13 @@ public record struct FreeSpaceEntry
     /// <summary>
     /// Gets whether this entry represents actual free space (vs. end-of-file marker).
     /// </summary>
-    public bool IsFreeSpace => Length != 0xFFFFFFFF;
+    public bool IsFreeSpace
+    {
+        get
+        {
+            return Length != 0xFFFFFFFF;
+        }
+    }
 
     /// <summary>
     /// Parses a free space entry from raw bytes.

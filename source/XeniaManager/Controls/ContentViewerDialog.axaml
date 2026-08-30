@@ -7,7 +7,9 @@
              xmlns:models="using:XeniaManager.Core.Models.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
-             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+             mc:Ignorable="d"
+             d:DesignWidth="600"
+             d:DesignHeight="500"
              x:Class="XeniaManager.Controls.ContentViewerDialog"
              x:Name="UserControl"
              x:DataType="vm:ContentViewerDialogViewModel"
@@ -93,7 +95,8 @@
                     </ListBox.ContextFlyout>
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="itemsvm:HeaderFileViewModel">
-                            <Border Padding="12,8" Margin="4,2">
+                            <Border Padding="12,8"
+                                    Margin="4,2">
                                 <Grid ColumnDefinitions="Auto,*,Auto">
                                     <!-- Icon: package thumbnail when available, document fallback otherwise -->
                                     <Panel Grid.Column="0"
@@ -245,7 +248,8 @@
                             </ItemsControl.ContextFlyout>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="itemsvm:AchievementViewModel">
-                                    <Border Padding="12,8" Margin="4,2">
+                                    <Border Padding="12,8"
+                                            Margin="4,2">
                                         <Grid ColumnDefinitions="Auto,*,Auto">
                                             <!-- Achievement Image or Unlock Status Icon -->
                                             <Panel Grid.Column="0"
@@ -267,8 +271,7 @@
                                                 <!-- LockOpen icon for unlocked achievements without an image -->
                                                 <fluent:SymbolIcon Symbol="LockOpen"
                                                                    IsVisible="{Binding ShowLockOpenIcon}"
-                                                                   Foreground="{DynamicResource SystemAccentColor}">
-                                                </fluent:SymbolIcon>
+                                                                   Foreground="{DynamicResource SystemAccentColor}" />
                                             </Panel>
 
                                             <!-- Achievement details -->
@@ -276,7 +279,8 @@
                                                         VerticalAlignment="Center"
                                                         Spacing="4">
                                                 <!-- Name and Gamerscore -->
-                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="8">
                                                     <TextBlock Text="{Binding Name}"
                                                                FontWeight="SemiBold"
                                                                TextWrapping="Wrap"

@@ -87,14 +87,20 @@ public partial class DashboardViewModel : ViewModelBase
     /// <summary>
     /// Whether the dashboard shows the disc stub (no games in the library).
     /// </summary>
-    public bool ShowEmptyStub => RecentGames.Count == 0;
+    public bool ShowEmptyStub
+    {
+        get
+        {
+            return RecentGames.Count == 0;
+        }
+    }
 
     public ObservableCollection<OptionsCardViewModel> Options { get; } =
     [
-        new("Library", "Games", OverlayScreen.Library),
-        new("Gallery", "Library", OverlayScreen.Gallery),
-        new("Settings", "Settings", OverlayScreen.Settings),
-        new("Quit", "Power", OverlayScreen.None)
+        new OptionsCardViewModel("Library", "Games", OverlayScreen.Library),
+        new OptionsCardViewModel("Gallery", "Library", OverlayScreen.Gallery),
+        new OptionsCardViewModel("Settings", "Settings", OverlayScreen.Settings),
+        new OptionsCardViewModel("Quit", "Power", OverlayScreen.None)
     ];
 
     public DashboardViewModel(IBackgroundService backgroundService)
@@ -276,7 +282,7 @@ public partial class DashboardViewModel : ViewModelBase
         {
             _artFade.Stop();
             _pendingArtwork = newArt;
-            _artFade = FadeArtOpacity(0).OnComplete(target: this, static t => t.CommitArtwork());
+            _artFade = FadeArtOpacity(0).OnComplete(this, static t => t.CommitArtwork());
             return;
         }
 

@@ -7,7 +7,9 @@
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:itemVm="clr-namespace:XeniaManager.ViewModels.Items"
              xmlns:models="clr-namespace:XeniaManager.Core.Models.Game;assembly=XeniaManager.Core"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.LibraryPage"
              x:DataType="vm:LibraryPageViewModel"
              x:Name="Root">
@@ -344,7 +346,8 @@
         </Grid>
 
         <!-- Zoom Slider -->
-        <Grid Grid.Row="1" Margin="10,0"
+        <Grid Grid.Row="1"
+              Margin="10,0"
               IsVisible="{Binding IsGridView}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -402,12 +405,15 @@
                                 Classes.selected="{Binding IsSelected}">
                             <Button.Styles>
                                 <Style Selector="Button.selected">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                    <Setter Property="BorderBrush"
+                                            Value="{DynamicResource AccentFillColorDefaultBrush}" />
                                 </Style>
                             </Button.Styles>
                             <ToolTip.Tip>
                                 <ToolTip>
-                                    <StackPanel Orientation="Vertical" Margin="4" MaxWidth="250">
+                                    <StackPanel Orientation="Vertical"
+                                                Margin="4"
+                                                MaxWidth="250">
                                         <!-- Game Title -->
                                         <TextBlock Text="{Binding Title}"
                                                    FontWeight="Bold"
@@ -724,7 +730,8 @@
                                 </MenuFlyout>
                             </Button.ContextFlyout>
 
-                            <Border CornerRadius="6" ClipToBounds="True">
+                            <Border CornerRadius="6"
+                                    ClipToBounds="True">
                                 <Grid>
                                     <!-- Shown when boxart exists -->
                                     <Image Grid.Row="0"
@@ -845,9 +852,12 @@
                                 Classes.selected="{Binding IsSelected}">
                             <Border.Styles>
                                 <Style Selector="Border.selected">
-                                    <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
-                                    <Setter Property="BorderThickness" Value="2,0,0,1" />
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                    <Setter Property="BorderBrush"
+                                            Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                    <Setter Property="BorderThickness"
+                                            Value="2,0,0,1" />
                                 </Style>
                             </Border.Styles>
                             <Border.ContextFlyout>
@@ -1076,7 +1086,9 @@
                                              VerticalAlignment="Center"
                                              IsVisible="{Binding DataContext.ShowListCompatibilityRating, ElementName=Root}">
                                         <ToolTip.Tip>
-                                            <StackPanel Orientation="Vertical" Margin="4" MaxWidth="250">
+                                            <StackPanel Orientation="Vertical"
+                                                        Margin="4"
+                                                        MaxWidth="250">
                                                 <!-- Compatibility Rating -->
                                                 <TextBlock Text="{Binding Game.Compatibility.Rating, Converter={StaticResource CompatibilityRatingToStringConverter}}"
                                                            FontWeight="Bold" />
@@ -1138,7 +1150,8 @@
                                     </Ellipse>
 
                                     <!-- Thumbnail -->
-                                    <Border Width="48" Height="48"
+                                    <Border Width="48"
+                                            Height="48"
                                             CornerRadius="4"
                                             ClipToBounds="True"
                                             IsVisible="{Binding DataContext.ShowListIcon, ElementName=Root}"
@@ -1227,7 +1240,8 @@
                 BorderThickness="1"
                 Padding="12,8"
                 IsVisible="{Binding HasSelectedGames}">
-            <StackPanel Orientation="Horizontal" Spacing="12">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="12">
                 <TextBlock Text="{Binding SelectedGamesCountText}"
                            VerticalAlignment="Center"
                            FontWeight="SemiBold" />
@@ -1284,6 +1298,7 @@
 
     <!-- Key Bindings -->
     <UserControl.KeyBindings>
-        <KeyBinding Gesture="Delete" Command="{Binding PromptDeleteSelectedGamesCommand}" />
+        <KeyBinding Gesture="Delete"
+                    Command="{Binding PromptDeleteSelectedGamesCommand}" />
     </UserControl.KeyBindings>
 </UserControl>

@@ -48,7 +48,9 @@ public class ZarFileTests
         finally
         {
             if (File.Exists(tempPath))
+            {
                 File.Delete(tempPath);
+            }
         }
     }
 
@@ -82,7 +84,9 @@ public class ZarFileTests
         finally
         {
             if (File.Exists(tempPath))
+            {
                 File.Delete(tempPath);
+            }
         }
     }
 
@@ -102,7 +106,9 @@ public class ZarFileTests
         finally
         {
             if (File.Exists(tempPath))
+            {
                 File.Delete(tempPath);
+            }
         }
     }
 

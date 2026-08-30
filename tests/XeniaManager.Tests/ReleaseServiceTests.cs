@@ -57,10 +57,7 @@ public class ReleaseServiceTests
                                                 """;
 
     [SetUp]
-    public void Setup()
-    {
-        _service = new ReleaseService();
-    }
+    public void Setup() => _service = new ReleaseService();
 
     [TearDown]
     public void Teardown()
@@ -190,7 +187,8 @@ public class ReleaseServiceTests
         Assert.That(cache.XeniaManagerStable!.Url, Is.EqualTo("https://github.com/xenia-manager/xenia-manager/releases/download/v1.0.0/xenia_manager.zip"));
         Assert.That(cache.XeniaManagerExperimental, Is.Not.Null);
         Assert.That(cache.XeniaManagerExperimental!.Version, Is.EqualTo("v1.1.0-exp"));
-        Assert.That(cache.XeniaManagerExperimental!.Url, Is.EqualTo("https://github.com/xenia-manager/experimental-builds/releases/download/v1.1.0-exp/xenia_manager.zip"));
+        Assert.That(cache.XeniaManagerExperimental!.Url,
+            Is.EqualTo("https://github.com/xenia-manager/experimental-builds/releases/download/v1.1.0-exp/xenia_manager.zip"));
         Assert.That(cache.XeniaCanary, Is.Not.Null);
         Assert.That(cache.XeniaCanary!.TagName, Is.EqualTo("v2.0.0-canary"));
         Assert.That(cache.NetplayStable, Is.Not.Null);

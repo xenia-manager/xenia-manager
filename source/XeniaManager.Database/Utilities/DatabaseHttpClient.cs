@@ -25,7 +25,8 @@ public sealed class DatabaseHttpClient : IDisposable
         _client.Timeout = timeout ?? TimeSpan.FromSeconds(15);
     }
 
-    public async Task<string> GetAsync(string url, CancellationToken cancellationToken = default, string? cacheKey = null, TimeSpan? cacheDuration = null, string? cacheDirectory = null)
+    public async Task<string> GetAsync(string url, CancellationToken cancellationToken = default, string? cacheKey = null, TimeSpan? cacheDuration = null,
+        string? cacheDirectory = null)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
 
@@ -80,12 +81,20 @@ public sealed class DatabaseHttpClient : IDisposable
     private bool TryReadCache(string cacheFile, TimeSpan cacheDuration, out string? content)
     {
         content = null;
-        if (!File.Exists(cacheFile)) return false;
+        if (!File.Exists(cacheFile))
+        {
+            return false;
+        }
+
         try
         {
             FileInfo fi = new FileInfo(cacheFile);
             TimeSpan age = DateTime.UtcNow - fi.LastWriteTimeUtc;
-            if (age > cacheDuration) return false;
+            if (age > cacheDuration)
+            {
+                return false;
+            }
+
             content = File.ReadAllText(cacheFile);
             return true;
         }
@@ -111,7 +120,11 @@ public sealed class DatabaseHttpClient : IDisposable
 
     public void Dispose()
     {
-        if (_disposed) return;
+        if (_disposed)
+        {
+            return;
+        }
+
         _client.Dispose();
         _disposed = true;
     }

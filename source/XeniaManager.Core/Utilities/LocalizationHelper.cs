@@ -174,7 +174,8 @@ public class LocalizationHelper
     /// </summary>
     /// <param name="value">The string value to check</param>
     /// <returns>True if the value is untranslated, otherwise false</returns>
-    private static bool IsUntranslated(string value) => string.IsNullOrWhiteSpace(value) || value.Equals(UntranslatedMarker, StringComparison.OrdinalIgnoreCase);
+    private static bool IsUntranslated(string value) =>
+        string.IsNullOrWhiteSpace(value) || value.Equals(UntranslatedMarker, StringComparison.OrdinalIgnoreCase);
 
     private static void EnsureInitialized()
     {

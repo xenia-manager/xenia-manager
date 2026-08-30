@@ -10,7 +10,14 @@ public class EventManager
 {
     // Singleton instance
     private static EventManager? _instance;
-    public static EventManager Instance => _instance ??= new EventManager();
+
+    public static EventManager Instance
+    {
+        get
+        {
+            return _instance ??= new EventManager();
+        }
+    }
 
     // Window state events
     public event Action<bool>? WindowDisabled;
@@ -44,24 +51,15 @@ public class EventManager
     /// <summary>
     /// Disables the window.
     /// </summary>
-    public void DisableWindow()
-    {
-        SetWindowDisabled(true);
-    }
+    public void DisableWindow() => SetWindowDisabled(true);
 
     /// <summary>
     /// Enables the window.
     /// </summary>
-    public void EnableWindow()
-    {
-        SetWindowDisabled(false);
-    }
+    public void EnableWindow() => SetWindowDisabled(false);
 
     /// <summary>
     /// Triggers the game library changed event.
     /// </summary>
-    public void OnGameLibraryChanged()
-    {
-        GameLibraryChanged?.Invoke();
-    }
+    public void OnGameLibraryChanged() => GameLibraryChanged?.Invoke();
 }

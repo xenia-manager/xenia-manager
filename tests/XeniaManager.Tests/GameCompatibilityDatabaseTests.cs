@@ -496,7 +496,7 @@ public class GameCompatibilityDatabaseTests
         try
         {
             // Create a mock game object
-            XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+            Game game = new Game
             {
                 Title = "Halo 3",
                 GameId = "4D5307E6",

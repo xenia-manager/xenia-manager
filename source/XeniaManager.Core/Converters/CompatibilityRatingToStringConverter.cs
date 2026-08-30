@@ -7,7 +7,7 @@ namespace XeniaManager.Core.Converters;
 
 public class CompatibilityRatingToStringConverter : IValueConverter
 {
-    public static readonly CompatibilityRatingToStringConverter Instance = new();
+    public static readonly CompatibilityRatingToStringConverter Instance = new CompatibilityRatingToStringConverter();
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -19,8 +19,5 @@ public class CompatibilityRatingToStringConverter : IValueConverter
         return string.Empty;
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }

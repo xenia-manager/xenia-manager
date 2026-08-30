@@ -4,7 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="72"
+        mc:Ignorable="d"
+        d:DesignWidth="520"
+        d:DesignHeight="72"
         x:Class="XeniaManager.BigScreen.Controls.Cards.GameActionRow"
         x:DataType="vm:GameActionItemViewModel"
         Classes.selected="{Binding IsSelected}">
@@ -23,7 +25,8 @@
             </Border>
         </ControlTemplate>
     </Button.Template>
-    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="20">
+    <Grid ColumnDefinitions="Auto,*"
+          ColumnSpacing="20">
         <fluent:SymbolIcon Symbol="{Binding Icon}"
                            FontSize="26"
                            Foreground="{DynamicResource TextSecondary}"

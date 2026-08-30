@@ -6,28 +6,39 @@
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Views.Modals.PatchDownloadView"
              x:DataType="vm:PatchDownloadViewModel">
 
     <UserControl.Styles>
         <!-- Download result rows -->
         <Style Selector="Border.download-row">
-            <Setter Property="Padding" Value="18,14" />
-            <Setter Property="Background" Value="{DynamicResource CardBackground}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
-            <Setter Property="BorderThickness" Value="3" />
-            <Setter Property="BoxShadow" Value="{DynamicResource CardShadowSoft}" />
-            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding"
+                    Value="18,14" />
+            <Setter Property="Background"
+                    Value="{DynamicResource CardBackground}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource CardBorderInner}" />
+            <Setter Property="BorderThickness"
+                    Value="3" />
+            <Setter Property="BoxShadow"
+                    Value="{DynamicResource CardShadowSoft}" />
+            <Setter Property="CornerRadius"
+                    Value="10" />
         </Style>
         <Style Selector="Border.download-row.selected">
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource AccentColor}" />
         </Style>
     </UserControl.Styles>
 
     <!-- The modal: regular card background + card border over the transparent black backdrop -->
     <Border Classes="modal-screen">
-        <Grid Margin="48" RowDefinitions="Auto, Auto, *, Auto, Auto" RowSpacing="20">
+        <Grid Margin="48"
+              RowDefinitions="Auto, Auto, *, Auto, Auto"
+              RowSpacing="20">
 
             <!-- HEADER: title + game name -->
             <prim:IconStat Grid.Row="0"
@@ -49,11 +60,15 @@
             <Grid Grid.Row="2">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Hidden">
-                    <ItemsControl x:Name="ResultsList" ItemsSource="{Binding Results}" Margin="0,0,0,20">
+                    <ItemsControl x:Name="ResultsList"
+                                  ItemsSource="{Binding Results}"
+                                  Margin="0,0,0,20">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="items:PatchDownloadItemViewModel">
-                                <Border Classes="download-row" Classes.selected="{Binding IsSelected}">
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+                                <Border Classes="download-row"
+                                        Classes.selected="{Binding IsSelected}">
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          ColumnSpacing="20">
                                         <fluent:SymbolIcon Grid.Column="0"
                                                            Symbol="DocumentText"
                                                            FontSize="24"
@@ -80,7 +95,8 @@
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Spacing="8" />
+                                <StackPanel Orientation="Vertical"
+                                            Spacing="8" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
@@ -114,10 +130,14 @@
                        HorizontalAlignment="Center" />
 
             <!-- HINTS: B back · A download (top modal only) -->
-            <StackPanel Grid.Row="4" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
-                <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+            <StackPanel Grid.Row="4"
+                        Classes="hint-bar"
+                        IsVisible="{Binding IsHintBarVisible}">
+                <prim:InputHint Char="B"
+                                KeyColour="{DynamicResource HintKeyB}"
                                 Text="{DynamicResource GameModal.Hint.Back}" />
-                <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                <prim:InputHint Char="A"
+                                KeyColour="{DynamicResource HintKeyA}"
                                 Text="{DynamicResource GameModal.Hint.Download}" />
             </StackPanel>
         </Grid>

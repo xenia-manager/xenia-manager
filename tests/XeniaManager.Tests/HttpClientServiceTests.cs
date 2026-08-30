@@ -7,6 +7,7 @@ namespace XeniaManager.Tests;
 public class HttpClientServiceTests
 {
     private const string TestUrl = "https://httpbin.org/get";
+
     [Test]
     public void Constructor_WithDefaultTimeout_SetsTimeoutTo15Seconds()
     {

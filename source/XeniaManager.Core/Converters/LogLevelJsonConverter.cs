@@ -25,8 +25,5 @@ public class LogLevelJsonConverter : JsonConverter<LogLevel>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, LogLevel value, JsonSerializerOptions options)
-    {
-        writer.WriteNumberValue(value.Ordinal);
-    }
+    public override void Write(Utf8JsonWriter writer, LogLevel value, JsonSerializerOptions options) => writer.WriteNumberValue(value.Ordinal);
 }

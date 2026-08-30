@@ -15,13 +15,13 @@
                                           ShowIconBackground="{TemplateBinding ShowIconBackground}" />
                         <!-- NumberBox -->
                         <controls:FANumberBox Grid.Column="1"
-                                   Minimum="{TemplateBinding Minimum}"
-                                   Maximum="{TemplateBinding Maximum}"
-                                   Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                   SpinButtonPlacementMode="Inline"
-                                   HorizontalAlignment="Right"
-                                   MinWidth="180"
-                                   MaxWidth="{TemplateBinding NumberBoxMaxWidth}" />
+                                              Minimum="{TemplateBinding Minimum}"
+                                              Maximum="{TemplateBinding Maximum}"
+                                              Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                              SpinButtonPlacementMode="Inline"
+                                              HorizontalAlignment="Right"
+                                              MinWidth="180"
+                                              MaxWidth="{TemplateBinding NumberBoxMaxWidth}" />
                     </Grid>
                 </local:CustomCard>
             </ControlTemplate>

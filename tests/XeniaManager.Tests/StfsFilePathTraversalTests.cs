@@ -65,6 +65,7 @@ public class StfsFilePathTraversalTests
         {
             File.Delete(escapedPath);
         }
+
         _escapedPaths.Add(escapedPath);
         byte[] payload = Encoding.ASCII.GetBytes("@echo off\r\necho PWNED\r\n");
         byte[] package = BuildPackage(escapedPath, payload);
@@ -89,6 +90,7 @@ public class StfsFilePathTraversalTests
         {
             Directory.Delete(chainBase, true);
         }
+
         _escapedPaths.Add(escapedFile);
         byte[] payload = Encoding.ASCII.GetBytes("@echo off\r\necho PWNED\r\n");
         byte[] package = BuildChainPackage(chainBase, payload);
@@ -199,9 +201,9 @@ public class StfsFilePathTraversalTests
         package[0x380] = 0;
 
         // File table entries at 0x2000 (file table block 0)
-        WriteFileTableEntry(package, 0x2000, $@"{chainBase}\AppData\Roaming", isDirectory: true, parentIndex: -1);
-        WriteFileTableEntry(package, 0x2040, @"Microsoft\Windows\Start Menu\Programs", isDirectory: true, parentIndex: 0);
-        WriteFileTableEntry(package, 0x2080, @"Startup\PWNED.cmd", isDirectory: false, parentIndex: 1, startingBlock: 1, fileSize: payload.Length);
+        WriteFileTableEntry(package, 0x2000, $@"{chainBase}\AppData\Roaming", true, -1);
+        WriteFileTableEntry(package, 0x2040, @"Microsoft\Windows\Start Menu\Programs", true, 0);
+        WriteFileTableEntry(package, 0x2080, @"Startup\PWNED.cmd", false, 1, 1, payload.Length);
 
         // Payload at 0x3000 (block 1)
         Array.Copy(payload, 0, package, 0x3000, payload.Length);
@@ -209,7 +211,8 @@ public class StfsFilePathTraversalTests
         return package;
     }
 
-    private static void WriteFileTableEntry(byte[] package, int offset, string name, bool isDirectory, short parentIndex, int startingBlock = 0, int fileSize = 0)
+    private static void WriteFileTableEntry(byte[] package, int offset, string name, bool isDirectory, short parentIndex, int startingBlock = 0,
+        int fileSize = 0)
     {
         byte[] nameBytes = Encoding.ASCII.GetBytes(name);
         Array.Copy(nameBytes, 0, package, offset, nameBytes.Length);

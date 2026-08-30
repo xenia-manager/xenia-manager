@@ -3,9 +3,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Shell"
-        xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="360" d:DesignHeight="60"
+        mc:Ignorable="d"
+        d:DesignWidth="360"
+        d:DesignHeight="60"
         x:Class="XeniaManager.BigScreen.Controls.Profiles.ProfileButton"
         x:DataType="vm:MainWindowViewModel"
         Classes.selected="{Binding Header.IsSelected}">
@@ -31,13 +32,15 @@
                                FontSize="30"
                                Foreground="{DynamicResource TextPrimary}" />
         </Border>
-        <StackPanel Margin="0,-4,0,0" VerticalAlignment="Center">
+        <StackPanel Margin="0,-4,0,0"
+                    VerticalAlignment="Center">
             <TextBlock Text="{Binding Header.Gamertag}"
                        Classes="header-text"
                        FontSize="16"
                        FontWeight="Bold"
                        Foreground="{DynamicResource TextPrimary}" />
-            <StackPanel Orientation="Horizontal" Spacing="6">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="6">
                 <fluent:SymbolIcon Symbol="Star"
                                    FontSize="13"
                                    Foreground="{DynamicResource TextPrimary}"

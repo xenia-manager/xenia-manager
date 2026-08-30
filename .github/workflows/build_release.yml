@@ -30,6 +30,23 @@ jobs:
       - name: Check localization keys
         run: python scripts/check_localization.py
 
+  lint:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore "Xenia Manager.sln"
+
+      - name: Lint and verify formatting is clean
+        run: python scripts/lint.py --install --pin-version --check
+
   update_translation_progress:
     needs: check_localization
     if: |
@@ -39,15 +56,15 @@ jobs:
     uses: ./.github/workflows/update_translation_progress.yml
 
   build_experimental:
-    needs: [check_localization, update_translation_progress]
-    if: always() && (needs.check_localization.result == 'success') && (needs.update_translation_progress.result == 'success' || needs.update_translation_progress.result == 'skipped')
+    needs: [check_localization, lint, update_translation_progress]
+    if: always() && (needs.check_localization.result == 'success') && (needs.lint.result == 'success') && (needs.update_translation_progress.result == 'success' || needs.update_translation_progress.result == 'skipped')
     uses: ./.github/workflows/build_job.yml
     with:
       release_type: experimental
 
   build_stable:
-    needs: [check_localization, update_translation_progress]
-    if: always() && github.event_name == 'workflow_dispatch' && inputs.create_stable_release && (needs.check_localization.result == 'success') && (needs.update_translation_progress.result == 'success' || needs.update_translation_progress.result == 'skipped')
+    needs: [check_localization, lint, update_translation_progress]
+    if: always() && github.event_name == 'workflow_dispatch' && inputs.create_stable_release && (needs.check_localization.result == 'success') && (needs.lint.result == 'success') && (needs.update_translation_progress.result == 'success' || needs.update_translation_progress.result == 'skipped')
     uses: ./.github/workflows/build_job.yml
     with:
       release_type: stable

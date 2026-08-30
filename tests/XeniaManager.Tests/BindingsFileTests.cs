@@ -1032,7 +1032,7 @@ key =
 
         // Assert
         Assert.That(entries, Has.Count.GreaterThan(0));
-        foreach (var entry in entries)
+        foreach (BindingsEntry entry in entries)
         {
             Assert.That(entry.Value, Is.EqualTo("B"));
         }

@@ -39,10 +39,16 @@ public class NetplayCompatibilityDatabase
     /// </summary>
     public static List<NetplayCompatibilityEntry> FilteredDatabase
     {
-        get => _databaseState.FilteredDatabase;
-        private set => _databaseState.FilteredDatabase = value;
+        get
+        {
+            return _databaseState.FilteredDatabase;
+        }
+        private set
+        {
+            _databaseState.FilteredDatabase = value;
+        }
     }
-    
+
     /// <summary>
     /// Loads the complete netplay compatibility database into memory.
     /// The database is only loaded once; following calls will be skipped if already loaded.
@@ -66,7 +72,7 @@ public class NetplayCompatibilityDatabase
         {
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: "netplay_compatibility_database", cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                response = await _client.GetAsync(url, cancellationToken, "netplay_compatibility_database", ApiCacheDuration, cacheDirectory);
                 Logger.Info<NetplayCompatibilityDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -115,9 +121,10 @@ public class NetplayCompatibilityDatabase
             .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        Logger.Info<NetplayCompatibilityDatabase>($"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
+        Logger.Info<NetplayCompatibilityDatabase>(
+            $"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
     }
-    
+
     /// <summary>
     /// Adds a game to the internal index using the specified title ID.
     /// </summary>
@@ -136,7 +143,7 @@ public class NetplayCompatibilityDatabase
             _databaseState.TitleIds.Add(normalized);
         }
     }
-    
+
     /// <summary>
     /// Filters the database based on the provided search query.
     /// </summary>
@@ -166,7 +173,7 @@ public class NetplayCompatibilityDatabase
             Logger.Debug<NetplayCompatibilityDatabase>($"Search completed, found {_databaseState.FilteredDatabase.Count} matching titles");
         });
     }
-    
+
     /// <summary>
     /// Retrieves NetplayCompatibilityEntry for a game with the specified title.
     /// </summary>
@@ -182,7 +189,7 @@ public class NetplayCompatibilityDatabase
             : $"Game with title '{gameTitle}' not found in database");
         return result;
     }
-    
+
     /// <summary>
     /// Retrieves NetplayCompatibilityEntry for a game with the specified title ID.
     /// </summary>
@@ -206,7 +213,7 @@ public class NetplayCompatibilityDatabase
         Logger.Debug<NetplayCompatibilityDatabase>($"Game with title ID '{titleId}' not found in database");
         return null;
     }
-    
+
     /// <summary>
     /// Resolves netplay compatibility entry for given ids/title. Returns null if not found.
     /// First searches using the primary game ID, then falls back to alternative IDs if needed.
@@ -217,7 +224,8 @@ public class NetplayCompatibilityDatabase
     /// <param name="cancellationToken">Token to cancel the operation if needed</param>
     /// <param name="cacheDirectory">Optional cache directory override</param>
     /// <returns>The matching NetplayCompatibilityEntry if found, null otherwise</returns>
-    public static async Task<NetplayCompatibilityEntry?> ResolveAsync(string? gameId, IReadOnlyList<string>? alternativeIds, string? title, CancellationToken cancellationToken = default, string? cacheDirectory = null)
+    public static async Task<NetplayCompatibilityEntry?> ResolveAsync(string? gameId, IReadOnlyList<string>? alternativeIds, string? title,
+        CancellationToken cancellationToken = default, string? cacheDirectory = null)
     {
         Logger.Debug<NetplayCompatibilityDatabase>($"Resolving netplay for '{title}' (ID: {gameId})");
         await LoadAsync(cancellationToken, cacheDirectory);
@@ -240,7 +248,11 @@ public class NetplayCompatibilityDatabase
             foreach (string altId in alternativeIds)
             {
                 NetplayCompatibilityEntry? match = GetGameCompatibilityById(altId);
-                if (match == null) continue;
+                if (match == null)
+                {
+                    continue;
+                }
+
                 matches.Add(match);
                 Logger.Debug<NetplayCompatibilityDatabase>($"Found netplay entry by alternative ID '{altId}'");
             }
@@ -262,12 +274,13 @@ public class NetplayCompatibilityDatabase
                     Logger.Debug<NetplayCompatibilityDatabase>($"Found title match for '{title}'");
                     return resultEntry;
                 }
+
                 resultEntry = matches[0];
                 Logger.Debug<NetplayCompatibilityDatabase>($"No title match found, using first entry for '{title}'");
                 return resultEntry;
         }
     }
-    
+
     /// <summary>
     /// Resets all static states. Intended for test isolation only.
     /// </summary>
@@ -279,7 +292,7 @@ public class NetplayCompatibilityDatabase
         _databaseState.IsLoaded = false;
         Logger.Info<NetplayCompatibilityDatabase>("NetplayCompatibilityDatabase reset complete");
     }
-    
+
     /// <summary>
     /// Forces a reload of the netplay compatibility database by clearing the cache and fetching fresh data.
     /// </summary>
@@ -289,13 +302,20 @@ public class NetplayCompatibilityDatabase
         if (!string.IsNullOrEmpty(cacheDirectory))
         {
             string cacheFile = Path.Combine(cacheDirectory, "netplay_compatibility_database.json");
-            if (File.Exists(cacheFile)) File.Delete(cacheFile);
+            if (File.Exists(cacheFile))
+            {
+                File.Delete(cacheFile);
+            }
         }
         else
         {
             string defaultCache = Path.Combine(AppContext.BaseDirectory, "Cache", "Database", "netplay_compatibility_database.json");
-            if (File.Exists(defaultCache)) File.Delete(defaultCache);
+            if (File.Exists(defaultCache))
+            {
+                File.Delete(defaultCache);
+            }
         }
+
         Reset();
         await LoadAsync(cancellationToken, cacheDirectory);
     }

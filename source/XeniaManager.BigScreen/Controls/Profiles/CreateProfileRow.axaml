@@ -4,7 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="96"
+        mc:Ignorable="d"
+        d:DesignWidth="1100"
+        d:DesignHeight="96"
         x:Class="XeniaManager.BigScreen.Controls.Profiles.CreateProfileRow"
         x:DataType="vm:CreateProfileStubViewModel"
         Classes.selected="{Binding IsSelected}">
@@ -23,7 +25,8 @@
             </Border>
         </ControlTemplate>
     </Button.Template>
-    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="24">
+    <Grid ColumnDefinitions="Auto,*"
+          ColumnSpacing="24">
         <Border Width="64"
                 Height="64"
                 VerticalAlignment="Center"

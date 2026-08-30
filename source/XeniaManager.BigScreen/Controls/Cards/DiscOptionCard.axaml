@@ -3,7 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-        mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="150"
+        mc:Ignorable="d"
+        d:DesignWidth="180"
+        d:DesignHeight="150"
         x:Class="XeniaManager.BigScreen.Controls.Cards.DiscOptionCard"
         x:DataType="vm:DiscOptionItemViewModel"
         Classes.selected="{Binding IsSelected}"
@@ -34,8 +36,12 @@
               HorizontalAlignment="Center">
             <Path.Data>
                 <GeometryGroup FillRule="EvenOdd">
-                    <EllipseGeometry Center="18,18" RadiusX="16" RadiusY="16" />
-                    <EllipseGeometry Center="18,18" RadiusX="7" RadiusY="7" />
+                    <EllipseGeometry Center="18,18"
+                                     RadiusX="16"
+                                     RadiusY="16" />
+                    <EllipseGeometry Center="18,18"
+                                     RadiusX="7"
+                                     RadiusY="7" />
                 </GeometryGroup>
             </Path.Data>
         </Path>

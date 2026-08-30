@@ -57,37 +57,67 @@ public class GamepadInputService : IGamepadInputService
     /// <summary>
     /// Whether any gamepad is currently open.
     /// </summary>
-    public bool IsConnected => _devices.IsConnected;
+    public bool IsConnected
+    {
+        get
+        {
+            return _devices.IsConnected;
+        }
+    }
 
     /// <summary>
     /// Battery percentage (0-100) of the primary pad, or -1 when unknown/no battery.
     /// </summary>
-    public int BatteryPercent => _devices.PrimaryBattery;
+    public int BatteryPercent
+    {
+        get
+        {
+            return _devices.PrimaryBattery;
+        }
+    }
 
     /// <summary>
     /// Whether the primary pad battery is currently charging.
     /// </summary>
-    public bool IsCharging => _devices.PrimaryCharging;
+    public bool IsCharging
+    {
+        get
+        {
+            return _devices.PrimaryCharging;
+        }
+    }
 
     /// <summary>
     /// All currently connected gamepads with live status.
     /// </summary>
-    public IReadOnlyList<GamepadInfo> ConnectedGamepads => _devices.Snapshot();
+    public IReadOnlyList<GamepadInfo> ConnectedGamepads
+    {
+        get
+        {
+            return _devices.Snapshot();
+        }
+    }
 
     /// <summary>
     /// The gamepad that drives navigation input, or null when none is connected.
     /// </summary>
-    public GamepadInfo? PrimaryGamepad => _devices.Primary;
+    public GamepadInfo? PrimaryGamepad
+    {
+        get
+        {
+            return _devices.Primary;
+        }
+    }
 
     /// <summary>
     /// Left stick X-axis tracker (left/right).
     /// </summary>
-    private readonly StickTracker _stickX = new();
+    private readonly StickTracker _stickX = new StickTracker();
 
     /// <summary>
     /// Left stick Y-axis tracker (up/down).
     /// </summary>
-    private readonly StickTracker _stickY = new();
+    private readonly StickTracker _stickY = new StickTracker();
 
     /// <summary>
     /// Repeat scheduling for currently held navigation directions (D-pad + left
@@ -98,7 +128,7 @@ public class GamepadInputService : IGamepadInputService
     /// <summary>
     /// All open gamepads + the primary selection.
     /// </summary>
-    private readonly GamepadDeviceCollection _devices = new();
+    private readonly GamepadDeviceCollection _devices = new GamepadDeviceCollection();
 
     private readonly DispatcherTimer? _pollTimer;
     private readonly DispatcherTimer? _batteryTimer;
@@ -142,13 +172,19 @@ public class GamepadInputService : IGamepadInputService
                 Logger.Warning<GamepadInputService>("SDL_GetGamepads returned null");
             }
 
-            _pollTimer = new DispatcherTimer { Interval = PollInterval };
+            _pollTimer = new DispatcherTimer
+            {
+                Interval = PollInterval
+            };
             _pollTimer.Tick += (_, _) => PollEvents();
             _pollTimer.Start();
             IsActive = true;
             Logger.Info<GamepadInputService>($"Poll timer started ({_pollTimer.Interval.TotalMilliseconds}ms)");
 
-            _batteryTimer = new DispatcherTimer { Interval = BatteryPollInterval };
+            _batteryTimer = new DispatcherTimer
+            {
+                Interval = BatteryPollInterval
+            };
             _batteryTimer.Tick += (_, _) => _devices.PollBattery();
             _batteryTimer.Start();
             _devices.PollBattery();
@@ -266,7 +302,7 @@ public class GamepadInputService : IGamepadInputService
         {
             SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX => _stickX.Track(e.value, GamepadButton.DpadLeft, GamepadButton.DpadRight),
             SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY => _stickY.Track(e.value, GamepadButton.DpadUp, GamepadButton.DpadDown),
-            _ => null,
+            _ => null
         };
 
         if (pressed == null)
@@ -296,7 +332,7 @@ public class GamepadInputService : IGamepadInputService
         {
             SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX => _stickX.HeldButton,
             SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY => _stickY.HeldButton,
-            _ => null,
+            _ => null
         };
         if (held != null)
         {
@@ -307,7 +343,7 @@ public class GamepadInputService : IGamepadInputService
         {
             SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTX => [GamepadButton.DpadLeft, GamepadButton.DpadRight],
             SDL_GamepadAxis.SDL_GAMEPAD_AXIS_LEFTY => [GamepadButton.DpadUp, GamepadButton.DpadDown],
-            _ => [],
+            _ => []
         };
         foreach (GamepadButton button in buttons)
         {

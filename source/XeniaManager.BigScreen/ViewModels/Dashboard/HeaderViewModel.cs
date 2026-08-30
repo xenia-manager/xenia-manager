@@ -110,14 +110,26 @@ public partial class HeaderViewModel : ViewModelBase
     /// <summary>
     /// Fluent icon for the current network state (wifi / wired / off).
     /// </summary>
-    public Symbol NetworkIcon => IconFactory.GetNetworkIcon(NetworkStatus);
+    public Symbol NetworkIcon
+    {
+        get
+        {
+            return IconFactory.GetNetworkIcon(NetworkStatus);
+        }
+    }
 
     /// <summary>
     /// Fluent icon for the current controller battery state.
     /// BatteryWarning when no controller is connected or the level is unknown;
     /// a tiered battery icon otherwise (charging-aware).
     /// </summary>
-    public Symbol BatteryIcon => IconFactory.GetBatteryIcon(BatteryLevel, IsCharging);
+    public Symbol BatteryIcon
+    {
+        get
+        {
+            return IconFactory.GetBatteryIcon(BatteryLevel, IsCharging);
+        }
+    }
 
     /// <summary>
     /// Re-checks the network connection state from the network interfaces:

@@ -13,7 +13,13 @@ public class ConfigDocument
     /// <summary>
     /// Gets a read-only list of configuration sections.
     /// </summary>
-    public IReadOnlyList<ConfigSection> SectionsReadOnly => Sections.AsReadOnly();
+    public IReadOnlyList<ConfigSection> SectionsReadOnly
+    {
+        get
+        {
+            return Sections.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Gets or sets the header comment for the config file.
@@ -45,10 +51,7 @@ public class ConfigDocument
     /// </summary>
     /// <param name="name">The name of the section to find.</param>
     /// <returns>The ConfigSection if found, null otherwise.</returns>
-    public ConfigSection? GetSection(string name)
-    {
-        return Sections.FirstOrDefault(s => s.Name == name);
-    }
+    public ConfigSection? GetSection(string name) => Sections.FirstOrDefault(s => s.Name == name);
 
     /// <summary>
     /// Gets or creates a section by name.
@@ -74,6 +77,7 @@ public class ConfigDocument
             Sections.Remove(section);
             return true;
         }
+
         return false;
     }
 

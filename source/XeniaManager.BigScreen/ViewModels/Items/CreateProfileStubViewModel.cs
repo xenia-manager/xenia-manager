@@ -14,7 +14,13 @@ public partial class CreateProfileStubViewModel : ObservableObject, ISelectable
     /// <summary>
     /// The stub's label.
     /// </summary>
-    public static string Title => LocalizationHelper.GetText("ManageProfiles.CreateNewProfile");
+    public static string Title
+    {
+        get
+        {
+            return LocalizationHelper.GetText("ManageProfiles.CreateNewProfile");
+        }
+    }
 
     /// <summary>
     /// Whether the stub currently has selection.

@@ -15,7 +15,7 @@ public class AccountFileTests
         // Get the path to the test account file in the Assets directory
         string assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         _testAccountFilePath = Path.Combine(assemblyLocation, "Assets", "Account");
-        
+
         // Verify the test file exists
         Assert.That(File.Exists(_testAccountFilePath), Is.True, $"Test account file does not exist at {_testAccountFilePath}");
     }
@@ -87,13 +87,13 @@ public class AccountFileTests
         try
         {
             byte[] accountFileData = File.ReadAllBytes(_testAccountFilePath);
-            
+
             // Modify a byte in the HMAC portion to make it invalid
             // The HMAC is the first 16 bytes, so we'll modify one of them
             byte[] corruptedData = new byte[accountFileData.Length];
             Array.Copy(accountFileData, corruptedData, accountFileData.Length);
             corruptedData[5] ^= 0xFF; // Flip some bits to corrupt the HMAC
-            
+
             File.WriteAllBytes(tempFilePath, corruptedData);
 
             // Act & Assert
@@ -215,7 +215,8 @@ public class AccountFileTests
 
         // Load the saved file and verify the passcode was preserved
         AccountInfo loadedAccount = AccountFile.Load(outputPath);
-        Assert.That(loadedAccount.Passcode, Is.EqualTo([PasscodeButton.DPadUp, PasscodeButton.DPadDown, PasscodeButton.DPadLeft, PasscodeButton.DPadRight]), "Passcode should be preserved");
+        Assert.That(loadedAccount.Passcode, Is.EqualTo([PasscodeButton.DPadUp, PasscodeButton.DPadDown, PasscodeButton.DPadLeft, PasscodeButton.DPadRight]),
+            "Passcode should be preserved");
 
         // Cleanup
         if (File.Exists(outputPath))
@@ -330,7 +331,7 @@ public class AccountFileTests
         originalAccount.Gamertag = "Devkit Test Ac";
 
         // Act
-        AccountFile.Save(originalAccount, outputPath, devkit: true); // Using devkit mode
+        AccountFile.Save(originalAccount, outputPath, true); // Using devkit mode
 
         // Assert
         Assert.That(File.Exists(outputPath), Is.True, "Devkit account file should exist");
@@ -357,7 +358,7 @@ public class AccountFileTests
         originalAccount.Gamertag = "Retail Test Ac";
 
         // Act
-        AccountFile.Save(originalAccount, outputPath, devkit: false); // Using retail mode explicitly
+        AccountFile.Save(originalAccount, outputPath, false); // Using retail mode explicitly
 
         // Assert
         Assert.That(File.Exists(outputPath), Is.True, "Retail account file should exist");
@@ -382,8 +383,8 @@ public class AccountFileTests
         string retailOutputPath = Path.Combine(Path.GetDirectoryName(_testAccountFilePath)!, "test_retail_diff");
 
         // Act
-        AccountFile.Save(originalAccount, devkitOutputPath, devkit: true);  // Save with devkit mode
-        AccountFile.Save(originalAccount, retailOutputPath, devkit: false); // Save with retail mode
+        AccountFile.Save(originalAccount, devkitOutputPath, true); // Save with devkit mode
+        AccountFile.Save(originalAccount, retailOutputPath, false); // Save with retail mode
 
         // Assert
         Assert.That(File.Exists(devkitOutputPath), Is.True, "Devkit account file should exist");
@@ -407,6 +408,7 @@ public class AccountFileTests
         {
             File.Delete(devkitOutputPath);
         }
+
         if (File.Exists(retailOutputPath))
         {
             File.Delete(retailOutputPath);

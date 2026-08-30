@@ -45,9 +45,15 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// "X commands" summary shown on the list row.
     /// </summary>
-    public string CommandCountText => _originalEntry.Commands.Count == 1
-        ? "1 command"
-        : $"{_originalEntry.Commands.Count} commands";
+    public string CommandCountText
+    {
+        get
+        {
+            return _originalEntry.Commands.Count == 1
+                ? "1 command"
+                : $"{_originalEntry.Commands.Count} commands";
+        }
+    }
 
     public PatchEntryItemViewModel(PatchEntry entry)
     {

@@ -44,8 +44,8 @@ public class InstallationHelper
         }
 
         // Attempt to open the registry key for writing or create it if it doesn't exist
-        using RegistryKey key = Registry.CurrentUser.OpenSubKey(REGISTRY_PATH, writable: true)
-                                ?? Registry.CurrentUser.CreateSubKey(REGISTRY_PATH, writable: true);
+        using RegistryKey key = Registry.CurrentUser.OpenSubKey(REGISTRY_PATH, true)
+                                ?? Registry.CurrentUser.CreateSubKey(REGISTRY_PATH, true);
 
         if (key.GetValue(REGISTRY_VALUE_NAME) == null)
         {
@@ -164,7 +164,8 @@ public class InstallationHelper
     /// </remarks>
     public static void SeparateContentFolder(List<XeniaVersion> installedXeniaVersions)
     {
-        Logger.Info<InstallationHelper>($"Starting content folder separation for {installedXeniaVersions.Count} Xenia version(s): {string.Join(", ", installedXeniaVersions)}");
+        Logger.Info<InstallationHelper>(
+            $"Starting content folder separation for {installedXeniaVersions.Count} Xenia version(s): {string.Join(", ", installedXeniaVersions)}");
 
         foreach (XeniaVersion xeniaVersion in installedXeniaVersions)
         {

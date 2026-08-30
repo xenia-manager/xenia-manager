@@ -15,15 +15,18 @@ public class GameLibraryService : IGameLibraryService
     /// <summary>
     /// All games in the library (from Core's <see cref="GameManager"/>).
     /// </summary>
-    public IReadOnlyList<Game> Games => GameManager.Games;
+    public IReadOnlyList<Game> Games
+    {
+        get
+        {
+            return GameManager.Games;
+        }
+    }
 
     /// <summary>
     /// Reloads the game library from disk.
     /// </summary>
-    public void Load()
-    {
-        GameManager.LoadLibrary();
-    }
+    public void Load() => GameManager.LoadLibrary();
 
     /// <summary>
     /// The <paramref name="count"/> most recently played games; never-played games

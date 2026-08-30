@@ -25,15 +25,27 @@ public class BindingsFile
     /// <summary>
     /// Gets the list of bindings sections.
     /// </summary>
-    public IReadOnlyList<BindingsSection> Sections => Document.SectionsReadOnly;
+    public IReadOnlyList<BindingsSection> Sections
+    {
+        get
+        {
+            return Document.SectionsReadOnly;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the header comment for the bindings file.
     /// </summary>
     public string? HeaderComment
     {
-        get => Document.HeaderComment;
-        set => Document.HeaderComment = value;
+        get
+        {
+            return Document.HeaderComment;
+        }
+        set
+        {
+            Document.HeaderComment = value;
+        }
     }
 
     /// <summary>
@@ -55,7 +67,10 @@ public class BindingsFile
 
         BindingsFile bindingsFile = new BindingsFile
         {
-            Document = new BindingsDocument { HeaderComment = headerComment }
+            Document = new BindingsDocument
+            {
+                HeaderComment = headerComment
+            }
         };
 
         Logger.Trace<BindingsFile>("BindingsFile created successfully");
@@ -146,6 +161,7 @@ public class BindingsFile
                     {
                         currentSection = bindingsFile.Document.AddSection("Default");
                     }
+
                     ParseEntryLine(trimmedLine, currentSection, ref currentEntry, false);
                 }
                 else
@@ -159,6 +175,7 @@ public class BindingsFile
                         {
                             currentSection = bindingsFile.Document.AddSection("Default");
                         }
+
                         ParseEntryLine(lineWithoutLeadingComment, currentSection, ref currentEntry, true);
                     }
                     else
@@ -175,6 +192,7 @@ public class BindingsFile
                         }
                     }
                 }
+
                 continue;
             }
 
@@ -194,6 +212,7 @@ public class BindingsFile
                     pendingCommentLines = null;
                     Logger.Debug<BindingsFile>($"Parsing section: {currentSection.Name}");
                 }
+
                 continue;
             }
 
@@ -235,9 +254,11 @@ public class BindingsFile
                         {
                             pendingCommentLines = [];
                         }
+
                         pendingCommentLines.Add(commentText);
                     }
                 }
+
                 continue;
             }
 
@@ -452,6 +473,7 @@ public class BindingsFile
             {
                 sb.AppendLine($"; {line}");
             }
+
             sb.AppendLine();
         }
 
@@ -500,34 +522,22 @@ public class BindingsFile
     /// <summary>
     /// Gets a section by name.
     /// </summary>
-    public BindingsSection? GetSection(string name)
-    {
-        return Document.GetSection(name);
-    }
+    public BindingsSection? GetSection(string name) => Document.GetSection(name);
 
     /// <summary>
     /// Gets or creates a section by name.
     /// </summary>
-    public BindingsSection GetOrCreateSection(string name)
-    {
-        return Document.GetOrCreateSection(name);
-    }
+    public BindingsSection GetOrCreateSection(string name) => Document.GetOrCreateSection(name);
 
     /// <summary>
     /// Adds a new section to the bindings file.
     /// </summary>
-    public BindingsSection AddSection(string name, string? type = null)
-    {
-        return Document.AddSection(name, type);
-    }
+    public BindingsSection AddSection(string name, string? type = null) => Document.AddSection(name, type);
 
     /// <summary>
     /// Removes a section by name.
     /// </summary>
-    public bool RemoveSection(string name)
-    {
-        return Document.RemoveSection(name);
-    }
+    public bool RemoveSection(string name) => Document.RemoveSection(name);
 
     /// <summary>
     /// Gets a section by title ID.
@@ -537,10 +547,8 @@ public class BindingsFile
     /// <param name="type">Optional type filter (e.g., "Default", "Vehicle").</param>
     /// <param name="titleName">Optional game title name for creating a new section.</param>
     /// <returns>The matching section, or a new section created from Default if no match is found.</returns>
-    public BindingsSection? GetSectionByTitleId(uint titleId, string? type = null, string? titleName = null)
-    {
-        return Document.GetSectionByTitleId(titleId, type, titleName);
-    }
+    public BindingsSection? GetSectionByTitleId(uint titleId, string? type = null, string? titleName = null) =>
+        Document.GetSectionByTitleId(titleId, type, titleName);
 
     /// <summary>
     /// Gets all sections that contain the specified title ID.
@@ -549,32 +557,20 @@ public class BindingsFile
     /// <param name="titleId">The title ID to search for.</param>
     /// <param name="titleName">Optional game title name for creating a new section.</param>
     /// <returns>A list of matching sections, or a new list containing a section created from Default.</returns>
-    public List<BindingsSection> GetSectionsByTitleId(uint titleId, string? titleName = null)
-    {
-        return Document.GetSectionsByTitleId(titleId, titleName);
-    }
+    public List<BindingsSection> GetSectionsByTitleId(uint titleId, string? titleName = null) => Document.GetSectionsByTitleId(titleId, titleName);
 
     /// <summary>
     /// Gets a section entry by value.
     /// </summary>
-    public BindingsEntry? GetEntryByValue(string sectionName, string value)
-    {
-        return Document.GetEntryByValue(sectionName, value);
-    }
+    public BindingsEntry? GetEntryByValue(string sectionName, string value) => Document.GetEntryByValue(sectionName, value);
 
     /// <summary>
     /// Gets a value from the bindings file.
     /// </summary>
-    public T GetValue<T>(string sectionName, string entryName, T defaultValue = default!)
-    {
-        return Document.GetValue<T>(sectionName, entryName, defaultValue);
-    }
+    public T GetValue<T>(string sectionName, string entryName, T defaultValue = default!) => Document.GetValue<T>(sectionName, entryName, defaultValue);
 
     /// <summary>
     /// Sets a value in the bindings file.
     /// </summary>
-    public void SetValue(string sectionName, string entryName, object? value)
-    {
-        Document.SetValue(sectionName, entryName, value);
-    }
+    public void SetValue(string sectionName, string entryName, object? value) => Document.SetValue(sectionName, entryName, value);
 }

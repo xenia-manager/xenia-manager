@@ -38,14 +38,12 @@ public static class LayoutConstants
     /// <summary>
     /// Dashboard content margin: inset X on the sides, inset Y at the bottom.
     /// </summary>
-    public static readonly Thickness DashboardContentMargin =
-        new(DashboardInsetX, 0, DashboardInsetX, DashboardInsetY);
+    public static readonly Thickness DashboardContentMargin = new Thickness(DashboardInsetX, 0, DashboardInsetX, DashboardInsetY);
 
     /// <summary>
     /// Main window content margin: inset X on the sides, inset Y at the top.
     /// </summary>
-    public static readonly Thickness MainWindowContentMargin =
-        new(DashboardInsetX, DashboardInsetY, DashboardInsetX, 0);
+    public static readonly Thickness MainWindowContentMargin = new Thickness(DashboardInsetX, DashboardInsetY, DashboardInsetX, 0);
 
     /// <summary>
     /// Vignette opacity step per adjustment press.

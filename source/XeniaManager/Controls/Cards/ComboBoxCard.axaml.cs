@@ -19,7 +19,7 @@ public class ComboBoxCard : ContentControl
 
     public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
         nameof(ShowIconBackground),
-        defaultValue: false);
+        false);
 
     public static readonly StyledProperty<IEnumerable?> ItemsSourceProperty = AvaloniaProperty.Register<ComboBoxCard, IEnumerable?>(nameof(ItemsSource));
 
@@ -29,7 +29,7 @@ public class ComboBoxCard : ContentControl
 
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<ComboBoxCard, int>(
         nameof(SelectedIndex),
-        defaultValue: -1,
+        -1,
         defaultBindingMode: BindingMode.TwoWay);
 
     public static readonly StyledProperty<DataTemplate?> ItemTemplateProperty = AvaloniaProperty.Register<ComboBoxCard, DataTemplate?>(nameof(ItemTemplate));
@@ -40,61 +40,121 @@ public class ComboBoxCard : ContentControl
 
     public string? Title
     {
-        get => GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+        get
+        {
+            return GetValue(TitleProperty);
+        }
+        set
+        {
+            SetValue(TitleProperty, value);
+        }
     }
 
     public string? Description
     {
-        get => GetValue(DescriptionProperty);
-        set => SetValue(DescriptionProperty, value);
+        get
+        {
+            return GetValue(DescriptionProperty);
+        }
+        set
+        {
+            SetValue(DescriptionProperty, value);
+        }
     }
 
     public string? Tooltip
     {
-        get => GetValue(TooltipProperty);
-        set => SetValue(TooltipProperty, value);
+        get
+        {
+            return GetValue(TooltipProperty);
+        }
+        set
+        {
+            SetValue(TooltipProperty, value);
+        }
     }
 
     public Symbol? Icon
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get
+        {
+            return GetValue(IconProperty);
+        }
+        set
+        {
+            SetValue(IconProperty, value);
+        }
     }
 
     public bool ShowIconBackground
     {
-        get => GetValue(ShowIconBackgroundProperty);
-        set => SetValue(ShowIconBackgroundProperty, value);
+        get
+        {
+            return GetValue(ShowIconBackgroundProperty);
+        }
+        set
+        {
+            SetValue(ShowIconBackgroundProperty, value);
+        }
     }
 
     public IEnumerable? ItemsSource
     {
-        get => GetValue(ItemsSourceProperty);
-        set => SetValue(ItemsSourceProperty, value);
+        get
+        {
+            return GetValue(ItemsSourceProperty);
+        }
+        set
+        {
+            SetValue(ItemsSourceProperty, value);
+        }
     }
 
     public object? SelectedItem
     {
-        get => GetValue(SelectedItemProperty);
-        set => SetValue(SelectedItemProperty, value);
+        get
+        {
+            return GetValue(SelectedItemProperty);
+        }
+        set
+        {
+            SetValue(SelectedItemProperty, value);
+        }
     }
 
     public int SelectedIndex
     {
-        get => GetValue(SelectedIndexProperty);
-        set => SetValue(SelectedIndexProperty, value);
+        get
+        {
+            return GetValue(SelectedIndexProperty);
+        }
+        set
+        {
+            SetValue(SelectedIndexProperty, value);
+        }
     }
 
     public DataTemplate? ItemTemplate
     {
-        get => GetValue(ItemTemplateProperty);
-        set => SetValue(ItemTemplateProperty, value);
+        get
+        {
+            return GetValue(ItemTemplateProperty);
+        }
+        set
+        {
+            SetValue(ItemTemplateProperty, value);
+        }
     }
 
     public double ComboBoxMinWidth
     {
-        get => GetValue(ComboBoxMinWidthProperty);
-        set => SetValue(ComboBoxMinWidthProperty, value);
+        get
+        {
+            return GetValue(ComboBoxMinWidthProperty);
+        }
+        set
+        {
+            SetValue(ComboBoxMinWidthProperty, value);
+        }
     }
 }

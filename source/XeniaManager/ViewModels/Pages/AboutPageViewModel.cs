@@ -31,6 +31,7 @@ public partial class AboutPageViewModel : ViewModelBase
     [ObservableProperty] private double _downloadProgress;
     [ObservableProperty] private string _downloadProgressStatus = string.Empty;
     [ObservableProperty] private bool _useExperimentalBuilds;
+
     partial void OnUseExperimentalBuildsChanged(bool value)
     {
         Logger.Info<AboutPageViewModel>($"Experimental build setting changed to: {value}");
@@ -52,6 +53,7 @@ public partial class AboutPageViewModel : ViewModelBase
     }
 
     [ObservableProperty] private bool _updatesAvailable;
+
     partial void OnUpdatesAvailableChanged(bool value)
     {
         Logger.Info<AboutPageViewModel>($"Update availability changed to: {value}");
@@ -134,7 +136,8 @@ public partial class AboutPageViewModel : ViewModelBase
             else
             {
                 Logger.Debug<AboutPageViewModel>("Xenia Manager is up to date");
-                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message"), FAInfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message"),
+                    FAInfoBarSeverity.Informational);
             }
         }
         catch (Exception ex)
@@ -145,6 +148,7 @@ public partial class AboutPageViewModel : ViewModelBase
                 LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailed.Title"),
                 string.Format(LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailed.Message"), ex.Message));
         }
+
         await Task.CompletedTask;
     }
 
@@ -207,6 +211,7 @@ public partial class AboutPageViewModel : ViewModelBase
                 {
                     Directory.Delete(extractPath, true);
                 }
+
                 Directory.CreateDirectory(extractPath);
 
                 await ArchiveExtractor.ExtractArchiveAsync(archivePath, extractPath);

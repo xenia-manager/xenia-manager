@@ -22,31 +22,58 @@ public struct AccountXuid : IEquatable<AccountXuid>
     /// Initializes a new instance of the AccountXuid struct with the specified value.
     /// </summary>
     /// <param name="value">The 64-bit value to assign to the XUID.</param>
-    public AccountXuid(ulong value) => Value = value;
+    public AccountXuid(ulong value)
+    {
+        Value = value;
+    }
 
     /// <summary>
     /// Determines if this XUID represents an offline account.
     /// Offline XUIDs have the top 12 bits set to 0xE000.
     /// The default value is also treated as an offline XUID.
     /// </summary>
-    public bool IsOffline => (Value & 0xF000000000000000UL) == 0xE000000000000000UL || Value == DefaultValue;
+    public bool IsOffline
+    {
+        get
+        {
+            return (Value & 0xF000000000000000UL) == 0xE000000000000000UL || Value == DefaultValue;
+        }
+    }
 
     /// <summary>
     /// Determines if this XUID represents an online account.
     /// Online XUIDs have the top 16 bits set to 0x0009.
     /// </summary>
-    public bool IsOnline => (Value & 0xFFFF000000000000UL) == 0x0009000000000000UL;
+    public bool IsOnline
+    {
+        get
+        {
+            return (Value & 0xFFFF000000000000UL) == 0x0009000000000000UL;
+        }
+    }
 
     /// <summary>
     /// Determines if this XUID represents a team (developer) account.
     /// Team XUIDs have the top 8 bits set to 0xFE.
     /// </summary>
-    public bool IsTeam => (Value & 0xFF00000000000000UL) == 0xFE00000000000000UL;
+    public bool IsTeam
+    {
+        get
+        {
+            return (Value & 0xFF00000000000000UL) == 0xFE00000000000000UL;
+        }
+    }
 
     /// <summary>
     /// Determines if this XUID is valid (either offline or online, but not both).
     /// </summary>
-    public bool IsValid => IsOffline != IsOnline;
+    public bool IsValid
+    {
+        get
+        {
+            return IsOffline != IsOnline;
+        }
+    }
 
     /// <summary>
     /// Creates a default XUID with the value 0xB13EBABEBABEBABE.

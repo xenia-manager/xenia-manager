@@ -22,8 +22,10 @@ public class CollectionIsEmptyConverter : IValueConverter
             {
                 return false; // Has at least one item
             }
+
             return true; // Empty
         }
+
         return true; // Null or not IEnumerable
     }
 

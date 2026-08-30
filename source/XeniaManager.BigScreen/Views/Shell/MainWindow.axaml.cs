@@ -42,13 +42,25 @@ public partial class MainWindow : FAAppWindow
     /// boot pipeline completed, so a stray key or button can't activate
     /// anything during the splash or while a game is running.
     /// </summary>
-    private bool CanHandleInput => IsEnabled && DataContext is MainWindowViewModel { IsInitialized: true };
+    private bool CanHandleInput
+    {
+        get
+        {
+            return IsEnabled && DataContext is MainWindowViewModel { IsInitialized: true };
+        }
+    }
 
     /// <summary>
     /// Whether dashboard cards may update their row selection on focus.
     /// Overlay cards update their own screen's selection instead.
     /// </summary>
-    private bool CanRouteCardFocus => IsEnabled && DataContext is MainWindowViewModel { IsOverlayOpen: false };
+    private bool CanRouteCardFocus
+    {
+        get
+        {
+            return IsEnabled && DataContext is MainWindowViewModel { IsOverlayOpen: false };
+        }
+    }
 
     /// <summary>
     /// Finds the first descendant of the given type in the visual tree,
@@ -226,19 +238,13 @@ public partial class MainWindow : FAAppWindow
     /// Scrolls the library carousel to its selected card (posted so a just-opened
     /// overlay has been laid out before centering).
     /// </summary>
-    private void OnScrollLibraryRequested()
-    {
-        Dispatcher.UIThread.Post(() => Find<LibraryView>()?.ScrollToSelected());
-    }
+    private void OnScrollLibraryRequested() => Dispatcher.UIThread.Post(() => Find<LibraryView>()?.ScrollToSelected());
 
     /// <summary>
     /// Scrolls the Gallery grid to its selected card (posted so a just-opened
     /// overlay has been laid out before centering).
     /// </summary>
-    private void OnScrollGalleryRequested()
-    {
-        Dispatcher.UIThread.Post(() => Find<GalleryView>()?.ScrollToSelected());
-    }
+    private void OnScrollGalleryRequested() => Dispatcher.UIThread.Post(() => Find<GalleryView>()?.ScrollToSelected());
 
     /// <summary>
     /// Moves focus into the open overlay (first focusable element).
@@ -407,7 +413,7 @@ public partial class MainWindow : FAAppWindow
         _router = App.Services.GetRequiredService<InputRouter>();
         _gamepadService = App.Services.GetRequiredService<IGamepadInputService>();
 
-        WindowState = Avalonia.Controls.WindowState.FullScreen;
+        WindowState = WindowState.FullScreen;
 
         InitializeComponent();
 

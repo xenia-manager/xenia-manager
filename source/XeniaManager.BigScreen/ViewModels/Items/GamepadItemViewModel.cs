@@ -20,45 +20,93 @@ public partial class GamepadItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Human-readable gamepad name.
     /// </summary>
-    public string Name => Source.Name;
+    public string Name
+    {
+        get
+        {
+            return Source.Name;
+        }
+    }
 
     /// <summary>
     /// Battery display text (percentage or "Unknown").
     /// </summary>
-    public string BatteryText => Source.BatteryPercent < 0
-        ? LocalizationHelper.GetText("Settings.Controllers.BatteryUnknown")
-        : $"{Source.BatteryPercent}%";
+    public string BatteryText
+    {
+        get
+        {
+            return Source.BatteryPercent < 0
+                ? LocalizationHelper.GetText("Settings.Controllers.BatteryUnknown")
+                : $"{Source.BatteryPercent}%";
+        }
+    }
 
     /// <summary>
     /// Battery icon for the current level and charging state.
     /// </summary>
-    public Symbol BatteryIcon => IconFactory.GetBatteryIcon(Source.BatteryPercent, Source.IsCharging);
+    public Symbol BatteryIcon
+    {
+        get
+        {
+            return IconFactory.GetBatteryIcon(Source.BatteryPercent, Source.IsCharging);
+        }
+    }
 
     /// <summary>
     /// "Status:" label for the row (stays white for both states).
     /// </summary>
-    public static string StatusLabel => LocalizationHelper.GetText("Settings.Controllers.StatusLabel");
+    public static string StatusLabel
+    {
+        get
+        {
+            return LocalizationHelper.GetText("Settings.Controllers.StatusLabel");
+        }
+    }
 
     /// <summary>
     /// Status value: "Primary" (accent) or "Secondary" (faded).
     /// </summary>
-    public string StatusValue => LocalizationHelper.GetText(
-        IsPrimary ? "Settings.Controllers.Primary" : "Settings.Controllers.Secondary");
+    public string StatusValue
+    {
+        get
+        {
+            return LocalizationHelper.GetText(
+                IsPrimary ? "Settings.Controllers.Primary" : "Settings.Controllers.Secondary");
+        }
+    }
 
     /// <summary>
     /// Whether the battery is currently charging.
     /// </summary>
-    public bool IsCharging => Source.IsCharging;
+    public bool IsCharging
+    {
+        get
+        {
+            return Source.IsCharging;
+        }
+    }
 
     /// <summary>
     /// Whether this gamepad drives navigation input.
     /// </summary>
-    public bool IsPrimary => Source.IsPrimary;
+    public bool IsPrimary
+    {
+        get
+        {
+            return Source.IsPrimary;
+        }
+    }
 
     /// <summary>
     /// Device GUID (hex), used for persistence.
     /// </summary>
-    public string Guid => Source.Guid;
+    public string Guid
+    {
+        get
+        {
+            return Source.Guid;
+        }
+    }
 
     /// <summary>
     /// Whether the row is selected (controller focus).

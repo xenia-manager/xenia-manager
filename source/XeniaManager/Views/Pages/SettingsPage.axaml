@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:cards="using:XeniaManager.Controls.Cards"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsPageViewModel">
     <Design.DataContext>
@@ -12,7 +14,8 @@
     </Design.DataContext>
     <!-- UI -->
     <ScrollViewer>
-        <StackPanel Spacing="16" Margin="24">
+        <StackPanel Spacing="16"
+                    Margin="24">
             <!-- General Settings -->
             <Expander>
                 <Expander.Header>
@@ -83,8 +86,7 @@
                                         Title="{DynamicResource SettingsPage.Ui.Theme.Title}"
                                         Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
                                         ItemsSource="{Binding AppThemeOptions}"
-                                        SelectedIndex="{Binding SelectedThemeIndex}">
-                    </cards:ComboBoxCard>
+                                        SelectedIndex="{Binding SelectedThemeIndex}" />
                     <!-- Loading Screen -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.Ui.LoadingScreen.Title}"
                                             Description="{DynamicResource SettingsPage.Ui.LoadingScreen.Description}"

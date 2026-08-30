@@ -15,7 +15,7 @@ namespace XeniaManager.Core.Models.Files.Shortcut;
 [ComImport]
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 [Guid("000214F9-0000-0000-C000-000000000046")]
-interface IShellLink
+internal interface IShellLink
 {
     /// <summary>
     /// Retrieves the path to the shell link object's target.
@@ -24,7 +24,7 @@ interface IShellLink
     /// <param name="cchMaxPath">Size of the buffer, in characters.</param>
     /// <param name="pfd">Pointer to a WIN32_FIND_DATA structure that receives information about the target.</param>
     /// <param name="fFlags">Flags that specify the type of search to perform.</param>
-    void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
+    void GetPath([Out] [MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
 
     /// <summary>
     /// Retrieves the item identifier list (PIDL) for the shell link target.
@@ -43,7 +43,7 @@ interface IShellLink
     /// </summary>
     /// <param name="pszName">Buffer that receives the description string.</param>
     /// <param name="cchMaxName">Size of the buffer, in characters.</param>
-    void GetDescription([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszName, int cchMaxName);
+    void GetDescription([Out] [MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszName, int cchMaxName);
 
     /// <summary>
     /// Sets the description of the shell link.
@@ -57,7 +57,7 @@ interface IShellLink
     /// </summary>
     /// <param name="pszDir">Buffer that receives the working directory path.</param>
     /// <param name="cchMaxPath">Size of the buffer, in characters.</param>
-    void GetWorkingDirectory([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir, int cchMaxPath);
+    void GetWorkingDirectory([Out] [MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir, int cchMaxPath);
 
     /// <summary>
     /// Sets the name of the working directory for the shell link target.
@@ -70,7 +70,7 @@ interface IShellLink
     /// </summary>
     /// <param name="pszArgs">Buffer that receives the command-line arguments.</param>
     /// <param name="cchMaxPath">Size of the buffer, in characters.</param>
-    void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
+    void GetArguments([Out] [MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
 
     /// <summary>
     /// Sets the command-line arguments for the shell link target.
@@ -108,7 +108,7 @@ interface IShellLink
     /// <param name="pszIconPath">Buffer that receives the icon path.</param>
     /// <param name="cchIconPath">Size of the buffer, in characters.</param>
     /// <param name="piIcon">The index of the icon within the icon file.</param>
-    void GetIconLocation([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
+    void GetIconLocation([Out] [MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
 
     /// <summary>
     /// Sets the location of the icon for the shell link.
@@ -150,6 +150,6 @@ interface IShellLink
 /// </remarks>
 [ComImport]
 [Guid("00021401-0000-0000-C000-000000000046")]
-class ShellLink
+internal class ShellLink
 {
 }

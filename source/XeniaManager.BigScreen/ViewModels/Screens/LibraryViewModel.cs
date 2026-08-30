@@ -38,7 +38,7 @@ public partial class LibraryViewModel : ScreenViewModel
     /// Serializes the details cache: the boot preload fills it on a background
     /// thread while the UI thread reads it on selection.
     /// </summary>
-    private readonly Lock _detailsLock = new();
+    private readonly Lock _detailsLock = new Lock();
 
     /// <summary>
     /// Monotonic generation counter so a slow fetch can't overwrite the pane for a
@@ -49,7 +49,13 @@ public partial class LibraryViewModel : ScreenViewModel
     /// <summary>
     /// Whether the library screen shows the "no games" stub.
     /// </summary>
-    public bool ShowEmptyStub => Games.Count == 0;
+    public bool ShowEmptyStub
+    {
+        get
+        {
+            return Games.Count == 0;
+        }
+    }
 
     /// <summary>
     /// All games in the library (carousel / list).
@@ -65,12 +71,18 @@ public partial class LibraryViewModel : ScreenViewModel
     /// <summary>
     /// Display name of the current library sort mode.
     /// </summary>
-    public string SortText => Sort switch
+    public string SortText
     {
-        LibrarySort.TimePlayed => LocalizationHelper.GetText("Library.Sort.TimePlayed"),
-        LibrarySort.LastPlayed => LocalizationHelper.GetText("Library.Sort.LastPlayed"),
-        _ => LocalizationHelper.GetText("Library.Sort.Alphabetical")
-    };
+        get
+        {
+            return Sort switch
+            {
+                LibrarySort.TimePlayed => LocalizationHelper.GetText("Library.Sort.TimePlayed"),
+                LibrarySort.LastPlayed => LocalizationHelper.GetText("Library.Sort.LastPlayed"),
+                _ => LocalizationHelper.GetText("Library.Sort.Alphabetical")
+            };
+        }
+    }
 
     /// <summary>
     /// Whether the library is shown as a vertical list with a details pane
@@ -156,10 +168,7 @@ public partial class LibraryViewModel : ScreenViewModel
     /// <summary>
     /// Applies the fetched database info to the current details pane.
     /// </summary>
-    private void ApplyDetails(GameDetailedInfo? info)
-    {
-        Details?.Info = info;
-    }
+    private void ApplyDetails(GameDetailedInfo? info) => Details?.Info = info;
 
     /// <summary>
     /// Fetches the marketplace database info for the selected game (off the UI thread,
@@ -304,10 +313,7 @@ public partial class LibraryViewModel : ScreenViewModel
     /// <summary>
     /// Follows the settings dropdown so the library swaps layouts live.
     /// </summary>
-    private void OnLibraryViewModeChanged()
-    {
-        IsListView = _settings.LibraryViewMode == LibraryViewMode.List;
-    }
+    private void OnLibraryViewModeChanged() => IsListView = _settings.LibraryViewMode == LibraryViewMode.List;
 
     public LibraryViewModel(SettingsViewModel settings, IModalService modalService) : base(settings, modalService)
     {

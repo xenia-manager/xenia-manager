@@ -10,17 +10,17 @@ public enum SubscriptionTier : byte
     /// No subscription (free account).
     /// </summary>
     NoSubscription = 0,
-    
+
     /// <summary>
     /// Silver subscription tier.
     /// </summary>
     Silver = 3,
-    
+
     /// <summary>
     /// Gold subscription tier.
     /// </summary>
     Gold = 6,
-    
+
     /// <summary>
     /// Family subscription tier.
     /// </summary>

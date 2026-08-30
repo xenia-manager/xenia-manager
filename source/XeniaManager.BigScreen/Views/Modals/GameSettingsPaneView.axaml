@@ -6,11 +6,14 @@
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:conv="using:Avalonia.Data.Converters"
-             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             mc:Ignorable="d"
+             d:DesignWidth="1100"
+             d:DesignHeight="780"
              x:Class="XeniaManager.BigScreen.Views.Modals.GameSettingsPaneView"
              x:DataType="vm:GameSettingsPaneViewModel">
 
-    <Grid RowDefinitions="Auto, *" RowSpacing="20">
+    <Grid RowDefinitions="Auto, *"
+          RowSpacing="20">
 
         <!-- HEADER: title -->
         <prim:IconStat Grid.Row="0"
@@ -27,7 +30,8 @@
                       Grid.Row="1"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Hidden">
-            <ItemsControl ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+            <ItemsControl ItemsSource="{Binding Rows}"
+                          Margin="0,0,0,20">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="items:ConfigRowViewModel">
                         <StackPanel>

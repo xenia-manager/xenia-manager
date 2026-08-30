@@ -23,6 +23,7 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Files.Models.XConfig;
 using XeniaManager.Core.Services;
+using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Screens;
@@ -41,7 +42,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// The base Xenia Manager's settings (same file the desktop app uses), so
     /// the "Start in Big Screen" toggle shares the desktop app's state.
     /// </summary>
-    private readonly Core.Settings.Settings _desktopSettings = new();
+    private readonly Settings _desktopSettings = new Settings();
 
     /// <summary>
     /// The emulator versions currently installed on this machine.
@@ -146,48 +147,88 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// Whether no gamepads are currently connected.
     /// </summary>
-    public bool HasNoControllers => Controllers.Count == 0;
+    public bool HasNoControllers
+    {
+        get
+        {
+            return Controllers.Count == 0;
+        }
+    }
 
     /// <summary>
     /// Whether any installed version has an XConfig file (the resolution card
     /// shows only then).
     /// </summary>
-    public bool HasXConfig => XConfigVersions.Count > 0;
+    public bool HasXConfig
+    {
+        get
+        {
+            return XConfigVersions.Count > 0;
+        }
+    }
 
     /// <summary>
     /// Whether a row's editor is open and takes value input.
     /// </summary>
-    public bool IsEditorOpen => ActiveEditor.HasValue;
+    public bool IsEditorOpen
+    {
+        get
+        {
+            return ActiveEditor.HasValue;
+        }
+    }
 
     /// <summary>
     /// Whether the open editor cycles its value with Up/Down (the dropdown
     /// rows) instead of Left/Right (colours and the slider).
     /// </summary>
-    private bool IsComboEditor =>
-        ActiveEditor is SettingsRowKind.LibraryView
-            or SettingsRowKind.CardImage
-            or SettingsRowKind.TimeFormat
-            or SettingsRowKind.BackgroundMode
-            or SettingsRowKind.XConfigVersion
-            or SettingsRowKind.XConfig;
+    private bool IsComboEditor
+    {
+        get
+        {
+            return ActiveEditor is SettingsRowKind.LibraryView
+                or SettingsRowKind.CardImage
+                or SettingsRowKind.TimeFormat
+                or SettingsRowKind.BackgroundMode
+                or SettingsRowKind.XConfigVersion
+                or SettingsRowKind.XConfig;
+        }
+    }
 
     /// <summary>
     /// Whether the open editor is a colour row (RGB sliders + preview swatch).
     /// </summary>
-    private bool IsColourEditor =>
-        ActiveEditor is SettingsRowKind.PrimaryColour or SettingsRowKind.AccentColour;
+    private bool IsColourEditor
+    {
+        get
+        {
+            return ActiveEditor is SettingsRowKind.PrimaryColour or SettingsRowKind.AccentColour;
+        }
+    }
 
     /// <summary>
     /// Whether the primary colour row's editor is open (drives its field's
     /// highlight).
     /// </summary>
-    public bool IsPrimaryColourEditorActive => ActiveEditor == SettingsRowKind.PrimaryColour;
+    public bool IsPrimaryColourEditorActive
+    {
+        get
+        {
+            return ActiveEditor == SettingsRowKind.PrimaryColour;
+        }
+    }
 
     /// <summary>
     /// Whether the accent colour row's editor is open (drives its field's
     /// highlight).
     /// </summary>
-    public bool IsAccentColourEditorActive => ActiveEditor == SettingsRowKind.AccentColour;
+    public bool IsAccentColourEditorActive
+    {
+        get
+        {
+            return ActiveEditor == SettingsRowKind.AccentColour;
+        }
+    }
 
     /// <summary>
     /// Whether the colour editor's palette popup is currently open.
@@ -239,77 +280,77 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// Row for the Manage Profiles card.
     /// </summary>
-    public SettingsRowViewModel RowManageProfiles { get; } = new(SettingsRowKind.ManageProfiles);
+    public SettingsRowViewModel RowManageProfiles { get; } = new SettingsRowViewModel(SettingsRowKind.ManageProfiles);
 
     /// <summary>
     /// Row for the library view dropdown card.
     /// </summary>
-    public SettingsRowViewModel RowLibraryView { get; } = new(SettingsRowKind.LibraryView);
+    public SettingsRowViewModel RowLibraryView { get; } = new SettingsRowViewModel(SettingsRowKind.LibraryView);
 
     /// <summary>
     /// Row for the card image dropdown card.
     /// </summary>
-    public SettingsRowViewModel RowCardImage { get; } = new(SettingsRowKind.CardImage);
+    public SettingsRowViewModel RowCardImage { get; } = new SettingsRowViewModel(SettingsRowKind.CardImage);
 
     /// <summary>
     /// Row for the time format dropdown card.
     /// </summary>
-    public SettingsRowViewModel RowTimeFormat { get; } = new(SettingsRowKind.TimeFormat);
+    public SettingsRowViewModel RowTimeFormat { get; } = new SettingsRowViewModel(SettingsRowKind.TimeFormat);
 
     /// <summary>
     /// Row for the quit behaviour toggle card.
     /// </summary>
-    public SettingsRowViewModel RowQuitToggle { get; } = new(SettingsRowKind.QuitToggle);
+    public SettingsRowViewModel RowQuitToggle { get; } = new SettingsRowViewModel(SettingsRowKind.QuitToggle);
 
     /// <summary>
     /// Row for the "launch games in fullscreen" toggle.
     /// </summary>
-    public SettingsRowViewModel RowFullscreenToggle { get; } = new(SettingsRowKind.FullscreenToggle);
+    public SettingsRowViewModel RowFullscreenToggle { get; } = new SettingsRowViewModel(SettingsRowKind.FullscreenToggle);
 
     /// <summary>
     /// Row for the "start in Big Screen" toggle (writes the desktop app's setting).
     /// </summary>
-    public SettingsRowViewModel RowStartInBigScreenToggle { get; } = new(SettingsRowKind.StartInBigScreenToggle);
+    public SettingsRowViewModel RowStartInBigScreenToggle { get; } = new SettingsRowViewModel(SettingsRowKind.StartInBigScreenToggle);
 
     /// <summary>
     /// Row for the "rotate profiles" toggle.
     /// </summary>
-    public SettingsRowViewModel RowRotateProfiles { get; } = new(SettingsRowKind.RotateProfiles);
+    public SettingsRowViewModel RowRotateProfiles { get; } = new SettingsRowViewModel(SettingsRowKind.RotateProfiles);
 
     /// <summary>
     /// Row for the background type dropdown card.
     /// </summary>
-    public SettingsRowViewModel RowBackgroundMode { get; } = new(SettingsRowKind.BackgroundMode);
+    public SettingsRowViewModel RowBackgroundMode { get; } = new SettingsRowViewModel(SettingsRowKind.BackgroundMode);
 
     /// <summary>
     /// Row for the primary colour card.
     /// </summary>
-    public SettingsRowViewModel RowPrimaryColour { get; } = new(SettingsRowKind.PrimaryColour);
+    public SettingsRowViewModel RowPrimaryColour { get; } = new SettingsRowViewModel(SettingsRowKind.PrimaryColour);
 
     /// <summary>
     /// Row for the accent colour card.
     /// </summary>
-    public SettingsRowViewModel RowAccentColour { get; } = new(SettingsRowKind.AccentColour);
+    public SettingsRowViewModel RowAccentColour { get; } = new SettingsRowViewModel(SettingsRowKind.AccentColour);
 
     /// <summary>
     /// Row for the vignette slider card.
     /// </summary>
-    public SettingsRowViewModel RowVignette { get; } = new(SettingsRowKind.Vignette);
+    public SettingsRowViewModel RowVignette { get; } = new SettingsRowViewModel(SettingsRowKind.Vignette);
 
     /// <summary>
     /// Row for the background image picker card.
     /// </summary>
-    public SettingsRowViewModel RowBackgroundImage { get; } = new(SettingsRowKind.BackgroundImage);
+    public SettingsRowViewModel RowBackgroundImage { get; } = new SettingsRowViewModel(SettingsRowKind.BackgroundImage);
 
     /// <summary>
     /// Row for the XConfig resolution card (bottom of the screen).
     /// </summary>
-    public SettingsRowViewModel RowXConfig { get; } = new(SettingsRowKind.XConfig);
+    public SettingsRowViewModel RowXConfig { get; } = new SettingsRowViewModel(SettingsRowKind.XConfig);
 
     /// <summary>
     /// Row for the XConfig version card (bottom of the screen).
     /// </summary>
-    public SettingsRowViewModel RowXConfigVersion { get; } = new(SettingsRowKind.XConfigVersion);
+    public SettingsRowViewModel RowXConfigVersion { get; } = new SettingsRowViewModel(SettingsRowKind.XConfigVersion);
 
     /// <summary>
     /// Options shown in the settings background-type dropdown, in enum order
@@ -348,7 +389,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// is stripped for display).
     /// </summary>
     public ObservableCollection<XConfigResolutionOption> XConfigResolutions { get; } =
-        new(Enum.GetValues<XConfigResolution>()
+        new ObservableCollection<XConfigResolutionOption>(Enum.GetValues<XConfigResolution>()
             .Select(value => new XConfigResolutionOption(value, value.ToString().TrimStart('R'))));
 
     /// <summary>
@@ -361,32 +402,56 @@ public partial class SettingsViewModel : ViewModelBase
     /// Brush used as the overlay/menu background, derived from the primary colour
     /// so menus match the dashboard instead of being pitch black.
     /// </summary>
-    public IBrush ScreenBackground => BackgroundBrushFactory.CreateSolid(PrimaryColor);
+    public IBrush ScreenBackground
+    {
+        get
+        {
+            return BackgroundBrushFactory.CreateSolid(PrimaryColor);
+        }
+    }
 
     /// <summary>
     /// Display name of the current background mode.
     /// </summary>
-    public string ModeText => Mode switch
+    public string ModeText
     {
-        BackgroundMode.Image => LocalizationHelper.GetText("Settings.BackgroundMode.Image"),
-        BackgroundMode.Solid => LocalizationHelper.GetText("Settings.BackgroundMode.Solid"),
-        BackgroundMode.LinearGradient => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
-        BackgroundMode.RadialGradient => LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient"),
-        BackgroundMode.Dynamic => LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"),
-        _ => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")
-    };
+        get
+        {
+            return Mode switch
+            {
+                BackgroundMode.Image => LocalizationHelper.GetText("Settings.BackgroundMode.Image"),
+                BackgroundMode.Solid => LocalizationHelper.GetText("Settings.BackgroundMode.Solid"),
+                BackgroundMode.LinearGradient => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient"),
+                BackgroundMode.RadialGradient => LocalizationHelper.GetText("Settings.BackgroundMode.RadialGradient"),
+                BackgroundMode.Dynamic => LocalizationHelper.GetText("Settings.BackgroundMode.Dynamic"),
+                _ => LocalizationHelper.GetText("Settings.BackgroundMode.LinearGradient")
+            };
+        }
+    }
 
     /// <summary>
     /// Display text for the vignette opacity as a percentage.
     /// </summary>
-    public string VignetteText => $"{Math.Round(VignetteOpacity * 100)}%";
+    public string VignetteText
+    {
+        get
+        {
+            return $"{Math.Round(VignetteOpacity * 100)}%";
+        }
+    }
 
     /// <summary>
     /// Display text for the currently configured background image.
     /// </summary>
-    public string ImageDisplayText => string.IsNullOrEmpty(_backgroundService.Settings.ImagePath)
-        ? LocalizationHelper.GetText("Settings.NoImage")
-        : Path.GetFileName(_backgroundService.Settings.ImagePath);
+    public string ImageDisplayText
+    {
+        get
+        {
+            return string.IsNullOrEmpty(_backgroundService.Settings.ImagePath)
+                ? LocalizationHelper.GetText("Settings.NoImage")
+                : Path.GetFileName(_backgroundService.Settings.ImagePath);
+        }
+    }
 
     /// <summary>
     /// The selected option in the XConfig resolution dropdown.
@@ -1004,10 +1069,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// Synchronises the palette-open state when the popup is dismissed by
     /// clicking outside (mouse light-dismiss).
     /// </summary>
-    public void NotifyColourPaletteClosed()
-    {
-        _colourPaletteOpen = false;
-    }
+    public void NotifyColourPaletteClosed() => _colourPaletteOpen = false;
 
     /// <summary>
     /// Steps the selected row's immediate-commit value directly (vignette

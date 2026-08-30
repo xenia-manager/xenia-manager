@@ -124,19 +124,37 @@ public class HeaderFile
     /// Gets whether the XUID field was present in the header.
     /// True only for headers >= 0x148 bytes.
     /// </summary>
-    public bool HasXuid => HeaderSize >= AggregateDataSize;
+    public bool HasXuid
+    {
+        get
+        {
+            return HeaderSize >= AggregateDataSize;
+        }
+    }
 
     /// <summary>
     /// Gets whether the title_id field was present in the header.
     /// True only for headers >= 0x138 bytes.
     /// </summary>
-    public bool HasTitleId => HeaderSize >= CrossTitleDataSize;
+    public bool HasTitleId
+    {
+        get
+        {
+            return HeaderSize >= CrossTitleDataSize;
+        }
+    }
 
     /// <summary>
     /// Gets whether the license_mask field was present in the header.
     /// True only for headers >= 0x14C bytes.
     /// </summary>
-    public bool HasLicenseMask => HeaderSize >= FullHeaderSize;
+    public bool HasLicenseMask
+    {
+        get
+        {
+            return HeaderSize >= FullHeaderSize;
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HeaderFile"/> class.
@@ -318,6 +336,7 @@ public class HeaderFile
         {
             header.DeviceId = SwapEndian(header.DeviceId);
         }
+
         Logger.Debug<HeaderFile>($"DeviceId: {header.DeviceId}");
 
         // 0x04-0x07: content_type (always present)
@@ -326,6 +345,7 @@ public class HeaderFile
         {
             contentTypeValue = SwapEndian(contentTypeValue);
         }
+
         header.ContentType = (ContentType)contentTypeValue;
         Logger.Debug<HeaderFile>($"ContentType: {header.ContentType} (0x{contentTypeValue:X8})");
 
@@ -350,6 +370,7 @@ public class HeaderFile
             {
                 Array.Reverse(xuidBytes);
             }
+
             header.AccountXuid = new AccountXuid(BitConverter.ToUInt64(xuidBytes, 0));
             Logger.Debug<HeaderFile>($"AccountXuid: {header.AccountXuid} (0x{header.AccountXuid.Value:X16})");
         }
@@ -367,6 +388,7 @@ public class HeaderFile
             {
                 header.TitleId = SwapEndian(header.TitleId);
             }
+
             Logger.Debug<HeaderFile>($"TitleId: 0x{header.TitleId:X8}");
         }
         else
@@ -383,6 +405,7 @@ public class HeaderFile
             {
                 header.LicenseMask = SwapEndian(header.LicenseMask);
             }
+
             Logger.Debug<HeaderFile>($"LicenseMask: 0x{header.LicenseMask:X8}");
         }
         else
@@ -391,7 +414,8 @@ public class HeaderFile
             Logger.Warning<HeaderFile>($"Header too small for license_mask, using default (0)");
         }
 
-        Logger.Info<HeaderFile>($"Successfully parsed header: '{header.DisplayName}' (Size: 0x{header.HeaderSize:X}, TitleId: 0x{header.TitleId:X8}, ContentType: {header.ContentType})");
+        Logger.Info<HeaderFile>(
+            $"Successfully parsed header: '{header.DisplayName}' (Size: 0x{header.HeaderSize:X}, TitleId: 0x{header.TitleId:X8}, ContentType: {header.ContentType})");
         Logger.Trace<HeaderFile>($"FromBytes parsing completed successfully");
 
         return header;

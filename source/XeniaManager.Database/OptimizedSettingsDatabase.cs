@@ -43,10 +43,16 @@ public class OptimizedSettingsDatabase
     /// </summary>
     public static List<OptimizedSettingsEntry> FilteredDatabase
     {
-        get => _databaseState.FilteredDatabase;
-        private set => _databaseState.FilteredDatabase = value;
+        get
+        {
+            return _databaseState.FilteredDatabase;
+        }
+        private set
+        {
+            _databaseState.FilteredDatabase = value;
+        }
     }
-    
+
     /// <summary>
     /// Loads the complete optimized settings database into memory.
     /// This method populates internal collections for fast game lookups and initializes the search functionality.
@@ -72,7 +78,7 @@ public class OptimizedSettingsDatabase
         {
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: "optimized_settings_database", cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                response = await _client.GetAsync(url, cancellationToken, "optimized_settings_database", ApiCacheDuration, cacheDirectory);
                 Logger.Info<OptimizedSettingsDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -121,9 +127,10 @@ public class OptimizedSettingsDatabase
             .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        Logger.Info<OptimizedSettingsDatabase>($"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
+        Logger.Info<OptimizedSettingsDatabase>(
+            $"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
     }
-    
+
     /// <summary>
     /// Adds an entry to the internal index using the specified title ID.
     /// This enables fast lookups of optimized settings by title ID.
@@ -146,7 +153,7 @@ public class OptimizedSettingsDatabase
             _databaseState.TitleIds.Add(normalized);
         }
     }
-    
+
     /// <summary>
     /// Filters the database based on the provided search query.
     /// This method updates the FilteredDatabase property with OptimizedSettingsEntry objects that match the search query.
@@ -180,7 +187,7 @@ public class OptimizedSettingsDatabase
             Logger.Debug<OptimizedSettingsDatabase>($"Search completed, found {_databaseState.FilteredDatabase.Count} matching titles");
         });
     }
-    
+
     /// <summary>
     /// Retrieves OptimizedSettingsEntry for a game with the specified title.
     /// Performs a case-insensitive search through all indexed entries to find a match by title.
@@ -199,7 +206,7 @@ public class OptimizedSettingsDatabase
             : $"Entry with title '{gameTitle}' not found in database");
         return result;
     }
-    
+
     /// <summary>
     /// Retrieves OptimizedSettingsEntry for a game with the specified title ID.
     /// Performs a direct lookup using the internal index.
@@ -238,7 +245,8 @@ public class OptimizedSettingsDatabase
     /// <param name="gameTitle">Game title</param>
     /// <param name="cancellationToken">Token to cancel the operation if needed</param>
     /// <returns>The ConfigFile with optimized settings if found, null otherwise</returns>
-    public static async Task<ConfigFile?> GetOptimizedSettingsAsync(string gameId, IReadOnlyList<string>? alternativeIds, string? gameTitle = null, CancellationToken cancellationToken = default, string? cacheDirectory = null)
+    public static async Task<ConfigFile?> GetOptimizedSettingsAsync(string gameId, IReadOnlyList<string>? alternativeIds, string? gameTitle = null,
+        CancellationToken cancellationToken = default, string? cacheDirectory = null)
     {
         string titleForLog = gameTitle ?? gameId;
         Logger.Debug<OptimizedSettingsDatabase>($"Searching for optimized settings for '{titleForLog}' (ID: {gameId})");
@@ -264,7 +272,11 @@ public class OptimizedSettingsDatabase
             foreach (string altId in alternativeIds)
             {
                 OptimizedSettingsEntry? match = GetEntryById(altId);
-                if (match == null) continue;
+                if (match == null)
+                {
+                    continue;
+                }
+
                 foundEntry = match;
                 foundId = altId;
                 Logger.Debug<OptimizedSettingsDatabase>($"Found optimized settings entry by alternative ID '{altId}': {match.Title}");
@@ -288,7 +300,7 @@ public class OptimizedSettingsDatabase
 
             try
             {
-                string tomlContent = await _client.GetAsync(url, cancellationToken, cacheKey: $"optimized_settings_{foundId}", cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                string tomlContent = await _client.GetAsync(url, cancellationToken, $"optimized_settings_{foundId}", ApiCacheDuration, cacheDirectory);
                 Logger.Info<OptimizedSettingsDatabase>($"Successfully downloaded optimized settings TOML for '{titleForLog}' from: {url}");
 
                 ConfigFile configFile = ConfigFile.FromString(tomlContent);
@@ -305,7 +317,7 @@ public class OptimizedSettingsDatabase
         Logger.Error<OptimizedSettingsDatabase>($"All {baseUrls.Length} URLs failed to provide optimized settings for '{titleForLog}'");
         return null;
     }
-    
+
     /// <summary>
     /// Resets all static states. Intended for test isolation only.
     /// </summary>
@@ -317,7 +329,7 @@ public class OptimizedSettingsDatabase
         _databaseState.IsLoaded = false;
         Logger.Info<OptimizedSettingsDatabase>("OptimizedSettingsDatabase reset complete");
     }
-    
+
     /// <summary>
     /// Forces a reload of the optimized settings database by clearing the cache and fetching fresh data.
     /// This bypasses the cached state and reloads from the API.
@@ -330,13 +342,20 @@ public class OptimizedSettingsDatabase
         if (!string.IsNullOrEmpty(cacheDirectory))
         {
             string cacheFile = Path.Combine(cacheDirectory, "optimized_settings_database.json");
-            if (File.Exists(cacheFile)) File.Delete(cacheFile);
+            if (File.Exists(cacheFile))
+            {
+                File.Delete(cacheFile);
+            }
         }
         else
         {
             string defaultCache = Path.Combine(AppContext.BaseDirectory, "Cache", "Database", "optimized_settings_database.json");
-            if (File.Exists(defaultCache)) File.Delete(defaultCache);
+            if (File.Exists(defaultCache))
+            {
+                File.Delete(defaultCache);
+            }
         }
+
         Reset();
         await LoadAsync(cancellationToken, cacheDirectory);
     }

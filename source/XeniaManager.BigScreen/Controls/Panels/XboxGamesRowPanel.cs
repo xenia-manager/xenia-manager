@@ -60,50 +60,98 @@ public class XboxGamesRowPanel : Panel
 
     public double FocusedIndex
     {
-        get => GetValue(FocusedIndexProperty);
-        set => SetValue(FocusedIndexProperty, value);
+        get
+        {
+            return GetValue(FocusedIndexProperty);
+        }
+        set
+        {
+            SetValue(FocusedIndexProperty, value);
+        }
     }
 
     public double FocusAmount
     {
-        get => GetValue(FocusAmountProperty);
-        set => SetValue(FocusAmountProperty, value);
+        get
+        {
+            return GetValue(FocusAmountProperty);
+        }
+        set
+        {
+            SetValue(FocusAmountProperty, value);
+        }
     }
 
     public double FocusedWidth
     {
-        get => GetValue(FocusedWidthProperty);
-        set => SetValue(FocusedWidthProperty, value);
+        get
+        {
+            return GetValue(FocusedWidthProperty);
+        }
+        set
+        {
+            SetValue(FocusedWidthProperty, value);
+        }
     }
 
     public double UnfocusedWidth
     {
-        get => GetValue(UnfocusedWidthProperty);
-        set => SetValue(UnfocusedWidthProperty, value);
+        get
+        {
+            return GetValue(UnfocusedWidthProperty);
+        }
+        set
+        {
+            SetValue(UnfocusedWidthProperty, value);
+        }
     }
 
     public double FocusedHeight
     {
-        get => GetValue(FocusedHeightProperty);
-        set => SetValue(FocusedHeightProperty, value);
+        get
+        {
+            return GetValue(FocusedHeightProperty);
+        }
+        set
+        {
+            SetValue(FocusedHeightProperty, value);
+        }
     }
 
     public double UnfocusedHeight
     {
-        get => GetValue(UnfocusedHeightProperty);
-        set => SetValue(UnfocusedHeightProperty, value);
+        get
+        {
+            return GetValue(UnfocusedHeightProperty);
+        }
+        set
+        {
+            SetValue(UnfocusedHeightProperty, value);
+        }
     }
 
     public double FocusedGap
     {
-        get => GetValue(FocusedGapProperty);
-        set => SetValue(FocusedGapProperty, value);
+        get
+        {
+            return GetValue(FocusedGapProperty);
+        }
+        set
+        {
+            SetValue(FocusedGapProperty, value);
+        }
     }
 
     public double UnfocusedGap
     {
-        get => GetValue(UnfocusedGapProperty);
-        set => SetValue(UnfocusedGapProperty, value);
+        get
+        {
+            return GetValue(UnfocusedGapProperty);
+        }
+        set
+        {
+            SetValue(UnfocusedGapProperty, value);
+        }
     }
 
     protected override Size MeasureOverride(Size availableSize)
