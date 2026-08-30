@@ -1,5 +1,5 @@
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Database;
+using XeniaManager.Database.Models.Xbox;
 
 namespace XeniaManager.Tests;
 

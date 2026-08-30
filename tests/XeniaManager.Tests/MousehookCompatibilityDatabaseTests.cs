@@ -1,5 +1,5 @@
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Models.Database.MousehookCompatibility;
+using XeniaManager.Database;
+using XeniaManager.Database.Models.MousehookCompatibility;
 using XeniaManager.Core.Models.Game;
 
 namespace XeniaManager.Tests;
@@ -132,7 +132,17 @@ public class MousehookCompatibilityDatabaseTests
             AlternativeIDs = []
         };
 
-        await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+        if (mousehookEntry != null)
+        {
+            game.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+            game.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+        }
+        else
+        {
+            game.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+            game.Compatibility.Mousehook.Notes = string.Empty;
+        }
 
         Assert.That(game.Compatibility.Mousehook.Rating, Is.EqualTo(MousehookSupportRating.Fair));
         Assert.That(game.Compatibility.Mousehook.Notes, Is.EqualTo("Test notes"));
@@ -150,7 +160,17 @@ public class MousehookCompatibilityDatabaseTests
             AlternativeIDs = []
         };
 
-        await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+        if (mousehookEntry != null)
+        {
+            game.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+            game.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+        }
+        else
+        {
+            game.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+            game.Compatibility.Mousehook.Notes = string.Empty;
+        }
 
         Assert.That(game.Compatibility.Mousehook.Rating, Is.EqualTo(MousehookSupportRating.Unknown));
         Assert.That(game.Compatibility.Mousehook.Notes, Is.EqualTo(string.Empty));
@@ -168,7 +188,17 @@ public class MousehookCompatibilityDatabaseTests
             AlternativeIDs = ["4D5307E6"]
         };
 
-        await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+        if (mousehookEntry != null)
+        {
+            game.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+            game.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+        }
+        else
+        {
+            game.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+            game.Compatibility.Mousehook.Notes = string.Empty;
+        }
 
         Assert.That(game.Compatibility.Mousehook.Rating, Is.EqualTo(MousehookSupportRating.Fair));
     }
@@ -202,7 +232,17 @@ public class MousehookCompatibilityDatabaseTests
                 AlternativeIDs = []
             };
 
-            await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+            MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+            if (mousehookEntry != null)
+            {
+                game.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+                game.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+            }
+            else
+            {
+                game.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+                game.Compatibility.Mousehook.Notes = string.Empty;
+            }
 
             Assert.That(game.Compatibility.Mousehook.Rating, Is.Not.EqualTo(MousehookSupportRating.Unknown));
         }

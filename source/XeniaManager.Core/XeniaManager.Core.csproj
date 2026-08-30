@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\XeniaManager.Database\XeniaManager.Database.csproj" />
       <ProjectReference Include="..\XeniaManager.Files\XeniaManager.Files.csproj" />
       <ProjectReference Include="..\XeniaManager.Logging\XeniaManager.Logging.csproj" />
     </ItemGroup>

@@ -13,9 +13,9 @@ using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.Core.Database;
+using XeniaManager.Database;
 using XeniaManager.Logging;
-using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Database.Models.Xbox;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Screens;

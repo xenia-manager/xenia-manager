@@ -1,5 +1,5 @@
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Models.Database.Patches;
+using XeniaManager.Database;
+using XeniaManager.Database.Models.Patches;
 
 namespace XeniaManager.Tests;
 

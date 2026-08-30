@@ -1,5 +1,5 @@
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Models.Database.GameCompatibility;
+using XeniaManager.Database;
+using XeniaManager.Database.Models.GameCompatibility;
 using XeniaManager.Core.Models.Game;
 
 namespace XeniaManager.Tests;
@@ -503,7 +503,17 @@ public class GameCompatibilityDatabaseTests
                 AlternativeIDs = []
             };
 
-            await GameCompatibilityDatabase.SetCompatibilityRating(game);
+            GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+            if (compatEntry != null)
+            {
+                game.Compatibility.Rating = compatEntry.State;
+                game.Compatibility.Url = compatEntry.Url ?? string.Empty;
+            }
+            else
+            {
+                game.Compatibility.Rating = CompatibilityRating.Unknown;
+                game.Compatibility.Url = string.Empty;
+            }
 
             Assert.That(game.Compatibility.Rating, Is.Not.EqualTo(CompatibilityRating.Unknown),
                 "Expected compatibility rating to be set from real API");
@@ -534,7 +544,17 @@ public class GameCompatibilityDatabaseTests
                     AlternativeIDs = [entry.Id]
                 };
 
-                await GameCompatibilityDatabase.SetCompatibilityRating(game);
+                GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+                if (compatEntry != null)
+                {
+                    game.Compatibility.Rating = compatEntry.State;
+                    game.Compatibility.Url = compatEntry.Url ?? string.Empty;
+                }
+                else
+                {
+                    game.Compatibility.Rating = CompatibilityRating.Unknown;
+                    game.Compatibility.Url = string.Empty;
+                }
 
                 Assert.That(game.Compatibility.Rating, Is.Not.EqualTo(CompatibilityRating.Unknown),
                     "Expected compatibility rating to be found via alternative ID");
