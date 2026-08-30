@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Database.Models.Xbox;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;

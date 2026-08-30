@@ -9,8 +9,10 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Files;
 using XeniaManager.Logging;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Database;
 using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Models.Game;
@@ -19,7 +21,6 @@ using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 using XeniaManager.Controls;
-using XeniaManager.Core.Database;
 
 namespace XeniaManager.ViewModels.Pages;
 
@@ -331,7 +332,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
         try
         {
             // Fetch optimized settings from the database
-            ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+            ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
 
             if (optimizedConfigFile == null)
             {

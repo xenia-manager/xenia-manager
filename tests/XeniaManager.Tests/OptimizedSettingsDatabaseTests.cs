@@ -1,6 +1,6 @@
-using XeniaManager.Core.Database;
+using XeniaManager.Database;
 using XeniaManager.Files;
-using XeniaManager.Core.Models.Database.OptimizedSettings;
+using XeniaManager.Database.Models.OptimizedSettings;
 using XeniaManager.Core.Models.Game;
 
 namespace XeniaManager.Tests;
@@ -502,7 +502,7 @@ public class OptimizedSettingsDatabaseTests
                 AlternativeIDs = []
             };
 
-            ConfigFile? configFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+            ConfigFile? configFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title);
 
             if (configFile != null)
             {
@@ -537,7 +537,7 @@ public class OptimizedSettingsDatabaseTests
                     AlternativeIDs = [entry.Id]
                 };
 
-                ConfigFile? configFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+                ConfigFile? configFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title);
 
                 if (configFile != null)
                 {
@@ -571,7 +571,7 @@ public class OptimizedSettingsDatabaseTests
                 AlternativeIDs = []
             };
 
-            ConfigFile? configFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+            ConfigFile? configFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title);
 
             Assert.That(configFile, Is.Null, "Expected null for non-existent game");
         }

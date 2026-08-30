@@ -23,6 +23,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\XeniaManager.Core\XeniaManager.Core.csproj" />
+        <ProjectReference Include="..\XeniaManager.Database\XeniaManager.Database.csproj" />
     </ItemGroup>
 
     <ItemGroup>

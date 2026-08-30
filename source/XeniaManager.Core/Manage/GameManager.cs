@@ -4,11 +4,14 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Database;
+using XeniaManager.Database.Models.Xbox;
+using XeniaManager.Database.Models.GameCompatibility;
+using XeniaManager.Database.Models.MousehookCompatibility;
+using XeniaManager.Database.Models.NetplayCompatibility;
+using XeniaManager.Database;
 using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Files.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
@@ -613,7 +616,7 @@ public class GameManager
 
         // Grab full game information
         Logger.Info<GameManager>($"Fetching detailed game information from Xbox database for TitleId: {actualTitleId}");
-        GameDetailedInfo? detailedGameInfo = await XboxDatabase.GetFullGameInfo(actualTitleId);
+        GameDetailedInfo? detailedGameInfo = await XboxDatabase.GetFullGameInfo(actualTitleId, cacheDirectory: AppPaths.X360DataBaseCacheDirectory);
         if (detailedGameInfo == null)
         {
             Logger.Error<GameManager>($"Failed to fetch game information for TitleId: {actualTitleId} - database returned null");
@@ -656,10 +659,42 @@ public class GameManager
 
         Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
-        // Fetch Compatibility Rating
-        await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
-        await MousehookCompatibilityDatabase.SetMousehookCompatibility(newGame);
-        await NetplayCompatibilityDatabase.SetNetplayCompatibility(newGame);
+        // Fetch Compatibility Rating (Database now leaf, pass cache dir explicitly)
+        GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (compatEntry != null)
+        {
+            newGame.Compatibility.Rating = compatEntry.State;
+            newGame.Compatibility.Url = compatEntry.Url ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Rating = CompatibilityRating.Unknown;
+            newGame.Compatibility.Url = string.Empty;
+        }
+
+        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (mousehookEntry != null)
+        {
+            newGame.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+            newGame.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+            newGame.Compatibility.Mousehook.Notes = string.Empty;
+        }
+
+        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (netplayEntry != null)
+        {
+            newGame.Compatibility.Netplay.Status = netplayEntry.Status;
+            newGame.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Netplay.Status = new NetplayStatus();
+            newGame.Compatibility.Netplay.Comments = string.Empty;
+        }
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");
@@ -694,14 +729,11 @@ public class GameManager
         Directory.CreateDirectory(artworkDirectory);
         Logger.Info<GameManager>($"Artwork directory created successfully: {artworkDirectory}");
 
-        DownloadManager downloadManager = new DownloadManager();
-        Logger.Trace<GameManager>($"DownloadManager initialized for artwork download operations");
-
         // Download Artwork
         // Boxart
         Logger.Info<GameManager>($"Starting boxart download process for game: '{newGame.Title}'");
         string boxartSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Boxart.png");
-        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Boxart, actualTitleId, "boxart.jpg", savePath: boxartSavePath);
+        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Boxart, actualTitleId, "boxart.jpg", savePath: boxartSavePath);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(boxartSavePath))
@@ -717,7 +749,7 @@ public class GameManager
         // Icon
         Logger.Info<GameManager>($"Starting icon download process for game: '{newGame.Title}'");
         string iconSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
-        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", savePath: iconSavePath, SKEncodedImageFormat.Ico);
+        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", savePath: iconSavePath, format: SKEncodedImageFormat.Ico);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(iconSavePath))
@@ -733,7 +765,7 @@ public class GameManager
         // Background
         Logger.Info<GameManager>($"Starting background download process for game: '{newGame.Title}'");
         string backgroundSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg");
-        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", savePath: backgroundSavePath);
+        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", savePath: backgroundSavePath);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(backgroundSavePath))
@@ -798,12 +830,44 @@ public class GameManager
         };
 
         Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', " +
-                                  $"GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
+                                   $"GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
-        // Fetch Compatibility Rating
-        await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
-        await MousehookCompatibilityDatabase.SetMousehookCompatibility(newGame);
-        await NetplayCompatibilityDatabase.SetNetplayCompatibility(newGame);
+        // Fetch Compatibility Rating (Database leaf)
+        GameCompatibilityEntry? compatEntry2 = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (compatEntry2 != null)
+        {
+            newGame.Compatibility.Rating = compatEntry2.State;
+            newGame.Compatibility.Url = compatEntry2.Url ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Rating = CompatibilityRating.Unknown;
+            newGame.Compatibility.Url = string.Empty;
+        }
+
+        MousehookCompatibilityEntry? mousehookEntry2 = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (mousehookEntry2 != null)
+        {
+            newGame.Compatibility.Mousehook.Rating = mousehookEntry2.MouseSupport;
+            newGame.Compatibility.Mousehook.Notes = mousehookEntry2.Notes ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+            newGame.Compatibility.Mousehook.Notes = string.Empty;
+        }
+
+        NetplayCompatibilityEntry? netplayEntry2 = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (netplayEntry2 != null)
+        {
+            newGame.Compatibility.Netplay.Status = netplayEntry2.Status;
+            newGame.Compatibility.Netplay.Comments = netplayEntry2.Comments ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Netplay.Status = new NetplayStatus();
+            newGame.Compatibility.Netplay.Comments = string.Empty;
+        }
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");

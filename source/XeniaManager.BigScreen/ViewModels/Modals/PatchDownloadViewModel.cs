@@ -6,10 +6,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
-using XeniaManager.Core.Database;
+using XeniaManager.Database;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
-using XeniaManager.Core.Models.Database.Patches;
+using XeniaManager.Database.Models.Patches;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 

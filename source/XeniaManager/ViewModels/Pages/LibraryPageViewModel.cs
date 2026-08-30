@@ -15,18 +15,21 @@ using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Database;
+using XeniaManager.Database;
 using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Database.Models.Xbox;
 using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Database.Models.GameCompatibility;
+using XeniaManager.Database.Models.MousehookCompatibility;
+using XeniaManager.Database.Models.NetplayCompatibility;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Items;
 
@@ -1499,15 +1502,45 @@ public partial class LibraryPageViewModel : ViewModelBase
 
                     if (selectedRatings.game)
                     {
-                        await GameCompatibilityDatabase.SetCompatibilityRating(game);
+                        GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+                        if (compatEntry != null)
+                        {
+                            game.Compatibility.Rating = compatEntry.State;
+                            game.Compatibility.Url = compatEntry.Url ?? string.Empty;
+                        }
+                        else
+                        {
+                            game.Compatibility.Rating = CompatibilityRating.Unknown;
+                            game.Compatibility.Url = string.Empty;
+                        }
                     }
                     if (selectedRatings.mousehook)
                     {
-                        await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+                        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+                        if (mousehookEntry != null)
+                        {
+                            game.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+                            game.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+                        }
+                        else
+                        {
+                            game.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+                            game.Compatibility.Mousehook.Notes = string.Empty;
+                        }
                     }
                     if (selectedRatings.netplay)
                     {
-                        await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+                        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+                        if (netplayEntry != null)
+                        {
+                            game.Compatibility.Netplay.Status = netplayEntry.Status;
+                            game.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+                        }
+                        else
+                        {
+                            game.Compatibility.Netplay.Status = new NetplayStatus();
+                            game.Compatibility.Netplay.Comments = string.Empty;
+                        }
                     }
 
                     bool gameChanged = selectedRatings.game && oldRating != game.Compatibility.Rating;
@@ -1577,7 +1610,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
             // Force reload the optimized settings database to get fresh data
             Logger.Info<LibraryPageViewModel>("Force reloading optimized settings database");
-            await OptimizedSettingsDatabase.ForceReloadAsync();
+            await OptimizedSettingsDatabase.ForceReloadAsync(cacheDirectory: AppPaths.DatabaseCacheDirectory);
 
             int updatedCount = 0;
             int failedCount = 0;
@@ -1596,7 +1629,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                     Logger.Debug<LibraryPageViewModel>($"Updating optimized settings for: '{game.Title}' (ID: {game.GameId})");
 
                     // Fetch optimized settings from the database
-                    ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+                    ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
 
                     if (optimizedConfigFile == null)
                     {

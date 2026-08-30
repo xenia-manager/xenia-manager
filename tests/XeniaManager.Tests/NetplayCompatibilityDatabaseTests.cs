@@ -1,5 +1,5 @@
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Models.Database.NetplayCompatibility;
+using XeniaManager.Database;
+using XeniaManager.Database.Models.NetplayCompatibility;
 using XeniaManager.Core.Models.Game;
 
 namespace XeniaManager.Tests;
@@ -124,7 +124,17 @@ public class NetplayCompatibilityDatabaseTests
             AlternativeIDs = []
         };
 
-        await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+        if (netplayEntry != null)
+        {
+            game.Compatibility.Netplay.Status = netplayEntry.Status;
+            game.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+        }
+        else
+        {
+            game.Compatibility.Netplay.Status = new NetplayStatus();
+            game.Compatibility.Netplay.Comments = string.Empty;
+        }
 
         Assert.That(game.Compatibility.Netplay.Status.WorkingPublic, Is.EqualTo(NetplayStatusValue.Ok));
         Assert.That(game.Compatibility.Netplay.Status.Systemlink, Is.EqualTo(NetplayStatusValue.Ok));
@@ -143,7 +153,17 @@ public class NetplayCompatibilityDatabaseTests
             AlternativeIDs = []
         };
 
-        await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+        if (netplayEntry != null)
+        {
+            game.Compatibility.Netplay.Status = netplayEntry.Status;
+            game.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+        }
+        else
+        {
+            game.Compatibility.Netplay.Status = new NetplayStatus();
+            game.Compatibility.Netplay.Comments = string.Empty;
+        }
 
         Assert.That(game.Compatibility.Netplay.Status.WorkingPublic, Is.EqualTo(NetplayStatusValue.Unknown));
         Assert.That(game.Compatibility.Netplay.Comments, Is.EqualTo(string.Empty));
@@ -161,7 +181,17 @@ public class NetplayCompatibilityDatabaseTests
             AlternativeIDs = ["415607D1"]
         };
 
-        await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+        if (netplayEntry != null)
+        {
+            game.Compatibility.Netplay.Status = netplayEntry.Status;
+            game.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+        }
+        else
+        {
+            game.Compatibility.Netplay.Status = new NetplayStatus();
+            game.Compatibility.Netplay.Comments = string.Empty;
+        }
 
         Assert.That(game.Compatibility.Netplay.Status.WorkingPublic, Is.EqualTo(NetplayStatusValue.Partial));
     }
@@ -195,7 +225,17 @@ public class NetplayCompatibilityDatabaseTests
                 AlternativeIDs = []
             };
 
-            await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+            NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title);
+            if (netplayEntry != null)
+            {
+                game.Compatibility.Netplay.Status = netplayEntry.Status;
+                game.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+            }
+            else
+            {
+                game.Compatibility.Netplay.Status = new NetplayStatus();
+                game.Compatibility.Netplay.Comments = string.Empty;
+            }
 
             Assert.That(game.Compatibility.Netplay.Status.WorkingPublic, Is.Not.EqualTo(NetplayStatusValue.Unknown).Or.EqualTo(NetplayStatusValue.Unknown));
         }
