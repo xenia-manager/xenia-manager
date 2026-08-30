@@ -88,10 +88,7 @@ public class PatchDocument
     /// Adds a patch entry to this document.
     /// </summary>
     /// <param name="patch">The patch entry to add.</param>
-    public void AddPatch(PatchEntry patch)
-    {
-        Patches.Add(patch);
-    }
+    public void AddPatch(PatchEntry patch) => Patches.Add(patch);
 
     /// <summary>
     /// Adds a new patch entry with the specified parameters.

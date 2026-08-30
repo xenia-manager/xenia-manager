@@ -21,7 +21,13 @@ public class AccountContent
     /// <summary>
     /// Gets the path to the Xenia content folder.
     /// </summary>
-    public string XeniaContentFolder => AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion).ContentFolderLocation);
+    public string XeniaContentFolder
+    {
+        get
+        {
+            return AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion).ContentFolderLocation);
+        }
+    }
 
     /// <summary>
     /// Gets the account information for this profile.
@@ -31,12 +37,24 @@ public class AccountContent
     /// <summary>
     /// Gets the Xbox 360 User ID (XUID) for this profile.
     /// </summary>
-    public ulong Xuid => AccountInfo.PathXuid?.Value ?? AccountInfo.Xuid.Value;
+    public ulong Xuid
+    {
+        get
+        {
+            return AccountInfo.PathXuid?.Value ?? AccountInfo.Xuid.Value;
+        }
+    }
 
     /// <summary>
     /// Gets the Xbox 360 User ID (XUID) as a hexadecimal string.
     /// </summary>
-    public string XuidHex => Xuid.ToString("X16");
+    public string XuidHex
+    {
+        get
+        {
+            return Xuid.ToString("X16");
+        }
+    }
 
     /// <summary>
     /// Gets the Title ID of the game associated with this profile.
@@ -199,8 +217,8 @@ public class AccountContent
         SavedGameHeaderFiles = [];
         List<string> savedGamesFolderContent =
         [
-            ..Directory.GetDirectories(savedGamesFolder),
-            ..Directory.GetFiles(savedGamesFolder)
+            .. Directory.GetDirectories(savedGamesFolder),
+            .. Directory.GetFiles(savedGamesFolder)
         ];
 
         Logger.Debug<AccountContent>($"Found {savedGamesFolderContent.Count} saved game items to process");

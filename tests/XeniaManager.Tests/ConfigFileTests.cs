@@ -244,7 +244,7 @@ mixed_array = [1, true, ""hello"", 3.14]
         ConfigSection? displaySection = configFile.GetSection("Display");
         Assert.That(displaySection, Is.Not.Null);
 
-        var someArray = displaySection.GetValue<List<object>>("some_array");
+        List<object> someArray = displaySection.GetValue<List<object>>("some_array");
         Assert.That(someArray, Is.Not.Null);
         Assert.That(someArray, Has.Count.EqualTo(4));
     }
@@ -795,7 +795,7 @@ empty_array = []
         // Assert
         ConfigSection? section = configFile.GetSection("Section");
         Assert.That(section, Is.Not.Null);
-        var array = section.GetValue<List<object>>("empty_array");
+        List<object> array = section.GetValue<List<object>>("empty_array");
         Assert.That(array, Is.Not.Null);
         Assert.That(array, Is.Empty);
     }

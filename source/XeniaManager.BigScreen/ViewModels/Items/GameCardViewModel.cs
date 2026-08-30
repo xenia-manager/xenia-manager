@@ -53,32 +53,68 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     /// <summary>
     /// The game's box art, or null when missing/unreadable.
     /// </summary>
-    public Bitmap? BoxArt => !string.IsNullOrEmpty(Game.Artwork.Boxart) ? Game.Artwork.CachedBoxart : null;
+    public Bitmap? BoxArt
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Game.Artwork.Boxart) ? Game.Artwork.CachedBoxart : null;
+        }
+    }
 
     /// <summary>
     /// Whether box art is available to show.
     /// </summary>
-    public bool HasBoxArt => BoxArt != null;
+    public bool HasBoxArt
+    {
+        get
+        {
+            return BoxArt != null;
+        }
+    }
 
     /// <summary>
     /// The game's disc art (icon), or null when missing/unreadable.
     /// </summary>
-    public Bitmap? DiscArt => Game.Artwork.CachedIcon;
+    public Bitmap? DiscArt
+    {
+        get
+        {
+            return Game.Artwork.CachedIcon;
+        }
+    }
 
     /// <summary>
     /// Whether disc art is available to show.
     /// </summary>
-    public bool HasDiscArt => DiscArt != null;
+    public bool HasDiscArt
+    {
+        get
+        {
+            return DiscArt != null;
+        }
+    }
 
     /// <summary>
     /// Whether the box art layer is shown (Box Art mode only).
     /// </summary>
-    public bool ShowBoxArt => CardImageMode == CardImageMode.BoxArt && HasBoxArt;
+    public bool ShowBoxArt
+    {
+        get
+        {
+            return CardImageMode == CardImageMode.BoxArt && HasBoxArt;
+        }
+    }
 
     /// <summary>
     /// Whether the disc icon layer is shown (always in Icon mode, fallback in Box Art mode).
     /// </summary>
-    public bool ShowDiscArt => CardImageMode == CardImageMode.Icon || !HasBoxArt;
+    public bool ShowDiscArt
+    {
+        get
+        {
+            return CardImageMode == CardImageMode.Icon || !HasBoxArt;
+        }
+    }
 
     /// <summary>
     /// Achievements unlocked / total, from the profile's GPD or per-game achievement GPD.
@@ -95,35 +131,59 @@ public partial class GameCardViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Total time played, formatted via <see cref="PlaytimeFormatter"/>.
     /// </summary>
-    public string PlaytimeText => PlaytimeFormatter.Format(Game.Playtime);
+    public string PlaytimeText
+    {
+        get
+        {
+            return PlaytimeFormatter.Format(Game.Playtime);
+        }
+    }
 
     /// <summary>
     /// The tile's width; grows on selection.
     /// </summary>
-    public double CardWidth => IsSelected
-        ? LayoutConstants.DashboardCardSelectedWidth
-        : LayoutConstants.DashboardCardWidth;
+    public double CardWidth
+    {
+        get
+        {
+            return IsSelected
+                ? LayoutConstants.DashboardCardSelectedWidth
+                : LayoutConstants.DashboardCardWidth;
+        }
+    }
 
     /// <summary>
     /// The tile's height. Box Art mode uses a portrait tile sized so the art fills
     /// it bottom-anchored with the top ~12% cropped (Icon mode stays square);
     /// selection grows both.
     /// </summary>
-    public double CardHeight => CardImageMode == CardImageMode.BoxArt
-        ? IsSelected
-            ? LayoutConstants.DashboardCardBoxArtSelectedHeight
-            : LayoutConstants.DashboardCardBoxArtHeight
-        : IsSelected
-            ? LayoutConstants.DashboardCardIconSelectedHeight
-            : LayoutConstants.DashboardCardIconHeight;
+    public double CardHeight
+    {
+        get
+        {
+            return CardImageMode == CardImageMode.BoxArt
+                ? IsSelected
+                    ? LayoutConstants.DashboardCardBoxArtSelectedHeight
+                    : LayoutConstants.DashboardCardBoxArtHeight
+                : IsSelected
+                    ? LayoutConstants.DashboardCardIconSelectedHeight
+                    : LayoutConstants.DashboardCardIconHeight;
+        }
+    }
 
     /// <summary>
     /// Full height of the box art at the current tile width; the bottom-anchored
     /// crop container, so only the art's top ~12% is clipped. 0 without art.
     /// </summary>
-    public double BoxArtFullHeight => BoxArt != null
-        ? (CardWidth - LayoutConstants.DashboardCardArtMargin) * BoxArt.PixelSize.Height / BoxArt.PixelSize.Width
-        : 0;
+    public double BoxArtFullHeight
+    {
+        get
+        {
+            return BoxArt != null
+                ? (CardWidth - LayoutConstants.DashboardCardArtMargin) * BoxArt.PixelSize.Height / BoxArt.PixelSize.Width
+                : 0;
+        }
+    }
 
     public GameCardViewModel(Game game, GameStatInfo? stats = null)
     {

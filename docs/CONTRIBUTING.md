@@ -187,7 +187,7 @@ All core logic should be placed in the appropriate library (**XeniaManager.Core*
 
 - Use **4 spaces** for indentation (no tabs)
 - Place opening braces `{` on a **new line**
-- Use expression-bodied members when appropriate for simple methods/properties
+- Use expression-bodied bodies only for simple single-line methods; properties and accessors always use block bodies (`get { return ...; }`)
 - Use file-scoped namespaces:
   ```csharp
   namespace XeniaManager.Core.Manage;
@@ -199,7 +199,10 @@ All core logic should be placed in the appropriate library (**XeniaManager.Core*
   ```
 
 - Use `using` directives sorted alphabetically, with system namespaces first
-- Prefer `var` when the type is obvious, explicit types when clarity is needed
+- Always write explicit types - never `var` and never target-typed `new()`
+- Keep lines under 160 characters
+
+The rules in this section are encoded in the root `.editorconfig` and enforced by `python scripts/lint.py` (ReSharper cleanupcode).
 
 ---
 
@@ -263,7 +266,17 @@ Xenia Manager supports custom themes. To create a new theme:
    - `refactor/description` - Code refactoring
    - `docs/description` - Documentation changes
 
-2. **Write Meaningful Commits**:
+2. **Run the Linter**:
+    - Format your changes before committing:
+      ```bash
+      python scripts/lint.py
+      ```
+    - To verify without modifying files (same check CI runs):
+      ```bash
+      python scripts/lint.py --check
+      ```
+
+3. **Write Meaningful Commits**:
    - Use conventional commit format:
      ```bash
      git commit -m "[Feature] Add game details editor dialog"
@@ -273,7 +286,7 @@ Xenia Manager supports custom themes. To create a new theme:
    - Keep commits atomic and focused on a single change
    - Write clear, descriptive commit messages
 
-3. **Submit a Pull Request**:
+4. **Submit a Pull Request**:
    - Push your branch to the remote repository
    - Open a pull request targeting the `dev` branch
    - Link to any related issues

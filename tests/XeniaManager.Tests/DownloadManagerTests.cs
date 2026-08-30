@@ -84,7 +84,8 @@ public class DownloadManagerTests
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
 
         // Act & Assert
-        ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", null!));
+        ArgumentException? exception =
+            Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", null!));
         Assert.That(exception!.ParamName, Is.EqualTo("fileName"));
     }
 
@@ -95,7 +96,8 @@ public class DownloadManagerTests
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
 
         // Act & Assert
-        ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", ""));
+        ArgumentException? exception =
+            Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", ""));
         Assert.That(exception!.ParamName, Is.EqualTo("fileName"));
     }
 
@@ -106,7 +108,8 @@ public class DownloadManagerTests
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
 
         // Act & Assert
-        ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", "   "));
+        ArgumentException? exception =
+            Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", "   "));
         Assert.That(exception!.ParamName, Is.EqualTo("fileName"));
     }
 
@@ -210,7 +213,8 @@ public class DownloadManagerTests
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
 
         // Act & Assert
-        ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileFromMultipleUrlsAsync(null!, "validPath.txt"));
+        ArgumentException? exception =
+            Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileFromMultipleUrlsAsync(null!, "validPath.txt"));
         Assert.That(exception!.ParamName, Is.EqualTo("urls"));
     }
 
@@ -222,7 +226,8 @@ public class DownloadManagerTests
         string[] emptyUrls = [];
 
         // Act & Assert
-        ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileFromMultipleUrlsAsync(emptyUrls, "validPath.txt"));
+        ArgumentException? exception =
+            Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileFromMultipleUrlsAsync(emptyUrls, "validPath.txt"));
         Assert.That(exception!.ParamName, Is.EqualTo("urls"));
     }
 
@@ -300,7 +305,10 @@ public class DownloadManagerTests
         downloadManager.ProgressChanged += (progress) => progressValues.Add(progress);
 
         // Using manifest URLs with an invalid URL first to test fallback behavior
-        string[] urls = new[] { "https://invalid-url-that-will-fail.com/file" }.Concat(Urls.Manifest).ToArray();
+        string[] urls = new[]
+        {
+            "https://invalid-url-that-will-fail.com/file"
+        }.Concat(Urls.Manifest).ToArray();
         string savePath = _testFilePath;
 
         // Act & Assert - Check that no validation exceptions are thrown

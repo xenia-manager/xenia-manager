@@ -110,7 +110,8 @@ public class ArchiveExtractor
     /// <exception cref="FileNotFoundException">Thrown when the specified archive file does not exist.</exception>
     /// <exception cref="NotSupportedException">Thrown when the archive format is not supported.</exception>
     /// <exception cref="OperationCanceledException">Thrown when the operation is canceled.</exception>
-    public static async Task ExtractArchiveAsync(string archivePath, string outputPath, string[]? filesToExtract = null, CancellationToken cancellationToken = default)
+    public static async Task ExtractArchiveAsync(string archivePath, string outputPath, string[]? filesToExtract = null,
+        CancellationToken cancellationToken = default)
     {
         ValidateInputs(archivePath, outputPath);
         string formatName = GetFormatName(archivePath);
@@ -166,7 +167,7 @@ public class ArchiveExtractor
                             Directory.CreateDirectory(entryDirectory);
                         }
 
-                        await reader.WriteEntryToFileAsync(entryOutputPath, DefaultExtractionOptions, cancellationToken: cancellationToken);
+                        await reader.WriteEntryToFileAsync(entryOutputPath, DefaultExtractionOptions, cancellationToken);
                         extractedCount++;
                     }
                 }
@@ -243,10 +244,12 @@ public class ArchiveExtractor
         {
             return ".tar.gz";
         }
+
         if (fileName.EndsWith(".tar.bz2"))
         {
             return ".tar.bz2";
         }
+
         if (fileName.EndsWith(".tar.xz"))
         {
             return ".tar.xz";

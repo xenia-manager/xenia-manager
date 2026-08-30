@@ -20,7 +20,8 @@ public class ArtworkManager
     /// Value: CacheEntry containing cached file path (hash-based), hash, file size, and last modified time
     /// This prevents redundant file reads and hash computations for the same artwork.
     /// </summary>
-    private static readonly ConcurrentDictionary<string, CacheEntry> ArtworkCache = new ConcurrentDictionary<string, CacheEntry>(StringComparer.OrdinalIgnoreCase);
+    private static readonly ConcurrentDictionary<string, CacheEntry> ArtworkCache =
+        new ConcurrentDictionary<string, CacheEntry>(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Represents a cache entry with metadata for quick validation.
@@ -31,15 +32,16 @@ public class ArtworkManager
     /// Dictionary mapping file extensions to their corresponding SkiaSharp encoded image formats.
     /// Used to validate and determine the output format for image conversions.
     /// </summary>
-    private static readonly Dictionary<string, SKEncodedImageFormat> SupportedExtensions = new Dictionary<string, SKEncodedImageFormat>(StringComparer.OrdinalIgnoreCase)
-    {
-        [".jpg"] = SKEncodedImageFormat.Jpeg,
-        [".jpeg"] = SKEncodedImageFormat.Jpeg,
-        [".png"] = SKEncodedImageFormat.Png,
-        [".webp"] = SKEncodedImageFormat.Webp,
-        [".bmp"] = SKEncodedImageFormat.Bmp,
-        [".gif"] = SKEncodedImageFormat.Gif,
-    };
+    private static readonly Dictionary<string, SKEncodedImageFormat> SupportedExtensions =
+        new Dictionary<string, SKEncodedImageFormat>(StringComparer.OrdinalIgnoreCase)
+        {
+            [".jpg"] = SKEncodedImageFormat.Jpeg,
+            [".jpeg"] = SKEncodedImageFormat.Jpeg,
+            [".png"] = SKEncodedImageFormat.Png,
+            [".webp"] = SKEncodedImageFormat.Webp,
+            [".bmp"] = SKEncodedImageFormat.Bmp,
+            [".gif"] = SKEncodedImageFormat.Gif
+        };
 
     /// <summary>
     /// Default quality setting used for image encoding operations (JPEG/WebP).
@@ -197,7 +199,8 @@ public class ArtworkManager
     /// <exception cref="InvalidOperationException">Thrown when SkiaSharp fails to encode the image.</exception>
     private static void EncodeTo(SKBitmap bitmap, string savePath, SKEncodedImageFormat format, int quality = DefaultQuality)
     {
-        Logger.Trace<ArtworkManager>($"Starting EncodeTo operation for bitmap {bitmap.Width}x{bitmap.Height} to {savePath} (Format: {format}, Quality: {quality})");
+        Logger.Trace<ArtworkManager>(
+            $"Starting EncodeTo operation for bitmap {bitmap.Width}x{bitmap.Height} to {savePath} (Format: {format}, Quality: {quality})");
         using SKImage? image = SKImage.FromBitmap(bitmap);
         using SKData data = image.Encode(format, quality)
                             ?? throw new InvalidOperationException(
@@ -223,6 +226,7 @@ public class ArtworkManager
             throw new NotSupportedException($"Unsupported file extension: '{ext}'. " +
                                             $"Supported: {string.Join(", ", SupportedExtensions.Keys)}");
         }
+
         Logger.Debug<ArtworkManager>($"File extension '{ext}' is supported");
         Logger.Trace<ArtworkManager>("ValidateSourceExtension operation completed successfully");
     }
@@ -239,7 +243,8 @@ public class ArtworkManager
     /// <exception cref="InvalidOperationException">Thrown when the image data cannot be decoded.</exception>
     public static void ConvertArtwork(byte[] artworkData, string savePath, SKEncodedImageFormat format, int width, int height, int quality = DefaultQuality)
     {
-        Logger.Trace<ArtworkManager>($"Starting ConvertArtwork operation with raw image data to {savePath} (Format: {format}, Size: {width}x{height}, Quality: {quality})");
+        Logger.Trace<ArtworkManager>(
+            $"Starting ConvertArtwork operation with raw image data to {savePath} (Format: {format}, Size: {width}x{height}, Quality: {quality})");
 
         using SKBitmap original = SKBitmap.Decode(artworkData)
                                   ?? throw new InvalidOperationException("Failed to decode image data.");
@@ -287,7 +292,8 @@ public class ArtworkManager
     /// <exception cref="NotSupportedException">Thrown when the source file extension is not supported.</exception>
     public static void ConvertArtwork(string filePath, string savePath, SKEncodedImageFormat format, int width, int height, int quality = DefaultQuality)
     {
-        Logger.Trace<ArtworkManager>($"Starting ConvertArtwork operation with file {filePath} to {savePath} (Format: {format}, Size: {width}x{height}, Quality: {quality})");
+        Logger.Trace<ArtworkManager>(
+            $"Starting ConvertArtwork operation with file {filePath} to {savePath} (Format: {format}, Size: {width}x{height}, Quality: {quality})");
 
         ValidateSourceExtension(filePath);
         Logger.Debug<ArtworkManager>($"Source file extension validated: {Path.GetExtension(filePath)}");
@@ -343,9 +349,11 @@ public class ArtworkManager
     /// <param name="quality">The quality level for lossy formats (JPEG/WebP), defaults to 100.</param>
     /// <exception cref="InvalidOperationException">Thrown when the image file cannot be decoded.</exception>
     /// <exception cref="NotSupportedException">Thrown when the source file extension is not supported.</exception>
-    public static void ResizeArtwork(string filePath, string savePath, int width, int height, ResizeMode mode = ResizeMode.Stretch, SKEncodedImageFormat? format = null, int quality = DefaultQuality)
+    public static void ResizeArtwork(string filePath, string savePath, int width, int height, ResizeMode mode = ResizeMode.Stretch,
+        SKEncodedImageFormat? format = null, int quality = DefaultQuality)
     {
-        Logger.Trace<ArtworkManager>($"Starting ResizeArtwork operation with file {filePath} to {savePath} (Size: {width}x{height}, Mode: {mode}, Format: {format?.ToString() ?? "auto"}, Quality: {quality})");
+        Logger.Trace<ArtworkManager>(
+            $"Starting ResizeArtwork operation with file {filePath} to {savePath} (Size: {width}x{height}, Mode: {mode}, Format: {format?.ToString() ?? "auto"}, Quality: {quality})");
 
         ValidateSourceExtension(filePath);
         Logger.Debug<ArtworkManager>($"Source file extension validated: {Path.GetExtension(filePath)}");
@@ -429,9 +437,11 @@ public class ArtworkManager
     /// <param name="width">The target width for the resized image, defaults to 150.</param>
     /// <param name="height">The target height for the resized image, defaults to 207.</param>
     /// <param name="format">The target image format for conversion, defaults to PNG.</param>
-    public static void LocalArtwork(string artwork, string destination, int width = 150, int height = 207, SKEncodedImageFormat format = SKEncodedImageFormat.Png)
+    public static void LocalArtwork(string artwork, string destination, int width = 150, int height = 207,
+        SKEncodedImageFormat format = SKEncodedImageFormat.Png)
     {
-        Logger.Trace<ArtworkManager>($"Starting LocalArtwork operation with embedded resource '{artwork}' to {destination} (Format: {format}, Size: {width}x{height})");
+        Logger.Trace<ArtworkManager>(
+            $"Starting LocalArtwork operation with embedded resource '{artwork}' to {destination} (Format: {format}, Size: {width}x{height})");
         byte[] resourceBytes = ReadEmbeddedResource(artwork);
         Logger.Debug<ArtworkManager>($"Successfully extracted embedded resource '{artwork}', size: {resourceBytes.Length} bytes");
         ConvertArtwork(resourceBytes, destination, format, width, height);
@@ -555,7 +565,8 @@ public class ArtworkManager
                 }
 
                 // Metadata changed, verify with hash
-                Logger.Debug<ArtworkManager>($"File metadata changed (old: {cachedEntry.FileSize} bytes @ {cachedEntry.LastModifiedTime}, new: {currentFileSize} bytes @ {currentLastModified}), verifying with hash");
+                Logger.Debug<ArtworkManager>(
+                    $"File metadata changed (old: {cachedEntry.FileSize} bytes @ {cachedEntry.LastModifiedTime}, new: {currentFileSize} bytes @ {currentLastModified}), verifying with hash");
                 byte[] originalBytes = File.ReadAllBytes(artworkLocation);
                 string currentHash = ComputeHash(originalBytes);
 
@@ -563,7 +574,11 @@ public class ArtworkManager
                 {
                     Logger.Info<ArtworkManager>($"Found matching cached artwork at: {cachedEntry.CachedPath} (hash validation passed)");
                     // Update metadata in cache
-                    ArtworkCache[fullPath] = cachedEntry with { FileSize = currentFileSize, LastModifiedTime = currentLastModified };
+                    ArtworkCache[fullPath] = cachedEntry with
+                    {
+                        FileSize = currentFileSize,
+                        LastModifiedTime = currentLastModified
+                    };
                     Logger.Trace<ArtworkManager>("FindCachedArtwork operation completed successfully");
                     return cachedEntry.CachedPath;
                 }
@@ -781,7 +796,8 @@ public class ArtworkManager
             }
         }
 
-        Logger.Info<ArtworkManager>($"ClearUnusedCachedArtwork operation completed. Deleted {deletedCount} orphaned cache files out of {cacheFiles.Length} total files");
+        Logger.Info<ArtworkManager>(
+            $"ClearUnusedCachedArtwork operation completed. Deleted {deletedCount} orphaned cache files out of {cacheFiles.Length} total files");
         return deletedCount;
     }
 
@@ -807,7 +823,8 @@ public class ArtworkManager
                     // Remove size indicators (lg, sm, lg1, sm1, etc.) before the extension
                     // Pattern: matches "lg" or "sm" optionally followed by digits, before the file extension
                     // e.g., "boxartlg.jpg" -> "boxart.jpg", "iconsm1.png" -> "icon.png"
-                    fileName = System.Text.RegularExpressions.Regex.Replace(fileName, @"(lg|sm)\d*\.(\w+)$", ".$2", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    fileName = System.Text.RegularExpressions.Regex.Replace(fileName, @"(lg|sm)\d*\.(\w+)$", ".$2",
+                        System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                     return fileName.ToLowerInvariant();
                 }
             }
@@ -998,7 +1015,7 @@ public class IcoEncoder
         Logger.Debug<IcoEncoder>($"Wrote ICO header with {frames.Count} images");
 
         // Calculate where PNG data starts (after header + all directory entries)
-        int dataOffset = 6 + (frames.Count * 16);
+        int dataOffset = 6 + frames.Count * 16;
 
         // "ICONDIRENTRY" for each frame (16 bytes each)
         for (int i = 0; i < frames.Count; i++)

@@ -1,0 +1,141 @@
+# EditorConfig — encodes the conventions from docs/CONTRIBUTING.md.
+# ReSharper Command Line Tools (scripts/lint.py) apply these automatically;
+# JetBrains-specific resharper_* keys extend the standard ones.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = false
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{axaml,xaml,xml}]
+
+## Keep the first attribute on the same line as the element name;
+## wrap subsequent attributes onto lines aligned with it
+resharper_xml_attribute_style = first_attribute_on_single_line
+resharper_xml_attribute_indent = align_by_first_attribute
+
+## Allow deeply nested elements to keep first attribute on the tag line
+resharper_xml_max_line_length = 320
+
+# --- Formatting (docs/CONTRIBUTING.md > Coding Standards > Formatting) ---
+
+[*.cs]
+
+## Wrap limit
+max_line_length = 160
+resharper_csharp_max_line_length = 160
+
+## Indentation: 4 spaces, no tabs
+indent_style = space
+indent_size = 4
+
+## Opening braces { on a new line (Allman)
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_between_query_expression_clauses = true
+
+## File-scoped namespaces
+csharp_style_namespace_declarations = file_scoped:suggestion
+resharper_csharp_use_file_scoped_namespaces = true
+
+## using directives sorted alphabetically, System first
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+## Never use var; always write the explicit type
+csharp_style_var_for_built_in_types = false:error
+csharp_style_var_when_type_is_apparent = false:error
+csharp_style_var_elsewhere = false:error
+
+## Never use target-typed new()
+csharp_style_implicit_object_creation_when_type_is_apparent = false:error
+
+## JetBrains-specific keys so jb cleanupcode rewrites new() usages
+resharper_csharp_object_creation_when_type_evident = explicitly_typed
+resharper_csharp_object_creation_when_type_not_evident = explicitly_typed
+
+## Expression-bodied members when appropriate for simple methods
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+
+## Never use expression bodies for properties/accessors; always block bodies
+csharp_style_expression_bodied_properties = false:error
+csharp_style_expression_bodied_accessors = false:error
+csharp_style_expression_bodied_constructors = false:suggestion
+
+## JetBrains-specific keys so jb cleanupcode rewrites accessor/property bodies
+resharper_csharp_accessor_owner_body = accessors_with_block_body
+
+## Constructors and local functions: always block bodies.
+## Methods are left at the jb default - it has no line-aware value matching
+## when_on_single_line above.
+resharper_csharp_constructor_or_destructor_body = block_body
+resharper_csharp_local_function_body = block_body
+
+csharp_prefer_braces = true:suggestion
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+csharp_style_throw_expression = true:suggestion
+dotnet_style_object_initializer = true:suggestion
+
+csharp_preserve_single_line_statements = false
+csharp_preserve_single_line_blocks = true
+
+## Object/collection initializers: one member per line
+resharper_csharp_wrap_object_and_collection_initializer_style = chop_always
+resharper_csharp_place_simple_initializer_on_single_line = false
+
+# --- Naming Conventions (docs/CONTRIBUTING.md > Naming Conventions) ---
+
+## Constants: PascalCase without underscore prefix
+## (must be declared before private_fields - first matching rule wins)
+dotnet_naming_rule.constants_pascalcase.severity = suggestion
+dotnet_naming_rule.constants_pascalcase.symbols = constants
+dotnet_naming_rule.constants_pascalcase.style = pascalcase
+
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.applicable_modifiers = const
+
+## Private instance/static fields: _camelCase (e.g. _settings, _isRunning)
+dotnet_naming_rule.private_fields_underscore_camelcase.severity = suggestion
+dotnet_naming_rule.private_fields_underscore_camelcase.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore_camelcase.style = underscore_camelcase
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_camelcase.required_prefix = _
+dotnet_naming_style.underscore_camelcase.capitalization = camel_case
+
+## Interfaces: IPascalCase
+dotnet_naming_rule.interfaces_i_pascalcase.severity = suggestion
+dotnet_naming_rule.interfaces_i_pascalcase.symbols = interfaces
+dotnet_naming_rule.interfaces_i_pascalcase.style = i_prefix_pascalcase
+
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+
+dotnet_naming_style.i_prefix_pascalcase.required_prefix = I
+dotnet_naming_style.i_prefix_pascalcase.capitalization = pascal_case
+
+
+## Types and public members: PascalCase (methods, properties, public static fields)
+dotnet_naming_rule.types_and_public_members_pascalcase.severity = suggestion
+dotnet_naming_rule.types_and_public_members_pascalcase.symbols = types_and_public_members
+dotnet_naming_rule.types_and_public_members_pascalcase.style = pascalcase
+
+dotnet_naming_symbols.types_and_public_members.applicable_kinds = class,struct,enum,method,property,field,event
+dotnet_naming_symbols.types_and_public_members.applicable_accessibilities = public,internal,protected,protected_internal,private_protected
+
+dotnet_naming_style.pascalcase.capitalization = pascal_case

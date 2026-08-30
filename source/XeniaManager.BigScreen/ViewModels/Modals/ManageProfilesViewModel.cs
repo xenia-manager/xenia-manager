@@ -65,46 +65,86 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// Whether the edited profile can be persisted: a profile is selected, the
     /// gamertag is valid and the country/language combos have a selection.
     /// </summary>
-    private bool CanSaveProfile =>
-        SelectedProfile != null && CanSave && SelectedCountryIndex >= 0 && SelectedLanguageIndex >= 0;
+    private bool CanSaveProfile
+    {
+        get
+        {
+            return SelectedProfile != null && CanSave && SelectedCountryIndex >= 0 && SelectedLanguageIndex >= 0;
+        }
+    }
 
     /// <summary>
     /// Whether the subscription tier combo holds a valid selection.
     /// </summary>
-    private bool HasValidSubscriptionIndex =>
-        SelectedSubscriptionTierIndex >= 0 && SelectedSubscriptionTierIndex < SubscriptionTiers.Count;
+    private bool HasValidSubscriptionIndex
+    {
+        get
+        {
+            return SelectedSubscriptionTierIndex >= 0 && SelectedSubscriptionTierIndex < SubscriptionTiers.Count;
+        }
+    }
 
     /// <summary>
     /// Whether a panel editor (dropdown) is open and takes Up/Down input.
     /// </summary>
-    public bool IsEditorOpen => _editorKind.HasValue;
+    public bool IsEditorOpen
+    {
+        get
+        {
+            return _editorKind.HasValue;
+        }
+    }
 
     /// <summary>
     /// Whether any profiles exist.
     /// </summary>
-    public bool HasProfiles => Rows.Count > 0;
+    public bool HasProfiles
+    {
+        get
+        {
+            return Rows.Count > 0;
+        }
+    }
 
     /// <summary>
     /// Whether the "no profiles" stub should show.
     /// </summary>
-    public bool ShowEmpty => !HasProfiles;
+    public bool ShowEmpty
+    {
+        get
+        {
+            return !HasProfiles;
+        }
+    }
 
     /// <summary>
     /// Whether the edit panel is shown. Hidden while the create stub is
     /// selected - there is nothing to edit.
     /// </summary>
-    public bool ShowEditPanel => !CreateStub.IsSelected;
+    public bool ShowEditPanel
+    {
+        get
+        {
+            return !CreateStub.IsSelected;
+        }
+    }
 
     /// <summary>
     /// Whether the edit fields differ from the values loaded when the profile
     /// was selected (unsaved edits).
     /// </summary>
-    private bool IsDirty => SelectedProfile != null && (
-        EditGamertag != _baseline.Gamertag ||
-        SelectedCountryIndex != _baseline.CountryIndex ||
-        SelectedLanguageIndex != _baseline.LanguageIndex ||
-        IsLiveEnabled != _baseline.IsLiveEnabled ||
-        SelectedSubscriptionTierIndex != _baseline.SubscriptionTierIndex);
+    private bool IsDirty
+    {
+        get
+        {
+            return SelectedProfile != null && (
+                EditGamertag != _baseline.Gamertag ||
+                SelectedCountryIndex != _baseline.CountryIndex ||
+                SelectedLanguageIndex != _baseline.LanguageIndex ||
+                IsLiveEnabled != _baseline.IsLiveEnabled ||
+                SelectedSubscriptionTierIndex != _baseline.SubscriptionTierIndex);
+        }
+    }
 
     /// <summary>
     /// Raised when View (Import) is pressed - the view runs the file picker.
@@ -148,37 +188,37 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// <summary>
     /// The anchored "Create New Profile" row beneath the list.
     /// </summary>
-    public CreateProfileStubViewModel CreateStub { get; } = new();
+    public CreateProfileStubViewModel CreateStub { get; } = new CreateProfileStubViewModel();
 
     /// <summary>
     /// Row for the edit panel's gamertag field.
     /// </summary>
-    public ManageProfilesRowViewModel RowGamertag { get; } = new(ManageProfilesRowKind.Gamertag);
+    public ManageProfilesRowViewModel RowGamertag { get; } = new ManageProfilesRowViewModel(ManageProfilesRowKind.Gamertag);
 
     /// <summary>
     /// Row for the edit panel's country dropdown.
     /// </summary>
-    public ManageProfilesRowViewModel RowCountry { get; } = new(ManageProfilesRowKind.Country);
+    public ManageProfilesRowViewModel RowCountry { get; } = new ManageProfilesRowViewModel(ManageProfilesRowKind.Country);
 
     /// <summary>
     /// Row for the edit panel's language dropdown.
     /// </summary>
-    public ManageProfilesRowViewModel RowLanguage { get; } = new(ManageProfilesRowKind.Language);
+    public ManageProfilesRowViewModel RowLanguage { get; } = new ManageProfilesRowViewModel(ManageProfilesRowKind.Language);
 
     /// <summary>
     /// Row for the edit panel's Xbox Live toggle.
     /// </summary>
-    public ManageProfilesRowViewModel RowLiveToggle { get; } = new(ManageProfilesRowKind.LiveToggle);
+    public ManageProfilesRowViewModel RowLiveToggle { get; } = new ManageProfilesRowViewModel(ManageProfilesRowKind.LiveToggle);
 
     /// <summary>
     /// Row for the edit panel's subscription tier dropdown.
     /// </summary>
-    public ManageProfilesRowViewModel RowSubscriptionTier { get; } = new(ManageProfilesRowKind.SubscriptionTier);
+    public ManageProfilesRowViewModel RowSubscriptionTier { get; } = new ManageProfilesRowViewModel(ManageProfilesRowKind.SubscriptionTier);
 
     /// <summary>
     /// Row for the edit panel's Save action.
     /// </summary>
-    public ManageProfilesRowViewModel RowSave { get; } = new(ManageProfilesRowKind.Save);
+    public ManageProfilesRowViewModel RowSave { get; } = new ManageProfilesRowViewModel(ManageProfilesRowKind.Save);
 
     /// <summary>
     /// The list of available countries for the ComboBox.
@@ -204,7 +244,13 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// <summary>
     /// Whether any version chips exist.
     /// </summary>
-    public bool HasVersionChips => VersionChips.Count > 0;
+    public bool HasVersionChips
+    {
+        get
+        {
+            return VersionChips.Count > 0;
+        }
+    }
 
     /// <summary>
     /// Rebuilds the version chips for every installed version, marking the
@@ -425,10 +471,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// Moves the panel selection by the given step, clamped at both ends. The
     /// panel rows start unselected - the first move selects the first row.
     /// </summary>
-    private void MovePanelSelection(int delta)
-    {
-        SelectionHelper.MoveSelection(_panelRows, delta);
-    }
+    private void MovePanelSelection(int delta) => SelectionHelper.MoveSelection(_panelRows, delta);
 
     /// <summary>
     /// Moves the controller into the edit panel, clearing the profile-row
@@ -702,7 +745,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         }
         else
         {
-            SetStatus(LocalizationHelper.GetText("ManageProfiles.Save.Error"), isError: true);
+            SetStatus(LocalizationHelper.GetText("ManageProfiles.Save.Error"), true);
         }
     }
 
@@ -990,7 +1033,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         }
         else
         {
-            SetStatus(LocalizationHelper.GetText("ManageProfiles.Delete.Error"), isError: true);
+            SetStatus(LocalizationHelper.GetText("ManageProfiles.Delete.Error"), true);
         }
     }
 
@@ -1011,7 +1054,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         SetStatus(status == ProfileOperationStatus.Success
                 ? string.Format(LocalizationHelper.GetText("ManageProfiles.Export.Success"), SelectedProfile.Gamertag)
                 : LocalizationHelper.GetText("ManageProfiles.Export.Failed"),
-            isError: status != ProfileOperationStatus.Success);
+            status != ProfileOperationStatus.Success);
     }
 
     /// <summary>
@@ -1036,7 +1079,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         }
         else
         {
-            SetStatus(LocalizationHelper.GetText("ManageProfiles.Import.Failed"), isError: true);
+            SetStatus(LocalizationHelper.GetText("ManageProfiles.Import.Failed"), true);
         }
     }
 

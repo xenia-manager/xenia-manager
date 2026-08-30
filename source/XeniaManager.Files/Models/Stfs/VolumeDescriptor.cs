@@ -31,12 +31,24 @@ public struct StfsVolumeDescriptor
     /// <summary>
     /// Gets whether this is a read-only format (single hash table block per level).
     /// </summary>
-    public bool IsReadOnlyFormat => (Flags & 0x01) != 0;
+    public bool IsReadOnlyFormat
+    {
+        get
+        {
+            return (Flags & 0x01) != 0;
+        }
+    }
 
     /// <summary>
     /// Gets the number of hash table blocks per level (1 for read-only, 2 for writable).
     /// </summary>
-    public int BlocksPerHashTable => IsReadOnlyFormat ? 1 : 2;
+    public int BlocksPerHashTable
+    {
+        get
+        {
+            return IsReadOnlyFormat ? 1 : 2;
+        }
+    }
 
     /// <summary>
     /// Number of blocks in the file table.
@@ -97,7 +109,8 @@ public struct StfsVolumeDescriptor
 
         Logger.Trace<StfsVolumeDescriptor>($"  VolumeDescriptorSize: {descriptor.VolumeDescriptorSize}");
         Logger.Trace<StfsVolumeDescriptor>($"  Version: {descriptor.Version}");
-        Logger.Trace<StfsVolumeDescriptor>($"  Flags: 0x{descriptor.Flags:X2} (IsReadOnlyFormat: {descriptor.IsReadOnlyFormat}, BlocksPerHashTable: {descriptor.BlocksPerHashTable})");
+        Logger.Trace<StfsVolumeDescriptor>(
+            $"  Flags: 0x{descriptor.Flags:X2} (IsReadOnlyFormat: {descriptor.IsReadOnlyFormat}, BlocksPerHashTable: {descriptor.BlocksPerHashTable})");
         Logger.Trace<StfsVolumeDescriptor>($"  FileTableBlockCount: {descriptor.FileTableBlockCount}");
         Logger.Trace<StfsVolumeDescriptor>($"  FileTableBlockNumber: {descriptor.FileTableBlockNumber}");
         Logger.Trace<StfsVolumeDescriptor>($"  TopHashTableHash: {BitConverter.ToString(descriptor.TopHashTableHash)}");

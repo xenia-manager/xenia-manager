@@ -17,53 +17,96 @@ public sealed class DownloadProgressCard : TemplatedControl
 
     public static readonly StyledProperty<double> ProgressProperty = AvaloniaProperty.Register<DownloadProgressCard, double>(nameof(Progress), 0d);
 
-    public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<DownloadProgressCard, bool>(nameof(ShowIconBackground), true);
+    public static readonly StyledProperty<bool> ShowIconBackgroundProperty =
+        AvaloniaProperty.Register<DownloadProgressCard, bool>(nameof(ShowIconBackground), true);
 
     public static readonly DirectProperty<DownloadProgressCard, string> ProgressTextProperty = AvaloniaProperty.RegisterDirect<DownloadProgressCard, string>(
         nameof(ProgressText), o => o.ProgressText);
 
     public string? StatusText
     {
-        get => GetValue(StatusTextProperty);
-        set => SetValue(StatusTextProperty, value);
+        get
+        {
+            return GetValue(StatusTextProperty);
+        }
+        set
+        {
+            SetValue(StatusTextProperty, value);
+        }
     }
 
     public bool IsOpen
     {
-        get => GetValue(IsOpenProperty);
-        set => SetValue(IsOpenProperty, value);
+        get
+        {
+            return GetValue(IsOpenProperty);
+        }
+        set
+        {
+            SetValue(IsOpenProperty, value);
+        }
     }
 
     public double Minimum
     {
-        get => GetValue(MinimumProperty);
-        set => SetValue(MinimumProperty, value);
+        get
+        {
+            return GetValue(MinimumProperty);
+        }
+        set
+        {
+            SetValue(MinimumProperty, value);
+        }
     }
 
     public double Maximum
     {
-        get => GetValue(MaximumProperty);
-        set => SetValue(MaximumProperty, value);
+        get
+        {
+            return GetValue(MaximumProperty);
+        }
+        set
+        {
+            SetValue(MaximumProperty, value);
+        }
     }
 
     public double Progress
     {
-        get => GetValue(ProgressProperty);
-        set => SetValue(ProgressProperty, value);
+        get
+        {
+            return GetValue(ProgressProperty);
+        }
+        set
+        {
+            SetValue(ProgressProperty, value);
+        }
     }
 
     private string _progressText = "0%";
 
     public string ProgressText
     {
-        get => _progressText;
-        private set => SetAndRaise(ProgressTextProperty, ref _progressText, value);
+        get
+        {
+            return _progressText;
+        }
+        private set
+        {
+            SetAndRaise(ProgressTextProperty, ref _progressText, value);
+        }
     }
 
     public bool ShowIconBackground
     {
-        get => GetValue(ShowIconBackgroundProperty);
-        set => SetValue(ShowIconBackgroundProperty, value);
+        get
+        {
+            return GetValue(ShowIconBackgroundProperty);
+        }
+        set
+        {
+            SetValue(ShowIconBackgroundProperty, value);
+        }
     }
 
     static DownloadProgressCard()
@@ -71,9 +114,13 @@ public sealed class DownloadProgressCard : TemplatedControl
         IsOpenProperty.Changed.AddClassHandler<DownloadProgressCard>((card, e) =>
         {
             if (card.IsOpen)
+            {
                 card.PseudoClasses.Add(":open");
+            }
             else
+            {
                 card.PseudoClasses.Remove(":open");
+            }
         });
 
         ProgressProperty.Changed.AddClassHandler<DownloadProgressCard>((card, _) => card.UpdateProgressText());

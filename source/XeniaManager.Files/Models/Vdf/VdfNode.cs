@@ -26,17 +26,35 @@ public class VdfNode
     /// <summary>
     /// Gets a read-only list of child nodes.
     /// </summary>
-    public IReadOnlyList<VdfNode> ChildrenReadOnly => Children.AsReadOnly();
+    public IReadOnlyList<VdfNode> ChildrenReadOnly
+    {
+        get
+        {
+            return Children.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Gets whether this node has child nodes.
     /// </summary>
-    public bool HasChildren => Children.Count > 0;
+    public bool HasChildren
+    {
+        get
+        {
+            return Children.Count > 0;
+        }
+    }
 
     /// <summary>
     /// Gets whether this node has a value (not a container node).
     /// </summary>
-    public bool HasValue => Value != null;
+    public bool HasValue
+    {
+        get
+        {
+            return Value != null;
+        }
+    }
 
     /// <summary>
     /// Creates a new VDF node.
@@ -67,10 +85,7 @@ public class VdfNode
     /// </summary>
     /// <param name="key">The key/name of the child node to find.</param>
     /// <returns>The child node if found, null otherwise.</returns>
-    public VdfNode? GetChild(string key)
-    {
-        return Children.FirstOrDefault(c => c.Key == key);
-    }
+    public VdfNode? GetChild(string key) => Children.FirstOrDefault(c => c.Key == key);
 
     /// <summary>
     /// Gets or creates a child node by key.
@@ -95,6 +110,7 @@ public class VdfNode
         {
             return false;
         }
+
         Children.Remove(child);
         return true;
     }
@@ -142,6 +158,7 @@ public class VdfNode
         {
             return result;
         }
+
         return defaultValue;
     }
 
@@ -158,19 +175,23 @@ public class VdfNode
         {
             return defaultValue;
         }
+
         // VDF uses "1" for true and "0" for false
         if (child.Value == "1")
         {
             return true;
         }
+
         if (child.Value == "0")
         {
             return false;
         }
+
         if (bool.TryParse(child.Value, out bool result))
         {
             return result;
         }
+
         return defaultValue;
     }
 
@@ -178,8 +199,5 @@ public class VdfNode
     /// Returns a string representation of this node.
     /// </summary>
     /// <returns>The key-value pair as a string, or just the key if it's a container node.</returns>
-    public override string ToString()
-    {
-        return HasValue ? $"\"{Key}\" = \"{Value}\"" : $"\"{Key}\" (container)";
-    }
+    public override string ToString() => HasValue ? $"\"{Key}\" = \"{Value}\"" : $"\"{Key}\" (container)";
 }

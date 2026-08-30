@@ -44,8 +44,14 @@ public partial class IconStat : UserControl
     /// </summary>
     public Symbol Icon
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get
+        {
+            return GetValue(IconProperty);
+        }
+        set
+        {
+            SetValue(IconProperty, value);
+        }
     }
 
     /// <summary>
@@ -53,8 +59,14 @@ public partial class IconStat : UserControl
     /// </summary>
     public string Stat
     {
-        get => GetValue(StatProperty);
-        set => SetValue(StatProperty, value);
+        get
+        {
+            return GetValue(StatProperty);
+        }
+        set
+        {
+            SetValue(StatProperty, value);
+        }
     }
 
     /// <summary>
@@ -62,8 +74,14 @@ public partial class IconStat : UserControl
     /// </summary>
     public double IconSize
     {
-        get => GetValue(IconSizeProperty);
-        set => SetValue(IconSizeProperty, value);
+        get
+        {
+            return GetValue(IconSizeProperty);
+        }
+        set
+        {
+            SetValue(IconSizeProperty, value);
+        }
     }
 
     /// <summary>
@@ -71,8 +89,14 @@ public partial class IconStat : UserControl
     /// </summary>
     public double Spacing
     {
-        get => GetValue(SpacingProperty);
-        set => SetValue(SpacingProperty, value);
+        get
+        {
+            return GetValue(SpacingProperty);
+        }
+        set
+        {
+            SetValue(SpacingProperty, value);
+        }
     }
 
     /// <summary>
@@ -80,8 +104,14 @@ public partial class IconStat : UserControl
     /// </summary>
     public double IconRotation
     {
-        get => GetValue(IconRotationProperty);
-        set => SetValue(IconRotationProperty, value);
+        get
+        {
+            return GetValue(IconRotationProperty);
+        }
+        set
+        {
+            SetValue(IconRotationProperty, value);
+        }
     }
 
     public IconStat()

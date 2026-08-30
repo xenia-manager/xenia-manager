@@ -25,7 +25,13 @@ public class VdfFile
     /// <summary>
     /// Gets the root node of the document.
     /// </summary>
-    public VdfNode? Root => Document.Root;
+    public VdfNode? Root
+    {
+        get
+        {
+            return Document.Root;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the header comment for the VDF file.
@@ -33,8 +39,14 @@ public class VdfFile
     /// </summary>
     public string? HeaderComment
     {
-        get => Document.HeaderComment;
-        set => Document.HeaderComment = value;
+        get
+        {
+            return Document.HeaderComment;
+        }
+        set
+        {
+            Document.HeaderComment = value;
+        }
     }
 
     /// <summary>
@@ -57,7 +69,10 @@ public class VdfFile
 
         VdfFile vdfFile = new VdfFile
         {
-            Document = new VdfDocument { HeaderComment = headerComment }
+            Document = new VdfDocument
+            {
+                HeaderComment = headerComment
+            }
         };
         vdfFile.Document.SetRoot(rootKey);
 
@@ -137,6 +152,7 @@ public class VdfFile
                 {
                     headerComment.AppendLine();
                 }
+
                 headerComment.Append(trimmedLine.Substring(2).Trim());
                 lineIndex++;
             }
@@ -184,6 +200,7 @@ public class VdfFile
                     // Find the parent by traversing from root
                     currentNode = FindParentNode(vdfFile.Document.Root, currentNode);
                 }
+
                 lineIndex++;
             }
             else
@@ -232,6 +249,7 @@ public class VdfFile
                 currentNode.Children.Add(newNode);
                 currentNode = newNode;
             }
+
             lineIndex++;
         }
         else if (remainder.StartsWith("\"") && remainder.EndsWith("\""))
@@ -254,6 +272,7 @@ public class VdfFile
                     currentNode.Children.Add(newNode);
                 }
             }
+
             lineIndex++;
         }
         else if (string.IsNullOrEmpty(remainder))
@@ -286,6 +305,7 @@ public class VdfFile
                         currentNode.Children.Add(newNode);
                         currentNode = newNode;
                     }
+
                     lineIndex++;
                     break;
                 }
@@ -304,6 +324,7 @@ public class VdfFile
                             {
                                 vdfFile.Document.Root.Value = newNode.Value;
                             }
+
                             hasRoot = true;
                         }
                         else
@@ -311,6 +332,7 @@ public class VdfFile
                             currentNode.Children.Add(newNode);
                         }
                     }
+
                     lineIndex++;
                     break;
                 }
@@ -417,6 +439,7 @@ public class VdfFile
             {
                 sb.AppendLine($"// {line}");
             }
+
             sb.AppendLine();
         }
 
@@ -502,20 +525,14 @@ public class VdfFile
     /// </summary>
     /// <param name="key">The key/name of the child node to find.</param>
     /// <returns>The child node if found, null otherwise.</returns>
-    public VdfNode? GetChild(string key)
-    {
-        return Document.GetChild(key);
-    }
+    public VdfNode? GetChild(string key) => Document.GetChild(key);
 
     /// <summary>
     /// Gets or creates a child node from the root by key.
     /// </summary>
     /// <param name="key">The key/name of the child node.</param>
     /// <returns>The existing or newly created child node.</returns>
-    public VdfNode GetOrCreateChild(string key)
-    {
-        return Document.GetOrCreateChild(key);
-    }
+    public VdfNode GetOrCreateChild(string key) => Document.GetOrCreateChild(key);
 
     /// <summary>
     /// Gets a value from a child node of the root.
@@ -523,20 +540,14 @@ public class VdfFile
     /// <param name="key">The key/name of the child node.</param>
     /// <param name="defaultValue">The default value if not found.</param>
     /// <returns>The value of the child node, or the default value if not found.</returns>
-    public string? GetValue(string key, string? defaultValue = null)
-    {
-        return Document.GetValue(key, defaultValue);
-    }
+    public string? GetValue(string key, string? defaultValue = null) => Document.GetValue(key, defaultValue);
 
     /// <summary>
     /// Sets a value in a child node of the root. Creates the child if it doesn't exist.
     /// </summary>
     /// <param name="key">The key/name of the child node.</param>
     /// <param name="value">The value to set.</param>
-    public void SetValue(string key, string value)
-    {
-        Document.SetValue(key, value);
-    }
+    public void SetValue(string key, string value) => Document.SetValue(key, value);
 
     /// <summary>
     /// Gets an integer value from a child node of the root.
@@ -544,10 +555,7 @@ public class VdfFile
     /// <param name="key">The key/name of the child node.</param>
     /// <param name="defaultValue">The default value if not found or parsing fails.</param>
     /// <returns>The integer value of the child node, or the default value if not found.</returns>
-    public int GetIntValue(string key, int defaultValue = 0)
-    {
-        return Document.GetIntValue(key, defaultValue);
-    }
+    public int GetIntValue(string key, int defaultValue = 0) => Document.GetIntValue(key, defaultValue);
 
     /// <summary>
     /// Gets a boolean value from a child node of the root.
@@ -555,38 +563,26 @@ public class VdfFile
     /// <param name="key">The key/name of the child node.</param>
     /// <param name="defaultValue">The default value if not found or parsing fails.</param>
     /// <returns>The boolean value of the child node, or the default value if not found.</returns>
-    public bool GetBoolValue(string key, bool defaultValue = false)
-    {
-        return Document.GetBoolValue(key, defaultValue);
-    }
+    public bool GetBoolValue(string key, bool defaultValue = false) => Document.GetBoolValue(key, defaultValue);
 
     /// <summary>
     /// Gets a nested value by traversing a path of keys.
     /// </summary>
     /// <param name="path">The path of keys to traverse (e.g., "actions", "GameControls").</param>
     /// <returns>The value at the path, or null if not found.</returns>
-    public string? GetNestedValue(params string[] path)
-    {
-        return Document.GetNestedValue(path);
-    }
+    public string? GetNestedValue(params string[] path) => Document.GetNestedValue(path);
 
     /// <summary>
     /// Sets a nested value by traversing a path of keys, creating nodes as needed.
     /// </summary>
     /// <param name="value">The value to set at the final path.</param>
     /// <param name="path">The path of keys to traverse.</param>
-    public void SetNestedValue(string value, params string[] path)
-    {
-        Document.SetNestedValue(value, path);
-    }
+    public void SetNestedValue(string value, params string[] path) => Document.SetNestedValue(value, path);
 
     /// <summary>
     /// Gets a nested node by traversing a path of keys.
     /// </summary>
     /// <param name="path">The path of keys to traverse.</param>
     /// <returns>The node at the path, or null if not found.</returns>
-    public VdfNode? GetNestedNode(params string[] path)
-    {
-        return Document.GetNestedNode(path);
-    }
+    public VdfNode? GetNestedNode(params string[] path) => Document.GetNestedNode(path);
 }

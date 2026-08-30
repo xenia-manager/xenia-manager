@@ -63,8 +63,14 @@ public class PalettePicker : TemplatedControl
     /// </summary>
     public IReadOnlyList<Color> Palette
     {
-        get => GetValue(PaletteProperty);
-        set => SetValue(PaletteProperty, value);
+        get
+        {
+            return GetValue(PaletteProperty);
+        }
+        set
+        {
+            SetValue(PaletteProperty, value);
+        }
     }
 
     /// <summary>
@@ -72,8 +78,14 @@ public class PalettePicker : TemplatedControl
     /// </summary>
     public Color SelectedColor
     {
-        get => GetValue(SelectedColorProperty);
-        set => SetValue(SelectedColorProperty, value);
+        get
+        {
+            return GetValue(SelectedColorProperty);
+        }
+        set
+        {
+            SetValue(SelectedColorProperty, value);
+        }
     }
 
     /// <summary>
@@ -151,7 +163,7 @@ public class PalettePicker : TemplatedControl
 
         foreach (Color colour in Palette)
         {
-            Border swatch = new()
+            Border swatch = new Border
             {
                 Width = SwatchWidth,
                 Height = SwatchHeight,

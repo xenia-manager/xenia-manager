@@ -33,7 +33,7 @@ public partial class App : Application
     {
         try
         {
-            Settings settings = new();
+            Settings settings = new Settings();
             List<XeniaVersion> installedVersions = settings.GetInstalledVersions(settings);
             if (installedVersions.Count == 0)
             {
@@ -41,7 +41,7 @@ public partial class App : Application
             }
 
             Logger.Info<App>("Updating SDL game controller database");
-            DownloadManager downloadManager = new();
+            DownloadManager downloadManager = new DownloadManager();
             await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase,
                 "gamecontrollerdb.txt");
             string downloaded = Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt");
@@ -64,10 +64,7 @@ public partial class App : Application
         }
     }
 
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+    public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
     public override void OnFrameworkInitializationCompleted()
     {

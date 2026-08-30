@@ -13,7 +13,13 @@ public class BindingsDocument
     /// <summary>
     /// Gets a read-only list of bindings sections.
     /// </summary>
-    public IReadOnlyList<BindingsSection> SectionsReadOnly => Sections.AsReadOnly();
+    public IReadOnlyList<BindingsSection> SectionsReadOnly
+    {
+        get
+        {
+            return Sections.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Gets or sets the header comment for the bindings file.
@@ -40,10 +46,7 @@ public class BindingsDocument
     /// <summary>
     /// Gets a section by name.
     /// </summary>
-    public BindingsSection? GetSection(string name)
-    {
-        return Sections.FirstOrDefault(s => s.Name == name);
-    }
+    public BindingsSection? GetSection(string name) => Sections.FirstOrDefault(s => s.Name == name);
 
     /// <summary>
     /// Gets a section by title ID.
@@ -94,7 +97,10 @@ public class BindingsDocument
         BindingsSection newSection = new BindingsSection(newName, type)
         {
             TitleName = titleName,
-            TitleIds = { titleId }
+            TitleIds =
+            {
+                titleId
+            }
         };
 
         // Copy all entries from the Default section
@@ -167,6 +173,7 @@ public class BindingsDocument
             Sections.Remove(section);
             return true;
         }
+
         return false;
     }
 

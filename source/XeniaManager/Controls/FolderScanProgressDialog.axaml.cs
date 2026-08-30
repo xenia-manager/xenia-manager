@@ -33,7 +33,13 @@ public partial class FolderScanProgressDialog : UserControl
     /// <summary>
     /// Gets the ViewModel for this dialog.
     /// </summary>
-    public FolderScanProgressDialogViewModel ViewModel => _viewModel;
+    public FolderScanProgressDialogViewModel ViewModel
+    {
+        get
+        {
+            return _viewModel;
+        }
+    }
 
     /// <summary>
     /// Shows a dialog to display the progress of scanning folders for game files.
@@ -47,7 +53,8 @@ public partial class FolderScanProgressDialog : UserControl
     /// - The result of the scan action
     /// - A boolean indicating whether the scan was cancelled
     /// </returns>
-    public static async Task<(TResult Result, bool Cancelled)> ShowAsync<TResult>(Func<CancellationToken, Action<string, string, int, int, int>, Task<TResult>> scanAction)
+    public static async Task<(TResult Result, bool Cancelled)> ShowAsync<TResult>(
+        Func<CancellationToken, Action<string, string, int, int, int>, Task<TResult>> scanAction)
     {
         FolderScanProgressDialog dialog = new FolderScanProgressDialog();
 

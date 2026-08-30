@@ -110,6 +110,7 @@ public partial class ContentItemViewModel : ObservableObject
         {
             DisplayName = Path.GetFileNameWithoutExtension(stfsFile.PackagePath ?? string.Empty);
         }
+
         ContentType = $"{stfsFile.Metadata.ContentType.ToDisplayString()} ({stfsFile.Metadata.ContentType.ToHexString()})";
         FilePath = stfsFile.PackagePath ?? string.Empty;
 
@@ -144,8 +145,5 @@ public partial class ContentItemViewModel : ObservableObject
     /// <summary>
     /// Removes this content item from the list.
     /// </summary>
-    private void Remove()
-    {
-        _onRemove?.Invoke(this);
-    }
+    private void Remove() => _onRemove?.Invoke(this);
 }

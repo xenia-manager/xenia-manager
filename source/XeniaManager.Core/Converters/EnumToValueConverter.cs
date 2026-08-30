@@ -14,11 +14,9 @@ public class EnumToValueConverter : IValueConverter
         {
             return enumValue.ToString() == paramName;
         }
+
         return false;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotSupportedException();
-    }
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }

@@ -45,7 +45,13 @@ public partial class GalleryViewModel : ScreenViewModel
     /// <summary>
     /// Whether the gallery screen shows the "no screenshots" stub.
     /// </summary>
-    public bool ShowEmptyScreenshots => Screenshots.Count == 0;
+    public bool ShowEmptyScreenshots
+    {
+        get
+        {
+            return Screenshots.Count == 0;
+        }
+    }
 
     /// <summary>
     /// The current gallery sort mode (cycled with X).
@@ -56,12 +62,18 @@ public partial class GalleryViewModel : ScreenViewModel
     /// <summary>
     /// Display name of the current gallery sort mode.
     /// </summary>
-    public string GallerySortText => GallerySort switch
+    public string GallerySortText
     {
-        GallerySort.OldestFirst => LocalizationHelper.GetText("Gallery.Sort.OldestFirst"),
-        GallerySort.ByGame => LocalizationHelper.GetText("Gallery.Sort.ByGame"),
-        _ => LocalizationHelper.GetText("Gallery.Sort.NewestFirst")
-    };
+        get
+        {
+            return GallerySort switch
+            {
+                GallerySort.OldestFirst => LocalizationHelper.GetText("Gallery.Sort.OldestFirst"),
+                GallerySort.ByGame => LocalizationHelper.GetText("Gallery.Sort.ByGame"),
+                _ => LocalizationHelper.GetText("Gallery.Sort.NewestFirst")
+            };
+        }
+    }
 
     /// <summary>
     /// The available version filters: "All" plus every installed emulator version.
@@ -77,7 +89,13 @@ public partial class GalleryViewModel : ScreenViewModel
     /// <summary>
     /// Display name of the active version filter (e.g. "All", "Xenia Canary").
     /// </summary>
-    public string VersionFilterText => SelectedVersionFilter?.DisplayName ?? string.Empty;
+    public string VersionFilterText
+    {
+        get
+        {
+            return SelectedVersionFilter?.DisplayName ?? string.Empty;
+        }
+    }
 
     public GalleryViewModel(SettingsViewModel settings, IScreenshotLibraryService screenshotLibraryService,
         IModalService modalService)

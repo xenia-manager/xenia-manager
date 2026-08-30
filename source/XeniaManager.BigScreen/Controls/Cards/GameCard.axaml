@@ -3,7 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
-             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="238"
+             mc:Ignorable="d"
+             d:DesignWidth="200"
+             d:DesignHeight="238"
              x:Class="XeniaManager.BigScreen.Controls.Cards.GameCard"
              x:DataType="vm:GameCardViewModel"
              HorizontalAlignment="Stretch"
@@ -11,20 +13,30 @@
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
     <Panel>
-        <Border x:Name="Tile" CornerRadius="10" Background="{DynamicResource CardBackground}" Margin="2" />
-        <Border x:Name="ArtClip" Background="Transparent" CornerRadius="10" Margin="2">
+        <Border x:Name="Tile"
+                CornerRadius="10"
+                Background="{DynamicResource CardBackground}"
+                Margin="2" />
+        <Border x:Name="ArtClip"
+                Background="Transparent"
+                CornerRadius="10"
+                Margin="2">
             <Panel>
                 <Grid x:Name="BoxArtHost"
                       IsVisible="{Binding ShowBoxArt}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Bottom">
-                    <Image Source="{Binding BoxArt}" Stretch="UniformToFill" VerticalAlignment="Bottom" />
+                    <Image Source="{Binding BoxArt}"
+                           Stretch="UniformToFill"
+                           VerticalAlignment="Bottom" />
                 </Grid>
                 <Grid x:Name="DiscArtHost"
                       IsVisible="{Binding ShowDiscArt}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Bottom">
-                    <Image Source="{Binding DiscArt}" Stretch="Uniform" VerticalAlignment="Bottom"
+                    <Image Source="{Binding DiscArt}"
+                           Stretch="Uniform"
+                           VerticalAlignment="Bottom"
                            HorizontalAlignment="Center" />
                 </Grid>
             </Panel>

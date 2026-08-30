@@ -73,7 +73,13 @@ public sealed class XexFile
     /// Multiple Media IDs can be specified for multi-disc games via the Multidisc Media IDs optional header (0x406FF).
     /// </para>
     /// </summary>
-    public string MediaId => Execution.HasValue ? $"{Execution.Value.MediaId:X8}" : string.Empty;
+    public string MediaId
+    {
+        get
+        {
+            return Execution.HasValue ? $"{Execution.Value.MediaId:X8}" : string.Empty;
+        }
+    }
 
     /// <summary>
     /// Gets the Title ID as a formatted hex string (e.g., "4D530910").
@@ -84,7 +90,13 @@ public sealed class XexFile
     /// Alternative Title IDs can be specified via the Alternate Title IDs optional header (0x407FF).
     /// </para>
     /// </summary>
-    public string TitleId => Execution.HasValue ? $"{Execution.Value.TitleId:X8}" : string.Empty;
+    public string TitleId
+    {
+        get
+        {
+            return Execution.HasValue ? $"{Execution.Value.TitleId:X8}" : string.Empty;
+        }
+    }
 
     /// <summary>
     /// Gets whether the XEX file was successfully parsed.
@@ -290,11 +302,11 @@ public sealed class XexFile
 
         // Search ID for execution info: (0x400 << 8) | (24 >> 2) = 0x40006
         // 0x400 is the execution info ID, 24 is the size of XexExecution structure
-        uint executionSearchId = 0x400 << 8 | 24 >> 2;
+        uint executionSearchId = (0x400 << 8) | (24 >> 2);
 
         for (int i = 0; i < entryCount; i++)
         {
-            int entryOffset = headerDirectoryOffset + (i * 8);
+            int entryOffset = headerDirectoryOffset + i * 8;
             if (entryOffset + 8 > data.Length)
             {
                 break;
@@ -328,8 +340,5 @@ public sealed class XexFile
     /// </summary>
     /// <param name="bytes">The byte array to convert.</param>
     /// <returns>The ASCII string representation with null terminators trimmed.</returns>
-    private static string GetString(byte[] bytes)
-    {
-        return Encoding.ASCII.GetString(bytes).Trim('\0');
-    }
+    private static string GetString(byte[] bytes) => Encoding.ASCII.GetString(bytes).Trim('\0');
 }

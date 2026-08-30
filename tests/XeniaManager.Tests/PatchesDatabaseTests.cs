@@ -7,16 +7,10 @@ namespace XeniaManager.Tests;
 public class PatchesDatabaseTests
 {
     [SetUp]
-    public void Setup()
-    {
-        PatchesDatabase.Reset();
-    }
+    public void Setup() => PatchesDatabase.Reset();
 
     [TearDown]
-    public void TearDown()
-    {
-        PatchesDatabase.Reset();
-    }
+    public void TearDown() => PatchesDatabase.Reset();
 
     private static async Task PopulateCanaryTestData(params PatchInfo[] patches)
     {
@@ -24,6 +18,7 @@ public class PatchesDatabaseTests
         {
             PatchesDatabase.AddPatchToIndex(patch);
         }
+
         await PatchesDatabase.SearchCanaryDatabase("");
     }
 
@@ -33,6 +28,7 @@ public class PatchesDatabaseTests
         {
             PatchesDatabase.AddPatchToNetplayIndex(patch);
         }
+
         await PatchesDatabase.SearchNetplayDatabase("");
     }
 

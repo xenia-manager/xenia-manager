@@ -9,12 +9,15 @@
                        xmlns:windowing="using:FluentAvalonia.UI.Windowing"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+                       mc:Ignorable="d"
+                       d:DesignWidth="1920"
+                       d:DesignHeight="1080"
                        x:Class="XeniaManager.BigScreen.Views.Shell.MainWindow"
                        x:DataType="vm:MainWindowViewModel"
                        Icon="/Assets/icon.ico"
                        Title="{DynamicResource MainWindow.Title}"
-                       Width="1920" Height="1080"
+                       Width="1920"
+                       Height="1080"
                        WindowState="FullScreen"
                        WindowDecorations="None"
                        WindowStartupLocation="CenterScreen"
@@ -58,14 +61,16 @@
                             Orientation="Horizontal"
                             Spacing="16"
                             VerticalAlignment="Center">
-                    <Grid Height="26" Width="26">
+                    <Grid Height="26"
+                          Width="26">
                         <fluent:SymbolIcon Symbol="{Binding Header.NetworkIcon}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            FontSize="24"
                                            Foreground="{DynamicResource TextPrimary}" />
                     </Grid>
-                    <Grid Height="26" Width="26">
+                    <Grid Height="26"
+                          Width="26">
                         <fluent:SymbolIcon Symbol="{Binding Header.BatteryIcon}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
@@ -87,7 +92,8 @@
                             Content="{Binding Dashboard}" />
 
             <!-- OVERLAY LAYER (covers the whole window when a screen is open) -->
-            <Panel Grid.Row="0" Grid.RowSpan="2"
+            <Panel Grid.Row="0"
+                   Grid.RowSpan="2"
                    IsVisible="{Binding IsOverlayOpen}"
                    IsHitTestVisible="{Binding IsOverlayOpen}">
                 <!-- Full-screen backdrop -->

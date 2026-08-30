@@ -47,7 +47,13 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     /// <summary>
     /// Whether the pane shows the empty state (scan finished, no screenshots).
     /// </summary>
-    public bool ShowEmpty => !IsLoading && Rows.Count == 0;
+    public bool ShowEmpty
+    {
+        get
+        {
+            return !IsLoading && Rows.Count == 0;
+        }
+    }
 
     /// <summary>
     /// The screenshots found for this game.
@@ -63,7 +69,13 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     /// <summary>
     /// The screenshot count shown in the pane header.
     /// </summary>
-    public string CountText => string.Format(LocalizationHelper.GetText("GameModal.Screenshots.Count"), Rows.Count);
+    public string CountText
+    {
+        get
+        {
+            return string.Format(LocalizationHelper.GetText("GameModal.Screenshots.Count"), Rows.Count);
+        }
+    }
 
     /// <summary>
     /// Resolves the game's screenshots folder: the standard "{GameId}" subfolder
@@ -233,18 +245,12 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
     /// <summary>
     /// Selects the first screenshot when the pane becomes active.
     /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(Rows, 0);
-    }
+    public void OnPaneEntered() => SelectionHelper.SelectOnlyAt(Rows, 0);
 
     /// <summary>
     /// Clears the screenshot selection when the pane loses focus.
     /// </summary>
-    public void OnPaneExited()
-    {
-        SelectionHelper.ClearSelection(Rows);
-    }
+    public void OnPaneExited() => SelectionHelper.ClearSelection(Rows);
 
     /// <summary>
     /// Releases the pane's self-scanned thumbnails when the game modal closes.

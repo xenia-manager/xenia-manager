@@ -153,7 +153,8 @@ public class ProfileManager
                     }
                     else
                     {
-                        Logger.Debug<ProfileManager>($"Directory {xuid} exists but doesn't contain the expected account file structure at: {expectedAccountPath}");
+                        Logger.Debug<ProfileManager>(
+                            $"Directory {xuid} exists but doesn't contain the expected account file structure at: {expectedAccountPath}");
                     }
                 }
                 else
@@ -667,7 +668,8 @@ public class ProfileManager
     /// <param name="profiles">The list of profiles to update after import.</param>
     /// <param name="onProfileExists">Callback function that handles the case when a profile already exists. Should return true to replace, false to cancel.</param>
     /// <returns>The imported profile if successful, null otherwise.</returns>
-    public static async Task<AccountInfo?> ImportProfileWithReplacement(XeniaVersion version, string zipPath, List<AccountInfo> profiles, Func<AccountInfo, Task<bool>> onProfileExists)
+    public static async Task<AccountInfo?> ImportProfileWithReplacement(XeniaVersion version, string zipPath, List<AccountInfo> profiles,
+        Func<AccountInfo, Task<bool>> onProfileExists)
     {
         Logger.Trace<ProfileManager>($"Starting ImportProfileWithReplacement operation");
         Logger.Debug<ProfileManager>($"Source zip path: '{zipPath}'");

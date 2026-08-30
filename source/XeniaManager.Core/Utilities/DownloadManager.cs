@@ -11,7 +11,12 @@ namespace XeniaManager.Core.Utilities;
 public sealed class DownloadManager : IDisposable
 {
     public readonly string DownloadPath = AppPaths.DownloadsDirectory;
-    private readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
+
+    private readonly HttpClient _httpClient = new HttpClient
+    {
+        Timeout = TimeSpan.FromSeconds(60)
+    };
+
     private bool _disposed = false;
 
     /// <summary>
@@ -91,14 +96,15 @@ public sealed class DownloadManager : IDisposable
 
             using HttpResponseMessage response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-            Logger.Debug<DownloadManager>($"Received HTTP response: Status Code {response.StatusCode}, Content Length: {response.Content.Headers.ContentLength ?? -1L} bytes");
+            Logger.Debug<DownloadManager>(
+                $"Received HTTP response: Status Code {response.StatusCode}, Content Length: {response.Content.Headers.ContentLength ?? -1L} bytes");
 
             response.EnsureSuccessStatusCode();
             long totalBytes = response.Content.Headers.ContentLength ?? -1L;
             long downloadedBytes = 0;
 
             Logger.Debug<DownloadManager>($"Creating file stream for {fileName}");
-            await using FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 8192, useAsync: true);
+            await using FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
 
             Logger.Debug<DownloadManager>("Opening content stream from HTTP response");
             await using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken);
@@ -291,6 +297,7 @@ public sealed class DownloadManager : IDisposable
         {
             return;
         }
+
         _httpClient.Dispose();
         _disposed = true;
         Logger.Debug<DownloadManager>("HttpClient disposed and DownloadManager marked as disposed");

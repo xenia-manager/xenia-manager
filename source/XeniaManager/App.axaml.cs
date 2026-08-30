@@ -31,7 +31,13 @@ public partial class App : Application
     /// <summary>
     /// Main Window instance
     /// </summary>
-    public static Window? MainWindow => Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
+    public static Window? MainWindow
+    {
+        get
+        {
+            return Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
+        }
+    }
 
     /// <summary>
     /// DI Services
@@ -290,7 +296,7 @@ public partial class App : Application
         try
         {
             Logger.Error<App>("=== Fatal Exception Encountered ===");
-            Logger.LogExceptionDetails<App>(ex, includeEnvironmentInfo: true);
+            Logger.LogExceptionDetails<App>(ex, true);
 
             // Ensure logs are written before a potential crash
             Logger.Flush();
@@ -320,6 +326,7 @@ public partial class App : Application
                 {
                     loadingScreen.SetBackground(game.Artwork.CachedBackground);
                 }
+
                 loadingScreen.SetLoadingText(game.Title);
             }
 
@@ -363,7 +370,8 @@ public partial class App : Application
             }
 
             // Launch the game asynchronously
-            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted, configOverridesFromArgs: configOverridesFromArgs, discNumber: discNumber);
+            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted, configOverridesFromArgs: configOverridesFromArgs,
+                discNumber: discNumber);
             Logger.Info<App>($"Game session ended for '{game.Title}'");
         }
         catch (Exception ex)

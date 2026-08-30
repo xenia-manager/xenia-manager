@@ -30,10 +30,10 @@ public class StringEntry
     /// </summary>
     /// <param name="value">The string value.</param>
     /// <returns>A new StringEntry instance.</returns>
-    public static StringEntry FromString(string value)
+    public static StringEntry FromString(string value) => new StringEntry
     {
-        return new StringEntry { Value = value };
-    }
+        Value = value
+    };
 
     /// <summary>
     /// Creates a new StringEntry from raw entry data.
@@ -67,6 +67,7 @@ public class StringEntry
                 {
                     break;
                 }
+
                 stringEnd += 2;
             }
 

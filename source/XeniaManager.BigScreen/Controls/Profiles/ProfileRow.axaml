@@ -5,7 +5,9 @@
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="96"
+        mc:Ignorable="d"
+        d:DesignWidth="1100"
+        d:DesignHeight="96"
         x:Class="XeniaManager.BigScreen.Controls.Profiles.ProfileRow"
         x:DataType="vm:ProfileItemViewModel"
         Classes.selected="{Binding IsSelected}">
@@ -24,7 +26,8 @@
             </Border>
         </ControlTemplate>
     </Button.Template>
-    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="24">
+    <Grid ColumnDefinitions="Auto,*,Auto"
+          ColumnSpacing="24">
         <Border Width="64"
                 Height="64"
                 VerticalAlignment="Center"

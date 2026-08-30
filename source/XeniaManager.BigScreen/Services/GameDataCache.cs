@@ -30,7 +30,7 @@ public class GameDataCache
     /// Serializes every cache dictionary access (loads included - contention
     /// is negligible: one background pass at boot plus rare lazy first-use).
     /// </summary>
-    private static readonly Lock CacheLock = new();
+    private static readonly Lock CacheLock = new Lock();
 
     private static readonly Dictionary<Game, ConfigFile> Configs = [];
     private static readonly Dictionary<Game, GameContent> Contents = [];
@@ -44,10 +44,7 @@ public class GameDataCache
         return ConfigFile.Load(path);
     }
 
-    private static GameContent LoadContent(Game game)
-    {
-        return new GameContent(game.XeniaVersion, game.GameId);
-    }
+    private static GameContent LoadContent(Game game) => new GameContent(game.XeniaVersion, game.GameId);
 
     private static (PatchFile? File, string? Path) LoadPatch(Game game)
     {

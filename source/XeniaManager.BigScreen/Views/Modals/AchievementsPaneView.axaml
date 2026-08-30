@@ -6,15 +6,21 @@
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
-             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             mc:Ignorable="d"
+             d:DesignWidth="1100"
+             d:DesignHeight="780"
              x:Class="XeniaManager.BigScreen.Views.Modals.AchievementsPaneView"
              x:DataType="vm:AchievementsPaneViewModel">
-    <Grid RowDefinitions="Auto, *" RowSpacing="24">
+    <Grid RowDefinitions="Auto, *"
+          RowSpacing="24">
 
         <!-- HEADER: stats (left) + filter indicator (right) -->
-        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" ColumnSpacing="40">
-            <StackPanel Orientation="Horizontal" Spacing="40" VerticalAlignment="Center">
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*, Auto"
+              ColumnSpacing="40">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="40"
+                        VerticalAlignment="Center">
                 <prim:IconStat Icon="Trophy"
                                Stat="{Binding AchievementText}"
                                Classes="pane-header-stat" />
@@ -37,7 +43,8 @@
             <ScrollViewer x:Name="SvAchievements"
                           HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Hidden">
-                <ItemsControl ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+                <ItemsControl ItemsSource="{Binding Rows}"
+                              Margin="0,0,0,20">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="items:AchievementItemViewModel">
                             <card:AchievementRow />
@@ -45,7 +52,8 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="10" />
+                            <StackPanel Orientation="Vertical"
+                                        Spacing="10" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

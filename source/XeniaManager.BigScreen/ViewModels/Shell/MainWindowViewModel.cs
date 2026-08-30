@@ -52,34 +52,68 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Whether any overlay is currently open.
     /// </summary>
-    public bool IsOverlayOpen => CurrentScreen != null;
+    public bool IsOverlayOpen
+    {
+        get
+        {
+            return CurrentScreen != null;
+        }
+    }
 
     /// <summary>
     /// Whether the library overlay is open.
     /// </summary>
-    public bool IsLibraryScreen => CurrentScreen == Library;
+    public bool IsLibraryScreen
+    {
+        get
+        {
+            return CurrentScreen == Library;
+        }
+    }
 
     /// <summary>
     /// Whether the Gallery overlay is open.
     /// </summary>
-    public bool IsGalleryScreen => CurrentScreen == Gallery;
+    public bool IsGalleryScreen
+    {
+        get
+        {
+            return CurrentScreen == Gallery;
+        }
+    }
 
     /// <summary>
     /// Whether the settings overlay is open.
     /// </summary>
-    public bool IsSettingsScreen => CurrentScreen == Settings;
+    public bool IsSettingsScreen
+    {
+        get
+        {
+            return CurrentScreen == Settings;
+        }
+    }
 
     /// <summary>
     /// Whether the library has games with nothing selected yet (first open).
     /// </summary>
-    private bool LibraryHasUnselectedGames =>
-        Library.Games.Count > 0 && !Library.Games.Any(g => g.IsSelected);
+    private bool LibraryHasUnselectedGames
+    {
+        get
+        {
+            return Library.Games.Count > 0 && !Library.Games.Any(g => g.IsSelected);
+        }
+    }
 
     /// <summary>
     /// Whether the base Xenia Manager app is currently running.
     /// </summary>
-    private static bool IsBaseAppRunning =>
-        Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length > 0;
+    private static bool IsBaseAppRunning
+    {
+        get
+        {
+            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppConstants.BaseAppExecutable)).Length > 0;
+        }
+    }
 
     /// <summary>
     /// Whether the boot pipeline (profile, library, screenshots) has completed.
@@ -197,7 +231,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (!IsOverlayOpen)
             {
-                Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, fade: true);
+                Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, true);
             }
         }
     }
@@ -265,7 +299,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Logger.Info<MainWindowViewModel>("Closing overlay");
         CurrentScreen = null;
-        Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, fade: true);
+        Dashboard.UpdateBackground(_lastSelectedGame?.BackgroundArt, true);
     }
 
     /// <summary>
@@ -283,7 +317,11 @@ public partial class MainWindowViewModel : ViewModelBase
             string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), AppConstants.BaseAppExecutable);
             if (File.Exists(baseExe) && !IsBaseAppRunning)
             {
-                Process.Start(new ProcessStartInfo { FileName = baseExe, UseShellExecute = true });
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = baseExe,
+                    UseShellExecute = true
+                });
             }
         }
         else
@@ -399,7 +437,7 @@ public partial class MainWindowViewModel : ViewModelBase
             InjectLaunchProfile(card.Game);
             _profileService.SyncXConfigDefaultProfile(card.Game.XeniaVersion);
             EventManager.Instance.DisableWindow();
-            Settings settings = new();
+            Settings settings = new Settings();
             await Launcher.LaunchGameASync(card.Game, settings, discNumber: discNumber);
             Logger.Info<MainWindowViewModel>($"Game session ended for '{card.Game.Title}'");
         }

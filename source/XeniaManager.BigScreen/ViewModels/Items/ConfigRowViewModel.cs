@@ -45,32 +45,68 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether the current value differs from the last saved value.
     /// </summary>
-    public bool IsDirty => !IsSameValue(_option.Value, _savedValue);
+    public bool IsDirty
+    {
+        get
+        {
+            return !IsSameValue(_option.Value, _savedValue);
+        }
+    }
 
     /// <summary>
     /// Whether a section header shows above this row.
     /// </summary>
-    public bool HasSectionTitle => SectionTitle != null;
+    public bool HasSectionTitle
+    {
+        get
+        {
+            return SectionTitle != null;
+        }
+    }
 
     /// <summary>
     /// Whether the row renders a toggle switch.
     /// </summary>
-    public bool IsToggle => ControlType == ConfigControlType.ToggleSwitch;
+    public bool IsToggle
+    {
+        get
+        {
+            return ControlType == ConfigControlType.ToggleSwitch;
+        }
+    }
 
     /// <summary>
     /// Whether the row renders a slider.
     /// </summary>
-    public bool IsSlider => ControlType == ConfigControlType.Slider;
+    public bool IsSlider
+    {
+        get
+        {
+            return ControlType == ConfigControlType.Slider;
+        }
+    }
 
     /// <summary>
     /// Whether the row renders a combo box.
     /// </summary>
-    public bool IsComboBox => ControlType == ConfigControlType.ComboBox;
+    public bool IsComboBox
+    {
+        get
+        {
+            return ControlType == ConfigControlType.ComboBox;
+        }
+    }
 
     /// <summary>
     /// The config option this row edits.
     /// </summary>
-    public ConfigOption Option => _option;
+    public ConfigOption Option
+    {
+        get
+        {
+            return _option;
+        }
+    }
 
     /// <summary>
     /// The row's display label (from the shared UI definitions).
@@ -106,9 +142,15 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     /// The slider's current value as display text (whole numbers for integer
     /// options, trimmed decimals for floats).
     /// </summary>
-    public string SliderValueText => _option.Type == ConfigOptionType.Integer
-        ? ((int)Math.Round(FloatValue)).ToString(CultureInfo.InvariantCulture)
-        : FloatValue.ToString("0.##", CultureInfo.InvariantCulture);
+    public string SliderValueText
+    {
+        get
+        {
+            return _option.Type == ConfigOptionType.Integer
+                ? ((int)Math.Round(FloatValue)).ToString(CultureInfo.InvariantCulture)
+                : FloatValue.ToString("0.##", CultureInfo.InvariantCulture);
+        }
+    }
 
     /// <summary>
     /// Whether the row is selected (controller focus).
@@ -229,10 +271,7 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Captures the current config value so a cancelled edit can restore it.
     /// </summary>
-    public void StartEdit()
-    {
-        _editorValue = _option.Value;
-    }
+    public void StartEdit() => _editorValue = _option.Value;
 
     /// <summary>
     /// Restores the config option to the value captured by <see cref="StartEdit"/>
@@ -263,10 +302,7 @@ public partial class ConfigRowViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Marks the current value as the saved baseline (after a manual save).
     /// </summary>
-    public void MarkAsSaved()
-    {
-        _savedValue = _option.Value;
-    }
+    public void MarkAsSaved() => _savedValue = _option.Value;
 
     partial void OnBoolValueChanged(bool value)
     {

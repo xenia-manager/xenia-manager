@@ -131,15 +131,16 @@ public sealed class XeniaPaths
     /// <summary>
     /// Represents the paths for the Xenia Canary variant.
     /// </summary>
-    public static readonly XeniaPaths Canary = new XeniaPaths(name: "Xenia Canary", executableName: "xenia_canary.exe", configName: "xenia-canary.config.toml");
+    public static readonly XeniaPaths Canary = new XeniaPaths("Xenia Canary", "xenia_canary.exe", "xenia-canary.config.toml");
 
     /// <summary>
     /// Represents the paths for the Xenia Mousehook variant.
     /// </summary>
-    public static readonly XeniaPaths Mousehook = new XeniaPaths(name: "Xenia Mousehook", executableName: "xenia_canary_mousehook.exe", configName: "xenia-canary-mousehook.config.toml", bindingsName: "bindings.ini");
+    public static readonly XeniaPaths Mousehook =
+        new XeniaPaths("Xenia Mousehook", "xenia_canary_mousehook.exe", "xenia-canary-mousehook.config.toml", "bindings.ini");
 
     /// <summary>
     /// Represents the paths for the Xenia Netplay variant.
     /// </summary>
-    public static readonly XeniaPaths Netplay = new XeniaPaths(name: "Xenia Netplay", executableName: "xenia_canary_netplay.exe", configName: "xenia-canary-netplay.config.toml");
+    public static readonly XeniaPaths Netplay = new XeniaPaths("Xenia Netplay", "xenia_canary_netplay.exe", "xenia-canary-netplay.config.toml");
 }

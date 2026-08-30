@@ -58,7 +58,8 @@ public partial class ConfigEditorDialog : UserControl
     /// <param name="uiDefinition">Optional UI definition to customize the display.</param>
     /// <param name="title">Optional title for the dialog. If not provided, uses the title from uiDefinition or "Config Editor".</param>
     /// <returns>True if the user saved changes, false if canceled.</returns>
-    public static async Task<bool> ShowAsync(ConfigFile configFile, string? configFilePath = null, ConfigUiDefinition? uiDefinition = null, string? title = null)
+    public static async Task<bool> ShowAsync(ConfigFile configFile, string? configFilePath = null, ConfigUiDefinition? uiDefinition = null,
+        string? title = null)
     {
         ConfigEditorDialog dialog = new ConfigEditorDialog(configFile, configFilePath, uiDefinition);
         ConfigEditorViewModel viewModel = dialog._viewModel;

@@ -23,7 +23,13 @@ public class ConfigSection
     /// <summary>
     /// Gets a read-only list of configuration options.
     /// </summary>
-    public IReadOnlyList<ConfigOption> OptionsReadOnly => Options.AsReadOnly();
+    public IReadOnlyList<ConfigOption> OptionsReadOnly
+    {
+        get
+        {
+            return Options.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Creates a new configuration section.
@@ -46,7 +52,8 @@ public class ConfigSection
     /// <param name="type">The type of the value.</param>
     /// <param name="padding">Optional padding string for alignment preservation.</param>
     /// <returns>The created ConfigOption.</returns>
-    public ConfigOption AddOption(string name, object? value, string? comment = null, bool isCommented = false, ConfigOptionType type = ConfigOptionType.Unknown,
+    public ConfigOption AddOption(string name, object? value, string? comment = null, bool isCommented = false,
+        ConfigOptionType type = ConfigOptionType.Unknown,
         string? padding = null)
     {
         ConfigOption option = new ConfigOption(name, value, comment, isCommented, type, padding);
@@ -59,10 +66,7 @@ public class ConfigSection
     /// </summary>
     /// <param name="name">The name of the option to find.</param>
     /// <returns>The ConfigOption if found, null otherwise.</returns>
-    public ConfigOption? GetOption(string name)
-    {
-        return Options.FirstOrDefault(o => o.Name == name);
-    }
+    public ConfigOption? GetOption(string name) => Options.FirstOrDefault(o => o.Name == name);
 
     /// <summary>
     /// Gets the value of an option by name.
@@ -90,22 +94,27 @@ public class ConfigSection
         {
             return (T)(object)Convert.ToInt32(option.Value);
         }
+
         if (typeof(T) == typeof(long))
         {
             return (T)(object)Convert.ToInt64(option.Value);
         }
+
         if (typeof(T) == typeof(uint))
         {
             return (T)(object)Convert.ToUInt32(option.Value);
         }
+
         if (typeof(T) == typeof(ulong))
         {
             return (T)(object)Convert.ToUInt64(option.Value);
         }
+
         if (typeof(T) == typeof(float))
         {
             return (T)(object)Convert.ToSingle(option.Value);
         }
+
         if (typeof(T) == typeof(double))
         {
             return (T)(object)Convert.ToDouble(option.Value);
@@ -145,6 +154,7 @@ public class ConfigSection
             Options.Remove(option);
             return true;
         }
+
         return false;
     }
 }

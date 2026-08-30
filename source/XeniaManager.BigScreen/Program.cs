@@ -6,7 +6,7 @@ using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen;
 
-sealed class Program
+internal sealed class Program
 {
     /// <summary>
     /// Configures the Avalonia application builder. Also used by the visual designer.

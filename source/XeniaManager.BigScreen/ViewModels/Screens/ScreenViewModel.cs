@@ -36,5 +36,11 @@ public abstract partial class ScreenViewModel : ViewModelBase
     /// Brush used as the overlay/menu background, derived from the primary colour
     /// so menus match the dashboard instead of being pitch black.
     /// </summary>
-    public IBrush ScreenBackground => BackgroundBrushFactory.CreateSolid(_settings.PrimaryColor);
+    public IBrush ScreenBackground
+    {
+        get
+        {
+            return BackgroundBrushFactory.CreateSolid(_settings.PrimaryColor);
+        }
+    }
 }

@@ -7,13 +7,17 @@
              xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:conv="using:Avalonia.Data.Converters"
-             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Views.Screens.LibraryView"
              x:DataType="vm:LibraryViewModel"
              Background="{Binding ScreenBackground}">
-    <Grid RowDefinitions="Auto, *, Auto" Margin="60">
-        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,20,0,30">
+    <Grid RowDefinitions="Auto, *, Auto"
+          Margin="60">
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*, Auto"
+              Margin="0,20,0,30">
             <TextBlock Grid.Column="0"
                        Text="{DynamicResource Library.Title}"
                        Classes="screen-title" />
@@ -27,7 +31,8 @@
                            FontSize="24" />
         </Grid>
 
-        <Grid Grid.Row="1" Margin="0,20">
+        <Grid Grid.Row="1"
+              Margin="0,20">
             <!-- CAROUSEL VIEW: horizontal card row -->
             <Grid IsVisible="{Binding !IsListView}">
                 <ScrollViewer x:Name="SvCarousel"
@@ -44,7 +49,8 @@
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" Spacing="20" />
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="20" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
@@ -63,7 +69,9 @@
             </Grid>
 
             <!-- LIST VIEW: vertical list + details pane -->
-            <Grid ColumnDefinitions="3*,4*" ColumnSpacing="40" IsVisible="{Binding IsListView}">
+            <Grid ColumnDefinitions="3*,4*"
+                  ColumnSpacing="40"
+                  IsVisible="{Binding IsListView}">
                 <Border Grid.Column="0"
                         Padding="14"
                         Background="{DynamicResource CardBackground}"
@@ -83,7 +91,8 @@
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" Spacing="16" />
+                                    <StackPanel Orientation="Vertical"
+                                                Spacing="16" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
@@ -110,16 +119,23 @@
             </Grid>
         </Grid>
 
-        <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
-            <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+        <StackPanel Grid.Row="2"
+                    Classes="hint-bar"
+                    IsVisible="{Binding IsHintBarVisible}">
+            <prim:InputHint Char="B"
+                            KeyColour="{DynamicResource HintKeyB}"
                             Text="{DynamicResource Library.Hint.Back}" />
-            <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+            <prim:InputHint Char="A"
+                            KeyColour="{DynamicResource HintKeyA}"
                             Text="{DynamicResource Library.Hint.Play}" />
-            <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
+            <prim:InputHint Char="X"
+                            KeyColour="{DynamicResource HintKeyX}"
                             Text="{DynamicResource Library.Hint.Sort}" />
-            <prim:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+            <prim:InputHint Char="Y"
+                            KeyColour="{DynamicResource HintKeyY}"
                             Text="{DynamicResource Library.Hint.Details}" />
-            <prim:InputHint Icon="CaretLeft" KeyColour="{DynamicResource HintKeyBack}"
+            <prim:InputHint Icon="CaretLeft"
+                            KeyColour="{DynamicResource HintKeyBack}"
                             Text="{DynamicResource Library.Hint.SwapView}" />
         </StackPanel>
     </Grid>

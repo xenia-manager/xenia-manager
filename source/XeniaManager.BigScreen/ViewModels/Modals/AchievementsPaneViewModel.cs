@@ -32,7 +32,13 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// Whether the pane shows the empty state (no GPD or no achievements).
     /// </summary>
-    public bool ShowEmpty => Rows.Count == 0;
+    public bool ShowEmpty
+    {
+        get
+        {
+            return Rows.Count == 0;
+        }
+    }
 
     /// <summary>
     /// The active sort order; X cycles through the options.
@@ -53,13 +59,19 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// The sort order's display text.
     /// </summary>
-    public string SortText => Sort switch
+    public string SortText
     {
-        AchievementSort.GamerscoreAwarded =>
-            LocalizationHelper.GetText("GameModal.Achievements.Sort.GamerscoreAwarded"),
-        AchievementSort.Alphabetical => LocalizationHelper.GetText("GameModal.Achievements.Sort.Alphabetical"),
-        _ => LocalizationHelper.GetText("GameModal.Achievements.Sort.Achieved")
-    };
+        get
+        {
+            return Sort switch
+            {
+                AchievementSort.GamerscoreAwarded =>
+                    LocalizationHelper.GetText("GameModal.Achievements.Sort.GamerscoreAwarded"),
+                AchievementSort.Alphabetical => LocalizationHelper.GetText("GameModal.Achievements.Sort.Alphabetical"),
+                _ => LocalizationHelper.GetText("GameModal.Achievements.Sort.Achieved")
+            };
+        }
+    }
 
     /// <summary>
     /// Raised after the selection moves, so the view can scroll the selected
@@ -96,10 +108,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// Rebuilds <see cref="Rows"/> from the sort order, keeping the selection on
     /// the same row index so the viewport stays put.
     /// </summary>
-    private void ApplySort()
-    {
-        SelectionHelper.ResortPreservingSelection(Rows, SortAchievements(_allAchievements));
-    }
+    private void ApplySort() => SelectionHelper.ResortPreservingSelection(Rows, SortAchievements(_allAchievements));
 
     partial void OnSortChanged(AchievementSort value)
     {
@@ -110,18 +119,12 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// Selects the first achievement row when the pane becomes active.
     /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(Rows, 0);
-    }
+    public void OnPaneEntered() => SelectionHelper.SelectOnlyAt(Rows, 0);
 
     /// <summary>
     /// Clears the achievement selection when the pane loses focus.
     /// </summary>
-    public void OnPaneExited()
-    {
-        SelectionHelper.ClearSelection(Rows);
-    }
+    public void OnPaneExited() => SelectionHelper.ClearSelection(Rows);
 
     /// <summary>
     /// Handles pane input: Up/Down moves the rows (scrolling into view), X

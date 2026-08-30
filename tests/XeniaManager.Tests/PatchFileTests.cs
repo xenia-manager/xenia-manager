@@ -35,10 +35,7 @@ value = 0x60000000
     }
 
     [Test]
-    public void FromString_WithNullContent_ThrowsArgumentException()
-    {
-        Assert.Throws<ArgumentException>(() => PatchFile.FromString(null!));
-    }
+    public void FromString_WithNullContent_ThrowsArgumentException() => Assert.Throws<ArgumentException>(() => PatchFile.FromString(null!));
 
     [Test]
     public void FromString_WithInvalidToml_ThrowsArgumentException()
@@ -57,10 +54,7 @@ value = 0x60000000
     }
 
     [Test]
-    public void Load_WithNonExistentPath_ThrowsFileNotFoundException()
-    {
-        Assert.Throws<FileNotFoundException>(() => PatchFile.Load("NonExistent.patch.toml"));
-    }
+    public void Load_WithNonExistentPath_ThrowsFileNotFoundException() => Assert.Throws<FileNotFoundException>(() => PatchFile.Load("NonExistent.patch.toml"));
 
     #region Header Parsing Tests
 
@@ -726,7 +720,11 @@ value = 0x60000000
     public void Create_WithMediaIds_IncludesMediaIds()
     {
         PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "DEADBEEFCAFEBABE",
-            new List<string> { "1B2C3D4E", "5F6E7D8C" });
+            new List<string>
+            {
+                "1B2C3D4E",
+                "5F6E7D8C"
+            });
 
         Assert.That(patchFile.MediaIds, Has.Count.EqualTo(2));
         Assert.That(patchFile.MediaIds[0].Id, Is.EqualTo("1B2C3D4E"));

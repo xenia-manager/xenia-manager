@@ -6,11 +6,13 @@
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
-             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             mc:Ignorable="d"
+             d:DesignWidth="1100"
+             d:DesignHeight="780"
              x:Class="XeniaManager.BigScreen.Views.Modals.InstalledContentPaneView"
              x:DataType="vm:InstalledContentPaneViewModel">
-    <Grid RowDefinitions="Auto, *" RowSpacing="24">
+    <Grid RowDefinitions="Auto, *"
+          RowSpacing="24">
 
         <!-- HEADER: content type + count -->
         <StackPanel Grid.Row="0"
@@ -29,7 +31,9 @@
         <Grid Grid.Row="1">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Hidden">
-                <ItemsControl x:Name="ContentList" ItemsSource="{Binding Rows}" Margin="0,0,0,20">
+                <ItemsControl x:Name="ContentList"
+                              ItemsSource="{Binding Rows}"
+                              Margin="0,0,0,20">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="items:ContentItemViewModel">
                             <card:ContentRow />
@@ -37,7 +41,8 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="10" />
+                            <StackPanel Orientation="Vertical"
+                                        Spacing="10" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

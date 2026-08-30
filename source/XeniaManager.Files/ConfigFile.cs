@@ -26,15 +26,27 @@ public class ConfigFile
     /// <summary>
     /// Gets the list of configuration sections.
     /// </summary>
-    public IReadOnlyList<ConfigSection> Sections => Document.SectionsReadOnly;
+    public IReadOnlyList<ConfigSection> Sections
+    {
+        get
+        {
+            return Document.SectionsReadOnly;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the header comment for the config file.
     /// </summary>
     public string? HeaderComment
     {
-        get => Document.HeaderComment;
-        set => Document.HeaderComment = value;
+        get
+        {
+            return Document.HeaderComment;
+        }
+        set
+        {
+            Document.HeaderComment = value;
+        }
     }
 
     /// <summary>
@@ -56,7 +68,10 @@ public class ConfigFile
 
         ConfigFile configFile = new ConfigFile
         {
-            Document = new ConfigDocument { HeaderComment = headerComment }
+            Document = new ConfigDocument
+            {
+                HeaderComment = headerComment
+            }
         };
 
         Logger.Trace<ConfigFile>("ConfigFile created successfully");
@@ -143,6 +158,7 @@ public class ConfigFile
                 {
                     configFile.HeaderComment += "\n" + trimmedLine.Substring(1).Trim();
                 }
+
                 continue;
             }
 
@@ -158,6 +174,7 @@ public class ConfigFile
                     pendingCommentLines = null;
                     Logger.Debug<ConfigFile>($"Parsing section: {sectionName}");
                 }
+
                 continue;
             }
 
@@ -181,6 +198,7 @@ public class ConfigFile
                 {
                     currentOption.Comment += "\n" + commentText;
                 }
+
                 currentOption.HasMultiLineComment = true;
                 continue;
             }
@@ -205,6 +223,7 @@ public class ConfigFile
                 {
                     pendingCommentLines = [];
                 }
+
                 pendingCommentLines.Add(trimmedLine.Substring(1).Trim());
             }
         }
@@ -324,6 +343,7 @@ public class ConfigFile
             type = ConfigOptionType.Boolean;
             return true;
         }
+
         if (valueStr.Equals("false", StringComparison.OrdinalIgnoreCase))
         {
             type = ConfigOptionType.Boolean;
@@ -477,6 +497,7 @@ public class ConfigFile
             {
                 sb.AppendLine($"# {line}");
             }
+
             sb.AppendLine();
         }
 
@@ -533,6 +554,7 @@ public class ConfigFile
                     sb.Append(optionPart);
                     sb.Append(' ');
                 }
+
                 sb.AppendLine($"\t# {commentLines[0]}");
             }
             else
@@ -548,6 +570,7 @@ public class ConfigFile
                     sb.Append(optionPart);
                     sb.Append(' ');
                 }
+
                 sb.AppendLine($"\t# {commentLines[0]}");
 
                 // Continuation lines: pad to value_alignment, then tab + # + comment
@@ -583,33 +606,39 @@ public class ConfigFile
             {
                 return (bool)value ? "true" : "false";
             }
+
             if (value is string str)
             {
                 return $"\"{str}\"";
             }
+
             if (value is IEnumerable && value is not string)
             {
                 return FormatArrayValue(value);
             }
+
             if (value is double d)
             {
                 return d.ToString(CultureInfo.InvariantCulture);
             }
+
             return value.ToString() ?? "\"\"";
         }
 
         return type switch
         {
             ConfigOptionType.Boolean => value is bool boolValue
-                ? (boolValue ? "true" : "false")
-                : (Convert.ToBoolean(value, CultureInfo.InvariantCulture) ? "true" : "false"),
+                ? boolValue ? "true" : "false"
+                : Convert.ToBoolean(value, CultureInfo.InvariantCulture)
+                    ? "true"
+                    : "false",
             ConfigOptionType.Integer => value is int or long or uint or ulong
                 ? value.ToString()
                 : Convert.ToInt64(value).ToString(),
             ConfigOptionType.Float => Convert.ToDouble(value, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture),
             ConfigOptionType.String => $"\"{value}\"",
             ConfigOptionType.Array => FormatArrayValue(value),
-            _ => value is string ? $"\"{value}\"" : (value.ToString() ?? "\"\"")
+            _ => value is string ? $"\"{value}\"" : value.ToString() ?? "\"\""
         } ?? string.Empty;
     }
 
@@ -665,10 +694,7 @@ public class ConfigFile
     /// <param name="optionName">The name of the option.</param>
     /// <param name="defaultValue">The default value if not found.</param>
     /// <returns>The value of the option, or the default value if not found.</returns>
-    public T GetValue<T>(string sectionName, string optionName, T defaultValue = default!)
-    {
-        return Document.GetValue<T>(sectionName, optionName, defaultValue);
-    }
+    public T GetValue<T>(string sectionName, string optionName, T defaultValue = default!) => Document.GetValue<T>(sectionName, optionName, defaultValue);
 
     /// <summary>
     /// Sets a value in the configuration.
@@ -676,30 +702,21 @@ public class ConfigFile
     /// <param name="sectionName">The name of the section.</param>
     /// <param name="optionName">The name of the option.</param>
     /// <param name="value">The value to set.</param>
-    public void SetValue(string sectionName, string optionName, object? value)
-    {
-        Document.SetValue(sectionName, optionName, value);
-    }
+    public void SetValue(string sectionName, string optionName, object? value) => Document.SetValue(sectionName, optionName, value);
 
     /// <summary>
     /// Gets a section by name.
     /// </summary>
     /// <param name="name">The name of the section to find.</param>
     /// <returns>The ConfigSection if found, null otherwise.</returns>
-    public ConfigSection? GetSection(string name)
-    {
-        return Document.GetSection(name);
-    }
+    public ConfigSection? GetSection(string name) => Document.GetSection(name);
 
     /// <summary>
     /// Gets or creates a section by name.
     /// </summary>
     /// <param name="name">The name of the section.</param>
     /// <returns>The existing or newly created ConfigSection.</returns>
-    public ConfigSection GetOrCreateSection(string name)
-    {
-        return Document.GetOrCreateSection(name);
-    }
+    public ConfigSection GetOrCreateSection(string name) => Document.GetOrCreateSection(name);
 
     /// <summary>
     /// Adds a new section to the configuration.

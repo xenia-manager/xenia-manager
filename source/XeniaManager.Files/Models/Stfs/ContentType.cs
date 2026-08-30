@@ -214,10 +214,7 @@ public static class ContentTypeExtensions
     /// </summary>
     /// <param name="type">The ContentType to convert.</param>
     /// <returns>The hexadecimal string representation of the ContentType value.</returns>
-    public static string ToHexString(this ContentType type)
-    {
-        return ((uint)type).ToString("X8");
-    }
+    public static string ToHexString(this ContentType type) => ((uint)type).ToString("X8");
 
     /// <summary>
     /// Converts the ContentType enum value to a display-friendly string with spaces between words.

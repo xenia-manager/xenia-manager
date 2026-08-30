@@ -42,8 +42,14 @@ public class GameCompatibilityDatabase
     /// </summary>
     public static List<GameCompatibilityEntry> FilteredDatabase
     {
-        get => _databaseState.FilteredDatabase;
-        private set => _databaseState.FilteredDatabase = value;
+        get
+        {
+            return _databaseState.FilteredDatabase;
+        }
+        private set
+        {
+            _databaseState.FilteredDatabase = value;
+        }
     }
 
     /// <summary>
@@ -71,7 +77,7 @@ public class GameCompatibilityDatabase
         {
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: "compatibility_database", cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                response = await _client.GetAsync(url, cancellationToken, "compatibility_database", ApiCacheDuration, cacheDirectory);
                 Logger.Info<GameCompatibilityDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -120,7 +126,8 @@ public class GameCompatibilityDatabase
             .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        Logger.Info<GameCompatibilityDatabase>($"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
+        Logger.Info<GameCompatibilityDatabase>(
+            $"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
     }
 
     /// <summary>
@@ -238,7 +245,8 @@ public class GameCompatibilityDatabase
     /// <param name="cancellationToken">Token to cancel the operation if needed</param>
     /// <param name="cacheDirectory">Optional cache directory override</param>
     /// <returns>The matching GameCompatibilityEntry if found, null otherwise</returns>
-    public static async Task<GameCompatibilityEntry?> ResolveAsync(string? gameId, IReadOnlyList<string>? alternativeIds, string? title, CancellationToken cancellationToken = default, string? cacheDirectory = null)
+    public static async Task<GameCompatibilityEntry?> ResolveAsync(string? gameId, IReadOnlyList<string>? alternativeIds, string? title,
+        CancellationToken cancellationToken = default, string? cacheDirectory = null)
     {
         Logger.Debug<GameCompatibilityDatabase>($"Resolving compatibility for '{title}' (ID: {gameId})");
         await LoadAsync(cancellationToken, cacheDirectory);
@@ -261,7 +269,11 @@ public class GameCompatibilityDatabase
             foreach (string altId in alternativeIds)
             {
                 GameCompatibilityEntry? match = GetGameCompatibilityById(altId);
-                if (match == null) continue;
+                if (match == null)
+                {
+                    continue;
+                }
+
                 matches.Add(match);
                 Logger.Debug<GameCompatibilityDatabase>($"Found compatibility entry by alternative ID '{altId}': {match.State}");
             }
@@ -283,6 +295,7 @@ public class GameCompatibilityDatabase
                     Logger.Debug<GameCompatibilityDatabase>($"Found title match for '{title}': {resultEntry.State}");
                     return resultEntry;
                 }
+
                 resultEntry = matches[0];
                 Logger.Debug<GameCompatibilityDatabase>($"No title match found, using first entry for '{title}': {resultEntry.State}");
                 return resultEntry;
@@ -324,7 +337,10 @@ public class GameCompatibilityDatabase
         {
             // Try default locations
             string defaultCache = Path.Combine(AppContext.BaseDirectory, "Cache", "Database", "compatibility_database.json");
-            if (File.Exists(defaultCache)) File.Delete(defaultCache);
+            if (File.Exists(defaultCache))
+            {
+                File.Delete(defaultCache);
+            }
         }
 
         Reset();

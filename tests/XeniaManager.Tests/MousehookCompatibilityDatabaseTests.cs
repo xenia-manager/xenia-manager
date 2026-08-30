@@ -8,16 +8,10 @@ namespace XeniaManager.Tests;
 public class MousehookCompatibilityDatabaseTests
 {
     [SetUp]
-    public void Setup()
-    {
-        MousehookCompatibilityDatabase.Reset();
-    }
+    public void Setup() => MousehookCompatibilityDatabase.Reset();
 
     [TearDown]
-    public void TearDown()
-    {
-        MousehookCompatibilityDatabase.Reset();
-    }
+    public void TearDown() => MousehookCompatibilityDatabase.Reset();
 
     private static async Task PopulateTestData(params MousehookCompatibilityEntry[] entries)
     {
@@ -125,7 +119,7 @@ public class MousehookCompatibilityDatabaseTests
     {
         await PopulateTestData(CreateHalo3());
 
-        XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+        Game game = new Game
         {
             Title = "Halo 3",
             GameId = "4D5307E6",
@@ -153,7 +147,7 @@ public class MousehookCompatibilityDatabaseTests
     {
         await PopulateTestData(CreateHalo3());
 
-        XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+        Game game = new Game
         {
             Title = "Unknown Game",
             GameId = "00000000",
@@ -181,7 +175,7 @@ public class MousehookCompatibilityDatabaseTests
     {
         await PopulateTestData(CreateHalo3());
 
-        XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+        Game game = new Game
         {
             Title = "Halo 3",
             GameId = "INVALID_ID",
@@ -225,7 +219,7 @@ public class MousehookCompatibilityDatabaseTests
     {
         try
         {
-            XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+            Game game = new Game
             {
                 Title = "Halo 3",
                 GameId = "4D5307E6",

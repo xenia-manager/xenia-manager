@@ -38,12 +38,24 @@ public partial class DiscOptionItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether the disc file is missing (dimmed card, skipped by navigation).
     /// </summary>
-    public bool IsMissing => !IsPathValid;
+    public bool IsMissing
+    {
+        get
+        {
+            return !IsPathValid;
+        }
+    }
 
     /// <summary>
     /// Whether the status line (last played / file missing) shows under the label.
     /// </summary>
-    public bool IsStatusVisible => IsLastPlayed || IsMissing;
+    public bool IsStatusVisible
+    {
+        get
+        {
+            return IsLastPlayed || IsMissing;
+        }
+    }
 
     /// <summary>
     /// The status line text: the last-played marker, the file-missing marker, or both.

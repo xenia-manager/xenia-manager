@@ -19,7 +19,10 @@ public class ArgumentParserTests
         {
             Title = "TestGame",
             GameId = "test-id",
-            FileLocations = new GameFiles { Game = _tempIsoPath }
+            FileLocations = new GameFiles
+            {
+                Game = _tempIsoPath
+            }
         };
         GameManager.Games = [_testGame];
     }
@@ -32,6 +35,7 @@ public class ArgumentParserTests
         {
             File.Delete(_tempIsoPath);
         }
+
         GameManager.Games = [];
     }
 

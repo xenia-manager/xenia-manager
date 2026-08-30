@@ -14,10 +14,7 @@ public static class TaskUtilities
     /// synchronous ones thrown while the work is being constructed).
     /// </summary>
     /// <typeparam name="T">The caller type, used for log prefixes.</typeparam>
-    public static void RunSafely<T>(Func<Task> work, string operation)
-    {
-        _ = RunCore<T>(work, operation);
-    }
+    public static void RunSafely<T>(Func<Task> work, string operation) => _ = RunCore<T>(work, operation);
 
     /// <summary>
     /// Awaits the work and logs any exception that escapes it.

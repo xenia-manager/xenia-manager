@@ -39,17 +39,35 @@ public class ProfilePickerViewModel : ModalViewModelBase
     /// <summary>
     /// Whether any profiles exist.
     /// </summary>
-    public bool HasProfiles => Profiles.Count > 0;
+    public bool HasProfiles
+    {
+        get
+        {
+            return Profiles.Count > 0;
+        }
+    }
 
     /// <summary>
     /// Whether any version chips exist.
     /// </summary>
-    public bool HasVersionChips => VersionChips.Count > 0;
+    public bool HasVersionChips
+    {
+        get
+        {
+            return VersionChips.Count > 0;
+        }
+    }
 
     /// <summary>
     /// Whether the "no profiles" stub should show.
     /// </summary>
-    public bool ShowEmpty => !HasProfiles;
+    public bool ShowEmpty
+    {
+        get
+        {
+            return !HasProfiles;
+        }
+    }
 
     /// <summary>
     /// Rebuilds the profile list and version chips from the profile service.

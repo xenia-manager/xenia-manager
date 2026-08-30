@@ -32,7 +32,13 @@ public class ScreenshotViewerViewModel : ModalViewModelBase
     /// <summary>
     /// The full-resolution screenshot image, or the thumbnail when its decode failed.
     /// </summary>
-    public Bitmap? Image => _fullImage ?? _screenshot.Thumbnail;
+    public Bitmap? Image
+    {
+        get
+        {
+            return _fullImage ?? _screenshot.Thumbnail;
+        }
+    }
 
     /// <summary>
     /// Decodes the current screenshot's full-resolution image from disk,
@@ -56,22 +62,46 @@ public class ScreenshotViewerViewModel : ModalViewModelBase
     /// <summary>
     /// The game title the screenshot belongs to.
     /// </summary>
-    public string GameTitle => _screenshot.GameTitle;
+    public string GameTitle
+    {
+        get
+        {
+            return _screenshot.GameTitle;
+        }
+    }
 
     /// <summary>
     /// The capture date formatted for display.
     /// </summary>
-    public string CapturedAtText => _screenshot.CapturedAtText;
+    public string CapturedAtText
+    {
+        get
+        {
+            return _screenshot.CapturedAtText;
+        }
+    }
 
     /// <summary>
     /// Whether the viewer can step to the previous screenshot.
     /// </summary>
-    public bool HasPrevious => _screenshots.IndexOf(_screenshot) > 0;
+    public bool HasPrevious
+    {
+        get
+        {
+            return _screenshots.IndexOf(_screenshot) > 0;
+        }
+    }
 
     /// <summary>
     /// Whether the viewer can step to the next screenshot.
     /// </summary>
-    public bool HasNext => _screenshots.IndexOf(_screenshot) < _screenshots.Count - 1;
+    public bool HasNext
+    {
+        get
+        {
+            return _screenshots.IndexOf(_screenshot) < _screenshots.Count - 1;
+        }
+    }
 
     /// <summary>
     /// Moves the viewer to the neighbouring screenshot, clamped at both ends.

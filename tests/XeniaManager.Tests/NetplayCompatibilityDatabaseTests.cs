@@ -8,16 +8,10 @@ namespace XeniaManager.Tests;
 public class NetplayCompatibilityDatabaseTests
 {
     [SetUp]
-    public void Setup()
-    {
-        NetplayCompatibilityDatabase.Reset();
-    }
+    public void Setup() => NetplayCompatibilityDatabase.Reset();
 
     [TearDown]
-    public void TearDown()
-    {
-        NetplayCompatibilityDatabase.Reset();
-    }
+    public void TearDown() => NetplayCompatibilityDatabase.Reset();
 
     private static async Task PopulateTestData(params NetplayCompatibilityEntry[] entries)
     {
@@ -117,7 +111,7 @@ public class NetplayCompatibilityDatabaseTests
     {
         await PopulateTestData(CreateMw2());
 
-        XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+        Game game = new Game
         {
             Title = "Call of Duty: Modern Warfare 2",
             GameId = "41560817",
@@ -146,7 +140,7 @@ public class NetplayCompatibilityDatabaseTests
     {
         await PopulateTestData(CreateCod2());
 
-        XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+        Game game = new Game
         {
             Title = "Unknown Game",
             GameId = "00000000",
@@ -174,7 +168,7 @@ public class NetplayCompatibilityDatabaseTests
     {
         await PopulateTestData(CreateCod2());
 
-        XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+        Game game = new Game
         {
             Title = "Call of Duty 2",
             GameId = "INVALID_ID",
@@ -218,7 +212,7 @@ public class NetplayCompatibilityDatabaseTests
     {
         try
         {
-            XeniaManager.Core.Models.Game.Game game = new XeniaManager.Core.Models.Game.Game
+            Game game = new Game
             {
                 Title = "Call of Duty 2",
                 GameId = "415607D1",

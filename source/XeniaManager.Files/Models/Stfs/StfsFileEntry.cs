@@ -80,32 +80,62 @@ public class StfsFileEntry
     /// Gets whether this entry represents a directory.
     /// Bit 7 of the flags byte.
     /// </summary>
-    public bool IsDirectory => (Flags & 0x80) == 0x80;
+    public bool IsDirectory
+    {
+        get
+        {
+            return (Flags & 0x80) == 0x80;
+        }
+    }
 
     /// <summary>
     /// Gets whether all blocks in the file are consecutive.
     /// Bit 6 of the flags byte.
     /// </summary>
-    public bool HasConsecutiveBlocks => (Flags & 0x40) == 0x40;
+    public bool HasConsecutiveBlocks
+    {
+        get
+        {
+            return (Flags & 0x40) == 0x40;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the length of the file name (first 6 bits of flags).
     /// </summary>
     public byte NameLength
     {
-        get => (byte)(Flags & 0x3F);
-        set => Flags = (byte)((Flags & 0xC0) | (value & 0x3F));
+        get
+        {
+            return (byte)(Flags & 0x3F);
+        }
+        set
+        {
+            Flags = (byte)((Flags & 0xC0) | (value & 0x3F));
+        }
     }
 
     /// <summary>
     /// Gets the update timestamp as a DateTime.
     /// </summary>
-    public DateTime UpdateDateTime => DecodeFatTimestamp(UpdateDate, UpdateTime);
+    public DateTime UpdateDateTime
+    {
+        get
+        {
+            return DecodeFatTimestamp(UpdateDate, UpdateTime);
+        }
+    }
 
     /// <summary>
     /// Gets the access timestamp as a DateTime.
     /// </summary>
-    public DateTime AccessDateTime => DecodeFatTimestamp(AccessDate, AccessTime);
+    public DateTime AccessDateTime
+    {
+        get
+        {
+            return DecodeFatTimestamp(AccessDate, AccessTime);
+        }
+    }
 
     /// <summary>
     /// Decodes a FAT timestamp into a DateTime.
@@ -136,18 +166,22 @@ public class StfsFileEntry
         {
             month = 1;
         }
+
         if (day is < 1 or > 31)
         {
             day = 1;
         }
+
         if (hours > 23)
         {
             hours = 0;
         }
+
         if (minutes > 59)
         {
             minutes = 0;
         }
+
         if (seconds > 59)
         {
             seconds = 0;

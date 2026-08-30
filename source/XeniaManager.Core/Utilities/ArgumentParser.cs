@@ -17,7 +17,7 @@ public class ArgumentParser
     /// <returns>A hash set containing the arguments with case-insensitive string comparison.</returns>
     public static HashSet<string> ToArgumentSet(string[]? args)
     {
-        Logger.Debug<ArgumentParser>($"Converting {(args?.Length ?? 0)} arguments to a hash set");
+        Logger.Debug<ArgumentParser>($"Converting {args?.Length ?? 0} arguments to a hash set");
 
         HashSet<string> result = args == null
             ? new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -35,7 +35,7 @@ public class ArgumentParser
     /// <returns>True if the argument exists in the array, false otherwise.</returns>
     public static bool Contains(string[]? args, string arg)
     {
-        Logger.Debug<ArgumentParser>($"Checking if argument '{arg}' exists in {(args?.Length ?? 0)} provided arguments");
+        Logger.Debug<ArgumentParser>($"Checking if argument '{arg}' exists in {args?.Length ?? 0} provided arguments");
 
         bool result = ToArgumentSet(args).Contains(arg);
 
@@ -63,6 +63,7 @@ public class ArgumentParser
                 return match;
             }
         }
+
         // Fallback to positional search (original logic)
         Logger.Debug<ArgumentParser>($"Checking if desktop arguments contain a game title");
 
@@ -90,6 +91,7 @@ public class ArgumentParser
                 Logger.Warning<ArgumentParser>($"Game '{matchingGame.Title}' ({matchingGame.GameId}) has an invalid path, skipping");
                 continue;
             }
+
             Logger.Debug<ArgumentParser>($"Found game '{matchingGame.Title}' ({matchingGame.GameId}) in desktop arguments");
             return matchingGame;
         }
@@ -113,6 +115,7 @@ public class ArgumentParser
             Logger.Debug<ArgumentParser>("No arguments provided");
             return null;
         }
+
         // Flag based overrides first
         (int xeniaFlagIndex, string? xeniaFlagValue) = TryGetFlagValue(args, ArgumentFlags.XeniaArgs);
         if (!string.IsNullOrWhiteSpace(xeniaFlagValue))
@@ -140,6 +143,7 @@ public class ArgumentParser
             Logger.Debug<ArgumentParser>("No override arguments provided");
             return null;
         }
+
         Logger.Debug<ArgumentParser>($"Found overrides '{configOverrideArgs}' in desktop arguments");
         return configOverrideArgs;
     }
@@ -188,10 +192,12 @@ public class ArgumentParser
                     {
                         return (i, args[i + 1].Trim('"'));
                     }
+
                     return (i, null);
                 }
             }
         }
+
         return (-1, null);
     }
 }

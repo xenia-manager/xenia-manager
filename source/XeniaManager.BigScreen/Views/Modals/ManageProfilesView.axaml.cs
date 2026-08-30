@@ -76,10 +76,7 @@ public partial class ManageProfilesView : UserControl
     /// Focuses the gamertag field so keyboard entry can start immediately
     /// (controller activation of the gamertag row).
     /// </summary>
-    private void OnGamertagFocusRequested()
-    {
-        TxtGamertag.Focus();
-    }
+    private void OnGamertagFocusRequested() => TxtGamertag.Focus();
 
     /// <summary>
     /// Scrolls the selected row into view (posted so layout has settled) - the
@@ -163,7 +160,7 @@ public partial class ManageProfilesView : UserControl
             return;
         }
 
-        FilePickerOpenOptions options = new()
+        FilePickerOpenOptions options = new FilePickerOpenOptions
         {
             Title = LocalizationHelper.GetText("ManageProfiles.Import.FilePicker.Title"),
             AllowMultiple = false,

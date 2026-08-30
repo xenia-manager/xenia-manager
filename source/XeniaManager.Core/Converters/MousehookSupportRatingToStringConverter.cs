@@ -7,7 +7,7 @@ namespace XeniaManager.Core.Converters;
 
 public class MousehookSupportRatingToStringConverter : IValueConverter
 {
-    public static readonly MousehookSupportRatingToStringConverter Instance = new();
+    public static readonly MousehookSupportRatingToStringConverter Instance = new MousehookSupportRatingToStringConverter();
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -19,8 +19,5 @@ public class MousehookSupportRatingToStringConverter : IValueConverter
         return string.Empty;
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }

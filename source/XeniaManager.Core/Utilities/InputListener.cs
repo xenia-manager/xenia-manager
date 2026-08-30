@@ -136,7 +136,13 @@ public class InputListener
     /// <summary>
     /// Gets whether the InputListener is currently running.
     /// </summary>
-    public static bool IsRunning => _isRunning;
+    public static bool IsRunning
+    {
+        get
+        {
+            return _isRunning;
+        }
+    }
 
     /// <summary>
     /// Handles key down events from Avalonia.

@@ -6,7 +6,9 @@
              xmlns:converters="using:XeniaManager.Core.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
+             mc:Ignorable="d"
+             d:DesignWidth="500"
+             d:DesignHeight="600"
              x:Class="XeniaManager.Controls.GameDetailsEditor"
              x:DataType="vm:GameDetailsEditorViewModel"
              Margin="20"
@@ -14,63 +16,93 @@
 
     <UserControl.Styles>
         <Style Selector="StackPanel.section">
-            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="Margin"
+                    Value="0,8" />
         </Style>
         <Style Selector="StackPanel.field">
-            <Setter Property="Margin" Value="0,4,0,12" />
+            <Setter Property="Margin"
+                    Value="0,4,0,12" />
         </Style>
         <Style Selector="TextBlock.label">
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="Medium" />
         </Style>
         <Style Selector="TextBlock.required">
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource SystemFillColorCriticalBrush}" />
         </Style>
         <Style Selector="Border.artworkButton">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Margin" Value="0,4" />
-            <Setter Property="ClipToBounds" Value="True" />
+            <Setter Property="Background"
+                    Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="CornerRadius"
+                    Value="8" />
+            <Setter Property="Padding"
+                    Value="0" />
+            <Setter Property="Margin"
+                    Value="0,4" />
+            <Setter Property="ClipToBounds"
+                    Value="True" />
         </Style>
         <Style Selector="Border.artworkButton:pointerover">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="Background"
+                    Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource CardStrokeColorDefaultBrush}" />
         </Style>
         <Style Selector="TextBox.readOnly">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorDisabledBrush}" />
+            <Setter Property="Background"
+                    Value="{DynamicResource ControlFillColorDisabledBrush}" />
         </Style>
         <Style Selector="Grid.infoField">
-            <Setter Property="Margin" Value="0,4" />
+            <Setter Property="Margin"
+                    Value="0,4" />
         </Style>
         <Style Selector="Border.artworkImageContainer">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="ClipToBounds" Value="True" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="CornerRadius"
+                    Value="8" />
+            <Setter Property="ClipToBounds"
+                    Value="True" />
         </Style>
         <Style Selector="Border.artworkImageContainer.boxart">
-            <Setter Property="Height" Value="300" />
-            <Setter Property="Width" Value="225" />
+            <Setter Property="Height"
+                    Value="300" />
+            <Setter Property="Width"
+                    Value="225" />
         </Style>
         <Style Selector="Border.artworkImageContainer.icon">
-            <Setter Property="Height" Value="64" />
-            <Setter Property="Width" Value="64" />
+            <Setter Property="Height"
+                    Value="64" />
+            <Setter Property="Width"
+                    Value="64" />
         </Style>
         <Style Selector="Border.artworkImageContainer.background">
-            <Setter Property="Height" Value="280" />
-            <Setter Property="Width" Value="500" />
+            <Setter Property="Height"
+                    Value="280" />
+            <Setter Property="Width"
+                    Value="500" />
         </Style>
     </UserControl.Styles>
 
     <Grid RowDefinitions="*,Auto">
         <!-- Content Section -->
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="0"
+                      VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <!-- Media Assets Section -->
                 <cards:CustomCard>
@@ -81,7 +113,8 @@
                                    Margin="0,0,0,12" />
                         <Grid ColumnDefinitions="*,16,*">
                             <!-- Boxart Editor -->
-                            <Border Grid.Column="0" Classes="artworkButton"
+                            <Border Grid.Column="0"
+                                    Classes="artworkButton"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                                 <Border.ContextFlyout>
@@ -115,7 +148,9 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     Spacing="8">
-                                            <icons:SymbolIcon Symbol="Image" Height="48" Width="48"
+                                            <icons:SymbolIcon Symbol="Image"
+                                                              Height="48"
+                                                              Width="48"
                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                             <TextBlock Text="{DynamicResource GameDetailsEditor.Boxart}"
                                                        TextAlignment="Center"
@@ -127,7 +162,8 @@
                             </Border>
 
                             <!-- Icon Editor -->
-                            <Border Grid.Column="2" Classes="artworkButton"
+                            <Border Grid.Column="2"
+                                    Classes="artworkButton"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                                 <Border.ContextFlyout>
@@ -161,7 +197,9 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     Spacing="8">
-                                            <icons:SymbolIcon Symbol="Image" Height="48" Width="48"
+                                            <icons:SymbolIcon Symbol="Image"
+                                                              Height="48"
+                                                              Width="48"
                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                             <TextBlock Text="{DynamicResource GameDetailsEditor.Icon}"
                                                        TextAlignment="Center"
@@ -174,7 +212,8 @@
                         </Grid>
 
                         <!-- Background Editor -->
-                        <Border Classes="artworkButton" Margin="0,16,0,0"
+                        <Border Classes="artworkButton"
+                                Margin="0,16,0,0"
                                 HorizontalAlignment="Stretch">
                             <Border.ContextFlyout>
                                 <MenuFlyout>
@@ -208,7 +247,9 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 Spacing="8">
-                                        <icons:SymbolIcon Symbol="Image" Height="48" Width="48"
+                                        <icons:SymbolIcon Symbol="Image"
+                                                          Height="48"
+                                                          Width="48"
                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                         <TextBlock Text="{DynamicResource GameDetailsEditor.Background}"
                                                    TextAlignment="Center"
@@ -323,7 +364,8 @@
                                                 IsEnabled="{Binding CanAddAlternativeId}"
                                                 Padding="12,6">
                                             <Button.Content>
-                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="4">
                                                     <icons:SymbolIcon Symbol="Add" />
                                                     <TextBlock Text="{DynamicResource GameDetailsEditor.Add}" />
                                                 </StackPanel>
@@ -462,8 +504,7 @@
                                            FontWeight="Medium"
                                            Text="{DynamicResource GameDetailsEditor.XeniaVersion}" />
                             </Grid>
-                            <ComboBox Grid.Column="2"
-                                      Margin="0,8,0,0"
+                            <ComboBox Margin="0,8,0,0"
                                       ItemsSource="{Binding XeniaVersions}"
                                       SelectedValue="{Binding SelectedXeniaVersion}"
                                       MinWidth="150">
@@ -592,7 +633,7 @@
                                                   Margin="0,0,8,0"
                                                   VerticalAlignment="Center"
                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Symbol="Keyboard" />
+                                                  Symbol="Keyboard" />
                                 <TextBlock Grid.Column="1"
                                            VerticalAlignment="Center"
                                            FontWeight="Medium"
@@ -637,9 +678,11 @@
                             </Grid>
 
                             <!-- Netplay Status Grid -->
-                            <Grid ColumnDefinitions="*,*" Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="*,*"
+                                  Margin="0,0,0,8">
                                 <!-- Working Public -->
-                                <StackPanel Grid.Column="0" Margin="0,0,8,4">
+                                <StackPanel Grid.Column="0"
+                                            Margin="0,0,8,4">
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.WorkingPublic}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
@@ -653,7 +696,8 @@
                                     </ComboBox>
                                 </StackPanel>
                                 <!-- Tested Locally -->
-                                <StackPanel Grid.Column="1" Margin="8,0,0,4">
+                                <StackPanel Grid.Column="1"
+                                            Margin="8,0,0,4">
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.TestedLocally}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
@@ -667,9 +711,11 @@
                                     </ComboBox>
                                 </StackPanel>
                             </Grid>
-                            <Grid ColumnDefinitions="*,*" Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="*,*"
+                                  Margin="0,0,0,8">
                                 <!-- Only Local -->
-                                <StackPanel Grid.Column="0" Margin="0,0,8,4">
+                                <StackPanel Grid.Column="0"
+                                            Margin="0,0,8,4">
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.OnlyLocal}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
@@ -683,7 +729,8 @@
                                     </ComboBox>
                                 </StackPanel>
                                 <!-- Systemlink -->
-                                <StackPanel Grid.Column="1" Margin="8,0,0,4">
+                                <StackPanel Grid.Column="1"
+                                            Margin="8,0,0,4">
                                     <TextBlock Text="{DynamicResource GameDetailsEditor.NetplayCompatibility.Systemlink}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />

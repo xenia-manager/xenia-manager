@@ -18,8 +18,6 @@ public class ColorJsonConverter : JsonConverter<Color>
             : default;
     }
 
-    public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options) =>
         writer.WriteStringValue($"#{value.A:X2}{value.R:X2}{value.G:X2}{value.B:X2}");
-    }
 }

@@ -38,7 +38,8 @@ public class Launcher
         try
         {
             XeniaVersionInfo info = XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion);
-            Logger.Debug<Launcher>($"Retrieved Xenia version info - Executable: {info.ExecutableLocation}, Emulator Dir: {info.EmulatorDir}, Config: {info.ConfigLocation}");
+            Logger.Debug<Launcher>(
+                $"Retrieved Xenia version info - Executable: {info.ExecutableLocation}, Emulator Dir: {info.EmulatorDir}, Config: {info.ConfigLocation}");
 
             Process xenia = new Process();
             xenia.StartInfo.FileName = AppPathResolver.GetFullPath(info.ExecutableLocation);
@@ -100,7 +101,8 @@ public class Launcher
         try
         {
             XeniaVersionInfo info = XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion);
-            Logger.Debug<Launcher>($"Retrieved Xenia version info - Executable: {info.ExecutableLocation}, Emulator Dir: {info.EmulatorDir}, Config: {info.ConfigLocation}");
+            Logger.Debug<Launcher>(
+                $"Retrieved Xenia version info - Executable: {info.ExecutableLocation}, Emulator Dir: {info.EmulatorDir}, Config: {info.ConfigLocation}");
 
             Process xenia = new Process();
             xenia.StartInfo.FileName = AppPathResolver.GetFullPath(info.ExecutableLocation);
@@ -159,10 +161,9 @@ public class Launcher
     /// <param name="configOverridesFromArgs">Optional config string when game loading starts</param>
     /// <param name="discNumber">Which disc to launch (1-based). Defaults to Disc 1.</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null, int discNumber = 1)
-    {
-        await LaunchGameCoreAsync(game, async: true, settings, outputHandler, onGameLoadingStarted, configOverridesFromArgs, discNumber);
-    }
+    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null,
+        Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null, int discNumber = 1) =>
+        await LaunchGameCoreAsync(game, true, settings, outputHandler, onGameLoadingStarted, configOverridesFromArgs, discNumber);
 
     /// <summary>
     /// Launches a game synchronously using the specified Xenia emulator version
@@ -180,10 +181,8 @@ public class Launcher
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
     /// <param name="discNumber">Which disc to launch (1-based). Defaults to Disc 1.</param>
-    public static void LaunchGame(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, int discNumber = 1)
-    {
-        LaunchGameCoreAsync(game, async: false, settings, outputHandler, onGameLoadingStarted, discNumber: discNumber).GetAwaiter().GetResult();
-    }
+    public static void LaunchGame(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null,
+        int discNumber = 1) => LaunchGameCoreAsync(game, false, settings, outputHandler, onGameLoadingStarted, discNumber: discNumber).GetAwaiter().GetResult();
 
     /// <summary>
     /// Core implementation for launching a game
@@ -196,7 +195,8 @@ public class Launcher
     /// <param name="configOverridesFromArgs">Optional config string when game loading starts</param>
     /// <param name="discNumber">Which disc to launch (1-based). Defaults to Disc 1.</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null, int discNumber = 1)
+    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null,
+        Action? onGameLoadingStarted = null, string? configOverridesFromArgs = null, int discNumber = 1)
     {
         if (XeniaUpdating)
         {
@@ -252,7 +252,8 @@ public class Launcher
         if (game.XeniaVersion != XeniaVersion.Custom)
         {
             XeniaVersionInfo xeniaVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion);
-            Logger.Debug<Launcher>($"Retrieved Xenia version info - Executable: {xeniaVersionInfo.ExecutableLocation}, Emulator Dir: {xeniaVersionInfo.EmulatorDir}, Config: {xeniaVersionInfo.ConfigLocation}");
+            Logger.Debug<Launcher>(
+                $"Retrieved Xenia version info - Executable: {xeniaVersionInfo.ExecutableLocation}, Emulator Dir: {xeniaVersionInfo.EmulatorDir}, Config: {xeniaVersionInfo.ConfigLocation}");
 
             // Configure the Xenia emulator process with the executable path and working directory
             xenia.StartInfo.FileName = AppPathResolver.GetFullPath(xeniaVersionInfo.ExecutableLocation);
@@ -275,7 +276,8 @@ public class Launcher
             xenia.StartInfo.Arguments = $@"""{discPath}"" {configOverridesFromArgs}";
         }
 
-        Logger.Trace<Launcher>($"Process configuration - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
+        Logger.Trace<Launcher>(
+            $"Process configuration - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
 
         try
         {
@@ -333,13 +335,15 @@ public class Launcher
                     {
                         Logger.Error<Launcher>($"Error invoking GameLoadingStarted callback: {ex.Message}");
                     }
+
                     (xeniaOutputHandler ?? outputHandler)!.GameLoadingStarted -= onGameLoadingStartedHandler;
                 };
                 (xeniaOutputHandler ?? outputHandler)!.GameLoadingStarted += onGameLoadingStartedHandler;
             }
             else
             {
-                Logger.Warning<Launcher>($"Not subscribing to GameLoadingStarted event: onGameLoadingStarted={onGameLoadingStarted != null}, outputHandler={(xeniaOutputHandler ?? outputHandler) != null}");
+                Logger.Warning<Launcher>(
+                    $"Not subscribing to GameLoadingStarted event: onGameLoadingStarted={onGameLoadingStarted != null}, outputHandler={(xeniaOutputHandler ?? outputHandler) != null}");
             }
 
             Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
@@ -418,6 +422,7 @@ public class Launcher
                     PatchManager.RestorePatches();
                 }
             }
+
             // Stop capturing output (prioritize save backup handler, then fallback to the provided handler)
             (xeniaOutputHandler ?? outputHandler)?.StopCapture(xenia);
         }

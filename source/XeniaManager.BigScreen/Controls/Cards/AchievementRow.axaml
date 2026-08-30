@@ -4,7 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="120"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="120"
         x:Class="XeniaManager.BigScreen.Controls.Cards.AchievementRow"
         x:DataType="vm:AchievementItemViewModel"
         Classes.selected="{Binding IsSelected}"
@@ -24,7 +26,8 @@
             </Border>
         </ControlTemplate>
     </Button.Template>
-    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+    <Grid ColumnDefinitions="Auto,*,Auto"
+          ColumnSpacing="20">
         <Border Width="56"
                 Height="56"
                 VerticalAlignment="Center"

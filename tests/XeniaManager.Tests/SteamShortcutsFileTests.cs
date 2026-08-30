@@ -141,10 +141,7 @@ public class SteamShortcutsFileTests
     /// <summary>
     /// Closes the root dictionary and appends the extra terminator Steam always writes.
     /// </summary>
-    private static byte[] Finish(BinaryVdfBuilder builder)
-    {
-        return builder.End().End().ToBytes();
-    }
+    private static byte[] Finish(BinaryVdfBuilder builder) => builder.End().End().ToBytes();
 
     private static string WriteTempFile(byte[] bytes)
     {
@@ -273,7 +270,10 @@ public class SteamShortcutsFileTests
 
         // Assert
         Assert.That(shortcutsFile.Shortcuts.Select(s => s.AppName),
-            Is.EqualTo(new[] { "First Game", "Bean (GoldenEye 007)", "Perfect Dark" }));
+            Is.EqualTo(new[]
+            {
+                "First Game", "Bean (GoldenEye 007)", "Perfect Dark"
+            }));
     }
 
     [Test]
@@ -333,7 +333,11 @@ public class SteamShortcutsFileTests
         SteamShortcutsFile shortcutsFile = SteamShortcutsFile.FromBytes(Finish(builder));
 
         // Assert
-        Assert.That(shortcutsFile.Shortcuts[0].Tags, Is.EqualTo(new List<string> { "Action", "Singleplayer" }));
+        Assert.That(shortcutsFile.Shortcuts[0].Tags, Is.EqualTo(new List<string>
+        {
+            "Action",
+            "Singleplayer"
+        }));
         Assert.That(shortcutsFile.Shortcuts[1].Tags, Is.Empty);
     }
 
@@ -662,7 +666,11 @@ public class SteamShortcutsFileTests
             Assert.That(roundTripped.SortAs, Is.EqualTo("Full App"));
             Assert.That(roundTripped.GetAppIdAsUint(), Is.EqualTo(TestAppId));
             Assert.That(roundTripped.GetLastPlayTimeAsInt(), Is.EqualTo(TestLastPlayTime));
-            Assert.That(roundTripped.Tags, Is.EqualTo(new List<string> { "Action", "Adventure" }));
+            Assert.That(roundTripped.Tags, Is.EqualTo(new List<string>
+            {
+                "Action",
+                "Adventure"
+            }));
             Assert.That(roundTripped.UnknownFields, Is.Empty);
         }
         finally
@@ -765,7 +773,10 @@ public class SteamShortcutsFileTests
             Assert.That(original.Exe, Is.EqualTo("\"D:\\Games\\Assassins Creed Black Flag Resynced\\game.exe\""),
                 "Original paths must survive untouched");
             Assert.That(original.UnknownFields.Select(f => f.Key),
-                Is.EquivalentTo(new[] { "SomeNewField", "AnotherNewField" }),
+                Is.EquivalentTo(new[]
+                {
+                    "SomeNewField", "AnotherNewField"
+                }),
                 "Genuinely unknown fields must be preserved through the round-trip");
             Assert.That(reloaded.Shortcuts[1].UnknownFields, Is.Empty);
             Assert.That(reloaded.Shortcuts[1].GetAppIdAsUint(), Is.EqualTo(0xEECC0A56));
@@ -801,7 +812,11 @@ public class SteamShortcutsFileTests
     public void ComputeAppId_SetsHighBit_AndIsDeterministic()
     {
         // Arrange
-        SteamShortcut shortcut = new SteamShortcut { AppName = "Game", Exe = "game.exe" };
+        SteamShortcut shortcut = new SteamShortcut
+        {
+            AppName = "Game",
+            Exe = "game.exe"
+        };
 
         // Act
         uint appId = shortcut.ComputeAppId();
@@ -816,7 +831,11 @@ public class SteamShortcutsFileTests
     public void ComputeAppId_SaltChangesResult()
     {
         // Arrange - salt is used to resolve AppId collisions
-        SteamShortcut shortcut = new SteamShortcut { AppName = "Game", Exe = "game.exe" };
+        SteamShortcut shortcut = new SteamShortcut
+        {
+            AppName = "Game",
+            Exe = "game.exe"
+        };
 
         // Act
         uint unsalted = shortcut.ComputeAppId();

@@ -61,7 +61,13 @@ public class StfsFile : IDisposable
     /// <summary>
     /// Gets the header size from metadata.
     /// </summary>
-    public int HeaderSize => Metadata.HeaderSize;
+    public int HeaderSize
+    {
+        get
+        {
+            return Metadata.HeaderSize;
+        }
+    }
 
     /// <summary>
     /// Gets the block size (always 0x1000 / 4096 bytes).
@@ -73,7 +79,13 @@ public class StfsFile : IDisposable
     /// Calculated as ((HeaderSize + 0xFFF) & 0xF000).
     /// Typically, 0xB000 for standard packages, making the first data block at 0xC000.
     /// </summary>
-    public int DataSectionStart => ((HeaderSize + 0xFFF) & 0xF000);
+    public int DataSectionStart
+    {
+        get
+        {
+            return (HeaderSize + 0xFFF) & 0xF000;
+        }
+    }
 
     // Constants for hash table calculations
     private static readonly uint[] kBlocksPerHashLevel = [170, 28900, 4913000];
@@ -86,10 +98,7 @@ public class StfsFile : IDisposable
     /// <param name="value">The value to round up.</param>
     /// <param name="alignment">The alignment.</param>
     /// <returns>The rounded-up value.</returns>
-    private static int RoundUp(int value, int alignment)
-    {
-        return (value + alignment - 1) & ~(alignment - 1);
-    }
+    private static int RoundUp(int value, int alignment) => (value + alignment - 1) & ~(alignment - 1);
 
     /// <summary>
     /// Private constructor to enforce factory methods.
@@ -160,7 +169,7 @@ public class StfsFile : IDisposable
         byte[] fileData = ReadFilePortion(filePath, 0xA000);
         Logger.Info<StfsFile>($"Loaded STFS package header: {filePath} ({fileData.Length} bytes)");
 
-        StfsFile stfs = FromBytes(fileData, parseFileTable: false);
+        StfsFile stfs = FromBytes(fileData, false);
 
         stfs.PackageName = Path.GetFileName(filePath);
         stfs.PackagePath = filePath;
@@ -342,7 +351,8 @@ public class StfsFile : IDisposable
         // Validate file table offset - if it's beyond the file size, the package is corrupted or incomplete
         if (fileTableOffset < 0 || fileTableOffset >= _rawData.Length)
         {
-            Logger.Warning<StfsFile>($"Invalid file table offset 0x{fileTableOffset:X8} (file size: {_rawData.Length} bytes). Package may be corrupted or incomplete.");
+            Logger.Warning<StfsFile>(
+                $"Invalid file table offset 0x{fileTableOffset:X8} (file size: {_rawData.Length} bytes). Package may be corrupted or incomplete.");
             return;
         }
 
@@ -460,7 +470,7 @@ public class StfsFile : IDisposable
         // block_step[0] = 170 + blocksPerHashTable
         // block_step[1] = 28900 + ((170 + 1) * blocksPerHashTable)
         uint blockStep0 = kBlocksPerHashLevel[0] + blocksPerHashTable;
-        uint blockStep1 = kBlocksPerHashLevel[1] + ((kBlocksPerHashLevel[0] + 1) * blocksPerHashTable);
+        uint blockStep1 = kBlocksPerHashLevel[1] + (kBlocksPerHashLevel[0] + 1) * blocksPerHashTable;
 
         if (hashLevel == 2)
         {
@@ -472,7 +482,7 @@ public class StfsFile : IDisposable
             return hashLevel == 0 ? 0u : blockStep0;
         }
 
-        uint block = ((uint)blockIndex / kBlocksPerHashLevel[hashLevel]) * (hashLevel == 0 ? blockStep0 : blockStep1);
+        uint block = (uint)blockIndex / kBlocksPerHashLevel[hashLevel] * (hashLevel == 0 ? blockStep0 : blockStep1);
 
         if (hashLevel == 0)
         {
@@ -509,11 +519,11 @@ public class StfsFile : IDisposable
         uint record = (uint)blockNumber % kBlocksPerHashLevel[0];
         if (level >= 1)
         {
-            record = ((uint)blockNumber / kBlocksPerHashLevel[level - 1]) % kBlocksPerHashLevel[0];
+            record = (uint)blockNumber / kBlocksPerHashLevel[level - 1] % kBlocksPerHashLevel[0];
         }
 
         // Each hash entry is 0x18 (24) bytes: 0x14 SHA1 + 0x04 info
-        return hashTableOffset + ((int)record * 0x18);
+        return hashTableOffset + (int)record * 0x18;
     }
 
     /// <summary>
@@ -524,7 +534,8 @@ public class StfsFile : IDisposable
     /// <returns>The file data.</returns>
     private byte[] ExtractNonConsecutiveFile(StfsFileEntry entry)
     {
-        Logger.Trace<StfsFile>($"ExtractNonConsecutiveFile: {entry.FileName}, StartBlock={entry.StartingBlock}, Size={entry.FileSize}, Blocks={entry.AllocatedDataBlocks}");
+        Logger.Trace<StfsFile>(
+            $"ExtractNonConsecutiveFile: {entry.FileName}, StartBlock={entry.StartingBlock}, Size={entry.FileSize}, Blocks={entry.AllocatedDataBlocks}");
 
         byte[] data = new byte[entry.FileSize];
         int offset = 0;
@@ -534,7 +545,7 @@ public class StfsFile : IDisposable
         while (offset < entry.FileSize && blocksRemaining > 0 && currentBlock != kEndOfChain)
         {
             // Read the hash table entry for this block (level 0)
-            int hashTableOffset = GetHashTableOffset((int)currentBlock, level: 0);
+            int hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
             Logger.Trace<StfsFile>($"  Block {currentBlock}: Hash table offset 0x{hashTableOffset:X8}");
 
             if (hashTableOffset >= _rawData.Length)
@@ -665,7 +676,7 @@ public class StfsFile : IDisposable
 
         byte[] data = new byte[entry.FileSize];
 
-        int bytesToRead = Math.Min(entry.FileSize, BlockSize - (startOffset % BlockSize));
+        int bytesToRead = Math.Min(entry.FileSize, BlockSize - startOffset % BlockSize);
         Logger.Trace<StfsFile>($"  Reading {bytesToRead} bytes from offset 0x{startOffset:X8}");
         Logger.Trace<StfsFile>($"  Data at start offset: {BitConverter.ToString(_rawData.Skip(startOffset).Take(Math.Min(32, bytesToRead)).ToArray())}");
 
@@ -702,19 +713,13 @@ public class StfsFile : IDisposable
     /// Lists all files in the STFS package.
     /// </summary>
     /// <returns>A list of file names.</returns>
-    public List<string> ListFiles()
-    {
-        return FileEntries.Where(e => !e.IsDirectory).Select(e => e.FileName).ToList();
-    }
+    public List<string> ListFiles() => FileEntries.Where(e => !e.IsDirectory).Select(e => e.FileName).ToList();
 
     /// <summary>
     /// Lists all directories in the STFS package.
     /// </summary>
     /// <returns>A list of directory names.</returns>
-    public List<string> ListDirectories()
-    {
-        return FileEntries.Where(e => e.IsDirectory).Select(e => e.FileName).ToList();
-    }
+    public List<string> ListDirectories() => FileEntries.Where(e => e.IsDirectory).Select(e => e.FileName).ToList();
 
     /// <summary>
     /// Extracts all files from the STFS package using Xenia's content folder structure.
@@ -727,7 +732,8 @@ public class StfsFile : IDisposable
     /// <param name="contentTypeHex">Optional content type hex (e.g., "000B0000"). Uses metadata if not provided.</param>
     /// <param name="packageName">Optional package name. Uses loaded filename if not provided.</param>
     /// <param name="progressCallback">Optional callback to report progress (current file index, total files).</param>
-    public void ExtractToXeniaStructure(string outputDirectory, string? titleId = null, string? contentTypeHex = null, string? packageName = null, Action<int, int>? progressCallback = null)
+    public void ExtractToXeniaStructure(string outputDirectory, string? titleId = null, string? contentTypeHex = null, string? packageName = null,
+        Action<int, int>? progressCallback = null)
     {
         if (FileEntries.Count == 0)
         {
@@ -774,7 +780,8 @@ public class StfsFile : IDisposable
         Logger.Debug<StfsFile>($"Total entries: {FileEntries.Count}");
         for (int i = 0; i < FileEntries.Count; i++)
         {
-            Logger.Trace<StfsFile>($"Entry[{i}]: {(FileEntries[i].IsDirectory ? "DIR" : "FILE")} '{FileEntries[i].FileName}' (PathIndicator: {FileEntries[i].PathIndicator})");
+            Logger.Trace<StfsFile>(
+                $"Entry[{i}]: {(FileEntries[i].IsDirectory ? "DIR" : "FILE")} '{FileEntries[i].FileName}' (PathIndicator: {FileEntries[i].PathIndicator})");
         }
 
         // We need to process directories in order since child directories depend on parents
@@ -832,7 +839,8 @@ public class StfsFile : IDisposable
                     relativePath = string.IsNullOrEmpty(dirPath)
                         ? entry.FileName
                         : Path.Combine(dirPath, entry.FileName);
-                    Logger.Trace<StfsFile>($"File '{entry.FileName}' (index {FileEntries.IndexOf(entry)}) belongs to directory at index {parentIndex} -> Full path: '{relativePath}'");
+                    Logger.Trace<StfsFile>(
+                        $"File '{entry.FileName}' (index {FileEntries.IndexOf(entry)}) belongs to directory at index {parentIndex} -> Full path: '{relativePath}'");
                 }
                 else if (parentIndex == -1)
                 {
@@ -914,10 +922,7 @@ public class StfsFile : IDisposable
     /// </summary>
     /// <param name="pathIndicator">The path indicator (-1 for root).</param>
     /// <returns>File entries at the specified path.</returns>
-    public List<StfsFileEntry> GetEntriesByPath(short pathIndicator)
-    {
-        return FileEntries.Where(e => e.PathIndicator == pathIndicator).ToList();
-    }
+    public List<StfsFileEntry> GetEntriesByPath(short pathIndicator) => FileEntries.Where(e => e.PathIndicator == pathIndicator).ToList();
 
     /// <summary>
     /// Disposes of resources used by the STFS file.
@@ -928,6 +933,7 @@ public class StfsFile : IDisposable
         {
             return;
         }
+
         _disposed = true;
         Array.Clear(_rawData, 0, _rawData.Length);
     }
@@ -937,8 +943,5 @@ public class StfsFile : IDisposable
     /// TODO: Modify when adding Install Content option
     /// </summary>
     /// <returns>A string describing the package.</returns>
-    public override string ToString()
-    {
-        return $"STFS Package: {Metadata.DisplayName} ({SignatureType}, {FileEntries.Count} files)";
-    }
+    public override string ToString() => $"STFS Package: {Metadata.DisplayName} ({SignatureType}, {FileEntries.Count} files)";
 }

@@ -21,12 +21,24 @@ internal class AppSplashScreen : IFAApplicationSplashScreen
     /// <summary>
     /// No window icon - the custom splash content covers the screen.
     /// </summary>
-    public IImage AppIcon => null!;
+    public IImage AppIcon
+    {
+        get
+        {
+            return null!;
+        }
+    }
 
     /// <summary>
     /// No app name shown - the custom splash content covers the screen.
     /// </summary>
-    public string AppName => null!;
+    public string AppName
+    {
+        get
+        {
+            return null!;
+        }
+    }
 
     /// <summary>
     /// Custom splash visuals: logo, live status, progress bar.
@@ -36,7 +48,13 @@ internal class AppSplashScreen : IFAApplicationSplashScreen
     /// <summary>
     /// Minimum time the splash stays visible, even on a fast boot.
     /// </summary>
-    public int MinimumShowTime => (int)TimingConstants.SplashMinimumShowTime.TotalMilliseconds;
+    public int MinimumShowTime
+    {
+        get
+        {
+            return (int)TimingConstants.SplashMinimumShowTime.TotalMilliseconds;
+        }
+    }
 
     public AppSplashScreen()
     {

@@ -18,13 +18,25 @@ public partial class ProfileItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// The profile's gamertag.
     /// </summary>
-    public string Gamertag => Profile.Gamertag;
+    public string Gamertag
+    {
+        get
+        {
+            return Profile.Gamertag;
+        }
+    }
 
     /// <summary>
     /// The profile's country and language as a single detail line (e.g. "United States · English").
     /// </summary>
-    public string DetailsText =>
-        $"{new EnumDisplayItem<XboxLiveCountry>(Profile.Country).DisplayName} · {new EnumDisplayItem<ConsoleLanguage>(Profile.Language).DisplayName}";
+    public string DetailsText
+    {
+        get
+        {
+            return
+                $"{new EnumDisplayItem<XboxLiveCountry>(Profile.Country).DisplayName} · {new EnumDisplayItem<ConsoleLanguage>(Profile.Language).DisplayName}";
+        }
+    }
 
     /// <summary>
     /// The profile's total gamerscore, or empty until loaded from its GPD.
@@ -35,7 +47,13 @@ public partial class ProfileItemViewModel : ObservableObject, ISelectable
     /// <summary>
     /// Whether the profile's gamerscore has been resolved from its GPD.
     /// </summary>
-    public bool HasGamerscore => !string.IsNullOrEmpty(GamerscoreText);
+    public bool HasGamerscore
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(GamerscoreText);
+        }
+    }
 
     /// <summary>
     /// Whether this is the active profile.

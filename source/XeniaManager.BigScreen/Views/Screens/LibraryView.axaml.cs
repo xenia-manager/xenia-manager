@@ -111,7 +111,7 @@ public partial class LibraryView : UserControl
     /// Re-centers the selection when the view mode swaps while the library is
     /// open, so the newly shown layout starts on the selected game.
     /// </summary>
-    private void OnDataContextChanged(object? sender, System.EventArgs e)
+    private void OnDataContextChanged(object? sender, EventArgs e)
     {
         if (DataContext is LibraryViewModel vm)
         {

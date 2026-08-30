@@ -81,7 +81,8 @@ public class GameManager
                 if (string.IsNullOrWhiteSpace(game.Title) || string.IsNullOrWhiteSpace(game.GameId))
                 {
                     // Game entry with missing required fields detected, log it and skip it
-                    Logger.Warning<GameManager>($"Game entry with missing required fields detected - Title: '{game.Title}', GameId: '{game.GameId}'. Skipping this entry.");
+                    Logger.Warning<GameManager>(
+                        $"Game entry with missing required fields detected - Title: '{game.Title}', GameId: '{game.GameId}'. Skipping this entry.");
                     continue;
                 }
 
@@ -114,7 +115,8 @@ public class GameManager
                         string relativeDiscPath = GetRelativeGamePath(disc.Path);
                         if (relativeDiscPath != disc.Path)
                         {
-                            Logger.Debug<GameManager>($"Migrating additional disc path for '{game.Title}' (Disc {disc.DiscNumber}): '{disc.Path}' -> '{relativeDiscPath}'");
+                            Logger.Debug<GameManager>(
+                                $"Migrating additional disc path for '{game.Title}' (Disc {disc.DiscNumber}): '{disc.Path}' -> '{relativeDiscPath}'");
                             disc.Path = relativeDiscPath;
                             migrated = true;
                         }
@@ -222,13 +224,13 @@ public class GameManager
             // Create a backup from the current file before replacing it
             if (File.Exists(path))
             {
-                File.Copy(path, backupPath, overwrite: true);
+                File.Copy(path, backupPath, true);
                 Logger.Info<GameManager>($"Backup created successfully at: {backupPath}");
             }
 
             Logger.Info<GameManager>($"Atomically replacing main file {path} with temporary file {tempPath}");
             // Atomically replace the main file
-            File.Move(tempPath, path, overwrite: true);
+            File.Move(tempPath, path, true);
 
             Logger.Info<GameManager>($"Game library successfully saved to {path}");
         }
@@ -432,7 +434,8 @@ public class GameManager
         xenia.StartInfo.Arguments = $@"""{gamePath}""";
         xenia.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-        Logger.Trace<GameManager>($"Setting up process - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
+        Logger.Trace<GameManager>(
+            $"Setting up process - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
 
         // Initialize XeniaOutputHandler for reading game details
         XeniaOutputHandler outputHandler = new XeniaOutputHandler(null, true);
@@ -469,7 +472,8 @@ public class GameManager
         Logger.Debug<GameManager>("Starting to extract game details from Xenia output");
         while (numberOfTries < maxTries)
         {
-            Logger.Trace<GameManager>($"Attempt {numberOfTries}: Extracted Title: '{outputHandler.GameDetails.Title}', ID: '{outputHandler.GameDetails.TitleId}', Media ID: '{outputHandler.GameDetails.MediaId}'");
+            Logger.Trace<GameManager>(
+                $"Attempt {numberOfTries}: Extracted Title: '{outputHandler.GameDetails.Title}', ID: '{outputHandler.GameDetails.TitleId}', Media ID: '{outputHandler.GameDetails.MediaId}'");
 
             // Check if all details have been extracted
             if (outputHandler.GameDetails.Title != "Not found" &&
@@ -490,7 +494,8 @@ public class GameManager
         // Extract the results from XeniaOutputHandler
         ParsedGameDetails details = outputHandler.GameDetails;
 
-        Logger.Debug<GameManager>($"Completed output extraction. Found Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}', Attempts: {numberOfTries}");
+        Logger.Debug<GameManager>(
+            $"Completed output extraction. Found Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}', Attempts: {numberOfTries}");
 
         Logger.Info<GameManager>($"Killing Xenia process with PID: {xenia.Id}");
         xenia.Kill(); // Force close Xenia
@@ -498,7 +503,8 @@ public class GameManager
         // Fallback - Using Xenia.log to fill in any missing details
         if (details.Title == "Not found" || details.TitleId == "00000000" || details.MediaId == "00000000")
         {
-            Logger.Warning<GameManager>($"XeniaOutputHandler missed some details (Title: {details.Title != "Not found"}, TitleId: {details.TitleId != "00000000"}, MediaId: {details.MediaId != "00000000"}), falling back to log file parsing");
+            Logger.Warning<GameManager>(
+                $"XeniaOutputHandler missed some details (Title: {details.Title != "Not found"}, TitleId: {details.TitleId != "00000000"}, MediaId: {details.MediaId != "00000000"}), falling back to log file parsing");
             string logFilePath = Path.Combine(xenia.StartInfo.WorkingDirectory, "xenia.log");
             if (File.Exists(logFilePath))
             {
@@ -563,10 +569,12 @@ public class GameManager
                                     Logger.Warning<GameManager>($"Invalid media ID format in log: '{mediaId}' at line {linesProcessed}");
                                 }
                             }
+
                             break;
                         }
                     }
                 }
+
                 Logger.Debug<GameManager>($"Completed parsing xenia.log, processed {linesProcessed} lines");
             }
             else
@@ -590,12 +598,14 @@ public class GameManager
     /// <param name="useMediaIdForTitle">Whether to use MediaId to find a matching media entry title.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
-    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details, bool useMediaIdForTitle = false, Func<Game, Task<bool>>? confirmMultiDiscMerge = null)
+    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details,
+        bool useMediaIdForTitle = false, Func<Game, Task<bool>>? confirmMultiDiscMerge = null)
     {
         // Use GameInfo's Id if titleId is "00000000"
         string actualTitleId = details.TitleId == "00000000" ? selectedGame.Id ?? details.TitleId : details.TitleId;
 
-        Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+        Logger.Trace<GameManager>(
+            $"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
         // Check whether this file is likely another disc of a game already in the library
         // (same Title ID). If the caller supplied a confirmation callback and the user agrees,
@@ -607,7 +617,8 @@ public class GameManager
             if (shouldMerge)
             {
                 AddDiscToExistingGame(multiDiscMatch, gamePath);
-                Logger.Info<GameManager>($"'{gamePath}' merged into existing game '{multiDiscMatch.Title}' as an additional disc, skipping separate library entry");
+                Logger.Info<GameManager>(
+                    $"'{gamePath}' merged into existing game '{multiDiscMatch.Title}' as an additional disc, skipping separate library entry");
                 return;
             }
 
@@ -660,7 +671,8 @@ public class GameManager
         Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
         // Fetch Compatibility Rating (Database now leaf, pass cache dir explicitly)
-        GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
         if (compatEntry != null)
         {
             newGame.Compatibility.Rating = compatEntry.State;
@@ -672,7 +684,8 @@ public class GameManager
             newGame.Compatibility.Url = string.Empty;
         }
 
-        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
         if (mousehookEntry != null)
         {
             newGame.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
@@ -684,7 +697,8 @@ public class GameManager
             newGame.Compatibility.Mousehook.Notes = string.Empty;
         }
 
-        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
         if (netplayEntry != null)
         {
             newGame.Compatibility.Netplay.Status = netplayEntry.Status;
@@ -709,6 +723,7 @@ public class GameManager
                 Logger.Trace<GameManager>($"Trying unique title: '{newGame.Title}' (counter: {counter})");
                 counter++;
             }
+
             Logger.Info<GameManager>($"Generated unique title: '{newGame.Title}' to avoid duplicate");
         }
         else
@@ -733,7 +748,7 @@ public class GameManager
         // Boxart
         Logger.Info<GameManager>($"Starting boxart download process for game: '{newGame.Title}'");
         string boxartSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Boxart.png");
-        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Boxart, actualTitleId, "boxart.jpg", savePath: boxartSavePath);
+        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Boxart, actualTitleId, "boxart.jpg", boxartSavePath);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(boxartSavePath))
@@ -749,7 +764,7 @@ public class GameManager
         // Icon
         Logger.Info<GameManager>($"Starting icon download process for game: '{newGame.Title}'");
         string iconSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
-        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", savePath: iconSavePath, format: SKEncodedImageFormat.Ico);
+        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", iconSavePath, SKEncodedImageFormat.Ico);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(iconSavePath))
@@ -765,7 +780,7 @@ public class GameManager
         // Background
         Logger.Info<GameManager>($"Starting background download process for game: '{newGame.Title}'");
         string backgroundSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg");
-        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", savePath: backgroundSavePath);
+        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", backgroundSavePath);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(backgroundSavePath))
@@ -807,7 +822,8 @@ public class GameManager
     /// <returns>A task representing the asynchronous operation.</returns>
     public static async Task AddUnknownGame(XeniaVersion xeniaVersion, ParsedGameDetails details, string gamePath)
     {
-        Logger.Trace<GameManager>($"Starting AddUnknownGame operation - Title: '{details.Title}', TitleId: {details.TitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+        Logger.Trace<GameManager>(
+            $"Starting AddUnknownGame operation - Title: '{details.Title}', TitleId: {details.TitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
         Logger.Info<GameManager>($"Creating new game entry for unknown game: '{details.Title}' (TitleId: {details.TitleId})");
         string sanitizedTitle = details.Title != "Not found"
@@ -830,10 +846,11 @@ public class GameManager
         };
 
         Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', " +
-                                   $"GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
+                                  $"GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
         // Fetch Compatibility Rating (Database leaf)
-        GameCompatibilityEntry? compatEntry2 = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        GameCompatibilityEntry? compatEntry2 = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
         if (compatEntry2 != null)
         {
             newGame.Compatibility.Rating = compatEntry2.State;
@@ -845,7 +862,8 @@ public class GameManager
             newGame.Compatibility.Url = string.Empty;
         }
 
-        MousehookCompatibilityEntry? mousehookEntry2 = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        MousehookCompatibilityEntry? mousehookEntry2 = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
         if (mousehookEntry2 != null)
         {
             newGame.Compatibility.Mousehook.Rating = mousehookEntry2.MouseSupport;
@@ -857,7 +875,8 @@ public class GameManager
             newGame.Compatibility.Mousehook.Notes = string.Empty;
         }
 
-        NetplayCompatibilityEntry? netplayEntry2 = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        NetplayCompatibilityEntry? netplayEntry2 = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
         if (netplayEntry2 != null)
         {
             newGame.Compatibility.Netplay.Status = netplayEntry2.Status;
@@ -882,6 +901,7 @@ public class GameManager
                 Logger.Trace<GameManager>($"Trying unique title: '{newGame.Title}' (counter: {counter})");
                 counter++;
             }
+
             Logger.Info<GameManager>($"Generated unique title: '{newGame.Title}' to avoid duplicate");
         }
         else
@@ -957,17 +977,18 @@ public class GameManager
             : Path.Combine(AppPaths.GamesDirectory, gamePath);
 
         bool isDuplicate = Games.Any(game => string.Equals(
-            game.FileLocations.ResolvedGamePath,
-            resolvedPath,
-            StringComparison.OrdinalIgnoreCase))
-            || Games.Any(game => game.FileLocations.AdditionalDiscs.Any(d => string.Equals(
-                d.ResolvedPath,
-                resolvedPath,
-                StringComparison.OrdinalIgnoreCase)));
+                               game.FileLocations.ResolvedGamePath,
+                               resolvedPath,
+                               StringComparison.OrdinalIgnoreCase))
+                           || Games.Any(game => game.FileLocations.AdditionalDiscs.Any(d => string.Equals(
+                               d.ResolvedPath,
+                               resolvedPath,
+                               StringComparison.OrdinalIgnoreCase)));
         if (isDuplicate)
         {
             Logger.Debug<GameManager>($"Duplicate game detected for path: {gamePath}");
         }
+
         return isDuplicate;
     }
 
@@ -1088,7 +1109,7 @@ public class GameManager
                 currentDirectory,
                 directoriesScanned,
                 gameFiles.Count,
-                Math.Min(100, (directoriesScanned * 100) / Math.Max(1, estimatedTotalDirectories)));
+                Math.Min(100, directoriesScanned * 100 / Math.Max(1, estimatedTotalDirectories)));
 
             // Single enumeration for all files and subdirectories
             string[] allFiles;
@@ -1146,6 +1167,7 @@ public class GameManager
                             {
                                 Logger.Trace<GameManager>($"Skipping STFS file (Installer/MarketplaceContent): {file}");
                             }
+
                             break;
                     }
                 }
@@ -1177,6 +1199,7 @@ public class GameManager
                         filesFoundHere++;
                     }
                 }
+
                 xexFound = true;
             }
 
@@ -1214,6 +1237,7 @@ public class GameManager
                 {
                     directoriesToScan.Enqueue(subDirectory);
                 }
+
                 estimatedTotalDirectories += subDirectories.Length; // Update estimate
                 Logger.Trace<GameManager>($"Queued {subDirectories.Length} subdirectories for scanning");
             }
@@ -1300,6 +1324,7 @@ public class GameManager
                         Logger.Debug<GameManager>($"Game content directory not found, skipping: {gameContentDirectory}");
                         continue;
                     }
+
                     Directory.Delete(gameContentDirectory, true);
                     Logger.Info<GameManager>($"Deleting profile content directory: {gameContentDirectory}");
                 }

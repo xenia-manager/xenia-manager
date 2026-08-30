@@ -34,7 +34,13 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// Whether a patch file is installed.
     /// </summary>
-    public bool HasPatch => _patchFile != null;
+    public bool HasPatch
+    {
+        get
+        {
+            return _patchFile != null;
+        }
+    }
 
     /// <summary>
     /// The rows shown in list mode: patch entries with the download and remove
@@ -51,8 +57,14 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// The pane header: the patch's title name, or a "no patch" label.
     /// </summary>
-    public string HeaderText => _patchFile?.TitleName
-                                ?? LocalizationHelper.GetText("GameModal.Patches.NoPatch");
+    public string HeaderText
+    {
+        get
+        {
+            return _patchFile?.TitleName
+                   ?? LocalizationHelper.GetText("GameModal.Patches.NoPatch");
+        }
+    }
 
     /// <summary>
     /// Loads the game's patch file from the boot preload cache (when installed)
@@ -211,18 +223,12 @@ public partial class PatchesPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// Selects the first row when the pane becomes active.
     /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(Rows, 0);
-    }
+    public void OnPaneEntered() => SelectionHelper.SelectOnlyAt(Rows, 0);
 
     /// <summary>
     /// Clears the patch selection when the pane loses focus.
     /// </summary>
-    public void OnPaneExited()
-    {
-        SelectionHelper.ClearSelection(Rows);
-    }
+    public void OnPaneExited() => SelectionHelper.ClearSelection(Rows);
 
     /// <summary>
     /// Loads the game's patch file (when installed) and builds the list rows.

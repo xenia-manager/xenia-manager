@@ -34,10 +34,7 @@ public partial class SettingsView : UserControl
     /// <summary>
     /// Focuses the first interactive setting (called when the overlay opens).
     /// </summary>
-    public void FocusFirst()
-    {
-        BackgroundModeCombo.Focus();
-    }
+    public void FocusFirst() => BackgroundModeCombo.Focus();
 
     /// <summary>
     /// Shows the image file picker and applies the chosen image.
@@ -55,7 +52,7 @@ public partial class SettingsView : UserControl
             return;
         }
 
-        FilePickerOpenOptions options = new()
+        FilePickerOpenOptions options = new FilePickerOpenOptions
         {
             Title = LocalizationHelper.GetText("Settings.SelectImageDialogTitle"),
             AllowMultiple = false,
@@ -75,10 +72,7 @@ public partial class SettingsView : UserControl
         }
     }
 
-    private void OnLoaded(object? sender, EventArgs e)
-    {
-        FocusFirst();
-    }
+    private void OnLoaded(object? sender, EventArgs e) => FocusFirst();
 
     /// <summary>
     /// Maps the fixed row view models to their card controls.
@@ -211,18 +205,12 @@ public partial class SettingsView : UserControl
     /// <summary>
     /// Opens a file picker and applies the chosen image as the dashboard background.
     /// </summary>
-    private async void OnSelectImageClick(object? sender, RoutedEventArgs e)
-    {
-        await ShowImagePickerAsync();
-    }
+    private async void OnSelectImageClick(object? sender, RoutedEventArgs e) => await ShowImagePickerAsync();
 
     /// <summary>
     /// Opens the background image picker on controller activation of the row.
     /// </summary>
-    private void OnSelectImageRequested()
-    {
-        TaskUtilities.RunSafely<SettingsView>(ShowImagePickerAsync, "Opening background image picker");
-    }
+    private void OnSelectImageRequested() => TaskUtilities.RunSafely<SettingsView>(ShowImagePickerAsync, "Opening background image picker");
 
     private void OnDataContextChanged(object? sender, EventArgs e)
     {

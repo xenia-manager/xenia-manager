@@ -35,7 +35,13 @@ public class BindingsSection
     /// <summary>
     /// Gets a read-only list of bindings entries.
     /// </summary>
-    public IReadOnlyList<BindingsEntry> EntriesReadOnly => Entries.AsReadOnly();
+    public IReadOnlyList<BindingsEntry> EntriesReadOnly
+    {
+        get
+        {
+            return Entries.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// Creates a new bindings section.
@@ -59,26 +65,17 @@ public class BindingsSection
     /// <summary>
     /// Gets an entry by key.
     /// </summary>
-    public BindingsEntry? GetEntry(string key)
-    {
-        return Entries.FirstOrDefault(e => e.Key == key);
-    }
+    public BindingsEntry? GetEntry(string key) => Entries.FirstOrDefault(e => e.Key == key);
 
     /// <summary>
     /// Gets an entry by value.
     /// </summary>
-    public BindingsEntry? GetEntryByValue(string value)
-    {
-        return Entries.FirstOrDefault(e => e.Value?.ToString() == value);
-    }
+    public BindingsEntry? GetEntryByValue(string value) => Entries.FirstOrDefault(e => e.Value?.ToString() == value);
 
     /// <summary>
     /// Gets all entries with the specified value.
     /// </summary>
-    public List<BindingsEntry> GetEntriesByValue(string value)
-    {
-        return Entries.Where(e => e.Value?.ToString() == value).ToList();
-    }
+    public List<BindingsEntry> GetEntriesByValue(string value) => Entries.Where(e => e.Value?.ToString() == value).ToList();
 
     /// <summary>
     /// Gets the value of an entry by key.
@@ -141,6 +138,7 @@ public class BindingsSection
             Entries.Remove(entry);
             return true;
         }
+
         return false;
     }
 }

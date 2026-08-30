@@ -31,69 +31,146 @@ public partial class GameDetailsViewModel : ObservableObject
     /// <summary>
     /// Whether a bio is available to show.
     /// </summary>
-    public bool HasBio => !string.IsNullOrWhiteSpace(Bio);
+    public bool HasBio
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(Bio);
+        }
+    }
 
     /// <summary>
     /// Whether the pane has nothing to show (not loading and no database info at all).
     /// </summary>
-    public bool ShowNoInfo => !IsLoading && !HasBio && !HasMetadata;
+    public bool ShowNoInfo
+    {
+        get
+        {
+            return !IsLoading && !HasBio && !HasMetadata;
+        }
+    }
 
     /// <summary>
     /// Whether any marketplace metadata (genre/developer/publisher/release) exists.
     /// </summary>
-    public bool HasMetadata =>
-        HasGenre || HasDeveloper || HasPublisher || HasReleased;
+    public bool HasMetadata
+    {
+        get
+        {
+            return HasGenre || HasDeveloper || HasPublisher || HasReleased;
+        }
+    }
 
     /// <summary>
     /// Whether a genre list is available.
     /// </summary>
-    public bool HasGenre => !string.IsNullOrWhiteSpace(GenreText);
+    public bool HasGenre
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(GenreText);
+        }
+    }
 
     /// <summary>
     /// Whether a developer is available.
     /// </summary>
-    public bool HasDeveloper => !string.IsNullOrWhiteSpace(Developer);
+    public bool HasDeveloper
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(Developer);
+        }
+    }
 
     /// <summary>
     /// Whether a publisher is available.
     /// </summary>
-    public bool HasPublisher => !string.IsNullOrWhiteSpace(Publisher);
+    public bool HasPublisher
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(Publisher);
+        }
+    }
 
     /// <summary>
     /// Whether a release date is available.
     /// </summary>
-    public bool HasReleased => !string.IsNullOrWhiteSpace(Released);
+    public bool HasReleased
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(Released);
+        }
+    }
 
     /// <summary>
     /// Display title: the database full title when available, otherwise the local one.
     /// </summary>
-    public string Title => Info?.Title?.Full ?? Card.Title;
+    public string Title
+    {
+        get
+        {
+            return Info?.Title?.Full ?? Card.Title;
+        }
+    }
 
     /// <summary>
     /// The game bio (short description is the real marketing blurb; the full one
     /// appends legal text, so it only serves as a fallback).
     /// </summary>
-    public string? Bio => Info?.Description?.Short ?? Info?.Description?.Full;
+    public string? Bio
+    {
+        get
+        {
+            return Info?.Description?.Short ?? Info?.Description?.Full;
+        }
+    }
 
     /// <summary>
     /// Comma-separated genre list.
     /// </summary>
-    public string GenreText => Info?.Genres is { Count: > 0 } genres ? string.Join(", ", genres) : string.Empty;
+    public string GenreText
+    {
+        get
+        {
+            return Info?.Genres is { Count: > 0 } genres ? string.Join(", ", genres) : string.Empty;
+        }
+    }
 
     /// <summary>
     /// The game's developer.
     /// </summary>
-    public string? Developer => Info?.Developer;
+    public string? Developer
+    {
+        get
+        {
+            return Info?.Developer;
+        }
+    }
 
     /// <summary>
     /// The game's publisher.
     /// </summary>
-    public string? Publisher => Info?.Publisher;
+    public string? Publisher
+    {
+        get
+        {
+            return Info?.Publisher;
+        }
+    }
 
     /// <summary>
     /// The game's release date, formatted as a real date (e.g. "18th May 2010").
     /// </summary>
-    public string? Released => ReleaseDateFormatter.Format(Info?.ReleaseDate);
+    public string? Released
+    {
+        get
+        {
+            return ReleaseDateFormatter.Format(Info?.ReleaseDate);
+        }
+    }
 
     public GameDetailsViewModel(GameCardViewModel card)
     {
@@ -117,8 +194,5 @@ public partial class GameDetailsViewModel : ObservableObject
         OnPropertyChanged(nameof(HasMetadata));
     }
 
-    partial void OnIsLoadingChanged(bool value)
-    {
-        OnPropertyChanged(nameof(ShowNoInfo));
-    }
+    partial void OnIsLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowNoInfo));
 }

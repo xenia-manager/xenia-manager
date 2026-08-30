@@ -31,7 +31,13 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
     /// <summary>
     /// Whether the pane shows the empty state (nothing installed of this type).
     /// </summary>
-    public bool ShowEmpty => Rows.Count == 0;
+    public bool ShowEmpty
+    {
+        get
+        {
+            return Rows.Count == 0;
+        }
+    }
 
     /// <summary>
     /// The content rows for the pane's content type.
@@ -47,14 +53,26 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
     /// <summary>
     /// The content type's display name.
     /// </summary>
-    public string TypeText => ContentType == ContentType.MarketplaceContent
-        ? LocalizationHelper.GetText("GameModal.Content.MarketplaceContent")
-        : LocalizationHelper.GetText("GameModal.Content.TitleUpdates");
+    public string TypeText
+    {
+        get
+        {
+            return ContentType == ContentType.MarketplaceContent
+                ? LocalizationHelper.GetText("GameModal.Content.MarketplaceContent")
+                : LocalizationHelper.GetText("GameModal.Content.TitleUpdates");
+        }
+    }
 
     /// <summary>
     /// The content count shown in the pane header.
     /// </summary>
-    public string CountText => string.Format(LocalizationHelper.GetText("GameModal.Content.Count"), Rows.Count);
+    public string CountText
+    {
+        get
+        {
+            return string.Format(LocalizationHelper.GetText("GameModal.Content.Count"), Rows.Count);
+        }
+    }
 
     /// <summary>
     /// Re-scans the game's content headers of the current type (from the boot
@@ -168,18 +186,12 @@ public partial class InstalledContentPaneViewModel : ViewModelBase, IGameModalPa
     /// <summary>
     /// Selects the first content row when the pane becomes active.
     /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(Rows, 0);
-    }
+    public void OnPaneEntered() => SelectionHelper.SelectOnlyAt(Rows, 0);
 
     /// <summary>
     /// Clears the content selection when the pane loses focus.
     /// </summary>
-    public void OnPaneExited()
-    {
-        SelectionHelper.ClearSelection(Rows);
-    }
+    public void OnPaneExited() => SelectionHelper.ClearSelection(Rows);
 
     /// <summary>
     /// Loads the game's content of the given type.

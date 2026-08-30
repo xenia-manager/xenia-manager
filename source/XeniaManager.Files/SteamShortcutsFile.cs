@@ -19,7 +19,13 @@ public class SteamShortcutsFile
     /// <summary>
     /// Gets a read-only list of shortcuts.
     /// </summary>
-    public IReadOnlyList<SteamShortcut> ShortcutsReadOnly => Shortcuts.AsReadOnly();
+    public IReadOnlyList<SteamShortcut> ShortcutsReadOnly
+    {
+        get
+        {
+            return Shortcuts.AsReadOnly();
+        }
+    }
 
     /// <summary>
     /// The file path of this shortcuts file.
@@ -153,7 +159,8 @@ public class SteamShortcutsFile
             VdfType trailingType = ReadVdfType(reader);
             if (trailingType != VdfType.End)
             {
-                throw new FormatException($"Unexpected data after end of shortcuts: type 0x{(byte)trailingType:X2} at offset {offset}. The file may be corrupted.");
+                throw new FormatException(
+                    $"Unexpected data after end of shortcuts: type 0x{(byte)trailingType:X2} at offset {offset}. The file may be corrupted.");
             }
         }
     }
@@ -217,7 +224,8 @@ public class SteamShortcutsFile
                 }
 
                 default:
-                    throw new FormatException($"Unknown VDF type 0x{(byte)type:X2} for key '{key}' at offset {typeOffset}. The file may be corrupted or use an unsupported format.");
+                    throw new FormatException(
+                        $"Unknown VDF type 0x{(byte)type:X2} for key '{key}' at offset {typeOffset}. The file may be corrupted or use an unsupported format.");
             }
         }
 
@@ -295,7 +303,8 @@ public class SteamShortcutsFile
                     reader.ReadInt32();
                     break;
                 default:
-                    throw new FormatException($"Unknown VDF type 0x{(byte)type:X2} at offset {typeOffset} while skipping dictionary. The file may be corrupted.");
+                    throw new FormatException(
+                        $"Unknown VDF type 0x{(byte)type:X2} at offset {typeOffset} while skipping dictionary. The file may be corrupted.");
             }
         }
     }
@@ -429,10 +438,7 @@ public class SteamShortcutsFile
     /// <summary>
     /// Reads a VDF type byte from the binary reader.
     /// </summary>
-    private static VdfType ReadVdfType(BinaryReader reader)
-    {
-        return (VdfType)reader.ReadByte();
-    }
+    private static VdfType ReadVdfType(BinaryReader reader) => (VdfType)reader.ReadByte();
 
     /// <summary>
     /// Saves the Steam shortcuts file to the specified path.
@@ -496,7 +502,8 @@ public class SteamShortcutsFile
 
             if (seenAppIds.TryGetValue(appId, out string? existingName))
             {
-                Logger.Warning<SteamShortcutsFile>($"Duplicate AppId 0x{appId:X8} detected on shortcuts '{existingName}' and '{shortcut.AppName}'. Keeping both entries.");
+                Logger.Warning<SteamShortcutsFile>(
+                    $"Duplicate AppId 0x{appId:X8} detected on shortcuts '{existingName}' and '{shortcut.AppName}'. Keeping both entries.");
                 continue;
             }
 
@@ -629,6 +636,7 @@ public class SteamShortcutsFile
         {
             return 0;
         }
+
         return BitConverter.ToInt32(bytes, 0);
     }
 
@@ -656,10 +664,7 @@ public class SteamShortcutsFile
     /// <summary>
     /// Writes a VDF type byte to the binary writer.
     /// </summary>
-    private static void WriteVdfType(BinaryWriter writer, VdfType type)
-    {
-        writer.Write((byte)type);
-    }
+    private static void WriteVdfType(BinaryWriter writer, VdfType type) => writer.Write((byte)type);
 
     /// <summary>
     /// Adds a new shortcut to the file.
@@ -712,10 +717,7 @@ public class SteamShortcutsFile
     /// </summary>
     /// <param name="appId">The AppId to search for.</param>
     /// <returns>The shortcut if found, null otherwise.</returns>
-    public SteamShortcut? GetShortcutByAppId(uint appId)
-    {
-        return Shortcuts.FirstOrDefault(s => s.GetAppIdAsUint() == appId);
-    }
+    public SteamShortcut? GetShortcutByAppId(uint appId) => Shortcuts.FirstOrDefault(s => s.GetAppIdAsUint() == appId);
 
     /// <summary>
     /// Quotes a string if it contains spaces or if force is true, and fixes Windows slashes.

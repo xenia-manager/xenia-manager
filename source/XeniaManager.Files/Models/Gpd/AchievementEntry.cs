@@ -69,13 +69,17 @@ public class AchievementEntry
     /// </summary>
     public AchievementType AchievementType
     {
-        get => (AchievementType)(Flags & 0x7);
+        get
+        {
+            return (AchievementType)(Flags & 0x7);
+        }
         set
         {
             if ((byte)value > 7)
             {
                 throw new ArgumentException("Invalid achievement type");
             }
+
             Flags = (Flags & 0xFFFFFFF8) | ((uint)value & 0x7);
         }
     }
@@ -86,7 +90,10 @@ public class AchievementEntry
     /// </summary>
     public bool ShowUnachieved
     {
-        get => (Flags & 0x8) == 0x8;
+        get
+        {
+            return (Flags & 0x8) == 0x8;
+        }
         set
         {
             if (value != ShowUnachieved)
@@ -102,7 +109,10 @@ public class AchievementEntry
     /// </summary>
     public bool UnlockedOnline
     {
-        get => (Flags & 0x10000) == 0x10000;
+        get
+        {
+            return (Flags & 0x10000) == 0x10000;
+        }
         set
         {
             if (value != UnlockedOnline)
@@ -118,7 +128,10 @@ public class AchievementEntry
     /// </summary>
     public bool IsEarned
     {
-        get => (Flags & 0x20000) == 0x20000;
+        get
+        {
+            return (Flags & 0x20000) == 0x20000;
+        }
         set
         {
             if (value != IsEarned)
@@ -134,7 +147,10 @@ public class AchievementEntry
     /// </summary>
     public bool IsEdited
     {
-        get => (Flags & 0x100000) == 0x100000;
+        get
+        {
+            return (Flags & 0x100000) == 0x100000;
+        }
         set
         {
             if (value != IsEdited)
@@ -147,15 +163,18 @@ public class AchievementEntry
     /// <summary>
     /// Gets a DateTime representation of the unlocking time.
     /// </summary>
-    public DateTime? UnlockDateTime => UnlockTime != 0 ? DateTime.FromFileTime(UnlockTime) : null;
+    public DateTime? UnlockDateTime
+    {
+        get
+        {
+            return UnlockTime != 0 ? DateTime.FromFileTime(UnlockTime) : null;
+        }
+    }
 
     /// <summary>
     /// Sets the unlocked time from a DateTime.
     /// </summary>
-    public void SetUnlockTime(DateTime time)
-    {
-        UnlockTime = time.ToFileTime();
-    }
+    public void SetUnlockTime(DateTime time) => UnlockTime = time.ToFileTime();
 
     /// <summary>
     /// Unlocks this achievement.
@@ -365,8 +384,10 @@ public class AchievementEntry
                 offset += 2; // Skip null terminator
                 return result;
             }
+
             offset += byteSize;
         }
+
         return string.Empty;
     }
 

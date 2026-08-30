@@ -25,16 +25,19 @@ public class BackgroundService : IBackgroundService
         AppContext.BaseDirectory,
         AppConstants.SettingsFileName);
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
     {
         WriteIndented = true,
-        Converters = { new ColorJsonConverter() }
+        Converters =
+        {
+            new ColorJsonConverter()
+        }
     };
 
     /// <summary>
     /// The currently loaded dashboard settings.
     /// </summary>
-    public DashboardSettings Settings { get; private set; } = new();
+    public DashboardSettings Settings { get; private set; } = new DashboardSettings();
 
     /// <summary>
     /// The cached decoded background image bitmap, reused while the image path

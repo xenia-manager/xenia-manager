@@ -27,48 +27,56 @@ public partial class SettingsPageViewModel : ViewModelBase
 
     // General Settings
     [ObservableProperty] private bool parseGameDetailsWithXenia;
+
     partial void OnParseGameDetailsWithXeniaChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Parse Game Details with Xenia changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.General.ParseGameDetailsWithXenia = newValue;
         _settings.SaveSettings();
     }
 
     [ObservableProperty] private bool checkForUpdatesOnStartup;
+
     partial void OnCheckForUpdatesOnStartupChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Check for Updates on Startup changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup = newValue;
         _settings.SaveSettings();
     }
 
     [ObservableProperty] private bool useMediaIdForTitle;
+
     partial void OnUseMediaIdForTitleChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Use MediaId for Title changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.General.UseMediaIdForTitle = newValue;
         _settings.SaveSettings();
     }
 
     [ObservableProperty] private bool autoDetectNewGames;
+
     partial void OnAutoDetectNewGamesChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Auto Detect New Games changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.General.AutoDetectNewGames = newValue;
         _settings.SaveSettings();
@@ -85,24 +93,28 @@ public partial class SettingsPageViewModel : ViewModelBase
     }
 
     [ObservableProperty] private bool autoMergeMultiDisc;
+
     partial void OnAutoMergeMultiDiscChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Auto Merge Multi-Disc changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.General.AutoMergeMultiDisc = newValue;
         _settings.SaveSettings();
     }
 
     [ObservableProperty] private bool startInBigScreen;
+
     partial void OnStartInBigScreenChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Start in Big Screen changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.General.StartInBigScreen = newValue;
         _settings.SaveSettings();
@@ -112,6 +124,7 @@ public partial class SettingsPageViewModel : ViewModelBase
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
     [ObservableProperty] private int selectedLanguageIndex;
+
     partial void OnSelectedLanguageIndexChanged(int oldValue, int newValue)
     {
         if (_suppressUpdates)
@@ -124,6 +137,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>(oldValue >= 0
             ? $"Language changed from '{AppLanguages[oldValue].Culture.DisplayName}' to '{AppLanguages[newValue].Culture.DisplayName}'"
             : $"Language changed to '{AppLanguages[newValue].Culture.DisplayName}'");
@@ -141,12 +155,14 @@ public partial class SettingsPageViewModel : ViewModelBase
     public ReadOnlyObservableCollection<ThemeDisplayItem> AppThemeOptions { get; private set; }
 
     [ObservableProperty] private Theme selectedTheme;
+
     partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
         OnPropertyChanged(nameof(SelectedThemeIndex));
     }
@@ -162,6 +178,7 @@ public partial class SettingsPageViewModel : ViewModelBase
                     return i;
                 }
             }
+
             return 0; // Default to the first theme if not found
         }
         set
@@ -170,10 +187,12 @@ public partial class SettingsPageViewModel : ViewModelBase
             {
                 return;
             }
+
             if (SelectedTheme == AppThemeOptions[value].ThemeValue)
             {
                 return;
             }
+
             SelectedTheme = AppThemeOptions[value].ThemeValue;
 
             // Update settings when the theme changes
@@ -186,12 +205,14 @@ public partial class SettingsPageViewModel : ViewModelBase
 
     // Loading Screen
     [ObservableProperty] private bool _loadingScreen;
+
     partial void OnLoadingScreenChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue)
         {
             return;
         }
+
         Logger.Info<SettingsPageViewModel>($"Loading Screen changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.Ui.Window.LoadingScreen = newValue;
         _settings.SaveSettings();
@@ -206,7 +227,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         LogLevel.Warn,
         LogLevel.Error,
         LogLevel.Fatal,
-        LogLevel.Off,
+        LogLevel.Off
     ];
 
     public int SelectedLogLevelIndex
@@ -220,6 +241,7 @@ public partial class SettingsPageViewModel : ViewModelBase
                     return i;
                 }
             }
+
             return 1; // Default to Debug if not found
         }
         set
@@ -228,6 +250,7 @@ public partial class SettingsPageViewModel : ViewModelBase
             {
                 return;
             }
+
             if (LogLevels[value] == _settings.Settings.Debug.LogLevel)
             {
                 return;
@@ -288,6 +311,7 @@ public partial class SettingsPageViewModel : ViewModelBase
             {
                 AppLanguages.Add(item);
             }
+
             Logger.Info<SettingsPageViewModel>($"Updated existing collection with {languageItems.Count} language items");
         }
 
@@ -306,14 +330,17 @@ public partial class SettingsPageViewModel : ViewModelBase
             if (defaultLanguageItem != null)
             {
                 SelectedLanguageIndex = AppLanguages.IndexOf(defaultLanguageItem);
-                Logger.Warning<SettingsPageViewModel>($"SelectedLanguageIndex defaulted to: {SelectedLanguageIndex} for language: {defaultLanguageItem.Culture.Name}");
+                Logger.Warning<SettingsPageViewModel>(
+                    $"SelectedLanguageIndex defaulted to: {SelectedLanguageIndex} for language: {defaultLanguageItem.Culture.Name}");
             }
             else
             {
                 Logger.Error<SettingsPageViewModel>("No default language could be found, SelectedLanguageIndex remains -1");
             }
         }
-        Logger.Info<SettingsPageViewModel>($"Currently selected language: {(SelectedLanguageIndex >= 0 && SelectedLanguageIndex < AppLanguages.Count ? AppLanguages[SelectedLanguageIndex].Culture.DisplayName : "Unknown")}");
+
+        Logger.Info<SettingsPageViewModel>(
+            $"Currently selected language: {(SelectedLanguageIndex >= 0 && SelectedLanguageIndex < AppLanguages.Count ? AppLanguages[SelectedLanguageIndex].Culture.DisplayName : "Unknown")}");
 
         // Load theme
         SelectedTheme = _settings.Settings.Ui.Theme;

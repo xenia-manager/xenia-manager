@@ -129,10 +129,12 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         {
             XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Canary, "Canary"));
         }
+
         if (installedVersions.Contains(XeniaVersion.Mousehook))
         {
             XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Mousehook, "Mousehook"));
         }
+
         if (installedVersions.Contains(XeniaVersion.Netplay))
         {
             XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Netplay, "Netplay"));
@@ -242,47 +244,33 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// </summary>
     /// <param name="title">The title to filter.</param>
     /// <returns>The filtered title.</returns>
-    private string FilterGameTitle(string title)
-    {
-        return AppPathResolver.SanitizeForFilename(title);
-    }
+    private string FilterGameTitle(string title) => AppPathResolver.SanitizeForFilename(title);
 
     /// <summary>
     /// Handles the game title property change to validate and filter it.
     /// </summary>
-    partial void OnGameTitleChanged(string value)
-    {
-        HasChanges = true;
-    }
+    partial void OnGameTitleChanged(string value) => HasChanges = true;
 
     /// <summary>
     /// Handles the compatibility page URL property change.
     /// </summary>
-    partial void OnCompatibilityPageUrlChanged(string value)
-    {
-        HasChanges = true;
-    }
+    partial void OnCompatibilityPageUrlChanged(string value) => HasChanges = true;
 
     /// <summary>
     /// Handles the selected compatibility rating property change.
     /// </summary>
-    partial void OnSelectedCompatibilityRatingChanged(CompatibilityRatingItem value)
-    {
-        HasChanges = true;
-    }
+    partial void OnSelectedCompatibilityRatingChanged(CompatibilityRatingItem value) => HasChanges = true;
 
     /// <summary>
     /// Handles the selected mousehook rating property change.
     /// </summary>
-    partial void OnSelectedMousehookRatingChanged(MousehookSupportRatingItem value)
-    {
-        HasChanges = true;
-    }
+    partial void OnSelectedMousehookRatingChanged(MousehookSupportRatingItem value) => HasChanges = true;
 
     /// <summary>
     /// Handles netplay status property changes.
     /// </summary>
     partial void OnSelectedNetplayWorkingPublicChanged(NetplayStatusItem value) => HasChanges = true;
+
     partial void OnSelectedNetplayTestedLocallyChanged(NetplayStatusItem value) => HasChanges = true;
     partial void OnSelectedNetplayOnlyLocalChanged(NetplayStatusItem value) => HasChanges = true;
     partial void OnSelectedNetplaySystemlinkChanged(NetplayStatusItem value) => HasChanges = true;
@@ -292,28 +280,16 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// <summary>
     /// Handles the selected Xenia version property change.
     /// </summary>
-    partial void OnSelectedXeniaVersionChanged(XeniaVersionItem value)
-    {
-        HasChanges = true;
-    }
+    partial void OnSelectedXeniaVersionChanged(XeniaVersionItem value) => HasChanges = true;
 
     /// <summary>
     /// Handles the custom executable path property change.
     /// </summary>
-    partial void OnCustomExecutablePathChanged(string value)
-    {
-        HasChanges = true;
-    }
+    partial void OnCustomExecutablePathChanged(string value) => HasChanges = true;
 
-    partial void OnNewAlternativeIdChanged(string value)
-    {
-        UpdateCanAddAlternativeId();
-    }
+    partial void OnNewAlternativeIdChanged(string value) => UpdateCanAddAlternativeId();
 
-    partial void OnAlternativeIdsChanged(List<string> value)
-    {
-        UpdateCanAddAlternativeId();
-    }
+    partial void OnAlternativeIdsChanged(List<string> value) => UpdateCanAddAlternativeId();
 
     private void UpdateCanAddAlternativeId()
     {
@@ -354,28 +330,19 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Opens a file picker to select a new icon image.
     /// </summary>
     [RelayCommand]
-    private async Task SelectIconAsync()
-    {
-        await SelectArtworkAsync("Icon");
-    }
+    private async Task SelectIconAsync() => await SelectArtworkAsync("Icon");
 
     /// <summary>
     /// Opens a file picker to select a new boxart image.
     /// </summary>
     [RelayCommand]
-    private async Task SelectBoxartAsync()
-    {
-        await SelectArtworkAsync("Boxart");
-    }
+    private async Task SelectBoxartAsync() => await SelectArtworkAsync("Boxart");
 
     /// <summary>
     /// Opens a file picker to select a new background image.
     /// </summary>
     [RelayCommand]
-    private async Task SelectBackgroundAsync()
-    {
-        await SelectArtworkAsync("Background");
-    }
+    private async Task SelectBackgroundAsync() => await SelectArtworkAsync("Background");
 
     /// <summary>
     /// Opens a file picker to select an artwork image.
@@ -456,6 +423,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             {
                 ArtworkManager.ConvertArtwork(selectedPath, destinationPath, targetFormat);
             }
+
             Logger.Info<GameDetailsEditorViewModel>($"Converted and saved {artworkType.ToLower()} to: {destinationPath}");
 
             // Update the game's artwork path
@@ -496,28 +464,19 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Clears the current icon.
     /// </summary>
     [RelayCommand]
-    private async Task ClearIconAsync()
-    {
-        await ClearArtworkAsync("Icon");
-    }
+    private async Task ClearIconAsync() => await ClearArtworkAsync("Icon");
 
     /// <summary>
     /// Clears the current boxart.
     /// </summary>
     [RelayCommand]
-    private async Task ClearBoxartAsync()
-    {
-        await ClearArtworkAsync("Boxart");
-    }
+    private async Task ClearBoxartAsync() => await ClearArtworkAsync("Boxart");
 
     /// <summary>
     /// Clears the current background.
     /// </summary>
     [RelayCommand]
-    private async Task ClearBackgroundAsync()
-    {
-        await ClearArtworkAsync("Background");
-    }
+    private async Task ClearBackgroundAsync() => await ClearArtworkAsync("Background");
 
     /// <summary>
     /// Opens a file picker to select a new game path.
@@ -617,7 +576,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// <param name="artworkType">The type of artwork to clear.</param>
     private async Task ClearArtworkAsync(string artworkType)
     {
-        bool confirmed = await _messageBoxService.ShowConfirmationAsync(string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Clear.Confirmation.Title"), artworkType),
+        bool confirmed = await _messageBoxService.ShowConfirmationAsync(
+            string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Clear.Confirmation.Title"), artworkType),
             string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Clear.Confirmation.Message"), artworkType.ToLower()));
 
         if (!confirmed)
@@ -695,7 +655,10 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 // Derive old directory from stored artwork paths first (more reliable
                 // than _game.Title, since the on-disk name may differ from a prior edit)
                 string? oldArtworkPath = null;
-                foreach (string artPath in new[] { _game.Artwork.Icon, _game.Artwork.Boxart, _game.Artwork.Background })
+                foreach (string artPath in new[]
+                         {
+                             _game.Artwork.Icon, _game.Artwork.Boxart, _game.Artwork.Background
+                         })
                 {
                     if (!string.IsNullOrEmpty(artPath))
                     {
@@ -707,6 +670,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                         }
                     }
                 }
+
                 oldArtworkPath ??= Path.Combine(AppPaths.GameDataDirectory, oldTitle, "Artwork");
 
                 string newArtworkPath = Path.Combine(AppPaths.GameDataDirectory, filteredTitle, "Artwork");
@@ -723,7 +687,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 
                 // Update config file path
                 string oldConfigPath = _game.FileLocations.Config;
-                string newConfigPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{filteredTitle}.config.toml");
+                string newConfigPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation,
+                    $"{filteredTitle}.config.toml");
 
                 string fullOldConfig = AppPathResolver.GetFullPath(oldConfigPath);
                 string fullNewConfig = AppPathResolver.GetFullPath(newConfigPath);
@@ -740,7 +705,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 if (_game.FileLocations.Patch != null)
                 {
                     string oldPatchesPath = _game.FileLocations.Patch;
-                    string newPatchPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{_game.GameId} - {filteredTitle}.patch.toml");
+                    string newPatchPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation,
+                        $"{_game.GameId} - {filteredTitle}.patch.toml");
 
                     string fullOldPatch = AppPathResolver.GetFullPath(oldPatchesPath);
                     string fullNewPatch = AppPathResolver.GetFullPath(newPatchPath);
@@ -752,6 +718,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                             Logger.Info<GameDetailsEditorViewModel>($"Moved patches file from '{oldPatchesPath}' to '{newPatchPath}'");
                         }
                     }
+
                     _game.FileLocations.Patch = newPatchPath;
                 }
 
@@ -763,10 +730,12 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 {
                     IconPath = Path.Combine("GameData", filteredTitle, "Artwork", Path.GetFileName(IconPath));
                 }
+
                 if (!string.IsNullOrEmpty(BoxartPath))
                 {
                     BoxartPath = Path.Combine("GameData", filteredTitle, "Artwork", Path.GetFileName(BoxartPath));
                 }
+
                 if (!string.IsNullOrEmpty(BackgroundPath))
                 {
                     BackgroundPath = Path.Combine("GameData", filteredTitle, "Artwork", Path.GetFileName(BackgroundPath));
@@ -891,10 +860,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Saves all changes to the game.
     /// </summary>
     [RelayCommand]
-    private async Task DoSaveAsync()
-    {
-        await SaveAsync();
-    }
+    private async Task DoSaveAsync() => await SaveAsync();
 }
 
 /// <summary>

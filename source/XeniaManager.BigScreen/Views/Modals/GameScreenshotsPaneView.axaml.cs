@@ -46,10 +46,7 @@ public partial class GameScreenshotsPaneView : UserControl
         e.Container.Height = _cardHeight;
     }
 
-    private void OnLoaded(object? sender, RoutedEventArgs e)
-    {
-        ApplyCardSize();
-    }
+    private void OnLoaded(object? sender, RoutedEventArgs e) => ApplyCardSize();
 
     public GameScreenshotsPaneView()
     {

@@ -5,7 +5,9 @@
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.AboutPage"
              x:DataType="vm:AboutPageViewModel">
     <Design.DataContext>
@@ -20,8 +22,11 @@
                                     Progress="{Binding DownloadProgress}"
                                     ShowIconBackground="True" />
 
-        <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <StackPanel Spacing="16" Margin="24">
+        <ScrollViewer Grid.Row="1"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch">
+            <StackPanel Spacing="16"
+                        Margin="24">
                 <!-- Application Info Card -->
                 <cards:CustomCard>
                     <StackPanel Spacing="16">
@@ -29,11 +34,13 @@
                         <Grid ColumnDefinitions="Auto,*">
                             <!-- App Icon with Accent Background -->
                             <Border Grid.Column="0"
-                                    Width="64" Height="64"
+                                    Width="64"
+                                    Height="64"
                                     Margin="0,0,20,0"
                                     Background="{DynamicResource SystemAccentColorBrush}"
                                     CornerRadius="16">
-                                <Image Width="48" Height="48"
+                                <Image Width="48"
+                                       Height="48"
                                        Source="/Assets/icon.ico"
                                        Stretch="Uniform" />
                             </Border>
@@ -84,7 +91,8 @@
                                         Command="{Binding OpenWebsiteCommand}"
                                         ToolTip.Tip="{DynamicResource AboutPage.WebsiteButton.ToolTip}">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="12">
                                             <icons:SymbolIcon Symbol="Globe" />
                                             <TextBlock Text="{DynamicResource AboutPage.WebsiteButton.Text}" />
                                         </StackPanel>
@@ -99,7 +107,8 @@
                                         Command="{Binding OpenGitHubCommand}"
                                         ToolTip.Tip="{DynamicResource AboutPage.GithubButton.ToolTip}">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="12">
                                             <icons:SymbolIcon Symbol="Open" />
                                             <TextBlock Text="{DynamicResource AboutPage.GithubButton.Text}" />
                                         </StackPanel>
@@ -114,7 +123,8 @@
                                         Command="{Binding CheckForUpdatesCommand}"
                                         IsVisible="{Binding CheckForUpdatesButtonVisible}">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="12">
                                             <icons:SymbolIcon Symbol="ArrowSync" />
                                             <TextBlock Text="{DynamicResource AboutPage.CheckForUpdatesButton.Text}" />
                                         </StackPanel>
@@ -130,7 +140,8 @@
                                         Command="{Binding UpdateXeniaManagerCommand}"
                                         IsVisible="{Binding UpdateManagerButtonVisible}">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="12">
                                             <icons:SymbolIcon Symbol="ArrowDownload" />
                                             <TextBlock Text="{DynamicResource AboutPage.UpdateXeniaManagerButton.Text}" />
                                         </StackPanel>

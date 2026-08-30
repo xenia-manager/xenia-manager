@@ -40,8 +40,14 @@ public partial class InputHint : UserControl
     /// </summary>
     public Color KeyColour
     {
-        get => GetValue(KeyColourProperty);
-        set => SetValue(KeyColourProperty, value);
+        get
+        {
+            return GetValue(KeyColourProperty);
+        }
+        set
+        {
+            SetValue(KeyColourProperty, value);
+        }
     }
 
     /// <summary>
@@ -49,8 +55,14 @@ public partial class InputHint : UserControl
     /// </summary>
     public Symbol? Icon
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get
+        {
+            return GetValue(IconProperty);
+        }
+        set
+        {
+            SetValue(IconProperty, value);
+        }
     }
 
     /// <summary>
@@ -58,8 +70,14 @@ public partial class InputHint : UserControl
     /// </summary>
     public string Char
     {
-        get => GetValue(CharProperty);
-        set => SetValue(CharProperty, value);
+        get
+        {
+            return GetValue(CharProperty);
+        }
+        set
+        {
+            SetValue(CharProperty, value);
+        }
     }
 
     /// <summary>
@@ -67,8 +85,14 @@ public partial class InputHint : UserControl
     /// </summary>
     public string Text
     {
-        get => GetValue(TextProperty);
-        set => SetValue(TextProperty, value);
+        get
+        {
+            return GetValue(TextProperty);
+        }
+        set
+        {
+            SetValue(TextProperty, value);
+        }
     }
 
     /// <summary>

@@ -19,13 +19,31 @@ public class ModalService : IModalService
     private readonly List<ModalViewModelBase> _stack = [];
 
     /// <inheritdoc />
-    public bool IsOpen => _stack.Count > 0;
+    public bool IsOpen
+    {
+        get
+        {
+            return _stack.Count > 0;
+        }
+    }
 
     /// <inheritdoc />
-    public ModalViewModelBase? Top => _stack.Count > 0 ? _stack[^1] : null;
+    public ModalViewModelBase? Top
+    {
+        get
+        {
+            return _stack.Count > 0 ? _stack[^1] : null;
+        }
+    }
 
     /// <inheritdoc />
-    public IReadOnlyList<ModalViewModelBase> Stack => _stack;
+    public IReadOnlyList<ModalViewModelBase> Stack
+    {
+        get
+        {
+            return _stack;
+        }
+    }
 
     /// <inheritdoc />
     public event Action? StackChanged;
@@ -57,10 +75,7 @@ public class ModalService : IModalService
     }
 
     /// <inheritdoc />
-    public Task ShowAsync(ModalViewModelBase modal)
-    {
-        return ShowAsyncCore(modal);
-    }
+    public Task ShowAsync(ModalViewModelBase modal) => ShowAsyncCore(modal);
 
     /// <inheritdoc />
     public async Task<TResult?> ShowAsync<TResult>(ModalViewModelBase<TResult> modal)

@@ -60,22 +60,46 @@ internal sealed unsafe class GamepadDeviceCollection
     /// <summary>
     /// Whether any gamepad is currently open.
     /// </summary>
-    public bool IsConnected => _gamepads.Count > 0;
+    public bool IsConnected
+    {
+        get
+        {
+            return _gamepads.Count > 0;
+        }
+    }
 
     /// <summary>
     /// The joystick ID driving navigation input (default = none).
     /// </summary>
-    public SDL_JoystickID PrimaryId => _primaryId;
+    public SDL_JoystickID PrimaryId
+    {
+        get
+        {
+            return _primaryId;
+        }
+    }
 
     /// <summary>
     /// Battery percentage (0-100) of the primary pad, or -1 when unknown/no battery.
     /// </summary>
-    public int PrimaryBattery => GetPrimary()?.Battery ?? -1;
+    public int PrimaryBattery
+    {
+        get
+        {
+            return GetPrimary()?.Battery ?? -1;
+        }
+    }
 
     /// <summary>
     /// Whether the primary pad battery is currently charging.
     /// </summary>
-    public bool PrimaryCharging => GetPrimary()?.Charging ?? false;
+    public bool PrimaryCharging
+    {
+        get
+        {
+            return GetPrimary()?.Charging ?? false;
+        }
+    }
 
     /// <summary>
     /// Whether the given joystick ID is the current primary.
@@ -93,7 +117,7 @@ internal sealed unsafe class GamepadDeviceCollection
     /// </summary>
     public IReadOnlyList<GamepadInfo> Snapshot()
     {
-        List<GamepadInfo> list = new(_gamepads.Count);
+        List<GamepadInfo> list = new List<GamepadInfo>(_gamepads.Count);
         foreach (GamepadHandle pad in _gamepads.Values)
         {
             list.Add(new GamepadInfo(
@@ -111,7 +135,13 @@ internal sealed unsafe class GamepadDeviceCollection
     /// <summary>
     /// The gamepad that drives navigation input, or null when none is connected.
     /// </summary>
-    public GamepadInfo? Primary => Snapshot().FirstOrDefault(g => g.IsPrimary);
+    public GamepadInfo? Primary
+    {
+        get
+        {
+            return Snapshot().FirstOrDefault(g => g.IsPrimary);
+        }
+    }
 
     /// <summary>
     /// Sets the gamepad with the given joystick ID as primary.
@@ -216,7 +246,12 @@ internal sealed unsafe class GamepadDeviceCollection
         }
 
         string name = SDL3.SDL_GetGamepadName(handle) ?? $"Gamepad {id}";
-        _gamepads[id] = new GamepadHandle { Id = id, Handle = handle, Name = name };
+        _gamepads[id] = new GamepadHandle
+        {
+            Id = id,
+            Handle = handle,
+            Name = name
+        };
         Logger.Info<GamepadDeviceCollection>($"Opened gamepad {id}: {name}");
 
         EnsurePrimary();

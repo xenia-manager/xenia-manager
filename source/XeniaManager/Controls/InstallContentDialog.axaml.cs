@@ -45,7 +45,7 @@ public partial class InstallContentDialog : UserControl
     /// <returns>True if the user installed content, false if the user canceled the dialog.</returns>
     public static async Task ShowAsync(XeniaVersion xeniaVersion = XeniaVersion.Canary)
     {
-        InstallContentDialog dialog = new InstallContentDialog()
+        InstallContentDialog dialog = new InstallContentDialog
         {
             _viewModel =
             {

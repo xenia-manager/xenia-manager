@@ -21,7 +21,8 @@ public abstract class XeniaSelectionDialog
     /// <returns>The selected Xenia version, or null if the user canceled the selection</returns>
     public static async Task<XeniaVersion?> ShowAsync(List<XeniaVersion> installedVersions)
     {
-        Logger.Info<XeniaSelectionDialog>($"Showing Xenia selection dialog with {installedVersions.Count} installed versions: [{string.Join(", ", installedVersions)}]");
+        Logger.Info<XeniaSelectionDialog>(
+            $"Showing Xenia selection dialog with {installedVersions.Count} installed versions: [{string.Join(", ", installedVersions)}]");
 
         bool canaryInstalled = installedVersions.Contains(XeniaVersion.Canary);
         bool mousehookInstalled = installedVersions.Contains(XeniaVersion.Mousehook);
@@ -34,7 +35,10 @@ public abstract class XeniaSelectionDialog
             Title = LocalizationHelper.GetText("XeniaSelectionDialog.Title"),
             Header = LocalizationHelper.GetText("XeniaSelectionDialog.Header"),
             SubHeader = LocalizationHelper.GetText("XeniaSelectionDialog.SubHeader"),
-            IconSource = new SymbolIconSource { Symbol = Symbol.Settings },
+            IconSource = new SymbolIconSource
+            {
+                Symbol = Symbol.Settings
+            },
             XamlRoot = App.MainWindow
         };
 
@@ -46,7 +50,10 @@ public abstract class XeniaSelectionDialog
             FATaskDialogCommand canaryCommand = new FATaskDialogCommand
             {
                 Text = LocalizationHelper.GetText("XeniaSelectionDialog.Canary.Title"),
-                IconSource = new SymbolIconSource { Symbol = Symbol.Rocket },
+                IconSource = new SymbolIconSource
+                {
+                    Symbol = Symbol.Rocket
+                },
                 ClosesOnInvoked = false
             };
             canaryCommand.Click += (_, _) =>
@@ -63,7 +70,10 @@ public abstract class XeniaSelectionDialog
             FATaskDialogCommand mousehookCommand = new FATaskDialogCommand
             {
                 Text = LocalizationHelper.GetText("XeniaSelectionDialog.Mousehook.Title"),
-                IconSource = new SymbolIconSource { Symbol = Symbol.DesktopKeyboard },
+                IconSource = new SymbolIconSource
+                {
+                    Symbol = Symbol.DesktopKeyboard
+                },
                 ClosesOnInvoked = false
             };
             mousehookCommand.Click += (_, _) =>
@@ -80,7 +90,10 @@ public abstract class XeniaSelectionDialog
             FATaskDialogCommand netplayCommand = new FATaskDialogCommand
             {
                 Text = LocalizationHelper.GetText("XeniaSelectionDialog.Netplay.Title"),
-                IconSource = new SymbolIconSource { Symbol = Symbol.People },
+                IconSource = new SymbolIconSource
+                {
+                    Symbol = Symbol.People
+                },
                 ClosesOnInvoked = false
             };
             netplayCommand.Click += (_, _) =>

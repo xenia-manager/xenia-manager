@@ -6,14 +6,17 @@
              xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
-             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             mc:Ignorable="d"
+             d:DesignWidth="1100"
+             d:DesignHeight="780"
              x:Class="XeniaManager.BigScreen.Views.Modals.GameScreenshotsPaneView"
              x:DataType="vm:GameScreenshotsPaneViewModel">
     <Grid>
         <!-- GRID VIEW (pane content) -->
-        <Grid RowDefinitions="Auto, *" RowSpacing="24">
-            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+        <Grid RowDefinitions="Auto, *"
+              RowSpacing="24">
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*, Auto">
                 <prim:IconStat Grid.Column="0"
                                Icon="Camera"
                                Stat="{Binding CountText}"

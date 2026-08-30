@@ -4,12 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="410" d:DesignHeight="220"
+             mc:Ignorable="d"
+             d:DesignWidth="410"
+             d:DesignHeight="220"
              x:Class="XeniaManager.BigScreen.Controls.Cards.OptionsCard"
              x:DataType="vm:OptionsCardViewModel"
              Focusable="True"
              Classes.selected="{Binding IsSelected}">
-    <Border x:Name="Tile" CornerRadius="8" Background="{DynamicResource CardBackground}">
+    <Border x:Name="Tile"
+            CornerRadius="8"
+            Background="{DynamicResource CardBackground}">
         <StackPanel Margin="20"
                     Orientation="Horizontal"
                     Spacing="14"

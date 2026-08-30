@@ -17,7 +17,7 @@ public partial class SettingsPage : UserControl
         _viewModel = App.Services.GetRequiredService<SettingsPageViewModel>();
         DataContext = _viewModel;
     }
-    
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);

@@ -7,52 +7,73 @@
              xmlns:prof="using:XeniaManager.BigScreen.Controls.Profiles"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
              x:Class="XeniaManager.BigScreen.Views.Modals.ManageProfilesView"
              x:DataType="vm:ManageProfilesViewModel">
 
     <UserControl.Styles>
         <!-- Edit-panel dropdowns (right-aligned, sized to content) -->
         <Style Selector="ComboBox.edit-combo">
-            <Setter Property="MinWidth" Value="280" />
-            <Setter Property="FontSize" Value="20" />
-            <Setter Property="Padding" Value="10,8" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="MinWidth"
+                    Value="280" />
+            <Setter Property="FontSize"
+                    Value="20" />
+            <Setter Property="Padding"
+                    Value="10,8" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
         </Style>
 
         <!-- Edit panel: reserved border, accent while the controller is inside it -->
         <Style Selector="Border.edit-panel">
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderInner}" />
-            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource CardBorderInner}" />
+            <Setter Property="BorderThickness"
+                    Value="3" />
         </Style>
 
         <Style Selector="Border.edit-panel.selected">
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource AccentColor}" />
         </Style>
 
         <!-- Edit-panel field rows: reserved transparent border (accent on
              selection); the negative margin keeps the layout unchanged -->
         <Style Selector="Border.edit-field-row">
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="3" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="Margin" Value="-6" />
-            <Setter Property="Padding" Value="3" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+            <Setter Property="BorderThickness"
+                    Value="3" />
+            <Setter Property="CornerRadius"
+                    Value="8" />
+            <Setter Property="Margin"
+                    Value="-6" />
+            <Setter Property="Padding"
+                    Value="3" />
         </Style>
 
         <Style Selector="Border.edit-field-row.selected">
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource AccentColor}" />
         </Style>
     </UserControl.Styles>
 
     <!-- The modal: regular card background + card border over the transparent black backdrop -->
     <Border Classes="modal-screen">
-        <Grid Margin="48" RowDefinitions="Auto, *, Auto">
+        <Grid Margin="48"
+              RowDefinitions="Auto, *, Auto">
 
             <!-- HEADER: title + version chips + status line -->
-            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,10,0,30">
-                <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="16">
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*, Auto"
+                  Margin="0,10,0,30">
+                <StackPanel Grid.Column="0"
+                            Orientation="Vertical"
+                            Spacing="16">
                     <TextBlock Text="{DynamicResource ManageProfiles.Title}"
                                Classes="screen-title" />
                     <ItemsControl x:Name="VersionChipsList"
@@ -60,17 +81,21 @@
                                   IsVisible="{Binding HasVersionChips}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" Spacing="10" />
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="10" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="items:VersionChipViewModel">
-                                <Button Classes="version-chip" Classes.selected="{Binding IsSelected}">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button Classes="version-chip"
+                                        Classes.selected="{Binding IsSelected}">
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="8">
                                         <fluent:SymbolIcon Symbol="{Binding Icon}"
                                                            FontSize="14"
                                                            VerticalAlignment="Center" />
-                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Name}"
+                                                   VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                             </DataTemplate>
@@ -85,17 +110,22 @@
             </Grid>
 
             <!-- BODY: profile list (left) + edit panel (right) -->
-            <Grid Grid.Row="1" ColumnDefinitions="*, *" ColumnSpacing="48">
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="*, *"
+                  ColumnSpacing="48">
 
                 <!-- LEFT: profile rows (scrollable) + create stub anchored below -->
-                <Grid Grid.Column="0" RowDefinitions="*, Auto">
+                <Grid Grid.Column="0"
+                      RowDefinitions="*, Auto">
 
                     <!-- PROFILE ROWS (scrollable) -->
                     <Grid Grid.Row="0">
                         <ScrollViewer x:Name="SvList"
                                       HorizontalScrollBarVisibility="Disabled"
                                       VerticalScrollBarVisibility="Hidden">
-                            <ItemsControl x:Name="RowsList" ItemsSource="{Binding Rows}" Margin="0,0,0,20" />
+                            <ItemsControl x:Name="RowsList"
+                                          ItemsSource="{Binding Rows}"
+                                          Margin="0,0,0,20" />
                         </ScrollViewer>
 
                         <!-- Empty-state stub -->
@@ -122,12 +152,14 @@
                         BoxShadow="{DynamicResource CardShadowFlat}"
                         IsVisible="{Binding ShowEditPanel}"
                         Padding="28,22">
-                    <StackPanel Orientation="Vertical" Spacing="24">
+                    <StackPanel Orientation="Vertical"
+                                Spacing="24">
 
                         <!-- GAMERTAG -->
                         <Border Classes="edit-field-row"
                                 Classes.selected="{Binding RowGamertag.IsSelected}">
-                            <StackPanel Orientation="Vertical" Spacing="8">
+                            <StackPanel Orientation="Vertical"
+                                        Spacing="8">
                                 <TextBlock Classes="settings-label"
                                            Text="{DynamicResource ManageProfiles.Edit.Gamertag}" />
                                 <TextBox x:Name="TxtGamertag"
@@ -229,18 +261,26 @@
             </Grid>
 
             <!-- HINTS: B back · A edit · X delete · Y version · View import · Start export -->
-            <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
-                <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+            <StackPanel Grid.Row="2"
+                        Classes="hint-bar"
+                        IsVisible="{Binding IsHintBarVisible}">
+                <prim:InputHint Char="B"
+                                KeyColour="{DynamicResource HintKeyB}"
                                 Text="{DynamicResource ManageProfiles.Hint.Back}" />
-                <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+                <prim:InputHint Char="A"
+                                KeyColour="{DynamicResource HintKeyA}"
                                 Text="{DynamicResource ManageProfiles.Hint.Edit}" />
-                <prim:InputHint Char="X" KeyColour="{DynamicResource HintKeyX}"
+                <prim:InputHint Char="X"
+                                KeyColour="{DynamicResource HintKeyX}"
                                 Text="{DynamicResource ManageProfiles.Hint.Delete}" />
-                <prim:InputHint Char="Y" KeyColour="{DynamicResource HintKeyY}"
+                <prim:InputHint Char="Y"
+                                KeyColour="{DynamicResource HintKeyY}"
                                 Text="{DynamicResource ManageProfiles.Hint.Version}" />
-                <prim:InputHint Icon="CaretLeft" KeyColour="{DynamicResource HintKeyBack}"
+                <prim:InputHint Icon="CaretLeft"
+                                KeyColour="{DynamicResource HintKeyBack}"
                                 Text="{DynamicResource ManageProfiles.Hint.Import}" />
-                <prim:InputHint Icon="CaretRight" KeyColour="{DynamicResource HintKeyBack}"
+                <prim:InputHint Icon="CaretRight"
+                                KeyColour="{DynamicResource HintKeyBack}"
                                 Text="{DynamicResource ManageProfiles.Hint.Export}" />
             </StackPanel>
         </Grid>

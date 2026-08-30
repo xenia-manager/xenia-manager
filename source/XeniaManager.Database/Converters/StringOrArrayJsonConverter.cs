@@ -36,6 +36,7 @@ public class StringOrArrayJsonConverter : JsonConverter<List<string>>
                     }
                 }
             }
+
             return result;
         }
 
@@ -55,6 +56,7 @@ public class StringOrArrayJsonConverter : JsonConverter<List<string>>
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
         }
     }

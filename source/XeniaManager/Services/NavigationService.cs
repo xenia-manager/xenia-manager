@@ -43,7 +43,13 @@ public class NavigationService
     /// </summary>
     private string? _currentPageTag;
 
-    public string? CurrentPageTag => _currentPageTag;
+    public string? CurrentPageTag
+    {
+        get
+        {
+            return _currentPageTag;
+        }
+    }
 
     /// <summary>
     /// Event signalizing that the service navigated to the selected Avalonia Page
@@ -99,7 +105,11 @@ public class NavigationService
         Logger.Info<NavigationService>($"Launching BigScreen from '{bigScreenPath}'");
         try
         {
-            Process? bigScreen = Process.Start(new ProcessStartInfo { FileName = bigScreenPath, UseShellExecute = true });
+            Process? bigScreen = Process.Start(new ProcessStartInfo
+            {
+                FileName = bigScreenPath,
+                UseShellExecute = true
+            });
             if (bigScreen == null)
             {
                 Logger.Error<NavigationService>("Failed to start BigScreen process");
@@ -241,6 +251,7 @@ public class NavigationService
                                 //User closed / canceled
                                 Logger.Info<NavigationService>("Xenia version selection was cancelled by user");
                             }
+
                             break;
                     }
                 }
@@ -250,6 +261,7 @@ public class NavigationService
                     EventManager.Instance.EnableWindow();
                     throw;
                 }
+
                 break;
             case "BigScreen":
                 Logger.Info<NavigationService>("Processing 'BigScreen' tag - attempting to launch BigScreen");

@@ -87,7 +87,8 @@ public class ConfigSectionDefinition
     /// <summary>
     /// Adds a slider option with custom step/increment value to this section.
     /// </summary>
-    public ConfigSectionDefinition AddSlider(string optionName, double minimum, double maximum, double step, string? displayName = null, string? comment = null, string? valueFormat = null)
+    public ConfigSectionDefinition AddSlider(string optionName, double minimum, double maximum, double step, string? displayName = null, string? comment = null,
+        string? valueFormat = null)
     {
         ConfigOptionDefinition definition = ConfigOptionDefinition.Slider(optionName, minimum, maximum, displayName, comment);
         definition.Step = step;

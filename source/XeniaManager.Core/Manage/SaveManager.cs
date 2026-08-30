@@ -80,8 +80,8 @@ public class SaveManager
             // Get all save files in the saved games folder
             string[] saveFilesPaths =
             [
-                ..Directory.GetDirectories(savedGamesFolder),
-                ..Directory.GetFiles(savedGamesFolder)
+                .. Directory.GetDirectories(savedGamesFolder),
+                .. Directory.GetFiles(savedGamesFolder)
             ];
 
             Logger.Debug<SaveManager>($"Found {saveFilesPaths.Length} save files for XUID '{folderXuid}'");
@@ -123,6 +123,7 @@ public class SaveManager
         Logger.Info<SaveManager>($"Found {saveFiles.Count} save files for game '{game.Title}' (TitleId: {game.GameId}, XUID: {xuid ?? "all"})");
         return saveFiles;
     }
+
     /// <summary>
     /// Reconstructs the actual content file path from a header file.
     /// </summary>
@@ -165,6 +166,7 @@ public class SaveManager
         // Return an empty string if both methods fail
         return string.Empty;
     }
+
     /// <summary>
     /// Exports save games to a zip file.
     /// </summary>
@@ -241,7 +243,8 @@ public class SaveManager
                     // Copy header file to the Headers directory
                     if (File.Exists(headerFile.FilePath))
                     {
-                        Logger.Trace<SaveManager>($"Copying header file from '{headerFile.FilePath}' to '{Path.Combine(headersDir, Path.GetFileName(headerFile.FilePath))}'");
+                        Logger.Trace<SaveManager>(
+                            $"Copying header file from '{headerFile.FilePath}' to '{Path.Combine(headersDir, Path.GetFileName(headerFile.FilePath))}'");
                         File.Copy(headerFile.FilePath, Path.Combine(headersDir, Path.GetFileName(headerFile.FilePath)), true);
                     }
                     else

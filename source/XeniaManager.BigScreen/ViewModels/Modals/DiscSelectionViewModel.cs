@@ -20,7 +20,13 @@ public class DiscSelectionViewModel : ModalViewModelBase<int?>
     /// <summary>
     /// Whether disc art is available to show.
     /// </summary>
-    public bool HasIcon => Icon != null;
+    public bool HasIcon
+    {
+        get
+        {
+            return Icon != null;
+        }
+    }
 
     /// <summary>
     /// The Core game model this selection is for.
@@ -30,12 +36,24 @@ public class DiscSelectionViewModel : ModalViewModelBase<int?>
     /// <summary>
     /// The game's display title.
     /// </summary>
-    public string Title => Game.Title;
+    public string Title
+    {
+        get
+        {
+            return Game.Title;
+        }
+    }
 
     /// <summary>
     /// The game's disc art (icon), or null when missing/unreadable.
     /// </summary>
-    public Bitmap? Icon => Game.Artwork.CachedIcon;
+    public Bitmap? Icon
+    {
+        get
+        {
+            return Game.Artwork.CachedIcon;
+        }
+    }
 
     /// <summary>
     /// The disc cards, one per disc (Disc 1 + additional discs).

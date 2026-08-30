@@ -110,10 +110,7 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// Recomputes the unsaved-changes flag after a row's value changed.
     /// </summary>
-    private void OnRowValueChanged()
-    {
-        HasUnsavedChanges = Rows.Any(row => row.IsDirty);
-    }
+    private void OnRowValueChanged() => HasUnsavedChanges = Rows.Any(row => row.IsDirty);
 
     /// <summary>
     /// Writes the current values to the config file and marks every row saved.
@@ -219,7 +216,7 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
 
             string? sectionTitle = lastSection != sectionName ? sectionDef?.DisplayName ?? sectionName : null;
             lastSection = sectionName;
-            ConfigRowViewModel row = new(option, optionDef, optionDef.DisplayName ?? option.Name, sectionTitle);
+            ConfigRowViewModel row = new ConfigRowViewModel(option, optionDef, optionDef.DisplayName ?? option.Name, sectionTitle);
             row.ValueChanged += OnRowValueChanged;
             Rows.Add(row);
         }
@@ -423,10 +420,7 @@ public partial class GameSettingsPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// Selects the first row when the pane becomes active.
     /// </summary>
-    public void OnPaneEntered()
-    {
-        SelectionHelper.SelectOnlyAt(Rows, 0);
-    }
+    public void OnPaneEntered() => SelectionHelper.SelectOnlyAt(Rows, 0);
 
     /// <summary>
     /// Clears the row selection when the pane loses focus.

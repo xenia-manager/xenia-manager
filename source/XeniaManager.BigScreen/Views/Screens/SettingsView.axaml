@@ -7,23 +7,30 @@
              xmlns:set="using:XeniaManager.BigScreen.Controls.Settings"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
              xmlns:sys="using:System"
-             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="800"
              x:Class="XeniaManager.BigScreen.Views.Screens.SettingsView"
              x:DataType="vm:SettingsViewModel"
              Background="{Binding ScreenBackground}">
 
-    <Grid RowDefinitions="Auto, *, Auto" Margin="60">
+    <Grid RowDefinitions="Auto, *, Auto"
+          Margin="60">
         <TextBlock Grid.Row="0"
                    Classes="screen-title"
                    Text="{DynamicResource Settings.Title}"
                    Margin="0,20,0,30" />
 
-        <ScrollViewer x:Name="SvSettings" Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
+        <ScrollViewer x:Name="SvSettings"
+                      Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Hidden">
-            <StackPanel Orientation="Vertical" Spacing="14">
+            <StackPanel Orientation="Vertical"
+                        Spacing="14">
 
                 <!-- PREFERENCES -->
-                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Preferences}" />
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.Preferences}" />
 
                 <!-- PROFILES -->
                 <Border x:Name="CardManageProfiles"
@@ -38,11 +45,13 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ManageProfiles}" />
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.ManageProfiles}" />
                             <ItemsControl ItemsSource="{Binding ActiveProfiles}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="sys:String">
-                                        <TextBlock Classes="settings-subtitle" Text="{Binding}" />
+                                        <TextBlock Classes="settings-subtitle"
+                                                   Text="{Binding}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -61,7 +70,8 @@
                                   ItemsSource="{Binding LibraryViewModeOptions}"
                                   SelectedItem="{Binding SelectedLibraryViewMode}"
                                   DisplayMemberBinding="{Binding DisplayName}" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.LibraryView}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.LibraryView}" />
                     </DockPanel>
                 </Border>
 
@@ -76,7 +86,8 @@
                                   ItemsSource="{Binding CardImageModeOptions}"
                                   SelectedItem="{Binding SelectedCardImageMode}"
                                   DisplayMemberBinding="{Binding DisplayName}" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.CardImage}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.CardImage}" />
                     </DockPanel>
                 </Border>
 
@@ -91,7 +102,8 @@
                                   ItemsSource="{Binding TimeFormatOptions}"
                                   SelectedItem="{Binding SelectedTimeFormat}"
                                   DisplayMemberBinding="{Binding DisplayName}" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.TimeFormat}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.TimeFormat}" />
                     </DockPanel>
                 </Border>
 
@@ -109,7 +121,8 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.ReturnToXeniaOnQuit}" />
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.ReturnToXeniaOnQuit}" />
                             <TextBlock Classes="settings-subtitle"
                                        Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}" />
                         </StackPanel>
@@ -130,7 +143,8 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.LaunchGamesFullscreen}" />
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.LaunchGamesFullscreen}" />
                             <TextBlock Classes="settings-subtitle"
                                        Text="{DynamicResource Settings.LaunchGamesFullscreen.Description}" />
                         </StackPanel>
@@ -151,7 +165,8 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.StartInBigScreen}" />
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.StartInBigScreen}" />
                             <TextBlock Classes="settings-subtitle"
                                        Text="{DynamicResource Settings.StartInBigScreen.Description}" />
                         </StackPanel>
@@ -172,7 +187,8 @@
                         <StackPanel Orientation="Vertical"
                                     VerticalAlignment="Center"
                                     Spacing="4">
-                            <TextBlock Classes="settings-label" Text="{DynamicResource Settings.RotateProfiles}" />
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.RotateProfiles}" />
                             <TextBlock Classes="settings-subtitle"
                                        Text="{DynamicResource Settings.RotateProfiles.Description}" />
                         </StackPanel>
@@ -180,7 +196,8 @@
                 </Border>
 
                 <!-- THEME -->
-                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Theme}" />
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.Theme}" />
 
                 <!-- BACKGROUND TYPE -->
                 <Border x:Name="CardBackgroundMode"
@@ -193,7 +210,8 @@
                                   ItemsSource="{Binding BackgroundModeOptions}"
                                   SelectedItem="{Binding SelectedBackgroundMode}"
                                   DisplayMemberBinding="{Binding DisplayName}" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.BackgroundType}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.BackgroundType}" />
                     </DockPanel>
                 </Border>
 
@@ -208,7 +226,8 @@
                                               ActiveTarget="{Binding ActiveColourTarget, Mode=TwoWay}"
                                               IsEditorActive="{Binding IsPrimaryColourEditorActive}"
                                               VerticalAlignment="Center" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.PrimaryColour}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.PrimaryColour}" />
                     </DockPanel>
                 </Border>
 
@@ -223,7 +242,8 @@
                                               ActiveTarget="{Binding ActiveColourTarget, Mode=TwoWay}"
                                               IsEditorActive="{Binding IsAccentColourEditorActive}"
                                               VerticalAlignment="Center" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.AccentColour}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.AccentColour}" />
                     </DockPanel>
                 </Border>
 
@@ -245,7 +265,8 @@
                                 Margin="0,0,16,0"
                                 VerticalAlignment="Center"
                                 Width="340" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.Vignette}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.Vignette}" />
                     </DockPanel>
                 </Border>
 
@@ -264,15 +285,18 @@
                                    Text="{Binding ImageDisplayText}"
                                    Margin="0,0,16,0"
                                    TextTrimming="CharacterEllipsis" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.BackgroundImage}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.BackgroundImage}" />
                     </DockPanel>
                 </Border>
 
                 <!-- CONTROLLERS -->
-                <TextBlock Classes="settings-section" Text="{DynamicResource Settings.Section.Controllers}" />
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.Controllers}" />
 
                 <Border Classes="settings-card">
-                    <StackPanel Orientation="Vertical" Spacing="12">
+                    <StackPanel Orientation="Vertical"
+                                Spacing="12">
                         <Grid>
                             <ItemsControl ItemsSource="{Binding Controllers}">
                                 <ItemsControl.ItemTemplate>
@@ -307,7 +331,8 @@
                                   ItemsSource="{Binding XConfigVersions}"
                                   SelectedItem="{Binding SelectedXConfigVersion}"
                                   DisplayMemberBinding="{Binding DisplayName}" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.XConfig.Version}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.XConfig.Version}" />
                     </DockPanel>
                 </Border>
 
@@ -323,17 +348,22 @@
                                   ItemsSource="{Binding XConfigResolutions}"
                                   SelectedItem="{Binding SelectedXConfigResolution}"
                                   DisplayMemberBinding="{Binding DisplayName}" />
-                        <TextBlock Classes="settings-label" Text="{DynamicResource Settings.XConfig.Resolution}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.XConfig.Resolution}" />
                     </DockPanel>
                 </Border>
 
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="2" Classes="hint-bar" IsVisible="{Binding IsHintBarVisible}">
-            <prim:InputHint Char="B" KeyColour="{DynamicResource HintKeyB}"
+        <StackPanel Grid.Row="2"
+                    Classes="hint-bar"
+                    IsVisible="{Binding IsHintBarVisible}">
+            <prim:InputHint Char="B"
+                            KeyColour="{DynamicResource HintKeyB}"
                             Text="{DynamicResource Settings.Hint.Back}" />
-            <prim:InputHint Char="A" KeyColour="{DynamicResource HintKeyA}"
+            <prim:InputHint Char="A"
+                            KeyColour="{DynamicResource HintKeyA}"
                             Text="{DynamicResource Settings.Hint.Select}" />
         </StackPanel>
     </Grid>

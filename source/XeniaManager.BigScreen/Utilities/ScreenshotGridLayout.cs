@@ -38,10 +38,7 @@ public static class ScreenshotGridLayout
     /// Fits a card width so exactly <see cref="CardsPerRow"/> fit per row,
     /// capped at <see cref="MaxCardWidth"/>.
     /// </summary>
-    public static double FitCardWidth(double viewportWidth)
-    {
-        return Math.Min((viewportWidth - ItemSpacing * (CardsPerRow - 1)) / CardsPerRow, MaxCardWidth);
-    }
+    public static double FitCardWidth(double viewportWidth) => Math.Min((viewportWidth - ItemSpacing * (CardsPerRow - 1)) / CardsPerRow, MaxCardWidth);
 
     /// <summary>
     /// The card height for the given width (16:9).

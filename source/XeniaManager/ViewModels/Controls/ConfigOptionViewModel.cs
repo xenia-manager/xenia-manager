@@ -158,6 +158,7 @@ public partial class ConfigOptionViewModel : ObservableObject, IDisposable
                 parts[i] = char.ToUpper(parts[i][0]) + parts[i][1..].ToLower();
             }
         }
+
         return string.Join(" ", parts);
     }
 
@@ -238,6 +239,7 @@ public partial class ConfigOptionViewModel : ObservableObject, IDisposable
                         // Use FloatValue and round to int (slider binds to FloatValue, not IntValue)
                         _configOption.Value = (int)Math.Round(FloatValue);
                     }
+
                     break;
                 case ConfigOptionType.Float:
                     _configOption.Value = (float)FloatValue;
@@ -338,10 +340,7 @@ public partial class ConfigOptionViewModel : ObservableObject, IDisposable
     /// <summary>
     /// Checks if the current value differs from the original and updates HasUnsavedChanges.
     /// </summary>
-    private void CheckForChanges(object? newValue)
-    {
-        HasUnsavedChanges = !Equals(newValue, _originalValue);
-    }
+    private void CheckForChanges(object? newValue) => HasUnsavedChanges = !Equals(newValue, _originalValue);
 
     /// <summary>
     /// Disposes of resources used by this ViewModel.

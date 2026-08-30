@@ -45,6 +45,7 @@ public class CompressionOffsetRecord
         {
             record.Sizes[i] = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(offset + 8 + i * 2));
         }
+
         return record;
     }
 }

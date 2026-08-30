@@ -51,24 +51,48 @@ public partial class PatchDownloadViewModel : ModalViewModelBase
     /// <summary>
     /// Whether the status line is shown.
     /// </summary>
-    public bool ShowStatus => StatusText.Length > 0;
+    public bool ShowStatus
+    {
+        get
+        {
+            return StatusText.Length > 0;
+        }
+    }
 
     /// <summary>
     /// Whether the results area shows the empty state ("Searching…" while a
     /// search is running, "No patches found" afterwards).
     /// </summary>
-    public bool ShowEmpty => !IsSearching && Results.Count == 0;
+    public bool ShowEmpty
+    {
+        get
+        {
+            return !IsSearching && Results.Count == 0;
+        }
+    }
 
     /// <summary>
     /// Whether the results area shows the searching state.
     /// </summary>
-    public bool ShowSearching => IsSearching && Results.Count == 0;
+    public bool ShowSearching
+    {
+        get
+        {
+            return IsSearching && Results.Count == 0;
+        }
+    }
 
     /// <summary>
     /// The modal header: the download title plus the game's name.
     /// </summary>
-    public string HeaderText => string.Format(
-        LocalizationHelper.GetText("GameModal.Patches.Download.TitleWithGame"), _game.Title);
+    public string HeaderText
+    {
+        get
+        {
+            return string.Format(
+                LocalizationHelper.GetText("GameModal.Patches.Download.TitleWithGame"), _game.Title);
+        }
+    }
 
     /// <summary>
     /// Creates the modal, pre-fills the search with the game ID and runs the
@@ -92,15 +116,9 @@ public partial class PatchDownloadViewModel : ModalViewModelBase
         OnPropertyChanged(nameof(ShowSearching));
     }
 
-    partial void OnStatusTextChanged(string value)
-    {
-        OnPropertyChanged(nameof(ShowStatus));
-    }
+    partial void OnStatusTextChanged(string value) => OnPropertyChanged(nameof(ShowStatus));
 
-    partial void OnSearchTextChanged(string value)
-    {
-        TaskUtilities.RunSafely<PatchDownloadViewModel>(SearchAsync, "Searching patches database");
-    }
+    partial void OnSearchTextChanged(string value) => TaskUtilities.RunSafely<PatchDownloadViewModel>(SearchAsync, "Searching patches database");
 
     /// <summary>
     /// Handles modal input: Up/Down moves the results, A downloads the selected

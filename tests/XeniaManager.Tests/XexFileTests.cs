@@ -49,7 +49,8 @@ public class XexFileTests
     public void Load_LocalXexFile_ParsesSuccessfully()
     {
         // Arrange - Skip if the test file is not present
-        Assume.That(File.Exists(_testXexPath), Is.True, $"Test XEX file not found at {_testXexPath}. Place a test.xex file in the Assets folder to run this test.");
+        Assume.That(File.Exists(_testXexPath), Is.True,
+            $"Test XEX file not found at {_testXexPath}. Place a test.xex file in the Assets folder to run this test.");
 
         // Act
         XexFile xex = XexFile.Load(_testXexPath);
@@ -131,7 +132,8 @@ public class XexFileTests
     public void FromBytes_ValidXexData_ParsesSuccessfully()
     {
         // Arrange - Skip if the test file is not present
-        Assume.That(File.Exists(_testXexPath), Is.True, $"Test XEX file not found at {_testXexPath}. Place a test.xex file in the Assets folder to run this test.");
+        Assume.That(File.Exists(_testXexPath), Is.True,
+            $"Test XEX file not found at {_testXexPath}. Place a test.xex file in the Assets folder to run this test.");
 
         byte[] xexData = File.ReadAllBytes(_testXexPath);
 
@@ -167,7 +169,8 @@ public class XexFileTests
     public void Load_LocalXexFile_HasExpectedProperties()
     {
         // Arrange - Skip if the test file is not present
-        Assume.That(File.Exists(_testXexPath), Is.True, $"Test XEX file not found at {_testXexPath}. Place a test.xex file in the Assets folder to run this test.");
+        Assume.That(File.Exists(_testXexPath), Is.True,
+            $"Test XEX file not found at {_testXexPath}. Place a test.xex file in the Assets folder to run this test.");
 
         // Act
         XexFile xex = XexFile.Load(_testXexPath);
@@ -214,8 +217,5 @@ public class XexFileTests
     /// <summary>
     /// Helper method to convert byte array to ASCII string (mirrors XexFile.GetString).
     /// </summary>
-    private static string GetString(byte[] bytes)
-    {
-        return System.Text.Encoding.ASCII.GetString(bytes).Trim('\0');
-    }
+    private static string GetString(byte[] bytes) => System.Text.Encoding.ASCII.GetString(bytes).Trim('\0');
 }

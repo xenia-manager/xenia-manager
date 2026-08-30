@@ -17,7 +17,7 @@ public enum XConfigCategory : ushort
     Dvd = 0x08,
     Iptv = 0x09,
     System = 0x0A,
-    Devkit = 0x0B,
+    Devkit = 0x0B
 }
 
 /// <summary>

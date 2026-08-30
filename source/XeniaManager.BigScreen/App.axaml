@@ -39,7 +39,8 @@
     </Application.Resources>
 
     <Application.Styles>
-        <style:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="False" />
-        <StyleInclude Source="avares://XeniaManager.BigScreen/Resources/BigScreenStyle.axaml"></StyleInclude>
+        <style:FluentAvaloniaTheme PreferSystemTheme="True"
+                                   PreferUserAccentColor="False" />
+        <StyleInclude Source="avares://XeniaManager.BigScreen/Resources/BigScreenStyle.axaml" />
     </Application.Styles>
 </Application>

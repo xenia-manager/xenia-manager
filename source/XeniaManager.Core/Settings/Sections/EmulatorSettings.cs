@@ -95,7 +95,13 @@ public class EmulatorInfo
     /// Gets the current version of the emulator based on whether nightly builds are enabled
     /// </summary>
     [JsonIgnore]
-    public string CurrentVersion => UseNightlyBuild ? NightlyVersion : Version;
+    public string CurrentVersion
+    {
+        get
+        {
+            return UseNightlyBuild ? NightlyVersion : Version;
+        }
+    }
 
     /// <summary>
     /// Sets the current version of the emulator based on whether nightly builds are enabled

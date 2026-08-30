@@ -26,7 +26,13 @@ public class GameDirectoryWatcherService : IDisposable
     /// <summary>
     /// Gets whether the watcher is currently running.
     /// </summary>
-    public bool IsRunning => _watcher != null;
+    public bool IsRunning
+    {
+        get
+        {
+            return _watcher != null;
+        }
+    }
 
     /// <summary>
     /// Starts monitoring the Games directory for new files.

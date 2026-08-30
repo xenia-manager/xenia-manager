@@ -38,12 +38,24 @@ public record struct EntryTableEntry
     /// <summary>
     /// Gets whether this entry is a Sync List entry.
     /// </summary>
-    public bool IsSyncList => Id == 0x100000000 || Id == 1;
+    public bool IsSyncList
+    {
+        get
+        {
+            return Id == 0x100000000 || Id == 1;
+        }
+    }
 
     /// <summary>
     /// Gets whether this entry is a Sync Data entry.
     /// </summary>
-    public bool IsSyncData => Id == 0x200000000 || Id == 2;
+    public bool IsSyncData
+    {
+        get
+        {
+            return Id == 0x200000000 || Id == 2;
+        }
+    }
 
     /// <summary>
     /// Parses an entry table entry from raw bytes.

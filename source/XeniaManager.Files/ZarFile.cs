@@ -70,6 +70,7 @@ public sealed class ZarFile : IDisposable
                 _files = new List<DirEntry>();
                 CollectFiles(0, string.Empty, _files);
             }
+
             return _files;
         }
     }
@@ -88,6 +89,7 @@ public sealed class ZarFile : IDisposable
                 _entries = new List<DirEntry>();
                 CollectEntries(0, string.Empty, _entries);
             }
+
             return _entries;
         }
     }
@@ -184,10 +186,12 @@ public sealed class ZarFile : IDisposable
             {
                 throw new InvalidDataException($"Bad ZAR magic: 0x{footer.Magic:X8}");
             }
+
             if (footer.Version != ZarFooter.ExpectedVersion)
             {
                 throw new InvalidDataException($"Bad ZAR version: 0x{footer.Version:X8}");
             }
+
             if (footer.TotalSize != (ulong)fs.Length)
             {
                 throw new InvalidDataException("ZAR total size mismatch");
@@ -361,6 +365,7 @@ public sealed class ZarFile : IDisposable
         {
             return null;
         }
+
         return ListDirectoryChildren(entry);
     }
 
@@ -375,11 +380,13 @@ public sealed class ZarFile : IDisposable
         {
             return null;
         }
+
         FileDirectoryEntry entry = _fileTree[(int)nodeIdx];
         if (entry.IsFile)
         {
             return null;
         }
+
         return ListDirectoryChildren(entry);
     }
 
@@ -488,6 +495,7 @@ public sealed class ZarFile : IDisposable
         {
             return null;
         }
+
         return ReadFile(entry);
     }
 
@@ -496,10 +504,7 @@ public sealed class ZarFile : IDisposable
     /// </summary>
     /// <param name="entry">The file entry to read.</param>
     /// <returns>The complete file data as a byte array.</returns>
-    public byte[] ReadFile(FileDirectoryEntry entry)
-    {
-        return ReadFile(entry, 0, entry.GetFileSize());
-    }
+    public byte[] ReadFile(FileDirectoryEntry entry) => ReadFile(entry, 0, entry.GetFileSize());
 
     /// <summary>
     /// Reads a portion of a file starting at the specified offset with the specified length.
@@ -519,6 +524,7 @@ public sealed class ZarFile : IDisposable
             Logger.Trace<ZarFile>($"ReadFile at offset {offset} beyond file size {fileSize}, returning empty");
             return Array.Empty<byte>();
         }
+
         ulong bytesToRead = Math.Min(length, fileSize - offset);
 
         Logger.Trace<ZarFile>($"Reading {bytesToRead} bytes from file at 0x{fileOffset:X} (offset {offset}, size {fileSize})");
@@ -582,6 +588,7 @@ public sealed class ZarFile : IDisposable
             {
                 Directory.CreateDirectory(parentDir);
             }
+
             File.WriteAllBytes(filePath, data);
             Logger.Trace<ZarFile>($"Extracted: {currentPath} ({data.Length} bytes)");
         }
@@ -636,7 +643,8 @@ public sealed class ZarFile : IDisposable
 
         long absoluteOffset = (long)(_compressedDataOffset + offset);
 
-        Logger.Trace<ZarFile>($"Decompressing block {blockIdx} (record {recordIdx}, subIdx {subIdx}, compressedSize {compressedSize}, offset 0x{absoluteOffset:X})");
+        Logger.Trace<ZarFile>(
+            $"Decompressing block {blockIdx} (record {recordIdx}, subIdx {subIdx}, compressedSize {compressedSize}, offset 0x{absoluteOffset:X})");
 
         Stream stream = _stream!;
         stream.Seek(absoluteOffset, SeekOrigin.Begin);
@@ -657,6 +665,7 @@ public sealed class ZarFile : IDisposable
         {
             throw new InvalidDataException($"Unexpected decompressed size {written} for block {blockIdx} (expected 65536, compressed {compressedSize} bytes)");
         }
+
         Logger.Trace<ZarFile>($"Block {blockIdx} decompressed: {compressedSize} -> 65536 bytes");
         return output;
     }
@@ -675,6 +684,7 @@ public sealed class ZarFile : IDisposable
         {
             return string.Empty;
         }
+
         if (offset >= _nameTable.Length)
         {
             Logger.Warning<ZarFile>($"Name offset 0x{offset:X} is beyond name table ({_nameTable.Length} bytes)");
@@ -692,7 +702,8 @@ public sealed class ZarFile : IDisposable
                 Logger.Warning<ZarFile>($"Long name header at offset 0x{offset:X} overflows name table");
                 return string.Empty;
             }
-            nameLength |= (_nameTable[offset + 1] << 7);
+
+            nameLength |= _nameTable[offset + 1] << 7;
             readOffset += 2;
         }
         else
@@ -723,6 +734,7 @@ public sealed class ZarFile : IDisposable
         {
             return false;
         }
+
         for (int i = 0; i < a.Length; i++)
         {
             char ca = a[i], cb = b[i];
@@ -730,15 +742,18 @@ public sealed class ZarFile : IDisposable
             {
                 ca = (char)(ca - ('A' - 'a'));
             }
+
             if (cb >= 'A' && cb <= 'Z')
             {
                 cb = (char)(cb - ('A' - 'a'));
             }
+
             if (ca != cb)
             {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -762,6 +777,7 @@ public sealed class ZarFile : IDisposable
             {
                 throw new EndOfStreamException("Unexpected end of stream");
             }
+
             read += n;
         }
     }
@@ -785,11 +801,13 @@ public sealed class ZarFile : IDisposable
         {
             return;
         }
+
         if (disposing)
         {
             _stream?.Dispose();
             _stream = null;
         }
+
         _disposed = true;
     }
 

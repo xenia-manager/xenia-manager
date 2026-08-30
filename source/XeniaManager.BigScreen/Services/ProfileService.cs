@@ -51,7 +51,7 @@ public class ProfileService : IProfileService
         public string Gamerscore { get; set; } = "0";
     }
 
-    private static readonly VersionState EmptyState = new();
+    private static readonly VersionState EmptyState = new VersionState();
 
     private readonly IBackgroundService _backgroundService;
     private readonly ConcurrentDictionary<XeniaVersion, VersionState> _states = [];
@@ -67,33 +67,68 @@ public class ProfileService : IProfileService
     /// <summary>
     /// Gamertag of the active version's profile, or "Guest" when none exists.
     /// </summary>
-    public string Gamertag => StateForVersion(ActiveVersion).Gamertag;
+    public string Gamertag
+    {
+        get
+        {
+            return StateForVersion(ActiveVersion).Gamertag;
+        }
+    }
 
     /// <summary>
     /// Total gamerscore of the active version's profile, or "0" when none exists.
     /// </summary>
-    public string Gamerscore => StateForVersion(ActiveVersion).Gamerscore;
+    public string Gamerscore
+    {
+        get
+        {
+            return StateForVersion(ActiveVersion).Gamerscore;
+        }
+    }
 
     /// <summary>
     /// All profiles of the active version found on disk.
     /// </summary>
-    public IReadOnlyList<AccountInfo> Profiles => StateForVersion(ActiveVersion).Profiles;
+    public IReadOnlyList<AccountInfo> Profiles
+    {
+        get
+        {
+            return StateForVersion(ActiveVersion).Profiles;
+        }
+    }
 
     /// <summary>
     /// The active version's active profile, or null when no profiles exist.
     /// </summary>
-    public AccountInfo? ActiveProfile => StateForVersion(ActiveVersion).ActiveProfile;
+    public AccountInfo? ActiveProfile
+    {
+        get
+        {
+            return StateForVersion(ActiveVersion).ActiveProfile;
+        }
+    }
 
     /// <summary>
     /// Installed versions (in installation order) that have at least one profile.
     /// </summary>
-    public IReadOnlyList<XeniaVersion> VersionsWithProfiles =>
-        _installedVersions.Where(v => StateForVersion(v).Profiles.Count > 0).ToList();
+    public IReadOnlyList<XeniaVersion> VersionsWithProfiles
+    {
+        get
+        {
+            return _installedVersions.Where(v => StateForVersion(v).Profiles.Count > 0).ToList();
+        }
+    }
 
     /// <summary>
     /// All installed emulator versions (in installation order).
     /// </summary>
-    public IReadOnlyList<XeniaVersion> InstalledVersions => _installedVersions;
+    public IReadOnlyList<XeniaVersion> InstalledVersions
+    {
+        get
+        {
+            return _installedVersions;
+        }
+    }
 
     /// <summary>
     /// Raised after the active profile changes, so the header and game stats refresh.
@@ -187,7 +222,10 @@ public class ProfileService : IProfileService
 
         try
         {
-            VersionState state = new VersionState { Profiles = ProfileManager.LoadProfiles(version) };
+            VersionState state = new VersionState
+            {
+                Profiles = ProfileManager.LoadProfiles(version)
+            };
             _states[version] = state;
             ActivatePersisted(version, state);
         }

@@ -34,7 +34,13 @@ public partial class DiscRowViewModel : ObservableObject
     [ObservableProperty] private bool _isPathValid;
 
     /// <summary>Disc 1 is the main game file and can't be removed or relabeled from this dialog.</summary>
-    public bool IsRemovable => DiscNumber > 1;
+    public bool IsRemovable
+    {
+        get
+        {
+            return DiscNumber > 1;
+        }
+    }
 }
 
 /// <summary>
@@ -49,7 +55,13 @@ public partial class ManageDiscsViewModel : ObservableObject
     /// <summary>The discs currently shown in the dialog (Disc 1 + all additional discs).</summary>
     [ObservableProperty] private ObservableCollection<DiscRowViewModel> _discs = [];
 
-    public string GameTitle => _game.Title;
+    public string GameTitle
+    {
+        get
+        {
+            return _game.Title;
+        }
+    }
 
     public ManageDiscsViewModel(Game game)
     {

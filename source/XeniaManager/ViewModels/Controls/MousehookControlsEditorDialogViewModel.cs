@@ -67,7 +67,13 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
     /// <summary>
     /// Gets the text showing the count of entries.
     /// </summary>
-    public string EntriesCountText => $"{BindingsEntries.Count} entries";
+    public string EntriesCountText
+    {
+        get
+        {
+            return $"{BindingsEntries.Count} entries";
+        }
+    }
 
     /// <summary>
     /// Gets the list of available virtual key codes for the key combobox.
@@ -276,7 +282,7 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
         _multibindTargetEntry = entry;
 
         MultibindOptions.Clear();
-        HashSet<string> checkedItems = (entry.Value)
+        HashSet<string> checkedItems = entry.Value
             .Split(['+'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Select(s => s.Trim())
             .ToHashSet(StringComparer.OrdinalIgnoreCase);

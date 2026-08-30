@@ -50,10 +50,16 @@ public class XboxDatabase
     /// </summary>
     public static List<GameInfo> FilteredDatabase
     {
-        get => _databaseState.FilteredDatabase;
-        private set => _databaseState.FilteredDatabase = value;
+        get
+        {
+            return _databaseState.FilteredDatabase;
+        }
+        private set
+        {
+            _databaseState.FilteredDatabase = value;
+        }
     }
-    
+
     /// <summary>
     /// Loads the complete Xbox games database from the marketplace into memory.
     /// This method populates internal collections for fast game lookups and initializes the search functionality.
@@ -78,7 +84,7 @@ public class XboxDatabase
         {
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: "xbox_database", cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                response = await _client.GetAsync(url, cancellationToken, "xbox_database", ApiCacheDuration, cacheDirectory);
                 Logger.Info<XboxDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -137,7 +143,7 @@ public class XboxDatabase
 
         Logger.Info<XboxDatabase>($"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
     }
-    
+
     /// <summary>
     /// Adds a game to the internal index using the specified title ID.
     /// This enables fast lookups of game information by title ID.
@@ -160,7 +166,7 @@ public class XboxDatabase
             Logger.Trace<XboxDatabase>($"Game with ID '{normalized}' already exists in index, skipping duplicate");
         }
     }
-    
+
     /// <summary>
     /// Filters the database based on the provided search query.
     /// This method updates the FilteredDatabase property with GameInfo objects that match the search query.
@@ -197,7 +203,7 @@ public class XboxDatabase
             Logger.Debug<XboxDatabase>($"Search completed, found {_databaseState.FilteredDatabase.Count} matching titles");
         });
     }
-    
+
     /// <summary>
     /// Retrieves GameInfo for a game with the specified title.
     /// Performs a case-insensitive search through all indexed games to find a match by title.
@@ -217,7 +223,7 @@ public class XboxDatabase
             : $"Game with title '{gameTitle}' not found in database");
         return result;
     }
-    
+
     /// <summary>
     /// Fetches detailed game information for the specified title ID using fallback URLs.
     /// This method retrieves comprehensive game details from the online database.
@@ -240,7 +246,7 @@ public class XboxDatabase
             string url = string.Format(urlFormat, titleId);
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: cacheKey, cacheDuration: ApiCacheDuration, cacheDirectory: cacheDirectory);
+                response = await _client.GetAsync(url, cancellationToken, cacheKey, ApiCacheDuration, cacheDirectory);
                 Logger.Info<XboxDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -269,7 +275,7 @@ public class XboxDatabase
 
         return result;
     }
-    
+
     /// <summary>
     /// Resets all static states and clears HTTP cache. Intended for test isolation only.
     /// This clears all cached data and resets the loaded state to allow for clean testing.
@@ -286,7 +292,8 @@ public class XboxDatabase
     /// <summary>
     /// Downloads artwork using internal HttpClient, independent from Core DownloadManager/ArtworkManager.
     /// </summary>
-    public static async Task DownloadArtworkAsync(string? primaryUrl, string titleId, string? artworkFileName = null, string? savePath = null, SKEncodedImageFormat? format = null)
+    public static async Task DownloadArtworkAsync(string? primaryUrl, string titleId, string? artworkFileName = null, string? savePath = null,
+        SKEncodedImageFormat? format = null)
     {
         if (string.IsNullOrEmpty(artworkFileName) && !string.IsNullOrEmpty(primaryUrl))
         {
@@ -319,7 +326,10 @@ public class XboxDatabase
 
         Logger.Debug<XboxDatabase>($"Starting artwork download for '{artworkFileName}' to '{savePath}' with format {format}");
 
-        using HttpClient httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+        using HttpClient httpClient = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(30)
+        };
         httpClient.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
 
         async Task<bool> TryDownloadAsync(string url)
@@ -327,9 +337,16 @@ public class XboxDatabase
             try
             {
                 using HttpResponseMessage response = await httpClient.GetAsync(url);
-                if (!response.IsSuccessStatusCode) return false;
+                if (!response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+
                 string? contentType = response.Content.Headers.ContentType?.MediaType;
-                if (contentType == null || !contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase)) return false;
+                if (contentType == null || !contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
 
                 byte[] data = await response.Content.ReadAsByteArrayAsync();
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath) ?? ".");
@@ -341,6 +358,7 @@ public class XboxDatabase
                 {
                     DatabaseArtworkHelper.ConvertArtwork(data, savePath, format.Value);
                 }
+
                 return true;
             }
             catch (Exception ex)

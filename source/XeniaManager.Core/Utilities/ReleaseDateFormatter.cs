@@ -31,8 +31,8 @@ public static class ReleaseDateFormatter
                 1 => "st",
                 2 => "nd",
                 3 => "rd",
-                _ => "th",
-            },
+                _ => "th"
+            }
         };
 
         return $"{day}{suffix} {date.ToString("MMMM yyyy", CultureInfo.InvariantCulture)}";

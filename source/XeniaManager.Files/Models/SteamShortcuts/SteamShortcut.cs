@@ -129,6 +129,7 @@ public class SteamShortcut
         {
             return 0;
         }
+
         return BitConverter.ToUInt32(AppId, 0);
     }
 
@@ -136,10 +137,7 @@ public class SteamShortcut
     /// Sets the AppId from an uint value.
     /// </summary>
     /// <param name="appId">The AppId value.</param>
-    public void SetAppIdFromUint(uint appId)
-    {
-        AppId = BitConverter.GetBytes(appId);
-    }
+    public void SetAppIdFromUint(uint appId) => AppId = BitConverter.GetBytes(appId);
 
     /// <summary>
     /// Gets the DevkitOverrideAppID as an uint value.
@@ -151,6 +149,7 @@ public class SteamShortcut
         {
             return 0;
         }
+
         return BitConverter.ToUInt32(DevkitOverrideAppID, 0);
     }
 
@@ -158,10 +157,7 @@ public class SteamShortcut
     /// Sets the DevkitOverrideAppID from a uint value.
     /// </summary>
     /// <param name="appId">The AppId value.</param>
-    public void SetDevkitOverrideAppIdFromUint(uint appId)
-    {
-        DevkitOverrideAppID = BitConverter.GetBytes(appId);
-    }
+    public void SetDevkitOverrideAppIdFromUint(uint appId) => DevkitOverrideAppID = BitConverter.GetBytes(appId);
 
     /// <summary>
     /// Gets the LastPlayTime as a Unix timestamp.
@@ -173,6 +169,7 @@ public class SteamShortcut
         {
             return 0;
         }
+
         return BitConverter.ToInt32(LastPlayTime, 0);
     }
 
@@ -180,10 +177,7 @@ public class SteamShortcut
     /// Sets the LastPlayTime from a Unix timestamp.
     /// </summary>
     /// <param name="timestamp">The Unix timestamp.</param>
-    public void SetLastPlayTimeFromInt(int timestamp)
-    {
-        LastPlayTime = BitConverter.GetBytes(timestamp);
-    }
+    public void SetLastPlayTimeFromInt(int timestamp) => LastPlayTime = BitConverter.GetBytes(timestamp);
 
     /// <summary>
     /// Computes the AppId for this shortcut based on AppName and Exe.
@@ -214,8 +208,9 @@ public class SteamShortcut
             uint temp = i;
             for (int j = 0; j < 8; j++)
             {
-                temp = (temp & 1) == 1 ? (Polynomial ^ (temp >> 1)) : (temp >> 1);
+                temp = (temp & 1) == 1 ? Polynomial ^ (temp >> 1) : temp >> 1;
             }
+
             table[i] = temp;
         }
 
@@ -225,6 +220,7 @@ public class SteamShortcut
             byte index = (byte)((crc & 0xFF) ^ b);
             crc = (crc >> 8) ^ table[index];
         }
+
         return ~crc;
     }
 

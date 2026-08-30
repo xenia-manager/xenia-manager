@@ -32,7 +32,13 @@ public partial class OptimizedSettingsDialogViewModel : ObservableObject, IDispo
     /// <summary>
     /// Gets the message box service for showing dialogs.
     /// </summary>
-    public IMessageBoxService MessageBoxService => _messageBoxService;
+    public IMessageBoxService MessageBoxService
+    {
+        get
+        {
+            return _messageBoxService;
+        }
+    }
 
     public OptimizedSettingsDialogViewModel(ConfigFile currentConfigFile, ConfigFile optimizedConfigFile, string gameName)
     {
@@ -103,7 +109,13 @@ public partial class OptimizedSettingsDialogViewModel : ObservableObject, IDispo
         HasSettings = Settings.Count > 0;
     }
 
-    private bool HasSelectedSetting => SelectedSetting != null;
+    private bool HasSelectedSetting
+    {
+        get
+        {
+            return SelectedSetting != null;
+        }
+    }
 
     /// <summary>
     /// Applies all remaining optimized settings to the current config file.
@@ -127,7 +139,8 @@ public partial class OptimizedSettingsDialogViewModel : ObservableObject, IDispo
                 else
                 {
                     // This shouldn't happen since we filtered them out, but just in case
-                    currentSection.AddOption(setting.OptionName, setting.OptimizedOption.Value, setting.OptimizedOption.Comment, false, setting.OptimizedOption.Type);
+                    currentSection.AddOption(setting.OptionName, setting.OptimizedOption.Value, setting.OptimizedOption.Comment, false,
+                        setting.OptimizedOption.Type);
                 }
 
                 Logger.Debug<OptimizedSettingsDialogViewModel>($"Applied setting: {setting.SectionNameValue}.{setting.OptionName} = {setting.NewValue}");

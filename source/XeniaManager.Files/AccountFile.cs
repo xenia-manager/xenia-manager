@@ -58,7 +58,7 @@ public class AccountFile
         try
         {
             Logger.Info<AccountFile>($"Attempting to decrypt account file using retail keys...");
-            AccountInfo result = Decrypt(file, devkit: false);
+            AccountInfo result = Decrypt(file, false);
             Logger.Info<AccountFile>($"Successfully decrypted account file using retail keys");
             return result;
         }
@@ -68,7 +68,7 @@ public class AccountFile
             // If retail fails, try devkit keys
             try
             {
-                AccountInfo result = Decrypt(file, devkit: true);
+                AccountInfo result = Decrypt(file, true);
                 Logger.Info<AccountFile>($"Successfully decrypted account file using devkit keys");
                 return result;
             }
@@ -107,7 +107,8 @@ public class AccountFile
         try
         {
             byte[] encryptedFile = Encrypt(info, devkit);
-            Logger.Info<AccountFile>($"Successfully encrypted account data using {(devkit ? "devkit" : "retail")} keys. File size: {encryptedFile.Length} bytes");
+            Logger.Info<AccountFile>(
+                $"Successfully encrypted account data using {(devkit ? "devkit" : "retail")} keys. File size: {encryptedFile.Length} bytes");
             Logger.Debug<AccountFile>($"Saving encrypted profile file to {savePath}");
 
             // Ensure the directory exists
@@ -159,7 +160,7 @@ public class AccountFile
             Logger.Debug<AccountFile>($"File HMAC: {BitConverter.ToString(fileHmac)}");
 
             // Generate RC4 key from file HMAC
-            byte[] rc4Key = CryptoUtils.HmacSha1(key, fileHmac, outputLen: 16);
+            byte[] rc4Key = CryptoUtils.HmacSha1(key, fileHmac, 16);
             Logger.Debug<AccountFile>($"RC4 Key: {BitConverter.ToString(rc4Key)}");
 
             // Decrypt confounder + account data (388 bytes at offset 0x10)
@@ -170,12 +171,13 @@ public class AccountFile
             Logger.Debug<AccountFile>($"Decrypted Payload: {BitConverter.ToString(decryptedPayload)}");
 
             // Verify HMAC
-            byte[] verifyHmac = CryptoUtils.HmacSha1(key, decryptedPayload, outputLen: 16);
+            byte[] verifyHmac = CryptoUtils.HmacSha1(key, decryptedPayload, 16);
             Logger.Debug<AccountFile>($"Verify HMAC: {BitConverter.ToString(verifyHmac)}");
 
             if (!fileHmac.SequenceEqual(verifyHmac))
             {
-                Logger.Warning<AccountFile>($"HMAC verification failed. File HMAC: {BitConverter.ToString(fileHmac)}, Computed HMAC: {BitConverter.ToString(verifyHmac)}");
+                Logger.Warning<AccountFile>(
+                    $"HMAC verification failed. File HMAC: {BitConverter.ToString(fileHmac)}, Computed HMAC: {BitConverter.ToString(verifyHmac)}");
                 Logger.Error<AccountFile>("Account file integrity verification failed - HMAC mismatch detected");
 
                 // TODO: Replace with custom exception
@@ -226,7 +228,7 @@ public class AccountFile
         // 0x00 - ReservedFlags (4 bytes)
         Logger.Trace<AccountFile>($"Parsing ReservedFlags at offset {offset:X2} (4 bytes)");
         info.ReservedFlags = (ReservedFlags)BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset));
-        Logger.Debug<AccountFile>($"Parsed ReservedFlags: {info.ReservedFlags} (Value: 0x{((uint)info.ReservedFlags):X8})");
+        Logger.Debug<AccountFile>($"Parsed ReservedFlags: {info.ReservedFlags} (Value: 0x{(uint)info.ReservedFlags:X8})");
         offset += 4;
 
         // 0x04 - LiveFlags (4 bytes)
@@ -265,6 +267,7 @@ public class AccountFile
         {
             info.Passcode[i] = (PasscodeButton)data[offset + i];
         }
+
         Logger.Info<AccountFile>($"Parsed Passcode: [{string.Join(", ", info.Passcode.Select(p => p.ToString()))}]");
         offset += 4;
 
@@ -344,6 +347,7 @@ public class AccountFile
             {
                 rng.GetBytes(confounder);
             }
+
             Logger.Debug<AccountFile>($"Confounder: {BitConverter.ToString(confounder)}");
 
             byte[] accountData = AccountToBytes(info);
@@ -354,11 +358,11 @@ public class AccountFile
             Logger.Debug<AccountFile>($"Payload (Confounder + AccountData): {BitConverter.ToString(payload)}");
 
             // HMAC of confounder + account data
-            byte[] hmac = CryptoUtils.HmacSha1(key, payload, outputLen: 16);
+            byte[] hmac = CryptoUtils.HmacSha1(key, payload, 16);
             Logger.Debug<AccountFile>($"HMAC: {BitConverter.ToString(hmac)}");
 
             // Generate RC4 key from HMAC
-            byte[] rc4Key = CryptoUtils.HmacSha1(key, hmac, outputLen: 16);
+            byte[] rc4Key = CryptoUtils.HmacSha1(key, hmac, 16);
             Logger.Debug<AccountFile>($"RC4 Key: {BitConverter.ToString(rc4Key)}");
 
             // Encrypt confounder + account data
@@ -428,6 +432,7 @@ public class AccountFile
         {
             data[offset + i] = (byte)info.Passcode[i];
         }
+
         offset += 4;
 
         // 0x3C - OnlineDomain

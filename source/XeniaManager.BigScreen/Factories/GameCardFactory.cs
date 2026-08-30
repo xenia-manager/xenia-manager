@@ -14,10 +14,7 @@ public static class GameCardFactory
     /// <summary>
     /// Creates a game card with the given stats (or zeroed defaults when null).
     /// </summary>
-    public static GameCardViewModel Create(Game game, GameStatInfo? stats = null)
-    {
-        return new GameCardViewModel(game, stats);
-    }
+    public static GameCardViewModel Create(Game game, GameStatInfo? stats = null) => new GameCardViewModel(game, stats);
 
     /// <summary>
     /// Creates a dashboard game card, applying the card image mode and

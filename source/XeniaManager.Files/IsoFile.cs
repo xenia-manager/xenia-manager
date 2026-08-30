@@ -165,6 +165,7 @@ public sealed class IsoFile : IDisposable
         {
             return [filePath];
         }
+
         // This is a split archive - find all parts
         string fileWithoutSubExtension = Path.GetFileNameWithoutExtension(fileWithoutExtension);
         string searchPattern = $"{fileWithoutSubExtension}.{extension}.*";
@@ -266,7 +267,11 @@ public sealed class IsoFile : IDisposable
 
         // Stack-based directory traversal (preorder)
         Stack<DirectoryNode> directoryStack = new Stack<DirectoryNode>();
-        directoryStack.Push(new DirectoryNode { Data = rootData, Offset = 0 });
+        directoryStack.Push(new DirectoryNode
+        {
+            Data = rootData,
+            Offset = 0
+        });
 
         while (directoryStack.Count > 0)
         {
@@ -307,11 +312,13 @@ public sealed class IsoFile : IDisposable
                 {
                     allFF = false;
                 }
+
                 if (headerBuffer[i] != 0x00)
                 {
                     allZero = false;
                 }
             }
+
             if (allFF || allZero)
             {
                 continue;
@@ -377,7 +384,11 @@ public sealed class IsoFile : IDisposable
                 uint rightOffsetBytes = (uint)right * 4;
                 if (rightOffsetBytes < (ulong)dirStream.Length)
                 {
-                    directoryStack.Push(new DirectoryNode { Data = currentNode.Data, Offset = right });
+                    directoryStack.Push(new DirectoryNode
+                    {
+                        Data = currentNode.Data,
+                        Offset = right
+                    });
                 }
             }
 
@@ -387,7 +398,11 @@ public sealed class IsoFile : IDisposable
                 uint leftOffsetBytes = (uint)left * 4;
                 if (leftOffsetBytes < (ulong)dirStream.Length)
                 {
-                    directoryStack.Push(new DirectoryNode { Data = currentNode.Data, Offset = left });
+                    directoryStack.Push(new DirectoryNode
+                    {
+                        Data = currentNode.Data,
+                        Offset = left
+                    });
                 }
             }
 
@@ -408,7 +423,11 @@ public sealed class IsoFile : IDisposable
                     }
                 }
 
-                directoryStack.Push(new DirectoryNode { Data = directoryData, Offset = 0 });
+                directoryStack.Push(new DirectoryNode
+                {
+                    Data = directoryData,
+                    Offset = 0
+                });
             }
         }
 
@@ -444,10 +463,12 @@ public sealed class IsoFile : IDisposable
         {
             return;
         }
+
         if (disposing)
         {
             _sectorReader?.Dispose();
         }
+
         _disposed = true;
     }
 

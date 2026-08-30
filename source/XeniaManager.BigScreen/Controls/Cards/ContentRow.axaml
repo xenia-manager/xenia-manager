@@ -4,7 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
         xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="96"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="96"
         x:Class="XeniaManager.BigScreen.Controls.Cards.ContentRow"
         x:DataType="vm:ContentItemViewModel"
         Classes.selected="{Binding IsSelected}">
@@ -23,7 +25,8 @@
             </Border>
         </ControlTemplate>
     </Button.Template>
-    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+    <Grid ColumnDefinitions="Auto,*,Auto"
+          ColumnSpacing="20">
         <!-- Icon: package thumbnail when available, document fallback otherwise -->
         <Panel VerticalAlignment="Center">
             <Image Source="{Binding ThumbnailImage}"

@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
              xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
-             mc:Ignorable="d" d:DesignWidth="355" d:DesignHeight="622"
+             mc:Ignorable="d"
+             d:DesignWidth="355"
+             d:DesignHeight="622"
              x:Class="XeniaManager.BigScreen.Controls.Cards.LibraryCard"
              x:DataType="vm:GameCardViewModel"
              Width="365"
@@ -43,13 +45,22 @@
             <StackPanel HorizontalAlignment="Left"
                         Orientation="Horizontal"
                         Spacing="16">
-                <prim:IconStat Icon="Clock" Stat="{Binding PlaytimeText}" IconSize="22" FontSize="20" />
+                <prim:IconStat Icon="Clock"
+                               Stat="{Binding PlaytimeText}"
+                               IconSize="22"
+                               FontSize="20" />
             </StackPanel>
             <StackPanel HorizontalAlignment="Left"
                         Orientation="Horizontal"
                         Spacing="16">
-                <prim:IconStat Icon="Trophy" Stat="{Binding AchievementsText}" IconSize="22" FontSize="20" />
-                <prim:IconStat Icon="Star" Stat="{Binding GamerscoreText}" IconSize="22" FontSize="20" />
+                <prim:IconStat Icon="Trophy"
+                               Stat="{Binding AchievementsText}"
+                               IconSize="22"
+                               FontSize="20" />
+                <prim:IconStat Icon="Star"
+                               Stat="{Binding GamerscoreText}"
+                               IconSize="22"
+                               FontSize="20" />
             </StackPanel>
         </StackPanel>
     </Border>
