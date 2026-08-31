@@ -136,6 +136,11 @@ public class FileIdentifier
         using BinaryReader reader = new BinaryReader(stream);
 
         byte[] headerBytes = reader.ReadBytes(4);
+        if (headerBytes.Length < 4)
+        {
+            return 0;
+        }
+
         return BinaryPrimitives.ReadUInt32BigEndian(headerBytes);
     }
 

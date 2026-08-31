@@ -19,7 +19,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -44,18 +44,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Assets\TestConfigFile.config.toml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\savegame.svg.header">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\RDR2MPSAVE.SAV.header">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\RDR2SAVE0.SAV.header">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\4d53091000000001.header">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Assets\TestHeaderFile (308).header">
