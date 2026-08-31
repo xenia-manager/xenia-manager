@@ -436,6 +436,271 @@ public sealed class IsoFile : IDisposable
     }
 
     /// <summary>
+    /// Tries to extract the SPA (XDBF) file embedded in the ISO's default.xex.
+    /// </summary>
+    /// <param name="spaFile">The parsed <see cref="SpaFile"/> (caller must <c>Dispose()</c>) if found; otherwise null.</param>
+    /// <returns>True if SPA was found and parsed, false otherwise.</returns>
+    public bool TryGetSpaFile(out SpaFile? spaFile)
+    {
+        spaFile = null;
+        try
+        {
+            if (XexFile is { IsValid: true })
+            {
+                return XexFile.TryGetSpaFile(out spaFile);
+            }
+
+            // Fallback: ISO valid but default.xex missing or invalid - try to locate an alternative XEX inside the ISO.
+            byte[]? xexBytes = TryExtractAlternativeXex();
+            if (xexBytes == null)
+            {
+                return false;
+            }
+
+            XexFile altXex = XexFile.FromBytes(xexBytes);
+            if (!altXex.IsValid)
+            {
+                Logger.Trace<IsoFile>($"ISO alternative XEX invalid: {altXex.ValidationError}");
+                return false;
+            }
+
+            return altXex.TryGetSpaFile(out spaFile);
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<IsoFile>($"TryGetSpaFile failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to extract the dashboard title icon PNG from the ISO's embedded XEX SPA (XDBF image <c>0x8000</c>).
+    /// </summary>
+    /// <returns>PNG bytes if found (valid <c>89 50 4E 47</c> header), null otherwise. Never throws.</returns>
+    public byte[]? TryGetIcon()
+    {
+        try
+        {
+            if (XexFile is { IsValid: true })
+            {
+                byte[]? icon = XexFile.TryGetIcon();
+                if (icon != null)
+                {
+                    Logger.Debug<IsoFile>($"ISO embedded XEX icon extracted ({icon.Length} bytes)");
+                    return icon;
+                }
+            }
+
+            byte[]? xexBytes = TryExtractAlternativeXex();
+            if (xexBytes != null)
+            {
+                XexFile altXex = XexFile.FromBytes(xexBytes);
+                if (altXex.IsValid)
+                {
+                    byte[]? icon = altXex.TryGetIcon();
+                    if (icon != null)
+                    {
+                        Logger.Debug<IsoFile>($"ISO alternative XEX icon extracted ({icon.Length} bytes)");
+                        return icon;
+                    }
+                }
+            }
+
+            Logger.Trace<IsoFile>("ISO TryGetIcon: no icon found");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<IsoFile>($"TryGetIcon failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Searches the ISO file tree for any <c>.xex</c> file other than the already-tried <c>default.xex</c>.
+    /// Used as fallback when <see cref="XexFile"/> is null or its icon is missing.
+    /// </summary>
+    /// <returns>First alternative XEX bytes found, or null.</returns>
+    private byte[]? TryExtractAlternativeXex()
+    {
+        if (_sectorReader == null || XgdInformation == null || !IsValid)
+        {
+            return null;
+        }
+
+        // Re-use the directory walk but collect any .xex candidate different from default.xex.
+        // To avoid duplicating traversal, we do a lightweight search that looks for *.xex entries.
+        // We scan the same GDFX tree used by FindFileInIso, but with a predicate for any .xex.
+        try
+        {
+            uint rootSectors = (XgdInformation.RootDirSize + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
+            byte[] rootData = new byte[XgdInformation.RootDirSize];
+            for (uint i = 0; i < rootSectors; i++)
+            {
+                uint currentSector = XgdInformation.BaseSector + XgdInformation.RootDirSector + i;
+                if (!_sectorReader.TryReadSector(currentSector, out byte[] sectorData))
+                {
+                    return null;
+                }
+
+                uint offset = i * IsoConstants.SECTOR_SIZE;
+                uint length = Math.Min(IsoConstants.SECTOR_SIZE, XgdInformation.RootDirSize - offset);
+                Array.Copy(sectorData, 0, rootData, offset, length);
+            }
+
+            Stack<DirectoryNode> stack = new Stack<DirectoryNode>();
+            stack.Push(new DirectoryNode
+            {
+                Data = rootData,
+                Offset = 0
+            });
+
+            while (stack.Count > 0)
+            {
+                DirectoryNode node = stack.Pop();
+                if (node.Offset * 4 >= (uint)node.Data.Length)
+                {
+                    continue;
+                }
+
+                using MemoryStream dirStream = new MemoryStream(node.Data);
+                using BinaryReader dirReader = new BinaryReader(dirStream);
+
+                uint entryOffset = node.Offset * 4;
+                if (entryOffset + 14 > (uint)dirStream.Length)
+                {
+                    continue;
+                }
+
+                dirStream.Position = entryOffset;
+                byte[] headerBuffer = dirReader.ReadBytes(14);
+                if (headerBuffer.Length != 14)
+                {
+                    continue;
+                }
+
+                ushort left = (ushort)(headerBuffer[0] | (headerBuffer[1] << 8));
+                ushort right = (ushort)(headerBuffer[2] | (headerBuffer[3] << 8));
+                uint sector = (uint)(headerBuffer[4] | (headerBuffer[5] << 8) | (headerBuffer[6] << 16) | (headerBuffer[7] << 24));
+                uint size = (uint)(headerBuffer[8] | (headerBuffer[9] << 8) | (headerBuffer[10] << 16) | (headerBuffer[11] << 24));
+                byte attr = headerBuffer[12];
+                byte nameLen = headerBuffer[13];
+
+                bool allFF = true, allZero = true;
+                for (int i = 0; i < 14; i++)
+                {
+                    if (headerBuffer[i] != 0xFF)
+                    {
+                        allFF = false;
+                    }
+
+                    if (headerBuffer[i] != 0x00)
+                    {
+                        allZero = false;
+                    }
+                }
+
+                if (allFF || allZero || nameLen == 0)
+                {
+                    continue;
+                }
+
+                uint filenameOffset = entryOffset + 14;
+                if (filenameOffset + nameLen > (uint)dirStream.Length)
+                {
+                    continue;
+                }
+
+                dirStream.Position = filenameOffset;
+                byte[] filenameBytes = dirReader.ReadBytes(nameLen);
+                string filename = System.Text.Encoding.ASCII.GetString(filenameBytes);
+
+                // If this is a .xex different from default.xex, extract and return it.
+                bool isXex = filename.EndsWith(".xex", StringComparison.OrdinalIgnoreCase);
+                bool isDefault = filename.Equals(IsoConstants.DEFAULT_EXECUTABLE_NAME, StringComparison.OrdinalIgnoreCase);
+                if (isXex && !isDefault && (attr & 0x10) == 0 && size > 0)
+                {
+                    byte[] fileData = new byte[size];
+                    uint readSector = sector + XgdInformation.BaseSector;
+                    uint processed = 0;
+                    while (processed < size)
+                    {
+                        if (!_sectorReader.TryReadSector(readSector, out byte[] sectorData))
+                        {
+                            break;
+                        }
+
+                        uint toCopy = Math.Min(size - processed, IsoConstants.SECTOR_SIZE);
+                        Array.Copy(sectorData, 0, fileData, processed, toCopy);
+                        readSector++;
+                        processed += toCopy;
+                    }
+
+                    if (processed == size)
+                    {
+                        Logger.Trace<IsoFile>($"ISO alternative XEX candidate found: '{filename}' ({size} bytes)");
+                        return fileData;
+                    }
+                }
+
+                if (right != 0 && right != 0xFFFF)
+                {
+                    uint ro = (uint)right * 4;
+                    if (ro < (ulong)dirStream.Length)
+                    {
+                        stack.Push(new DirectoryNode
+                        {
+                            Data = node.Data,
+                            Offset = right
+                        });
+                    }
+                }
+
+                if (left != 0 && left != 0xFFFF)
+                {
+                    uint lo = (uint)left * 4;
+                    if (lo < (ulong)dirStream.Length)
+                    {
+                        stack.Push(new DirectoryNode
+                        {
+                            Data = node.Data,
+                            Offset = left
+                        });
+                    }
+                }
+
+                if ((attr & 0x10) != 0 && size > 0)
+                {
+                    uint dirSectors = (size + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
+                    byte[] directoryData = new byte[size];
+                    for (uint i = 0; i < dirSectors; i++)
+                    {
+                        uint s = XgdInformation.BaseSector + sector + i;
+                        if (_sectorReader.TryReadSector(s, out byte[] sd))
+                        {
+                            uint off = i * IsoConstants.SECTOR_SIZE;
+                            uint len = Math.Min(IsoConstants.SECTOR_SIZE, size - off);
+                            Array.Copy(sd, 0, directoryData, off, len);
+                        }
+                    }
+
+                    stack.Push(new DirectoryNode
+                    {
+                        Data = directoryData,
+                        Offset = 0
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<IsoFile>($"TryExtractAlternativeXex failed: {ex.Message}");
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Internal class representing a directory node during traversal.
     /// </summary>
     private sealed class DirectoryNode

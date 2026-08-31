@@ -758,6 +758,133 @@ public sealed class ZarFile : IDisposable
     }
 
     /// <summary>
+    /// Tries to extract the SPA (XDBF) file embedded in the ZAR archive's XEX.
+    /// </summary>
+    /// <param name="spaFile">The parsed <see cref="SpaFile"/> (caller must <c>Dispose()</c>) if found; otherwise null.</param>
+    /// <returns>True if SPA was found and parsed, false otherwise.</returns>
+    public bool TryGetSpaFile(out SpaFile? spaFile)
+    {
+        spaFile = null;
+        try
+        {
+            if (XexFile is { IsValid: true })
+            {
+                return XexFile.TryGetSpaFile(out spaFile);
+            }
+
+            byte[]? xexBytes = TryExtractAlternativeXexBytes();
+            if (xexBytes == null)
+            {
+                return false;
+            }
+
+            XexFile altXex = XexFile.FromBytes(xexBytes);
+            if (!altXex.IsValid)
+            {
+                Logger.Trace<ZarFile>($"ZAR alternative XEX invalid: {altXex.ValidationError}");
+                return false;
+            }
+
+            return altXex.TryGetSpaFile(out spaFile);
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<ZarFile>($"TryGetSpaFile failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to extract the dashboard title icon PNG from the ZAR archive.
+    /// </summary>
+    /// <returns>PNG bytes if found (valid <c>89 50 4E 47</c> header), null otherwise. Never throws.</returns>
+    public byte[]? TryGetIcon()
+    {
+        try
+        {
+            if (XexFile is { IsValid: true })
+            {
+                byte[]? icon = XexFile.TryGetIcon();
+                if (icon != null)
+                {
+                    Logger.Debug<ZarFile>($"ZAR embedded XEX icon extracted ({icon.Length} bytes)");
+                    return icon;
+                }
+            }
+
+            byte[]? xexBytes = TryExtractAlternativeXexBytes();
+            if (xexBytes != null)
+            {
+                XexFile altXex = XexFile.FromBytes(xexBytes);
+                if (altXex.IsValid)
+                {
+                    byte[]? icon = altXex.TryGetIcon();
+                    if (icon != null)
+                    {
+                        Logger.Debug<ZarFile>($"ZAR alternative XEX icon extracted ({icon.Length} bytes)");
+                        return icon;
+                    }
+                }
+            }
+
+            Logger.Trace<ZarFile>("ZAR TryGetIcon: no icon found");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<ZarFile>($"TryGetIcon failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Searches the ZAR file tree for any <c>.xex</c> file other than the already-tried <c>default.xex</c>.
+    /// </summary>
+    /// <returns>First alternative XEX bytes found, or null.</returns>
+    private byte[]? TryExtractAlternativeXexBytes()
+    {
+        if (!IsValid || _fileTree.Count == 0)
+        {
+            return null;
+        }
+
+        foreach (DirEntry entry in Files)
+        {
+            if (!entry.IsFile || !entry.Name.EndsWith(".xex", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (entry.Name.Equals("default.xex", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            try
+            {
+                FileDirectoryEntry? dirEntry = Lookup(entry.Name);
+                if (dirEntry == null || !dirEntry.IsFile)
+                {
+                    continue;
+                }
+
+                byte[] data = ReadFile(dirEntry);
+                if (data.Length >= 0x18)
+                {
+                    Logger.Trace<ZarFile>($"ZAR alternative XEX candidate: '{entry.Name}' ({data.Length} bytes)");
+                    return data;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Trace<ZarFile>($"ZAR failed to read alternative XEX '{entry.Name}': {ex.Message}");
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Reads exactly <paramref name="count"/> bytes from the stream into the buffer.
     /// Unlike Stream.Read, this guarantees the requested number of bytes are read
     /// or throws EndOfStreamException.

@@ -918,6 +918,156 @@ public class StfsFile : IDisposable
     }
 
     /// <summary>
+    /// Tries to extract the SPA (XDBF) file embedded in the STFS package's XEX.
+    /// </summary>
+    /// <param name="spaFile">The parsed <see cref="SpaFile"/> (caller must <c>Dispose()</c>) if found; otherwise null.</param>
+    /// <returns>True if SPA was found and parsed, false otherwise.</returns>
+    public bool TryGetSpaFile(out SpaFile? spaFile)
+    {
+        spaFile = null;
+        try
+        {
+            byte[]? xexBytes = TryExtractXexBytes();
+            if (xexBytes == null)
+            {
+                return false;
+            }
+
+            XexFile xex = XexFile.FromBytes(xexBytes);
+            if (!xex.IsValid)
+            {
+                Logger.Trace<StfsFile>($"STFS XEX bytes found but XexFile invalid: {xex.ValidationError}");
+                return false;
+            }
+
+            return xex.TryGetSpaFile(out spaFile);
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<StfsFile>($"TryGetSpaFile failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to extract the dashboard title icon PNG from the STFS package.
+    /// </summary>
+    /// <returns>PNG/JPEG bytes if found (valid image), null otherwise. Never throws.</returns>
+    /// <remarks>
+    /// Search order: STFS thumbnail images from metadata → XEX SPA (XDBF image <c>0x8000</c>) via embedded <c>default.xex</c> as last resort.
+    /// Thumbnail is preferred because it is directly accessible without decrypting/decompressing the XEX PE.
+    /// </remarks>
+    public byte[]? TryGetIcon()
+    {
+        try
+        {
+            // Prefer STFS thumbnail images stored in package metadata (fast, no XEX decrypt/decompress).
+            if (Metadata.ThumbnailImage is { Length: > 0 } thumb && IsValidImageData(thumb))
+            {
+                Logger.Debug<StfsFile>($"STFS ThumbnailImage ({thumb.Length} bytes)");
+                return thumb;
+            }
+
+            if (Metadata.TitleThumbnailImage is { Length: > 0 } titleThumb && IsValidImageData(titleThumb))
+            {
+                Logger.Debug<StfsFile>($"STFS TitleThumbnailImage ({titleThumb.Length} bytes)");
+                return titleThumb;
+            }
+
+            // Last resort: embedded XEX SPA (requires AES+LZX PE extraction).
+            byte[]? xexBytes = TryExtractXexBytes();
+            if (xexBytes != null)
+            {
+                XexFile xex = XexFile.FromBytes(xexBytes);
+                if (xex.IsValid)
+                {
+                    byte[]? icon = xex.TryGetIcon();
+                    if (icon != null)
+                    {
+                        Logger.Debug<StfsFile>($"STFS embedded XEX icon extracted ({icon.Length} bytes)");
+                        return icon;
+                    }
+                }
+            }
+
+            Logger.Trace<StfsFile>("STFS TryGetIcon: no icon found (no valid thumbnails and no XEX SPA)");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<StfsFile>($"TryGetIcon failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Attempts to locate and extract the XEX bytes from the STFS package.
+    /// </summary>
+    /// <returns>XEX bytes if found, null otherwise.</returns>
+    private byte[]? TryExtractXexBytes()
+    {
+        if (FileEntries.Count == 0)
+        {
+            Logger.Trace<StfsFile>("STFS TryExtractXexBytes: no file entries (header-only or empty package)");
+            return null;
+        }
+
+        // Prefer default.xex (case-insensitive) at any path; fallback to any .xex file.
+        StfsFileEntry? entry = FileEntries.FirstOrDefault(e =>
+            !e.IsDirectory && e.FileName.Equals("default.xex", StringComparison.OrdinalIgnoreCase));
+
+        entry ??= FileEntries.FirstOrDefault(e =>
+            !e.IsDirectory && e.FileName.EndsWith(".xex", StringComparison.OrdinalIgnoreCase));
+
+        if (entry == null)
+        {
+            Logger.Trace<StfsFile>("STFS TryExtractXexBytes: no .xex entry found");
+            return null;
+        }
+
+        try
+        {
+            byte[] data = ExtractFile(entry);
+            if (data.Length < 0x18)
+            {
+                Logger.Trace<StfsFile>($"STFS XEX entry '{entry.FileName}' too short ({data.Length} bytes)");
+                return null;
+            }
+
+            Logger.Trace<StfsFile>($"STFS extracted XEX '{entry.FileName}' ({data.Length} bytes)");
+            return data;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<StfsFile>($"STFS failed to extract XEX '{entry.FileName}': {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Checks whether the supplied bytes look like a valid PNG or JPEG image (header-only validation).
+    /// </summary>
+    private static bool IsValidImageData(byte[] data)
+    {
+        if (data.Length < 8)
+        {
+            return false;
+        }
+
+        // PNG signature: 89 50 4E 47 0D 0A 1A 0A
+        bool isPng = data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4E && data[3] == 0x47
+                     && data[4] == 0x0D && data[5] == 0x0A && data[6] == 0x1A && data[7] == 0x0A;
+        if (isPng)
+        {
+            return true;
+        }
+
+        // JPEG signature: FF D8 FF
+        bool isJpeg = data[0] == 0xFF && data[1] == 0xD8 && data[2] == 0xFF;
+        return isJpeg;
+    }
+
+    /// <summary>
     /// Gets file entries by path indicator (for directory support).
     /// </summary>
     /// <param name="pathIndicator">The path indicator (-1 for root).</param>
