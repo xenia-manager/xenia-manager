@@ -284,15 +284,17 @@ public class GameManager
 
     /// <summary>
     /// Retrieves game details by parsing the game file directly without launching Xenia.
-    /// Supports STFS packages (CON, LIVE, PIRS), XEX executables (.xex), and ISO disc images (.iso, .xiso).
+    /// Supports STFS (CON/LIVE/PIRS), SVOD (GOD - file or directory with <c>.data</c>), XEX (.xex), ISO/XISO and ZAR.
+    /// For SVOD the <paramref name="gamePath"/> may be the header file (<c>…\9788EAE3AB44A2D1BFCD</c>), the game root
+    /// directory (<c>…\Forza Horizon</c>) or the <c>.data</c> directory; <see cref="SvodFile.Load"/> normalises all three.
     /// </summary>
-    /// <param name="gamePath">The path to the game file to analyze</param>
-    /// <returns>Parsed game details. Returns default values if the file type is not recognized.</returns>
+    /// <param name="gamePath">The path to the game file or SVOD directory to analyze.</param>
+    /// <returns>Parsed game details (Title, TitleId, MediaId); returns defaults if the file type is not recognized or parsing fails.</returns>
     public static ParsedGameDetails GetGameDetails(string gamePath)
     {
         Logger.Info<GameManager>($"Starting to retrieve game details for: {gamePath}");
 
-        if (!File.Exists(gamePath))
+        if (!File.Exists(gamePath) && !Directory.Exists(gamePath))
         {
             Logger.Error<GameManager>($"Game file does not exist: {gamePath}");
             return new ParsedGameDetails();
@@ -389,6 +391,46 @@ public class GameManager
                     string titleId = zar.XexFile.TitleId;
                     string mediaId = zar.XexFile.MediaId;
                     Logger.Info<GameManager>($"ZAR archive parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
+                    return new ParsedGameDetails
+                    {
+                        Title = title,
+                        TitleId = titleId,
+                        MediaId = mediaId
+                    };
+                }
+
+                // SVOD packages (GOD / Installed Game) - disc-based STFS variant with header + .data
+                case FileSignature.SVOD:
+                {
+                    Logger.Info<GameManager>($"Detected SVOD package ({fileSignature}), parsing: {gamePath}");
+                    using SvodFile svod = SvodFile.Load(gamePath);
+                    if (!svod.IsValid)
+                    {
+                        Logger.Warning<GameManager>($"SVOD package is invalid: {svod.ValidationError}");
+                        return new ParsedGameDetails();
+                    }
+
+                    // Prefer XEX TitleId/MediaId when available (more authoritative), fallback to STFS metadata
+                    string titleId = svod.XexFile is { IsValid: true } xex && !string.IsNullOrWhiteSpace(xex.TitleId) && xex.TitleId != "00000000"
+                        ? xex.TitleId
+                        : svod.Metadata.TitleIdHex;
+                    string mediaId = svod.XexFile is { IsValid: true } xex2 && !string.IsNullOrWhiteSpace(xex2.MediaId) && xex2.MediaId != "00000000"
+                        ? xex2.MediaId
+                        : svod.Metadata.MediaIdHex;
+                    string title = !string.IsNullOrWhiteSpace(svod.Metadata.TitleName)
+                        ? svod.Metadata.TitleName
+                        : !string.IsNullOrWhiteSpace(svod.Metadata.DisplayName)
+                            ? svod.Metadata.DisplayName
+                            : Path.GetFileNameWithoutExtension(gamePath);
+
+                    // If gamePath is a directory (GOD root), use directory name as title fallback
+                    if (Directory.Exists(gamePath) && string.IsNullOrWhiteSpace(svod.Metadata.TitleName) &&
+                        string.IsNullOrWhiteSpace(svod.Metadata.DisplayName))
+                    {
+                        title = new DirectoryInfo(gamePath).Name;
+                    }
+
+                    Logger.Info<GameManager>($"SVOD parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
                     return new ParsedGameDetails
                     {
                         Title = title,

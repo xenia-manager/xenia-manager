@@ -61,6 +61,16 @@ public class FileIdentifier
     {
         Logger.Trace<FileIdentifier>($"Identifying file type for: {filePath}");
 
+        // Handle SVOD directories (GOD / Installed Game) containing Data0000 etc.
+        if (Directory.Exists(filePath))
+        {
+            if (IsSvodDirectory(filePath))
+            {
+                Logger.Info<FileIdentifier>($"File identified as SVOD by directory structure: {filePath}");
+                return FileSignature.SVOD;
+            }
+        }
+
         if (!File.Exists(filePath))
         {
             Logger.Error<FileIdentifier>($"File does not exist: {filePath}");
@@ -102,6 +112,16 @@ public class FileIdentifier
             PirsMagic => FileSignature.PIRS,
             _ => FileSignature.Unknown
         };
+
+        // Differentiate STFS vs SVOD (GOD) when magic is CON/LIVE/PIRS – SVOD has DescriptorType == 1 at 0x3A9
+        if (detectedSignature is FileSignature.CON or FileSignature.LIVE or FileSignature.PIRS)
+        {
+            if (IsSvodPackage(filePath))
+            {
+                Logger.Info<FileIdentifier>($"File identified as SVOD by descriptor: {filePath}");
+                return FileSignature.SVOD;
+            }
+        }
 
         // Check if it might be an XISO by validating the structure
         if (detectedSignature == FileSignature.Unknown)
@@ -159,6 +179,55 @@ public class FileIdentifier
         catch (Exception ex)
         {
             Logger.Trace<FileIdentifier>($"XISO validation failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if a file is an SVOD package (GOD / Installed Game) by reading DescriptorType at 0x3A9 (int32 BE).
+    /// </summary>
+    private static bool IsSvodPackage(string filePath)
+    {
+        try
+        {
+            using FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            if (fs.Length < 0x3AD)
+            {
+                return false;
+            }
+
+            byte[] buf = new byte[4];
+            fs.Seek(0x3A9, SeekOrigin.Begin);
+            int read = fs.Read(buf, 0, 4);
+            if (read < 4)
+            {
+                return false;
+            }
+
+            int descriptorType = BinaryPrimitives.ReadInt32BigEndian(buf);
+            // SVOD has DescriptorType == 1, STFS == 0
+            return descriptorType == 1;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<FileIdentifier>($"SVOD check failed for {filePath}: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if a directory is an SVOD package (contains Data0000 etc. or header with SVOD descriptor).
+    /// </summary>
+    private static bool IsSvodDirectory(string dirPath)
+    {
+        try
+        {
+            // SvodFile.IsSvodPackage handles both file and directory, delegate to avoid duplication
+            return SvodFile.IsSvodPackage(dirPath);
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<FileIdentifier>($"SVOD directory check failed for {dirPath}: {ex.Message}");
             return false;
         }
     }

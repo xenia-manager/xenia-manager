@@ -802,3 +802,320 @@ public class ZarFileIconTests
         Assert.That(zar.TryGetIcon(), Is.Null);
     }
 }
+
+[TestFixture]
+public class SvodFileIconTests
+{
+    private static byte[] LoadIcon()
+    {
+        Assembly coreAssembly = typeof(XeniaManager.Core.Manage.ArtworkManager).Assembly;
+        using Stream? s = coreAssembly.GetManifestResourceStream("XeniaManager.Core.Assets.Artwork.Icon.png");
+        Assume.That(s, Is.Not.Null);
+        using MemoryStream ms = new MemoryStream();
+        s!.CopyTo(ms);
+        return ms.ToArray();
+    }
+
+    private static byte[] BuildGpdWithIcon(uint imageId = 0x8000, byte[]? png = null)
+    {
+        png ??= LoadIcon();
+        using GpdFile gpd = GpdFile.Create();
+        gpd.AddImage(imageId, png);
+        return gpd.ToBytes();
+    }
+
+    private static byte[] BuildPeImage(string sectionName, byte[] sectionData, int rawAddr = 0x200)
+    {
+        int peSize = rawAddr + sectionData.Length + 0x100;
+        peSize = (peSize + 15) & ~15;
+        byte[] pe = new byte[peSize];
+        pe[0] = 0x4D;
+        pe[1] = 0x5A;
+        BinaryPrimitives.WriteInt32LittleEndian(pe.AsSpan(0x3C), 0x80);
+        pe[0x80] = 0x50;
+        pe[0x81] = 0x45;
+        pe[0x82] = 0x00;
+        pe[0x83] = 0x00;
+        BinaryPrimitives.WriteUInt16LittleEndian(pe.AsSpan(0x84), 0x014C);
+        BinaryPrimitives.WriteUInt16LittleEndian(pe.AsSpan(0x86), 1);
+        BinaryPrimitives.WriteUInt16LittleEndian(pe.AsSpan(0x94), 0xE0);
+        BinaryPrimitives.WriteUInt16LittleEndian(pe.AsSpan(0x98), 0x010B);
+        int sh = 0x98 + 0xE0;
+        byte[] nameBytes = Encoding.ASCII.GetBytes(sectionName);
+        Array.Copy(nameBytes, 0, pe, sh, Math.Min(nameBytes.Length, 8));
+        BinaryPrimitives.WriteUInt32LittleEndian(pe.AsSpan(sh + 8), (uint)sectionData.Length);
+        BinaryPrimitives.WriteUInt32LittleEndian(pe.AsSpan(sh + 12), 0x1000);
+        BinaryPrimitives.WriteUInt32LittleEndian(pe.AsSpan(sh + 16), (uint)sectionData.Length);
+        BinaryPrimitives.WriteUInt32LittleEndian(pe.AsSpan(sh + 20), (uint)rawAddr);
+        Array.Copy(sectionData, 0, pe, rawAddr, sectionData.Length);
+        return pe;
+    }
+
+    private static byte[] BuildMinimalXex(uint titleId, byte[] peImage, uint mediaId = 0x12345678)
+    {
+        const uint headerSize = 0x300;
+        const uint securityOffset = 0x40;
+        const int executionInfoOffset = 0x40 + 0x184;
+        int totalSize = (int)headerSize + peImage.Length + 0x100;
+        totalSize = (totalSize + 15) & ~15;
+        byte[] xex = new byte[totalSize];
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(0x00), 0x58455832u);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(0x08), headerSize);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(0x10), securityOffset);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(0x14), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(0x18), 0x00040006u);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(0x1C), (uint)executionInfoOffset);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan((int)securityOffset + 0x00), 0x180);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan((int)securityOffset + 0x04), (uint)peImage.Length);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan((int)securityOffset + 0x178), 0xFF);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan((int)securityOffset + 0x17C), 0xFFFFFFFF);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(executionInfoOffset + 0x00), mediaId);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(executionInfoOffset + 0x04), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(executionInfoOffset + 0x08), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(xex.AsSpan(executionInfoOffset + 0x0C), titleId);
+        xex[executionInfoOffset + 0x12] = 1;
+        xex[executionInfoOffset + 0x13] = 1;
+        Array.Copy(peImage, 0, xex, (int)headerSize, peImage.Length);
+        return xex;
+    }
+
+    private static SvodFile CreateMockSvodWithXex(byte[] xexBytes, byte[]? thumbnail = null)
+    {
+        ConstructorInfo ctor = typeof(SvodFile).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null)!;
+        SvodFile svod = (SvodFile)ctor.Invoke(null);
+        typeof(SvodFile).GetProperty("IsValid")!.SetValue(svod, true);
+        typeof(SvodFile).GetProperty("XexFile")!.SetValue(svod, XexFile.FromBytes(xexBytes));
+        if (thumbnail != null)
+        {
+            StfsMetadata meta = new StfsMetadata();
+            meta.ThumbnailImage = thumbnail;
+            meta.HeaderSize = 0xB000;
+            typeof(SvodFile).GetProperty("Metadata")!.SetValue(svod, meta);
+        }
+
+        return svod;
+    }
+
+    private static SvodFile CreateMockSvodWithThumbnailOnly(byte[] thumbnail)
+    {
+        ConstructorInfo ctor = typeof(SvodFile).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null)!;
+        SvodFile svod = (SvodFile)ctor.Invoke(null);
+        typeof(SvodFile).GetProperty("IsValid")!.SetValue(svod, true);
+        StfsMetadata meta = new StfsMetadata();
+        meta.ThumbnailImage = thumbnail;
+        meta.HeaderSize = 0xB000;
+        typeof(SvodFile).GetProperty("Metadata")!.SetValue(svod, meta);
+        return svod;
+    }
+
+    private static SvodFile CreateMockSvodInvalid()
+    {
+        ConstructorInfo ctor = typeof(SvodFile).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null)!;
+        SvodFile svod = (SvodFile)ctor.Invoke(null);
+        typeof(SvodFile).GetProperty("IsValid")!.SetValue(svod, false);
+        return svod;
+    }
+
+    [Test]
+    public void TryGetIcon_InvalidSvod_ReturnsNull()
+    {
+        using SvodFile svod = CreateMockSvodInvalid();
+        Assert.That(svod.TryGetIcon(), Is.Null);
+        Assert.That(svod.TryGetSpaFile(out SpaFile? spa), Is.False);
+        Assert.That(spa, Is.Null);
+    }
+
+    [Test]
+    public void TryGetIcon_ThumbnailFallback_ReturnsThumbnail()
+    {
+        byte[] icon = LoadIcon();
+        using SvodFile svod = CreateMockSvodWithThumbnailOnly(icon);
+        byte[]? extracted = svod.TryGetIcon();
+        Assert.That(extracted, Is.Not.Null);
+        Assert.That(extracted!.Length, Is.EqualTo(icon.Length));
+    }
+
+    [Test]
+    public void TryGetIcon_PrefersThumbnailOverXex()
+    {
+        byte[] thumb = new byte[]
+        {
+            0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01
+        };
+        uint titleId = 0x4D530910;
+        byte[] icon = LoadIcon();
+        byte[] spa = BuildGpdWithIcon(0x8000, icon);
+        byte[] pe = BuildPeImage($"{titleId:X8}", spa);
+        byte[] xexBytes = BuildMinimalXex(titleId, pe);
+        using SvodFile svod = CreateMockSvodWithXex(xexBytes, thumb);
+        byte[]? extracted = svod.TryGetIcon();
+        Assert.That(extracted, Is.Not.Null);
+        Assert.That(extracted![0], Is.EqualTo(0xFF));
+        Assert.That(extracted[1], Is.EqualTo(0xD8));
+    }
+
+    [Test]
+    public void TryGetIcon_WithValidXex_ReturnsIconWhenNoThumbnail()
+    {
+        uint titleId = 0x4D530910;
+        byte[] icon = LoadIcon();
+        byte[] spa = BuildGpdWithIcon(0x8000, icon);
+        byte[] pe = BuildPeImage($"{titleId:X8}", spa);
+        byte[] xexBytes = BuildMinimalXex(titleId, pe);
+        using SvodFile svod = CreateMockSvodWithXex(xexBytes, null);
+        // Clear thumbnail
+        svod.Metadata.ThumbnailImage = Array.Empty<byte>();
+        byte[]? extracted = svod.TryGetIcon();
+        Assert.That(extracted, Is.Not.Null);
+        Assert.That(extracted!.Length, Is.EqualTo(icon.Length));
+    }
+
+    [Test]
+    public void TryGetIcon_WithValidXex_NoIcon_ReturnsNull()
+    {
+        uint titleId = 0x4D530910;
+        byte[] pe = BuildPeImage($"{titleId:X8}", Encoding.ASCII.GetBytes("no icon"));
+        byte[] xexBytes = BuildMinimalXex(titleId, pe);
+        using SvodFile svod = CreateMockSvodWithXex(xexBytes, null);
+        svod.Metadata.ThumbnailImage = Array.Empty<byte>();
+        Assert.That(svod.TryGetIcon(), Is.Null);
+    }
+
+    [Test]
+    public void TryGetIcon_InvalidXex_ReturnsNull()
+    {
+        byte[] badXex = [0x00, 0x01, 0x02, 0x03];
+        using SvodFile svod = CreateMockSvodWithXex(badXex, null);
+        svod.Metadata.ThumbnailImage = Array.Empty<byte>();
+        Assert.That(svod.TryGetIcon(), Is.Null);
+    }
+
+    [Test]
+    public void TryGetIcon_NeverThrows()
+    {
+        using SvodFile svod = CreateMockSvodInvalid();
+        Assert.DoesNotThrow(() => svod.TryGetIcon());
+        Assert.DoesNotThrow(() => svod.TryGetSpaFile(out _));
+    }
+
+    [Test]
+    public void TryGetSpaFile_WithValidXex_ReturnsSpa()
+    {
+        uint titleId = 0x4D530910;
+        byte[] spa = BuildGpdWithIcon();
+        byte[] pe = BuildPeImage($"{titleId:X8}", spa);
+        byte[] xexBytes = BuildMinimalXex(titleId, pe);
+        using SvodFile svod = CreateMockSvodWithXex(xexBytes);
+        bool ok = svod.TryGetSpaFile(out SpaFile? spaFile);
+        Assert.That(ok, Is.True);
+        Assert.That(spaFile, Is.Not.Null);
+        Assert.That(spaFile!.IsValid, Is.True);
+        spaFile.Dispose();
+    }
+
+    [Test]
+    public void TryGetSpaFile_InvalidXex_ReturnsFalse()
+    {
+        byte[] pe = BuildPeImage("NOPE", new byte[64]);
+        byte[] xexBytes = BuildMinimalXex(0x12345678, pe);
+        using SvodFile svod = CreateMockSvodWithXex(xexBytes);
+        bool ok = svod.TryGetSpaFile(out SpaFile? spaFile);
+        Assert.That(ok, Is.False);
+        Assert.That(spaFile, Is.Null);
+    }
+
+    [Test]
+    public void IsSvodPackage_DetectsDescriptorType()
+    {
+        // Build a minimal STFS header with CON magic and DescriptorType 0 vs 1 (4-byte BE at 0x3A9)
+        byte[] stfsHeader = new byte[0x400];
+        Encoding.ASCII.GetBytes("CON ").CopyTo(stfsHeader, 0);
+        BinaryPrimitives.WriteInt32BigEndian(stfsHeader.AsSpan(0x3A9), 0); // STFS
+        string tmpStfs = Path.Combine(Path.GetTempPath(), $"test_stfs_{Guid.NewGuid()}.bin");
+        File.WriteAllBytes(tmpStfs, stfsHeader);
+        try
+        {
+            Assert.That(SvodFile.IsSvodPackage(tmpStfs), Is.False);
+        }
+        finally { File.Delete(tmpStfs); }
+
+        byte[] svodHeader = new byte[0x400];
+        Encoding.ASCII.GetBytes("CON ").CopyTo(svodHeader, 0);
+        BinaryPrimitives.WriteInt32BigEndian(svodHeader.AsSpan(0x3A9), 1); // SVOD
+        string tmpSvod = Path.Combine(Path.GetTempPath(), $"test_svod_{Guid.NewGuid()}.bin");
+        File.WriteAllBytes(tmpSvod, svodHeader);
+        try
+        {
+            Assert.That(SvodFile.IsSvodPackage(tmpSvod), Is.True);
+        }
+        finally { File.Delete(tmpSvod); }
+    }
+
+    [Test]
+    public void IsSvodPackage_DirectoryWithDataFiles()
+    {
+        string tmpDir = Path.Combine(Path.GetTempPath(), $"svod_test_{Guid.NewGuid()}");
+        Directory.CreateDirectory(tmpDir);
+        try
+        {
+            // Create Data0000 with CON magic and SVOD descriptor (Data0000 is header for multi-file SVOD)
+            byte[] header = new byte[0x1000];
+            Encoding.ASCII.GetBytes("CON ").CopyTo(header, 0);
+            BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(0x3A9), 1);
+            File.WriteAllBytes(Path.Combine(tmpDir, "Data0000"), header);
+            File.WriteAllBytes(Path.Combine(tmpDir, "Data0001"), new byte[0x1000]);
+            Assert.That(SvodFile.IsSvodPackage(tmpDir), Is.True);
+        }
+        finally { Directory.Delete(tmpDir, true); }
+    }
+
+    [Test]
+    public void Load_InvalidSvod_ReturnsInvalid()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"test_invalid_{Guid.NewGuid()}.bin");
+        File.WriteAllBytes(tmp, [0x00, 0x01, 0x02, 0x03]);
+        try
+        {
+            using SvodFile svod = SvodFile.Load(tmp);
+            Assert.That(svod.IsValid, Is.False);
+            Assert.That(svod.TryGetIcon(), Is.Null);
+        }
+        finally
+        {
+            if (File.Exists(tmp))
+            {
+                File.Delete(tmp);
+            }
+        }
+    }
+
+    [Test]
+    public void SvodVolumeDescriptor_ParseAndToBytes_RoundTrip()
+    {
+        byte[] raw = new byte[0x24];
+        raw[0x00] = 0x24;
+        raw[0x01] = 5;
+        raw[0x02] = 2;
+        raw[0x03] = 3;
+        for (int i = 0; i < 0x14; i++)
+        {
+            raw[0x04 + i] = (byte)i;
+        }
+
+        raw[0x18] = 0x40; // Enhanced
+        raw[0x19] = 0x01;
+        raw[0x1A] = 0x02;
+        raw[0x1B] = 0x03; // DataBlockCount 0x010203
+        raw[0x1C] = 0x04;
+        raw[0x1D] = 0x05;
+        raw[0x1E] = 0x06; // DataBlockOffset 0x040506
+        SvodVolumeDescriptor desc = SvodVolumeDescriptor.FromBytes(raw, 0);
+        Assert.That(desc.VolumeDescriptorSize, Is.EqualTo(0x24));
+        Assert.That(desc.IsEnhancedGdfLayout, Is.True);
+        Assert.That(desc.DataBlockCount, Is.EqualTo(0x010203));
+        Assert.That(desc.DataBlockOffset, Is.EqualTo(0x040506));
+        byte[] outBytes = desc.ToBytes();
+        Assert.That(outBytes[0x18], Is.EqualTo(0x40));
+        Assert.That(outBytes[0x19], Is.EqualTo(0x01));
+    }
+}

@@ -48,5 +48,10 @@ public enum FileSignature
     /// <summary>
     /// ISO disc image.
     /// </summary>
-    ISO
+    ISO,
+
+    /// <summary>
+    /// SVOD package (GOD / Installed Game) - disc-based STFS variant.
+    /// </summary>
+    SVOD
 }
