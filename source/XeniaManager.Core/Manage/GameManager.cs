@@ -804,17 +804,25 @@ public class GameManager
         newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "Boxart.png");
         Logger.Debug<GameManager>($"Boxart artwork path set: {newGame.Artwork.Boxart}");
 
-        // Icon
-        Logger.Info<GameManager>($"Starting icon download process for game: '{newGame.Title}'");
+        // Icon - attempt embedded XEX SPA/XDBF icon first (STFS/SVOD/ISO/ZAR/XEX), then fallback to remote download
+        Logger.Info<GameManager>($"Starting icon extraction process for game: '{newGame.Title}'");
         string iconSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
-        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", iconSavePath, SKEncodedImageFormat.Ico);
-
-        // Check if remote download succeeded, if not, use local default
-        if (!File.Exists(iconSavePath))
+        bool iconFromEmbedded = TrySaveEmbeddedIcon(gamePath, iconSavePath);
+        if (iconFromEmbedded)
         {
-            Logger.Warning<GameManager>($"Remote icon download failed, using local default icon");
-            ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePath);
-            Logger.Info<GameManager>($"Default local icon applied successfully");
+            Logger.Info<GameManager>($"Embedded XEX SPA icon saved successfully to {iconSavePath}");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded icon not found, attempting remote download for '{newGame.Title}'");
+            await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", iconSavePath, SKEncodedImageFormat.Ico);
+
+            if (!File.Exists(iconSavePath))
+            {
+                Logger.Warning<GameManager>($"Remote icon download failed, using local default icon");
+                ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePath);
+                Logger.Info<GameManager>($"Default local icon applied successfully");
+            }
         }
 
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
@@ -973,11 +981,20 @@ public class GameManager
         newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "Boxart.png");
         Logger.Debug<GameManager>($"Boxart artwork path set: {newGame.Artwork.Boxart}");
 
-        // Default Icon
-        Logger.Info<GameManager>($"Applying default icon artwork for game: '{newGame.Title}'");
-        ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png",
-            Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico"));
-        Logger.Info<GameManager>($"Default icon applied successfully");
+        // Icon - try embedded XEX SPA/XDBF icon (STFS/SVOD/ISO/ZAR/XEX) before falling back to local default
+        string iconSavePathUnknown = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
+        Logger.Info<GameManager>($"Attempting embedded icon extraction for unknown game '{newGame.Title}' from '{gamePath}'");
+        if (!TrySaveEmbeddedIcon(gamePath, iconSavePathUnknown))
+        {
+            Logger.Info<GameManager>($"Applying default icon artwork for game: '{newGame.Title}'");
+            ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePathUnknown);
+            Logger.Info<GameManager>($"Default icon applied successfully");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded XEX SPA icon saved successfully for unknown game '{newGame.Title}'");
+        }
+
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
         Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
 
@@ -1482,6 +1499,259 @@ public class GameManager
         {
             Logger.Warning<GameManager>($"Failed to clean up temporary file at {tempPath}: {ex.Message}");
             Logger.LogExceptionDetails<GameManager>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Attempts to extract the embedded dashboard icon (XDBF image <c>0x8000</c>) from the game file's XEX SPA
+    /// and save it as <c>.ico</c> to <paramref name="savePath"/>. Supports STFS, SVOD, ISO/XISO, ZAR, and XEX.
+    /// SVOD (GOD) is handled for both single file and header+data directory layouts (e.g., Forza Horizon).
+    /// </summary>
+    /// <param name="gamePath">Absolute or relative path to the game file or SVOD directory.</param>
+    /// <param name="savePath">Destination <c>.ico</c> path.</param>
+    /// <returns>True if an icon was extracted and saved, false otherwise.</returns>
+    private static bool TrySaveEmbeddedIcon(string gamePath, string savePath)
+    {
+        try
+        {
+            string resolvedPath = Path.IsPathRooted(gamePath)
+                ? gamePath
+                : Path.Combine(AppPaths.GamesDirectory, gamePath);
+
+            if (!File.Exists(resolvedPath) && !Directory.Exists(resolvedPath))
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon: path not found: {resolvedPath}");
+                return false;
+            }
+
+            FileSignature sig;
+            try
+            {
+                sig = FileIdentifier.IdentifyFileType(resolvedPath);
+            }
+            catch (FileNotFoundException)
+            {
+                // For SVOD directories, IdentifyFileType may throw if given a file inside .data; try SvodFile directly
+                sig = FileSignature.Unknown;
+            }
+
+            Logger.Debug<GameManager>($"TrySaveEmbeddedIcon: {resolvedPath} identified as {sig}");
+            byte[]? iconBytes = null;
+
+            switch (sig)
+            {
+                case FileSignature.XEX1:
+                case FileSignature.XEX2:
+                {
+                    XexFile xex = XexFile.Load(resolvedPath);
+                    if (xex.IsValid)
+                    {
+                        iconBytes = xex.TryGetIcon();
+                    }
+
+                    break;
+                }
+
+                case FileSignature.CON:
+                case FileSignature.LIVE:
+                case FileSignature.PIRS:
+                {
+                    try
+                    {
+                        using StfsFile stfs = StfsFile.Load(resolvedPath);
+                        iconBytes = stfs.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"STFS icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.SVOD:
+                {
+                    try
+                    {
+                        using SvodFile svod = SvodFile.Load(resolvedPath);
+                        iconBytes = svod.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"SVOD icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ISO:
+                case FileSignature.XISO:
+                {
+                    try
+                    {
+                        using IsoFile iso = IsoFile.Load(resolvedPath);
+                        iconBytes = iso.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ISO icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ZAR:
+                {
+                    try
+                    {
+                        using ZarFile zar = ZarFile.Load(resolvedPath);
+                        iconBytes = zar.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ZAR icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.Unknown:
+                default:
+                {
+                    // Fallback: try SVOD directly (handles GOD header+data layout where IdentifyFileType may return Unknown for .data dir)
+                    try
+                    {
+                        if (SvodFile.IsSvodPackage(resolvedPath))
+                        {
+                            using SvodFile svod = SvodFile.Load(resolvedPath);
+                            iconBytes = svod.TryGetIcon();
+                            if (iconBytes != null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback SVOD icon extraction failed: {ex.Message}");
+                    }
+
+                    // Try STFS as fallback for unknown CON-like files
+                    try
+                    {
+                        // Try XEX parse by bytes regardless of signature
+                        byte[] header = new byte[4];
+                        string fileForHeader = resolvedPath;
+                        if (Directory.Exists(resolvedPath))
+                        {
+                            // For directories, try to find a header file inside (GOD case)
+                            string? candidate = Directory.GetFiles(resolvedPath, "*", SearchOption.TopDirectoryOnly)
+                                .FirstOrDefault(f =>
+                                {
+                                    try
+                                    {
+                                        using FileStream fs = new FileStream(f, FileMode.Open, FileAccess.Read);
+                                        byte[] b = new byte[4];
+                                        fs.ReadExactly(b, 0, 4);
+                                        string m = System.Text.Encoding.ASCII.GetString(b);
+                                        return m is "CON " or "LIVE" or "PIRS" or "XEX2" or "XEX1";
+                                    }
+                                    catch { return false; }
+                                });
+                            if (candidate != null)
+                            {
+                                fileForHeader = candidate;
+                            }
+                        }
+
+                        if (File.Exists(fileForHeader))
+                        {
+                            using (FileStream fs = new FileStream(fileForHeader, FileMode.Open, FileAccess.Read))
+                            {
+                                if (fs.Length >= 4)
+                                {
+                                    fs.ReadExactly(header, 0, 4);
+                                }
+                            }
+
+                            string magic = System.Text.Encoding.ASCII.GetString(header);
+                            if (magic is "XEX2" or "XEX1")
+                            {
+                                XexFile xex = XexFile.Load(fileForHeader);
+                                if (xex.IsValid)
+                                {
+                                    iconBytes = xex.TryGetIcon();
+                                }
+                            }
+                            else if (magic is "CON " or "LIVE" or "PIRS")
+                            {
+                                // Try STFS then SVOD
+                                try
+                                {
+                                    using StfsFile stfs = StfsFile.Load(fileForHeader);
+                                    iconBytes = stfs.TryGetIcon();
+                                }
+                                catch { }
+
+                                if (iconBytes == null)
+                                {
+                                    try
+                                    {
+                                        using SvodFile svod = SvodFile.Load(fileForHeader);
+                                        iconBytes = svod.TryGetIcon();
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback XEX/STFS icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+            }
+
+            if (iconBytes == null || iconBytes.Length == 0)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon: no icon bytes extracted for {resolvedPath} (sig={sig})");
+                return false;
+            }
+
+            // Validate that bytes are a decodable image before writing .ico (avoids writing corrupt data)
+            if (iconBytes.Length < 8)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon: icon bytes too short ({iconBytes.Length}) for {resolvedPath}");
+                return false;
+            }
+
+            // Save as .ico via ArtworkManager (handles PNG/JPEG via SkiaSharp).
+            try
+            {
+                string? dir = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                ArtworkManager.ConvertToIcon(iconBytes, savePath);
+                Logger.Info<GameManager>($"TrySaveEmbeddedIcon: saved embedded icon ({iconBytes.Length} bytes) to {savePath} (sig={sig})");
+                return File.Exists(savePath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<GameManager>($"TrySaveEmbeddedIcon: ConvertToIcon failed for {resolvedPath}: {ex.Message}");
+                Logger.LogExceptionDetails<GameManager>(ex);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TrySaveEmbeddedIcon failed for '{gamePath}': {ex.Message}");
+            Logger.LogExceptionDetails<GameManager>(ex);
+            return false;
         }
     }
 
