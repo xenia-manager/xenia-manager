@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
+        <InternalsVisibleTo Include="XeniaManager.Tests" />
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="SharpCompress" Version="0.50.4" />
         <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
     </ItemGroup>
