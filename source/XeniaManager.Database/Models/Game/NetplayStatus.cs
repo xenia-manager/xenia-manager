@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using XeniaManager.Core.Converters;
+using XeniaManager.Database.Converters;
 
-namespace XeniaManager.Core.Models.Game;
+namespace XeniaManager.Database.Models.Game;
 
 /// <summary>
 /// Netplay status breakdown for a game across different connection modes

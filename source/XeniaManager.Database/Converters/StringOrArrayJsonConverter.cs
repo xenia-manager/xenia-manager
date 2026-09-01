@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace XeniaManager.Core.Converters;
+namespace XeniaManager.Database.Converters;
 
 /// <summary>
 /// Custom JSON converter that handles JSON values that can be either a string or an array of strings.

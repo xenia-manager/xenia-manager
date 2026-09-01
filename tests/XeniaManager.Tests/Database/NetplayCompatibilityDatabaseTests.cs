@@ -1,6 +1,7 @@
 using XeniaManager.Database;
 using XeniaManager.Database.Models.NetplayCompatibility;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.Tests.Database;
 

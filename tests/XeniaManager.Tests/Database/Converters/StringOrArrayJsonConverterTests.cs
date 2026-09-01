@@ -1,5 +1,5 @@
 using System.Text.Json;
-using XeniaManager.Core.Converters;
+using XeniaManager.Database.Converters;
 
 namespace XeniaManager.Tests.Database.Converters;
 

@@ -1,7 +1,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.Core.Converters;
 
