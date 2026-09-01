@@ -779,11 +779,12 @@ public partial class LibraryPageViewModel : ViewModelBase
                                     _settings.Settings.General.UseMediaIdForTitle,
                                     _settings.Settings.General.AutoMergeMultiDisc
                                         ? _ => Task.FromResult(true)
-                                        : ConfirmMultiDiscMergeAsync);
+                                        : ConfirmMultiDiscMergeAsync,
+                                    _settings.Settings.General.UseEmbeddedArtwork);
                             }
                             else
                             {
-                                await GameManager.AddUnknownGame(xeniaVersion, details, gameFile);
+                                await GameManager.AddUnknownGame(xeniaVersion, details, gameFile, _settings.Settings.General.UseEmbeddedArtwork);
                             }
 
                             added++;
@@ -1052,13 +1053,14 @@ public partial class LibraryPageViewModel : ViewModelBase
                             await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle,
                                 _settings.Settings.General.AutoMergeMultiDisc
                                     ? _ => Task.FromResult(true)
-                                    : ConfirmMultiDiscMergeAsync);
+                                    : ConfirmMultiDiscMergeAsync,
+                                _settings.Settings.General.UseEmbeddedArtwork);
                         }
                         else
                         {
                             // TODO: Open GameDatabaseWindow to allow the user to select the game
                             // Currently disabled
-                            await GameManager.AddUnknownGame(xeniaVersion, details, gameFile);
+                            await GameManager.AddUnknownGame(xeniaVersion, details, gameFile, _settings.Settings.General.UseEmbeddedArtwork);
                         }
 
                         added++;
@@ -1290,22 +1292,22 @@ public partial class LibraryPageViewModel : ViewModelBase
                     {
                         GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
                         await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details, _settings.Settings.General.UseMediaIdForTitle,
-                            ConfirmMultiDiscMergeAsync);
+                            ConfirmMultiDiscMergeAsync, _settings.Settings.General.UseEmbeddedArtwork);
                     }
                     else
                     {
-                        await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
+                        await GameManager.AddUnknownGame(xeniaVersion, details, filePath, _settings.Settings.General.UseEmbeddedArtwork);
                     }
                 }
                 catch (HttpRequestException)
                 {
                     Logger.Warning<LibraryPageViewModel>($"Failed to fetch x360db, adding the game as unknown");
-                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath, _settings.Settings.General.UseEmbeddedArtwork);
                 }
                 catch (TaskCanceledException)
                 {
                     Logger.Warning<LibraryPageViewModel>($"Task canceled while searching database for game {details.TitleId}, adding the game as unknown");
-                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath, _settings.Settings.General.UseEmbeddedArtwork);
                 }
             }
             catch (Exception ex)

@@ -374,6 +374,9 @@
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Koristi MediaId za naslov igre</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Koristi MediaId iz datoteka igre za pronalaženje odgovarajućeg naslova</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Onemogući za uvijek korištenje naslova iz baze podataka umjesto naslova specifičnih za odabrani medij</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">Koristi ugrađeno umjetničko djelo</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">Koristi umjetničko djelo ugrađeno u datoteke igre (ikona, sličice) prije preuzimanja iz baze podataka</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">Kada je omogućeno, ikona igre i sličice prvo se izdvajaju iz same datoteke igre (STFS/SVOD/ISO/ZAR/XEX). Onemogućite za uvijek preuzimanje umjetničkog djela iz baze podataka.</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Provjeri ažuriranja pri pokretanju</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatski provjerava ažuriranja za Xenia i Xenia Manager prilikom pokretanja aplikacije</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Onemogućite ovo da biste preskočili provjeru ažuriranja tijekom pokretanja aplikacije</sys:String>

@@ -120,6 +120,20 @@ public partial class SettingsPageViewModel : ViewModelBase
         _settings.SaveSettings();
     }
 
+    [ObservableProperty] private bool useEmbeddedArtwork;
+
+    partial void OnUseEmbeddedArtworkChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+
+        Logger.Info<SettingsPageViewModel>($"Use Embedded Artwork changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.UseEmbeddedArtwork = newValue;
+        _settings.SaveSettings();
+    }
+
     // UI Settings
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
@@ -291,6 +305,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         AutoDetectNewGames = _settings.Settings.General.AutoDetectNewGames;
         AutoMergeMultiDisc = _settings.Settings.General.AutoMergeMultiDisc;
         StartInBigScreen = _settings.Settings.General.StartInBigScreen;
+        UseEmbeddedArtwork = _settings.Settings.General.UseEmbeddedArtwork;
 
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();

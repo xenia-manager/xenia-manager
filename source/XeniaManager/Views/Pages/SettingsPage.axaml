@@ -38,6 +38,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.UseMediaIdForTitle.ToolTip}"
                                             Icon="Tag"
                                             IsChecked="{Binding UseMediaIdForTitle, Mode=TwoWay}" />
+                    <!-- Use Embedded Artwork -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.UseEmbeddedArtwork}"
+                                            Description="{DynamicResource SettingsPage.General.UseEmbeddedArtwork.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.UseEmbeddedArtwork.ToolTip}"
+                                            Icon="Image"
+                                            IsChecked="{Binding UseEmbeddedArtwork, Mode=TwoWay}" />
                     <!-- Check for Updates on Startup -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup}"
                                             Description="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Description}"

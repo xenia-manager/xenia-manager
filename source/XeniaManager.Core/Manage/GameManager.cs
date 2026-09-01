@@ -642,7 +642,7 @@ public class GameManager
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
     public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details,
-        bool useMediaIdForTitle = false, Func<Game, Task<bool>>? confirmMultiDiscMerge = null)
+        bool useMediaIdForTitle = false, Func<Game, Task<bool>>? confirmMultiDiscMerge = null, bool useEmbeddedArtwork = true)
     {
         // Use GameInfo's Id if titleId is "00000000"
         string actualTitleId = details.TitleId == "00000000" ? selectedGame.Id ?? details.TitleId : details.TitleId;
@@ -807,7 +807,7 @@ public class GameManager
         // Icon - attempt embedded XEX SPA/XDBF icon first (STFS/SVOD/ISO/ZAR/XEX), then fallback to remote download
         Logger.Info<GameManager>($"Starting icon extraction process for game: '{newGame.Title}'");
         string iconSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
-        bool iconFromEmbedded = TrySaveEmbeddedIcon(gamePath, iconSavePath);
+        bool iconFromEmbedded = TrySaveEmbeddedIcon(gamePath, iconSavePath, useEmbeddedArtwork);
         if (iconFromEmbedded)
         {
             Logger.Info<GameManager>($"Embedded XEX SPA icon saved successfully to {iconSavePath}");
@@ -871,7 +871,7 @@ public class GameManager
     /// <param name="details">The parsed game details (title, title ID, media ID).</param>
     /// <param name="gamePath">The file path to the game.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public static async Task AddUnknownGame(XeniaVersion xeniaVersion, ParsedGameDetails details, string gamePath)
+    public static async Task AddUnknownGame(XeniaVersion xeniaVersion, ParsedGameDetails details, string gamePath, bool useEmbeddedArtwork = true)
     {
         Logger.Trace<GameManager>(
             $"Starting AddUnknownGame operation - Title: '{details.Title}', TitleId: {details.TitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
@@ -984,7 +984,7 @@ public class GameManager
         // Icon - try embedded XEX SPA/XDBF icon (STFS/SVOD/ISO/ZAR/XEX) before falling back to local default
         string iconSavePathUnknown = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
         Logger.Info<GameManager>($"Attempting embedded icon extraction for unknown game '{newGame.Title}' from '{gamePath}'");
-        if (!TrySaveEmbeddedIcon(gamePath, iconSavePathUnknown))
+        if (!TrySaveEmbeddedIcon(gamePath, iconSavePathUnknown, useEmbeddedArtwork))
         {
             Logger.Info<GameManager>($"Applying default icon artwork for game: '{newGame.Title}'");
             ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePathUnknown);
@@ -1510,10 +1510,16 @@ public class GameManager
     /// <param name="gamePath">Absolute or relative path to the game file or SVOD directory.</param>
     /// <param name="savePath">Destination <c>.ico</c> path.</param>
     /// <returns>True if an icon was extracted and saved, false otherwise.</returns>
-    private static bool TrySaveEmbeddedIcon(string gamePath, string savePath)
+    private static bool TrySaveEmbeddedIcon(string gamePath, string savePath, bool useEmbeddedArtwork)
     {
         try
         {
+            if (!useEmbeddedArtwork)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon skipped: UseEmbeddedArtwork disabled by user setting");
+                return false;
+            }
+
             string resolvedPath = Path.IsPathRooted(gamePath)
                 ? gamePath
                 : Path.Combine(AppPaths.GamesDirectory, gamePath);
