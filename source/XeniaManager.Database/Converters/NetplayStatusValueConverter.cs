@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Models.Game;
 
-namespace XeniaManager.Core.Converters;
+namespace XeniaManager.Database.Converters;
 
 /// <summary>
 /// Custom JSON converter for NetplayStatusValue that maps null to Unknown

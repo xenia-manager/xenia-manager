@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.Core.Models.Game;
 

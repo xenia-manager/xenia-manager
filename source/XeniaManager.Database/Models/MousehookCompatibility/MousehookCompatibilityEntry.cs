@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
-using XeniaManager.Core.Converters;
-using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Converters;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.Database.Models.MousehookCompatibility;
 

@@ -14,6 +14,7 @@ using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Files.Models;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Files.Utilities;

@@ -1,6 +1,6 @@
 using System.Text.Json;
-using XeniaManager.Core.Converters;
-using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Converters;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.Tests.Database.Converters;
 

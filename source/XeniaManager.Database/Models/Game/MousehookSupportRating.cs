@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace XeniaManager.Core.Models.Game;
+namespace XeniaManager.Database.Models.Game;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum MousehookSupportRating

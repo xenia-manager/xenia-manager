@@ -32,6 +32,7 @@ using XeniaManager.Database.Models.MousehookCompatibility;
 using XeniaManager.Database.Models.NetplayCompatibility;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Items;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.ViewModels.Pages;
 
