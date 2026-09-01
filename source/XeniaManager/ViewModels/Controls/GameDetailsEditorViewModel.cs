@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
@@ -91,6 +92,11 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     [ObservableProperty] private Bitmap? _cachedIcon;
     [ObservableProperty] private Bitmap? _cachedBoxart;
     [ObservableProperty] private Bitmap? _cachedBackground;
+
+    // Refetch state
+    [ObservableProperty] private bool _isRefetchingIcon;
+    [ObservableProperty] private bool _isRefetchingBoxart;
+    [ObservableProperty] private bool _isRefetchingBackground;
 
     public GameDetailsEditorViewModel(Game game, IMessageBoxService messageBoxService)
     {
@@ -478,6 +484,241 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// </summary>
     [RelayCommand]
     private async Task ClearBackgroundAsync() => await ClearArtworkAsync("Background");
+
+    /// <summary>
+    /// Refetches the game icon, letting the user choose the source (game files or x360db).
+    /// Shows a choice dialog before fetching and a result dialog afterward. If not found, artwork is unchanged.
+    /// </summary>
+    [RelayCommand]
+    private async Task RefetchIconAsync()
+    {
+        if (IsRefetchingIcon)
+        {
+            return;
+        }
+
+        FAContentDialogResult choice = await _messageBoxService.ShowCustomDialogAsync(
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.Title"),
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.Message"),
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.GameFiles"),
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.X360Db"),
+            LocalizationHelper.GetText("MessageBox.Cancel"));
+
+        if (choice == FAContentDialogResult.None)
+        {
+            Logger.Debug<GameDetailsEditorViewModel>("Icon refetch canceled by user at choice dialog");
+            return;
+        }
+
+        bool useGameFiles = choice == FAContentDialogResult.Primary;
+        string sourceKey = useGameFiles
+            ? LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Source.GameFiles")
+            : LocalizationHelper.GetText("GameDetailsEditor.Refetch.Source.X360Db");
+        string sourceLog = useGameFiles ? "game files" : "x360db";
+
+        IsRefetchingIcon = true;
+        try
+        {
+            string titleId = TitleId;
+            string gamePath = GamePath;
+            if (string.IsNullOrWhiteSpace(gamePath))
+            {
+                gamePath = _game.FileLocations.Game;
+            }
+
+            string savePath = Path.Combine(AppPaths.GameDataDirectory, _game.Title, "Artwork", "Icon.ico");
+            string relativePath = Path.Combine("GameData", _game.Title, "Artwork", "Icon.ico");
+
+            Logger.Info<GameDetailsEditorViewModel>($"Refetching icon for '{_game.Title}' from {sourceLog} (titleId={titleId}, gamePath='{gamePath}')");
+
+            bool success;
+            if (useGameFiles)
+            {
+                success = GameManager.TryRefetchIconFromGameFiles(gamePath, savePath);
+            }
+            else
+            {
+                success = await GameManager.TryRefetchIconFromX360DbAsync(titleId, savePath);
+            }
+
+            if (success && File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+            {
+                IconPath = relativePath;
+                _game.Artwork.Icon = relativePath;
+                HasChanges = true;
+                RefreshCachedImages();
+                Logger.Info<GameDetailsEditorViewModel>($"Icon refetched successfully from {sourceLog} to {savePath}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Success.Message"), sourceKey));
+            }
+            else
+            {
+                Logger.Info<GameDetailsEditorViewModel>($"Icon refetch: not found in {sourceLog}, artwork unchanged");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.NotFound.Message"), sourceKey));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDetailsEditorViewModel>("Failed to refetch icon");
+            Logger.LogExceptionDetails<GameDetailsEditorViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Message"), "icon", ex.Message));
+        }
+        finally
+        {
+            IsRefetchingIcon = false;
+        }
+    }
+
+    /// <summary>
+    /// Refetches the game boxart from x360db only.
+    /// Shows a result dialog afterward. If not found, artwork is unchanged.
+    /// </summary>
+    [RelayCommand]
+    private async Task RefetchBoxartAsync()
+    {
+        if (IsRefetchingBoxart)
+        {
+            return;
+        }
+
+        IsRefetchingBoxart = true;
+        try
+        {
+            string titleId = TitleId;
+            string savePath = Path.Combine(AppPaths.GameDataDirectory, _game.Title, "Artwork", "Boxart.png");
+            string relativePath = Path.Combine("GameData", _game.Title, "Artwork", "Boxart.png");
+            string sourceKey = LocalizationHelper.GetText("GameDetailsEditor.Refetch.Source.X360Db");
+
+            Logger.Info<GameDetailsEditorViewModel>($"Refetching boxart for '{_game.Title}' from x360db (titleId={titleId})");
+
+            bool success = await GameManager.TryRefetchBoxartFromX360DbAsync(titleId, savePath);
+
+            if (success && File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+            {
+                BoxartPath = relativePath;
+                _game.Artwork.Boxart = relativePath;
+                HasChanges = true;
+                RefreshCachedImages();
+                Logger.Info<GameDetailsEditorViewModel>($"Boxart refetched successfully from x360db to {savePath}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.Success.Message"), sourceKey));
+            }
+            else
+            {
+                Logger.Info<GameDetailsEditorViewModel>("Boxart refetch: not found on x360db, artwork unchanged");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.NotFound.Message"), sourceKey));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDetailsEditorViewModel>("Failed to refetch boxart");
+            Logger.LogExceptionDetails<GameDetailsEditorViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Message"), "boxart", ex.Message));
+        }
+        finally
+        {
+            IsRefetchingBoxart = false;
+        }
+    }
+
+    /// <summary>
+    /// Refetches the game background, letting the user choose the source (game files or x360db).
+    /// Shows a choice dialog before fetching and a result dialog afterward. If not found, artwork is unchanged.
+    /// </summary>
+    [RelayCommand]
+    private async Task RefetchBackgroundAsync()
+    {
+        if (IsRefetchingBackground)
+        {
+            return;
+        }
+
+        FAContentDialogResult choice = await _messageBoxService.ShowCustomDialogAsync(
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.Title"),
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.Message"),
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.GameFiles"),
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.X360Db"),
+            LocalizationHelper.GetText("MessageBox.Cancel"));
+
+        if (choice == FAContentDialogResult.None)
+        {
+            Logger.Debug<GameDetailsEditorViewModel>("Background refetch canceled by user at choice dialog");
+            return;
+        }
+
+        bool useNxeart = choice == FAContentDialogResult.Primary;
+        string sourceKey = useNxeart
+            ? LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Source.GameFiles")
+            : LocalizationHelper.GetText("GameDetailsEditor.Refetch.Source.X360Db");
+        string sourceLog = useNxeart ? "game files" : "x360db";
+
+        IsRefetchingBackground = true;
+        try
+        {
+            string titleId = TitleId;
+            string gamePath = GamePath;
+            if (string.IsNullOrWhiteSpace(gamePath))
+            {
+                gamePath = _game.FileLocations.Game;
+            }
+
+            string savePath = Path.Combine(AppPaths.GameDataDirectory, _game.Title, "Artwork", "Background.jpg");
+            string relativePath = Path.Combine("GameData", _game.Title, "Artwork", "Background.jpg");
+
+            Logger.Info<GameDetailsEditorViewModel>($"Refetching background for '{_game.Title}' from {sourceLog} (titleId={titleId}, gamePath='{gamePath}')");
+
+            bool success;
+            if (useNxeart)
+            {
+                success = GameManager.TryRefetchBackgroundFromNxeart(gamePath, savePath);
+            }
+            else
+            {
+                success = await GameManager.TryRefetchBackgroundFromX360DbAsync(titleId, savePath);
+            }
+
+            if (success && File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+            {
+                BackgroundPath = relativePath;
+                _game.Artwork.Background = relativePath;
+                HasChanges = true;
+                RefreshCachedImages();
+                Logger.Info<GameDetailsEditorViewModel>($"Background refetched successfully from {sourceLog} to {savePath}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Success.Message"), sourceKey));
+            }
+            else
+            {
+                Logger.Info<GameDetailsEditorViewModel>($"Background refetch: not found in {sourceLog}, artwork unchanged");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.NotFound.Message"), sourceKey));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDetailsEditorViewModel>("Failed to refetch background");
+            Logger.LogExceptionDetails<GameDetailsEditorViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Message"), "background", ex.Message));
+        }
+        finally
+        {
+            IsRefetchingBackground = false;
+        }
+    }
 
     /// <summary>
     /// Opens a file picker to select a new game path.

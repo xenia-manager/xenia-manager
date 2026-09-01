@@ -131,6 +131,13 @@
                                                 <icons:SymbolIcon Symbol="Delete" />
                                             </MenuItem.Icon>
                                         </MenuItem>
+                                        <Separator />
+                                        <MenuItem Command="{Binding RefetchBoxartCommand}"
+                                                  Header="{DynamicResource GameDetailsEditor.Boxart.Refetch}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ArrowSync" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                     </MenuFlyout>
                                 </Border.ContextFlyout>
                                 <Border Classes="artworkImageContainer boxart">
@@ -180,6 +187,13 @@
                                                 <icons:SymbolIcon Symbol="Delete" />
                                             </MenuItem.Icon>
                                         </MenuItem>
+                                        <Separator />
+                                        <MenuItem Command="{Binding RefetchIconCommand}"
+                                                  Header="{DynamicResource GameDetailsEditor.Icon.Refetch}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ArrowSync" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                     </MenuFlyout>
                                 </Border.ContextFlyout>
                                 <Border Classes="artworkImageContainer icon">
@@ -227,6 +241,13 @@
                                               Header="{DynamicResource GameDetailsEditor.Background.Clear}">
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="Delete" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator />
+                                    <MenuItem Command="{Binding RefetchBackgroundCommand}"
+                                              Header="{DynamicResource GameDetailsEditor.Background.Refetch}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="ArrowSync" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                 </MenuFlyout>

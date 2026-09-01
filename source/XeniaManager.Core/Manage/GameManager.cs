@@ -1528,7 +1528,7 @@ public class GameManager
     /// <param name="gamePath">Absolute or relative path to the game file or SVOD directory.</param>
     /// <param name="savePath">Destination <c>.ico</c> path.</param>
     /// <returns>True if an icon was extracted and saved, false otherwise.</returns>
-    private static bool TrySaveEmbeddedIcon(string gamePath, string savePath, bool useEmbeddedArtwork)
+    public static bool TrySaveEmbeddedIcon(string gamePath, string savePath, bool useEmbeddedArtwork)
     {
         try
         {
@@ -1788,7 +1788,7 @@ public class GameManager
     /// <param name="savePath">Destination <c>.jpg</c> path.</param>
     /// <param name="useEmbeddedArtwork">Whether embedded artwork extraction is enabled (from settings).</param>
     /// <returns>True if a background was extracted and saved, false otherwise.</returns>
-    private static bool TrySaveEmbeddedBackground(string gamePath, string savePath, bool useEmbeddedArtwork)
+    public static bool TrySaveEmbeddedBackground(string gamePath, string savePath, bool useEmbeddedArtwork)
     {
         try
         {
@@ -2129,6 +2129,223 @@ public class GameManager
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Tries to refetch the icon from game files only.
+    /// </summary>
+    public static bool TryRefetchIconFromGameFiles(string gamePath, string savePath)
+    {
+        try
+        {
+            bool ok = TrySaveEmbeddedIcon(gamePath, savePath, true);
+            return ok && File.Exists(savePath) && new FileInfo(savePath).Length > 0;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryRefetchIconFromGameFiles failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to refetch the icon from x360db only.
+    /// </summary>
+    public static async Task<bool> TryRefetchIconFromX360DbAsync(string titleId, string savePath)
+    {
+        if (string.IsNullOrWhiteSpace(titleId) || titleId == "00000000")
+        {
+            return false;
+        }
+
+        return await TryDownloadArtworkFromX360DbAsync(titleId, "icon.png", savePath, SKEncodedImageFormat.Ico);
+    }
+
+    /// <summary>
+    /// Tries to refetch the background from game files (nxeart) only.
+    /// </summary>
+    public static bool TryRefetchBackgroundFromNxeart(string gamePath, string savePath)
+    {
+        try
+        {
+            bool ok = TrySaveEmbeddedBackground(gamePath, savePath, true);
+            return ok && File.Exists(savePath) && new FileInfo(savePath).Length > 0;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryRefetchBackgroundFromNxeart failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to refetch the background from x360db only.
+    /// </summary>
+    public static async Task<bool> TryRefetchBackgroundFromX360DbAsync(string titleId, string savePath)
+    {
+        if (string.IsNullOrWhiteSpace(titleId) || titleId == "00000000")
+        {
+            return false;
+        }
+
+        return await TryDownloadArtworkFromX360DbAsync(titleId, "background.jpg", savePath, SKEncodedImageFormat.Jpeg);
+    }
+
+    /// <summary>
+    /// Tries to refetch the boxart from x360db only.
+    /// </summary>
+    public static async Task<bool> TryRefetchBoxartFromX360DbAsync(string titleId, string savePath)
+    {
+        if (string.IsNullOrWhiteSpace(titleId) || titleId == "00000000")
+        {
+            return false;
+        }
+
+        // Primary attempt via boxart.jpg (standard x360db name); fallback to boxart.png if not found
+        bool downloaded = await TryDownloadArtworkFromX360DbAsync(titleId, "boxart.jpg", savePath, SKEncodedImageFormat.Png);
+        if (downloaded)
+        {
+            return true;
+        }
+
+        // Fallback to PNG variant in case the database uses png extension
+        return await TryDownloadArtworkFromX360DbAsync(titleId, "boxart.png", savePath, SKEncodedImageFormat.Png);
+    }
+
+    /// <summary>
+    /// Downloads artwork from x360db (GitHub Pages / Raw GitHub) for the given titleId and filename.
+    /// Also attempts to use the primary URL from the marketplace info when available.
+    /// </summary>
+    private static async Task<bool> TryDownloadArtworkFromX360DbAsync(string titleId, string artworkFileName, string savePath, SKEncodedImageFormat format)
+    {
+        string? primaryUrl = null;
+        try
+        {
+            GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(titleId, cacheDirectory: AppPaths.X360DataBaseCacheDirectory);
+            if (info?.Artwork != null)
+            {
+                primaryUrl = artworkFileName.Equals("icon.png", StringComparison.OrdinalIgnoreCase) ? info.Artwork.Icon
+                    : artworkFileName.Equals("background.jpg", StringComparison.OrdinalIgnoreCase) ? info.Artwork.Background
+                    : info.Artwork.Boxart;
+                if (!string.IsNullOrWhiteSpace(primaryUrl))
+                {
+                    Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: primaryUrl from DB: {primaryUrl}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: GetFullGameInfo failed: {ex.Message}");
+        }
+
+        // Use shared HttpClient logic via XboxDatabase helper but also handle direct fallback if primaryUrl is missing.
+        // First attempt using XboxDatabase.DownloadArtworkAsync with primaryUrl if available (it handles its own fallbacks).
+        if (!string.IsNullOrWhiteSpace(primaryUrl))
+        {
+            try
+            {
+                // Ensure directory exists before download
+                string? dir = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                // Download via XboxDatabase (includes primary + github fallbacks when primaryUrl is provided)
+                await XboxDatabase.DownloadArtworkAsync(primaryUrl, titleId, artworkFileName, savePath, format);
+                if (File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: XboxDatabase.DownloadArtworkAsync with primaryUrl failed: {ex.Message}");
+            }
+        }
+
+        // Direct GitHub fallback: try artwork via x360db GitHub URLs regardless of primaryUrl success
+        // This covers cases where primaryUrl is null or primaryUrl download failed to produce a file.
+        using HttpClient httpClient = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+
+        async Task<bool> TryDownloadUrlAsync(string url)
+        {
+            try
+            {
+                using HttpResponseMessage response = await httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: {url} returned {response.StatusCode}");
+                    return false;
+                }
+
+                string? contentType = response.Content.Headers.ContentType?.MediaType;
+                if (contentType == null || !contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                {
+                    Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: {url} content-type not image: {contentType}");
+                    return false;
+                }
+
+                byte[] data = await response.Content.ReadAsByteArrayAsync();
+                if (data.Length == 0)
+                {
+                    return false;
+                }
+
+                string? dir2 = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir2))
+                {
+                    Directory.CreateDirectory(dir2);
+                }
+
+                if (format == SKEncodedImageFormat.Ico)
+                {
+                    // Use Database helper for ICO conversion (leaf-independent)
+                    // Fallback to ArtworkManager if needed
+                    try
+                    {
+                        // Try Database helper path via reflection would be internal; use ArtworkManager directly
+                        ArtworkManager.ConvertToIcon(data, savePath);
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    ArtworkManager.ConvertArtwork(data, savePath, format);
+                }
+
+                return File.Exists(savePath) && new FileInfo(savePath).Length > 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: download failed for {url}: {ex.Message}");
+                return false;
+            }
+        }
+
+        string[] artworkUrls =
+        [
+            string.Format(Database.Constants.DatabaseUrls.XboxMarketplaceDatabaseArtwork[0], titleId, artworkFileName),
+            string.Format(Database.Constants.DatabaseUrls.XboxMarketplaceDatabaseArtwork[1], titleId, artworkFileName)
+        ];
+
+        foreach (string url in artworkUrls)
+        {
+            if (await TryDownloadUrlAsync(url))
+            {
+                Logger.Info<GameManager>($"TryDownloadArtworkFromX360DbAsync: downloaded {artworkFileName} from {url}");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
