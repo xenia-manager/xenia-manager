@@ -9,6 +9,7 @@ using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Converters;
 using XeniaManager.BigScreen.Factories;
 using XeniaManager.BigScreen.Models.Settings;
+using XeniaManager.Core.Constants;
 using XeniaManager.Logging;
 
 namespace XeniaManager.BigScreen.Services;
@@ -22,7 +23,7 @@ public class BackgroundService : IBackgroundService
     /// Path of the persisted settings file (next to the executable).
     /// </summary>
     private static readonly string SettingsPath = Path.Combine(
-        AppContext.BaseDirectory,
+        AppPaths.ConfigDirectory,
         AppConstants.SettingsFileName);
 
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions

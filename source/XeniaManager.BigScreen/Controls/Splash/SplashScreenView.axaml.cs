@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using XeniaManager.BigScreen.Constants;
 using XeniaManager.BigScreen.Factories;
+using XeniaManager.Core.Constants;
 using XeniaManager.Logging;
 
 namespace XeniaManager.BigScreen.Controls.Splash;
@@ -50,7 +51,9 @@ public partial class SplashScreenView : UserControl
     {
         try
         {
-            string path = Path.Combine(AppContext.BaseDirectory, AppConstants.SettingsFileName);
+            string path = Path.Combine(
+                AppPaths.ConfigDirectory,
+                AppConstants.SettingsFileName);
             if (File.Exists(path) && TryGetSavedColor(File.ReadAllText(path), propertyName, out Color color))
             {
                 return color;

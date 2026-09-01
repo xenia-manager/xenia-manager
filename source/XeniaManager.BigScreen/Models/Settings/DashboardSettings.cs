@@ -65,7 +65,7 @@ public class DashboardSettings
     /// The image shown on dashboard game cards.
     /// </summary>
     [JsonPropertyName("card_image_mode")]
-    public CardImageMode CardImageMode { get; set; } = CardImageMode.Icon;
+    public CardImageMode CardImageMode { get; set; } = CardImageMode.BoxArt;
 
     /// <summary>
     /// The hour format used by the header clock and capture dates.
