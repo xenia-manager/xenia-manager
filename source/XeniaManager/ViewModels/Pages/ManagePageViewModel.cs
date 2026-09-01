@@ -354,11 +354,11 @@ public partial class ManagePageViewModel : ViewModelBase
             try
             {
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Move the file to the emulator directory
-                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
-                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Canary.EmulatorDir), "gamecontrollerdb.txt"));
+                File.Move(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName),
+                    AppPathResolver.GetFullPath(XeniaPaths.Canary.GameControllerDatabaseLocation));
             }
             catch (Exception)
             {
@@ -618,11 +618,11 @@ public partial class ManagePageViewModel : ViewModelBase
             try
             {
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Move the file to the emulator directory
-                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
-                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Netplay.EmulatorDir), "gamecontrollerdb.txt"));
+                File.Move(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName),
+                    AppPathResolver.GetFullPath(XeniaPaths.Netplay.GameControllerDatabaseLocation));
             }
             catch (Exception)
             {
@@ -909,11 +909,11 @@ public partial class ManagePageViewModel : ViewModelBase
             try
             {
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Move the file to the emulator directory
-                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
-                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Mousehook.EmulatorDir), "gamecontrollerdb.txt"));
+                File.Move(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName),
+                    AppPathResolver.GetFullPath(XeniaPaths.Mousehook.GameControllerDatabaseLocation));
             }
             catch (Exception)
             {
@@ -1839,17 +1839,16 @@ public partial class ManagePageViewModel : ViewModelBase
 
                 // Download the SDL database
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Get all installed Xenia versions and update their gamecontrollerdb.txt
                 List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
                 foreach (XeniaVersion version in installedVersions)
                 {
-                    string emulatorDir = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).EmulatorDir);
-                    string destinationPath = Path.Combine(emulatorDir, "gamecontrollerdb.txt");
+                    string destinationPath = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).GameControllerDatabaseLocation);
 
                     // Move the file to the emulator directory
-                    File.Copy(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"), destinationPath, true);
+                    File.Copy(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName), destinationPath, true);
                     Logger.Info<ManagePageViewModel>($"Updated SDL database for Xenia {version}: {destinationPath}");
                 }
 

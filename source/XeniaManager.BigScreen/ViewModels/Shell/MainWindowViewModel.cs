@@ -314,7 +314,7 @@ public partial class MainWindowViewModel : ViewModelBase
             $"Quitting BigScreen (return to Xenia Manager: {Settings.ReturnToXeniaOnQuit})");
         if (Settings.ReturnToXeniaOnQuit)
         {
-            string baseExe = Path.Combine(AppPathResolver.BaseDirectory(), AppConstants.BaseAppExecutable);
+            string baseExe = AppPaths.ManagerExecutable;
             if (File.Exists(baseExe) && !IsBaseAppRunning)
             {
                 Process.Start(new ProcessStartInfo

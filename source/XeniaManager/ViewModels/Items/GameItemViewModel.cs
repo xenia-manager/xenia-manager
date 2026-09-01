@@ -264,7 +264,7 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             string screenshotsFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(Game.XeniaVersion).EmulatorDir,
-                "screenshots", Game.GameId.ToUpperInvariant());
+                XeniaPaths.ScreenshotsFolderName, Game.GameId.ToUpperInvariant());
 
             if (!Directory.Exists(screenshotsFolder))
             {

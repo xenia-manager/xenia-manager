@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using System;
-using XeniaManager.Core.Utilities;
+using XeniaManager.Core.Constants;
 using XeniaManager.Logging;
 
 namespace XeniaManager;
@@ -13,7 +13,7 @@ internal sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        Logger.Initialize(AppPathResolver.GetFullPath("Logs"));
+        Logger.Initialize(AppPaths.LogsDirectory);
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 

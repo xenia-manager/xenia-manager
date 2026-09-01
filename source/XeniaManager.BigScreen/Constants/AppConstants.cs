@@ -16,11 +16,6 @@ public static class AppConstants
     public const int RecentGamesLimit = 8;
 
     /// <summary>
-    /// File name of the persisted dashboard settings (next to the executable).
-    /// </summary>
-    public const string SettingsFileName = "dashboard-settings.json";
-
-    /// <summary>
     /// Config section holding the fullscreen toggle.
     /// </summary>
     public const string ConfigFullscreenSection = "Display";

@@ -51,9 +51,7 @@ public partial class SplashScreenView : UserControl
     {
         try
         {
-            string path = Path.Combine(
-                AppPaths.ConfigDirectory,
-                AppConstants.SettingsFileName);
+            string path = AppPaths.DashboardSettingsFile;
             if (File.Exists(path) && TryGetSavedColor(File.ReadAllText(path), propertyName, out Color color))
             {
                 return color;

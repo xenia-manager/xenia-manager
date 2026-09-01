@@ -20,11 +20,9 @@ namespace XeniaManager.BigScreen.Services;
 public class BackgroundService : IBackgroundService
 {
     /// <summary>
-    /// Path of the persisted settings file (next to the executable).
+    /// Path of the persisted settings file.
     /// </summary>
-    private static readonly string SettingsPath = Path.Combine(
-        AppPaths.ConfigDirectory,
-        AppConstants.SettingsFileName);
+    private static readonly string SettingsPath = AppPaths.DashboardSettingsFile;
 
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
     {

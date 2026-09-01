@@ -14,6 +14,7 @@ using XeniaManager.BigScreen.Utilities;
 using XeniaManager.BigScreen.ViewModels.Items;
 using XeniaManager.BigScreen.Views.Screens;
 using XeniaManager.Logging;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
@@ -89,7 +90,7 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
         {
             return AppPathResolver.GetFullPath(
                 XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).EmulatorDir,
-                "screenshots",
+                XeniaPaths.ScreenshotsFolderName,
                 _game.GameId.ToUpperInvariant());
         }
 
@@ -104,7 +105,7 @@ public partial class GameScreenshotsPaneViewModel : ViewModelBase, IGameModalPan
             : AppPathResolver.GetFullPath(Path.GetDirectoryName(executable) ?? string.Empty);
         return emulatorDir.Length == 0
             ? null
-            : Path.Combine(emulatorDir, "screenshots", _game.GameId.ToUpperInvariant());
+            : Path.Combine(emulatorDir, XeniaPaths.ScreenshotsFolderName, _game.GameId.ToUpperInvariant());
     }
 
     /// <summary>

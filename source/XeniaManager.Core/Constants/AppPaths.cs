@@ -22,6 +22,7 @@ public class AppPaths
     public static readonly string ConfigFile = Path.Combine(ConfigDirectory, "config.json");
     public static readonly string ConfigFileBackup = Path.Combine(ConfigDirectory, "config.json.backup");
     public static readonly string GameLibraryPath = Path.Combine(ConfigDirectory, "games.json");
+    public static readonly string DashboardSettingsFile = Path.Combine(ConfigDirectory, "dashboard-settings.json");
 
     // Downloads
     public static readonly string DownloadsDirectory = AppPathResolver.GetFullPath("Downloads");

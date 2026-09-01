@@ -2,6 +2,7 @@
 using Avalonia;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.Logging;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen;
@@ -25,7 +26,7 @@ internal sealed class Program
     {
         string? baseDirectory = BaseAppLocator.Resolve(args);
         AppPathResolver.SetBaseDirectory(baseDirectory ?? string.Empty);
-        Logger.Initialize(AppPathResolver.GetFullPath("Logs"));
+        Logger.Initialize(AppPaths.LogsDirectory);
         Logger.Info<Program>($"Starting BigScreen (base directory: {baseDirectory ?? "own folder"})");
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);

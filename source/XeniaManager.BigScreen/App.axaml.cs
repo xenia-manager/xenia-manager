@@ -43,14 +43,14 @@ public partial class App : Application
             Logger.Info<App>("Updating SDL game controller database");
             DownloadManager downloadManager = new DownloadManager();
             await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase,
-                "gamecontrollerdb.txt");
-            string downloaded = Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt");
+                XeniaPaths.GameControllerDatabaseName);
+            string downloaded = Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName);
 
             foreach (XeniaVersion version in installedVersions)
             {
                 string emulatorDir =
                     AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).EmulatorDir);
-                File.Copy(downloaded, Path.Combine(emulatorDir, "gamecontrollerdb.txt"), true);
+                File.Copy(downloaded, Path.Combine(emulatorDir, XeniaPaths.GameControllerDatabaseName), true);
                 Logger.Info<App>($"Updated SDL database for Xenia {version}");
             }
 
