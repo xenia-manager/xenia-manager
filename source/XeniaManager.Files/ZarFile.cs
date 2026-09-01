@@ -838,6 +838,83 @@ public sealed class ZarFile : IDisposable
     }
 
     /// <summary>
+    /// Tries to extract the NXE background image (<c>nxebg.jpg</c>) from the <c>nxeart</c> file embedded in the ZAR archive.
+    /// </summary>
+    /// <returns>JPEG bytes if found, null otherwise. Never throws.</returns>
+    /// <remarks>
+    /// Searches the ZAR file tree for <c>nxeart</c> (case-insensitive, any directory; entries are stored as full paths like <c>a/b/nxeart</c>),
+    /// extracts it via <see cref="ReadFile"/>, then parses the inner PIRS/STFS via <see cref="Utilities.NxeArtHelper"/> to obtain <c>nxebg.jpg</c>.
+    /// </remarks>
+    public byte[]? TryGetNxeBackground()
+    {
+        try
+        {
+            if (!IsValid || _fileTree.Count == 0)
+            {
+                Logger.Trace<ZarFile>("ZAR TryGetNxeBackground: not valid or empty");
+                return null;
+            }
+
+            // Search Files (flat list) for nxeart case-insensitive, including paths
+            byte[]? nxeartBytes = null;
+            foreach (DirEntry entry in Files)
+            {
+                if (!entry.IsFile)
+                {
+                    continue;
+                }
+
+                string name = Path.GetFileName(entry.Name);
+                if (!name.Equals("nxeart", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                FileDirectoryEntry? dirEntry = Lookup(entry.Name);
+                if (dirEntry == null || !dirEntry.IsFile)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    nxeartBytes = ReadFile(dirEntry);
+                    if (nxeartBytes != null && nxeartBytes.Length > 0)
+                    {
+                        Logger.Trace<ZarFile>($"ZAR nxeart candidate: '{entry.Name}' ({nxeartBytes.Length} bytes)");
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Trace<ZarFile>($"ZAR failed to read nxeart '{entry.Name}': {ex.Message}");
+                }
+            }
+
+            if (nxeartBytes == null || nxeartBytes.Length == 0)
+            {
+                Logger.Trace<ZarFile>("ZAR TryGetNxeBackground: nxeart not found");
+                return null;
+            }
+
+            byte[]? bg = NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes);
+            if (bg != null)
+            {
+                Logger.Debug<ZarFile>($"ZAR nxeart nxebg.jpg extracted ({bg.Length} bytes)");
+                return bg;
+            }
+
+            Logger.Trace<ZarFile>("ZAR TryGetNxeBackground: nxebg.jpg not found inside nxeart");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<ZarFile>($"TryGetNxeBackground failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Searches the ZAR file tree for any <c>.xex</c> file other than the already-tried <c>default.xex</c>.
     /// </summary>
     /// <returns>First alternative XEX bytes found, or null.</returns>

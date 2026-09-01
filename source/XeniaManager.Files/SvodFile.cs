@@ -1142,6 +1142,48 @@ public sealed class SvodFile : IDisposable
     }
 
     /// <summary>
+    /// Tries to extract the NXE background image (<c>nxebg.jpg</c>) from the <c>nxeart</c> file embedded in the SVOD's GDFX filesystem.
+    /// </summary>
+    /// <returns>JPEG bytes if found, null otherwise. Never throws.</returns>
+    /// <remarks>
+    /// Searches GDFX for a file named <c>nxeart</c> (case-insensitive, any directory via <see cref="FindFileInSvod"/>), extracts it,
+    /// then parses the inner STFS (PIRS/CON/LIVE) via <see cref="Utilities.NxeArtHelper"/> to obtain <c>nxebg.jpg</c>.
+    /// </remarks>
+    public byte[]? TryGetNxeBackground()
+    {
+        try
+        {
+            if (_dataStreams == null || _xgdInfo == null)
+            {
+                Logger.Trace<SvodFile>("SVOD TryGetNxeBackground: GDFX not initialized");
+                return null;
+            }
+
+            byte[]? nxeartBytes = FindFileInSvod("nxeart");
+            if (nxeartBytes == null || nxeartBytes.Length == 0)
+            {
+                Logger.Trace<SvodFile>("SVOD TryGetNxeBackground: nxeart not found in GDFX");
+                return null;
+            }
+
+            byte[]? bg = Utilities.NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes);
+            if (bg != null)
+            {
+                Logger.Debug<SvodFile>($"SVOD nxeart nxebg.jpg extracted ({bg.Length} bytes)");
+                return bg;
+            }
+
+            Logger.Trace<SvodFile>("SVOD TryGetNxeBackground: nxebg.jpg not found inside nxeart");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<SvodFile>($"TryGetNxeBackground failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Scans the GDFX tree for any <c>*.xex</c> other than <c>default.xex</c>.
     /// </summary>
     private byte[]? TryExtractAlternativeXex()

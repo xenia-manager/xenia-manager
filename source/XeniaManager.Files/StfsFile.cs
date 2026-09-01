@@ -1045,6 +1045,57 @@ public class StfsFile : IDisposable
     }
 
     /// <summary>
+    /// Tries to extract the NXE background image (<c>nxebg.jpg</c>) from the <c>nxeart</c> file embedded in the STFS package.
+    /// </summary>
+    /// <returns>JPEG bytes if found (valid <c>FF D8 FF</c> header or any bytes from <c>nxeart</c>), null otherwise. Never throws.</returns>
+    /// <remarks>
+    /// Searches the STFS file table for an entry named <c>nxeart</c> (case-insensitive, any directory), extracts it,
+    /// then parses the inner STFS (PIRS/CON/LIVE, see <c>Documentation/nxeart</c> which contains 3 entries: DashStyle, nxebg.jpg 1350836 bytes at 0xE000, nxeslot.jpg)
+    /// via <see cref="Utilities.NxeArtHelper"/> to obtain <c>nxebg.jpg</c>. Used by <c>GameManager.TrySaveEmbeddedBackground</c> as primary background source.
+    /// </remarks>
+    public byte[]? TryGetNxeBackground()
+    {
+        try
+        {
+            if (FileEntries.Count == 0)
+            {
+                Logger.Trace<StfsFile>("STFS TryGetNxeBackground: no file entries (header-only or empty package)");
+                return null;
+            }
+
+            StfsFileEntry? nxeartEntry = FileEntries.FirstOrDefault(e =>
+                !e.IsDirectory && e.FileName.Equals("nxeart", StringComparison.OrdinalIgnoreCase));
+            if (nxeartEntry == null)
+            {
+                Logger.Trace<StfsFile>("STFS TryGetNxeBackground: nxeart not found");
+                return null;
+            }
+
+            byte[] nxeartBytes = ExtractFile(nxeartEntry);
+            if (nxeartBytes.Length == 0)
+            {
+                Logger.Trace<StfsFile>("STFS nxeart entry empty");
+                return null;
+            }
+
+            byte[]? bg = NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes);
+            if (bg != null)
+            {
+                Logger.Debug<StfsFile>($"STFS nxeart nxebg.jpg extracted ({bg.Length} bytes)");
+                return bg;
+            }
+
+            Logger.Trace<StfsFile>("STFS TryGetNxeBackground: nxebg.jpg not found inside nxeart");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<StfsFile>($"TryGetNxeBackground failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Checks whether the supplied bytes look like a valid PNG or JPEG image (header-only validation).
     /// </summary>
     private static bool IsValidImageData(byte[] data)

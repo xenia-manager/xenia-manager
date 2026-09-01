@@ -828,17 +828,25 @@ public class GameManager
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
         Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
 
-        // Background
-        Logger.Info<GameManager>($"Starting background download process for game: '{newGame.Title}'");
+        // Background - prioritize embedded nxeart nxebg.jpg (STFS/SVOD/ISO/ZAR) before remote download
+        Logger.Info<GameManager>($"Starting background extraction process for game: '{newGame.Title}'");
         string backgroundSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg");
-        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", backgroundSavePath);
-
-        // Check if remote download succeeded, if not, use local default
-        if (!File.Exists(backgroundSavePath))
+        bool backgroundFromEmbedded = TrySaveEmbeddedBackground(gamePath, backgroundSavePath, useEmbeddedArtwork);
+        if (backgroundFromEmbedded)
         {
-            Logger.Warning<GameManager>($"Remote background download failed, using local default background");
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", backgroundSavePath, SKEncodedImageFormat.Jpeg);
-            Logger.Info<GameManager>($"Default local background applied successfully");
+            Logger.Info<GameManager>($"Embedded nxeart nxebg.jpg saved successfully to {backgroundSavePath}");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded background not found, attempting remote download for '{newGame.Title}'");
+            await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", backgroundSavePath);
+
+            if (!File.Exists(backgroundSavePath))
+            {
+                Logger.Warning<GameManager>($"Remote background download failed, using local default background");
+                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", backgroundSavePath, SKEncodedImageFormat.Jpeg);
+                Logger.Info<GameManager>($"Default local background applied successfully");
+            }
         }
 
         newGame.Artwork.Background = Path.Combine("GameData", newGame.Title, "Artwork", "Background.jpg");
@@ -998,11 +1006,21 @@ public class GameManager
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
         Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
 
-        // Default Background
-        Logger.Info<GameManager>($"Applying default background artwork for game: '{newGame.Title}'");
-        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg",
-            Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
-        Logger.Info<GameManager>($"Default background applied successfully");
+        // Background - try embedded nxeart nxebg.jpg before falling back to local default
+        string backgroundSavePathUnknown = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Background.jpg");
+        Logger.Info<GameManager>($"Attempting embedded background extraction for unknown game '{newGame.Title}' from '{gamePath}'");
+        if (!TrySaveEmbeddedBackground(gamePath, backgroundSavePathUnknown, useEmbeddedArtwork))
+        {
+            Logger.Info<GameManager>($"Applying default background artwork for game: '{newGame.Title}'");
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg",
+                backgroundSavePathUnknown, SKEncodedImageFormat.Jpeg);
+            Logger.Info<GameManager>($"Default background applied successfully");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded nxeart nxebg.jpg saved successfully for unknown game '{newGame.Title}'");
+        }
+
         newGame.Artwork.Background = Path.Combine("GameData", newGame.Title, "Artwork", "Background.jpg");
         Logger.Debug<GameManager>($"Background artwork path set: {newGame.Artwork.Background}");
 
@@ -1759,6 +1777,358 @@ public class GameManager
             Logger.LogExceptionDetails<GameManager>(ex);
             return false;
         }
+    }
+
+    /// <summary>
+    /// Attempts to extract the NXE background image (<c>nxebg.jpg</c>) from the game's <c>nxeart</c> file and save it as JPEG.
+    /// Supports STFS, SVOD, ISO/XISO, ZAR and filesystem sibling (XEX directory). Prioritized over remote download.
+    /// If <c>nxeart</c> isn't found, returns false and caller proceeds as before.
+    /// </summary>
+    /// <param name="gamePath">Absolute or relative path to the game file or SVOD directory.</param>
+    /// <param name="savePath">Destination <c>.jpg</c> path.</param>
+    /// <param name="useEmbeddedArtwork">Whether embedded artwork extraction is enabled (from settings).</param>
+    /// <returns>True if a background was extracted and saved, false otherwise.</returns>
+    private static bool TrySaveEmbeddedBackground(string gamePath, string savePath, bool useEmbeddedArtwork)
+    {
+        try
+        {
+            if (!useEmbeddedArtwork)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground skipped: UseEmbeddedArtwork disabled by user setting");
+                return false;
+            }
+
+            string resolvedPath = Path.IsPathRooted(gamePath)
+                ? gamePath
+                : Path.Combine(AppPaths.GamesDirectory, gamePath);
+
+            if (!File.Exists(resolvedPath) && !Directory.Exists(resolvedPath))
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground: path not found: {resolvedPath}");
+                return false;
+            }
+
+            FileSignature sig;
+            try
+            {
+                sig = FileIdentifier.IdentifyFileType(resolvedPath);
+            }
+            catch (FileNotFoundException)
+            {
+                sig = FileSignature.Unknown;
+            }
+
+            Logger.Debug<GameManager>($"TrySaveEmbeddedBackground: {resolvedPath} identified as {sig}");
+            byte[]? bgBytes = null;
+
+            switch (sig)
+            {
+                case FileSignature.XEX1:
+                case FileSignature.XEX2:
+                {
+                    // For loose XEX, nxeart is a sibling file alongside the executable (e.g., extracted game folder)
+                    bgBytes = TryExtractBackgroundFromSiblingNxeart(resolvedPath);
+                    break;
+                }
+
+                case FileSignature.CON:
+                case FileSignature.LIVE:
+                case FileSignature.PIRS:
+                {
+                    try
+                    {
+                        using StfsFile stfs = StfsFile.Load(resolvedPath);
+                        bgBytes = stfs.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"STFS nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.SVOD:
+                {
+                    try
+                    {
+                        using SvodFile svod = SvodFile.Load(resolvedPath);
+                        bgBytes = svod.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"SVOD nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ISO:
+                case FileSignature.XISO:
+                {
+                    try
+                    {
+                        using IsoFile iso = IsoFile.Load(resolvedPath);
+                        bgBytes = iso.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ISO nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ZAR:
+                {
+                    try
+                    {
+                        using ZarFile zar = ZarFile.Load(resolvedPath);
+                        bgBytes = zar.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ZAR nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.Unknown:
+                default:
+                {
+                    // Fallback: try SVOD directly (GOD header+data layout)
+                    try
+                    {
+                        if (SvodFile.IsSvodPackage(resolvedPath))
+                        {
+                            using SvodFile svod = SvodFile.Load(resolvedPath);
+                            bgBytes = svod.TryGetNxeBackground();
+                            if (bgBytes != null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback SVOD nxeart extraction failed: {ex.Message}");
+                    }
+
+                    // Try STFS as fallback for CON-like files
+                    try
+                    {
+                        byte[] header = new byte[4];
+                        string fileForHeader = resolvedPath;
+                        if (Directory.Exists(resolvedPath))
+                        {
+                            string? candidate = Directory.GetFiles(resolvedPath, "*", SearchOption.TopDirectoryOnly)
+                                .FirstOrDefault(f =>
+                                {
+                                    try
+                                    {
+                                        using FileStream fs = new FileStream(f, FileMode.Open, FileAccess.Read);
+                                        byte[] b = new byte[4];
+                                        fs.ReadExactly(b, 0, 4);
+                                        string m = System.Text.Encoding.ASCII.GetString(b);
+                                        return m is "CON " or "LIVE" or "PIRS" or "XEX2" or "XEX1";
+                                    }
+                                    catch { return false; }
+                                });
+                            if (candidate != null)
+                            {
+                                fileForHeader = candidate;
+                            }
+                        }
+
+                        if (File.Exists(fileForHeader))
+                        {
+                            using (FileStream fs = new FileStream(fileForHeader, FileMode.Open, FileAccess.Read))
+                            {
+                                if (fs.Length >= 4)
+                                {
+                                    fs.ReadExactly(header, 0, 4);
+                                }
+                            }
+
+                            string magic = System.Text.Encoding.ASCII.GetString(header);
+                            if (magic is "XEX2" or "XEX1")
+                            {
+                                bgBytes = TryExtractBackgroundFromSiblingNxeart(fileForHeader);
+                            }
+                            else if (magic is "CON " or "LIVE" or "PIRS")
+                            {
+                                try
+                                {
+                                    using StfsFile stfs = StfsFile.Load(fileForHeader);
+                                    bgBytes = stfs.TryGetNxeBackground();
+                                }
+                                catch { }
+
+                                if (bgBytes == null)
+                                {
+                                    try
+                                    {
+                                        using SvodFile svod = SvodFile.Load(fileForHeader);
+                                        bgBytes = svod.TryGetNxeBackground();
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback nxeart extraction failed: {ex.Message}");
+                    }
+
+                    // Final fallback: sibling filesystem nxeart (handles loose XEX folders and extracted GOD dirs)
+                    if (bgBytes == null)
+                    {
+                        bgBytes = TryExtractBackgroundFromSiblingNxeart(resolvedPath);
+                    }
+
+                    break;
+                }
+            }
+
+            // Final sibling fallback if container had no nxeart (covers XEX dirs where sig is CON etc. but sibling still checked)
+            if (bgBytes == null)
+            {
+                byte[]? siblingBg = TryExtractBackgroundFromSiblingNxeart(resolvedPath);
+                if (siblingBg != null)
+                {
+                    bgBytes = siblingBg;
+                }
+            }
+
+            if (bgBytes == null || bgBytes.Length == 0)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground: no nxebg.jpg found for {resolvedPath} (sig={sig})");
+                return false;
+            }
+
+            if (bgBytes.Length < 8)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground: bg bytes too short ({bgBytes.Length}) for {resolvedPath}");
+                return false;
+            }
+
+            try
+            {
+                string? dir = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                // Save as JPEG via SkiaSharp (validates and re-encodes PNG/JPEG); fallback to raw write if decode fails
+                try
+                {
+                    ArtworkManager.ConvertArtwork(bgBytes, savePath, SKEncodedImageFormat.Jpeg);
+                }
+                catch (Exception convEx)
+                {
+                    Logger.Trace<GameManager>($"ConvertArtwork for background failed, falling back to raw write: {convEx.Message}");
+                    File.WriteAllBytes(savePath, bgBytes);
+                }
+
+                Logger.Info<GameManager>($"TrySaveEmbeddedBackground: saved nxeart nxebg.jpg ({bgBytes.Length} bytes) to {savePath} (sig={sig})");
+                return File.Exists(savePath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<GameManager>($"TrySaveEmbeddedBackground: save failed for {resolvedPath}: {ex.Message}");
+                Logger.LogExceptionDetails<GameManager>(ex);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TrySaveEmbeddedBackground failed for '{gamePath}': {ex.Message}");
+            Logger.LogExceptionDetails<GameManager>(ex);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to find a sibling <c>nxeart</c> file next to the game file/directory and extract <c>nxebg.jpg</c> from it.
+    /// Handles loose XEX layouts (e.g., <c>C:\Games\Halo3\default.xex</c> with <c>C:\Games\Halo3\nxeart</c>) and
+    /// extracted STFS directories where <c>nxeart</c> is stored alongside the executable on the filesystem.
+    /// </summary>
+    private static byte[]? TryExtractBackgroundFromSiblingNxeart(string resolvedPath)
+    {
+        try
+        {
+            string? searchDir = null;
+            if (Directory.Exists(resolvedPath))
+            {
+                searchDir = resolvedPath;
+            }
+            else if (File.Exists(resolvedPath))
+            {
+                searchDir = Path.GetDirectoryName(resolvedPath);
+            }
+
+            if (string.IsNullOrEmpty(searchDir) || !Directory.Exists(searchDir))
+            {
+                return null;
+            }
+
+            string candidate = Path.Combine(searchDir, "nxeart");
+            if (File.Exists(candidate))
+            {
+                try
+                {
+                    byte[] nxeartBytes = File.ReadAllBytes(candidate);
+                    byte[]? bg = NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes);
+                    if (bg != null)
+                    {
+                        Logger.Debug<GameManager>($"Sibling nxeart background found at {candidate} ({bg.Length} bytes)");
+                        return bg;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Trace<GameManager>($"Failed to read sibling nxeart at {candidate}: {ex.Message}");
+                }
+            }
+
+            // Case-insensitive top-level scan (covers "NXEART" variants)
+            foreach (string f in Directory.GetFiles(searchDir, "*", SearchOption.TopDirectoryOnly))
+            {
+                if (!Path.GetFileName(f).Equals("nxeart", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (f.Equals(candidate, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    byte[] nxeartBytes2 = File.ReadAllBytes(f);
+                    byte[]? bg2 = NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes2);
+                    if (bg2 != null)
+                    {
+                        Logger.Debug<GameManager>($"Sibling nxeart (case-variant) background found at {f} ({bg2.Length} bytes)");
+                        return bg2;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Trace<GameManager>($"Failed to read sibling nxeart variant at {f}: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryExtractBackgroundFromSiblingNxeart failed for {resolvedPath}: {ex.Message}");
+        }
+
+        return null;
     }
 
     /// <summary>

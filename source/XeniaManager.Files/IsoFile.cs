@@ -517,6 +517,48 @@ public sealed class IsoFile : IDisposable
     }
 
     /// <summary>
+    /// Tries to extract the NXE background image (<c>nxebg.jpg</c>) from the <c>nxeart</c> file embedded in the ISO's GDFX filesystem.
+    /// </summary>
+    /// <returns>JPEG bytes if found, null otherwise. Never throws.</returns>
+    /// <remarks>
+    /// Searches GDFX for <c>nxeart</c> via <see cref="FindFileInIso"/> (case-insensitive, any directory),
+    /// then delegates to <see cref="Utilities.NxeArtHelper"/> which parses the inner PIRS/STFS and extracts <c>nxebg.jpg</c> at <c>0xE000</c>.
+    /// </remarks>
+    public byte[]? TryGetNxeBackground()
+    {
+        try
+        {
+            if (_sectorReader == null || XgdInformation == null)
+            {
+                Logger.Trace<IsoFile>("ISO TryGetNxeBackground: sector reader not initialized");
+                return null;
+            }
+
+            byte[]? nxeartBytes = FindFileInIso("nxeart");
+            if (nxeartBytes == null || nxeartBytes.Length == 0)
+            {
+                Logger.Trace<IsoFile>("ISO TryGetNxeBackground: nxeart not found in GDFX");
+                return null;
+            }
+
+            byte[]? bg = Utilities.NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes);
+            if (bg != null)
+            {
+                Logger.Debug<IsoFile>($"ISO nxeart nxebg.jpg extracted ({bg.Length} bytes)");
+                return bg;
+            }
+
+            Logger.Trace<IsoFile>("ISO TryGetNxeBackground: nxebg.jpg not found inside nxeart");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<IsoFile>($"TryGetNxeBackground failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Searches the ISO file tree for any <c>.xex</c> file other than the already-tried <c>default.xex</c>.
     /// Used as fallback when <see cref="XexFile"/> is null or its icon is missing.
     /// </summary>
