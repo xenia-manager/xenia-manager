@@ -11,8 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">打开 Xenia</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">大屏模式</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">打开大屏模式</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">游戏库</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia 设置</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">管理 Xenia</sys:String>
@@ -24,31 +24,31 @@
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">搜索...</sys:String>
     <sys:String x:Key="LibraryPage.Refresh.ToolTip">重新加载游戏库</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">排序游戏</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">切换到列表视图</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">切换到网格视图</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">排序方向</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">标题</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">兼容性</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">游戏时长</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Xenia 版本</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">上次游玩时间</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">编辑网格视图</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">显示/隐藏封面上的额外信息</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">游戏标题</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">兼容性评级</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Xenia 版本</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">为每个游戏显示 Xenia 版本图标</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">编辑列表视图</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">在列表视图中显示/隐藏列</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">兼容性评级</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">游戏时长</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Xenia 版本</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">为每个游戏显示 Xenia 版本图标</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">上次游玩时间</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">游戏图标</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">标题 ID</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">媒体 ID</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">双击启动</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">切换单击或双击启动游戏</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">扫描目录</sys:String>
@@ -67,11 +67,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">扫描失败</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">扫描目录时发生错误：&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">扫描错误</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">扫描目录</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">请选择扫描来源：</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">扫描游戏文件夹</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">扫描自定义文件夹</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">取消</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">正在扫描游戏</sys:String>
@@ -135,11 +135,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">成功更新 {0} 个游戏。&#10;未更改：{1}&#10;失败：{2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">更新失败</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">更新兼容性评级时出错。&#10;{0}</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">更新兼容性评级</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">游戏兼容性</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Mousehook版兼容性</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Netplay版兼容性</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">更新</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">优化游戏</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">从在线数据库将优化设置应用到库中的所有游戏</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">优化完成</sys:String>
@@ -194,23 +194,23 @@
     <sys:String x:Key="CompatibilityRating.Playable">可通关</sys:String>
 
     <!-- Mousehook Support Rating -->
-    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Unknown">未知</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">较差</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">一般</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">良好</sys:String>
 
     <!-- Netplay Status -->
-    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Unknown">未知</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">良好</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">一般</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">较差</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Mousehook版支持：</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">公网可联机：</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">本地已测试：</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">只支持本地：</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">系统连线：</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">模拟器管理</sys:String>
@@ -277,9 +277,9 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">允许用户修改 Xenia 配置文件</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">管理</sys:String>
 
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.EditXConfig.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">编辑Xconfig设置</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">编辑Xbox 360面板设置</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">编辑</sys:String>
 
     <sys:String x:Key="ManagePage.Content.Install.Title">安装内容</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">为 Xenia 安装 DLC、更新及其他内容</sys:String>
@@ -334,17 +334,17 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Xenia {0} 的按键绑定文件已成功重新下载。</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">重新下载失败</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">重新下载按键绑定文件失败。&#10;错误：{0}</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">清理着色器缓存</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">删除着色器缓存文件</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">清理</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">未安装模拟器</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">清理着色器缓存前，请至少安装一个版本的 Xenia。</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">着色器缓存已清理</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">已成功为 Xenia {1} 清理 {0} 个着色器缓存文件。</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">未找到着色器缓存</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">未找到 Xenia {0} 的着色器缓存文件。&#10;请运行游戏以生成着色器缓存。</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">清理失败</sys:String>
-    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">清理 Xenia {0} 的着色器缓存失败。&#10;错误：{1}</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">清理着色器缓存</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">删除着色器缓存文件</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">清理</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">未安装模拟器</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">清理着色器缓存前，请至少安装一个版本的 Xenia。</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">着色器缓存已清理</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">已成功为 Xenia {1} 清理 {0} 个着色器缓存文件。</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">未找到着色器缓存</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">未找到 Xenia {0} 的着色器缓存文件。&#10;请运行游戏以生成着色器缓存。</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">清理失败</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">清理 Xenia {0} 的着色器缓存失败。&#10;错误：{1}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">界面设置</sys:String>
@@ -374,21 +374,21 @@
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">使用 MediaId 作为游戏标题</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">使用游戏文件中的 MediaId 查找匹配的媒体条目标题</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">禁用后始终使用数据库标题，而不使用特定于媒体的标题</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">优先使用游戏内置封面</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">优先使用游戏文件内置的美术资源（图标、缩略图），再从数据库下载</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">启用后，游戏图标和缩略图将优先从游戏文件本身（STFS/SVOD/ISO/ZAR/XEX）提取。禁用后则始终从数据库下载封面资源。</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">启动时检查更新</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">在应用程序启动时自动检查 Xenia 和 Xenia Manager 的更新</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">禁用此选项可在应用程序启动时跳过更新检查</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">自动检测新游戏</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">当有新游戏添加到游戏文件夹时自动检测</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">在游戏目录中检测到新游戏文件时显示通知</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">自动合并多碟游戏</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">在库扫描时自动合并检测到的同一游戏的多张光盘</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">启用后，与库中现有游戏匹配的额外光盘将自动合并，无需提示</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">以大屏模式启动</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">启动时以大屏模式打开，而不是主窗口</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">启用后，Xenia Manager 启动时直接进入大屏模式</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">正在加载 {0}</sys:String>
@@ -413,12 +413,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">未找到 {0} 的屏幕截图。</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">打开文件夹失败</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">打开屏幕截图文件夹时出错。&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">打开游戏位置</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">打开包含游戏文件的文件夹</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">未找到游戏文件</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">找不到游戏文件目录。</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">打开文件夹失败</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">打开游戏位置时出错。&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">补丁</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">下载</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">从仓库下载补丁</sys:String>
@@ -489,10 +489,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">已成功在您的 Steam 库中为 '{0}' 创建 Steam 快捷方式。</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">创建 Steam 快捷方式失败</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">为 '{0}' 创建 Steam 快捷方式失败。&#10;{1}</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">选择Steam帐户</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">发现多个Steam帐户</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">选择用于创建快捷方式的帐户：</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">取消</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">兼容性页面</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">打开兼容性页面</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">无兼容性页面</sys:String>
@@ -536,8 +536,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">未安装 Xenia</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">未找到任何 Xenia 安装。请先安装 Xenia 再尝试启动。</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">未找到大屏模式程序</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">在 Xenia Manager 旁边找不到 XeniaManager.BigScreen.exe 程序。</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - 补丁</sys:String>
@@ -594,37 +594,37 @@
     <sys:String x:Key="GameDetailsEditor.Icon">图标</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">选择图标</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">清除图标</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">重新获取图标</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">未找到图标</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">在 {0} 中未找到任何图标，现有图标保持不变。</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">图标已重新获取</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">已成功从 {0} 重新获取图标。</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">重新获取图标</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">请选择重新获取图标的来源：</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">游戏文件</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">游戏文件</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">重新获取封面</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">未找到封面</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">在 {0} 中未找到任何封面，现有封面保持不变。</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">封面已重新获取</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">已成功从 {0} 重新获取封面。</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">背景</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">选择背景</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">清除背景</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">重新获取背景</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">未找到背景</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">在 {0} 中未找到任何背景，现有背景保持不变。</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">背景已重新获取</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">已成功从 {0} 重新获取背景。</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">重新获取背景</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">请选择重新获取背景的来源：</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">游戏文件</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">游戏文件</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">重新获取失败</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">重新获取 {0} 失败。&#10;错误：{1}</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">自动检测</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID 和 Media ID 是自动检测的，无法更改。</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
@@ -638,14 +638,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">兼容性评级</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">兼容性页面 URL</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">输入兼容性页面 URL</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Mousehook版兼容性</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">没有可用的Mousehook说明</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Netplay版兼容性</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">公网可联机</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">本地已测试</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">只支持本地</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">系统连线</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">没有可用的Netplay版评论</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">更改游戏路径</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">选择游戏文件</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">缺少存储提供程序</sys:String>
@@ -680,9 +680,9 @@
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">取消</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">添加内容</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">选择内容文件</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">安装（解压）</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">安装（包）</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">保持包文件完整。需要最新的 Xenia Canary。</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">安装成功</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">以下内容已成功安装：</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">安装部分成功</sys:String>
@@ -746,16 +746,16 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">保存失败</sys:String>
 
     <!-- Edit XConfig Dialog -->
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">编辑Xconfig设置</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">保存</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">取消</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">分辨率</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">语言</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">联机国家/地区</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">默认档案</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">保存失败</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">无法加载 xconfig.settings 文件。</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">未找到任何已安装 Xenia 版本的 xconfig.settings 文件。</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia 版本选择对话框</sys:String>
@@ -828,8 +828,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">有可用更新：{0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Xenia Manager 有可用更新</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">检测到新游戏。重新扫描游戏目录以更新您的游戏库。</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">重新扫描</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">配置编辑器</sys:String>
@@ -874,9 +874,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">保存失败</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">绑定 "{0}" 的按键不能为 "None"。请选择有效的按键。</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">绑定 "{0}" 的值不能为 "None"。请选择有效的控制器输入。</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">多重绑定</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">选择要组合的绑定：</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">应用</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">重置设置</sys:String>
@@ -1048,8 +1048,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">无</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">快速</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">完整</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">内存导出回读</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">在 CPU 上读取着色器中内存导出写入的数据。&#10;某些游戏可能需要此功能，但会导致帧内同步，对性能有巨大影响。</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">绘制分辨率缩放 X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">用于对游戏不透明地缩放渲染分辨率的整数像素宽度缩放比例</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">绘制分辨率缩放 Y</sys:String>
@@ -1077,12 +1077,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">异步着色器编译</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">在后台线程中异步编译着色器并创建管线&#10;消除着色器编译卡顿，但在管线创建期间可能会导致短暂的渲染伪影&#10;禁用时，管线同步创建，会导致卡顿但无视觉伪影</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">遮挡查询</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">控制 EVENT_WRITE_ZPD 的硬件遮挡查询行为&#10;用于镜头光晕、物体剔除和自动曝光等效果&#10;fake：写入假结果，不询问 GPU。对大多数游戏安全&#10;fast：询问 GPU     但不等待。写入缓存结果，当 GPU 跟上时更新。（默认）&#10;fast-alt：类似于 fast，但对未解析的报告保留缓存的零结果&#10;strict：询问 GPU     并等待真实结果。最准确，但性能较差</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">模拟</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">快速（默认）</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">快速替代</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">严格</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">输入系统</sys:String>
@@ -1165,14 +1165,14 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">指定提供给客户端的额外命令行参数</sys:String>
 
     <!-- Config UI Settings - Logging Options -->
-    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">启用控制台</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">随主窗口打开控制台窗口</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">日志级别</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">要记录的最高日志级别</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">错误</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">警告</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">信息</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">调试</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">启用控制台</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">随主窗口打开控制台窗口</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">日志级别</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">要记录的最高日志级别</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">错误</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">警告</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">信息</sys:String>
+	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">调试</sys:String>
 
     <!-- Config UI Settings - Memory Options -->
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">保护零页</sys:String>
@@ -1315,10 +1315,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - 键盘和鼠标支持</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - 跨平台 UI 框架，采用 Fluent Design</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">CommunityToolkit.Mvvm</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip"> - .NET 的 MVVM 框架</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">Microsoft.Extensions.DependencyInjection</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip"> - .NET 的依赖注入容器</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - 为 Avalonia 提供的 Fluent Design 控件和主题</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1327,16 +1327,16 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - 适用于 .NET 的灵活日志框架</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - 游戏详情解析</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">ppy.SDL3-CS</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip"> - 用于手柄输入支持的 SDL3 绑定</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - 归档和压缩处理</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">System.IO.Hashing</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip"> - 快速哈希算法（XxHash）</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">TweenAvalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip"> - Avalonia 的程序化补间动画</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - .NET 的 Zstandard 压缩库</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">本应用程序不以任何方式隶属于 Microsoft Corporation 或 Xenia Project，也未获得其认可或赞助。所有商标、徽标和品牌名称均为其各自所有者的财产。&#10;Xbox 360 是 Microsoft Corporation 在美国和/或其他国家/地区的注册商标。&#10;Xenia 是 Xenia Project 的注册商标。&#10;对这些或其他商标的任何引用仅出于标识兼容性或功能的目的，并不意味着与商标持有者有任何关联或获得其认可。&#10;本软件仅供教育和信息目的使用。它不包含或分发 Microsoft Corporation 或任何第三方拥有的任何受版权保护的内容。用户全权负责确保其对本软件的使用符合所有适用法律，包括版权和许可法律。&#10;使用本应用程序运行或与专有软件或固件交互的任何行为都必须在相关最终用户许可协议 (EULA) 的范围内进行。本应用程序的开发者和分发者不以任何形式纵容或支持盗版行为。&#10;本应用程序按"原样"提供，不作任何明示或暗示的担保。使用风险自负。</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">使用实验性构建</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">启用以接收实验性功能更新和新功能的早期访问权限</sys:String>
@@ -1350,34 +1350,34 @@
     <sys:String x:Key="LibraryPage.DragDrop.Subtitle">支持 .iso、.xex、.zar 文件</sys:String>
 
     <!-- Multi-Disc Support -->
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.GameButton.DiscCount">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">管理光盘</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">添加、重命名或移除多碟游戏的光盘</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">管理光盘失败</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">管理光盘时出错。&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">{0} 张光盘</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">添加为附加光盘？</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">此文件似乎是 '{0}' 的另一张光盘，该游戏已在您的库中。&#10;&#10;是否将其添加为 '{0}' 的附加光盘，而不是创建单独的库条目？</sys:String>
 
     <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
-    <sys:String x:Key="DiscSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.Disc1">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.DiscN">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Header">选择光盘</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">此游戏有多张光盘，请选择要启动的一张。</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">光盘 1</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">光盘 {0}</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">（上次游玩）</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">（文件缺失）</sys:String>
 
     <!-- Manage Discs Dialog -->
-    <sys:String x:Key="ManageDiscsDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Subtitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Disc1Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingFile">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Title">{0} - 管理光盘</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">添加、重命名或移除光盘。您启动的光盘将被记住以供下次使用。</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">关闭</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">光盘 1</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">光盘 {0}</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">添加光盘</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">移除此光盘</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">找不到文件</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">选择光盘文件</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">缺少存储提供程序</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">存储提供程序不可用。</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">光盘已添加</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">此文件已与此游戏关联。</sys:String>
 </ResourceDictionary>
