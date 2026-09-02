@@ -7,7 +7,7 @@ using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Installation;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -80,9 +80,15 @@ public partial class MainWindow : FAAppWindow
         List<XeniaVersion> updatesAvailable = [];
         Dictionary<XeniaVersion, EmulatorInfo?> emulators = new Dictionary<XeniaVersion, EmulatorInfo?>
         {
-            { XeniaVersion.Canary, _viewModel.Settings.Settings.Emulator.Canary },
-            { XeniaVersion.Mousehook, _viewModel.Settings.Settings.Emulator.Mousehook },
-            { XeniaVersion.Netplay, _viewModel.Settings.Settings.Emulator.Netplay }
+            {
+                XeniaVersion.Canary, _viewModel.Settings.Settings.Emulator.Canary
+            },
+            {
+                XeniaVersion.Mousehook, _viewModel.Settings.Settings.Emulator.Mousehook
+            },
+            {
+                XeniaVersion.Netplay, _viewModel.Settings.Settings.Emulator.Netplay
+            }
         };
 
         Core.Manage.Launcher.XeniaUpdating = true;
@@ -209,10 +215,7 @@ public partial class MainWindow : FAAppWindow
         }
     }
 
-    private void OnWindowDisabled(bool isDisabled)
-    {
-        _viewModel.DisableWindow = isDisabled;
-    }
+    private void OnWindowDisabled(bool isDisabled) => _viewModel.DisableWindow = isDisabled;
 
     private async Task ShowWelcomeDialog()
     {

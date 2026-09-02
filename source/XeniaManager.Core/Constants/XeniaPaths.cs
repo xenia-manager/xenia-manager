@@ -8,6 +8,31 @@ namespace XeniaManager.Core.Constants;
 public sealed class XeniaPaths
 {
     /// <summary>
+    /// Name of the content folder inside every Xenia variant's directory.
+    /// </summary>
+    public const string ContentFolderName = "content";
+
+    /// <summary>
+    /// Name of the config folder inside every Xenia variant's directory.
+    /// </summary>
+    public const string ConfigFolderName = "config";
+
+    /// <summary>
+    /// Name of the patches folder inside every Xenia variant's directory.
+    /// </summary>
+    public const string PatchFolderName = "patches";
+
+    /// <summary>
+    /// Name of the screenshots folder inside every Xenia variant's directory.
+    /// </summary>
+    public const string ScreenshotsFolderName = "screenshots";
+
+    /// <summary>
+    /// Name of the SDL game controller database file inside every Xenia variant's directory.
+    /// </summary>
+    public const string GameControllerDatabaseName = "gamecontrollerdb.txt";
+
+    /// <summary>
     /// Gets the display name of the Xenia variant (e.g., "Xenia Canary", "Xenia Mousehook").
     /// </summary>
     public string Name { get; }
@@ -71,6 +96,12 @@ public sealed class XeniaPaths
     public string LogLocation { get; }
 
     /// <summary>
+    /// Gets the path to the SDL game controller database file for this Xenia variant.
+    /// Format: "{EmulatorDir}/gamecontrollerdb.txt"
+    /// </summary>
+    public string GameControllerDatabaseLocation { get; }
+
+    /// <summary>
     /// Gets the full path to the configuration file for this Xenia variant.
     /// Format: "{ConfigFolderLocation}/{ConfigName}"
     /// </summary>
@@ -112,11 +143,12 @@ public sealed class XeniaPaths
         EmulatorDir = Path.Combine("Emulators", name);
         ExecutableLocation = Path.Combine(EmulatorDir, ExecutableName);
 
-        ContentFolderLocation = Path.Combine(EmulatorDir, "content");
-        ConfigFolderLocation = Path.Combine(EmulatorDir, "config");
-        PatchFolderLocation = Path.Combine(EmulatorDir, "patches");
-        ScreenshotsFolderLocation = Path.Combine(EmulatorDir, "screenshots");
+        ContentFolderLocation = Path.Combine(EmulatorDir, ContentFolderName);
+        ConfigFolderLocation = Path.Combine(EmulatorDir, ConfigFolderName);
+        PatchFolderLocation = Path.Combine(EmulatorDir, PatchFolderName);
+        ScreenshotsFolderLocation = Path.Combine(EmulatorDir, ScreenshotsFolderName);
         LogLocation = Path.Combine(EmulatorDir, "xenia.log");
+        GameControllerDatabaseLocation = Path.Combine(EmulatorDir, GameControllerDatabaseName);
 
         ConfigLocation = Path.Combine(ConfigFolderLocation, ConfigName);
         DefaultConfigLocation = Path.Combine(EmulatorDir, ConfigName);
@@ -131,15 +163,16 @@ public sealed class XeniaPaths
     /// <summary>
     /// Represents the paths for the Xenia Canary variant.
     /// </summary>
-    public static readonly XeniaPaths Canary = new XeniaPaths(name: "Xenia Canary", executableName: "xenia_canary.exe", configName: "xenia-canary.config.toml");
+    public static readonly XeniaPaths Canary = new XeniaPaths("Xenia Canary", "xenia_canary.exe", "xenia-canary.config.toml");
 
     /// <summary>
     /// Represents the paths for the Xenia Mousehook variant.
     /// </summary>
-    public static readonly XeniaPaths Mousehook = new XeniaPaths(name: "Xenia Mousehook", executableName: "xenia_canary_mousehook.exe", configName: "xenia-canary-mousehook.config.toml", bindingsName: "bindings.ini");
+    public static readonly XeniaPaths Mousehook =
+        new XeniaPaths("Xenia Mousehook", "xenia_canary_mousehook.exe", "xenia-canary-mousehook.config.toml", "bindings.ini");
 
     /// <summary>
     /// Represents the paths for the Xenia Netplay variant.
     /// </summary>
-    public static readonly XeniaPaths Netplay = new XeniaPaths(name: "Xenia Netplay", executableName: "xenia_canary_netplay.exe", configName: "xenia-canary-netplay.config.toml");
+    public static readonly XeniaPaths Netplay = new XeniaPaths("Xenia Netplay", "xenia_canary_netplay.exe", "xenia-canary-netplay.config.toml");
 }

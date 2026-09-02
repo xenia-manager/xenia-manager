@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
              xmlns:controls="using:XeniaManager.Controls"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="600"
              x:Class="XeniaManager.Controls.ConfigEditorDialog"
              x:DataType="vm:ConfigEditorViewModel">
 

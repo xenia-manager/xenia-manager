@@ -24,5 +24,11 @@ public class ParsedGameDetails
     /// <summary>
     /// Gets a value indicating whether valid game details were extracted
     /// </summary>
-    public bool IsValid => Title != "Not found" || TitleId != "00000000";
+    public bool IsValid
+    {
+        get
+        {
+            return Title != "Not found" || TitleId != "00000000";
+        }
+    }
 }

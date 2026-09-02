@@ -2,12 +2,12 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Files;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Shortcut;
-using XeniaManager.Core.Models.Files.SteamShortcuts;
-using XeniaManager.Core.Models.Files.Vdf;
+using XeniaManager.Files.Models.SteamShortcuts;
+using XeniaManager.Files.Models.Vdf;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
@@ -71,6 +71,7 @@ public class ShortcutManager
         {
             arguments += $" {ArgumentFlags.Disc[0]} {discNumber}";
         }
+
         link.SetArguments(arguments);
         Logger.Debug<ShortcutManager>($"Shortcut arguments set to: {arguments}");
 
@@ -116,6 +117,7 @@ public class ShortcutManager
         {
             throw new Exception("Steam loginusers.vdf file not found");
         }
+
         Logger.Debug<ShortcutManager>($"Steam loginusers file found: {loggedInUsersFilePath}");
 
         // Load loginusers
@@ -128,7 +130,8 @@ public class ShortcutManager
     /// <summary>
     /// Shared logic for creating a Steam shortcut with a known user ID.
     /// </summary>
-    private static void CreateSteamShortcutInternal(Game game, string steamInstallPath, VdfFile loggedUsersFile, string userId, bool restartSteam, int? discNumber)
+    private static void CreateSteamShortcutInternal(Game game, string steamInstallPath, VdfFile loggedUsersFile, string userId, bool restartSteam,
+        int? discNumber)
     {
         // Find the userdata directory (try 32-bit ID first, then 64-bit)
         string? userDataDirectory = FindSteamUserDataDirectory(steamInstallPath, loggedUsersFile, userId);
@@ -136,6 +139,7 @@ public class ShortcutManager
         {
             throw new Exception("Steam user data directory not found");
         }
+
         Logger.Debug<ShortcutManager>($"Steam userdata directory found: {userDataDirectory}");
 
         // Load or create a shortcuts file
@@ -154,6 +158,24 @@ public class ShortcutManager
 
         // Create and add the game shortcut
         (SteamShortcut gameShortcut, uint appId) = CreateSteamShortcutFromGame(game, discNumber);
+
+        // Resolve AppId collisions against existing shortcuts (e.g., CRC32 hash collisions)
+        if (shortcutsFile.GetShortcutByAppId(appId) != null)
+        {
+            appId = ResolveAppIdCollision(shortcutsFile, gameShortcut, appId);
+            gameShortcut.SetAppIdFromUint(appId);
+        }
+
+        // Back up the existing shortcuts file before modifying it.
+        // Steam deletes shortcuts.vdf entirely when it considers the content corrupted,
+        // so keeping a backup limits the damage of any write that goes wrong.
+        if (File.Exists(shortcutsFilePath))
+        {
+            string backupPath = shortcutsFilePath + ".bak";
+            Logger.Info<ShortcutManager>($"Backing up existing shortcuts file to {backupPath}");
+            File.Copy(shortcutsFilePath, backupPath, true);
+        }
+
         shortcutsFile.AddShortcut(gameShortcut);
         shortcutsFile.Save(shortcutsFilePath);
 
@@ -297,7 +319,8 @@ public class ShortcutManager
             AllowOverlay = true,
             AllowDesktopConfig = true,
             IsHidden = false,
-            OpenVR = false
+            OpenVR = false,
+            IsCreatedByXenia = true
         };
 
         // Set icon if available
@@ -314,6 +337,33 @@ public class ShortcutManager
         Logger.Debug<ShortcutManager>($"Computed AppId: {appId}");
 
         return (shortcut, appId);
+    }
+
+    /// <summary>
+    /// Resolves an AppId collision with an existing shortcut by recomputing the AppId with a salt.
+    /// </summary>
+    /// <param name="shortcutsFile">The shortcuts file containing existing shortcuts.</param>
+    /// <param name="shortcut">The new shortcut whose AppId collides.</param>
+    /// <param name="appId">The colliding AppId.</param>
+    /// <returns>A unique AppId, or the last computed AppId if uniqueness could not be achieved.</returns>
+    private static uint ResolveAppIdCollision(SteamShortcutsFile shortcutsFile, SteamShortcut shortcut, uint appId)
+    {
+        const int MaxAttempts = 64;
+
+        Logger.Warning<ShortcutManager>($"Steam shortcut AppId 0x{appId:X8} is already in use by another shortcut, recomputing with salt");
+
+        for (int attempt = 0; attempt < MaxAttempts; attempt++)
+        {
+            appId = shortcut.ComputeAppId($"#{attempt}");
+            if (shortcutsFile.GetShortcutByAppId(appId) == null)
+            {
+                Logger.Info<ShortcutManager>($"Resolved AppId collision: 0x{appId:X8}");
+                return appId;
+            }
+        }
+
+        Logger.Warning<ShortcutManager>($"Could not resolve AppId collision after {MaxAttempts} attempts, using last computed AppId");
+        return appId;
     }
 
     /// <summary>
@@ -410,6 +460,7 @@ public class ShortcutManager
                 Logger.Info<ShortcutManager>($"Found Steam installation: {path}");
                 return path;
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in 64-bit registry");
 
             // 2. Fallback to the 32-bit registry view
@@ -421,6 +472,7 @@ public class ShortcutManager
                 Logger.Info<ShortcutManager>($"Found Steam installation: {path}");
                 return path;
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in 32-bit registry");
 
             // 3. Default locations: Program Files (x86)
@@ -435,6 +487,7 @@ public class ShortcutManager
                     return defaultX86;
                 }
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in Program Files (x86)");
 
             // 4. Default locations: Program Files
@@ -449,6 +502,7 @@ public class ShortcutManager
                     return default64;
                 }
             }
+
             Logger.Debug<ShortcutManager>("Steam not found in Program Files");
         }
         else

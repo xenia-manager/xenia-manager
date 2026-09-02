@@ -1,0 +1,118 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="1100"
+             d:DesignHeight="780"
+             x:Class="XeniaManager.BigScreen.Views.Modals.PatchesPaneView"
+             x:DataType="vm:PatchesPaneViewModel">
+
+    <UserControl.Styles>
+        <!-- Patch list rows (entry + action) -->
+        <Style Selector="Border.patch-row">
+            <Setter Property="Padding"
+                    Value="18,14" />
+            <Setter Property="Background"
+                    Value="{DynamicResource CardBackground}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource CardBorderInner}" />
+            <Setter Property="BorderThickness"
+                    Value="3" />
+            <Setter Property="BoxShadow"
+                    Value="{DynamicResource CardShadowSoft}" />
+            <Setter Property="CornerRadius"
+                    Value="10" />
+        </Style>
+        <Style Selector="Border.patch-row.selected">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource AccentColor}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *"
+          RowSpacing="24">
+
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*, Auto">
+            <prim:IconStat Grid.Column="0"
+                           Icon="DocumentText"
+                           Stat="{Binding HeaderText}"
+                           Classes="pane-header-stat"
+                           VerticalAlignment="Center" />
+        </Grid>
+
+        <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Hidden">
+            <ItemsControl x:Name="PatchList"
+                          ItemsSource="{Binding Rows}"
+                          Margin="0,0,0,20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="items:PatchListRowViewModel">
+                        <Border Classes="patch-row"
+                                Classes.selected="{Binding IsSelected}">
+                            <Grid ColumnDefinitions="Auto,*,Auto"
+                                  ColumnSpacing="20">
+
+                                <!-- ACTION ICON or ENABLED MARKER -->
+                                <fluent:SymbolIcon Grid.Column="0"
+                                                   Symbol="ArrowDownload"
+                                                   IsVisible="{Binding IsDownloadAction}"
+                                                   FontSize="24"
+                                                   Foreground="{DynamicResource TextSecondary}"
+                                                   VerticalAlignment="Center" />
+                                <fluent:SymbolIcon Grid.Column="0"
+                                                   Symbol="Delete"
+                                                   IsVisible="{Binding IsRemoveAction}"
+                                                   FontSize="24"
+                                                   Foreground="{DynamicResource TextError}"
+                                                   VerticalAlignment="Center" />
+                                <fluent:SymbolIcon Grid.Column="0"
+                                                   Symbol="Checkmark"
+                                                   IsVisible="{Binding IsEnabled}"
+                                                   FontSize="24"
+                                                   Foreground="{DynamicResource AccentColor}"
+                                                   VerticalAlignment="Center"
+                                                   Opacity="0.9" />
+
+                                <!-- TITLE / PATCH NAME -->
+                                <StackPanel Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Spacing="2">
+                                    <TextBlock Text="{Binding Title}"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontSize="20"
+                                               Foreground="{DynamicResource TextPrimary}" />
+                                    <TextBlock Text="{Binding Subtitle}"
+                                               IsVisible="{Binding HasSubtitle}"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontSize="15"
+                                               Foreground="{DynamicResource TextSecondary}" />
+                                </StackPanel>
+
+                                <!-- COMMAND COUNT (entries) -->
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding CommandCountText}"
+                                           IsVisible="{Binding !IsAction}"
+                                           FontSize="16"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"
+                                    Spacing="10" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

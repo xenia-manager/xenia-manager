@@ -18,6 +18,7 @@ public class DoubleFormatConverter : IMultiValueConverter
             string? format = values.Count >= 2 ? values[1] as string : "F0";
             return doubleValue.ToString(format ?? "F0", culture);
         }
+
         return string.Empty;
     }
 }

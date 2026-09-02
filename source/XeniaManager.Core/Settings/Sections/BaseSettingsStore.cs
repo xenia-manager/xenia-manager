@@ -28,6 +28,5 @@ public abstract class BaseSettingsStore
     [JsonPropertyName("emulators")]
     public EmulatorSettings Emulator { get; set; } = new EmulatorSettings();
 
-    [JsonPropertyName("update_checks")]
-    public UpdateCheckSettings UpdateChecks { get; set; } = new UpdateCheckSettings();
+    [JsonPropertyName("update_checks")] public UpdateCheckSettings UpdateChecks { get; set; } = new UpdateCheckSettings();
 }

@@ -43,6 +43,7 @@ public partial class LibraryPage : UserControl
             {
                 _viewModel.SelectAllGamesCommand.Execute(null);
             }
+
             e.Handled = true;
         }
     }
@@ -127,7 +128,10 @@ public partial class LibraryPage : UserControl
     {
         List<GameItemViewModel> games = _viewModel.Games.ToList();
         int clickedIndex = games.IndexOf(clickedGame);
-        if (clickedIndex < 0) return;
+        if (clickedIndex < 0)
+        {
+            return;
+        }
 
         if (e.KeyModifiers.HasFlag(KeyModifiers.Shift) && _lastSelectedGame != null)
         {
@@ -156,6 +160,7 @@ public partial class LibraryPage : UserControl
             {
                 game.IsSelected = false;
             }
+
             clickedGame.IsSelected = true;
             _lastSelectedGame = clickedGame;
         }
@@ -184,6 +189,7 @@ public partial class LibraryPage : UserControl
         {
             game.IsSelected = false;
         }
+
         _lastSelectedGame = null;
     }
 
@@ -194,15 +200,9 @@ public partial class LibraryPage : UserControl
         _viewModel.IsDragOverlayVisible = true;
     }
 
-    private void OnDragOver(object? sender, DragEventArgs e)
-    {
-        e.DragEffects = DragDropEffects.Copy;
-    }
+    private void OnDragOver(object? sender, DragEventArgs e) => e.DragEffects = DragDropEffects.Copy;
 
-    private void OnDragLeave(object? sender, DragEventArgs e)
-    {
-        _viewModel.IsDragOverlayVisible = false;
-    }
+    private void OnDragLeave(object? sender, DragEventArgs e) => _viewModel.IsDragOverlayVisible = false;
 
     private async void OnDrop(object? sender, DragEventArgs e)
     {

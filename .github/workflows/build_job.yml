@@ -61,8 +61,18 @@ jobs:
           -o publish/desktop
           source/XeniaManager/XeniaManager.csproj
 
+      - name: Publish the BigScreen app
+        shell: pwsh
+        run: >
+          dotnet publish -c Release -r win-x64 --self-contained false
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:InformationalVersion="${{ steps.get_version_info.outputs.VERSION_TAG }}"
+          -o publish/desktop
+          source/XeniaManager.BigScreen/XeniaManager.BigScreen.csproj
+
       - name: Upload artifact
         uses: actions/upload-artifact@v6
         with:
           name: xenia_manager_${{ inputs.release_type }}
-          path: publish/desktop/XeniaManager.exe
+          path: publish/desktop/*.exe

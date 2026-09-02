@@ -18,6 +18,7 @@ public class StringIsNotEmptyConverter : IValueConverter
         {
             return !string.IsNullOrEmpty(str);
         }
+
         return false;
     }
 

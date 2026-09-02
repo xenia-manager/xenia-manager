@@ -1,0 +1,61 @@
+<Button xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="96"
+        x:Class="XeniaManager.BigScreen.Controls.Cards.ContentRow"
+        x:DataType="vm:ContentItemViewModel"
+        Classes.selected="{Binding IsSelected}">
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <Border x:Name="RowBorder"
+                    Padding="18,14"
+                    Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderInner}"
+                    BorderThickness="3"
+                    BoxShadow="{DynamicResource CardShadowSoft}"
+                    CornerRadius="10">
+                <ContentPresenter Content="{TemplateBinding Content}"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Center" />
+            </Border>
+        </ControlTemplate>
+    </Button.Template>
+    <Grid ColumnDefinitions="Auto,*,Auto"
+          ColumnSpacing="20">
+        <!-- Icon: package thumbnail when available, document fallback otherwise -->
+        <Panel VerticalAlignment="Center">
+            <Image Source="{Binding ThumbnailImage}"
+                   IsVisible="{Binding HasThumbnail}"
+                   Width="48"
+                   Height="48"
+                   Stretch="Uniform" />
+            <fluent:SymbolIcon Symbol="Document"
+                               FontSize="26"
+                               Foreground="{DynamicResource TextSecondary}"
+                               VerticalAlignment="Center"
+                               IsVisible="{Binding !HasThumbnail}" />
+        </Panel>
+        <StackPanel Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Spacing="2">
+            <TextBlock Text="{Binding DisplayName}"
+                       TextTrimming="CharacterEllipsis"
+                       FontSize="20"
+                       Foreground="{DynamicResource TextPrimary}" />
+            <TextBlock Text="{Binding FileName}"
+                       TextTrimming="CharacterEllipsis"
+                       FontSize="15"
+                       Foreground="{DynamicResource TextSecondary}" />
+        </StackPanel>
+        <fluent:SymbolIcon Grid.Column="2"
+                           Symbol="Delete"
+                           FontSize="22"
+                           Foreground="{DynamicResource TextError}"
+                           VerticalAlignment="Center" />
+    </Grid>
+</Button>

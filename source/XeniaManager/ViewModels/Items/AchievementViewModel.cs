@@ -3,8 +3,8 @@ using System.IO;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.Gpd;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.Gpd;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.ViewModels.Items;
@@ -32,42 +32,90 @@ public partial class AchievementViewModel : ViewModelBase
     /// <summary>
     /// Gets the achievement ID.
     /// </summary>
-    public uint AchievementId => Achievement.AchievementId;
+    public uint AchievementId
+    {
+        get
+        {
+            return Achievement.AchievementId;
+        }
+    }
 
     /// <summary>
     /// Gets the gamerscore value.
     /// </summary>
-    public int Gamerscore => Achievement.Gamerscore;
+    public int Gamerscore
+    {
+        get
+        {
+            return Achievement.Gamerscore;
+        }
+    }
 
     /// <summary>
     /// Gets the achievement name.
     /// </summary>
-    public string Name => Achievement.Name;
+    public string Name
+    {
+        get
+        {
+            return Achievement.Name;
+        }
+    }
 
     /// <summary>
     /// Gets the description (unlocked or locked based on status).
     /// </summary>
-    public string Description => Achievement.IsEarned ? Achievement.UnlockedDescription : Achievement.LockedDescription;
+    public string Description
+    {
+        get
+        {
+            return Achievement.IsEarned ? Achievement.UnlockedDescription : Achievement.LockedDescription;
+        }
+    }
 
     /// <summary>
     /// Gets whether the achievement is unlocked.
     /// </summary>
-    public bool IsUnlocked => Achievement.IsEarned;
+    public bool IsUnlocked
+    {
+        get
+        {
+            return Achievement.IsEarned;
+        }
+    }
 
     /// <summary>
     /// Gets the unlocked date time (null if not unlocked).
     /// </summary>
-    public DateTime? UnlockDateTime => Achievement.UnlockDateTime;
+    public DateTime? UnlockDateTime
+    {
+        get
+        {
+            return Achievement.UnlockDateTime;
+        }
+    }
 
     /// <summary>
     /// Gets the formatted unlocked date.
     /// </summary>
-    public string UnlockDateDisplay => UnlockDateTime?.ToString("yyyy-MM-dd HH:mm") ?? LocalizationHelper.GetText("InstalledContentDialog.NotUnlocked");
+    public string UnlockDateDisplay
+    {
+        get
+        {
+            return UnlockDateTime?.ToString("yyyy-MM-dd HH:mm") ?? LocalizationHelper.GetText("InstalledContentDialog.NotUnlocked");
+        }
+    }
 
     /// <summary>
     /// Gets the icon symbol based on unlocked status.
     /// </summary>
-    public string UnlockIcon => IsUnlocked ? "Checkmark" : "LockClosed";
+    public string UnlockIcon
+    {
+        get
+        {
+            return IsUnlocked ? "Checkmark" : "LockClosed";
+        }
+    }
 
     /// <summary>
     /// Gets the achievement image if available and unlocked, otherwise null.
@@ -112,12 +160,24 @@ public partial class AchievementViewModel : ViewModelBase
     /// <summary>
     /// Gets whether an achievement image is available.
     /// </summary>
-    public bool HasAchievementImage => AchievementImage != null;
+    public bool HasAchievementImage
+    {
+        get
+        {
+            return AchievementImage != null;
+        }
+    }
 
     /// <summary>
     /// Gets whether to show the LockOpen icon (unlocked without an image).
     /// </summary>
-    public bool ShowLockOpenIcon => IsUnlocked && !HasAchievementImage;
+    public bool ShowLockOpenIcon
+    {
+        get
+        {
+            return IsUnlocked && !HasAchievementImage;
+        }
+    }
 
     /// <summary>
     /// Gets or sets whether advanced achievement features are enabled.

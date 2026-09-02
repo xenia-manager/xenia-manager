@@ -1,5 +1,5 @@
 using System.Globalization;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Models.Items;
 
@@ -46,7 +46,7 @@ public class LanguageItem
     private static string CapitalizeFirst(string text, CultureInfo culture)
     {
         Logger.Trace<LanguageItem>($"Capitalizing first character of text: '{text}' for culture: {culture.Name}");
-        
+
         if (string.IsNullOrEmpty(text))
         {
             Logger.Trace<LanguageItem>($"Text is null or empty, returning as-is: '{text}'");
@@ -56,11 +56,11 @@ public class LanguageItem
         // Handle surrogate pairs / non-BMP characters correctly
         TextInfo textInfo = culture.TextInfo;
         int firstCharLength = char.IsSurrogatePair(text, 0) ? 2 : 1;
-        
+
         string firstChar = text.Substring(0, firstCharLength);
         string remainingText = text.Substring(firstCharLength);
         string capitalizedText = textInfo.ToUpper(firstChar) + remainingText;
-        
+
         Logger.Trace<LanguageItem>($"Capitalized text: '{capitalizedText}' from original: '{text}' for culture: {culture.Name}");
         return capitalizedText;
     }
@@ -77,6 +77,7 @@ public class LanguageItem
         {
             return Culture.Equals(other.Culture);
         }
+
         return false;
     }
 
@@ -85,8 +86,5 @@ public class LanguageItem
     /// The hash code is based on the underlying CultureInfo
     /// </summary>
     /// <returns>The hash code of the associated CultureInfo</returns>
-    public override int GetHashCode()
-    {
-        return Culture.GetHashCode();
-    }
+    public override int GetHashCode() => Culture.GetHashCode();
 }

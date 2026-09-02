@@ -7,7 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;
@@ -62,7 +62,13 @@ public class ThemeService
     /// <summary>
     /// Available themes for display in UI dropdowns, sorted and localized.
     /// </summary>
-    public ReadOnlyObservableCollection<ThemeDisplayItem> ThemeDisplayItems => _themeDisplayItems ??= CreateThemeDisplayItems();
+    public ReadOnlyObservableCollection<ThemeDisplayItem> ThemeDisplayItems
+    {
+        get
+        {
+            return _themeDisplayItems ??= CreateThemeDisplayItems();
+        }
+    }
 
     /// <summary>
     /// Locates and caches the app's <see cref="FluentAvaloniaTheme"/> style instance.
@@ -158,6 +164,7 @@ public class ThemeService
                     ? ThemeVariant.Dark
                     : ThemeVariant.Light;
             }
+
             Application.Current.RequestedThemeVariant = targetVariant;
         }
 
@@ -192,7 +199,7 @@ public class ThemeService
             {
                 Theme.Amoled => "avares://XeniaManager/Resources/Themes/Amoled.axaml",
                 Theme.Dark => "avares://XeniaManager/Resources/Themes/Dark.axaml",
-                Theme.Steam =>  "avares://XeniaManager/Resources/Themes/Steam.axaml",
+                Theme.Steam => "avares://XeniaManager/Resources/Themes/Steam.axaml",
                 _ => "avares://XeniaManager/Resources/Themes/Light.axaml"
             };
 
@@ -226,8 +233,5 @@ public class ThemeService
     /// <summary>
     /// All themes defined on the <see cref="Theme"/> enum.
     /// </summary>
-    public IEnumerable<Theme> GetAvailableThemes()
-    {
-        return (Theme[])Enum.GetValues(typeof(Theme));
-    }
+    public IEnumerable<Theme> GetAvailableThemes() => (Theme[])Enum.GetValues(typeof(Theme));
 }

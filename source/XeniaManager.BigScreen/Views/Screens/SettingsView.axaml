@@ -1,0 +1,370 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Screens"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:set="using:XeniaManager.BigScreen.Controls.Settings"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:sys="using:System"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="800"
+             x:Class="XeniaManager.BigScreen.Views.Screens.SettingsView"
+             x:DataType="vm:SettingsViewModel"
+             Background="{Binding ScreenBackground}">
+
+    <Grid RowDefinitions="Auto, *, Auto"
+          Margin="60">
+        <TextBlock Grid.Row="0"
+                   Classes="screen-title"
+                   Text="{DynamicResource Settings.Title}"
+                   Margin="0,20,0,30" />
+
+        <ScrollViewer x:Name="SvSettings"
+                      Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Hidden">
+            <StackPanel Orientation="Vertical"
+                        Spacing="14">
+
+                <!-- PREFERENCES -->
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.Preferences}" />
+
+                <!-- PROFILES -->
+                <Border x:Name="CardManageProfiles"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowManageProfiles.IsSelected}">
+                    <DockPanel>
+                        <Button x:Name="BtnManageProfiles"
+                                Classes="settings-button"
+                                DockPanel.Dock="Right"
+                                Content="{DynamicResource Settings.ManageProfiles}"
+                                Click="OnManageProfilesClick" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.ManageProfiles}" />
+                            <ItemsControl ItemsSource="{Binding ActiveProfiles}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="sys:String">
+                                        <TextBlock Classes="settings-subtitle"
+                                                   Text="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- LIBRARY VIEW -->
+                <Border x:Name="CardLibraryView"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowLibraryView.IsSelected}">
+                    <DockPanel>
+                        <ComboBox x:Name="LibraryViewModeCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding LibraryViewModeOptions}"
+                                  SelectedItem="{Binding SelectedLibraryViewMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.LibraryView}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- CARD IMAGE -->
+                <Border x:Name="CardCardImage"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowCardImage.IsSelected}">
+                    <DockPanel>
+                        <ComboBox x:Name="CardImageModeCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding CardImageModeOptions}"
+                                  SelectedItem="{Binding SelectedCardImageMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.CardImage}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- TIME FORMAT -->
+                <Border x:Name="CardTimeFormat"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowTimeFormat.IsSelected}">
+                    <DockPanel>
+                        <ComboBox x:Name="TimeFormatCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding TimeFormatOptions}"
+                                  SelectedItem="{Binding SelectedTimeFormat}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.TimeFormat}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- QUIT BEHAVIOUR -->
+                <Border x:Name="CardQuitToggle"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowQuitToggle.IsSelected}">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkQuitBehaviour"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding ReturnToXeniaOnQuit}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="toggle-switch" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.ReturnToXeniaOnQuit}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.ReturnToXeniaOnQuit.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- FULLSCREEN LAUNCHES -->
+                <Border x:Name="CardFullscreenToggle"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowFullscreenToggle.IsSelected}">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkFullscreenLaunches"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding LaunchGamesFullscreen}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="toggle-switch" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.LaunchGamesFullscreen}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.LaunchGamesFullscreen.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- START IN BIG SCREEN -->
+                <Border x:Name="CardStartInBigScreenToggle"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowStartInBigScreenToggle.IsSelected}">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkStartInBigScreen"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding StartInBigScreen}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="toggle-switch" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.StartInBigScreen}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.StartInBigScreen.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- ROTATE PROFILES -->
+                <Border x:Name="CardRotateProfiles"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowRotateProfiles.IsSelected}">
+                    <DockPanel>
+                        <CheckBox x:Name="ChkRotateProfiles"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding RotateProfiles}"
+                                  Padding="12,8"
+                                  VerticalAlignment="Center"
+                                  Classes="toggle-switch" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+                            <TextBlock Classes="settings-label"
+                                       Text="{DynamicResource Settings.RotateProfiles}" />
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.RotateProfiles.Description}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- THEME -->
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.Theme}" />
+
+                <!-- BACKGROUND TYPE -->
+                <Border x:Name="CardBackgroundMode"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowBackgroundMode.IsSelected}">
+                    <DockPanel>
+                        <ComboBox x:Name="BackgroundModeCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding BackgroundModeOptions}"
+                                  SelectedItem="{Binding SelectedBackgroundMode}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.BackgroundType}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- PRIMARY COLOUR -->
+                <Border x:Name="CardPrimaryColour"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowPrimaryColour.IsSelected}">
+                    <DockPanel>
+                        <set:ColorPickerField x:Name="PrimaryColorField"
+                                              DockPanel.Dock="Right"
+                                              Color="{Binding PrimaryColor, Mode=TwoWay}"
+                                              ActiveTarget="{Binding ActiveColourTarget, Mode=TwoWay}"
+                                              IsEditorActive="{Binding IsPrimaryColourEditorActive}"
+                                              VerticalAlignment="Center" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.PrimaryColour}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- ACCENT COLOUR -->
+                <Border x:Name="CardAccentColour"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowAccentColour.IsSelected}">
+                    <DockPanel>
+                        <set:ColorPickerField x:Name="AccentColorField"
+                                              DockPanel.Dock="Right"
+                                              Color="{Binding AccentColor, Mode=TwoWay}"
+                                              ActiveTarget="{Binding ActiveColourTarget, Mode=TwoWay}"
+                                              IsEditorActive="{Binding IsAccentColourEditorActive}"
+                                              VerticalAlignment="Center" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.AccentColour}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- VIGNETTE OPACITY -->
+                <Border x:Name="CardVignette"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowVignette.IsSelected}">
+                    <DockPanel>
+                        <TextBlock Classes="settings-value"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding VignetteText}"
+                                   Width="60"
+                                   TextAlignment="Right" />
+                        <Slider x:Name="SldVignette"
+                                DockPanel.Dock="Right"
+                                Minimum="0"
+                                Maximum="1"
+                                Value="{Binding VignetteOpacity, Mode=TwoWay}"
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center"
+                                Width="340" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.Vignette}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- BACKGROUND IMAGE -->
+                <Border x:Name="CardBackgroundImage"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowBackgroundImage.IsSelected}">
+                    <DockPanel>
+                        <Button x:Name="BtnSelectImage"
+                                Classes="settings-button"
+                                DockPanel.Dock="Right"
+                                Content="{DynamicResource Settings.SelectImage}"
+                                Click="OnSelectImageClick" />
+                        <TextBlock Classes="settings-value"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding ImageDisplayText}"
+                                   Margin="0,0,16,0"
+                                   TextTrimming="CharacterEllipsis" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.BackgroundImage}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- CONTROLLERS -->
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.Controllers}" />
+
+                <Border Classes="settings-card">
+                    <StackPanel Orientation="Vertical"
+                                Spacing="12">
+                        <Grid>
+                            <ItemsControl ItemsSource="{Binding Controllers}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="items:GamepadItemViewModel">
+                                        <set:GamepadCard />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Classes="settings-subtitle"
+                                       Text="{DynamicResource Settings.Controllers.None}"
+                                       IsVisible="{Binding HasNoControllers}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,16,0,16" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- XCONFIG (least-worthy section, bottom of the screen) -->
+                <TextBlock Classes="settings-section"
+                           Text="{DynamicResource Settings.Section.XConfig}"
+                           IsVisible="{Binding HasXConfig}" />
+
+                <!-- XCONFIG VERSION -->
+                <Border x:Name="CardXConfigVersion"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowXConfigVersion.IsSelected}"
+                        IsVisible="{Binding HasXConfig}">
+                    <DockPanel>
+                        <ComboBox x:Name="XConfigVersionCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding XConfigVersions}"
+                                  SelectedItem="{Binding SelectedXConfigVersion}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.XConfig.Version}" />
+                    </DockPanel>
+                </Border>
+
+                <!-- XCONFIG RESOLUTION -->
+                <Border x:Name="CardXConfig"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowXConfig.IsSelected}"
+                        IsVisible="{Binding HasXConfig}">
+                    <DockPanel>
+                        <ComboBox x:Name="XConfigResolutionCombo"
+                                  Classes="settings-combo"
+                                  DockPanel.Dock="Right"
+                                  ItemsSource="{Binding XConfigResolutions}"
+                                  SelectedItem="{Binding SelectedXConfigResolution}"
+                                  DisplayMemberBinding="{Binding DisplayName}" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.XConfig.Resolution}" />
+                    </DockPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2"
+                    Classes="hint-bar"
+                    IsVisible="{Binding IsHintBarVisible}">
+            <prim:InputHint Char="B"
+                            KeyColour="{DynamicResource HintKeyB}"
+                            Text="{DynamicResource Settings.Hint.Back}" />
+            <prim:InputHint Char="A"
+                            KeyColour="{DynamicResource HintKeyA}"
+                            Text="{DynamicResource Settings.Hint.Select}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

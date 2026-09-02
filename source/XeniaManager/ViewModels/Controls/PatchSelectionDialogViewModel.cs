@@ -3,8 +3,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Models.Database.Patches;
+using XeniaManager.Database;
+using XeniaManager.Database.Models.Patches;
 using XeniaManager.ViewModels.Items;
 
 namespace XeniaManager.ViewModels.Controls;
@@ -92,8 +92,5 @@ public partial class PatchSelectionDialogViewModel : ViewModelBase
     /// Invoked when the user clicks the Cancel button.
     /// </summary>
     [RelayCommand]
-    private void Cancel()
-    {
-        SelectedPatch = null;
-    }
+    private void Cancel() => SelectedPatch = null;
 }

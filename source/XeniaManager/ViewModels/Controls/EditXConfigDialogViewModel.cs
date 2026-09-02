@@ -4,12 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Files;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Models.Files.XConfig;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.XConfig;
 
 namespace XeniaManager.ViewModels.Controls;
 
@@ -113,7 +113,8 @@ public partial class EditXConfigDialogViewModel : ViewModelBase
         SelectedLanguageIndex = FindIndex(Languages, l => (uint)l.Value == (uint)Xconfig.Language);
         SelectedCountryIndex = FindIndex(Countries, c => (byte)c.Value == (byte)Xconfig.Country);
 
-        Logger.Debug<EditXConfigDialogViewModel>($"Initial selection indices - Resolution: {SelectedResolutionIndex}, Language: {SelectedLanguageIndex}, Country: {SelectedCountryIndex}");
+        Logger.Debug<EditXConfigDialogViewModel>(
+            $"Initial selection indices - Resolution: {SelectedResolutionIndex}, Language: {SelectedLanguageIndex}, Country: {SelectedCountryIndex}");
 
         // Add available profiles to the combobox
         foreach (AccountInfo account in accounts)
@@ -160,6 +161,7 @@ public partial class EditXConfigDialogViewModel : ViewModelBase
                 return i;
             }
         }
+
         return -1;
     }
 

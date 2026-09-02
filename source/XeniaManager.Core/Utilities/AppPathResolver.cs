@@ -1,4 +1,4 @@
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Utilities;
 
@@ -8,7 +8,21 @@ namespace XeniaManager.Core.Utilities;
 /// </summary>
 public class AppPathResolver
 {
-    private static readonly string _baseDirectory = ResolveBaseDirectory();
+    private static string _baseDirectory = ResolveBaseDirectory();
+
+    /// <summary>
+    /// Redirects the base directory to the given absolute path. Used by companion
+    /// executables (e.g. BigScreen) to share the main application's data folders.
+    /// Must be called before any path resolution.
+    /// </summary>
+    /// <param name="path">Absolute path to use as the base directory.</param>
+    public static void SetBaseDirectory(string path)
+    {
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            _baseDirectory = Path.GetFullPath(path);
+        }
+    }
 
     /// <summary>
     /// Resolves the most appropriate base directory for the application at runtime.
@@ -70,7 +84,10 @@ public class AppPathResolver
     /// </summary>
     /// <param name="relativePaths">An ordered set of relative path segments.</param>
     /// <returns>The resulting absolute path.</returns>
-    public static string GetFullPath(params string[] relativePaths) => Path.Combine(new[] { _baseDirectory }.Concat(relativePaths).ToArray());
+    public static string GetFullPath(params string[] relativePaths) => Path.Combine(new[]
+    {
+        _baseDirectory
+    }.Concat(relativePaths).ToArray());
 
     /// <summary>
     /// Replaces all characters invalid for use in Windows filenames with spaces.
@@ -85,11 +102,13 @@ public class AppPathResolver
         {
             input = input.Replace(c, ' ');
         }
+
         string result = input;
         while (result.Contains("  "))
         {
             result = result.Replace("  ", " ");
         }
+
         result = result.Trim();
         Logger.Debug<AppPathResolver>($"Sanitized filename result: '{result}'");
         return result;

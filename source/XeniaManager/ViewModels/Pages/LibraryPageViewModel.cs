@@ -15,20 +15,24 @@ using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Database;
+using XeniaManager.Files;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Database.Xbox;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Database.Models.Xbox;
+using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Database.Models.GameCompatibility;
+using XeniaManager.Database.Models.MousehookCompatibility;
+using XeniaManager.Database.Models.NetplayCompatibility;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Items;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.ViewModels.Pages;
 
@@ -53,7 +57,13 @@ public partial class LibraryPageViewModel : ViewModelBase
     /// <summary>
     /// Computed property for XAML binding compatibility
     /// </summary>
-    public bool IsGridView => ViewOption == LibraryViewOption.Grid;
+    public bool IsGridView
+    {
+        get
+        {
+            return ViewOption == LibraryViewOption.Grid;
+        }
+    }
 
     partial void OnViewOptionChanged(LibraryViewOption value)
     {
@@ -63,10 +73,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleGridView()
-    {
-        ViewOption = ViewOption == LibraryViewOption.Grid ? LibraryViewOption.List : LibraryViewOption.Grid;
-    }
+    private void ToggleGridView() => ViewOption = ViewOption == LibraryViewOption.Grid ? LibraryViewOption.List : LibraryViewOption.Grid;
 
     [ObservableProperty] private GameSortOption _sortOption = GameSortOption.Title;
     [ObservableProperty] private bool _sortDescending = false;
@@ -88,15 +95,21 @@ public partial class LibraryPageViewModel : ViewModelBase
     /// <summary>
     /// Returns the display name for the current sort option.
     /// </summary>
-    public string SortOptionDisplay => SortOption switch
+    public string SortOptionDisplay
     {
-        GameSortOption.Title => LocalizationHelper.GetText("LibraryPage.Sort.Title"),
-        GameSortOption.Playtime => LocalizationHelper.GetText("LibraryPage.Sort.Playtime"),
-        GameSortOption.Compatibility => LocalizationHelper.GetText("LibraryPage.Sort.Compatibility"),
-        GameSortOption.XeniaVersion => LocalizationHelper.GetText("LibraryPage.Sort.XeniaVersion"),
-        GameSortOption.LastPlayed => LocalizationHelper.GetText("LibraryPage.Sort.LastPlayed"),
-        _ => SortOption.ToString()
-    };
+        get
+        {
+            return SortOption switch
+            {
+                GameSortOption.Title => LocalizationHelper.GetText("LibraryPage.Sort.Title"),
+                GameSortOption.Playtime => LocalizationHelper.GetText("LibraryPage.Sort.Playtime"),
+                GameSortOption.Compatibility => LocalizationHelper.GetText("LibraryPage.Sort.Compatibility"),
+                GameSortOption.XeniaVersion => LocalizationHelper.GetText("LibraryPage.Sort.XeniaVersion"),
+                GameSortOption.LastPlayed => LocalizationHelper.GetText("LibraryPage.Sort.LastPlayed"),
+                _ => SortOption.ToString()
+            };
+        }
+    }
 
     /// <summary>
     /// Command that accepts a GameSortOption parameter and sets it as the active sort option.
@@ -119,9 +132,16 @@ public partial class LibraryPageViewModel : ViewModelBase
     /// <summary>
     /// Returns the icon for the current sort direction.
     /// </summary>
-    public FluentIcons.Common.Symbol SortDirectionIcon => SortDescending ? FluentIcons.Common.Symbol.ArrowDown : FluentIcons.Common.Symbol.ArrowUp;
+    public Symbol SortDirectionIcon
+    {
+        get
+        {
+            return SortDescending ? Symbol.ArrowDown : Symbol.ArrowUp;
+        }
+    }
 
     [ObservableProperty] private bool _showGameTitle = false;
+
     partial void OnShowGameTitleChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.GridView.GameTitle = ShowGameTitle;
@@ -134,7 +154,13 @@ public partial class LibraryPageViewModel : ViewModelBase
     /// <summary>
     /// Indicates whether shortcut creation is supported (native Windows only).
     /// </summary>
-    public bool SupportsShortcuts => _supportsShortcuts;
+    public bool SupportsShortcuts
+    {
+        get
+        {
+            return _supportsShortcuts;
+        }
+    }
 
     [ObservableProperty] private bool _showCompatibilityRating = false;
 
@@ -154,6 +180,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     // List View column visibility
     [ObservableProperty] private bool _showListCompatibilityRating = true;
+
     partial void OnShowListCompatibilityRatingChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.ListView.CompatibilityRating = ShowListCompatibilityRating;
@@ -161,6 +188,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [ObservableProperty] private bool _showListPlaytime = true;
+
     partial void OnShowListPlaytimeChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.ListView.Playtime = ShowListPlaytime;
@@ -168,6 +196,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [ObservableProperty] private bool _showListXeniaVersion = true;
+
     partial void OnShowListXeniaVersionChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.ListView.XeniaVersion = ShowListXeniaVersion;
@@ -175,24 +204,16 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleListCompatibilityRating()
-    {
-        ShowListCompatibilityRating = !ShowListCompatibilityRating;
-    }
+    private void ToggleListCompatibilityRating() => ShowListCompatibilityRating = !ShowListCompatibilityRating;
 
     [RelayCommand]
-    private void ToggleListPlaytime()
-    {
-        ShowListPlaytime = !ShowListPlaytime;
-    }
+    private void ToggleListPlaytime() => ShowListPlaytime = !ShowListPlaytime;
 
     [RelayCommand]
-    private void ToggleListXeniaVersion()
-    {
-        ShowListXeniaVersion = !ShowListXeniaVersion;
-    }
+    private void ToggleListXeniaVersion() => ShowListXeniaVersion = !ShowListXeniaVersion;
 
     [ObservableProperty] private bool _showListLastPlayed = true;
+
     partial void OnShowListLastPlayedChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.ListView.LastPlayed = ShowListLastPlayed;
@@ -200,12 +221,10 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleListLastPlayed()
-    {
-        ShowListLastPlayed = !ShowListLastPlayed;
-    }
+    private void ToggleListLastPlayed() => ShowListLastPlayed = !ShowListLastPlayed;
 
     [ObservableProperty] private bool _showListIcon = true;
+
     partial void OnShowListIconChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.ListView.ShowIcon = ShowListIcon;
@@ -213,12 +232,10 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleListIcon()
-    {
-        ShowListIcon = !ShowListIcon;
-    }
+    private void ToggleListIcon() => ShowListIcon = !ShowListIcon;
 
     [ObservableProperty] private bool _showListTitleId = false;
+
     partial void OnShowListTitleIdChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.ListView.ShowTitleId = ShowListTitleId;
@@ -226,12 +243,10 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleListTitleId()
-    {
-        ShowListTitleId = !ShowListTitleId;
-    }
+    private void ToggleListTitleId() => ShowListTitleId = !ShowListTitleId;
 
     [ObservableProperty] private bool _showListMediaId = false;
+
     partial void OnShowListMediaIdChanged(bool value)
     {
         _settings.Settings.Ui.Window.Library.ListView.ShowMediaId = ShowListMediaId;
@@ -239,20 +254,66 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleListMediaId()
-    {
-        ShowListMediaId = !ShowListMediaId;
-    }
+    private void ToggleListMediaId() => ShowListMediaId = !ShowListMediaId;
 
     // Zoom Properties
     [ObservableProperty] private double _zoomValue = 100;
-    public double ZoomMinimum => 50;
-    public double ZoomMaximum => 300;
-    public double ZoomTickFrequency => 10;
-    public string ZoomToolTip => $"{ZoomValue}%";
-    public double MinItemWidth => 150 * (ZoomValue / 100.0);
-    public double MinItemHeight => 200 * (ZoomValue / 100.0);
-    public double ItemSpacing => 8 * (ZoomValue / 100.0);
+
+    public double ZoomMinimum
+    {
+        get
+        {
+            return 50;
+        }
+    }
+
+    public double ZoomMaximum
+    {
+        get
+        {
+            return 300;
+        }
+    }
+
+    public double ZoomTickFrequency
+    {
+        get
+        {
+            return 10;
+        }
+    }
+
+    public string ZoomToolTip
+    {
+        get
+        {
+            return $"{ZoomValue}%";
+        }
+    }
+
+    public double MinItemWidth
+    {
+        get
+        {
+            return 150 * (ZoomValue / 100.0);
+        }
+    }
+
+    public double MinItemHeight
+    {
+        get
+        {
+            return 200 * (ZoomValue / 100.0);
+        }
+    }
+
+    public double ItemSpacing
+    {
+        get
+        {
+            return 8 * (ZoomValue / 100.0);
+        }
+    }
 
     partial void OnZoomValueChanged(double value)
     {
@@ -274,10 +335,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleDoubleClickLaunch()
-    {
-        DoubleClickLaunch = !DoubleClickLaunch;
-    }
+    private void ToggleDoubleClickLaunch() => DoubleClickLaunch = !DoubleClickLaunch;
 
     // Games List
     [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
@@ -285,7 +343,14 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     // Selection properties for multiselect
     private int _selectedGamesCount;
-    public bool HasSelectedGames => _selectedGamesCount > 0;
+
+    public bool HasSelectedGames
+    {
+        get
+        {
+            return _selectedGamesCount > 0;
+        }
+    }
 
     public string SelectedGamesCountText
     {
@@ -321,10 +386,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ClearSearch()
-    {
-        SearchQuery = string.Empty;
-    }
+    private void ClearSearch() => SearchQuery = string.Empty;
 
     // Constructor
     public LibraryPageViewModel()
@@ -416,6 +478,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             SubscribeToGameSelectionChanges(gameVm);
             _allGames.Add(gameVm);
         }
+
         FilterGames();
 
         // Notify selection properties have changed (selection is cleared on refresh)
@@ -473,13 +536,63 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void Refresh()
+    private async Task Refresh()
     {
         Logger.Info<LibraryPageViewModel>("Refreshing game library");
         GameManager.LoadLibrary();
         RefreshLibrary();
         _lastNotificationTime = DateTime.MinValue;
         Logger.Debug<LibraryPageViewModel>("Library refreshed, notification cooldown reset");
+
+        await CheckForNewGameFilesAsync();
+    }
+
+    /// <summary>
+    /// Scans the Games directory for game files that are not yet in the library
+    /// and shows a notification with a rescan action when new files are found.
+    /// </summary>
+    private async Task CheckForNewGameFilesAsync()
+    {
+        if (_isScanning)
+        {
+            Logger.Trace<LibraryPageViewModel>("Skipping new game file check (scan already in progress)");
+            return;
+        }
+
+        if (!Directory.Exists(AppPaths.GamesDirectory))
+        {
+            Logger.Trace<LibraryPageViewModel>($"Skipping new game file check (Games directory does not exist: {AppPaths.GamesDirectory})");
+            return;
+        }
+
+        List<string> discoveredGameFiles;
+        try
+        {
+            discoveredGameFiles = await Task.Run(() => GameManager.DiscoverGameFiles(AppPaths.GamesDirectory));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>($"Failed to scan Games directory for new files: {ex.Message}");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            return;
+        }
+
+        List<string> newGameFiles = discoveredGameFiles.Where(file => !GameManager.IsDuplicateGame(file)).ToList();
+        if (newGameFiles.Count == 0)
+        {
+            Logger.Debug<LibraryPageViewModel>("No new game files found in Games directory");
+            return;
+        }
+
+        // Suppress the watcher notification so it doesn't immediately duplicate this one
+        _lastNotificationTime = DateTime.UtcNow;
+        Logger.Info<LibraryPageViewModel>($"Found {newGameFiles.Count} new game files in Games directory, showing notification");
+
+        _notificationService.ShowAction(
+            LocalizationHelper.GetText("InfoBar.NewGamesDetected.Message"),
+            FAInfoBarSeverity.Informational,
+            LocalizationHelper.GetText("InfoBar.NewGamesDetected.Action"),
+            async void () => await ScanGamesDirectoryAsync());
     }
 
     /// <summary>
@@ -498,7 +611,8 @@ public partial class LibraryPageViewModel : ViewModelBase
         TimeSpan sinceLastNotification = DateTime.UtcNow - _lastNotificationTime;
         if (sinceLastNotification < NotificationCooldown)
         {
-            Logger.Trace<LibraryPageViewModel>($"Ignoring NewGameFilesDetected event (cooldown active, {sinceLastNotification.TotalSeconds:F1}s since last notification)");
+            Logger.Trace<LibraryPageViewModel>(
+                $"Ignoring NewGameFilesDetected event (cooldown active, {sinceLastNotification.TotalSeconds:F1}s since last notification)");
             return;
         }
 
@@ -610,7 +724,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                     foreach (string gameFile in discoveredGameFiles)
                     {
                         processed++;
-                        int progress = (processed * 100) / totalGames;
+                        int progress = processed * 100 / totalGames;
 
                         // Check for duplicates before processing
                         if (GameManager.IsDuplicateGame(gameFile))
@@ -618,7 +732,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                             Logger.Trace<LibraryPageViewModel>($"Skipping duplicate game: {gameFile}");
                             skipped++;
                             progressReporter(
-                                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate"), Path.GetFileName(gameFile)),
+                                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate"),
+                                    Path.GetFileName(gameFile)),
                                 gameFile, processed, totalGames, added, skipped, failed, progress);
                             continue;
                         }
@@ -644,7 +759,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                             Logger.Warning<LibraryPageViewModel>($"Game details are invalid, skipping: {gameFile}");
                             skipped++;
                             progressReporter(
-                                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingInvalid"), Path.GetFileName(gameFile)),
+                                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingInvalid"),
+                                    Path.GetFileName(gameFile)),
                                 gameFile, processed, totalGames, added, skipped, failed, progress);
                             continue;
                         }
@@ -661,13 +777,14 @@ public partial class LibraryPageViewModel : ViewModelBase
                                 GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
                                 await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details,
                                     _settings.Settings.General.UseMediaIdForTitle,
-                                    confirmMultiDiscMerge: _settings.Settings.General.AutoMergeMultiDisc
+                                    _settings.Settings.General.AutoMergeMultiDisc
                                         ? _ => Task.FromResult(true)
-                                        : ConfirmMultiDiscMergeAsync);
+                                        : ConfirmMultiDiscMergeAsync,
+                                    _settings.Settings.General.UseEmbeddedArtwork);
                             }
                             else
                             {
-                                await GameManager.AddUnknownGame(xeniaVersion, details, gameFile);
+                                await GameManager.AddUnknownGame(xeniaVersion, details, gameFile, _settings.Settings.General.UseEmbeddedArtwork);
                             }
 
                             added++;
@@ -714,22 +831,13 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleGameTitle()
-    {
-        ShowGameTitle = !ShowGameTitle;
-    }
+    private void ToggleGameTitle() => ShowGameTitle = !ShowGameTitle;
 
     [RelayCommand]
-    private void ToggleCompatibilityRating()
-    {
-        ShowCompatibilityRating = !ShowCompatibilityRating;
-    }
+    private void ToggleCompatibilityRating() => ShowCompatibilityRating = !ShowCompatibilityRating;
 
     [RelayCommand]
-    private void ToggleXeniaVersion()
-    {
-        ShowXeniaVersion = !ShowXeniaVersion;
-    }
+    private void ToggleXeniaVersion() => ShowXeniaVersion = !ShowXeniaVersion;
 
     [RelayCommand]
     private async Task ScanDirectory()
@@ -788,6 +896,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                         Logger.Info<LibraryPageViewModel>("Xenia version selection was cancelled by user");
                         return;
                     }
+
                     break;
             }
         }
@@ -807,9 +916,9 @@ public partial class LibraryPageViewModel : ViewModelBase
             FAContentDialogResult scanChoice = await _messageBoxService.ShowCustomDialogAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Title"),
                 LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Message"),
-                primaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder"),
-                secondaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder"),
-                closeButtonText: LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Cancel"));
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder"),
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder"),
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanChoice.Cancel"));
 
             string folderPath;
 
@@ -888,7 +997,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                 foreach (string gameFile in discoveredGameFiles)
                 {
                     processed++;
-                    int progress = (processed * 100) / totalGames;
+                    int progress = processed * 100 / totalGames;
 
                     // Check for duplicates
                     if (GameManager.IsDuplicateGame(gameFile))
@@ -896,7 +1005,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                         Logger.Warning<LibraryPageViewModel>($"Skipping duplicate game: {gameFile}");
                         skipped++;
                         progressReporter(
-                            string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate"), Path.GetFileName(gameFile)),
+                            string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate"),
+                                Path.GetFileName(gameFile)),
                             gameFile,
                             processed, totalGames, added, skipped, failed, progress);
                         continue;
@@ -940,15 +1050,17 @@ public partial class LibraryPageViewModel : ViewModelBase
                         {
                             // Add the game using fetched GameInfo
                             GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle, confirmMultiDiscMerge: _settings.Settings.General.AutoMergeMultiDisc
-                                ? _ => Task.FromResult(true)
-                                : ConfirmMultiDiscMergeAsync);
+                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details, _settings.Settings.General.UseMediaIdForTitle,
+                                _settings.Settings.General.AutoMergeMultiDisc
+                                    ? _ => Task.FromResult(true)
+                                    : ConfirmMultiDiscMergeAsync,
+                                _settings.Settings.General.UseEmbeddedArtwork);
                         }
                         else
                         {
                             // TODO: Open GameDatabaseWindow to allow the user to select the game
                             // Currently disabled
-                            await GameManager.AddUnknownGame(xeniaVersion, details, gameFile);
+                            await GameManager.AddUnknownGame(xeniaVersion, details, gameFile, _settings.Settings.General.UseEmbeddedArtwork);
                         }
 
                         added++;
@@ -968,11 +1080,13 @@ public partial class LibraryPageViewModel : ViewModelBase
                         processed, totalGames, added, skipped, failed, progress);
                 }
 
-                Logger.Info<LibraryPageViewModel>($"Directory scan completed. Games added: {added}, Skipped (duplicates): {skipped}, Failed: {failed}, Total games in library: {GameManager.Games.Count}");
+                Logger.Info<LibraryPageViewModel>(
+                    $"Directory scan completed. Games added: {added}, Skipped (duplicates): {skipped}, Failed: {failed}, Total games in library: {GameManager.Games.Count}");
                 return (added, skipped, failed);
             });
 
-            Logger.Info<LibraryPageViewModel>($"Directory scan completed. Games added: {gamesAdded}, Skipped (duplicates): {gamesSkipped}, Failed: {gamesFailed}, Total games in library: {GameManager.Games.Count}");
+            Logger.Info<LibraryPageViewModel>(
+                $"Directory scan completed. Games added: {gamesAdded}, Skipped (duplicates): {gamesSkipped}, Failed: {gamesFailed}, Total games in library: {GameManager.Games.Count}");
 
             // Refresh the library to update the UI with newly added games
             RefreshLibrary();
@@ -1177,22 +1291,23 @@ public partial class LibraryPageViewModel : ViewModelBase
                     if (XboxDatabase.FilteredDatabase.Count == 1)
                     {
                         GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                        await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details, _settings.Settings.General.UseMediaIdForTitle, confirmMultiDiscMerge: ConfirmMultiDiscMergeAsync);
+                        await GameManager.AddGame(xeniaVersion, gameInfo, filePath, details, _settings.Settings.General.UseMediaIdForTitle,
+                            ConfirmMultiDiscMergeAsync, _settings.Settings.General.UseEmbeddedArtwork);
                     }
                     else
                     {
-                        await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
+                        await GameManager.AddUnknownGame(xeniaVersion, details, filePath, _settings.Settings.General.UseEmbeddedArtwork);
                     }
                 }
                 catch (HttpRequestException)
                 {
                     Logger.Warning<LibraryPageViewModel>($"Failed to fetch x360db, adding the game as unknown");
-                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath, _settings.Settings.General.UseEmbeddedArtwork);
                 }
                 catch (TaskCanceledException)
                 {
                     Logger.Warning<LibraryPageViewModel>($"Task canceled while searching database for game {details.TitleId}, adding the game as unknown");
-                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, filePath, _settings.Settings.General.UseEmbeddedArtwork);
                 }
             }
             catch (Exception ex)
@@ -1204,6 +1319,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                     string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Message"), filePath, ex));
             }
         }
+
         EventManager.Instance.EnableWindow();
         RefreshLibrary();
     }
@@ -1218,6 +1334,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         {
             return;
         }
+
         await ProcessAndAddGamesAsync(filePaths, xeniaVersion.Value);
     }
 
@@ -1230,9 +1347,9 @@ public partial class LibraryPageViewModel : ViewModelBase
             FAContentDialogResult result = await _messageBoxService.ShowCustomDialogAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Title"),
                 LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Message"),
-                primaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder"),
-                secondaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam"),
-                closeButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel"));
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder"),
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam"),
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel"));
 
             if (result == FAContentDialogResult.None)
             {
@@ -1349,6 +1466,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                         "Steam user selection was cancelled. No shortcuts were created.");
                     return;
                 }
+
                 selectedUserId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
                 Logger.Info<LibraryPageViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({selectedUserId})");
             }
@@ -1360,7 +1478,7 @@ public partial class LibraryPageViewModel : ViewModelBase
             {
                 try
                 {
-                    ShortcutManager.CreateSteamShortcut(game.Game, selectedUserId, restartSteam: false);
+                    ShortcutManager.CreateSteamShortcut(game.Game, selectedUserId, false);
                     successList.Add(game.Title);
                 }
                 catch (Exception ex)
@@ -1408,7 +1526,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                 return;
             }
 
-            Logger.Info<LibraryPageViewModel>($"Starting compatibility rating update (Game: {selectedRatings.game}, Mousehook: {selectedRatings.mousehook}, Netplay: {selectedRatings.netplay})");
+            Logger.Info<LibraryPageViewModel>(
+                $"Starting compatibility rating update (Game: {selectedRatings.game}, Mousehook: {selectedRatings.mousehook}, Netplay: {selectedRatings.netplay})");
 
             // Force reload selected compatibility databases to get fresh data
             if (selectedRatings.game)
@@ -1416,11 +1535,13 @@ public partial class LibraryPageViewModel : ViewModelBase
                 Logger.Info<LibraryPageViewModel>("Force reloading game compatibility database");
                 await GameCompatibilityDatabase.ForceReloadAsync();
             }
+
             if (selectedRatings.mousehook)
             {
                 Logger.Info<LibraryPageViewModel>("Force reloading mousehook compatibility database");
                 await MousehookCompatibilityDatabase.ForceReloadAsync();
             }
+
             if (selectedRatings.netplay)
             {
                 Logger.Info<LibraryPageViewModel>("Force reloading netplay compatibility database");
@@ -1438,7 +1559,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                     Game game = gameItem.Game;
                     CompatibilityRating oldRating = game.Compatibility.Rating;
                     MousehookSupportRating oldMousehookRating = game.Compatibility.Mousehook.Rating;
-                    NetplayStatus oldNetplayStatus = new()
+                    NetplayStatus oldNetplayStatus = new NetplayStatus
                     {
                         WorkingPublic = game.Compatibility.Netplay.Status.WorkingPublic,
                         TestedLocally = game.Compatibility.Netplay.Status.TestedLocally,
@@ -1449,15 +1570,50 @@ public partial class LibraryPageViewModel : ViewModelBase
 
                     if (selectedRatings.game)
                     {
-                        await GameCompatibilityDatabase.SetCompatibilityRating(game);
+                        GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title,
+                            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+                        if (compatEntry != null)
+                        {
+                            game.Compatibility.Rating = compatEntry.State;
+                            game.Compatibility.Url = compatEntry.Url ?? string.Empty;
+                        }
+                        else
+                        {
+                            game.Compatibility.Rating = CompatibilityRating.Unknown;
+                            game.Compatibility.Url = string.Empty;
+                        }
                     }
+
                     if (selectedRatings.mousehook)
                     {
-                        await MousehookCompatibilityDatabase.SetMousehookCompatibility(game);
+                        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs,
+                            game.Title, cacheDirectory: AppPaths.DatabaseCacheDirectory);
+                        if (mousehookEntry != null)
+                        {
+                            game.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+                            game.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+                        }
+                        else
+                        {
+                            game.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+                            game.Compatibility.Mousehook.Notes = string.Empty;
+                        }
                     }
+
                     if (selectedRatings.netplay)
                     {
-                        await NetplayCompatibilityDatabase.SetNetplayCompatibility(game);
+                        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(game.GameId, game.AlternativeIDs, game.Title,
+                            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+                        if (netplayEntry != null)
+                        {
+                            game.Compatibility.Netplay.Status = netplayEntry.Status;
+                            game.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+                        }
+                        else
+                        {
+                            game.Compatibility.Netplay.Status = new NetplayStatus();
+                            game.Compatibility.Netplay.Comments = string.Empty;
+                        }
                     }
 
                     bool gameChanged = selectedRatings.game && oldRating != game.Compatibility.Rating;
@@ -1487,7 +1643,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                 }
             }
 
-            Logger.Info<LibraryPageViewModel>($"Compatibility rating update completed. Updated: {updatedCount}, Unchanged: {unchangedCount}, Failed: {failedCount}");
+            Logger.Info<LibraryPageViewModel>(
+                $"Compatibility rating update completed. Updated: {updatedCount}, Unchanged: {unchangedCount}, Failed: {failedCount}");
 
             // Refresh the library to update the UI
             RefreshLibrary();
@@ -1527,7 +1684,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
             // Force reload the optimized settings database to get fresh data
             Logger.Info<LibraryPageViewModel>("Force reloading optimized settings database");
-            await OptimizedSettingsDatabase.ForceReloadAsync();
+            await OptimizedSettingsDatabase.ForceReloadAsync(cacheDirectory: AppPaths.DatabaseCacheDirectory);
 
             int updatedCount = 0;
             int failedCount = 0;
@@ -1546,7 +1703,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                     Logger.Debug<LibraryPageViewModel>($"Updating optimized settings for: '{game.Title}' (ID: {game.GameId})");
 
                     // Fetch optimized settings from the database
-                    ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+                    ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettingsAsync(game.GameId, game.AlternativeIDs, game.Title,
+                        cacheDirectory: AppPaths.DatabaseCacheDirectory);
 
                     if (optimizedConfigFile == null)
                     {
@@ -1589,14 +1747,16 @@ public partial class LibraryPageViewModel : ViewModelBase
                             if (currentOption == null)
                             {
                                 // Skip option if it doesn't exist in the current config
-                                Logger.Debug<LibraryPageViewModel>($"Skipping option '{optimizedSection.Name}.{optimizedOption.Name}' - not present in current config");
+                                Logger.Debug<LibraryPageViewModel>(
+                                    $"Skipping option '{optimizedSection.Name}.{optimizedOption.Name}' - not present in current config");
                                 continue;
                             }
 
                             // Only apply if the types match
                             if (currentOption.Type != optimizedOption.Type)
                             {
-                                Logger.Debug<LibraryPageViewModel>($"Skipping option '{optimizedSection.Name}.{optimizedOption.Name}' - type mismatch (current: {currentOption.Type}, optimized: {optimizedOption.Type})");
+                                Logger.Debug<LibraryPageViewModel>(
+                                    $"Skipping option '{optimizedSection.Name}.{optimizedOption.Name}' - type mismatch (current: {currentOption.Type}, optimized: {optimizedOption.Type})");
                                 continue;
                             }
 
@@ -1611,11 +1771,13 @@ public partial class LibraryPageViewModel : ViewModelBase
                                 // Update the value if different
                                 currentOption.Value = optimizedOption.Value;
                                 hasChanges = true;
-                                Logger.Debug<LibraryPageViewModel>($"Updated option '{optimizedSection.Name}.{optimizedOption.Name}' from '{oldValue}' to '{currentOption.Value}'");
+                                Logger.Debug<LibraryPageViewModel>(
+                                    $"Updated option '{optimizedSection.Name}.{optimizedOption.Name}' from '{oldValue}' to '{currentOption.Value}'");
                             }
                             else
                             {
-                                Logger.Debug<LibraryPageViewModel>($"Option '{optimizedSection.Name}.{optimizedOption.Name}' unchanged (current: {currentOption.Value}, optimized: {optimizedOption.Value})");
+                                Logger.Debug<LibraryPageViewModel>(
+                                    $"Option '{optimizedSection.Name}.{optimizedOption.Name}' unchanged (current: {currentOption.Value}, optimized: {optimizedOption.Value})");
                             }
                         }
                     }
@@ -1644,7 +1806,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                 }
             }
 
-            Logger.Info<LibraryPageViewModel>($"Optimized settings update completed. Updated: {updatedCount}, Unchanged: {unchangedCount}, Not Found: {notFoundCount}, Failed: {failedCount}");
+            Logger.Info<LibraryPageViewModel>(
+                $"Optimized settings update completed. Updated: {updatedCount}, Unchanged: {unchangedCount}, Not Found: {notFoundCount}, Failed: {failedCount}");
 
             // Refresh the library to update the UI
             RefreshLibrary();

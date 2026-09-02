@@ -1,6 +1,6 @@
 using System.Text.Json;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 
 namespace XeniaManager.Core.Utilities;
@@ -96,7 +96,13 @@ public sealed class ReleaseService : IReleaseService
     /// <summary>
     /// Gets the current manifest cache (thread-safe)
     /// </summary>
-    public ReleaseCache? Current => _current;
+    public ReleaseCache? Current
+    {
+        get
+        {
+            return _current;
+        }
+    }
 
     /// <summary>
     /// Event raised when the manifest cache is updated with new data
@@ -110,7 +116,10 @@ public sealed class ReleaseService : IReleaseService
     public ReleaseService()
     {
         Logger.Info<ReleaseService>("Initializing ManifestService");
-        _httpClient = new HttpClient { Timeout = Timeout };
+        _httpClient = new HttpClient
+        {
+            Timeout = Timeout
+        };
         Logger.Debug<ReleaseService>($"Initialized HTTP client with {Timeout.TotalSeconds}s timeout");
     }
 
@@ -375,7 +384,8 @@ public sealed class ReleaseService : IReleaseService
             if (xeniaManager.TryGetProperty("experimental", out JsonElement experimental))
             {
                 cache.XeniaManagerExperimental = GetManagerBuild(experimental);
-                Logger.Debug<ReleaseService>($"Added experimental manager version: {(cache.XeniaManagerExperimental != null ? cache.XeniaManagerExperimental.Version : "null")}");
+                Logger.Debug<ReleaseService>(
+                    $"Added experimental manager version: {(cache.XeniaManagerExperimental != null ? cache.XeniaManagerExperimental.Version : "null")}");
             }
         }
 
@@ -399,6 +409,7 @@ public sealed class ReleaseService : IReleaseService
                     cache.NetplayStable = GetBuild(stable);
                     Logger.Debug<ReleaseService>($"Added Netplay Stable: {(cache.NetplayStable != null ? cache.NetplayStable.TagName : "null")}");
                 }
+
                 if (netplay.TryGetProperty("nightly", out JsonElement nightly))
                 {
                     cache.NetplayNightly = GetBuild(nightly);
@@ -414,6 +425,7 @@ public sealed class ReleaseService : IReleaseService
                     cache.MousehookStandard = GetBuild(standard);
                     Logger.Debug<ReleaseService>($"Added Mousehook Standard: {(cache.MousehookStandard != null ? cache.MousehookStandard.TagName : "null")}");
                 }
+
                 if (mousehook.TryGetProperty("netplay", out JsonElement netplayHook))
                 {
                     cache.MousehookNetplay = GetBuild(netplayHook);
@@ -438,30 +450,37 @@ public sealed class ReleaseService : IReleaseService
         {
             count++;
         }
+
         if (cache.NetplayStable != null)
         {
             count++;
         }
+
         if (cache.NetplayNightly != null)
         {
             count++;
         }
+
         if (cache.MousehookStandard != null)
         {
             count++;
         }
+
         if (cache.MousehookNetplay != null)
         {
             count++;
         }
+
         if (cache.XeniaManagerStable != null)
         {
             count++;
         }
+
         if (cache.XeniaManagerExperimental != null)
         {
             count++;
         }
+
         return count;
     }
 }

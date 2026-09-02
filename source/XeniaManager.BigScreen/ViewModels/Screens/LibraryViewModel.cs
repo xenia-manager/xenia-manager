@@ -1,0 +1,325 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.BigScreen.Models;
+using XeniaManager.BigScreen.Models.Settings;
+using XeniaManager.BigScreen.Services;
+using XeniaManager.BigScreen.Utilities;
+using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Database;
+using XeniaManager.Logging;
+using XeniaManager.Database.Models.Xbox;
+using XeniaManager.Core.Utilities;
+
+namespace XeniaManager.BigScreen.ViewModels.Screens;
+
+/// <summary>
+/// Library screen state: the full game carousel/list, its sort mode, and the
+/// details pane of the list view.
+/// </summary>
+public partial class LibraryViewModel : ScreenViewModel
+{
+    private readonly SettingsViewModel _settings;
+
+    /// <summary>
+    /// In-memory cache of fetched database info keyed by game ID (null values are
+    /// cached too so games missing from the marketplace DB aren't re-fetched).
+    /// </summary>
+    private readonly Dictionary<string, GameDetailedInfo?> _detailsCache = [];
+
+    /// <summary>
+    /// Serializes the details cache: the boot preload fills it on a background
+    /// thread while the UI thread reads it on selection.
+    /// </summary>
+    private readonly Lock _detailsLock = new Lock();
+
+    /// <summary>
+    /// Monotonic generation counter so a slow fetch can't overwrite the pane for a
+    /// game the user already navigated away from.
+    /// </summary>
+    private int _detailsLoadGeneration;
+
+    /// <summary>
+    /// Whether the library screen shows the "no games" stub.
+    /// </summary>
+    public bool ShowEmptyStub
+    {
+        get
+        {
+            return Games.Count == 0;
+        }
+    }
+
+    /// <summary>
+    /// All games in the library (carousel / list).
+    /// </summary>
+    public ObservableCollection<GameCardViewModel> Games { get; } = [];
+
+    /// <summary>
+    /// The current library sort mode (cycled with Y).
+    /// </summary>
+    [ObservableProperty]
+    public partial LibrarySort Sort { get; set; } = LibrarySort.Alphabetical;
+
+    /// <summary>
+    /// Display name of the current library sort mode.
+    /// </summary>
+    public string SortText
+    {
+        get
+        {
+            return Sort switch
+            {
+                LibrarySort.TimePlayed => LocalizationHelper.GetText("Library.Sort.TimePlayed"),
+                LibrarySort.LastPlayed => LocalizationHelper.GetText("Library.Sort.LastPlayed"),
+                _ => LocalizationHelper.GetText("Library.Sort.Alphabetical")
+            };
+        }
+    }
+
+    /// <summary>
+    /// Whether the library is shown as a vertical list with a details pane
+    /// (vs. the horizontal card carousel). Follows the settings dropdown.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsListView { get; set; }
+
+    /// <summary>
+    /// The currently selected game card (drives the details pane).
+    /// </summary>
+    [ObservableProperty]
+    public partial GameCardViewModel? SelectedCard { get; set; }
+
+    /// <summary>
+    /// The details pane content for the selected game, or null when nothing is selected.
+    /// </summary>
+    [ObservableProperty]
+    public partial GameDetailsViewModel? Details { get; set; }
+
+    /// <summary>
+    /// Re-sorts the game collection. The selection follows the list position,
+    /// not the element, so the selected card stays in the same spot on screen.
+    /// </summary>
+    public void ApplySort()
+    {
+        if (Games.Count == 0)
+        {
+            return;
+        }
+
+        List<GameCardViewModel> sorted = Sort switch
+        {
+            LibrarySort.TimePlayed => Games.OrderByDescending(g => g.Game.Playtime).ToList(),
+            LibrarySort.LastPlayed => Games.OrderByDescending(g => g.Game.LastPlayed).ToList(),
+            _ => Games.OrderBy(g => g.Game.Title, StringComparer.OrdinalIgnoreCase).ToList()
+        };
+
+        SelectionHelper.ResortPreservingSelection(Games, sorted);
+    }
+
+    /// <summary>
+    /// Updates the selected card when it gains selection.
+    /// </summary>
+    private void OnCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(GameCardViewModel.IsSelected) &&
+            sender is GameCardViewModel { IsSelected: true } card)
+        {
+            SelectedCard = card;
+        }
+    }
+
+    /// <summary>
+    /// Tracks card selection changes (via PropertyChanged) whenever cards are
+    /// added/removed, so the details pane follows the selected game.
+    /// </summary>
+    private void OnGamesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems != null)
+        {
+            foreach (GameCardViewModel card in e.NewItems.Cast<GameCardViewModel>())
+            {
+                card.PropertyChanged += OnCardPropertyChanged;
+                if (card.IsSelected)
+                {
+                    SelectedCard = card;
+                }
+            }
+        }
+
+        if (e.OldItems != null)
+        {
+            foreach (GameCardViewModel card in e.OldItems.Cast<GameCardViewModel>())
+            {
+                card.PropertyChanged -= OnCardPropertyChanged;
+            }
+        }
+
+        OnPropertyChanged(nameof(ShowEmptyStub));
+    }
+
+    /// <summary>
+    /// Applies the fetched database info to the current details pane.
+    /// </summary>
+    private void ApplyDetails(GameDetailedInfo? info) => Details?.Info = info;
+
+    /// <summary>
+    /// Fetches the marketplace database info for the selected game (off the UI thread,
+    /// disk-cached for a day by Core) and applies it to the details pane. Stale results
+    /// are discarded if the selection moved on while the fetch was in flight.
+    /// </summary>
+    private async Task LoadDetailsAsync(GameCardViewModel card)
+    {
+        string gameId = card.Game.GameId;
+        GameDetailedInfo? cached = null;
+        bool hasCached;
+        lock (_detailsLock)
+        {
+            hasCached = _detailsCache.TryGetValue(gameId, out cached);
+        }
+
+        if (hasCached)
+        {
+            ApplyDetails(cached);
+            return;
+        }
+
+        int generation = ++_detailsLoadGeneration;
+        Details?.IsLoading = true;
+
+        try
+        {
+            GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(gameId);
+            lock (_detailsLock)
+            {
+                _detailsCache[gameId] = info;
+            }
+
+            if (generation == _detailsLoadGeneration && ReferenceEquals(SelectedCard, card))
+            {
+                ApplyDetails(info);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<LibraryViewModel>($"Failed to fetch database info for '{card.Game.Title}'");
+            Logger.LogExceptionDetails<LibraryViewModel>(ex);
+            lock (_detailsLock)
+            {
+                _detailsCache[gameId] = null;
+            }
+
+            if (generation == _detailsLoadGeneration && ReferenceEquals(SelectedCard, card))
+            {
+                ApplyDetails(null);
+            }
+        }
+        finally
+        {
+            if (generation == _detailsLoadGeneration && Details != null)
+            {
+                Details.IsLoading = false;
+            }
+        }
+    }
+
+    partial void OnSelectedCardChanged(GameCardViewModel? value)
+    {
+        Details = value != null ? new GameDetailsViewModel(value) : null;
+        if (value != null)
+        {
+            _ = LoadDetailsAsync(value);
+        }
+    }
+
+    partial void OnSortChanged(LibrarySort value)
+    {
+        ApplySort();
+        OnPropertyChanged(nameof(SortText));
+        Logger.Debug<LibraryViewModel>($"Library sort changed to {value}");
+    }
+
+    /// <summary>
+    /// Cycles the library sort mode: Alphabetical → Time Played → Last Played.
+    /// </summary>
+    public void CycleSort() => Sort = EnumCycleHelper.Next(Sort, 1);
+
+    /// <summary>
+    /// Swaps between the carousel and list views, persisting the choice through
+    /// the settings dropdown (which the library follows live).
+    /// </summary>
+    public void ToggleView() =>
+        _settings.LibraryViewMode = _settings.LibraryViewMode == LibraryViewMode.List
+            ? LibraryViewMode.Carousel
+            : LibraryViewMode.List;
+
+    /// <summary>
+    /// Preloads the marketplace DB info for every game into the details cache
+    /// (runs inside the game-data boot stage). Failures are negative-cached so
+    /// the details pane never re-fetches them. Logs how long each game took.
+    /// </summary>
+    public async Task PreloadDetailsAsync(CancellationToken cancellationToken)
+    {
+        int total = Games.Count;
+        foreach (GameCardViewModel card in Games)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            lock (_detailsLock)
+            {
+                if (_detailsCache.ContainsKey(card.Game.GameId))
+                {
+                    continue;
+                }
+            }
+
+            try
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(card.Game.GameId, cancellationToken);
+                sw.Stop();
+                lock (_detailsLock)
+                {
+                    _detailsCache[card.Game.GameId] = info;
+                }
+
+                Logger.Info<LibraryViewModel>(
+                    $"Details for '{card.Game.Title}' in {sw.ElapsedMilliseconds}ms");
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<LibraryViewModel>($"Failed to preload details for '{card.Game.Title}'");
+                Logger.LogExceptionDetails<LibraryViewModel>(ex);
+                lock (_detailsLock)
+                {
+                    _detailsCache[card.Game.GameId] = null;
+                }
+            }
+        }
+
+        Logger.Info<LibraryViewModel>($"Details preloaded for {total} games");
+    }
+
+    /// <summary>
+    /// Follows the settings dropdown so the library swaps layouts live.
+    /// </summary>
+    private void OnLibraryViewModeChanged() => IsListView = _settings.LibraryViewMode == LibraryViewMode.List;
+
+    public LibraryViewModel(SettingsViewModel settings, IModalService modalService) : base(settings, modalService)
+    {
+        _settings = settings;
+        Games.CollectionChanged += OnGamesCollectionChanged;
+        settings.LibraryViewModeChanged += OnLibraryViewModeChanged;
+        IsListView = settings.LibraryViewMode == LibraryViewMode.List;
+    }
+}

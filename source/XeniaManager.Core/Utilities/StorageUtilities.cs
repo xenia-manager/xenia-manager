@@ -1,4 +1,4 @@
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Utilities;
 
@@ -96,7 +96,7 @@ public class StorageUtilities
                     string newDestination = Path.Combine(fullDestination, subDir.Name);
                     Logger.Trace<StorageUtilities>($"Entering subdirectory '{subDir.FullName}'");
 
-                    CopyDirectory(subDir.FullName, newDestination, recursive: true, overwrite, cancellationToken);
+                    CopyDirectory(subDir.FullName, newDestination, true, overwrite, cancellationToken);
                 }
             }
             catch (Exception ex)

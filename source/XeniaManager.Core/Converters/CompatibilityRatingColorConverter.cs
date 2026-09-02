@@ -1,13 +1,13 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.Core.Converters;
 
 public class CompatibilityRatingColorConverter : IValueConverter
 {
-    public static readonly CompatibilityRatingColorConverter Instance = new();
+    public static readonly CompatibilityRatingColorConverter Instance = new CompatibilityRatingColorConverter();
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -27,8 +27,5 @@ public class CompatibilityRatingColorConverter : IValueConverter
         return new SolidColorBrush(Color.Parse("#A9A9A9"));
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }

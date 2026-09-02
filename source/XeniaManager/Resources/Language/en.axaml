@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Big Screen</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Open Big Screen</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Settings</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Manage Xenia</sys:String>
@@ -372,6 +374,9 @@
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Use MediaId for Game Title</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Use the MediaId from game files to find a matching media entry title</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Disable to always use the database title instead of media-specific titles</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">Use Embedded Artwork</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">Use artwork embedded in game files (icon, thumbnails) before downloading from the database</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">When enabled, the game icon and thumbnails are first extracted from the game file itself (STFS/SVOD/ISO/ZAR/XEX). Disable to always download artwork from the database.</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Check for Updates on Startup</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatically check for Xenia and Xenia Manager updates when the application starts</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Disable this to skip update checks during application startup</sys:String>
@@ -381,6 +386,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Auto-Merge Multi-Disc Games</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Automatically merge detected discs of the same game during library scan</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">When enabled, additional discs matching an existing game in the library are merged automatically without prompting</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">Start in Big Screen</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">Launch Big Screen instead of the main window on startup</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">When enabled, Xenia Manager opens Big Screen mode directly on launch</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>
@@ -528,6 +536,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">No Xenia Installed</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">No Xenia installations were found. Please install Xenia first before trying to launch.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">Big Screen Not Found</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">Couldn't find XeniaManager.BigScreen.exe next to Xenia Manager.</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>
@@ -584,9 +594,37 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Icon</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Select Icon</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Clear Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">Refetch Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">Icon Not Found</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">No icon could be found in {0}. The existing icon was left unchanged.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">Icon Refetched</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">Icon successfully refetched from {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">Refetch Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">Choose where to refetch the icon from:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">Game Files</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">Game Files</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">Refetch Boxart</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">Boxart Not Found</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">No boxart could be found in {0}. The existing boxart was left unchanged.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">Boxart Refetched</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">Boxart successfully refetched from {0}.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">Background</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">Select Background</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">Clear Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">Refetch Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">Background Not Found</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">No background could be found in {0}. The existing background was left unchanged.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">Background Refetched</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">Background successfully refetched from {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">Refetch Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">Choose where to refetch the background from:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">Game Files</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">Game Files</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">Refetch Failed</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">Failed to refetch {0}.&#10;Error: {1}</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Automatic Detection</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID and Media ID are automatically detected and cannot be changed.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
@@ -639,10 +677,12 @@
 
     <!-- Install Content Dialog -->
     <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Install Content</sys:String>
-    <sys:String x:Key="InstallContentDialog.ContentDialog.InstallButton.Text">Install</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">Add Content</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">Select Content Files</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">Install (Extract)</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">Install (Package)</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">Keeps the package file intact. Requires the latest Xenia Canary.</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">Installation Successful</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">The following content was installed successfully:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Installation Partially Successful</sys:String>
@@ -1275,6 +1315,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - Keyboard &amp; Mouse support</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - Cross-platform UI framework with Fluent Design</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">CommunityToolkit.Mvvm</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip"> - MVVM framework for .NET</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">Microsoft.Extensions.DependencyInjection</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip"> - Dependency injection container for .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - Fluent Design controls and themes for Avalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1283,8 +1327,14 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Flexible logging framework for .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Game details parsing</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">ppy.SDL3-CS</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip"> - SDL3 bindings for gamepad input support</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Archive and compression handling</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">System.IO.Hashing</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip"> - Fast hashing algorithms (XxHash)</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">TweenAvalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip"> - Programmatic tween animations for Avalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - Zstandard compression for .NET</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">This application is not affiliated with, endorsed by, or sponsored by Microsoft Corporation or the Xenia Project in any way. All trademarks, logos, and brand names are the property of their respective owners.&#10;Xbox 360 is a registered trademark of Microsoft Corporation in the United States and/or other countries.&#10;Xenia is a registered trademark of the Xenia Project.&#10;Any references to these or other trademarks are made solely for the purpose of identifying compatibility or functionality and do not imply any association with or endorsement by the trademark holders.&#10;This software is intended for educational and informational purposes only. It does not contain or distribute any copyrighted content owned by Microsoft Corporation or any third party. Users are solely responsible for ensuring that their use of this software complies with all applicable laws, including copyright and licensing laws.&#10;Any use of this application to run or interact with proprietary software or firmware must be conducted within the bounds of relevant end-user license agreements (EULAs). The developers and distributors of this application do not condone or support piracy in any form.&#10;This application is provided "as is" without warranty of any kind, express or implied. Use at your own risk.</sys:String>

@@ -4,8 +4,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using XeniaManager.Core.Extensions;
-using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Files.Extensions;
+using XeniaManager.Logging;
+using XeniaManager.Files.Models.Bindings;
 using AvaloniaKeyEventArgs = Avalonia.Input.KeyEventArgs;
 using KeyEventArgs = XeniaManager.Core.Models.InputListener.KeyEventArgs;
 
@@ -135,7 +136,13 @@ public class InputListener
     /// <summary>
     /// Gets whether the InputListener is currently running.
     /// </summary>
-    public static bool IsRunning => _isRunning;
+    public static bool IsRunning
+    {
+        get
+        {
+            return _isRunning;
+        }
+    }
 
     /// <summary>
     /// Handles key down events from Avalonia.

@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Files;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Manage;
@@ -20,21 +20,22 @@ public class ConfigManager
     /// - DefaultConfigLocation: Where the configuration file needs to be for Xenia to load it
     /// - ConfigLocation: The stock/default Xenia configuration file location
     /// </summary>
-    private static readonly Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)> _configLocations = new Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)>
-    {
+    private static readonly Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)> _configLocations =
+        new Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)>
         {
-            XeniaVersion.Canary,
-            (AppPathResolver.GetFullPath(XeniaPaths.Canary.DefaultConfigLocation), AppPathResolver.GetFullPath(XeniaPaths.Canary.ConfigLocation))
-        },
-        {
-            XeniaVersion.Mousehook,
-            (AppPathResolver.GetFullPath(XeniaPaths.Mousehook.DefaultConfigLocation), AppPathResolver.GetFullPath(XeniaPaths.Mousehook.ConfigLocation))
-        },
-        {
-            XeniaVersion.Netplay,
-            (AppPathResolver.GetFullPath(XeniaPaths.Netplay.DefaultConfigLocation), AppPathResolver.GetFullPath(XeniaPaths.Netplay.ConfigLocation))
-        }
-    };
+            {
+                XeniaVersion.Canary,
+                (AppPathResolver.GetFullPath(XeniaPaths.Canary.DefaultConfigLocation), AppPathResolver.GetFullPath(XeniaPaths.Canary.ConfigLocation))
+            },
+            {
+                XeniaVersion.Mousehook,
+                (AppPathResolver.GetFullPath(XeniaPaths.Mousehook.DefaultConfigLocation), AppPathResolver.GetFullPath(XeniaPaths.Mousehook.ConfigLocation))
+            },
+            {
+                XeniaVersion.Netplay,
+                (AppPathResolver.GetFullPath(XeniaPaths.Netplay.DefaultConfigLocation), AppPathResolver.GetFullPath(XeniaPaths.Netplay.ConfigLocation))
+            }
+        };
 
     /// <summary>
     /// Changes the configuration file for a specific Xenia version
@@ -121,7 +122,7 @@ public class ConfigManager
             Logger.Error<ConfigManager>($"Xenia executable does not exist at: {AppPathResolver.GetFullPath(info.ExecutableLocation)}");
             throw new FileNotFoundException($"Xenia executable not found at: {AppPathResolver.GetFullPath(info.ExecutableLocation)}");
         }
-        
+
         // Clean up current temporary configuration file to generate a fresh one
         if (File.Exists(AppPathResolver.GetFullPath(info.DefaultConfigLocation)))
         {
@@ -134,7 +135,8 @@ public class ConfigManager
         xenia.StartInfo.WorkingDirectory = AppPathResolver.GetFullPath(info.EmulatorDir);
         xenia.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-        Logger.Debug<ConfigManager>($"Attempting to start Xenia process from: {xenia.StartInfo.FileName} in working directory: {xenia.StartInfo.WorkingDirectory}");
+        Logger.Debug<ConfigManager>(
+            $"Attempting to start Xenia process from: {xenia.StartInfo.FileName} in working directory: {xenia.StartInfo.WorkingDirectory}");
 
         bool processStarted;
         try
@@ -371,7 +373,8 @@ public class ConfigManager
                     // Only migrate if the types match
                     if (oldOption.Type != newOption.Type)
                     {
-                        Logger.Debug<ConfigManager>($"Skipping option '{oldSection.Name}.{oldOption.Name}' - type mismatch (old: {oldOption.Type}, new: {newOption.Type})");
+                        Logger.Debug<ConfigManager>(
+                            $"Skipping option '{oldSection.Name}.{oldOption.Name}' - type mismatch (old: {oldOption.Type}, new: {newOption.Type})");
                         continue;
                     }
 

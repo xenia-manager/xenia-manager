@@ -1,5 +1,5 @@
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Services;
 
@@ -26,7 +26,13 @@ public class GameDirectoryWatcherService : IDisposable
     /// <summary>
     /// Gets whether the watcher is currently running.
     /// </summary>
-    public bool IsRunning => _watcher != null;
+    public bool IsRunning
+    {
+        get
+        {
+            return _watcher != null;
+        }
+    }
 
     /// <summary>
     /// Starts monitoring the Games directory for new files.

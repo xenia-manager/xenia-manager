@@ -47,6 +47,7 @@ public sealed class XeniaVersionInfo
     public string PatchFolderLocation { get; }
     public string ScreenshotsFolderLocation { get; }
     public string LogLocation { get; }
+    public string GameControllerDatabaseLocation { get; }
 
     public string ConfigLocation { get; }
     public string DefaultConfigLocation { get; }
@@ -67,6 +68,7 @@ public sealed class XeniaVersionInfo
         PatchFolderLocation = paths.PatchFolderLocation;
         ScreenshotsFolderLocation = paths.ScreenshotsFolderLocation;
         LogLocation = paths.LogLocation;
+        GameControllerDatabaseLocation = paths.GameControllerDatabaseLocation;
 
         ConfigLocation = paths.ConfigLocation;
         DefaultConfigLocation = paths.DefaultConfigLocation;

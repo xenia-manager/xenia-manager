@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
@@ -7,7 +9,8 @@ using FluentAvalonia.UI.Media.Animation;
 using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
-using XeniaManager.Core.Logging;
+using XeniaManager.Core.Constants;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
@@ -19,6 +22,11 @@ namespace XeniaManager.Services;
 
 public class NavigationService
 {
+    /// <summary>
+    /// File name of the BigScreen companion executable, launched side-by-side.
+    /// </summary>
+    private const string BigScreenExecutable = "XeniaManager.BigScreen.exe";
+
     // Properties
     /// <summary>
     /// Content Frame where all Avalonia Pages are loaded
@@ -35,7 +43,13 @@ public class NavigationService
     /// </summary>
     private string? _currentPageTag;
 
-    public string? CurrentPageTag => _currentPageTag;
+    public string? CurrentPageTag
+    {
+        get
+        {
+            return _currentPageTag;
+        }
+    }
 
     /// <summary>
     /// Event signalizing that the service navigated to the selected Avalonia Page
@@ -68,6 +82,101 @@ public class NavigationService
         Logger.Debug<NavigationService>($"Setting navigation view");
         _navigationView = navigationView;
         Logger.Debug<NavigationService>($"Navigation view set");
+    }
+
+    /// <summary>
+    /// Launches the BigScreen companion app. Resolves the executable side-by-side
+    /// (production layout) or in the repo's sibling project folder (dev layout).
+    /// Hides and disables the main window for the session, restoring it when
+    /// BigScreen exits (even if it crashed). Warns when it can't be found.
+    /// </summary>
+    public async Task LaunchBigScreen()
+    {
+        string? bigScreenPath = ResolveBigScreenPath();
+        if (bigScreenPath == null)
+        {
+            Logger.Warning<NavigationService>("BigScreen executable not found");
+            await _messageBoxService.ShowWarningAsync(
+                LocalizationHelper.GetText("NavigationService.BigScreenNotFound.Title"),
+                LocalizationHelper.GetText("NavigationService.BigScreenNotFound.Message"));
+            return;
+        }
+
+        Logger.Info<NavigationService>($"Launching BigScreen from '{bigScreenPath}'");
+        try
+        {
+            Process? bigScreen = Process.Start(new ProcessStartInfo
+            {
+                FileName = bigScreenPath,
+                UseShellExecute = true
+            });
+            if (bigScreen == null)
+            {
+                Logger.Error<NavigationService>("Failed to start BigScreen process");
+                return;
+            }
+
+            // Hide + disable the main window while BigScreen owns the screen
+            EventManager.Instance.DisableWindow();
+            App.MainWindow?.Hide();
+            Logger.Info<NavigationService>($"Main window hidden until BigScreen exits (PID {bigScreen.Id})");
+
+            await bigScreen.WaitForExitAsync();
+            Logger.Info<NavigationService>($"BigScreen exited with code {bigScreen.ExitCode}");
+
+            // "Close everything" on BigScreen's quit toggle means the manager
+            // shuts down too; anything else restores the hidden window.
+            if (bigScreen.ExitCode == ProcessExitCodes.CloseEverything)
+            {
+                Logger.Info<NavigationService>("BigScreen closed everything - shutting down Xenia Manager");
+                App.MainWindow?.Close();
+                return;
+            }
+
+            App.MainWindow?.Show();
+            EventManager.Instance.EnableWindow();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<NavigationService>("Failed to launch BigScreen");
+            Logger.LogExceptionDetails<NavigationService>(ex);
+            App.MainWindow?.Show();
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    /// <summary>
+    /// Finds the BigScreen executable: next to this app (production layout), or
+    /// in the sibling BigScreen project's bin folder (repo/dev layout).
+    /// </summary>
+    private static string? ResolveBigScreenPath()
+    {
+        // 1. Side-by-side deployment: XeniaManager.BigScreen.exe next to this app
+        string baseDirectory = AppPathResolver.BaseDirectory();
+        string sideBySide = Path.Combine(baseDirectory, BigScreenExecutable);
+        if (File.Exists(sideBySide))
+        {
+            return sideBySide;
+        }
+
+        // 2. Repo/dev layout: sibling project folder with the same bin configuration
+        //    ...\XeniaManager\bin\{Debug|Release}\net10.0\
+        //    -> ...\XeniaManager.BigScreen\bin\{Debug|Release}\net10.0\
+        DirectoryInfo current = new DirectoryInfo(baseDirectory);
+        string tfm = current.Name;
+        string? config = current.Parent?.Name;
+
+        for (int i = 0; i < 6 && current != null; i++, current = current.Parent!)
+        {
+            string sibling = Path.Combine(current.FullName, "XeniaManager.BigScreen", "bin", config ?? string.Empty, tfm);
+            string siblingPath = Path.Combine(sibling, BigScreenExecutable);
+            if (File.Exists(siblingPath))
+            {
+                return siblingPath;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -142,6 +251,7 @@ public class NavigationService
                                 //User closed / canceled
                                 Logger.Info<NavigationService>("Xenia version selection was cancelled by user");
                             }
+
                             break;
                     }
                 }
@@ -151,6 +261,11 @@ public class NavigationService
                     EventManager.Instance.EnableWindow();
                     throw;
                 }
+
+                break;
+            case "BigScreen":
+                Logger.Info<NavigationService>("Processing 'BigScreen' tag - attempting to launch BigScreen");
+                await LaunchBigScreen();
                 break;
             case "Library":
                 Logger.Debug<NavigationService>("Navigating to Library page");

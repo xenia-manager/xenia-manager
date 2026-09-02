@@ -5,7 +5,9 @@
              xmlns:controls="using:FluentAvalonia.UI.Controls"
              xmlns:ic="using:FluentIcons.Avalonia.Fluent"
              xmlns:vm="using:XeniaManager.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
              x:Class="XeniaManager.Views.MainView"
              x:DataType="vm:MainViewModel">
     <Design.DataContext>
@@ -13,26 +15,35 @@
     </Design.DataContext>
 
     <controls:FANavigationView x:Name="NavigationView"
-                             AlwaysShowHeader="False"
-                             IsBackButtonVisible="False"
-                             IsSettingsVisible="False"
-                             PaneDisplayMode="Left"
-                             IsPaneOpen="False"
-                             IsPaneToggleButtonVisible="True"
-                              ItemInvoked="NavigationView_OnItemInvoked">
+                               AlwaysShowHeader="False"
+                               IsBackButtonVisible="False"
+                               IsSettingsVisible="False"
+                               PaneDisplayMode="Left"
+                               IsPaneOpen="False"
+                               IsPaneToggleButtonVisible="True"
+                               ItemInvoked="NavigationView_OnItemInvoked">
         <!-- Navigation Items -->
         <controls:FANavigationView.MenuItems>
             <!-- Open Xenia -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.OpenXenia}"
-                                         Tag="Open">
+                                           Tag="Open">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Play" />
                 </controls:FANavigationViewItem.IconSource>
             </controls:FANavigationViewItem>
 
+            <!-- Big Screen -->
+            <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.BigScreen}"
+                                           Tag="BigScreen"
+                                           ToolTip.Tip="{DynamicResource MainView.Navigation.BigScreen.ToolTip}">
+                <controls:FANavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="Tv" />
+                </controls:FANavigationViewItem.IconSource>
+            </controls:FANavigationViewItem>
+
             <!-- Game Library -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.Library}"
-                                         Tag="Library">
+                                           Tag="Library">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Archive" />
                 </controls:FANavigationViewItem.IconSource>
@@ -40,7 +51,7 @@
 
             <!-- Xenia Settings -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.XeniaSettings}"
-                                         Tag="XeniaSettings">
+                                           Tag="XeniaSettings">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="PlaySettings" />
                 </controls:FANavigationViewItem.IconSource>
@@ -48,7 +59,7 @@
 
             <!-- Manage Page -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.ManagePage}"
-                                         Tag="Manage">
+                                           Tag="Manage">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="AppsAddIn" />
                 </controls:FANavigationViewItem.IconSource>
@@ -58,7 +69,7 @@
         <controls:FANavigationView.FooterMenuItems>
             <!-- Xenia Manager Settings -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.Settings}"
-                                         Tag="Settings">
+                                           Tag="Settings">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Settings" />
                 </controls:FANavigationViewItem.IconSource>
@@ -66,13 +77,14 @@
 
             <!-- About -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.About}"
-                                         Tag="About">
+                                           Tag="About">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Info" />
                 </controls:FANavigationViewItem.IconSource>
             </controls:FANavigationViewItem>
         </controls:FANavigationView.FooterMenuItems>
 
-        <controls:FAFrame x:Name="ContentFrame" CacheSize="0" />
+        <controls:FAFrame x:Name="ContentFrame"
+                          CacheSize="0" />
     </controls:FANavigationView>
 </UserControl>

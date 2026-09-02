@@ -1,8 +1,8 @@
 using System.Globalization;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files;
+using XeniaManager.Logging;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.Stfs;
 
 namespace XeniaManager.Core.Models.Items;
 
@@ -85,8 +85,8 @@ public class GameContent : AccountContent
         InstallerHeaderFiles = [];
         List<string> installerFolderContent =
         [
-            ..Directory.GetDirectories(installerFolder),
-            ..Directory.GetFiles(installerFolder)
+            .. Directory.GetDirectories(installerFolder),
+            .. Directory.GetFiles(installerFolder)
         ];
 
         Logger.Debug<GameContent>($"Found {installerFolderContent.Count} installer items to process");
@@ -94,12 +94,23 @@ public class GameContent : AccountContent
         foreach (string content in installerFolderContent)
         {
             string contentName = Path.GetFileName(content);
-            string contentHeaderFile = Path.Combine(installerHeaderFolder, $"{contentName}.header");
             try
             {
-                // Load the HeaderFile and add it to the InstallerHeaderFiles list
-                Logger.Debug<GameContent>($"Loading header file for {contentName}");
-                HeaderFile header = HeaderFile.Load(contentHeaderFile);
+                HeaderFile header;
+                if (File.Exists(content))
+                {
+                    // Package file entry: read the metadata directly from the package
+                    Logger.Debug<GameContent>($"Loading package metadata for {contentName}");
+                    header = LoadHeaderFromPackage(content);
+                }
+                else
+                {
+                    // Directory entry: load the sidecar header file
+                    string contentHeaderFile = Path.Combine(installerHeaderFolder, $"{contentName}.header");
+                    Logger.Debug<GameContent>($"Loading header file for {contentName}");
+                    header = HeaderFile.Load(contentHeaderFile);
+                }
+
                 InstallerHeaderFiles.Add(header);
                 Logger.Debug<GameContent>($"Successfully loaded header for {contentName}");
             }
@@ -153,8 +164,8 @@ public class GameContent : AccountContent
         MarketplaceContentHeaderFiles = [];
         List<string> marketplaceContentFolderContent =
         [
-            ..Directory.GetDirectories(marketplaceContentFolder),
-            ..Directory.GetFiles(marketplaceContentFolder)
+            .. Directory.GetDirectories(marketplaceContentFolder),
+            .. Directory.GetFiles(marketplaceContentFolder)
         ];
 
         Logger.Debug<GameContent>($"Found {marketplaceContentFolderContent.Count} marketplace content items to process");
@@ -162,12 +173,23 @@ public class GameContent : AccountContent
         foreach (string content in marketplaceContentFolderContent)
         {
             string contentName = Path.GetFileName(content);
-            string contentHeaderFile = Path.Combine(marketplaceContentHeaderFolder, $"{contentName}.header");
             try
             {
-                // Load the HeaderFile and add it to the MarketplaceContentHeaderFiles list
-                Logger.Debug<GameContent>($"Loading header file for {contentName}");
-                HeaderFile header = HeaderFile.Load(contentHeaderFile);
+                HeaderFile header;
+                if (File.Exists(content))
+                {
+                    // Package file entry: read the metadata directly from the package
+                    Logger.Debug<GameContent>($"Loading package metadata for {contentName}");
+                    header = LoadHeaderFromPackage(content);
+                }
+                else
+                {
+                    // Directory entry: load the sidecar header file
+                    string contentHeaderFile = Path.Combine(marketplaceContentHeaderFolder, $"{contentName}.header");
+                    Logger.Debug<GameContent>($"Loading header file for {contentName}");
+                    header = HeaderFile.Load(contentHeaderFile);
+                }
+
                 MarketplaceContentHeaderFiles.Add(header);
                 Logger.Debug<GameContent>($"Successfully loaded header for {contentName}");
             }
@@ -191,5 +213,31 @@ public class GameContent : AccountContent
         }
 
         Logger.Info<GameContent>($"Loaded {MarketplaceContentHeaderFiles.Count} marketplace content headers for Title ID {titleId}");
+    }
+
+    /// <summary>
+    /// Loads content metadata directly from an STFS package file kept intact in the content directory
+    /// (XContent package support, Xenia Canary b11458e+).
+    /// </summary>
+    /// <param name="packageFilePath">Path to the package file.</param>
+    /// <returns>A HeaderFile describing the package.</returns>
+    private static HeaderFile LoadHeaderFromPackage(string packageFilePath)
+    {
+        using StfsFile package = StfsFile.LoadHeaderOnly(packageFilePath);
+        return new HeaderFile
+        {
+            DeviceId = 1,
+            ContentType = package.Metadata.ContentType,
+            DisplayName = package.Metadata.DisplayName,
+            FileName = Path.GetFileName(packageFilePath),
+            FilePath = packageFilePath,
+            TitleId = unchecked((uint)package.Metadata.TitleId),
+            AccountXuid = new AccountXuid(0), // Universal XUID for installed content
+            HeaderSize = HeaderFile.FullHeaderSize,
+            IsPackageEntry = true,
+            ThumbnailImage = package.Metadata.ThumbnailImage.Length > 0
+                ? package.Metadata.ThumbnailImage
+                : package.Metadata.TitleThumbnailImage
+        };
     }
 }

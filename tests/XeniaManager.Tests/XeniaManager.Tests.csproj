@@ -13,13 +13,13 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
         <PackageReference Include="NUnit" Version="4.6.1" />
         <PackageReference Include="NUnit.Analyzers" Version="4.14.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,6 +28,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\source\XeniaManager.Core\XeniaManager.Core.csproj" />
+      <ProjectReference Include="..\..\source\XeniaManager.Database\XeniaManager.Database.csproj" />
+      <ProjectReference Include="..\..\source\XeniaManager.Files\XeniaManager.Files.csproj" />
+      <ProjectReference Include="..\..\source\XeniaManager.Logging\XeniaManager.Logging.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -43,18 +46,6 @@
       <None Update="Assets\TestConfigFile.config.toml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Assets\savegame.svg.header">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\RDR2MPSAVE.SAV.header">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\RDR2SAVE0.SAV.header">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\4d53091000000001.header">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Assets\TestHeaderFile (308).header">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
@@ -68,9 +59,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="Assets\TestVdfFile.vdf">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Assets\TestShortcuts.vdf">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="Assets\Patches\TestPatchFile.patch.toml">

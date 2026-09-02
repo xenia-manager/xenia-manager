@@ -6,7 +6,6 @@
         <SelfContained>false</SelfContained>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <AssemblyVersion>4.3.2</AssemblyVersion>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     </PropertyGroup>
 
@@ -16,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\XeniaManager.Core\XeniaManager.Core.csproj" />
+      <ProjectReference Include="..\XeniaManager.Database\XeniaManager.Database.csproj" />
     </ItemGroup>
 
     <ItemGroup>

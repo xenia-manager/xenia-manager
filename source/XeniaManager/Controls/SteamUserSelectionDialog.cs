@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Utilities;
 
@@ -24,14 +24,18 @@ public abstract class SteamUserSelectionDialog
     /// <returns>The selected Steam user, or null if the user canceled the selection</returns>
     public static async Task<SteamUser?> ShowAsync(List<SteamUser> users)
     {
-        Logger.Info<SteamUserSelectionDialog>($"Showing Steam user selection dialog with {users.Count} account(s): [{string.Join(", ", users.Select(u => u.PersonaName))}]");
+        Logger.Info<SteamUserSelectionDialog>(
+            $"Showing Steam user selection dialog with {users.Count} account(s): [{string.Join(", ", users.Select(u => u.PersonaName))}]");
 
         FATaskDialog taskDialog = new FATaskDialog
         {
             Title = LocalizationHelper.GetText("SteamUserSelectionDialog.Title"),
             Header = LocalizationHelper.GetText("SteamUserSelectionDialog.Header"),
             SubHeader = LocalizationHelper.GetText("SteamUserSelectionDialog.SubHeader"),
-            IconSource = new SymbolIconSource { Symbol = Symbol.People },
+            IconSource = new SymbolIconSource
+            {
+                Symbol = Symbol.People
+            },
             XamlRoot = App.MainWindow
         };
 
@@ -48,7 +52,10 @@ public abstract class SteamUserSelectionDialog
             FATaskDialogCommand userCommand = new FATaskDialogCommand
             {
                 Text = displayText,
-                IconSource = new SymbolIconSource { Symbol = Symbol.Person },
+                IconSource = new SymbolIconSource
+                {
+                    Symbol = Symbol.Person
+                },
                 ClosesOnInvoked = false
             };
 

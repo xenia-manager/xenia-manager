@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Views;
 
 namespace XeniaManager.Services;
@@ -88,8 +88,8 @@ public class NotificationService : INotificationService
 {
     private FAInfoBar? _infoBar;
     private int _animationFps = 120;
-    private readonly ConcurrentQueue<NotificationItem> _notificationQueue = new();
-    private readonly SemaphoreSlim _queueSemaphore = new(1, 1);
+    private readonly ConcurrentQueue<NotificationItem> _notificationQueue = new ConcurrentQueue<NotificationItem>();
+    private readonly SemaphoreSlim _queueSemaphore = new SemaphoreSlim(1, 1);
     private CancellationTokenSource? _processingCts;
     private bool _isProcessing;
 
@@ -98,14 +98,26 @@ public class NotificationService : INotificationService
     /// </summary>
     public int AnimationFps
     {
-        get => _animationFps;
-        set => _animationFps = Math.Max(1, value);
+        get
+        {
+            return _animationFps;
+        }
+        set
+        {
+            _animationFps = Math.Max(1, value);
+        }
     }
 
     /// <summary>
     /// Gets the number of pending notifications in the queue.
     /// </summary>
-    public int PendingCount => _notificationQueue.Count;
+    public int PendingCount
+    {
+        get
+        {
+            return _notificationQueue.Count;
+        }
+    }
 
     /// <summary>
     /// Gets the FAInfoBar control from the MainWindow.
@@ -118,6 +130,7 @@ public class NotificationService : INotificationService
             {
                 _infoBar = mainWindow.FindControl<FAInfoBar>("InfoBar");
             }
+
             return _infoBar;
         }
     }
@@ -125,34 +138,22 @@ public class NotificationService : INotificationService
     /// <summary>
     /// Shows an informational notification.
     /// </summary>
-    public void ShowInfo(string message, double durationSeconds = 5)
-    {
-        Show(message, FAInfoBarSeverity.Informational, durationSeconds);
-    }
+    public void ShowInfo(string message, double durationSeconds = 5) => Show(message, FAInfoBarSeverity.Informational, durationSeconds);
 
     /// <summary>
     /// Shows a success notification.
     /// </summary>
-    public void ShowSuccess(string message, double durationSeconds = 5)
-    {
-        Show(message, FAInfoBarSeverity.Success, durationSeconds);
-    }
+    public void ShowSuccess(string message, double durationSeconds = 5) => Show(message, FAInfoBarSeverity.Success, durationSeconds);
 
     /// <summary>
     /// Shows a warning notification.
     /// </summary>
-    public void ShowWarning(string message, double durationSeconds = 5)
-    {
-        Show(message, FAInfoBarSeverity.Warning, durationSeconds);
-    }
+    public void ShowWarning(string message, double durationSeconds = 5) => Show(message, FAInfoBarSeverity.Warning, durationSeconds);
 
     /// <summary>
     /// Shows an error notification.
     /// </summary>
-    public void ShowError(string message, double durationSeconds = 5)
-    {
-        Show(message, FAInfoBarSeverity.Error, durationSeconds);
-    }
+    public void ShowError(string message, double durationSeconds = 5) => Show(message, FAInfoBarSeverity.Error, durationSeconds);
 
     /// <summary>
     /// Shows a notification with custom severity.
@@ -191,7 +192,10 @@ public class NotificationService : INotificationService
                 return;
             }
 
-            Button button = new Button { Content = actionText };
+            Button button = new Button
+            {
+                Content = actionText
+            };
             button.Click += (_, _) =>
             {
                 Logger.Trace<NotificationService>("Action button clicked, executing action");
@@ -214,6 +218,7 @@ public class NotificationService : INotificationService
     public void ClearQueue()
     {
         while (_notificationQueue.TryDequeue(out _)) { }
+
         _processingCts?.Cancel();
     }
 

@@ -6,7 +6,9 @@
              xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
-             mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="550"
+             mc:Ignorable="d"
+             d:DesignWidth="550"
+             d:DesignHeight="550"
              x:Class="XeniaManager.Controls.PatchSelectionDialog"
              x:DataType="vm:PatchSelectionDialogViewModel"
              Width="500"
@@ -14,8 +16,10 @@
     <UserControl.Styles>
         <!-- Default state for patch item cards -->
         <Style Selector="cards|CustomCard.patch-item">
-            <Setter Property="Padding" Value="12" />
-            <Setter Property="Margin" Value="4,2" />
+            <Setter Property="Padding"
+                    Value="12" />
+            <Setter Property="Margin"
+                    Value="4,2" />
         </Style>
     </UserControl.Styles>
 
@@ -30,7 +34,8 @@
                      BorderThickness="0"
                      Background="Transparent">
                 <TextBox.InnerLeftContent>
-                    <fluent:SymbolIcon Symbol="Search" Margin="8,0,4,0">
+                    <fluent:SymbolIcon Symbol="Search"
+                                       Margin="8,0,4,0">
                         <fluent:SymbolIcon.Foreground>
                             <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
                         </fluent:SymbolIcon.Foreground>
@@ -42,84 +47,89 @@
         <!-- Patches List Section -->
         <cards:CustomCard Grid.Row="1">
             <Grid RowDefinitions="*,Auto">
-                    <!-- Patch Items ListBox -->
-                    <ListBox Grid.Row="0"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             SelectionMode="Single"
-                             ItemsSource="{Binding Patches}"
-                             SelectedItem="{Binding SelectedPatch, Mode=TwoWay}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="itemsvm:PatchItemViewModel">
-                                <!-- Individual patch item card -->
-                                <cards:CustomCard Classes="patch-item">
-                                    <Grid ColumnDefinitions="Auto,*">
-                                        <!-- Document icon indicating a patch file -->
-                                        <fluent:SymbolIcon Grid.Column="0"
-                                                           Symbol="DocumentText"
-                                                           VerticalAlignment="Center"
-                                                           Margin="0,0,12,0">
-                                            <fluent:SymbolIcon.Foreground>
-                                                <DynamicResource ResourceKey="AccentFillColorDefaultBrush" />
-                                            </fluent:SymbolIcon.Foreground>
-                                        </fluent:SymbolIcon>
-                                        <!-- Patch name displayed with emphasis -->
-                                        <StackPanel Grid.Column="1" Spacing="4">
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontWeight="SemiBold"
-                                                       TextWrapping="Wrap" />
-                                            <!-- Patch type indicator -->
-                                            <Border Padding="6,2"
-                                                    CornerRadius="4"
-                                                    HorizontalAlignment="Left">
-                                                <Border.Styles>
-                                                    <Style Selector="Border[Tag=Canary]">
-                                                        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
-                                                    </Style>
-                                                    <Style Selector="Border[Tag=Netplay]">
-                                                        <Setter Property="Background" Value="{DynamicResource SystemFillColorSuccessBrush}" />
-                                                    </Style>
-                                                </Border.Styles>
-                                                <Border.Tag>
-                                                    <Binding Path="PatchType" />
-                                                </Border.Tag>
-                                                <TextBlock Text="{Binding PatchType}"
-                                                           FontSize="10"
-                                                           FontWeight="Medium"
-                                                           VerticalAlignment="Center">
-                                                    <TextBlock.Foreground>
-                                                        <DynamicResource ResourceKey="TextOnAccentFillColorPrimaryBrush" />
-                                                    </TextBlock.Foreground>
-                                                </TextBlock>
-                                            </Border>
-                                        </StackPanel>
-                                    </Grid>
-                                </cards:CustomCard>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                <!-- Patch Items ListBox -->
+                <ListBox Grid.Row="0"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         SelectionMode="Single"
+                         ItemsSource="{Binding Patches}"
+                         SelectedItem="{Binding SelectedPatch, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="itemsvm:PatchItemViewModel">
+                            <!-- Individual patch item card -->
+                            <cards:CustomCard Classes="patch-item">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <!-- Document icon indicating a patch file -->
+                                    <fluent:SymbolIcon Grid.Column="0"
+                                                       Symbol="DocumentText"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,12,0">
+                                        <fluent:SymbolIcon.Foreground>
+                                            <DynamicResource ResourceKey="AccentFillColorDefaultBrush" />
+                                        </fluent:SymbolIcon.Foreground>
+                                    </fluent:SymbolIcon>
+                                    <!-- Patch name displayed with emphasis -->
+                                    <StackPanel Grid.Column="1"
+                                                Spacing="4">
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontWeight="SemiBold"
+                                                   TextWrapping="Wrap" />
+                                        <!-- Patch type indicator -->
+                                        <Border Padding="6,2"
+                                                CornerRadius="4"
+                                                HorizontalAlignment="Left">
+                                            <Border.Styles>
+                                                <Style Selector="Border[Tag=Canary]">
+                                                    <Setter Property="Background"
+                                                            Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                                </Style>
+                                                <Style Selector="Border[Tag=Netplay]">
+                                                    <Setter Property="Background"
+                                                            Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                                                </Style>
+                                            </Border.Styles>
+                                            <Border.Tag>
+                                                <Binding Path="PatchType" />
+                                            </Border.Tag>
+                                            <TextBlock Text="{Binding PatchType}"
+                                                       FontSize="10"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center">
+                                                <TextBlock.Foreground>
+                                                    <DynamicResource ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+                                                </TextBlock.Foreground>
+                                            </TextBlock>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </cards:CustomCard>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
-                    <!-- More patches indicator -->
-                    <Border Grid.Row="1"
-                            Padding="8"
-                            IsVisible="{Binding HasMoreItems}">
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    Spacing="4">
-                            <fluent:SymbolIcon Symbol="List" Height="12" Width="12">
-                                <fluent:SymbolIcon.Foreground>
-                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                </fluent:SymbolIcon.Foreground>
-                            </fluent:SymbolIcon>
-                            <TextBlock Text="{DynamicResource PatchSelectionDialog.ListBox.MorePatchesAvailable}"
-                                       FontSize="11"
-                                       FontWeight="Medium">
-                                <TextBlock.Foreground>
-                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                </TextBlock.Foreground>
-                            </TextBlock>
-                        </StackPanel>
-                    </Border>
+                <!-- More patches indicator -->
+                <Border Grid.Row="1"
+                        Padding="8"
+                        IsVisible="{Binding HasMoreItems}">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Spacing="4">
+                        <fluent:SymbolIcon Symbol="List"
+                                           Height="12"
+                                           Width="12">
+                            <fluent:SymbolIcon.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </fluent:SymbolIcon.Foreground>
+                        </fluent:SymbolIcon>
+                        <TextBlock Text="{DynamicResource PatchSelectionDialog.ListBox.MorePatchesAvailable}"
+                                   FontSize="11"
+                                   FontWeight="Medium">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
             </Grid>
         </cards:CustomCard>
     </Grid>

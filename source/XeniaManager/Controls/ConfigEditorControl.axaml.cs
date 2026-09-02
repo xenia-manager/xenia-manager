@@ -15,7 +15,13 @@ public partial class ConfigEditorControl : UserControl
     /// <summary>
     /// Gets the view model for this control.
     /// </summary>
-    public ConfigEditorViewModel? ViewModel => DataContext as ConfigEditorViewModel;
+    public ConfigEditorViewModel? ViewModel
+    {
+        get
+        {
+            return DataContext as ConfigEditorViewModel;
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ConfigEditorControl"/> class.
@@ -42,8 +48,5 @@ public partial class ConfigEditorControl : UserControl
     /// <summary>
     /// Discards all changes and reloads the config from the file.
     /// </summary>
-    public void DiscardChanges()
-    {
-        ViewModel?.DiscardChanges();
-    }
+    public void DiscardChanges() => ViewModel?.DiscardChanges();
 }

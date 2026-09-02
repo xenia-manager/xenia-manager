@@ -1,0 +1,143 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:set="using:XeniaManager.BigScreen.Controls.Settings">
+
+    <!-- COLOUR PICKER FIELD -->
+    <ControlTheme x:Key="{x:Type set:ColorPickerField}"
+                  TargetType="set:ColorPickerField">
+        <Setter Property="Focusable"
+                Value="True" />
+        <Setter Property="Template">
+            <ControlTemplate TargetType="set:ColorPickerField">
+                <Grid ColumnDefinitions="*, Auto"
+                      ColumnSpacing="28"
+                      x:DataType="set:ColorPickerField">
+                    <StackPanel Grid.Column="0"
+                                Orientation="Vertical"
+                                Spacing="6"
+                                MinWidth="360"
+                                VerticalAlignment="Center">
+                        <!-- Red channel -->
+                        <Border Classes="colour-slider-target"
+                                Classes.active="{Binding IsRedActive, RelativeSource={RelativeSource TemplatedParent}}"
+                                Padding="8,2">
+                            <Grid ColumnDefinitions="Auto, *, Auto"
+                                  ColumnSpacing="16">
+                                <TextBlock Grid.Column="0"
+                                           Text="R"
+                                           Width="20"
+                                           TextAlignment="Center"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           FontSize="16"
+                                           VerticalAlignment="Center" />
+                                <Slider x:Name="PART_SliderR"
+                                        Grid.Column="1"
+                                        Minimum="0"
+                                        Maximum="255"
+                                        VerticalAlignment="Center" />
+                                <TextBlock x:Name="PART_ValueR"
+                                           Grid.Column="2"
+                                           Width="44"
+                                           TextAlignment="Center"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           FontSize="16"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                        <!-- Green channel -->
+                        <Border Classes="colour-slider-target"
+                                Classes.active="{Binding IsGreenActive, RelativeSource={RelativeSource TemplatedParent}}"
+                                Padding="8,2">
+                            <Grid ColumnDefinitions="Auto, *, Auto"
+                                  ColumnSpacing="16">
+                                <TextBlock Grid.Column="0"
+                                           Text="G"
+                                           Width="20"
+                                           TextAlignment="Center"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           FontSize="16"
+                                           VerticalAlignment="Center" />
+                                <Slider x:Name="PART_SliderG"
+                                        Grid.Column="1"
+                                        Minimum="0"
+                                        Maximum="255"
+                                        VerticalAlignment="Center" />
+                                <TextBlock x:Name="PART_ValueG"
+                                           Grid.Column="2"
+                                           Width="44"
+                                           TextAlignment="Center"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           FontSize="16"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                        <!-- Blue channel -->
+                        <Border Classes="colour-slider-target"
+                                Classes.active="{Binding IsBlueActive, RelativeSource={RelativeSource TemplatedParent}}"
+                                Padding="8,2">
+                            <Grid ColumnDefinitions="Auto, *, Auto"
+                                  ColumnSpacing="16">
+                                <TextBlock Grid.Column="0"
+                                           Text="B"
+                                           Width="20"
+                                           TextAlignment="Center"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           FontSize="16"
+                                           VerticalAlignment="Center" />
+                                <Slider x:Name="PART_SliderB"
+                                        Grid.Column="1"
+                                        Minimum="0"
+                                        Maximum="255"
+                                        VerticalAlignment="Center" />
+                                <TextBlock x:Name="PART_ValueB"
+                                           Grid.Column="2"
+                                           Width="44"
+                                           TextAlignment="Center"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           FontSize="16"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                    <Border x:Name="PART_Swatch"
+                            Grid.Column="1"
+                            Width="72"
+                            Height="72"
+                            CornerRadius="10"
+                            Classes="colour-swatch"
+                            Classes.active="{Binding IsPreviewActive, RelativeSource={RelativeSource TemplatedParent}}"
+                            Background="{DynamicResource CardTitleBar}"
+                            IsHitTestVisible="True" />
+                    <Popup x:Name="PART_Popup"
+                           IsLightDismissEnabled="True"
+                           Placement="Bottom"
+                           HorizontalOffset="-140">
+                        <set:PalettePicker x:Name="PART_Palette" />
+                    </Popup>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <!-- PALETTE PICKER -->
+    <ControlTheme x:Key="{x:Type set:PalettePicker}"
+                  TargetType="set:PalettePicker">
+        <Setter Property="Focusable"
+                Value="False" />
+        <Setter Property="Template">
+            <ControlTemplate TargetType="set:PalettePicker">
+                <Border Background="{DynamicResource CardBackground}"
+                        CornerRadius="12"
+                        BorderBrush="{DynamicResource CardBorder}"
+                        BorderThickness="2"
+                        BoxShadow="{DynamicResource CardShadowPopup}"
+                        Padding="14"
+                        Margin="6">
+                    <StackPanel x:Name="PART_Palette"
+                                Orientation="Horizontal"
+                                Spacing="10" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

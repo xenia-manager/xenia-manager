@@ -17,7 +17,7 @@ public class TextBoxCard : ContentControl
 
     public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
         nameof(ShowIconBackground),
-        defaultValue: false);
+        false);
 
     public static readonly StyledProperty<string?> TextProperty = AvaloniaProperty.Register<TextBoxCard, string?>(
         nameof(Text),
@@ -33,49 +33,97 @@ public class TextBoxCard : ContentControl
 
     public string? Title
     {
-        get => GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+        get
+        {
+            return GetValue(TitleProperty);
+        }
+        set
+        {
+            SetValue(TitleProperty, value);
+        }
     }
 
     public string? Description
     {
-        get => GetValue(DescriptionProperty);
-        set => SetValue(DescriptionProperty, value);
+        get
+        {
+            return GetValue(DescriptionProperty);
+        }
+        set
+        {
+            SetValue(DescriptionProperty, value);
+        }
     }
 
     public string? Tooltip
     {
-        get => GetValue(TooltipProperty);
-        set => SetValue(TooltipProperty, value);
+        get
+        {
+            return GetValue(TooltipProperty);
+        }
+        set
+        {
+            SetValue(TooltipProperty, value);
+        }
     }
 
     public Symbol? Icon
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get
+        {
+            return GetValue(IconProperty);
+        }
+        set
+        {
+            SetValue(IconProperty, value);
+        }
     }
-    
+
     public bool ShowIconBackground
     {
-        get => GetValue(ShowIconBackgroundProperty);
-        set => SetValue(ShowIconBackgroundProperty, value);
+        get
+        {
+            return GetValue(ShowIconBackgroundProperty);
+        }
+        set
+        {
+            SetValue(ShowIconBackgroundProperty, value);
+        }
     }
 
     public string? Text
     {
-        get => GetValue(TextProperty);
-        set => SetValue(TextProperty, value);
+        get
+        {
+            return GetValue(TextProperty);
+        }
+        set
+        {
+            SetValue(TextProperty, value);
+        }
     }
 
     public double TextBoxMinWidth
     {
-        get => GetValue(TextBoxMinWidthProperty);
-        set => SetValue(TextBoxMinWidthProperty, value);
+        get
+        {
+            return GetValue(TextBoxMinWidthProperty);
+        }
+        set
+        {
+            SetValue(TextBoxMinWidthProperty, value);
+        }
     }
 
     public double TextBoxMaxWidth
     {
-        get => GetValue(TextBoxMaxWidthProperty);
-        set => SetValue(TextBoxMaxWidthProperty, value);
+        get
+        {
+            return GetValue(TextBoxMaxWidthProperty);
+        }
+        set
+        {
+            SetValue(TextBoxMaxWidthProperty, value);
+        }
     }
 }

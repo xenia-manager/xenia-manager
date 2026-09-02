@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:cards="using:XeniaManager.Controls.Cards"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsPageViewModel">
     <Design.DataContext>
@@ -12,7 +14,8 @@
     </Design.DataContext>
     <!-- UI -->
     <ScrollViewer>
-        <StackPanel Spacing="16" Margin="24">
+        <StackPanel Spacing="16"
+                    Margin="24">
             <!-- General Settings -->
             <Expander>
                 <Expander.Header>
@@ -35,6 +38,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.UseMediaIdForTitle.ToolTip}"
                                             Icon="Tag"
                                             IsChecked="{Binding UseMediaIdForTitle, Mode=TwoWay}" />
+                    <!-- Use Embedded Artwork -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.UseEmbeddedArtwork}"
+                                            Description="{DynamicResource SettingsPage.General.UseEmbeddedArtwork.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.UseEmbeddedArtwork.ToolTip}"
+                                            Icon="Image"
+                                            IsChecked="{Binding UseEmbeddedArtwork, Mode=TwoWay}" />
                     <!-- Check for Updates on Startup -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup}"
                                             Description="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Description}"
@@ -53,6 +62,12 @@
                                             ToolTip.Tip="{DynamicResource SettingsPage.General.AutoMergeMultiDisc.ToolTip}"
                                             Icon="Games"
                                             IsChecked="{Binding AutoMergeMultiDisc, Mode=TwoWay}" />
+                    <!-- Start in Big Screen -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.StartInBigScreen}"
+                                            Description="{DynamicResource SettingsPage.General.StartInBigScreen.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.StartInBigScreen.ToolTip}"
+                                            Icon="Tv"
+                                            IsChecked="{Binding StartInBigScreen, Mode=TwoWay}" />
                 </StackPanel>
             </Expander>
             <!-- UI Settings -->
@@ -77,8 +92,7 @@
                                         Title="{DynamicResource SettingsPage.Ui.Theme.Title}"
                                         Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
                                         ItemsSource="{Binding AppThemeOptions}"
-                                        SelectedIndex="{Binding SelectedThemeIndex}">
-                    </cards:ComboBoxCard>
+                                        SelectedIndex="{Binding SelectedThemeIndex}" />
                     <!-- Loading Screen -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.Ui.LoadingScreen.Title}"
                                             Description="{DynamicResource SettingsPage.Ui.LoadingScreen.Description}"

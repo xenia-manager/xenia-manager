@@ -8,7 +8,7 @@ public partial class ManagePage : UserControl
 {
     // Variables
     private ManagePageViewModel _viewModel { get; set; }
-    
+
     // Constructor
     public ManagePage()
     {

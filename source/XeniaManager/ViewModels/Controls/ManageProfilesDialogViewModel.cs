@@ -9,10 +9,10 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 
@@ -120,15 +120,9 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
     /// </summary>
     private readonly IMessageBoxService _messageBoxService;
 
-    partial void OnSelectedGamertagChanged(ProfileDisplayInfo? value)
-    {
-        LoadSelectedProfile();
-    }
+    partial void OnSelectedGamertagChanged(ProfileDisplayInfo? value) => LoadSelectedProfile();
 
-    partial void OnEditGamertagChanged(string value)
-    {
-        ValidateGamertag();
-    }
+    partial void OnEditGamertagChanged(string value) => ValidateGamertag();
 
     /// <summary>
     /// Validates the gamertag according to the following rules:
@@ -183,7 +177,8 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
             SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == XboxLiveCountry.Unknown) ?? Countries.First());
             SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == ConsoleLanguage.English) ?? Languages.First());
             IsLiveEnabled = false;
-            SelectedSubscriptionTierIndex = SubscriptionTiers.IndexOf(SubscriptionTiers.FirstOrDefault(s => s.Value == SubscriptionTier.NoSubscription) ?? SubscriptionTiers.First());
+            SelectedSubscriptionTierIndex =
+                SubscriptionTiers.IndexOf(SubscriptionTiers.FirstOrDefault(s => s.Value == SubscriptionTier.NoSubscription) ?? SubscriptionTiers.First());
             CanSave = false;
             return;
         }
@@ -195,7 +190,8 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
             SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == SelectedProfile.Country) ?? Countries.First());
             SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == SelectedProfile.Language) ?? Languages.First());
             IsLiveEnabled = SelectedProfile.IsLiveEnabled;
-            SelectedSubscriptionTierIndex = SubscriptionTiers.IndexOf(SubscriptionTiers.FirstOrDefault(s => s.Value == SelectedProfile.SubscriptionTier) ?? SubscriptionTiers.First());
+            SelectedSubscriptionTierIndex =
+                SubscriptionTiers.IndexOf(SubscriptionTiers.FirstOrDefault(s => s.Value == SelectedProfile.SubscriptionTier) ?? SubscriptionTiers.First());
             ValidateGamertag();
         }
     }

@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Models.Database.Patches;
+using XeniaManager.Database.Models.Patches;
 
 namespace XeniaManager.ViewModels.Items;
 

@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Pokreni Emulator</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Veliki zaslon</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Otvori Veliki zaslon</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Biblioteka igara</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Postavke Emulatora</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Upravljanje Emulatora</sys:String>
@@ -372,6 +374,9 @@
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Koristi MediaId za naslov igre</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Koristi MediaId iz datoteka igre za pronalaženje odgovarajućeg naslova</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Onemogući za uvijek korištenje naslova iz baze podataka umjesto naslova specifičnih za odabrani medij</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">Koristi ugrađeno umjetničko djelo</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">Koristi umjetničko djelo ugrađeno u datoteke igre (ikona, sličice) prije preuzimanja iz baze podataka</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">Kada je omogućeno, ikona igre i sličice prvo se izdvajaju iz same datoteke igre (STFS/SVOD/ISO/ZAR/XEX). Onemogućite za uvijek preuzimanje umjetničkog djela iz baze podataka.</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Provjeri ažuriranja pri pokretanju</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatski provjerava ažuriranja za Xenia i Xenia Manager prilikom pokretanja aplikacije</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Onemogućite ovo da biste preskočili provjeru ažuriranja tijekom pokretanja aplikacije</sys:String>
@@ -381,6 +386,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Automatski spoji igre s više diskova</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Tijekom skeniranja biblioteke automatski spoji prepoznate diskove iste igre</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Kada je omogućeno, dodatni diskovi koji odgovaraju postojećoj igri u biblioteci automatski se spajaju bez traženja potvrde</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">Pokreni u Velikom zaslonu</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">Pokreće Veliki zaslon umjesto glavnog prozora pri pokretanju</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">Kad je uključeno, Xenia Manager otvara Veliki zaslon odmah pri pokretanju</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Učitavanje {0}</sys:String>
@@ -405,6 +413,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nema pronađenih snimaka zaslona za {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Otvaranje mape nije uspjelo</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Došlo je do greške prilikom otvaranja mape sa snimkama zaslona.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">Otvori lokaciju igre</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">Otvara mapu koja sadrži datoteku igre</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">Lokacija mape igre nije pronađena</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">Lokacija mape igre nije moguće pronaći.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">Neuspjelo otvaranje mape</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">Došlo je do greške prilikom otvaranja lokacije igre.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Zakrpe</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Preuzmi</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Preuzmite zakrpe iz repozitorija</sys:String>
@@ -522,6 +536,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Nema instaliranog emulatora</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Nije pronađena nijedna instalacija Xenia emulatora. Molimo instalirajte Xenia emulator.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">Veliki zaslon nije pronađen</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">Nije moguće pronaći XeniaManager.BigScreen.exe pored Xenia Managera.</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Zakrpe</sys:String>
@@ -578,9 +594,37 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Ikona</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Odaberi ikonu</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Ukloni ikonu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">Ponovno dohvati ikonu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">Ikona nije pronađena</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">Nemoguće je pronaći ikonu u {0}. Postojeća ikona je ostala neizmijenjena.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">Ikona ponovno dohvaćena</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">Ikona uspješno ponovno dohvaćena iz {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">Ponovno dohvati ikonu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">Odaberite odkuda ponovno dohvatiti ikonu:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">Datoteke igre</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">Datoteke igre</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">Ponovno dohvati omot</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">Omot nije pronađen</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">Ne moguće je pronaći omot u {0}. Postojeći omot je ostao neizmijenjen.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">Omot ponovno dohvaćen</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">Omot uspješno ponovno dohvaćen iz {0}.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">Pozadina</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">Odaberi pozadinu</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">Ukloni pozadinu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">Ponovno dohvati pozadinu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">Pozadina nije pronađena</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">Ne moguće je pronaći pozadinu u {0}. Postojeća pozadina je ostala neizmijenjena.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">Pozadina ponovno dohvaćena</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">Pozadina uspješno ponovno dohvaćena iz {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">Ponovno dohvati pozadinu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">Odaberite odkuda ponovno dohvatiti pozadinu:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">Datoteke igre</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">Datoteke igre</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">Ponovno dohvaćanje nije uspjelo</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">Ponovno dohvaćanje {0} nije uspjelo.&#10;Greška: {1}</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Automatsko prepoznavanje</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID naslova i medijski ID automatski se prepoznaju i ne mogu se mijenjati.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">ID naslova</sys:String>
@@ -633,10 +677,12 @@
 
     <!-- Install Content Dialog -->
     <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Instaliraj sadržaj</sys:String>
-    <sys:String x:Key="InstallContentDialog.ContentDialog.InstallButton.Text">Instaliraj</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Otkaži</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">Dodaj sadržaj</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">Odaberite datoteke sadržaja</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">Instaliraj (Raspakiraj)</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">Instaliraj (Paket)</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">Zadržava paketnu datoteku netaknutom. Potreban je najnoviji Xenia Canary.</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">Instalacija uspješna</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">Sljedeći sadržaj je uspješno instaliran:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Instalacija djelomično uspješna</sys:String>
@@ -1269,6 +1315,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - Podrška za tipkovnicu i miš</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - Višeplatformski UI framework s Fluent dizajnom</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">CommunityToolkit.Mvvm</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip"> - MVVM framework za .NET</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">Microsoft.Extensions.DependencyInjection</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip"> - Dependency injection za .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - Fluent Design kontrole i teme za Avalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1277,8 +1327,14 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Fleksibilan framework za zapisivanje za .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Dohvaćanje detalja igre</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">ppy.SDL3-CS</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip"> - SDL3 biblioteka za podršku gamepad-a</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Upravljanje arhivama i kompresijom</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">System.IO.Hashing</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip"> - Brzi algoritmi haširanja (XxHash)</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">TweenAvalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip"> - Animacije za AvaloniaUI</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - Zstandard kompresija za .NET</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Ova aplikacija nije povezana, odobrena niti sponzorirana od strane Microsoft Corporation ili Xenia projekta na bilo koji način. Sve robne marke, logotipi i nazivi brendova vlasništvo su svojih vlasnika.&#10;Xbox 360 je registrirana robna marka Microsoft Corporation u Sjedinjenim Američkim Državama i/ili drugim zemljama.&#10;Xenia je registrirana robna marka Xenia projekta.&#10;Sva pozivanja na ove ili druge robne marke napravljena su isključivo u svrhu identificiranja kompatibilnosti ili funkcionalnosti i ne impliciraju nikakvu povezanost s ili odobrenje od strane vlasnika robnih marki.&#10;Ova aplikacija namijenjena je isključivo u obrazovne i informativne svrhe. Ne sadrži niti distribuira bilo kakav sadržaj zaštićen autorskim pravima u vlasništvu Microsoft Corporation ili bilo koje treće strane. Korisnici su isključivo odgovorni za osiguravanje da njihovo korištenje ovog softvera bude u skladu sa svim primjenjivim zakonima, uključujući zakone o autorskim pravima i licenciranju.&#10;Svako korištenje ove aplikacije za pokretanje ili interakciju s vlasničkim softverom ili firmwareom mora biti provedeno u granicama relevantnih ugovora o licenciranju krajnjih korisnika (EULA). Programeri i distributeri ove aplikacije ne odobravaju niti podržavaju pirateriju u bilo kojem obliku.&#10;Ova aplikacija pruža se "kakva jest" bez ikakvih jamstava, izričitih ili impliciranih. Koristite na vlastitu odgovornost.</sys:String>

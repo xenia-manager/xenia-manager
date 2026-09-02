@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using Avalonia.Media.Imaging;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Utilities;
 
@@ -29,6 +29,7 @@ public class GameArtwork
             {
                 return _cachedBackground;
             }
+
             lock (_backgroundLock)
             {
                 if (_cachedBackground == null && !string.IsNullOrEmpty(Background))
@@ -44,6 +45,7 @@ public class GameArtwork
                         return null;
                     }
                 }
+
                 return _cachedBackground;
             }
         }
@@ -67,6 +69,7 @@ public class GameArtwork
             {
                 return _cachedBoxart;
             }
+
             lock (_boxartLock)
             {
                 if (_cachedBoxart == null && !string.IsNullOrEmpty(Boxart))
@@ -82,6 +85,7 @@ public class GameArtwork
                         return null;
                     }
                 }
+
                 return _cachedBoxart;
             }
         }
@@ -105,6 +109,7 @@ public class GameArtwork
             {
                 return _cachedIcon;
             }
+
             lock (_iconLock)
             {
                 if (_cachedIcon == null && !string.IsNullOrEmpty(Icon))
@@ -120,6 +125,7 @@ public class GameArtwork
                         return null;
                     }
                 }
+
                 return _cachedIcon;
             }
         }
@@ -154,10 +160,12 @@ public class GameArtwork
         {
             _cachedBackground = null;
         }
+
         lock (_boxartLock)
         {
             _cachedBoxart = null;
         }
+
         lock (_iconLock)
         {
             _cachedIcon = null;

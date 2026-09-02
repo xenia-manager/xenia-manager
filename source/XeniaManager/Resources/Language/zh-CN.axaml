@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">打开 Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">游戏库</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia 设置</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">管理 Xenia</sys:String>
@@ -332,17 +334,17 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Xenia {0} 的按键绑定文件已成功重新下载。</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">重新下载失败</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">重新下载按键绑定文件失败。&#10;错误：{0}</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">清理着色器缓存</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">删除着色器缓存文件</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">清理</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">未安装模拟器</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">清理着色器缓存前，请至少安装一个版本的 Xenia。</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">着色器缓存已清理</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">已成功为 Xenia {1} 清理 {0} 个着色器缓存文件。</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">未找到着色器缓存</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">未找到 Xenia {0} 的着色器缓存文件。&#10;请运行游戏以生成着色器缓存。</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">清理失败</sys:String>
-	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">清理 Xenia {0} 的着色器缓存失败。&#10;错误：{1}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">清理着色器缓存</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">删除着色器缓存文件</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">清理</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">未安装模拟器</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">清理着色器缓存前，请至少安装一个版本的 Xenia。</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">着色器缓存已清理</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">已成功为 Xenia {1} 清理 {0} 个着色器缓存文件。</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">未找到着色器缓存</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">未找到 Xenia {0} 的着色器缓存文件。&#10;请运行游戏以生成着色器缓存。</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">清理失败</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">清理 Xenia {0} 的着色器缓存失败。&#10;错误：{1}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">界面设置</sys:String>
@@ -372,6 +374,9 @@
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">使用 MediaId 作为游戏标题</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">使用游戏文件中的 MediaId 查找匹配的媒体条目标题</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">禁用后始终使用数据库标题，而不使用特定于媒体的标题</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">启动时检查更新</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">在应用程序启动时自动检查 Xenia 和 Xenia Manager 的更新</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">禁用此选项可在应用程序启动时跳过更新检查</sys:String>
@@ -381,6 +386,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">自动合并多碟游戏</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">在库扫描时自动合并检测到的同一游戏的多张光盘</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">启用后，与库中现有游戏匹配的额外光盘将自动合并，无需提示</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">正在加载 {0}</sys:String>
@@ -528,6 +536,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">未安装 Xenia</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">未找到任何 Xenia 安装。请先安装 Xenia 再尝试启动。</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - 补丁</sys:String>
@@ -584,9 +594,37 @@
     <sys:String x:Key="GameDetailsEditor.Icon">图标</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">选择图标</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">清除图标</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">背景</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">选择背景</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">清除背景</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">自动检测</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID 和 Media ID 是自动检测的，无法更改。</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
@@ -639,10 +677,12 @@
 
     <!-- Install Content Dialog -->
     <sys:String x:Key="InstallContentDialog.ContentDialog.Title">安装内容</sys:String>
-    <sys:String x:Key="InstallContentDialog.ContentDialog.InstallButton.Text">安装</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">取消</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">添加内容</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">选择内容文件</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">安装成功</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">以下内容已成功安装：</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">安装部分成功</sys:String>
@@ -1125,14 +1165,14 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">指定提供给客户端的额外命令行参数</sys:String>
 
     <!-- Config UI Settings - Logging Options -->
-	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">启用控制台</sys:String>
-	<sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">随主窗口打开控制台窗口</sys:String>
-	<sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">日志级别</sys:String>
-	<sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">要记录的最高日志级别</sys:String>
-	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">错误</sys:String>
-	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">警告</sys:String>
-	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">信息</sys:String>
-	<sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">调试</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">启用控制台</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">随主窗口打开控制台窗口</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">日志级别</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">要记录的最高日志级别</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">错误</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">警告</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">信息</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">调试</sys:String>
 
     <!-- Config UI Settings - Memory Options -->
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">保护零页</sys:String>
@@ -1275,6 +1315,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - 键盘和鼠标支持</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - 跨平台 UI 框架，采用 Fluent Design</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - 为 Avalonia 提供的 Fluent Design 控件和主题</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1283,8 +1327,14 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - 适用于 .NET 的灵活日志框架</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - 游戏详情解析</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - 归档和压缩处理</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - .NET 的 Zstandard 压缩库</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">本应用程序不以任何方式隶属于 Microsoft Corporation 或 Xenia Project，也未获得其认可或赞助。所有商标、徽标和品牌名称均为其各自所有者的财产。&#10;Xbox 360 是 Microsoft Corporation 在美国和/或其他国家/地区的注册商标。&#10;Xenia 是 Xenia Project 的注册商标。&#10;对这些或其他商标的任何引用仅出于标识兼容性或功能的目的，并不意味着与商标持有者有任何关联或获得其认可。&#10;本软件仅供教育和信息目的使用。它不包含或分发 Microsoft Corporation 或任何第三方拥有的任何受版权保护的内容。用户全权负责确保其对本软件的使用符合所有适用法律，包括版权和许可法律。&#10;使用本应用程序运行或与专有软件或固件交互的任何行为都必须在相关最终用户许可协议 (EULA) 的范围内进行。本应用程序的开发者和分发者不以任何形式纵容或支持盗版行为。&#10;本应用程序按"原样"提供，不作任何明示或暗示的担保。使用风险自负。</sys:String>

@@ -13,12 +13,12 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Files;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Gpd;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files.Models.Gpd;
+using XeniaManager.Files.Models.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;
@@ -58,7 +58,13 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// <summary>
     /// Gets whether the selected content type is SavedGame.
     /// </summary>
-    public bool IsSavedGameContentType => SelectedContentType?.Value == ContentType.SavedGame;
+    public bool IsSavedGameContentType
+    {
+        get
+        {
+            return SelectedContentType?.Value == ContentType.SavedGame;
+        }
+    }
 
     /// <summary>
     /// Collection of account content items (excludes GameContent).
@@ -66,20 +72,14 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private ObservableCollection<AccountContent> _accountContents = [];
 
-    partial void OnAccountContentsChanged(ObservableCollection<AccountContent> value)
-    {
-        UpdateAccountVisibility();
-    }
+    partial void OnAccountContentsChanged(ObservableCollection<AccountContent> value) => UpdateAccountVisibility();
 
     /// <summary>
     /// The currently selected account content.
     /// </summary>
     [ObservableProperty] private AccountContent? _selectedAccountContent;
 
-    partial void OnSelectedAccountContentChanged(AccountContent? value)
-    {
-        UpdateContentList();
-    }
+    partial void OnSelectedAccountContentChanged(AccountContent? value) => UpdateContentList();
 
     /// <summary>
     /// Collection of game content items (only GameContent).
@@ -87,20 +87,14 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private ObservableCollection<GameContent> _gameContents = [];
 
-    partial void OnGameContentsChanged(ObservableCollection<GameContent> value)
-    {
-        UpdateAccountVisibility();
-    }
+    partial void OnGameContentsChanged(ObservableCollection<GameContent> value) => UpdateAccountVisibility();
 
     /// <summary>
     /// The currently selected game content.
     /// </summary>
     [ObservableProperty] private GameContent? _selectedGameContent;
 
-    partial void OnSelectedGameContentChanged(GameContent? value)
-    {
-        UpdateContentList();
-    }
+    partial void OnSelectedGameContentChanged(GameContent? value) => UpdateContentList();
 
     /// <summary>
     /// Indicates whether the account selector should be visible.
@@ -108,10 +102,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private bool _isAccountSelectorVisible;
 
-    partial void OnIsAccountSelectorVisibleChanged(bool value)
-    {
-        OnPropertyChanged(nameof(IsAccountSelectorVisible));
-    }
+    partial void OnIsAccountSelectorVisibleChanged(bool value) => OnPropertyChanged(nameof(IsAccountSelectorVisible));
 
     /// <summary>
     /// Collection of header files to display in the dialog.
@@ -141,7 +132,13 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// <summary>
     /// Indicates whether the header files list is empty.
     /// </summary>
-    public bool IsEmpty => HeaderFiles.Count == 0;
+    public bool IsEmpty
+    {
+        get
+        {
+            return HeaderFiles.Count == 0;
+        }
+    }
 
     /// <summary>
     /// Collection of achievements to display when the Achievements content type is selected.
@@ -187,6 +184,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                 achievement.PropertyChanged -= Achievement_PropertyChanged;
             }
         }
+
         if (e.NewItems != null)
         {
             foreach (AchievementViewModel achievement in e.NewItems)
@@ -226,17 +224,35 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// <summary>
     /// Gets whether achievements can be unlocked (selected achievements that are locked).
     /// </summary>
-    public bool CanUnlockAchievements => AreAchievementFeaturesEnabled && Achievements.Any(a => a.IsSelected && !a.IsUnlocked);
+    public bool CanUnlockAchievements
+    {
+        get
+        {
+            return AreAchievementFeaturesEnabled && Achievements.Any(a => a.IsSelected && !a.IsUnlocked);
+        }
+    }
 
     /// <summary>
     /// Gets whether achievements can be locked (selected achievements that are unlocked).
     /// </summary>
-    public bool CanLockAchievements => AreAchievementFeaturesEnabled && Achievements.Any(a => a.IsSelected && a.IsUnlocked);
+    public bool CanLockAchievements
+    {
+        get
+        {
+            return AreAchievementFeaturesEnabled && Achievements.Any(a => a.IsSelected && a.IsUnlocked);
+        }
+    }
 
     /// <summary>
     /// Gets whether achievements can be selected (not all achievements are selected).
     /// </summary>
-    public bool CanSelectAllAchievements => AreAchievementFeaturesEnabled && Achievements.Any(a => !a.IsSelected);
+    public bool CanSelectAllAchievements
+    {
+        get
+        {
+            return AreAchievementFeaturesEnabled && Achievements.Any(a => !a.IsSelected);
+        }
+    }
 
     /// <summary>
     /// Selects all achievements.
@@ -273,13 +289,25 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// <summary>
     /// Indicates whether the achievements list is empty.
     /// </summary>
-    public bool IsAchievementsEmpty => Achievements.Count == 0;
+    public bool IsAchievementsEmpty
+    {
+        get
+        {
+            return Achievements.Count == 0;
+        }
+    }
 
     /// <summary>
     /// Indicates whether the achievements empty state should be visible.
     /// True when the achievements list is visible AND empty.
     /// </summary>
-    public bool IsAchievementsEmptyStateVisible => IsAchievementsListVisible && IsAchievementsEmpty;
+    public bool IsAchievementsEmptyStateVisible
+    {
+        get
+        {
+            return IsAchievementsListVisible && IsAchievementsEmpty;
+        }
+    }
 
     /// <summary>
     /// Gets the total achievement count.
@@ -306,20 +334,23 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private string _achievementFilter = string.Empty;
 
-    partial void OnAchievementFilterChanged(string value)
-    {
-        ApplyAchievementFilter();
-    }
+    partial void OnAchievementFilterChanged(string value) => ApplyAchievementFilter();
 
     /// <summary>
     /// Gets the list of available achievement filters.
     /// </summary>
-    public string[] AchievementFilters =>
-    [
-        LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.All"),
-        LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Unlocked"),
-        LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Locked")
-    ];
+    public string[] AchievementFilters
+    {
+        get
+        {
+            return
+            [
+                LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.All"),
+                LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Unlocked"),
+                LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Locked")
+            ];
+        }
+    }
 
     /// <summary>
     /// All achievements loaded from the GPD file (unfiltered).
@@ -330,7 +361,13 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// Indicates whether the header files empty state should be visible.
     /// True when the header files list is visible AND empty.
     /// </summary>
-    public bool IsHeaderFilesEmptyStateVisible => IsHeaderFilesListVisible && IsEmpty;
+    public bool IsHeaderFilesEmptyStateVisible
+    {
+        get
+        {
+            return IsHeaderFilesListVisible && IsEmpty;
+        }
+    }
 
     /// <summary>
     /// Indicates whether the achievements list is visible.
@@ -379,7 +416,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             {
                 selectedAchievement.Achievement.IsEarned = true;
                 selectedAchievement.Achievement.UnlockTime = DateTime.Now.ToFileTime();
-                selectedAchievement.Refresh(clearImageCache: true);
+                selectedAchievement.Refresh(true);
                 selectedAchievement.IsSelected = false;
                 unlockedCount++;
                 gamerscoreGained += selectedAchievement.Gamerscore;
@@ -440,7 +477,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             {
                 selectedAchievement.Achievement.IsEarned = false;
                 selectedAchievement.Achievement.UnlockTime = 0;
-                selectedAchievement.Refresh(clearImageCache: true);
+                selectedAchievement.Refresh(true);
                 selectedAchievement.IsSelected = false;
                 lockedCount++;
                 gamerscoreLost += selectedAchievement.Gamerscore;
@@ -521,7 +558,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             // Refresh all achievement view models
             foreach (AchievementViewModel achievement in Achievements)
             {
-                achievement.Refresh(clearImageCache: true);
+                achievement.Refresh(true);
                 achievement.IsSelected = false;
             }
 
@@ -587,7 +624,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             // Refresh all achievement view models
             foreach (AchievementViewModel achievement in Achievements)
             {
-                achievement.Refresh(clearImageCache: true);
+                achievement.Refresh(true);
                 achievement.IsSelected = false;
             }
 
@@ -652,6 +689,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                     deletedCount++;
                     HeaderFiles.Remove(headerFile);
                 }
+
                 if (File.Exists(headerFile.HeaderFilePath))
                 {
                     File.Delete(headerFile.HeaderFilePath);
@@ -712,6 +750,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                     deletedCount++;
                     HeaderFiles.Remove(headerFile);
                 }
+
                 if (File.Exists(headerFile.HeaderFilePath))
                 {
                     File.Delete(headerFile.HeaderFilePath);
@@ -929,12 +968,14 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
             string contentDirectory = Path.Combine(emulatorContentFolder, xuid, Game.GameId, selectedContentType);
             Logger.Trace<ContentViewerDialogViewModel>($"Constructed content directory: {contentDirectory}");
-            Logger.Debug<ContentViewerDialogViewModel>($"Content directory components - Folder: {emulatorContentFolder}, XUID: {xuid}, GameId: {Game.GameId}, ContentType: {selectedContentType}");
+            Logger.Debug<ContentViewerDialogViewModel>(
+                $"Content directory components - Folder: {emulatorContentFolder}, XUID: {xuid}, GameId: {Game.GameId}, ContentType: {selectedContentType}");
 
             if (string.IsNullOrEmpty(contentDirectory) || !Directory.Exists(contentDirectory))
             {
                 Logger.Warning<ContentViewerDialogViewModel>($"Content directory does not exist: {contentDirectory}");
-                Logger.Debug<ContentViewerDialogViewModel>($"Directory.Exists check: {Directory.Exists(contentDirectory)}, IsNullOrEmpty: {string.IsNullOrEmpty(contentDirectory)}");
+                Logger.Debug<ContentViewerDialogViewModel>(
+                    $"Directory.Exists check: {Directory.Exists(contentDirectory)}, IsNullOrEmpty: {string.IsNullOrEmpty(contentDirectory)}");
                 return;
             }
 
@@ -1002,7 +1043,8 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             if (!string.IsNullOrEmpty(SelectedAccountContent.ProfileGpdPath))
             {
                 SelectedAccountContent.ProfileGpd.Save(SelectedAccountContent.ProfileGpdPath);
-                Logger.Info<ContentViewerDialogViewModel>($"Updated ProfileGpd TitleEntry for {SelectedAccountContent.TitleId}: {titleEntry.AchievementUnlockedCount} achievements, {titleEntry.GamerscoreUnlocked}G");
+                Logger.Info<ContentViewerDialogViewModel>(
+                    $"Updated ProfileGpd TitleEntry for {SelectedAccountContent.TitleId}: {titleEntry.AchievementUnlockedCount} achievements, {titleEntry.GamerscoreUnlocked}G");
             }
         }
         else
@@ -1208,8 +1250,10 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
         IEnumerable<AchievementViewModel> filteredAchievements = AchievementFilter switch
         {
-            _ when AchievementFilter == LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Unlocked") => _allAchievements.Where(a => a.IsUnlocked),
-            _ when AchievementFilter == LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Locked") => _allAchievements.Where(a => !a.IsUnlocked),
+            _ when AchievementFilter == LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Unlocked") => _allAchievements.Where(a =>
+                a.IsUnlocked),
+            _ when AchievementFilter == LocalizationHelper.GetText("InstalledContentDialog.AchievementFilter.Locked") => _allAchievements.Where(a =>
+                !a.IsUnlocked),
             _ => _allAchievements
         };
 

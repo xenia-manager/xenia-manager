@@ -1,0 +1,197 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             xmlns:coreconv="using:XeniaManager.Core.Converters"
+             mc:Ignorable="d"
+             d:DesignWidth="1100"
+             d:DesignHeight="800"
+             x:Class="XeniaManager.BigScreen.Controls.Cards.GameDetailsPanel"
+             x:DataType="vm:GameDetailsViewModel">
+    <Border Padding="30"
+            Background="{DynamicResource CardBackground}"
+            BorderBrush="{DynamicResource CardBorder}"
+            BorderThickness="4"
+            BoxShadow="{DynamicResource CardShadow}"
+            CornerRadius="12">
+        <Grid RowDefinitions="Auto,Auto,*,Auto"
+              RowSpacing="24">
+
+            <!-- Game name + Xenia version badge (opposite the title) -->
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*,Auto"
+                  ColumnSpacing="24">
+                <TextBlock Grid.Column="0"
+                           Text="{Binding Title}"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center"
+                           FontSize="40"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource TextPrimary}" />
+
+                <!-- Version icon: build icon + hover tooltip (Canary = gamepad, etc.) -->
+                <fluent:SymbolIcon Grid.Column="1"
+                                   Symbol="{Binding Card.Game.XeniaVersion, Converter={x:Static coreconv:XeniaVersionToIconConverter.Instance}}"
+                                   FontSize="30"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextPrimary}">
+                    <ToolTip.Tip>
+                        <TextBlock Text="{Binding Card.Game.XeniaVersion, Converter={x:Static coreconv:XeniaVersionToStringConverter.Instance}}" />
+                    </ToolTip.Tip>
+                </fluent:SymbolIcon>
+            </Grid>
+
+            <!-- Stats box: icon left, playtime/achievements/gamerscore stacked -->
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="Auto,*"
+                  ColumnSpacing="28">
+                <Border Width="150"
+                        Height="150"
+                        Background="{DynamicResource CardBorder}"
+                        ClipToBounds="True"
+                        CornerRadius="10">
+                    <Grid>
+                        <Image Source="{Binding Card.DiscArt}"
+                               IsVisible="{Binding Card.HasDiscArt}"
+                               Stretch="Uniform" />
+                        <fluent:SymbolIcon Symbol="Games"
+                                           IsVisible="{Binding !Card.HasDiscArt}"
+                                           FontSize="56"
+                                           Foreground="{DynamicResource TextSecondary}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+                <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            Spacing="14"
+                            VerticalAlignment="Center">
+                    <prim:IconStat Icon="Clock"
+                                   Stat="{Binding Card.PlaytimeText}"
+                                   IconSize="26"
+                                   FontSize="22" />
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="24">
+                        <prim:IconStat Icon="Trophy"
+                                       Stat="{Binding Card.AchievementsText}"
+                                       IconSize="26"
+                                       FontSize="22" />
+                        <prim:IconStat Icon="Star"
+                                       Stat="{Binding Card.GamerscoreText}"
+                                       IconSize="26"
+                                       FontSize="22" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!-- Bio / loading / no-info -->
+            <Grid Grid.Row="2">
+                <StackPanel Orientation="Vertical"
+                            Spacing="12"
+                            IsVisible="{Binding HasBio}">
+                    <TextBlock Text="{DynamicResource Library.Details.Description}"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource TextSecondary}" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <TextBlock Text="{Binding Bio}"
+                                   FontSize="19"
+                                   LineHeight="27"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   TextWrapping="Wrap" />
+                    </ScrollViewer>
+                </StackPanel>
+                <ProgressBar IsVisible="{Binding IsLoading}"
+                             IsIndeterminate="True"
+                             Width="280"
+                             Height="6"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource AccentColor}" />
+                <TextBlock Text="{DynamicResource Library.Details.NoInfo}"
+                           IsVisible="{Binding ShowNoInfo}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="22"
+                           Foreground="{DynamicResource TextSecondary}" />
+            </Grid>
+
+            <!-- Metadata strip -->
+            <StackPanel Grid.Row="3"
+                        Orientation="Vertical"
+                        Spacing="10"
+                        IsVisible="{Binding HasMetadata}">
+                <Grid ColumnDefinitions="150,*">
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource Library.Details.Compatibility}"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextSecondary}" />
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="12"
+                                VerticalAlignment="Center"
+                                ToolTip.Tip="{Binding Card.Game.Compatibility.Url}">
+                        <TextBlock Text="{Binding Card.Game.Compatibility.Rating, Converter={x:Static coreconv:CompatibilityRatingToStringConverter.Instance}}"
+                                   FontSize="20"
+                                   Foreground="{DynamicResource TextPrimary}" />
+                        <Ellipse Width="16"
+                                 Height="16"
+                                 VerticalAlignment="Center"
+                                 Fill="{Binding Card.Game.Compatibility.Rating, Converter={x:Static coreconv:CompatibilityRatingColorConverter.Instance}}" />
+                    </StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasGenre}">
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource Library.Details.Genre}"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextSecondary}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding GenreText}"
+                               TextWrapping="Wrap"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextPrimary}" />
+                </Grid>
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasDeveloper}">
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource Library.Details.Developer}"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextSecondary}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Developer}"
+                               TextWrapping="Wrap"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextPrimary}" />
+                </Grid>
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasPublisher}">
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource Library.Details.Publisher}"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextSecondary}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Publisher}"
+                               TextWrapping="Wrap"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextPrimary}" />
+                </Grid>
+                <Grid ColumnDefinitions="150,*"
+                      IsVisible="{Binding HasReleased}">
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource Library.Details.Released}"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextSecondary}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Released}"
+                               FontSize="20"
+                               Foreground="{DynamicResource TextPrimary}" />
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

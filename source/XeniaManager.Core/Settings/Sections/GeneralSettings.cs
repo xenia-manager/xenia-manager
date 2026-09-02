@@ -37,4 +37,16 @@ public class GeneralSettings
     /// </summary>
     [JsonPropertyName("auto_merge_multi_disc")]
     public bool AutoMergeMultiDisc { get; set; } = false;
+
+    /// <summary>
+    /// Whether to launch BigScreen on startup instead of showing the main window
+    /// </summary>
+    [JsonPropertyName("start_in_big_screen")]
+    public bool StartInBigScreen { get; set; } = false;
+
+    /// <summary>
+    /// Whether to use the embedded artwork (XDBF SPA, e.g. icon 0x8000) from the game file (STFS/SVOD/ISO/ZAR/XEX) as the primary artwork source before downloading from the database.
+    /// </summary>
+    [JsonPropertyName("use_embedded_artwork")]
+    public bool UseEmbeddedArtwork { get; set; } = true;
 }

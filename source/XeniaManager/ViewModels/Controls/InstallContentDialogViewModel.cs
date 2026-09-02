@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Files;
+using XeniaManager.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Files.Models.Stfs;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels.Items;
@@ -36,33 +38,21 @@ public partial class InstallContentDialogViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private ContentItemViewModel? _selectedContent;
 
-    partial void OnSelectedContentChanged(ContentItemViewModel? value)
-    {
-        UpdateCanInstall();
-    }
+    partial void OnSelectedContentChanged(ContentItemViewModel? value) => UpdateCanInstall();
 
-    partial void OnContentItemsChanged(ObservableCollection<ContentItemViewModel> value)
-    {
-        UpdateCanInstall();
-    }
+    partial void OnContentItemsChanged(ObservableCollection<ContentItemViewModel> value) => UpdateCanInstall();
 
     /// <summary>
     /// Updates the CanInstall property based on whether there are items in the list.
     /// </summary>
-    private void UpdateCanInstall()
-    {
-        CanInstall = ContentItems.Count > 0 && !IsInstalling;
-    }
+    private void UpdateCanInstall() => CanInstall = ContentItems.Count > 0 && !IsInstalling;
 
     /// <summary>
     /// Indicates whether an installation is currently in progress.
     /// </summary>
     [ObservableProperty] private bool _isInstalling;
 
-    partial void OnIsInstallingChanged(bool value)
-    {
-        UpdateCanInstall();
-    }
+    partial void OnIsInstallingChanged(bool value) => UpdateCanInstall();
 
     /// <summary>
     /// Indicates whether the Installation button should be enabled.
@@ -109,10 +99,11 @@ public partial class InstallContentDialogViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Starts the installation of all content items in the list.
+    /// Starts the installation of all content items in the list using the given installation method.
     /// </summary>
+    /// <param name="installationMethod">The installation method to use for the content items.</param>
     [RelayCommand]
-    private async Task InstallAsync()
+    private async Task InstallAsync(ContentInstallationMethod installationMethod)
     {
         if (ContentItems.Count == 0)
         {
@@ -155,21 +146,42 @@ public partial class InstallContentDialogViewModel : ViewModelBase
                     string contentFolder = Path.Combine(AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion).ContentFolderLocation),
                         "0000000000000000");
 
-                    // Extract the STFS file to Xenia's structure with progress reporting on a background thread
+                    // Install with progress reporting on a background thread
                     await Task.Run(() =>
                     {
-                        stfsFile.ExtractToXeniaStructure(
-                            contentFolder,
-                            progressCallback: (extractedFiles, totalFiles) =>
-                            {
-                                // Update progress based on extracted files count
-                                // Must be dispatched to UI thread
-                                double progress = (extractedFiles / (double)totalFiles) * 100;
-                                Dispatcher.UIThread.Post(() =>
+                        if (installationMethod == ContentInstallationMethod.PackageFile)
+                        {
+                            // Copy the package file into Xenia's content directory as-is
+                            ContentPackageManager.InstallPackageAsFile(
+                                stfsFile.PackagePath ?? throw new InvalidOperationException("Package file path is unknown"),
+                                contentFolder,
+                                stfsFile.Metadata.TitleIdHex,
+                                stfsFile.Metadata.ContentType.ToHexString(),
+                                (copiedBytes, totalBytes) =>
                                 {
-                                    contentItem.InstallationProgress = progress;
+                                    double progress = totalBytes > 0 ? copiedBytes * 100.0 / totalBytes : 100;
+                                    Dispatcher.UIThread.Post(() =>
+                                    {
+                                        contentItem.InstallationProgress = Math.Min(progress, 100);
+                                    });
                                 });
-                            });
+                        }
+                        else
+                        {
+                            // Extract the STFS file to Xenia's structure with progress reporting
+                            stfsFile.ExtractToXeniaStructure(
+                                contentFolder,
+                                progressCallback: (extractedFiles, totalFiles) =>
+                                {
+                                    // Update progress based on extracted files count
+                                    // Must be dispatched to UI thread
+                                    double progress = extractedFiles / (double)totalFiles * 100;
+                                    Dispatcher.UIThread.Post(() =>
+                                    {
+                                        contentItem.InstallationProgress = progress;
+                                    });
+                                });
+                        }
                     });
 
                     // Mark as complete

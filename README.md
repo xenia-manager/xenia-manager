@@ -58,10 +58,10 @@ If you have any questions, check out the [Frequently Asked Questions](https://gi
 
 ## Contributing
 
-We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
+We welcome contributions! Please read our [Contributing Guide](docs/CONTRIBUTING.md) to get started.
 
 - Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) and our [TODO list](https://github.com/orgs/xenia-manager/projects/2/) for ideas.
-- Want to help with translations? See our [Translations Guide](TRANSLATIONS.md)!
+- Want to help with translations? See our [Translations Guide](docs/TRANSLATIONS.md)!
 
 ---
 
@@ -109,10 +109,15 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 ### Libraries Used
 
 - [Avalonia UI](https://avaloniaui.net/) – cross-platform UI framework
+- [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) – MVVM framework for .NET
 - [FluentAvalonia](https://github.com/amwx/FluentAvalonia/) – Fluent Design controls for Avalonia
 - [FluentIcons](https://github.com/davidxuang/FluentIcons) – Fluent Design icon library
+- [Microsoft.Extensions.DependencyInjection](https://github.com/dotnet/runtime) – dependency injection container
 - [NLog](https://github.com/NLog/NLog) – logging and diagnostics
+- [ppy.SDL3-CS](https://github.com/ppy/SDL3-CS) – SDL3 bindings for gamepad input support
 - [SharpCompress](https://github.com/adamhathcock/sharpcompress) – archive compression handling
+- [System.IO.Hashing](https://learn.microsoft.com/en-us/dotnet/api/system.io.hashing) – fast hashing algorithms (XxHash)
+- [TweenAvalonia](https://github.com/SBUplakankus/tween-avalonia) – programmatic tween animations for Avalonia
 - [ZstdSharp.Port](https://github.com/oleg-st/ZstdSharp) – Zstandard compression for .NET
 
 ---

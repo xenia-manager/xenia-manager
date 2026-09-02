@@ -26,13 +26,25 @@ public class GameFiles
     /// Whether this game has more than one disc associated with it
     /// </summary>
     [JsonIgnore]
-    public bool IsMultiDisc => AdditionalDiscs.Count > 0;
+    public bool IsMultiDisc
+    {
+        get
+        {
+            return AdditionalDiscs.Count > 0;
+        }
+    }
 
     /// <summary>
     /// Total number of discs associated with this game (including Disc 1)
     /// </summary>
     [JsonIgnore]
-    public int DiscCount => 1 + AdditionalDiscs.Count;
+    public int DiscCount
+    {
+        get
+        {
+            return 1 + AdditionalDiscs.Count;
+        }
+    }
 
     /// <summary>
     /// Path to the game's patch file
@@ -56,16 +68,28 @@ public class GameFiles
     /// Gets the resolved game file path, converting relative paths to absolute using the Games directory.
     /// </summary>
     [JsonIgnore]
-    public string ResolvedGamePath => Path.IsPathRooted(Game)
-        ? Game
-        : Path.Combine(AppPaths.GamesDirectory, Game);
+    public string ResolvedGamePath
+    {
+        get
+        {
+            return Path.IsPathRooted(Game)
+                ? Game
+                : Path.Combine(AppPaths.GamesDirectory, Game);
+        }
+    }
 
     /// <summary>
     /// Whether the game's path is valid
     /// </summary>
     [JsonIgnore]
-    public bool IsGamePathValid => !string.IsNullOrEmpty(Game)
-                                   && File.Exists(ResolvedGamePath);
+    public bool IsGamePathValid
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Game)
+                   && File.Exists(ResolvedGamePath);
+        }
+    }
 
     /// <summary>
     /// Returns the file path for the given disc number (1-based), with relative paths
@@ -123,13 +147,25 @@ public class GameDisc
     /// Gets the resolved absolute path, converting relative paths to absolute using the Games directory.
     /// </summary>
     [JsonIgnore]
-    public string ResolvedPath => System.IO.Path.IsPathRooted(Path)
-        ? Path
-        : System.IO.Path.Combine(AppPaths.GamesDirectory, Path);
+    public string ResolvedPath
+    {
+        get
+        {
+            return System.IO.Path.IsPathRooted(Path)
+                ? Path
+                : System.IO.Path.Combine(AppPaths.GamesDirectory, Path);
+        }
+    }
 
     /// <summary>
     /// Whether this disc's path currently points to an existing file
     /// </summary>
     [JsonIgnore]
-    public bool IsPathValid => !string.IsNullOrEmpty(Path) && File.Exists(ResolvedPath);
+    public bool IsPathValid
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Path) && File.Exists(ResolvedPath);
+        }
+    }
 }

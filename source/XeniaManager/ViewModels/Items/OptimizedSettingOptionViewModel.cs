@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 
 namespace XeniaManager.ViewModels.Items;
 
@@ -56,16 +56,29 @@ public partial class OptimizedSettingOptionViewModel : ObservableObject
                 parts[i] = char.ToUpper(parts[i][0]) + parts[i][1..].ToLower();
             }
         }
+
         return string.Join(" ", parts);
     }
 
     /// <summary>
     /// Gets the optimized option to apply.
     /// </summary>
-    public ConfigOption OptimizedOption => _optimizedOption;
+    public ConfigOption OptimizedOption
+    {
+        get
+        {
+            return _optimizedOption;
+        }
+    }
 
     /// <summary>
     /// Gets the section name.
     /// </summary>
-    public string SectionNameValue => SectionName;
+    public string SectionNameValue
+    {
+        get
+        {
+            return SectionName;
+        }
+    }
 }

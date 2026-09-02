@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             xmlns:card="using:XeniaManager.BigScreen.Controls.Cards"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.Modals.GameModalView"
+             x:DataType="vm:GameModalViewModel">
+
+    <!-- The modal: regular card background + card border over the transparent black backdrop -->
+    <Border Classes="modal-screen">
+        <Grid Margin="48"
+              RowDefinitions="*, Auto">
+
+            <!-- BODY: game info + options (left) and the selected option's pane (right) -->
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="2*,5*"
+                  ColumnSpacing="48">
+
+                <!-- LEFT: game icon + title above the options list -->
+                <Grid Grid.Column="0"
+                      RowDefinitions="Auto, *"
+                      RowSpacing="28">
+
+                    <!-- Game header: icon (library style) + title -->
+                    <Grid Grid.Row="0"
+                          ColumnDefinitions="Auto, *"
+                          ColumnSpacing="20">
+                        <Border Width="64"
+                                Height="64"
+                                VerticalAlignment="Center"
+                                Background="{DynamicResource CardBorder}"
+                                ClipToBounds="True"
+                                CornerRadius="8">
+                            <Grid>
+                                <Image Source="{Binding Icon}"
+                                       IsVisible="{Binding HasIcon}"
+                                       Stretch="Uniform" />
+                                <fluent:SymbolIcon Symbol="Games"
+                                                   IsVisible="{Binding !HasIcon}"
+                                                   FontSize="28"
+                                                   Foreground="{DynamicResource TextSecondary}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Title}"
+                                   TextTrimming="CharacterEllipsis"
+                                   VerticalAlignment="Center"
+                                   FontSize="30"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextPrimary}" />
+                    </Grid>
+
+                    <!-- OPTIONS LIST -->
+                    <ItemsControl x:Name="OptionsList"
+                                  Grid.Row="1"
+                                  ItemsSource="{Binding Options}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="items:GameActionItemViewModel">
+                                <card:GameActionRow />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"
+                                            Spacing="12" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Grid>
+
+                <!-- RIGHT: the selected option's pane (updates live on navigation) -->
+                <Border Grid.Column="1"
+                        BorderBrush="{DynamicResource CardBorderInner}"
+                        BorderThickness="3"
+                        CornerRadius="10"
+                        Padding="24,20">
+                    <ContentControl Content="{Binding Pane}"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch" />
+                </Border>
+            </Grid>
+
+            <!-- HINTS: B back · A select · X pane action (top modal only) -->
+            <StackPanel Grid.Row="1"
+                        Classes="hint-bar"
+                        IsVisible="{Binding IsHintBarVisible}">
+                <prim:InputHint Char="B"
+                                KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource GameModal.Hint.Back}" />
+                <prim:InputHint Char="A"
+                                KeyColour="{DynamicResource HintKeyA}"
+                                Text="{Binding AHintText}" />
+                <prim:InputHint Char="X"
+                                KeyColour="{DynamicResource HintKeyX}"
+                                Text="{Binding XHintText}"
+                                IsVisible="{Binding IsXHintVisible}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

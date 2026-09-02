@@ -7,15 +7,17 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
+using XeniaManager.Database.Models.Game;
 
 namespace XeniaManager.ViewModels.Controls;
 
@@ -91,6 +93,11 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     [ObservableProperty] private Bitmap? _cachedBoxart;
     [ObservableProperty] private Bitmap? _cachedBackground;
 
+    // Refetch state
+    [ObservableProperty] private bool _isRefetchingIcon;
+    [ObservableProperty] private bool _isRefetchingBoxart;
+    [ObservableProperty] private bool _isRefetchingBackground;
+
     public GameDetailsEditorViewModel(Game game, IMessageBoxService messageBoxService)
     {
         _game = game;
@@ -129,10 +136,12 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         {
             XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Canary, "Canary"));
         }
+
         if (installedVersions.Contains(XeniaVersion.Mousehook))
         {
             XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Mousehook, "Mousehook"));
         }
+
         if (installedVersions.Contains(XeniaVersion.Netplay))
         {
             XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Netplay, "Netplay"));
@@ -242,47 +251,33 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// </summary>
     /// <param name="title">The title to filter.</param>
     /// <returns>The filtered title.</returns>
-    private string FilterGameTitle(string title)
-    {
-        return AppPathResolver.SanitizeForFilename(title);
-    }
+    private string FilterGameTitle(string title) => AppPathResolver.SanitizeForFilename(title);
 
     /// <summary>
     /// Handles the game title property change to validate and filter it.
     /// </summary>
-    partial void OnGameTitleChanged(string value)
-    {
-        HasChanges = true;
-    }
+    partial void OnGameTitleChanged(string value) => HasChanges = true;
 
     /// <summary>
     /// Handles the compatibility page URL property change.
     /// </summary>
-    partial void OnCompatibilityPageUrlChanged(string value)
-    {
-        HasChanges = true;
-    }
+    partial void OnCompatibilityPageUrlChanged(string value) => HasChanges = true;
 
     /// <summary>
     /// Handles the selected compatibility rating property change.
     /// </summary>
-    partial void OnSelectedCompatibilityRatingChanged(CompatibilityRatingItem value)
-    {
-        HasChanges = true;
-    }
+    partial void OnSelectedCompatibilityRatingChanged(CompatibilityRatingItem value) => HasChanges = true;
 
     /// <summary>
     /// Handles the selected mousehook rating property change.
     /// </summary>
-    partial void OnSelectedMousehookRatingChanged(MousehookSupportRatingItem value)
-    {
-        HasChanges = true;
-    }
+    partial void OnSelectedMousehookRatingChanged(MousehookSupportRatingItem value) => HasChanges = true;
 
     /// <summary>
     /// Handles netplay status property changes.
     /// </summary>
     partial void OnSelectedNetplayWorkingPublicChanged(NetplayStatusItem value) => HasChanges = true;
+
     partial void OnSelectedNetplayTestedLocallyChanged(NetplayStatusItem value) => HasChanges = true;
     partial void OnSelectedNetplayOnlyLocalChanged(NetplayStatusItem value) => HasChanges = true;
     partial void OnSelectedNetplaySystemlinkChanged(NetplayStatusItem value) => HasChanges = true;
@@ -292,28 +287,16 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// <summary>
     /// Handles the selected Xenia version property change.
     /// </summary>
-    partial void OnSelectedXeniaVersionChanged(XeniaVersionItem value)
-    {
-        HasChanges = true;
-    }
+    partial void OnSelectedXeniaVersionChanged(XeniaVersionItem value) => HasChanges = true;
 
     /// <summary>
     /// Handles the custom executable path property change.
     /// </summary>
-    partial void OnCustomExecutablePathChanged(string value)
-    {
-        HasChanges = true;
-    }
+    partial void OnCustomExecutablePathChanged(string value) => HasChanges = true;
 
-    partial void OnNewAlternativeIdChanged(string value)
-    {
-        UpdateCanAddAlternativeId();
-    }
+    partial void OnNewAlternativeIdChanged(string value) => UpdateCanAddAlternativeId();
 
-    partial void OnAlternativeIdsChanged(List<string> value)
-    {
-        UpdateCanAddAlternativeId();
-    }
+    partial void OnAlternativeIdsChanged(List<string> value) => UpdateCanAddAlternativeId();
 
     private void UpdateCanAddAlternativeId()
     {
@@ -354,28 +337,19 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Opens a file picker to select a new icon image.
     /// </summary>
     [RelayCommand]
-    private async Task SelectIconAsync()
-    {
-        await SelectArtworkAsync("Icon");
-    }
+    private async Task SelectIconAsync() => await SelectArtworkAsync("Icon");
 
     /// <summary>
     /// Opens a file picker to select a new boxart image.
     /// </summary>
     [RelayCommand]
-    private async Task SelectBoxartAsync()
-    {
-        await SelectArtworkAsync("Boxart");
-    }
+    private async Task SelectBoxartAsync() => await SelectArtworkAsync("Boxart");
 
     /// <summary>
     /// Opens a file picker to select a new background image.
     /// </summary>
     [RelayCommand]
-    private async Task SelectBackgroundAsync()
-    {
-        await SelectArtworkAsync("Background");
-    }
+    private async Task SelectBackgroundAsync() => await SelectArtworkAsync("Background");
 
     /// <summary>
     /// Opens a file picker to select an artwork image.
@@ -456,6 +430,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             {
                 ArtworkManager.ConvertArtwork(selectedPath, destinationPath, targetFormat);
             }
+
             Logger.Info<GameDetailsEditorViewModel>($"Converted and saved {artworkType.ToLower()} to: {destinationPath}");
 
             // Update the game's artwork path
@@ -496,27 +471,253 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Clears the current icon.
     /// </summary>
     [RelayCommand]
-    private async Task ClearIconAsync()
-    {
-        await ClearArtworkAsync("Icon");
-    }
+    private async Task ClearIconAsync() => await ClearArtworkAsync("Icon");
 
     /// <summary>
     /// Clears the current boxart.
     /// </summary>
     [RelayCommand]
-    private async Task ClearBoxartAsync()
-    {
-        await ClearArtworkAsync("Boxart");
-    }
+    private async Task ClearBoxartAsync() => await ClearArtworkAsync("Boxart");
 
     /// <summary>
     /// Clears the current background.
     /// </summary>
     [RelayCommand]
-    private async Task ClearBackgroundAsync()
+    private async Task ClearBackgroundAsync() => await ClearArtworkAsync("Background");
+
+    /// <summary>
+    /// Refetches the game icon, letting the user choose the source (game files or x360db).
+    /// Shows a choice dialog before fetching and a result dialog afterward. If not found, artwork is unchanged.
+    /// </summary>
+    [RelayCommand]
+    private async Task RefetchIconAsync()
     {
-        await ClearArtworkAsync("Background");
+        if (IsRefetchingIcon)
+        {
+            return;
+        }
+
+        FAContentDialogResult choice = await _messageBoxService.ShowCustomDialogAsync(
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.Title"),
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.Message"),
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.GameFiles"),
+            LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Choice.X360Db"),
+            LocalizationHelper.GetText("MessageBox.Cancel"));
+
+        if (choice == FAContentDialogResult.None)
+        {
+            Logger.Debug<GameDetailsEditorViewModel>("Icon refetch canceled by user at choice dialog");
+            return;
+        }
+
+        bool useGameFiles = choice == FAContentDialogResult.Primary;
+        string sourceKey = useGameFiles
+            ? LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Source.GameFiles")
+            : LocalizationHelper.GetText("GameDetailsEditor.Refetch.Source.X360Db");
+        string sourceLog = useGameFiles ? "game files" : "x360db";
+
+        IsRefetchingIcon = true;
+        try
+        {
+            string titleId = TitleId;
+            string gamePath = GamePath;
+            if (string.IsNullOrWhiteSpace(gamePath))
+            {
+                gamePath = _game.FileLocations.Game;
+            }
+
+            string savePath = Path.Combine(AppPaths.GameDataDirectory, _game.Title, "Artwork", "Icon.ico");
+            string relativePath = Path.Combine("GameData", _game.Title, "Artwork", "Icon.ico");
+
+            Logger.Info<GameDetailsEditorViewModel>($"Refetching icon for '{_game.Title}' from {sourceLog} (titleId={titleId}, gamePath='{gamePath}')");
+
+            bool success;
+            if (useGameFiles)
+            {
+                success = GameManager.TryRefetchIconFromGameFiles(gamePath, savePath);
+            }
+            else
+            {
+                success = await GameManager.TryRefetchIconFromX360DbAsync(titleId, savePath);
+            }
+
+            if (success && File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+            {
+                IconPath = relativePath;
+                _game.Artwork.Icon = relativePath;
+                HasChanges = true;
+                RefreshCachedImages();
+                Logger.Info<GameDetailsEditorViewModel>($"Icon refetched successfully from {sourceLog} to {savePath}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.Success.Message"), sourceKey));
+            }
+            else
+            {
+                Logger.Info<GameDetailsEditorViewModel>($"Icon refetch: not found in {sourceLog}, artwork unchanged");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Icon.Refetch.NotFound.Message"), sourceKey));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDetailsEditorViewModel>("Failed to refetch icon");
+            Logger.LogExceptionDetails<GameDetailsEditorViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Message"), "icon", ex.Message));
+        }
+        finally
+        {
+            IsRefetchingIcon = false;
+        }
+    }
+
+    /// <summary>
+    /// Refetches the game boxart from x360db only.
+    /// Shows a result dialog afterward. If not found, artwork is unchanged.
+    /// </summary>
+    [RelayCommand]
+    private async Task RefetchBoxartAsync()
+    {
+        if (IsRefetchingBoxart)
+        {
+            return;
+        }
+
+        IsRefetchingBoxart = true;
+        try
+        {
+            string titleId = TitleId;
+            string savePath = Path.Combine(AppPaths.GameDataDirectory, _game.Title, "Artwork", "Boxart.png");
+            string relativePath = Path.Combine("GameData", _game.Title, "Artwork", "Boxart.png");
+            string sourceKey = LocalizationHelper.GetText("GameDetailsEditor.Refetch.Source.X360Db");
+
+            Logger.Info<GameDetailsEditorViewModel>($"Refetching boxart for '{_game.Title}' from x360db (titleId={titleId})");
+
+            bool success = await GameManager.TryRefetchBoxartFromX360DbAsync(titleId, savePath);
+
+            if (success && File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+            {
+                BoxartPath = relativePath;
+                _game.Artwork.Boxart = relativePath;
+                HasChanges = true;
+                RefreshCachedImages();
+                Logger.Info<GameDetailsEditorViewModel>($"Boxart refetched successfully from x360db to {savePath}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.Success.Message"), sourceKey));
+            }
+            else
+            {
+                Logger.Info<GameDetailsEditorViewModel>("Boxart refetch: not found on x360db, artwork unchanged");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Boxart.Refetch.NotFound.Message"), sourceKey));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDetailsEditorViewModel>("Failed to refetch boxart");
+            Logger.LogExceptionDetails<GameDetailsEditorViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Message"), "boxart", ex.Message));
+        }
+        finally
+        {
+            IsRefetchingBoxart = false;
+        }
+    }
+
+    /// <summary>
+    /// Refetches the game background, letting the user choose the source (game files or x360db).
+    /// Shows a choice dialog before fetching and a result dialog afterward. If not found, artwork is unchanged.
+    /// </summary>
+    [RelayCommand]
+    private async Task RefetchBackgroundAsync()
+    {
+        if (IsRefetchingBackground)
+        {
+            return;
+        }
+
+        FAContentDialogResult choice = await _messageBoxService.ShowCustomDialogAsync(
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.Title"),
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.Message"),
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.GameFiles"),
+            LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Choice.X360Db"),
+            LocalizationHelper.GetText("MessageBox.Cancel"));
+
+        if (choice == FAContentDialogResult.None)
+        {
+            Logger.Debug<GameDetailsEditorViewModel>("Background refetch canceled by user at choice dialog");
+            return;
+        }
+
+        bool useNxeart = choice == FAContentDialogResult.Primary;
+        string sourceKey = useNxeart
+            ? LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Source.GameFiles")
+            : LocalizationHelper.GetText("GameDetailsEditor.Refetch.Source.X360Db");
+        string sourceLog = useNxeart ? "game files" : "x360db";
+
+        IsRefetchingBackground = true;
+        try
+        {
+            string titleId = TitleId;
+            string gamePath = GamePath;
+            if (string.IsNullOrWhiteSpace(gamePath))
+            {
+                gamePath = _game.FileLocations.Game;
+            }
+
+            string savePath = Path.Combine(AppPaths.GameDataDirectory, _game.Title, "Artwork", "Background.jpg");
+            string relativePath = Path.Combine("GameData", _game.Title, "Artwork", "Background.jpg");
+
+            Logger.Info<GameDetailsEditorViewModel>($"Refetching background for '{_game.Title}' from {sourceLog} (titleId={titleId}, gamePath='{gamePath}')");
+
+            bool success;
+            if (useNxeart)
+            {
+                success = GameManager.TryRefetchBackgroundFromNxeart(gamePath, savePath);
+            }
+            else
+            {
+                success = await GameManager.TryRefetchBackgroundFromX360DbAsync(titleId, savePath);
+            }
+
+            if (success && File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+            {
+                BackgroundPath = relativePath;
+                _game.Artwork.Background = relativePath;
+                HasChanges = true;
+                RefreshCachedImages();
+                Logger.Info<GameDetailsEditorViewModel>($"Background refetched successfully from {sourceLog} to {savePath}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.Success.Message"), sourceKey));
+            }
+            else
+            {
+                Logger.Info<GameDetailsEditorViewModel>($"Background refetch: not found in {sourceLog}, artwork unchanged");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("GameDetailsEditor.Background.Refetch.NotFound.Message"), sourceKey));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameDetailsEditorViewModel>("Failed to refetch background");
+            Logger.LogExceptionDetails<GameDetailsEditorViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Refetch.Error.Message"), "background", ex.Message));
+        }
+        finally
+        {
+            IsRefetchingBackground = false;
+        }
     }
 
     /// <summary>
@@ -617,7 +818,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// <param name="artworkType">The type of artwork to clear.</param>
     private async Task ClearArtworkAsync(string artworkType)
     {
-        bool confirmed = await _messageBoxService.ShowConfirmationAsync(string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Clear.Confirmation.Title"), artworkType),
+        bool confirmed = await _messageBoxService.ShowConfirmationAsync(
+            string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Clear.Confirmation.Title"), artworkType),
             string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Clear.Confirmation.Message"), artworkType.ToLower()));
 
         if (!confirmed)
@@ -695,7 +897,10 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 // Derive old directory from stored artwork paths first (more reliable
                 // than _game.Title, since the on-disk name may differ from a prior edit)
                 string? oldArtworkPath = null;
-                foreach (string artPath in new[] { _game.Artwork.Icon, _game.Artwork.Boxart, _game.Artwork.Background })
+                foreach (string artPath in new[]
+                         {
+                             _game.Artwork.Icon, _game.Artwork.Boxart, _game.Artwork.Background
+                         })
                 {
                     if (!string.IsNullOrEmpty(artPath))
                     {
@@ -707,6 +912,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                         }
                     }
                 }
+
                 oldArtworkPath ??= Path.Combine(AppPaths.GameDataDirectory, oldTitle, "Artwork");
 
                 string newArtworkPath = Path.Combine(AppPaths.GameDataDirectory, filteredTitle, "Artwork");
@@ -723,7 +929,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 
                 // Update config file path
                 string oldConfigPath = _game.FileLocations.Config;
-                string newConfigPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{filteredTitle}.config.toml");
+                string newConfigPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation,
+                    $"{filteredTitle}.config.toml");
 
                 string fullOldConfig = AppPathResolver.GetFullPath(oldConfigPath);
                 string fullNewConfig = AppPathResolver.GetFullPath(newConfigPath);
@@ -740,7 +947,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 if (_game.FileLocations.Patch != null)
                 {
                     string oldPatchesPath = _game.FileLocations.Patch;
-                    string newPatchPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{_game.GameId} - {filteredTitle}.patch.toml");
+                    string newPatchPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation,
+                        $"{_game.GameId} - {filteredTitle}.patch.toml");
 
                     string fullOldPatch = AppPathResolver.GetFullPath(oldPatchesPath);
                     string fullNewPatch = AppPathResolver.GetFullPath(newPatchPath);
@@ -752,6 +960,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                             Logger.Info<GameDetailsEditorViewModel>($"Moved patches file from '{oldPatchesPath}' to '{newPatchPath}'");
                         }
                     }
+
                     _game.FileLocations.Patch = newPatchPath;
                 }
 
@@ -763,10 +972,12 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 {
                     IconPath = Path.Combine("GameData", filteredTitle, "Artwork", Path.GetFileName(IconPath));
                 }
+
                 if (!string.IsNullOrEmpty(BoxartPath))
                 {
                     BoxartPath = Path.Combine("GameData", filteredTitle, "Artwork", Path.GetFileName(BoxartPath));
                 }
+
                 if (!string.IsNullOrEmpty(BackgroundPath))
                 {
                     BackgroundPath = Path.Combine("GameData", filteredTitle, "Artwork", Path.GetFileName(BackgroundPath));
@@ -891,10 +1102,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Saves all changes to the game.
     /// </summary>
     [RelayCommand]
-    private async Task DoSaveAsync()
-    {
-        await SaveAsync();
-    }
+    private async Task DoSaveAsync() => await SaveAsync();
 }
 
 /// <summary>

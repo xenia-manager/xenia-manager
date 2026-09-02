@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.ViewModels.Controls;
@@ -62,12 +62,18 @@ public partial class FolderScanProgressDialogViewModel : ViewModelBase
     /// <summary>
     /// The cancellation token source for cancelling the scan operation.
     /// </summary>
-    public CancellationTokenSource CancellationTokenSource { get; } = new();
+    public CancellationTokenSource CancellationTokenSource { get; } = new CancellationTokenSource();
 
     /// <summary>
     /// Gets whether the scan can be cancelled.
     /// </summary>
-    public bool CanCancelScan => CanCancel && IsScanning;
+    public bool CanCancelScan
+    {
+        get
+        {
+            return CanCancel && IsScanning;
+        }
+    }
 
     /// <summary>
     /// Updates the progress information.
@@ -91,6 +97,7 @@ public partial class FolderScanProgressDialogViewModel : ViewModelBase
         {
             LogMessages.RemoveAt(0);
         }
+
         LogMessages.Add($"[{DateTime.Now:HH:mm:ss}] {statusMessage}");
     }
 
@@ -152,8 +159,5 @@ public partial class FolderScanProgressDialogViewModel : ViewModelBase
     /// <summary>
     /// Disposes of resources used by the ViewModel.
     /// </summary>
-    public void Dispose()
-    {
-        CancellationTokenSource?.Dispose();
-    }
+    public void Dispose() => CancellationTokenSource?.Dispose();
 }

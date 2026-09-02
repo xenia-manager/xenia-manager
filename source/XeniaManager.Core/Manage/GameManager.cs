@@ -4,15 +4,20 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Database.Models.Xbox;
+using XeniaManager.Database.Models.GameCompatibility;
+using XeniaManager.Database.Models.MousehookCompatibility;
+using XeniaManager.Database.Models.NetplayCompatibility;
+using XeniaManager.Database;
+using XeniaManager.Files;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Database.Xbox;
-using XeniaManager.Core.Models.Files;
+using XeniaManager.Files.Models;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Database.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Utilities;
 
 namespace XeniaManager.Core.Manage;
 
@@ -77,7 +82,8 @@ public class GameManager
                 if (string.IsNullOrWhiteSpace(game.Title) || string.IsNullOrWhiteSpace(game.GameId))
                 {
                     // Game entry with missing required fields detected, log it and skip it
-                    Logger.Warning<GameManager>($"Game entry with missing required fields detected - Title: '{game.Title}', GameId: '{game.GameId}'. Skipping this entry.");
+                    Logger.Warning<GameManager>(
+                        $"Game entry with missing required fields detected - Title: '{game.Title}', GameId: '{game.GameId}'. Skipping this entry.");
                     continue;
                 }
 
@@ -110,7 +116,8 @@ public class GameManager
                         string relativeDiscPath = GetRelativeGamePath(disc.Path);
                         if (relativeDiscPath != disc.Path)
                         {
-                            Logger.Debug<GameManager>($"Migrating additional disc path for '{game.Title}' (Disc {disc.DiscNumber}): '{disc.Path}' -> '{relativeDiscPath}'");
+                            Logger.Debug<GameManager>(
+                                $"Migrating additional disc path for '{game.Title}' (Disc {disc.DiscNumber}): '{disc.Path}' -> '{relativeDiscPath}'");
                             disc.Path = relativeDiscPath;
                             migrated = true;
                         }
@@ -218,13 +225,13 @@ public class GameManager
             // Create a backup from the current file before replacing it
             if (File.Exists(path))
             {
-                File.Copy(path, backupPath, overwrite: true);
+                File.Copy(path, backupPath, true);
                 Logger.Info<GameManager>($"Backup created successfully at: {backupPath}");
             }
 
             Logger.Info<GameManager>($"Atomically replacing main file {path} with temporary file {tempPath}");
             // Atomically replace the main file
-            File.Move(tempPath, path, overwrite: true);
+            File.Move(tempPath, path, true);
 
             Logger.Info<GameManager>($"Game library successfully saved to {path}");
         }
@@ -277,15 +284,17 @@ public class GameManager
 
     /// <summary>
     /// Retrieves game details by parsing the game file directly without launching Xenia.
-    /// Supports STFS packages (CON, LIVE, PIRS), XEX executables (.xex), and ISO disc images (.iso, .xiso).
+    /// Supports STFS (CON/LIVE/PIRS), SVOD (GOD - file or directory with <c>.data</c>), XEX (.xex), ISO/XISO and ZAR.
+    /// For SVOD the <paramref name="gamePath"/> may be the header file (<c>…\9788EAE3AB44A2D1BFCD</c>), the game root
+    /// directory (<c>…\Forza Horizon</c>) or the <c>.data</c> directory; <see cref="SvodFile.Load"/> normalises all three.
     /// </summary>
-    /// <param name="gamePath">The path to the game file to analyze</param>
-    /// <returns>Parsed game details. Returns default values if the file type is not recognized.</returns>
+    /// <param name="gamePath">The path to the game file or SVOD directory to analyze.</param>
+    /// <returns>Parsed game details (Title, TitleId, MediaId); returns defaults if the file type is not recognized or parsing fails.</returns>
     public static ParsedGameDetails GetGameDetails(string gamePath)
     {
         Logger.Info<GameManager>($"Starting to retrieve game details for: {gamePath}");
 
-        if (!File.Exists(gamePath))
+        if (!File.Exists(gamePath) && !Directory.Exists(gamePath))
         {
             Logger.Error<GameManager>($"Game file does not exist: {gamePath}");
             return new ParsedGameDetails();
@@ -390,6 +399,46 @@ public class GameManager
                     };
                 }
 
+                // SVOD packages (GOD / Installed Game) - disc-based STFS variant with header + .data
+                case FileSignature.SVOD:
+                {
+                    Logger.Info<GameManager>($"Detected SVOD package ({fileSignature}), parsing: {gamePath}");
+                    using SvodFile svod = SvodFile.Load(gamePath);
+                    if (!svod.IsValid)
+                    {
+                        Logger.Warning<GameManager>($"SVOD package is invalid: {svod.ValidationError}");
+                        return new ParsedGameDetails();
+                    }
+
+                    // Prefer XEX TitleId/MediaId when available (more authoritative), fallback to STFS metadata
+                    string titleId = svod.XexFile is { IsValid: true } xex && !string.IsNullOrWhiteSpace(xex.TitleId) && xex.TitleId != "00000000"
+                        ? xex.TitleId
+                        : svod.Metadata.TitleIdHex;
+                    string mediaId = svod.XexFile is { IsValid: true } xex2 && !string.IsNullOrWhiteSpace(xex2.MediaId) && xex2.MediaId != "00000000"
+                        ? xex2.MediaId
+                        : svod.Metadata.MediaIdHex;
+                    string title = !string.IsNullOrWhiteSpace(svod.Metadata.TitleName)
+                        ? svod.Metadata.TitleName
+                        : !string.IsNullOrWhiteSpace(svod.Metadata.DisplayName)
+                            ? svod.Metadata.DisplayName
+                            : Path.GetFileNameWithoutExtension(gamePath);
+
+                    // If gamePath is a directory (GOD root), use directory name as title fallback
+                    if (Directory.Exists(gamePath) && string.IsNullOrWhiteSpace(svod.Metadata.TitleName) &&
+                        string.IsNullOrWhiteSpace(svod.Metadata.DisplayName))
+                    {
+                        title = new DirectoryInfo(gamePath).Name;
+                    }
+
+                    Logger.Info<GameManager>($"SVOD parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
+                    return new ParsedGameDetails
+                    {
+                        Title = title,
+                        TitleId = titleId,
+                        MediaId = mediaId
+                    };
+                }
+
                 default:
                 {
                     Logger.Warning<GameManager>($"Unrecognized file type: {fileSignature}");
@@ -428,7 +477,8 @@ public class GameManager
         xenia.StartInfo.Arguments = $@"""{gamePath}""";
         xenia.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-        Logger.Trace<GameManager>($"Setting up process - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
+        Logger.Trace<GameManager>(
+            $"Setting up process - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
 
         // Initialize XeniaOutputHandler for reading game details
         XeniaOutputHandler outputHandler = new XeniaOutputHandler(null, true);
@@ -465,7 +515,8 @@ public class GameManager
         Logger.Debug<GameManager>("Starting to extract game details from Xenia output");
         while (numberOfTries < maxTries)
         {
-            Logger.Trace<GameManager>($"Attempt {numberOfTries}: Extracted Title: '{outputHandler.GameDetails.Title}', ID: '{outputHandler.GameDetails.TitleId}', Media ID: '{outputHandler.GameDetails.MediaId}'");
+            Logger.Trace<GameManager>(
+                $"Attempt {numberOfTries}: Extracted Title: '{outputHandler.GameDetails.Title}', ID: '{outputHandler.GameDetails.TitleId}', Media ID: '{outputHandler.GameDetails.MediaId}'");
 
             // Check if all details have been extracted
             if (outputHandler.GameDetails.Title != "Not found" &&
@@ -486,7 +537,8 @@ public class GameManager
         // Extract the results from XeniaOutputHandler
         ParsedGameDetails details = outputHandler.GameDetails;
 
-        Logger.Debug<GameManager>($"Completed output extraction. Found Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}', Attempts: {numberOfTries}");
+        Logger.Debug<GameManager>(
+            $"Completed output extraction. Found Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}', Attempts: {numberOfTries}");
 
         Logger.Info<GameManager>($"Killing Xenia process with PID: {xenia.Id}");
         xenia.Kill(); // Force close Xenia
@@ -494,7 +546,8 @@ public class GameManager
         // Fallback - Using Xenia.log to fill in any missing details
         if (details.Title == "Not found" || details.TitleId == "00000000" || details.MediaId == "00000000")
         {
-            Logger.Warning<GameManager>($"XeniaOutputHandler missed some details (Title: {details.Title != "Not found"}, TitleId: {details.TitleId != "00000000"}, MediaId: {details.MediaId != "00000000"}), falling back to log file parsing");
+            Logger.Warning<GameManager>(
+                $"XeniaOutputHandler missed some details (Title: {details.Title != "Not found"}, TitleId: {details.TitleId != "00000000"}, MediaId: {details.MediaId != "00000000"}), falling back to log file parsing");
             string logFilePath = Path.Combine(xenia.StartInfo.WorkingDirectory, "xenia.log");
             if (File.Exists(logFilePath))
             {
@@ -559,10 +612,12 @@ public class GameManager
                                     Logger.Warning<GameManager>($"Invalid media ID format in log: '{mediaId}' at line {linesProcessed}");
                                 }
                             }
+
                             break;
                         }
                     }
                 }
+
                 Logger.Debug<GameManager>($"Completed parsing xenia.log, processed {linesProcessed} lines");
             }
             else
@@ -586,12 +641,14 @@ public class GameManager
     /// <param name="useMediaIdForTitle">Whether to use MediaId to find a matching media entry title.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
-    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details, bool useMediaIdForTitle = false, Func<Game, Task<bool>>? confirmMultiDiscMerge = null)
+    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details,
+        bool useMediaIdForTitle = false, Func<Game, Task<bool>>? confirmMultiDiscMerge = null, bool useEmbeddedArtwork = true)
     {
         // Use GameInfo's Id if titleId is "00000000"
         string actualTitleId = details.TitleId == "00000000" ? selectedGame.Id ?? details.TitleId : details.TitleId;
 
-        Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+        Logger.Trace<GameManager>(
+            $"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
         // Check whether this file is likely another disc of a game already in the library
         // (same Title ID). If the caller supplied a confirmation callback and the user agrees,
@@ -603,7 +660,8 @@ public class GameManager
             if (shouldMerge)
             {
                 AddDiscToExistingGame(multiDiscMatch, gamePath);
-                Logger.Info<GameManager>($"'{gamePath}' merged into existing game '{multiDiscMatch.Title}' as an additional disc, skipping separate library entry");
+                Logger.Info<GameManager>(
+                    $"'{gamePath}' merged into existing game '{multiDiscMatch.Title}' as an additional disc, skipping separate library entry");
                 return;
             }
 
@@ -612,7 +670,7 @@ public class GameManager
 
         // Grab full game information
         Logger.Info<GameManager>($"Fetching detailed game information from Xbox database for TitleId: {actualTitleId}");
-        GameDetailedInfo? detailedGameInfo = await XboxDatabase.GetFullGameInfo(actualTitleId);
+        GameDetailedInfo? detailedGameInfo = await XboxDatabase.GetFullGameInfo(actualTitleId, cacheDirectory: AppPaths.X360DataBaseCacheDirectory);
         if (detailedGameInfo == null)
         {
             Logger.Error<GameManager>($"Failed to fetch game information for TitleId: {actualTitleId} - database returned null");
@@ -655,10 +713,45 @@ public class GameManager
 
         Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
-        // Fetch Compatibility Rating
-        await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
-        await MousehookCompatibilityDatabase.SetMousehookCompatibility(newGame);
-        await NetplayCompatibilityDatabase.SetNetplayCompatibility(newGame);
+        // Fetch Compatibility Rating (Database now leaf, pass cache dir explicitly)
+        GameCompatibilityEntry? compatEntry = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (compatEntry != null)
+        {
+            newGame.Compatibility.Rating = compatEntry.State;
+            newGame.Compatibility.Url = compatEntry.Url ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Rating = CompatibilityRating.Unknown;
+            newGame.Compatibility.Url = string.Empty;
+        }
+
+        MousehookCompatibilityEntry? mousehookEntry = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (mousehookEntry != null)
+        {
+            newGame.Compatibility.Mousehook.Rating = mousehookEntry.MouseSupport;
+            newGame.Compatibility.Mousehook.Notes = mousehookEntry.Notes ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+            newGame.Compatibility.Mousehook.Notes = string.Empty;
+        }
+
+        NetplayCompatibilityEntry? netplayEntry = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (netplayEntry != null)
+        {
+            newGame.Compatibility.Netplay.Status = netplayEntry.Status;
+            newGame.Compatibility.Netplay.Comments = netplayEntry.Comments ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Netplay.Status = new NetplayStatus();
+            newGame.Compatibility.Netplay.Comments = string.Empty;
+        }
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");
@@ -673,6 +766,7 @@ public class GameManager
                 Logger.Trace<GameManager>($"Trying unique title: '{newGame.Title}' (counter: {counter})");
                 counter++;
             }
+
             Logger.Info<GameManager>($"Generated unique title: '{newGame.Title}' to avoid duplicate");
         }
         else
@@ -693,14 +787,11 @@ public class GameManager
         Directory.CreateDirectory(artworkDirectory);
         Logger.Info<GameManager>($"Artwork directory created successfully: {artworkDirectory}");
 
-        DownloadManager downloadManager = new DownloadManager();
-        Logger.Trace<GameManager>($"DownloadManager initialized for artwork download operations");
-
         // Download Artwork
         // Boxart
         Logger.Info<GameManager>($"Starting boxart download process for game: '{newGame.Title}'");
         string boxartSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Boxart.png");
-        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Boxart, actualTitleId, "boxart.jpg", savePath: boxartSavePath);
+        await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Boxart, actualTitleId, "boxart.jpg", boxartSavePath);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(boxartSavePath))
@@ -713,33 +804,49 @@ public class GameManager
         newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "Boxart.png");
         Logger.Debug<GameManager>($"Boxart artwork path set: {newGame.Artwork.Boxart}");
 
-        // Icon
-        Logger.Info<GameManager>($"Starting icon download process for game: '{newGame.Title}'");
+        // Icon - attempt embedded XEX SPA/XDBF icon first (STFS/SVOD/ISO/ZAR/XEX), then fallback to remote download
+        Logger.Info<GameManager>($"Starting icon extraction process for game: '{newGame.Title}'");
         string iconSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
-        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", savePath: iconSavePath, SKEncodedImageFormat.Ico);
-
-        // Check if remote download succeeded, if not, use local default
-        if (!File.Exists(iconSavePath))
+        bool iconFromEmbedded = TrySaveEmbeddedIcon(gamePath, iconSavePath, useEmbeddedArtwork);
+        if (iconFromEmbedded)
         {
-            Logger.Warning<GameManager>($"Remote icon download failed, using local default icon");
-            ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePath);
-            Logger.Info<GameManager>($"Default local icon applied successfully");
+            Logger.Info<GameManager>($"Embedded XEX SPA icon saved successfully to {iconSavePath}");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded icon not found, attempting remote download for '{newGame.Title}'");
+            await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", iconSavePath, SKEncodedImageFormat.Ico);
+
+            if (!File.Exists(iconSavePath))
+            {
+                Logger.Warning<GameManager>($"Remote icon download failed, using local default icon");
+                ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePath);
+                Logger.Info<GameManager>($"Default local icon applied successfully");
+            }
         }
 
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
         Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
 
-        // Background
-        Logger.Info<GameManager>($"Starting background download process for game: '{newGame.Title}'");
+        // Background - prioritize embedded nxeart nxebg.jpg (STFS/SVOD/ISO/ZAR) before remote download
+        Logger.Info<GameManager>($"Starting background extraction process for game: '{newGame.Title}'");
         string backgroundSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg");
-        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", savePath: backgroundSavePath);
-
-        // Check if remote download succeeded, if not, use local default
-        if (!File.Exists(backgroundSavePath))
+        bool backgroundFromEmbedded = TrySaveEmbeddedBackground(gamePath, backgroundSavePath, useEmbeddedArtwork);
+        if (backgroundFromEmbedded)
         {
-            Logger.Warning<GameManager>($"Remote background download failed, using local default background");
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", backgroundSavePath, SKEncodedImageFormat.Jpeg);
-            Logger.Info<GameManager>($"Default local background applied successfully");
+            Logger.Info<GameManager>($"Embedded nxeart nxebg.jpg saved successfully to {backgroundSavePath}");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded background not found, attempting remote download for '{newGame.Title}'");
+            await XboxDatabase.DownloadArtworkAsync(detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", backgroundSavePath);
+
+            if (!File.Exists(backgroundSavePath))
+            {
+                Logger.Warning<GameManager>($"Remote background download failed, using local default background");
+                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", backgroundSavePath, SKEncodedImageFormat.Jpeg);
+                Logger.Info<GameManager>($"Default local background applied successfully");
+            }
         }
 
         newGame.Artwork.Background = Path.Combine("GameData", newGame.Title, "Artwork", "Background.jpg");
@@ -772,9 +879,10 @@ public class GameManager
     /// <param name="details">The parsed game details (title, title ID, media ID).</param>
     /// <param name="gamePath">The file path to the game.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public static async Task AddUnknownGame(XeniaVersion xeniaVersion, ParsedGameDetails details, string gamePath)
+    public static async Task AddUnknownGame(XeniaVersion xeniaVersion, ParsedGameDetails details, string gamePath, bool useEmbeddedArtwork = true)
     {
-        Logger.Trace<GameManager>($"Starting AddUnknownGame operation - Title: '{details.Title}', TitleId: {details.TitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+        Logger.Trace<GameManager>(
+            $"Starting AddUnknownGame operation - Title: '{details.Title}', TitleId: {details.TitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
         Logger.Info<GameManager>($"Creating new game entry for unknown game: '{details.Title}' (TitleId: {details.TitleId})");
         string sanitizedTitle = details.Title != "Not found"
@@ -799,10 +907,45 @@ public class GameManager
         Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', " +
                                   $"GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
-        // Fetch Compatibility Rating
-        await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
-        await MousehookCompatibilityDatabase.SetMousehookCompatibility(newGame);
-        await NetplayCompatibilityDatabase.SetNetplayCompatibility(newGame);
+        // Fetch Compatibility Rating (Database leaf)
+        GameCompatibilityEntry? compatEntry2 = await GameCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (compatEntry2 != null)
+        {
+            newGame.Compatibility.Rating = compatEntry2.State;
+            newGame.Compatibility.Url = compatEntry2.Url ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Rating = CompatibilityRating.Unknown;
+            newGame.Compatibility.Url = string.Empty;
+        }
+
+        MousehookCompatibilityEntry? mousehookEntry2 = await MousehookCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (mousehookEntry2 != null)
+        {
+            newGame.Compatibility.Mousehook.Rating = mousehookEntry2.MouseSupport;
+            newGame.Compatibility.Mousehook.Notes = mousehookEntry2.Notes ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Mousehook.Rating = MousehookSupportRating.Unknown;
+            newGame.Compatibility.Mousehook.Notes = string.Empty;
+        }
+
+        NetplayCompatibilityEntry? netplayEntry2 = await NetplayCompatibilityDatabase.ResolveAsync(newGame.GameId, newGame.AlternativeIDs, newGame.Title,
+            cacheDirectory: AppPaths.DatabaseCacheDirectory);
+        if (netplayEntry2 != null)
+        {
+            newGame.Compatibility.Netplay.Status = netplayEntry2.Status;
+            newGame.Compatibility.Netplay.Comments = netplayEntry2.Comments ?? string.Empty;
+        }
+        else
+        {
+            newGame.Compatibility.Netplay.Status = new NetplayStatus();
+            newGame.Compatibility.Netplay.Comments = string.Empty;
+        }
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");
@@ -817,6 +960,7 @@ public class GameManager
                 Logger.Trace<GameManager>($"Trying unique title: '{newGame.Title}' (counter: {counter})");
                 counter++;
             }
+
             Logger.Info<GameManager>($"Generated unique title: '{newGame.Title}' to avoid duplicate");
         }
         else
@@ -845,19 +989,38 @@ public class GameManager
         newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "Boxart.png");
         Logger.Debug<GameManager>($"Boxart artwork path set: {newGame.Artwork.Boxart}");
 
-        // Default Icon
-        Logger.Info<GameManager>($"Applying default icon artwork for game: '{newGame.Title}'");
-        ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png",
-            Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico"));
-        Logger.Info<GameManager>($"Default icon applied successfully");
+        // Icon - try embedded XEX SPA/XDBF icon (STFS/SVOD/ISO/ZAR/XEX) before falling back to local default
+        string iconSavePathUnknown = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
+        Logger.Info<GameManager>($"Attempting embedded icon extraction for unknown game '{newGame.Title}' from '{gamePath}'");
+        if (!TrySaveEmbeddedIcon(gamePath, iconSavePathUnknown, useEmbeddedArtwork))
+        {
+            Logger.Info<GameManager>($"Applying default icon artwork for game: '{newGame.Title}'");
+            ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePathUnknown);
+            Logger.Info<GameManager>($"Default icon applied successfully");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded XEX SPA icon saved successfully for unknown game '{newGame.Title}'");
+        }
+
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
         Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
 
-        // Default Background
-        Logger.Info<GameManager>($"Applying default background artwork for game: '{newGame.Title}'");
-        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg",
-            Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
-        Logger.Info<GameManager>($"Default background applied successfully");
+        // Background - try embedded nxeart nxebg.jpg before falling back to local default
+        string backgroundSavePathUnknown = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Background.jpg");
+        Logger.Info<GameManager>($"Attempting embedded background extraction for unknown game '{newGame.Title}' from '{gamePath}'");
+        if (!TrySaveEmbeddedBackground(gamePath, backgroundSavePathUnknown, useEmbeddedArtwork))
+        {
+            Logger.Info<GameManager>($"Applying default background artwork for game: '{newGame.Title}'");
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg",
+                backgroundSavePathUnknown, SKEncodedImageFormat.Jpeg);
+            Logger.Info<GameManager>($"Default background applied successfully");
+        }
+        else
+        {
+            Logger.Info<GameManager>($"Embedded nxeart nxebg.jpg saved successfully for unknown game '{newGame.Title}'");
+        }
+
         newGame.Artwork.Background = Path.Combine("GameData", newGame.Title, "Artwork", "Background.jpg");
         Logger.Debug<GameManager>($"Background artwork path set: {newGame.Artwork.Background}");
 
@@ -892,17 +1055,18 @@ public class GameManager
             : Path.Combine(AppPaths.GamesDirectory, gamePath);
 
         bool isDuplicate = Games.Any(game => string.Equals(
-            game.FileLocations.ResolvedGamePath,
-            resolvedPath,
-            StringComparison.OrdinalIgnoreCase))
-            || Games.Any(game => game.FileLocations.AdditionalDiscs.Any(d => string.Equals(
-                d.ResolvedPath,
-                resolvedPath,
-                StringComparison.OrdinalIgnoreCase)));
+                               game.FileLocations.ResolvedGamePath,
+                               resolvedPath,
+                               StringComparison.OrdinalIgnoreCase))
+                           || Games.Any(game => game.FileLocations.AdditionalDiscs.Any(d => string.Equals(
+                               d.ResolvedPath,
+                               resolvedPath,
+                               StringComparison.OrdinalIgnoreCase)));
         if (isDuplicate)
         {
             Logger.Debug<GameManager>($"Duplicate game detected for path: {gamePath}");
         }
+
         return isDuplicate;
     }
 
@@ -1023,7 +1187,7 @@ public class GameManager
                 currentDirectory,
                 directoriesScanned,
                 gameFiles.Count,
-                Math.Min(100, (directoriesScanned * 100) / Math.Max(1, estimatedTotalDirectories)));
+                Math.Min(100, directoriesScanned * 100 / Math.Max(1, estimatedTotalDirectories)));
 
             // Single enumeration for all files and subdirectories
             string[] allFiles;
@@ -1081,6 +1245,7 @@ public class GameManager
                             {
                                 Logger.Trace<GameManager>($"Skipping STFS file (Installer/MarketplaceContent): {file}");
                             }
+
                             break;
                     }
                 }
@@ -1112,6 +1277,7 @@ public class GameManager
                         filesFoundHere++;
                     }
                 }
+
                 xexFound = true;
             }
 
@@ -1149,6 +1315,7 @@ public class GameManager
                 {
                     directoriesToScan.Enqueue(subDirectory);
                 }
+
                 estimatedTotalDirectories += subDirectories.Length; // Update estimate
                 Logger.Trace<GameManager>($"Queued {subDirectories.Length} subdirectories for scanning");
             }
@@ -1235,6 +1402,7 @@ public class GameManager
                         Logger.Debug<GameManager>($"Game content directory not found, skipping: {gameContentDirectory}");
                         continue;
                     }
+
                     Directory.Delete(gameContentDirectory, true);
                     Logger.Info<GameManager>($"Deleting profile content directory: {gameContentDirectory}");
                 }
@@ -1350,6 +1518,834 @@ public class GameManager
             Logger.Warning<GameManager>($"Failed to clean up temporary file at {tempPath}: {ex.Message}");
             Logger.LogExceptionDetails<GameManager>(ex);
         }
+    }
+
+    /// <summary>
+    /// Attempts to extract the embedded dashboard icon (XDBF image <c>0x8000</c>) from the game file's XEX SPA
+    /// and save it as <c>.ico</c> to <paramref name="savePath"/>. Supports STFS, SVOD, ISO/XISO, ZAR, and XEX.
+    /// SVOD (GOD) is handled for both single file and header+data directory layouts (e.g., Forza Horizon).
+    /// </summary>
+    /// <param name="gamePath">Absolute or relative path to the game file or SVOD directory.</param>
+    /// <param name="savePath">Destination <c>.ico</c> path.</param>
+    /// <returns>True if an icon was extracted and saved, false otherwise.</returns>
+    public static bool TrySaveEmbeddedIcon(string gamePath, string savePath, bool useEmbeddedArtwork)
+    {
+        try
+        {
+            if (!useEmbeddedArtwork)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon skipped: UseEmbeddedArtwork disabled by user setting");
+                return false;
+            }
+
+            string resolvedPath = Path.IsPathRooted(gamePath)
+                ? gamePath
+                : Path.Combine(AppPaths.GamesDirectory, gamePath);
+
+            if (!File.Exists(resolvedPath) && !Directory.Exists(resolvedPath))
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon: path not found: {resolvedPath}");
+                return false;
+            }
+
+            FileSignature sig;
+            try
+            {
+                sig = FileIdentifier.IdentifyFileType(resolvedPath);
+            }
+            catch (FileNotFoundException)
+            {
+                // For SVOD directories, IdentifyFileType may throw if given a file inside .data; try SvodFile directly
+                sig = FileSignature.Unknown;
+            }
+
+            Logger.Debug<GameManager>($"TrySaveEmbeddedIcon: {resolvedPath} identified as {sig}");
+            byte[]? iconBytes = null;
+
+            switch (sig)
+            {
+                case FileSignature.XEX1:
+                case FileSignature.XEX2:
+                {
+                    XexFile xex = XexFile.Load(resolvedPath);
+                    if (xex.IsValid)
+                    {
+                        iconBytes = xex.TryGetIcon();
+                    }
+
+                    break;
+                }
+
+                case FileSignature.CON:
+                case FileSignature.LIVE:
+                case FileSignature.PIRS:
+                {
+                    try
+                    {
+                        using StfsFile stfs = StfsFile.Load(resolvedPath);
+                        iconBytes = stfs.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"STFS icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.SVOD:
+                {
+                    try
+                    {
+                        using SvodFile svod = SvodFile.Load(resolvedPath);
+                        iconBytes = svod.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"SVOD icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ISO:
+                case FileSignature.XISO:
+                {
+                    try
+                    {
+                        using IsoFile iso = IsoFile.Load(resolvedPath);
+                        iconBytes = iso.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ISO icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ZAR:
+                {
+                    try
+                    {
+                        using ZarFile zar = ZarFile.Load(resolvedPath);
+                        iconBytes = zar.TryGetIcon();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ZAR icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.Unknown:
+                default:
+                {
+                    // Fallback: try SVOD directly (handles GOD header+data layout where IdentifyFileType may return Unknown for .data dir)
+                    try
+                    {
+                        if (SvodFile.IsSvodPackage(resolvedPath))
+                        {
+                            using SvodFile svod = SvodFile.Load(resolvedPath);
+                            iconBytes = svod.TryGetIcon();
+                            if (iconBytes != null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback SVOD icon extraction failed: {ex.Message}");
+                    }
+
+                    // Try STFS as fallback for unknown CON-like files
+                    try
+                    {
+                        // Try XEX parse by bytes regardless of signature
+                        byte[] header = new byte[4];
+                        string fileForHeader = resolvedPath;
+                        if (Directory.Exists(resolvedPath))
+                        {
+                            // For directories, try to find a header file inside (GOD case)
+                            string? candidate = Directory.GetFiles(resolvedPath, "*", SearchOption.TopDirectoryOnly)
+                                .FirstOrDefault(f =>
+                                {
+                                    try
+                                    {
+                                        using FileStream fs = new FileStream(f, FileMode.Open, FileAccess.Read);
+                                        byte[] b = new byte[4];
+                                        fs.ReadExactly(b, 0, 4);
+                                        string m = System.Text.Encoding.ASCII.GetString(b);
+                                        return m is "CON " or "LIVE" or "PIRS" or "XEX2" or "XEX1";
+                                    }
+                                    catch { return false; }
+                                });
+                            if (candidate != null)
+                            {
+                                fileForHeader = candidate;
+                            }
+                        }
+
+                        if (File.Exists(fileForHeader))
+                        {
+                            using (FileStream fs = new FileStream(fileForHeader, FileMode.Open, FileAccess.Read))
+                            {
+                                if (fs.Length >= 4)
+                                {
+                                    fs.ReadExactly(header, 0, 4);
+                                }
+                            }
+
+                            string magic = System.Text.Encoding.ASCII.GetString(header);
+                            if (magic is "XEX2" or "XEX1")
+                            {
+                                XexFile xex = XexFile.Load(fileForHeader);
+                                if (xex.IsValid)
+                                {
+                                    iconBytes = xex.TryGetIcon();
+                                }
+                            }
+                            else if (magic is "CON " or "LIVE" or "PIRS")
+                            {
+                                // Try STFS then SVOD
+                                try
+                                {
+                                    using StfsFile stfs = StfsFile.Load(fileForHeader);
+                                    iconBytes = stfs.TryGetIcon();
+                                }
+                                catch { }
+
+                                if (iconBytes == null)
+                                {
+                                    try
+                                    {
+                                        using SvodFile svod = SvodFile.Load(fileForHeader);
+                                        iconBytes = svod.TryGetIcon();
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback XEX/STFS icon extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+            }
+
+            if (iconBytes == null || iconBytes.Length == 0)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon: no icon bytes extracted for {resolvedPath} (sig={sig})");
+                return false;
+            }
+
+            // Validate that bytes are a decodable image before writing .ico (avoids writing corrupt data)
+            if (iconBytes.Length < 8)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedIcon: icon bytes too short ({iconBytes.Length}) for {resolvedPath}");
+                return false;
+            }
+
+            // Save as .ico via ArtworkManager (handles PNG/JPEG via SkiaSharp).
+            try
+            {
+                string? dir = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                ArtworkManager.ConvertToIcon(iconBytes, savePath);
+                Logger.Info<GameManager>($"TrySaveEmbeddedIcon: saved embedded icon ({iconBytes.Length} bytes) to {savePath} (sig={sig})");
+                return File.Exists(savePath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<GameManager>($"TrySaveEmbeddedIcon: ConvertToIcon failed for {resolvedPath}: {ex.Message}");
+                Logger.LogExceptionDetails<GameManager>(ex);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TrySaveEmbeddedIcon failed for '{gamePath}': {ex.Message}");
+            Logger.LogExceptionDetails<GameManager>(ex);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Attempts to extract the NXE background image (<c>nxebg.jpg</c>) from the game's <c>nxeart</c> file and save it as JPEG.
+    /// Supports STFS, SVOD, ISO/XISO, ZAR and filesystem sibling (XEX directory). Prioritized over remote download.
+    /// If <c>nxeart</c> isn't found, returns false and caller proceeds as before.
+    /// </summary>
+    /// <param name="gamePath">Absolute or relative path to the game file or SVOD directory.</param>
+    /// <param name="savePath">Destination <c>.jpg</c> path.</param>
+    /// <param name="useEmbeddedArtwork">Whether embedded artwork extraction is enabled (from settings).</param>
+    /// <returns>True if a background was extracted and saved, false otherwise.</returns>
+    public static bool TrySaveEmbeddedBackground(string gamePath, string savePath, bool useEmbeddedArtwork)
+    {
+        try
+        {
+            if (!useEmbeddedArtwork)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground skipped: UseEmbeddedArtwork disabled by user setting");
+                return false;
+            }
+
+            string resolvedPath = Path.IsPathRooted(gamePath)
+                ? gamePath
+                : Path.Combine(AppPaths.GamesDirectory, gamePath);
+
+            if (!File.Exists(resolvedPath) && !Directory.Exists(resolvedPath))
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground: path not found: {resolvedPath}");
+                return false;
+            }
+
+            FileSignature sig;
+            try
+            {
+                sig = FileIdentifier.IdentifyFileType(resolvedPath);
+            }
+            catch (FileNotFoundException)
+            {
+                sig = FileSignature.Unknown;
+            }
+
+            Logger.Debug<GameManager>($"TrySaveEmbeddedBackground: {resolvedPath} identified as {sig}");
+            byte[]? bgBytes = null;
+
+            switch (sig)
+            {
+                case FileSignature.XEX1:
+                case FileSignature.XEX2:
+                {
+                    // For loose XEX, nxeart is a sibling file alongside the executable (e.g., extracted game folder)
+                    bgBytes = TryExtractBackgroundFromSiblingNxeart(resolvedPath);
+                    break;
+                }
+
+                case FileSignature.CON:
+                case FileSignature.LIVE:
+                case FileSignature.PIRS:
+                {
+                    try
+                    {
+                        using StfsFile stfs = StfsFile.Load(resolvedPath);
+                        bgBytes = stfs.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"STFS nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.SVOD:
+                {
+                    try
+                    {
+                        using SvodFile svod = SvodFile.Load(resolvedPath);
+                        bgBytes = svod.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"SVOD nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ISO:
+                case FileSignature.XISO:
+                {
+                    try
+                    {
+                        using IsoFile iso = IsoFile.Load(resolvedPath);
+                        bgBytes = iso.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ISO nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.ZAR:
+                {
+                    try
+                    {
+                        using ZarFile zar = ZarFile.Load(resolvedPath);
+                        bgBytes = zar.TryGetNxeBackground();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"ZAR nxeart extraction failed: {ex.Message}");
+                    }
+
+                    break;
+                }
+
+                case FileSignature.Unknown:
+                default:
+                {
+                    // Fallback: try SVOD directly (GOD header+data layout)
+                    try
+                    {
+                        if (SvodFile.IsSvodPackage(resolvedPath))
+                        {
+                            using SvodFile svod = SvodFile.Load(resolvedPath);
+                            bgBytes = svod.TryGetNxeBackground();
+                            if (bgBytes != null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback SVOD nxeart extraction failed: {ex.Message}");
+                    }
+
+                    // Try STFS as fallback for CON-like files
+                    try
+                    {
+                        byte[] header = new byte[4];
+                        string fileForHeader = resolvedPath;
+                        if (Directory.Exists(resolvedPath))
+                        {
+                            string? candidate = Directory.GetFiles(resolvedPath, "*", SearchOption.TopDirectoryOnly)
+                                .FirstOrDefault(f =>
+                                {
+                                    try
+                                    {
+                                        using FileStream fs = new FileStream(f, FileMode.Open, FileAccess.Read);
+                                        byte[] b = new byte[4];
+                                        fs.ReadExactly(b, 0, 4);
+                                        string m = System.Text.Encoding.ASCII.GetString(b);
+                                        return m is "CON " or "LIVE" or "PIRS" or "XEX2" or "XEX1";
+                                    }
+                                    catch { return false; }
+                                });
+                            if (candidate != null)
+                            {
+                                fileForHeader = candidate;
+                            }
+                        }
+
+                        if (File.Exists(fileForHeader))
+                        {
+                            using (FileStream fs = new FileStream(fileForHeader, FileMode.Open, FileAccess.Read))
+                            {
+                                if (fs.Length >= 4)
+                                {
+                                    fs.ReadExactly(header, 0, 4);
+                                }
+                            }
+
+                            string magic = System.Text.Encoding.ASCII.GetString(header);
+                            if (magic is "XEX2" or "XEX1")
+                            {
+                                bgBytes = TryExtractBackgroundFromSiblingNxeart(fileForHeader);
+                            }
+                            else if (magic is "CON " or "LIVE" or "PIRS")
+                            {
+                                try
+                                {
+                                    using StfsFile stfs = StfsFile.Load(fileForHeader);
+                                    bgBytes = stfs.TryGetNxeBackground();
+                                }
+                                catch { }
+
+                                if (bgBytes == null)
+                                {
+                                    try
+                                    {
+                                        using SvodFile svod = SvodFile.Load(fileForHeader);
+                                        bgBytes = svod.TryGetNxeBackground();
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Fallback nxeart extraction failed: {ex.Message}");
+                    }
+
+                    // Final fallback: sibling filesystem nxeart (handles loose XEX folders and extracted GOD dirs)
+                    if (bgBytes == null)
+                    {
+                        bgBytes = TryExtractBackgroundFromSiblingNxeart(resolvedPath);
+                    }
+
+                    break;
+                }
+            }
+
+            // Final sibling fallback if container had no nxeart (covers XEX dirs where sig is CON etc. but sibling still checked)
+            if (bgBytes == null)
+            {
+                byte[]? siblingBg = TryExtractBackgroundFromSiblingNxeart(resolvedPath);
+                if (siblingBg != null)
+                {
+                    bgBytes = siblingBg;
+                }
+            }
+
+            if (bgBytes == null || bgBytes.Length == 0)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground: no nxebg.jpg found for {resolvedPath} (sig={sig})");
+                return false;
+            }
+
+            if (bgBytes.Length < 8)
+            {
+                Logger.Trace<GameManager>($"TrySaveEmbeddedBackground: bg bytes too short ({bgBytes.Length}) for {resolvedPath}");
+                return false;
+            }
+
+            try
+            {
+                string? dir = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                // Save as JPEG via SkiaSharp (validates and re-encodes PNG/JPEG); fallback to raw write if decode fails
+                try
+                {
+                    ArtworkManager.ConvertArtwork(bgBytes, savePath, SKEncodedImageFormat.Jpeg);
+                }
+                catch (Exception convEx)
+                {
+                    Logger.Trace<GameManager>($"ConvertArtwork for background failed, falling back to raw write: {convEx.Message}");
+                    File.WriteAllBytes(savePath, bgBytes);
+                }
+
+                Logger.Info<GameManager>($"TrySaveEmbeddedBackground: saved nxeart nxebg.jpg ({bgBytes.Length} bytes) to {savePath} (sig={sig})");
+                return File.Exists(savePath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<GameManager>($"TrySaveEmbeddedBackground: save failed for {resolvedPath}: {ex.Message}");
+                Logger.LogExceptionDetails<GameManager>(ex);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TrySaveEmbeddedBackground failed for '{gamePath}': {ex.Message}");
+            Logger.LogExceptionDetails<GameManager>(ex);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to find a sibling <c>nxeart</c> file next to the game file/directory and extract <c>nxebg.jpg</c> from it.
+    /// Handles loose XEX layouts (e.g., <c>C:\Games\Halo3\default.xex</c> with <c>C:\Games\Halo3\nxeart</c>) and
+    /// extracted STFS directories where <c>nxeart</c> is stored alongside the executable on the filesystem.
+    /// </summary>
+    private static byte[]? TryExtractBackgroundFromSiblingNxeart(string resolvedPath)
+    {
+        try
+        {
+            string? searchDir = null;
+            if (Directory.Exists(resolvedPath))
+            {
+                searchDir = resolvedPath;
+            }
+            else if (File.Exists(resolvedPath))
+            {
+                searchDir = Path.GetDirectoryName(resolvedPath);
+            }
+
+            if (string.IsNullOrEmpty(searchDir) || !Directory.Exists(searchDir))
+            {
+                return null;
+            }
+
+            string candidate = Path.Combine(searchDir, "nxeart");
+            if (File.Exists(candidate))
+            {
+                try
+                {
+                    byte[] nxeartBytes = File.ReadAllBytes(candidate);
+                    byte[]? bg = NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes);
+                    if (bg != null)
+                    {
+                        Logger.Debug<GameManager>($"Sibling nxeart background found at {candidate} ({bg.Length} bytes)");
+                        return bg;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Trace<GameManager>($"Failed to read sibling nxeart at {candidate}: {ex.Message}");
+                }
+            }
+
+            // Case-insensitive top-level scan (covers "NXEART" variants)
+            foreach (string f in Directory.GetFiles(searchDir, "*", SearchOption.TopDirectoryOnly))
+            {
+                if (!Path.GetFileName(f).Equals("nxeart", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (f.Equals(candidate, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    byte[] nxeartBytes2 = File.ReadAllBytes(f);
+                    byte[]? bg2 = NxeArtHelper.TryExtractNxebgFromNxeart(nxeartBytes2);
+                    if (bg2 != null)
+                    {
+                        Logger.Debug<GameManager>($"Sibling nxeart (case-variant) background found at {f} ({bg2.Length} bytes)");
+                        return bg2;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Trace<GameManager>($"Failed to read sibling nxeart variant at {f}: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryExtractBackgroundFromSiblingNxeart failed for {resolvedPath}: {ex.Message}");
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Tries to refetch the icon from game files only.
+    /// </summary>
+    public static bool TryRefetchIconFromGameFiles(string gamePath, string savePath)
+    {
+        try
+        {
+            bool ok = TrySaveEmbeddedIcon(gamePath, savePath, true);
+            return ok && File.Exists(savePath) && new FileInfo(savePath).Length > 0;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryRefetchIconFromGameFiles failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to refetch the icon from x360db only.
+    /// </summary>
+    public static async Task<bool> TryRefetchIconFromX360DbAsync(string titleId, string savePath)
+    {
+        if (string.IsNullOrWhiteSpace(titleId) || titleId == "00000000")
+        {
+            return false;
+        }
+
+        return await TryDownloadArtworkFromX360DbAsync(titleId, "icon.png", savePath, SKEncodedImageFormat.Ico);
+    }
+
+    /// <summary>
+    /// Tries to refetch the background from game files (nxeart) only.
+    /// </summary>
+    public static bool TryRefetchBackgroundFromNxeart(string gamePath, string savePath)
+    {
+        try
+        {
+            bool ok = TrySaveEmbeddedBackground(gamePath, savePath, true);
+            return ok && File.Exists(savePath) && new FileInfo(savePath).Length > 0;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryRefetchBackgroundFromNxeart failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to refetch the background from x360db only.
+    /// </summary>
+    public static async Task<bool> TryRefetchBackgroundFromX360DbAsync(string titleId, string savePath)
+    {
+        if (string.IsNullOrWhiteSpace(titleId) || titleId == "00000000")
+        {
+            return false;
+        }
+
+        return await TryDownloadArtworkFromX360DbAsync(titleId, "background.jpg", savePath, SKEncodedImageFormat.Jpeg);
+    }
+
+    /// <summary>
+    /// Tries to refetch the boxart from x360db only.
+    /// </summary>
+    public static async Task<bool> TryRefetchBoxartFromX360DbAsync(string titleId, string savePath)
+    {
+        if (string.IsNullOrWhiteSpace(titleId) || titleId == "00000000")
+        {
+            return false;
+        }
+
+        // Primary attempt via boxart.jpg (standard x360db name); fallback to boxart.png if not found
+        bool downloaded = await TryDownloadArtworkFromX360DbAsync(titleId, "boxart.jpg", savePath, SKEncodedImageFormat.Png);
+        if (downloaded)
+        {
+            return true;
+        }
+
+        // Fallback to PNG variant in case the database uses png extension
+        return await TryDownloadArtworkFromX360DbAsync(titleId, "boxart.png", savePath, SKEncodedImageFormat.Png);
+    }
+
+    /// <summary>
+    /// Downloads artwork from x360db (GitHub Pages / Raw GitHub) for the given titleId and filename.
+    /// Also attempts to use the primary URL from the marketplace info when available.
+    /// </summary>
+    private static async Task<bool> TryDownloadArtworkFromX360DbAsync(string titleId, string artworkFileName, string savePath, SKEncodedImageFormat format)
+    {
+        string? primaryUrl = null;
+        try
+        {
+            GameDetailedInfo? info = await XboxDatabase.GetFullGameInfo(titleId, cacheDirectory: AppPaths.X360DataBaseCacheDirectory);
+            if (info?.Artwork != null)
+            {
+                primaryUrl = artworkFileName.Equals("icon.png", StringComparison.OrdinalIgnoreCase) ? info.Artwork.Icon
+                    : artworkFileName.Equals("background.jpg", StringComparison.OrdinalIgnoreCase) ? info.Artwork.Background
+                    : info.Artwork.Boxart;
+                if (!string.IsNullOrWhiteSpace(primaryUrl))
+                {
+                    Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: primaryUrl from DB: {primaryUrl}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: GetFullGameInfo failed: {ex.Message}");
+        }
+
+        // Use shared HttpClient logic via XboxDatabase helper but also handle direct fallback if primaryUrl is missing.
+        // First attempt using XboxDatabase.DownloadArtworkAsync with primaryUrl if available (it handles its own fallbacks).
+        if (!string.IsNullOrWhiteSpace(primaryUrl))
+        {
+            try
+            {
+                // Ensure directory exists before download
+                string? dir = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                // Download via XboxDatabase (includes primary + github fallbacks when primaryUrl is provided)
+                await XboxDatabase.DownloadArtworkAsync(primaryUrl, titleId, artworkFileName, savePath, format);
+                if (File.Exists(savePath) && new FileInfo(savePath).Length > 0)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: XboxDatabase.DownloadArtworkAsync with primaryUrl failed: {ex.Message}");
+            }
+        }
+
+        // Direct GitHub fallback: try artwork via x360db GitHub URLs regardless of primaryUrl success
+        // This covers cases where primaryUrl is null or primaryUrl download failed to produce a file.
+        using HttpClient httpClient = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+
+        async Task<bool> TryDownloadUrlAsync(string url)
+        {
+            try
+            {
+                using HttpResponseMessage response = await httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: {url} returned {response.StatusCode}");
+                    return false;
+                }
+
+                string? contentType = response.Content.Headers.ContentType?.MediaType;
+                if (contentType == null || !contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                {
+                    Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: {url} content-type not image: {contentType}");
+                    return false;
+                }
+
+                byte[] data = await response.Content.ReadAsByteArrayAsync();
+                if (data.Length == 0)
+                {
+                    return false;
+                }
+
+                string? dir2 = Path.GetDirectoryName(savePath);
+                if (!string.IsNullOrEmpty(dir2))
+                {
+                    Directory.CreateDirectory(dir2);
+                }
+
+                if (format == SKEncodedImageFormat.Ico)
+                {
+                    // Use Database helper for ICO conversion (leaf-independent)
+                    // Fallback to ArtworkManager if needed
+                    try
+                    {
+                        // Try Database helper path via reflection would be internal; use ArtworkManager directly
+                        ArtworkManager.ConvertToIcon(data, savePath);
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    ArtworkManager.ConvertArtwork(data, savePath, format);
+                }
+
+                return File.Exists(savePath) && new FileInfo(savePath).Length > 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Trace<GameManager>($"TryDownloadArtworkFromX360DbAsync: download failed for {url}: {ex.Message}");
+                return false;
+            }
+        }
+
+        string[] artworkUrls =
+        [
+            string.Format(Database.Constants.DatabaseUrls.XboxMarketplaceDatabaseArtwork[0], titleId, artworkFileName),
+            string.Format(Database.Constants.DatabaseUrls.XboxMarketplaceDatabaseArtwork[1], titleId, artworkFileName)
+        ];
+
+        foreach (string url in artworkUrls)
+        {
+            if (await TryDownloadUrlAsync(url))
+            {
+                Logger.Info<GameManager>($"TryDownloadArtworkFromX360DbAsync: downloaded {artworkFileName} from {url}");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>

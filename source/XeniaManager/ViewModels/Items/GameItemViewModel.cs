@@ -14,14 +14,15 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Database;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
+using XeniaManager.Database;
+using XeniaManager.Files;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Database.Patches;
-using XeniaManager.Core.Models.Files.Account;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Database.Models.Patches;
+using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.Bindings;
+using XeniaManager.Files.Models.Config;
 using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
@@ -41,17 +42,86 @@ public partial class GameItemViewModel : ViewModelBase
     private IMessageBoxService _messageBoxService { get; set; }
     private INotificationService _notificationService;
     private Core.Settings.Settings _settings { get; set; }
-    public string Title => Game.Title;
-    public GameArtwork Artwork => Game.Artwork;
-    public bool HasBoxart => !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
-    public bool HasIcon => !string.IsNullOrEmpty(Artwork.Icon) && Artwork.CachedIcon != null;
-    public bool IsCustomXenia => Game.XeniaVersion == XeniaVersion.Custom;
-    public bool IsXeniaMousehook => Game.XeniaVersion == XeniaVersion.Mousehook;
-    public bool IsXeniaNetplay => Game.XeniaVersion == XeniaVersion.Netplay;
 
-    public bool InstalledPatches => !string.IsNullOrEmpty(Game.FileLocations.Patch);
-    public bool IsMultiDisc => Game.FileLocations.IsMultiDisc;
-    public int DiscCount => Game.FileLocations.DiscCount;
+    public string Title
+    {
+        get
+        {
+            return Game.Title;
+        }
+    }
+
+    public GameArtwork Artwork
+    {
+        get
+        {
+            return Game.Artwork;
+        }
+    }
+
+    public bool HasBoxart
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
+        }
+    }
+
+    public bool HasIcon
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Artwork.Icon) && Artwork.CachedIcon != null;
+        }
+    }
+
+    public bool IsCustomXenia
+    {
+        get
+        {
+            return Game.XeniaVersion == XeniaVersion.Custom;
+        }
+    }
+
+    public bool IsXeniaMousehook
+    {
+        get
+        {
+            return Game.XeniaVersion == XeniaVersion.Mousehook;
+        }
+    }
+
+    public bool IsXeniaNetplay
+    {
+        get
+        {
+            return Game.XeniaVersion == XeniaVersion.Netplay;
+        }
+    }
+
+    public bool InstalledPatches
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(Game.FileLocations.Patch);
+        }
+    }
+
+    public bool IsMultiDisc
+    {
+        get
+        {
+            return Game.FileLocations.IsMultiDisc;
+        }
+    }
+
+    public int DiscCount
+    {
+        get
+        {
+            return Game.FileLocations.DiscCount;
+        }
+    }
 
     // Cached result to avoid repeated platform checks
     private static readonly bool _supportsShortcuts = PlatformUtilities.IsNativeWindows();
@@ -59,7 +129,13 @@ public partial class GameItemViewModel : ViewModelBase
     /// <summary>
     /// Indicates whether shortcut creation is supported (native Windows only).
     /// </summary>
-    public bool SupportsShortcuts => _supportsShortcuts;
+    public bool SupportsShortcuts
+    {
+        get
+        {
+            return _supportsShortcuts;
+        }
+    }
 
     public GameItemViewModel(Game game, LibraryPageViewModel library)
     {
@@ -109,6 +185,7 @@ public partial class GameItemViewModel : ViewModelBase
                 {
                     loadingScreen.SetBackground(Game.Artwork.CachedBackground);
                 }
+
                 loadingScreen.SetLoadingText(Game.Title);
             }
 
@@ -187,7 +264,7 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             string screenshotsFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(Game.XeniaVersion).EmulatorDir,
-                "screenshots", Game.GameId.ToUpperInvariant());
+                XeniaPaths.ScreenshotsFolderName, Game.GameId.ToUpperInvariant());
 
             if (!Directory.Exists(screenshotsFolder))
             {
@@ -344,7 +421,8 @@ public partial class GameItemViewModel : ViewModelBase
         {
             Logger.Error<LibraryPageViewModel>("Storage provider is not available");
             Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
-            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Title"),
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Message"), ex));
             return;
         }
@@ -624,7 +702,7 @@ public partial class GameItemViewModel : ViewModelBase
             string destinationPath = file.Path.LocalPath;
 
             // Copy the patch file to the destination
-            File.Copy(currentPatchPath, destinationPath, overwrite: true);
+            File.Copy(currentPatchPath, destinationPath, true);
 
             Logger.Info<GameItemViewModel>($"Successfully exported patch file to: {destinationPath}");
 
@@ -680,6 +758,7 @@ public partial class GameItemViewModel : ViewModelBase
                 {
                     return;
                 }
+
                 discNumber = selectedDisc;
             }
 
@@ -717,6 +796,7 @@ public partial class GameItemViewModel : ViewModelBase
                     Logger.Info<GameItemViewModel>($"Disc selection cancelled for: '{Game.Title}'");
                     return;
                 }
+
                 discNumber = selectedDisc;
             }
 
@@ -742,6 +822,7 @@ public partial class GameItemViewModel : ViewModelBase
                     Logger.Info<GameItemViewModel>($"User cancelled Steam user selection for: '{Game.Title}'");
                     return;
                 }
+
                 userId = selectedUser.SteamId32 ?? selectedUser.SteamId64;
                 Logger.Info<GameItemViewModel>($"Selected Steam user: {selectedUser.PersonaName} ({userId})");
             }
@@ -777,7 +858,10 @@ public partial class GameItemViewModel : ViewModelBase
         await Task.Run(() =>
         {
             Logger.Info<GameItemViewModel>($"Opening game compatibility page: {Game.Compatibility.Url}");
-            Process.Start(new ProcessStartInfo(Game.Compatibility.Url) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(Game.Compatibility.Url)
+            {
+                UseShellExecute = true
+            });
         });
     }
 
@@ -857,6 +941,7 @@ public partial class GameItemViewModel : ViewModelBase
                     LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.MissingBindingsLocation"));
                 return;
             }
+
             if (!uint.TryParse(Game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
             {
                 Logger.Error<GameItemViewModel>($"Failed to parse game ID '{Game.GameId}' to uint for {Game.Title}");
@@ -964,7 +1049,8 @@ public partial class GameItemViewModel : ViewModelBase
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Message"),
                     Game.Title)))
         {
-            bool deleteGameContent = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title"),
+            bool deleteGameContent = await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message"),
                     Game.Title));
             try
@@ -995,7 +1081,7 @@ public partial class GameItemViewModel : ViewModelBase
             {
                 await _messageBoxService.ShowInfoAsync(
                     LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title"),
-                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message"));   
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message"));
                 return;
             }
 
@@ -1012,7 +1098,7 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message"), 
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message"),
                     ex.Message));
         }
     }

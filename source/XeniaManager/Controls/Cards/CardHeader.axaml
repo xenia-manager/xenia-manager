@@ -42,8 +42,11 @@
     </Style>
 
     <Style Selector="local|CardHeader[ShowIconBackground=false] Border#IconBorder">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="CornerRadius"
+                Value="0" />
     </Style>
 </Styles>

@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Patches;
+using XeniaManager.Files;
+using XeniaManager.Logging;
+using XeniaManager.Files.Models.Patches;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 
@@ -66,18 +66,12 @@ public partial class PatchCommandViewModel : ObservableObject
     /// <summary>
     /// Called when the Type property changes to re-validate the value.
     /// </summary>
-    partial void OnTypeChanged(PatchType value)
-    {
-        Validate();
-    }
+    partial void OnTypeChanged(PatchType value) => Validate();
 
     /// <summary>
     /// Called when the Value property changes to validate the new value.
     /// </summary>
-    partial void OnValueChanged(string value)
-    {
-        Validate();
-    }
+    partial void OnValueChanged(string value) => Validate();
 
     /// <summary>
     /// Validates the current value against the patch type format requirements.
@@ -217,6 +211,7 @@ public partial class PatchCommandViewModel : ObservableObject
             {
                 return (false, "Invalid array format. Use hex bytes (e.g., 0x0102030405)");
             }
+
             if (cleanedHex.Length % 2 != 0)
             {
                 return (false, "Array hex must have even number of characters");
@@ -229,10 +224,12 @@ public partial class PatchCommandViewModel : ObservableObject
             {
                 return (true, string.Empty);
             }
+
             if (!Regex.IsMatch(cleanedHex, "^[0-9A-Fa-f]+$"))
             {
                 return (false, "Invalid array format. Use hex bytes (e.g., 0102030405)");
             }
+
             if (cleanedHex.Length % 2 != 0)
             {
                 return (false, "Array hex must have even number of characters");
@@ -461,7 +458,8 @@ public partial class PatchConfigurationViewModel : ObservableObject
         if (invalidCommands.Count > 0)
         {
             // Build the error message using localized strings
-            string errorMessage = string.Format(LocalizationHelper.GetText("PatchConfigurationDialog.Save.InvalidValues.Header"), invalidCommands.Count) + "\n\n";
+            string errorMessage = string.Format(LocalizationHelper.GetText("PatchConfigurationDialog.Save.InvalidValues.Header"), invalidCommands.Count) +
+                                  "\n\n";
 
             foreach ((string PatchName, string CommandType, string Address) invalid in invalidCommands.Take(5))
             {
@@ -551,17 +549,11 @@ public partial class PatchConfigurationViewModel : ObservableObject
     /// <summary>
     /// Marks the configuration as changed when any patch is modified.
     /// </summary>
-    partial void OnSelectedPatchChanged(PatchEntryViewModel? value)
-    {
-        HasUnsavedChanges = true;
-    }
+    partial void OnSelectedPatchChanged(PatchEntryViewModel? value) => HasUnsavedChanges = true;
 
     /// <summary>
     /// Saves the patch configuration.
     /// </summary>
     [RelayCommand]
-    private async Task DoSaveAsync()
-    {
-        await SaveAsync();
-    }
+    private async Task DoSaveAsync() => await SaveAsync();
 }

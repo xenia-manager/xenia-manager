@@ -4,16 +4,26 @@
 
     <!-- Closed (Default) Style -->
     <Style Selector="local|DownloadProgressCard">
-        <Setter Property="Opacity" Value="0" />
-        <Setter Property="MaxHeight" Value="0" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="Opacity"
+                Value="0" />
+        <Setter Property="MaxHeight"
+                Value="0" />
+        <Setter Property="Margin"
+                Value="0" />
+        <Setter Property="ClipToBounds"
+                Value="True" />
 
         <Setter Property="Transitions">
             <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="CubicEaseInOut" />
-                <DoubleTransition Property="MaxHeight" Duration="0:0:0.25" Easing="CubicEaseOut" />
-                <ThicknessTransition Property="Margin" Duration="0:0:0.25" Easing="CubicEaseOut" />
+                <DoubleTransition Property="Opacity"
+                                  Duration="0:0:0.2"
+                                  Easing="CubicEaseInOut" />
+                <DoubleTransition Property="MaxHeight"
+                                  Duration="0:0:0.25"
+                                  Easing="CubicEaseOut" />
+                <ThicknessTransition Property="Margin"
+                                     Duration="0:0:0.25"
+                                     Easing="CubicEaseOut" />
             </Transitions>
         </Setter>
 
@@ -49,9 +59,12 @@
 
     <!-- Open Style -->
     <Style Selector="local|DownloadProgressCard:open">
-        <Setter Property="Opacity" Value="1" />
-        <Setter Property="MaxHeight" Value="300" />
-        <Setter Property="Margin" Value="24,24,24,0" />
+        <Setter Property="Opacity"
+                Value="1" />
+        <Setter Property="MaxHeight"
+                Value="300" />
+        <Setter Property="Margin"
+                Value="24,24,24,0" />
     </Style>
 
 </Styles>

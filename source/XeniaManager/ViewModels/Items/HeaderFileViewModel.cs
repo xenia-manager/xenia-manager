@@ -1,9 +1,11 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files;
-using XeniaManager.Core.Models.Files.Stfs;
+using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.Files;
+using XeniaManager.Logging;
+using XeniaManager.Files.Models.Stfs;
 
 namespace XeniaManager.ViewModels.Items;
 
@@ -18,29 +20,75 @@ public partial class HeaderFileViewModel : ViewModelBase
     public HeaderFile Header { get; }
 
     /// <summary>
+    /// The thumbnail image embedded in the package (only available for package entries).
+    /// </summary>
+    [ObservableProperty] private Bitmap? _thumbnailImage;
+
+    /// <summary>
+    /// Gets whether a thumbnail image is available for display.
+    /// </summary>
+    public bool HasThumbnail
+    {
+        get
+        {
+            return ThumbnailImage != null;
+        }
+    }
+
+    /// <summary>
     /// Gets the display name of the header file.
     /// </summary>
-    public string DisplayName => Header.DisplayName;
+    public string DisplayName
+    {
+        get
+        {
+            return Header.DisplayName;
+        }
+    }
 
     /// <summary>
     /// Gets the file name of the header file.
     /// </summary>
-    public string FileName => Header.FileName;
+    public string FileName
+    {
+        get
+        {
+            return Header.FileName;
+        }
+    }
 
     /// <summary>
     /// Gets the content type of the header file.
     /// </summary>
-    public string ContentType => Header.ContentType.ToDisplayString();
+    public string ContentType
+    {
+        get
+        {
+            return Header.ContentType.ToDisplayString();
+        }
+    }
 
     /// <summary>
     /// Gets the title ID of the header file.
     /// </summary>
-    public string TitleId => $"{Header.TitleId:X8}";
+    public string TitleId
+    {
+        get
+        {
+            return $"{Header.TitleId:X8}";
+        }
+    }
 
     /// <summary>
     /// Gets the original file path of the header file.
     /// </summary>
-    public string HeaderFilePath => Header.FilePath;
+    public string HeaderFilePath
+    {
+        get
+        {
+            return Header.FilePath;
+        }
+    }
 
     /// <summary>
     /// Gets the reconstructed file path from the content type and file name.
@@ -49,6 +97,12 @@ public partial class HeaderFileViewModel : ViewModelBase
     {
         get
         {
+            // Package-file content points directly at the package itself (no sidecar header)
+            if (Header.IsPackageEntry)
+            {
+                return Header.FilePath;
+            }
+
             // Split the path to get the base directory (remove "\Headers\...")
             string[] parts = Regex.Split(HeaderFilePath, @"\\Headers", RegexOptions.IgnoreCase);
             string basePath = parts[0];
@@ -83,5 +137,20 @@ public partial class HeaderFileViewModel : ViewModelBase
     public HeaderFileViewModel(HeaderFile header)
     {
         Header = header;
+
+        // Package entries carry their icon inside the package metadata
+        if (header.IsPackageEntry && header.ThumbnailImage.Length > 0)
+        {
+            try
+            {
+                using MemoryStream ms = new MemoryStream(header.ThumbnailImage);
+                ThumbnailImage = new Bitmap(ms);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<HeaderFileViewModel>($"Failed to load package thumbnail for '{header.FileName}'");
+                Logger.LogExceptionDetails<HeaderFileViewModel>(ex);
+            }
+        }
     }
 }

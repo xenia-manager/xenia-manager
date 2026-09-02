@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using FluentAvalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
@@ -31,7 +31,13 @@ public partial class App : Application
     /// <summary>
     /// Main Window instance
     /// </summary>
-    public static Window? MainWindow => Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
+    public static Window? MainWindow
+    {
+        get
+        {
+            return Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
+        }
+    }
 
     /// <summary>
     /// DI Services
@@ -116,6 +122,7 @@ public partial class App : Application
             {
                 // No game launch via arguments, show MainWindow as normal
                 SetupMainWindow(mainWindow, settings);
+                SubscribeStartInBigScreen(mainWindow);
             }
 
             Logger.Info<App>("Application initialization completed successfully");
@@ -236,12 +243,60 @@ public partial class App : Application
         };
     }
 
+    /// <summary>
+    /// Launches BigScreen instead of the desktop UI when the --bigscreen
+    /// argument was passed or "Start in Big Screen" is enabled in the settings.
+    /// Runs on first show so the hide happens after the window is displayed;
+    /// the handler unsubscribes itself so a later Show (BigScreen exit) can't
+    /// relaunch it.
+    /// </summary>
+    private void SubscribeStartInBigScreen(MainWindow mainWindow)
+    {
+        bool startInBigScreen =
+            (Desktop?.Args ?? []).Any(arg => arg.Equals("--bigscreen", StringComparison.OrdinalIgnoreCase))
+            || Services.GetRequiredService<Settings>().Settings.General.StartInBigScreen;
+        if (!startInBigScreen)
+        {
+            return;
+        }
+
+        Logger.Info<App>("Starting in Big Screen mode");
+        mainWindow.Opened += OnMainWindowOpenedForBigScreen;
+    }
+
+    /// <summary>
+    /// Launches BigScreen on the window's first show, then unsubscribes so a
+    /// later Show (BigScreen exit restore) can't relaunch it.
+    /// </summary>
+    private async void OnMainWindowOpenedForBigScreen(object? sender, EventArgs e)
+    {
+        if (sender is not MainWindow mainWindow)
+        {
+            return;
+        }
+
+        mainWindow.Opened -= OnMainWindowOpenedForBigScreen;
+
+        try
+        {
+            NavigationService navigation = Services.GetRequiredService<NavigationService>();
+            await navigation.LaunchBigScreen();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<App>("Failed to launch BigScreen on startup");
+            Logger.LogExceptionDetails<App>(ex);
+            EventManager.Instance.EnableWindow();
+            mainWindow.Show();
+        }
+    }
+
     private static void HandleFatalException(Exception ex)
     {
         try
         {
             Logger.Error<App>("=== Fatal Exception Encountered ===");
-            Logger.LogExceptionDetails<App>(ex, includeEnvironmentInfo: true);
+            Logger.LogExceptionDetails<App>(ex, true);
 
             // Ensure logs are written before a potential crash
             Logger.Flush();
@@ -271,6 +326,7 @@ public partial class App : Application
                 {
                     loadingScreen.SetBackground(game.Artwork.CachedBackground);
                 }
+
                 loadingScreen.SetLoadingText(game.Title);
             }
 
@@ -314,7 +370,8 @@ public partial class App : Application
             }
 
             // Launch the game asynchronously
-            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted, configOverridesFromArgs: configOverridesFromArgs, discNumber: discNumber);
+            await Launcher.LaunchGameASync(game, settings, onGameLoadingStarted: onGameLoadingStarted, configOverridesFromArgs: configOverridesFromArgs,
+                discNumber: discNumber);
             Logger.Info<App>($"Game session ended for '{game.Title}'");
         }
         catch (Exception ex)

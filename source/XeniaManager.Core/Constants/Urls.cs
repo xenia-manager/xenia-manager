@@ -63,7 +63,8 @@ public class Urls
     /// Source:
     /// - Raw GitHub - Official Xenia Mousehook repository
     /// </summary>
-    public static readonly string XeniaMousehookBindingsFile = @"https://raw.githubusercontent.com/marinesciencedude/xenia-canary-mousehook/refs/heads/mousehook/bindings.ini";
+    public static readonly string XeniaMousehookBindingsFile =
+        @"https://raw.githubusercontent.com/marinesciencedude/xenia-canary-mousehook/refs/heads/mousehook/bindings.ini";
 
     /// <summary>
     /// Array of URLs to fetch the Xbox Marketplace games database.

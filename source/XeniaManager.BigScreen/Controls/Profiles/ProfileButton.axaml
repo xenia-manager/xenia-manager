@@ -1,0 +1,60 @@
+<Button xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Shell"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+        mc:Ignorable="d"
+        d:DesignWidth="360"
+        d:DesignHeight="60"
+        x:Class="XeniaManager.BigScreen.Controls.Profiles.ProfileButton"
+        x:DataType="vm:MainWindowViewModel"
+        Classes.selected="{Binding Header.IsSelected}">
+    <Button.Template>
+        <ControlTemplate TargetType="Button">
+            <ContentPresenter Content="{TemplateBinding Content}"
+                              HorizontalContentAlignment="Stretch"
+                              VerticalContentAlignment="Center" />
+        </ControlTemplate>
+    </Button.Template>
+    <StackPanel Orientation="Horizontal"
+                Spacing="12"
+                VerticalAlignment="Center">
+        <!-- Avatar circle: reserved 2px border that turns accent on selection/hover;
+             no fill - the icon sits inside with breathing room -->
+        <Border x:Name="AvatarCircle"
+                CornerRadius="20"
+                Height="40"
+                Width="40">
+            <fluent:SymbolIcon Symbol="PersonCircle"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="30"
+                               Foreground="{DynamicResource TextPrimary}" />
+        </Border>
+        <StackPanel Margin="0,-4,0,0"
+                    VerticalAlignment="Center">
+            <TextBlock Text="{Binding Header.Gamertag}"
+                       Classes="header-text"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextPrimary}" />
+            <StackPanel Orientation="Horizontal"
+                        Spacing="6">
+                <fluent:SymbolIcon Symbol="Star"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Header.Gamerscore}"
+                           FontSize="13"
+                           Foreground="{DynamicResource TextPrimary}"
+                           VerticalAlignment="Center" />
+                <fluent:SymbolIcon Symbol="{Binding Header.VersionIcon}"
+                                   IsVisible="{Binding Header.HasVersionIcon}"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</Button>

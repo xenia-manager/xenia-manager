@@ -16,13 +16,13 @@ namespace XeniaManager.Core.Models.Files.Shortcut;
 [ComImport]
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 [Guid("0000010B-0000-0000-C000-000000000046")]
-interface IPersistFile
+internal interface IPersistFile
 {
     /// <summary>
     /// Retrieves the current file name of the object.
     /// </summary>
     /// <param name="pszFile">Buffer that receives the current file name.</param>
-    void GetCurFile([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile);
+    void GetCurFile([Out] [MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile);
 
     /// <summary>
     /// Determines whether the object has changed since it was last saved.

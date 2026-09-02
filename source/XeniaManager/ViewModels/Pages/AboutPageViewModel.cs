@@ -8,11 +8,12 @@ using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Installation;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Utilities;
 using XeniaManager.Services;
 
 namespace XeniaManager.ViewModels.Pages;
@@ -30,6 +31,7 @@ public partial class AboutPageViewModel : ViewModelBase
     [ObservableProperty] private double _downloadProgress;
     [ObservableProperty] private string _downloadProgressStatus = string.Empty;
     [ObservableProperty] private bool _useExperimentalBuilds;
+
     partial void OnUseExperimentalBuildsChanged(bool value)
     {
         Logger.Info<AboutPageViewModel>($"Experimental build setting changed to: {value}");
@@ -51,6 +53,7 @@ public partial class AboutPageViewModel : ViewModelBase
     }
 
     [ObservableProperty] private bool _updatesAvailable;
+
     partial void OnUpdatesAvailableChanged(bool value)
     {
         Logger.Info<AboutPageViewModel>($"Update availability changed to: {value}");
@@ -133,7 +136,8 @@ public partial class AboutPageViewModel : ViewModelBase
             else
             {
                 Logger.Debug<AboutPageViewModel>("Xenia Manager is up to date");
-                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message"), FAInfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message"),
+                    FAInfoBarSeverity.Informational);
             }
         }
         catch (Exception ex)
@@ -144,6 +148,7 @@ public partial class AboutPageViewModel : ViewModelBase
                 LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailed.Title"),
                 string.Format(LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailed.Message"), ex.Message));
         }
+
         await Task.CompletedTask;
     }
 
@@ -206,6 +211,7 @@ public partial class AboutPageViewModel : ViewModelBase
                 {
                     Directory.Delete(extractPath, true);
                 }
+
                 Directory.CreateDirectory(extractPath);
 
                 await ArchiveExtractor.ExtractArchiveAsync(archivePath, extractPath);
@@ -229,6 +235,15 @@ public partial class AboutPageViewModel : ViewModelBase
                     Logger.Info<AboutPageViewModel>($"Backed up old executable to {backupPath}");
                 }
 
+                // Back up the old BigScreen executable if it exists
+                string bigScreenExecutable = AppPathResolver.GetFullPath("XeniaManager.BigScreen.exe");
+                if (File.Exists(bigScreenExecutable))
+                {
+                    string backupPath = Path.Combine(backupDir, "XeniaManager.BigScreen.exe");
+                    File.Copy(bigScreenExecutable, backupPath, true);
+                    Logger.Info<AboutPageViewModel>($"Backed up old BigScreen executable to {backupPath}");
+                }
+
                 // Create the batch script
                 string batPath = Path.Combine(AppPaths.DownloadsDirectory, "UpdateAndRelaunch.bat");
                 string currentProcessPath = Environment.ProcessPath ?? "";
@@ -246,6 +261,9 @@ public partial class AboutPageViewModel : ViewModelBase
                                           timeout /T 1 /NOBREAK >nul
                                           goto waitloop
                                       )
+
+                                      :: Stop BigScreen if it is still running
+                                      taskkill /IM "XeniaManager.BigScreen.exe" /F >nul 2>&1
 
                                       echo Moving files...
                                       xcopy /E /I /Y "{{extractDir}}\*.*" "{{baseDir}}\"

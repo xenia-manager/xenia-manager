@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Logging;
+using XeniaManager.Files.Models.Bindings;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.ViewModels.Items;
@@ -22,7 +22,13 @@ public partial class BindingsEntryViewModel : ObservableObject
     /// <summary>
     /// Gets the underlying bindings entry.
     /// </summary>
-    public BindingsEntry Entry => _entry;
+    public BindingsEntry Entry
+    {
+        get
+        {
+            return _entry;
+        }
+    }
 
     public BindingsEntryViewModel(BindingsEntry entry, int index, MousehookControlsEditorDialogViewModel parent)
     {

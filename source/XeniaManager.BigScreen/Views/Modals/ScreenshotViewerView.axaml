@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:prim="using:XeniaManager.BigScreen.Controls.Primitives"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.Modals.ScreenshotViewerView"
+             x:DataType="vm:ScreenshotViewerViewModel">
+
+    <UserControl.Styles>
+        <!-- Subtle faded chevron buttons for the modal viewer -->
+        <Style Selector="Button.gallery-chevron">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Foreground"
+                    Value="#B3FFFFFF" />
+            <Setter Property="Padding"
+                    Value="24" />
+            <Setter Property="CornerRadius"
+                    Value="12" />
+            <Setter Property="Opacity"
+                    Value="0.45" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.gallery-chevron:pointerover">
+            <Setter Property="Opacity"
+                    Value="1" />
+        </Style>
+        <Style Selector="Button.gallery-chevron:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="#26FFFFFF" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- Full-bleed viewer, covers the whole screen while open -->
+    <Panel Background="{DynamicResource ViewerBackdrop}">
+
+        <Image Source="{Binding Image}"
+               Margin="140,60"
+               Stretch="Uniform" />
+
+        <Button x:Name="BtnPrev"
+                IsVisible="{Binding HasPrevious}"
+                HorizontalAlignment="Left"
+                Margin="40,0"
+                VerticalAlignment="Center"
+                Classes="gallery-chevron"
+                Click="OnPrevClick">
+            <fluent:SymbolIcon Symbol="ChevronLeft"
+                               FontSize="48" />
+        </Button>
+
+        <Button x:Name="BtnNext"
+                IsVisible="{Binding HasNext}"
+                HorizontalAlignment="Right"
+                Margin="40,0"
+                VerticalAlignment="Center"
+                Classes="gallery-chevron"
+                Click="OnNextClick">
+            <fluent:SymbolIcon Symbol="ChevronRight"
+                               FontSize="48" />
+        </Button>
+
+        <!-- Modal footer: close hint bottom left, caption bottom right -->
+        <Grid ColumnDefinitions="*, Auto"
+              Margin="40,0,40,37"
+              VerticalAlignment="Bottom">
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding IsHintBarVisible}">
+                <prim:InputHint Char="B"
+                                KeyColour="{DynamicResource HintKeyB}"
+                                Text="{DynamicResource Gallery.Viewer.Close}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Right"
+                        Spacing="4"
+                        VerticalAlignment="Center">
+                <TextBlock Text="{Binding GameTitle}"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource TextPrimary}"
+                           TextAlignment="Right" />
+                <TextBlock Text="{Binding CapturedAtText}"
+                           FontSize="16"
+                           Foreground="{DynamicResource TextSecondary}"
+                           TextAlignment="Right" />
+            </StackPanel>
+        </Grid>
+    </Panel>
+</UserControl>

@@ -4,8 +4,8 @@ using System.Windows.Input;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Files.Stfs;
+using XeniaManager.Files;
+using XeniaManager.Files.Models.Stfs;
 
 namespace XeniaManager.ViewModels.Items;
 
@@ -110,6 +110,7 @@ public partial class ContentItemViewModel : ObservableObject
         {
             DisplayName = Path.GetFileNameWithoutExtension(stfsFile.PackagePath ?? string.Empty);
         }
+
         ContentType = $"{stfsFile.Metadata.ContentType.ToDisplayString()} ({stfsFile.Metadata.ContentType.ToHexString()})";
         FilePath = stfsFile.PackagePath ?? string.Empty;
 
@@ -144,8 +145,5 @@ public partial class ContentItemViewModel : ObservableObject
     /// <summary>
     /// Removes this content item from the list.
     /// </summary>
-    private void Remove()
-    {
-        _onRemove?.Invoke(this);
-    }
+    private void Remove() => _onRemove?.Invoke(this);
 }

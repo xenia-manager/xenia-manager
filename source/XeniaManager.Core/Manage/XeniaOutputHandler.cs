@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
@@ -43,7 +43,8 @@ public partial class XeniaOutputHandler
     /// Matches: Loaded Gamertag (GUID: XUID) to slot 0-4
     /// Case-insensitive to handle both uppercase and lowercase hex
     /// </summary>
-    [GeneratedRegex(@"\bLoaded\s(?<Gamertag>\w+)\s\(GUID:\s(?<GUID>[A-F0-9]+)\)\sto\sslot\s(?<Slot>[0-4])", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    [GeneratedRegex(@"\bLoaded\s(?<Gamertag>\w+)\s\(GUID:\s(?<GUID>[A-F0-9]+)\)\sto\sslot\s(?<Slot>[0-4])",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex GamerProfilesRegex();
 
     /// <summary>
@@ -100,7 +101,13 @@ public partial class XeniaOutputHandler
     /// <summary>
     /// Gets the extracted game details
     /// </summary>
-    public ParsedGameDetails GameDetails => _gameDetails;
+    public ParsedGameDetails GameDetails
+    {
+        get
+        {
+            return _gameDetails;
+        }
+    }
 
     /// <summary>
     /// Configures a process for Xenia launch.
@@ -154,6 +161,7 @@ public partial class XeniaOutputHandler
         {
             // Ignore cancellation exceptions
         }
+
         _logReaderCts?.Dispose();
         _logReaderCts = null;
         _logReaderTask = null;
@@ -203,7 +211,7 @@ public partial class XeniaOutputHandler
         try
         {
             await using FileStream fileStream = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite,
-                bufferSize: 8192, useAsync: true);
+                8192, true);
             using StreamReader reader = new StreamReader(fileStream);
 
             // Adaptive polling: start fast, slow down when idle
@@ -222,10 +230,12 @@ public partial class XeniaOutputHandler
                 {
                     hasExited = true;
                 }
+
                 if (hasExited)
                 {
                     break;
                 }
+
                 string? line;
                 bool sawNewData = false;
                 while ((line = await reader.ReadLineAsync(cancellationToken)) != null)
@@ -408,9 +418,10 @@ public partial class XeniaOutputHandler
             {
                 return;
             }
+
             DateTime? startTime = _gameLoadStartTime;
 
-            if (startTime == null || (DateTime.UtcNow - startTime.Value) < _gameLoadTimeout)
+            if (startTime == null || DateTime.UtcNow - startTime.Value < _gameLoadTimeout)
             {
                 return;
             }
@@ -419,6 +430,7 @@ public partial class XeniaOutputHandler
             Logger.Info<XeniaOutputHandler>($"Game marked as loaded after {_gameLoadTimeout.TotalSeconds} seconds");
             handler = GameLoadingStarted;
         }
+
         handler?.Invoke(this, EventArgs.Empty);
     }
 
@@ -452,6 +464,7 @@ public partial class XeniaOutputHandler
                 handler = GameLoadingStarted;
             }
         }
+
         handler?.Invoke(this, EventArgs.Empty);
     }
 
@@ -481,8 +494,9 @@ public partial class XeniaOutputHandler
                 ulong.TryParse(xuidString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out ulong slotXuidValue) &&
                 slotXuidValue != 0)
             {
-                AddOrUpdateProfile(slotXuidValue, profileSlot, gamertag: null);
+                AddOrUpdateProfile(slotXuidValue, profileSlot, null);
             }
+
             return;
         }
 
@@ -527,7 +541,8 @@ public partial class XeniaOutputHandler
                     _loadedProfiles.Remove(existingProfileInSlot);
                     _slotToProfile.Remove(slot);
                     _xuidToProfile.Remove(existingProfileInSlot.Xuid.Value);
-                    Logger.Info<XeniaOutputHandler>($"Removed profile from slot {slot}: {existingProfileInSlot.Gamertag} (XUID: {existingProfileInSlot.Xuid}) - profile switch detected");
+                    Logger.Info<XeniaOutputHandler>(
+                        $"Removed profile from slot {slot}: {existingProfileInSlot.Gamertag} (XUID: {existingProfileInSlot.Xuid}) - profile switch detected");
                 }
             }
 
@@ -559,7 +574,8 @@ public partial class XeniaOutputHandler
                 _loadedProfiles.Add(profile);
                 _slotToProfile[slot] = profile;
                 _xuidToProfile[xuidValue] = profile;
-                Logger.Info<XeniaOutputHandler>($"Profile {(gamertag != null ? "loaded" : "detected")}: {(gamertag ?? "Unknown")} (XUID: {xuidValue:X16}, Slot: {slot})");
+                Logger.Info<XeniaOutputHandler>(
+                    $"Profile {(gamertag != null ? "loaded" : "detected")}: {gamertag ?? "Unknown"} (XUID: {xuidValue:X16}, Slot: {slot})");
             }
         }
     }

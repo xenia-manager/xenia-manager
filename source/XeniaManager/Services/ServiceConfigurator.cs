@@ -8,7 +8,7 @@ using XeniaManager.ViewModels;
 using XeniaManager.ViewModels.Controls;
 using XeniaManager.ViewModels.Pages;
 using XeniaManager.Views;
-using Logger = XeniaManager.Core.Logging.Logger;
+using Logger = XeniaManager.Logging.Logger;
 
 namespace XeniaManager.Services;
 
@@ -44,6 +44,7 @@ public class ServiceConfigurator
                 Logger.LogExceptionDetails<ServiceConfigurator>(ex);
                 // Settings will fall back to defaults, which is handled by the settings system
             }
+
             return settings;
         });
         // NavigationService
@@ -63,6 +64,7 @@ public class ServiceConfigurator
             {
                 Logger.Error<ServiceConfigurator>($"Failed to apply saved theme: {ex.Message}");
             }
+
             return themeService;
         });
         // MessageBoxService

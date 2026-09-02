@@ -11,6 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Запуск Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Библиотека</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Настр. Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Управ. Xenia</sys:String>
@@ -372,6 +374,9 @@
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Проверка наличия обновлений при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Автоматическая проверка обновлений Xenia и Xenia Manager при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Отключите эту опцию, чтобы пропускать проверку обновлений при запуске программы</sys:String>
@@ -381,6 +386,9 @@
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Загрузка {0}</sys:String>
@@ -405,6 +413,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Не найдены скриншоты для {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Не удалось открыть папку</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Ошибка при открытии папки со скриншотами.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Патчи</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Скачать</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Скачать патчи из репозитория</sys:String>
@@ -522,6 +536,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Патчи</sys:String>
@@ -578,9 +594,37 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Иконка</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Выберите иконку</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Очистить иконку</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">Фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">Выбрать фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">Очистить фоновое изображение</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Автоматическое определение</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID игры и ID диска, определяются автоматически из файла игры и не могут быть изменены.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">ID игры</sys:String>
@@ -633,10 +677,12 @@
 
     <!-- Install Content Dialog -->
     <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Установить игровые данные</sys:String>
-    <sys:String x:Key="InstallContentDialog.ContentDialog.InstallButton.Text">Установить</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Отменить</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">Добавить контент</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">Выберите файлы игровых данных</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">Успешно установлено</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">Следующие игровые данные были успешно установлены:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Установка прошла частично успешно</sys:String>
@@ -1269,6 +1315,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - Поддержка клавиатуры и мыши</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - Кроссплатформенный UI-фреймворк с Fluent Design</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - Элементы управления и темы Fluent Design для Avalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1277,8 +1327,14 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Средство логирования для приложений на .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Парсинг данных игры</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Поддержка архивов и сжатия</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Это приложение никоим образом не связано, не одобрено и не спонсируется корпорацией Microsoft или проектом Xenia. Все торговые марки, логотипы и наименования брендов являются собственностью их соответствующих владельцев.&#10; Xbox 360 является зарегистрированной торговой маркой корпорации Microsoft в США и/или других странах.&#10;Xenia является зарегистрированной торговой маркой проекта Xenia.&#10;Любые ссылки на эти или другие торговые марки делаются исключительно в целях идентификации совместимости или функциональности и не подразумевают какую-либо ассоциацию или одобрение владельцами торговых марок.&#10;Это программное обеспечение предназначено исключительно для образовательных и информационных целей. Оно не содержит и не распространяет какое-либо защищённое авторским правом содержимое, принадлежащее корпорации Microsoft или любому третьему лицу. Пользователи несут полную ответственность за соблюдение всех применимых законов, включая законы об авторском праве и лицензировании.&#10;Любое использование этого приложения для запуска или взаимодействия с проприетарным программным обеспечением или прошивкой должно осуществляться в рамках соответствующих лицензионных соглашений конечного пользователя (EULA). Разработчики и распространители этого приложения не одобряют и не поддерживают пиратство в любой форме.&#10;Это приложение предоставляется «как есть», без каких-либо гарантий, явных или подразумеваемых. Используйте на свой страх и риск.</sys:String>

@@ -2,8 +2,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Logging;
+using XeniaManager.Files.Models.Config;
 
 namespace XeniaManager.ViewModels.Controls;
 
@@ -114,10 +114,7 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
     /// <summary>
     /// Updates the HasUnsavedChanges flag based on whether any options have unsaved changes.
     /// </summary>
-    private void UpdateUnsavedChangesStatus()
-    {
-        HasUnsavedChanges = Options.Any(o => o.HasUnsavedChanges);
-    }
+    private void UpdateUnsavedChangesStatus() => HasUnsavedChanges = Options.Any(o => o.HasUnsavedChanges);
 
     /// <summary>
     /// Applies all changes from the option ViewModels back to the underlying ConfigSection.

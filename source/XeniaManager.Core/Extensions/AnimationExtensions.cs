@@ -55,8 +55,5 @@ public static class AnimationExtensions
     /// <summary>
     /// Ease-in-out function for smooth animations
     /// </summary>
-    private static double EaseInOut(double t)
-    {
-        return t < 0.5 ? 2 * t * t : 1 - Math.Pow(-2 * t + 2, 2) / 2;
-    }
+    private static double EaseInOut(double t) => t < 0.5 ? 2 * t * t : 1 - Math.Pow(-2 * t + 2, 2) / 2;
 }

@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using FluentAvalonia.UI.Controls;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Controls;
@@ -46,7 +46,12 @@ public abstract class CompatibilityRatingSelectionDialog
 
         StackPanel content = new StackPanel
         {
-            Children = { gameCheckBox, mousehookCheckBox, netplayCheckBox }
+            Children =
+            {
+                gameCheckBox,
+                mousehookCheckBox,
+                netplayCheckBox
+            }
         };
 
         FAContentDialog dialog = new FAContentDialog

@@ -8,7 +8,7 @@ public partial class XeniaSettingsPage : UserControl
 {
     // Variables
     private XeniaSettingsPageViewModel _viewModel { get; set; }
-    
+
     // Constructor
     public XeniaSettingsPage()
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
@@ -30,7 +30,10 @@ public abstract class DiscSelectionDialog
             Title = game.Title,
             Header = LocalizationHelper.GetText("DiscSelectionDialog.Header"),
             SubHeader = LocalizationHelper.GetText("DiscSelectionDialog.SubHeader"),
-            IconSource = new SymbolIconSource { Symbol = Symbol.Games },
+            IconSource = new SymbolIconSource
+            {
+                Symbol = Symbol.Games
+            },
             XamlRoot = App.MainWindow
         };
 
@@ -59,7 +62,10 @@ public abstract class DiscSelectionDialog
             FATaskDialogCommand discCommand = new FATaskDialogCommand
             {
                 Text = label,
-                IconSource = new SymbolIconSource { Symbol = Symbol.Games },
+                IconSource = new SymbolIconSource
+                {
+                    Symbol = Symbol.Games
+                },
                 ClosesOnInvoked = false,
                 IsEnabled = isValid
             };

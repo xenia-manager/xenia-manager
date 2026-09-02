@@ -1,6 +1,6 @@
 using System.IO;
 using System.Security.Principal;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 
 namespace XeniaManager.Core.Utilities;
 

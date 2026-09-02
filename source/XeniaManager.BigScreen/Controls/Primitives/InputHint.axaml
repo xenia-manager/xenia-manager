@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Class="XeniaManager.BigScreen.Controls.Primitives.InputHint"
+             x:Name="Root">
+    <StackPanel Orientation="Horizontal"
+                Spacing="14"
+                VerticalAlignment="Center">
+        <Border x:Name="KeyBox"
+                CornerRadius="16"
+                MinHeight="32"
+                MinWidth="32"
+                Background="Transparent"
+                BorderThickness="2"
+                BoxShadow="{DynamicResource CardShadowSoft}">
+            <Grid>
+                <fluent:SymbolIcon x:Name="IconElement"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="18" />
+                <TextBlock x:Name="CharElement"
+                           Text="{Binding #Root.Char}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontFamily="Cascadia Mono"
+                           FontSize="15"
+                           FontWeight="SemiBold" />
+            </Grid>
+        </Border>
+        <TextBlock Text="{Binding #Root.Text}"
+                   VerticalAlignment="Center"
+                   FontSize="20"
+                   Foreground="{DynamicResource TextPrimary}" />
+    </StackPanel>
+</UserControl>

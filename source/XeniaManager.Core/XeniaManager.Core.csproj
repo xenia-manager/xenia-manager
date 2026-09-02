@@ -4,7 +4,9 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>4.3.2</AssemblyVersion>
+        <!-- Required for GamepadInputService.cs, which uses SDL3 native pointers (SDL_Gamepad*)
+             via ppy.SDL3-CS for gamepad input support -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,20 +14,25 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="12.1.0" />
-      <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
-      <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
-      <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.0" />
+      <PackageReference Include="Avalonia" Version="12.1.1" />
+      <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
+      <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
+      <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
       <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-      <PackageReference Include="FluentAvaloniaUI" Version="3.0.2" />
-      <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.333" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
-      <PackageReference Include="NLog" Version="6.1.4" />
-      <PackageReference Include="SharpCompress" Version="0.50.0" />
-      <PackageReference Include="System.IO.Hashing" Version="10.0.10" />
-      <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
-      <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
+      <PackageReference Include="FluentAvaloniaUI" Version="3.1.0" />
+      <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.337" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
+      <PackageReference Include="NLog" Version="6.2.0" />
+      <PackageReference Include="ppy.SDL3-CS" Version="2026.722.0" />
+      <PackageReference Include="System.IO.Hashing" Version="10.0.11" />
+      <PackageReference Include="Tmds.DBus.Protocol" Version="0.95.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\XeniaManager.Database\XeniaManager.Database.csproj" />
+      <ProjectReference Include="..\XeniaManager.Files\XeniaManager.Files.csproj" />
+      <ProjectReference Include="..\XeniaManager.Logging\XeniaManager.Logging.csproj" />
     </ItemGroup>
 
     <ItemGroup>

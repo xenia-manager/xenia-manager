@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using XeniaManager.Core.Extensions;
-using XeniaManager.Core.Files;
-using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Files.Extensions;
+using XeniaManager.Files;
+using XeniaManager.Logging;
+using XeniaManager.Files.Models.Bindings;
 using XeniaManager.Core.Models.InputListener;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -67,7 +67,13 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
     /// <summary>
     /// Gets the text showing the count of entries.
     /// </summary>
-    public string EntriesCountText => $"{BindingsEntries.Count} entries";
+    public string EntriesCountText
+    {
+        get
+        {
+            return $"{BindingsEntries.Count} entries";
+        }
+    }
 
     /// <summary>
     /// Gets the list of available virtual key codes for the key combobox.
@@ -276,7 +282,7 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
         _multibindTargetEntry = entry;
 
         MultibindOptions.Clear();
-        HashSet<string> checkedItems = (entry.Value)
+        HashSet<string> checkedItems = entry.Value
             .Split(['+'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Select(s => s.Trim())
             .ToHashSet(StringComparer.OrdinalIgnoreCase);

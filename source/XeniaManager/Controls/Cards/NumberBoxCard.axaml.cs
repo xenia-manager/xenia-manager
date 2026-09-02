@@ -17,7 +17,7 @@ public class NumberBoxCard : ContentControl
 
     public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<NumberBoxCard, bool>(
         nameof(ShowIconBackground),
-        defaultValue: false);
+        false);
 
     public static readonly StyledProperty<double> MinimumProperty = AvaloniaProperty.Register<NumberBoxCard, double>(nameof(Minimum), double.MinValue);
 
@@ -33,55 +33,109 @@ public class NumberBoxCard : ContentControl
 
     public string? Title
     {
-        get => GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+        get
+        {
+            return GetValue(TitleProperty);
+        }
+        set
+        {
+            SetValue(TitleProperty, value);
+        }
     }
 
     public string? Description
     {
-        get => GetValue(DescriptionProperty);
-        set => SetValue(DescriptionProperty, value);
+        get
+        {
+            return GetValue(DescriptionProperty);
+        }
+        set
+        {
+            SetValue(DescriptionProperty, value);
+        }
     }
 
     public string? Tooltip
     {
-        get => GetValue(TooltipProperty);
-        set => SetValue(TooltipProperty, value);
+        get
+        {
+            return GetValue(TooltipProperty);
+        }
+        set
+        {
+            SetValue(TooltipProperty, value);
+        }
     }
 
     public Symbol? Icon
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get
+        {
+            return GetValue(IconProperty);
+        }
+        set
+        {
+            SetValue(IconProperty, value);
+        }
     }
 
     public double Minimum
     {
-        get => GetValue(MinimumProperty);
-        set => SetValue(MinimumProperty, value);
+        get
+        {
+            return GetValue(MinimumProperty);
+        }
+        set
+        {
+            SetValue(MinimumProperty, value);
+        }
     }
 
     public double? Maximum
     {
-        get => GetValue(MaximumProperty);
-        set => SetValue(MaximumProperty, value);
+        get
+        {
+            return GetValue(MaximumProperty);
+        }
+        set
+        {
+            SetValue(MaximumProperty, value);
+        }
     }
 
     public double Value
     {
-        get => GetValue(ValueProperty);
-        set => SetValue(ValueProperty, value);
+        get
+        {
+            return GetValue(ValueProperty);
+        }
+        set
+        {
+            SetValue(ValueProperty, value);
+        }
     }
 
     public double NumberBoxMaxWidth
     {
-        get => GetValue(NumberBoxMaxWidthProperty);
-        set => SetValue(NumberBoxMaxWidthProperty, value);
+        get
+        {
+            return GetValue(NumberBoxMaxWidthProperty);
+        }
+        set
+        {
+            SetValue(NumberBoxMaxWidthProperty, value);
+        }
     }
 
     public bool ShowIconBackground
     {
-        get => GetValue(ShowIconBackgroundProperty);
-        set => SetValue(ShowIconBackgroundProperty, value);
+        get
+        {
+            return GetValue(ShowIconBackgroundProperty);
+        }
+        set
+        {
+            SetValue(ShowIconBackgroundProperty, value);
+        }
     }
 }

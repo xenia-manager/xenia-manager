@@ -1,6 +1,6 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
-using XeniaManager.Core.Models.Files.Config;
+using XeniaManager.Files.Models.Config;
 
 namespace XeniaManager.Core.Converters;
 
@@ -32,8 +32,5 @@ public class ConfigControlTypeToVisibilityConverter : IValueConverter
         return false;
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotSupportedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }

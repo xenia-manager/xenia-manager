@@ -10,16 +10,17 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
+using XeniaManager.Files;
 using XeniaManager.Core.Installation;
-using XeniaManager.Core.Logging;
+using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Files.Models.Account;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Utilities;
 using XeniaManager.Services;
 
 namespace XeniaManager.ViewModels.Pages;
@@ -66,6 +67,7 @@ public partial class ManagePageViewModel : ViewModelBase
     // Emulator Settings
     [ObservableProperty] private bool isXeniaInstalled;
     [ObservableProperty] private bool automaticSaveBackup;
+
     partial void OnAutomaticSaveBackupChanged(bool value)
     {
         // If enabling AutomaticSaveBackup, try to select a profile automatically
@@ -105,6 +107,7 @@ public partial class ManagePageViewModel : ViewModelBase
     // Profiles
     [ObservableProperty] private ObservableCollection<ProfileDisplayInfo> profiles = [];
     [ObservableProperty] private ProfileDisplayInfo? selectedProfile;
+
     partial void OnSelectedProfileChanged(ProfileDisplayInfo? value)
     {
         if (value != null)
@@ -118,7 +121,13 @@ public partial class ManagePageViewModel : ViewModelBase
     [ObservableProperty] private bool isAdministrator;
     [ObservableProperty] private bool isNtfsDrive;
 
-    public bool IsUnifiedContentFolderEnabled => IsAdministrator && IsNtfsDrive;
+    public bool IsUnifiedContentFolderEnabled
+    {
+        get
+        {
+            return IsAdministrator && IsNtfsDrive;
+        }
+    }
 
     partial void OnUseNetplayNightlyChanged(bool value)
     {
@@ -126,9 +135,12 @@ public partial class ManagePageViewModel : ViewModelBase
         {
             _settings.Settings.Emulator.Netplay.UseNightlyBuild = value;
             _settings.Settings.Emulator.Netplay.UpdateAvailable = false;
-            NetplayVersion = _settings.Settings.Emulator.Netplay.UseNightlyBuild ? _settings.Settings.Emulator.Netplay.NightlyVersion : _settings.Settings.Emulator.Netplay.Version;
+            NetplayVersion = _settings.Settings.Emulator.Netplay.UseNightlyBuild
+                ? _settings.Settings.Emulator.Netplay.NightlyVersion
+                : _settings.Settings.Emulator.Netplay.Version;
             _settings.SaveSettings();
         }
+
         NetplayUpdate = _settings.Settings.Emulator.Netplay?.UpdateAvailable ?? false;
         NetplayCheckForUpdates = NetplayInstalled && !NetplayUpdate;
     }
@@ -158,7 +170,9 @@ public partial class ManagePageViewModel : ViewModelBase
         CanaryInstalled = _settings.Settings.Emulator.Canary != null;
         if (_settings.Settings.Emulator.Canary != null)
         {
-            CanaryVersion = CanaryInstalled ? _settings.Settings.Emulator.Canary.Version : LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
+            CanaryVersion = CanaryInstalled
+                ? _settings.Settings.Emulator.Canary.Version
+                : LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
             Logger.Info<ManagePageViewModel>($"Xenia Canary is installed ({_settings.Settings.Emulator.Canary.Version})");
         }
         else
@@ -166,6 +180,7 @@ public partial class ManagePageViewModel : ViewModelBase
             CanaryVersion = LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
             Logger.Info<ManagePageViewModel>("Xenia Canary is not installed");
         }
+
         CanaryInstall = !CanaryInstalled;
         CanaryUpdate = _settings.Settings.Emulator.Canary is { UpdateAvailable: true };
         CanaryUninstall = CanaryInstalled;
@@ -187,6 +202,7 @@ public partial class ManagePageViewModel : ViewModelBase
             NetplayNightlyVersion = LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
             Logger.Info<ManagePageViewModel>("Xenia Netplay is not installed");
         }
+
         NetplayInstall = !NetplayInstalled;
         NetplayUpdate = _settings.Settings.Emulator.Netplay is { UpdateAvailable: true };
         NetplayUninstall = NetplayInstalled;
@@ -205,6 +221,7 @@ public partial class ManagePageViewModel : ViewModelBase
             MousehookVersion = LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
             Logger.Info<ManagePageViewModel>("Xenia Mousehook is not installed");
         }
+
         MousehookInstall = !MousehookInstalled;
         MousehookUpdate = _settings.Settings.Emulator.Mousehook is { UpdateAvailable: true };
         MousehookUninstall = MousehookInstalled;
@@ -257,6 +274,7 @@ public partial class ManagePageViewModel : ViewModelBase
                         Logger.Debug<ManagePageViewModel>($"Skipping content folder ({account.PathXuid}, {account.Xuid})");
                         continue;
                     }
+
                     // Skip if we've already seen this XUID
                     string xuidKey = account.PathXuid.ToString() ?? account.Xuid.ToString();
                     if (seenXuids.Contains(xuidKey))
@@ -336,11 +354,11 @@ public partial class ManagePageViewModel : ViewModelBase
             try
             {
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Move the file to the emulator directory
-                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
-                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Canary.EmulatorDir), "gamecontrollerdb.txt"));
+                File.Move(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName),
+                    AppPathResolver.GetFullPath(XeniaPaths.Canary.GameControllerDatabaseLocation));
             }
             catch (Exception)
             {
@@ -363,7 +381,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             IsDownloading = false;
             EventManager.Instance.EnableWindow();
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Canary"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Canary"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Message"), "Canary", ex));
         }
         finally
@@ -427,7 +446,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             IsDownloading = false;
             EventManager.Instance.EnableWindow();
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Canary"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Canary"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Message"), "Canary", ex));
         }
         finally
@@ -455,7 +475,7 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Check for updates with forced cache refresh
             (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Canary,
-                ReleaseType.XeniaCanary, forceRefresh: true);
+                ReleaseType.XeniaCanary, true);
 
             if (isUpdateAvailable)
             {
@@ -500,7 +520,8 @@ public partial class ManagePageViewModel : ViewModelBase
         try
         {
             Logger.Debug<ManagePageViewModel>("Showing uninstall confirmation dialog to user");
-            bool result = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
+            bool result = await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message"), "Canary"));
             if (!result)
             {
@@ -538,7 +559,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             EventManager.Instance.EnableWindow();
             completedUninstallation = false;
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Canary"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Canary"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Canary", ex));
         }
         finally
@@ -596,11 +618,11 @@ public partial class ManagePageViewModel : ViewModelBase
             try
             {
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Move the file to the emulator directory
-                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
-                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Netplay.EmulatorDir), "gamecontrollerdb.txt"));
+                File.Move(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName),
+                    AppPathResolver.GetFullPath(XeniaPaths.Netplay.GameControllerDatabaseLocation));
             }
             catch (Exception)
             {
@@ -637,7 +659,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             IsDownloading = false;
             EventManager.Instance.EnableWindow();
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Netplay"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Netplay"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Message"), "Netplay", ex));
         }
         finally
@@ -713,7 +736,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             IsDownloading = false;
             EventManager.Instance.EnableWindow();
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Netplay"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Netplay"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Message"), "Netplay", ex));
         }
         finally
@@ -742,7 +766,7 @@ public partial class ManagePageViewModel : ViewModelBase
             // Check for updates with forced cache refresh - use nightly if toggle is on, otherwise stable
             ReleaseType releaseType = UseNetplayNightly ? ReleaseType.NetplayNightly : ReleaseType.NetplayStable;
             (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Netplay,
-                releaseType, forceRefresh: true);
+                releaseType, true);
 
             if (isUpdateAvailable)
             {
@@ -787,7 +811,8 @@ public partial class ManagePageViewModel : ViewModelBase
         try
         {
             Logger.Debug<ManagePageViewModel>("Showing uninstall confirmation dialog to user");
-            bool result = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
+            bool result = await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message"), "Netplay"));
             if (!result)
             {
@@ -825,7 +850,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             EventManager.Instance.EnableWindow();
             completedUninstallation = false;
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Netplay"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Netplay"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Netplay", ex));
         }
         finally
@@ -883,11 +909,11 @@ public partial class ManagePageViewModel : ViewModelBase
             try
             {
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Move the file to the emulator directory
-                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
-                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Mousehook.EmulatorDir), "gamecontrollerdb.txt"));
+                File.Move(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName),
+                    AppPathResolver.GetFullPath(XeniaPaths.Mousehook.GameControllerDatabaseLocation));
             }
             catch (Exception)
             {
@@ -913,7 +939,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             IsDownloading = false;
             EventManager.Instance.EnableWindow();
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Mousehook"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Mousehook"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Message"), "Mousehook", ex));
         }
         finally
@@ -979,7 +1006,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             IsDownloading = false;
             EventManager.Instance.EnableWindow();
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Mousehook"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Mousehook"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Message"), "Mousehook", ex));
         }
         finally
@@ -1008,7 +1036,7 @@ public partial class ManagePageViewModel : ViewModelBase
             // Check for updates with forced cache refresh - use nightly if toggle is on, otherwise stable
             ReleaseType releaseType = ReleaseType.MousehookStandard;
             (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Mousehook,
-                releaseType, forceRefresh: true);
+                releaseType, true);
 
             if (isUpdateAvailable)
             {
@@ -1053,7 +1081,8 @@ public partial class ManagePageViewModel : ViewModelBase
         try
         {
             Logger.Debug<ManagePageViewModel>("Showing uninstall confirmation dialog to user");
-            bool result = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
+            bool result = await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message"), "Mousehook"));
             if (!result)
             {
@@ -1091,7 +1120,8 @@ public partial class ManagePageViewModel : ViewModelBase
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
             EventManager.Instance.EnableWindow();
             completedUninstallation = false;
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Mousehook"),
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Mousehook"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Mousehook", ex));
         }
         finally
@@ -1332,6 +1362,7 @@ public partial class ManagePageViewModel : ViewModelBase
                     UnifiedContentFolder = false;
                     return;
                 }
+
                 try
                 {
                     if (installedVersions.Count > 0)
@@ -1373,7 +1404,8 @@ public partial class ManagePageViewModel : ViewModelBase
                     Logger.LogExceptionDetails<ManagePageViewModel>(ex);
                     await _messageBoxService.ShowErrorAsync(
                         LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Title"),
-                        string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Message"), "unify", ex.Message));
+                        string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Message"), "unify",
+                            ex.Message));
                 }
             }
             else
@@ -1537,6 +1569,7 @@ public partial class ManagePageViewModel : ViewModelBase
                 default:
                     throw new ArgumentOutOfRangeException(nameof(version), version, null);
             }
+
             await _settings.SaveSettingsAsync();
 
             IsDownloading = false;
@@ -1806,17 +1839,16 @@ public partial class ManagePageViewModel : ViewModelBase
 
                 // Download the SDL database
                 DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
-                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, XeniaPaths.GameControllerDatabaseName);
 
                 // Get all installed Xenia versions and update their gamecontrollerdb.txt
                 List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
                 foreach (XeniaVersion version in installedVersions)
                 {
-                    string emulatorDir = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).EmulatorDir);
-                    string destinationPath = Path.Combine(emulatorDir, "gamecontrollerdb.txt");
+                    string destinationPath = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).GameControllerDatabaseLocation);
 
                     // Move the file to the emulator directory
-                    File.Copy(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"), destinationPath, true);
+                    File.Copy(Path.Combine(downloadManager.DownloadPath, XeniaPaths.GameControllerDatabaseName), destinationPath, true);
                     Logger.Info<ManagePageViewModel>($"Updated SDL database for Xenia {version}: {destinationPath}");
                 }
 

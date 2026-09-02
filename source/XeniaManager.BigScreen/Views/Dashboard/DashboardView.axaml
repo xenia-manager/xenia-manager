@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Dashboard"
+             xmlns:const="using:XeniaManager.BigScreen.Constants"
+             xmlns:panels="using:XeniaManager.BigScreen.Controls.Panels"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Views.Dashboard.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+    <Grid RowDefinitions="*, Auto, Auto"
+          Margin="{x:Static const:LayoutConstants.DashboardContentMargin}"
+          RowSpacing="{x:Static const:LayoutConstants.DashboardRowSpacing}"
+          HorizontalAlignment="Center">
+
+        <Grid Grid.Row="1"
+              VerticalAlignment="Bottom">
+
+            <Border IsVisible="{Binding ShowEmptyStub}"
+                    CornerRadius="8"
+                    Height="{x:Static const:LayoutConstants.DashboardCardWidth}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Width="{x:Static const:LayoutConstants.DashboardCardWidth}"
+                    Classes="empty-state">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Spacing="10">
+                    <fluent:SymbolIcon Symbol="PlayCircle"
+                                       FontSize="52" />
+                    <TextBlock Text="{DynamicResource Dashboard.NoGamesFound}"
+                               FontSize="14" />
+                </StackPanel>
+            </Border>
+
+            <ItemsControl x:Name="GamesRow"
+                          ItemsSource="{Binding RecentGames}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <panels:XboxGamesRowPanel FocusedIndex="{Binding FocusedIndex}"
+                                                  FocusAmount="{Binding FocusAmount}"
+                                                  FocusedWidth="{x:Static const:LayoutConstants.DashboardCardSelectedWidth}"
+                                                  UnfocusedWidth="{x:Static const:LayoutConstants.DashboardCardRowUnfocusedWidth}"
+                                                  FocusedHeight="{x:Static const:LayoutConstants.DashboardCardBoxArtSelectedHeight}"
+                                                  UnfocusedHeight="{x:Static const:LayoutConstants.DashboardCardRowUnfocusedBoxArtHeight}"
+                                                  FocusedGap="{x:Static const:LayoutConstants.DashboardCardSpacing}"
+                                                  UnfocusedGap="{x:Static const:LayoutConstants.DashboardCardRowUnfocusedGap}"
+                                                  VerticalAlignment="Bottom" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+
+        <ItemsControl x:Name="OptionsRow"
+                      Grid.Row="2"
+                      ItemsSource="{Binding Options}"
+                      VerticalAlignment="Bottom">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="{x:Static const:LayoutConstants.DashboardOptionSpacing}"
+                                VerticalAlignment="Bottom" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+    </Grid>
+</UserControl>
