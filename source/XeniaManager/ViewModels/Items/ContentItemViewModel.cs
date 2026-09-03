@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Files;
 using XeniaManager.Files.Models.Stfs;
 
@@ -23,6 +24,11 @@ public partial class ContentItemViewModel : ObservableObject
     /// The type of content (DLC, Update, Save, etc.).
     /// </summary>
     [ObservableProperty] private string _contentType = string.Empty;
+
+    /// <summary>
+    /// The package size and version details shown below the content type (e.g. "12.4 MB • v2").
+    /// </summary>
+    [ObservableProperty] private string _sizeDetails = string.Empty;
 
     /// <summary>
     /// The full path to the STFS file.
@@ -112,6 +118,8 @@ public partial class ContentItemViewModel : ObservableObject
         }
 
         ContentType = $"{stfsFile.Metadata.ContentType.ToDisplayString()} ({stfsFile.Metadata.ContentType.ToHexString()})";
+        SizeDetails = BuildSizeDetails(stfsFile) ?? string.Empty;
+
         FilePath = stfsFile.PackagePath ?? string.Empty;
 
         // Load thumbnail images
@@ -140,6 +148,35 @@ public partial class ContentItemViewModel : ObservableObject
                 TitleThumbnailImage = null;
             }
         }
+    }
+
+    /// <summary>
+    /// Builds the size and version details for a package (e.g. "12.4 MB • v2"),
+    /// or null when neither can be determined.
+    /// </summary>
+    /// <param name="stfsFile">The STFS file to describe.</param>
+    private static string? BuildSizeDetails(StfsFile stfsFile)
+    {
+        string? sizeText = null;
+        try
+        {
+            string? path = stfsFile.PackagePath;
+            if (!string.IsNullOrEmpty(path) && File.Exists(path))
+            {
+                sizeText = FileSizeFormatter.FormatBytes(new FileInfo(path).Length);
+            }
+        }
+        catch (Exception)
+        {
+            sizeText = null;
+        }
+
+        if (stfsFile.Metadata.Version != 0)
+        {
+            return sizeText != null ? $"{sizeText} • v{stfsFile.Metadata.Version}" : $"v{stfsFile.Metadata.Version}";
+        }
+
+        return sizeText;
     }
 
     /// <summary>

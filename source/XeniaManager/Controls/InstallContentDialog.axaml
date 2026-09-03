@@ -94,6 +94,15 @@
                                     <TextBlock Text="{Binding ContentType}"
                                                FontSize="11"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    <!-- Size and version (below type) -->
+                                    <TextBlock Text="{Binding SizeDetails}"
+                                               FontSize="11"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                        <TextBlock.IsVisible>
+                                            <Binding Path="SizeDetails"
+                                                     Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                                        </TextBlock.IsVisible>
+                                    </TextBlock>
                                     <!-- Progress bar (shown during installation) -->
                                     <ProgressBar Value="{Binding InstallationProgress}"
                                                  Minimum="0"
