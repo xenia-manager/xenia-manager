@@ -826,10 +826,6 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Yüklü İçerik</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Kapat</sys:String>
-    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.Achievements.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Gizli Özellik Açıldı!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Başarım düzenleme özellikleri etkinleştirildi.&#10;&#10;Dikkatli kullanın - başarımları değiştirmek profilinizi etkileyebilir.</sys:String>
 

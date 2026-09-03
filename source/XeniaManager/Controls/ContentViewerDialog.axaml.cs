@@ -38,8 +38,7 @@ public partial class ContentViewerDialog : UserControl
     /// <param name="accountContents">List of all account contents (including GameContent).</param>
     /// <param name="game">Game whose content we're showing</param>
     /// <param name="initialType">Content type to display. When null, the content type selector stays visible.</param>
-    /// <param name="title">Dialog title. When null, the generic installed content title is used.</param>
-    public static async void Show(List<AccountContent> accountContents, Game game, ContentType? initialType = null, string? title = null)
+    public static async void Show(List<AccountContent> accountContents, Game game, ContentType? initialType = null)
     {
         ContentViewerDialog dialog = new ContentViewerDialog();
 
@@ -55,7 +54,9 @@ public partial class ContentViewerDialog : UserControl
 
         FAContentDialog contentDialog = new FAContentDialog
         {
-            Title = title ?? LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.Title"),
+            Title = !string.IsNullOrEmpty(game.Title)
+                ? game.Title
+                : LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.Title"),
             Content = dialog,
             CloseButtonText = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.CloseButton.Text"),
             FullSizeDesired = true,
@@ -89,23 +90,23 @@ public partial class ContentViewerDialog : UserControl
     /// Shows the saved games dialog, locked to the <see cref="ContentType.SavedGame"/> content type.
     /// </summary>
     public static void ShowSavedGames(List<AccountContent> accountContents, Game game) =>
-        Show(accountContents, game, ContentType.SavedGame, LocalizationHelper.GetText("ContentViewerDialog.SavedGames.Title"));
+        Show(accountContents, game, ContentType.SavedGame);
 
     /// <summary>
     /// Shows the achievements dialog, locked to the <see cref="ContentType.Achievements"/> content type.
     /// </summary>
     public static void ShowAchievements(List<AccountContent> accountContents, Game game) =>
-        Show(accountContents, game, ContentType.Achievements, LocalizationHelper.GetText("ContentViewerDialog.Achievements.Title"));
+        Show(accountContents, game, ContentType.Achievements);
 
     /// <summary>
     /// Shows the title updates dialog, locked to the <see cref="ContentType.TitleUpdates"/> content type.
     /// </summary>
     public static void ShowTitleUpdates(List<AccountContent> accountContents, Game game) =>
-        Show(accountContents, game, ContentType.TitleUpdates, LocalizationHelper.GetText("ContentViewerDialog.TitleUpdates.Title"));
+        Show(accountContents, game, ContentType.TitleUpdates);
 
     /// <summary>
     /// Shows the marketplace content dialog, locked to the <see cref="ContentType.MarketplaceContent"/> content type.
     /// </summary>
     public static void ShowMarketplaceContent(List<AccountContent> accountContents, Game game) =>
-        Show(accountContents, game, ContentType.MarketplaceContent, LocalizationHelper.GetText("ContentViewerDialog.MarketplaceContent.Title"));
+        Show(accountContents, game, ContentType.MarketplaceContent);
 }
