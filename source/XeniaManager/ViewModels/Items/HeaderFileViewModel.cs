@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Files.Models.Stfs;
@@ -106,27 +107,13 @@ public partial class HeaderFileViewModel : ViewModelBase
             return null;
         }
 
-        string details = FormatBytes(size);
+        string details = FileSizeFormatter.FormatBytes(size);
         if (Header.HasVersion && Header.Version != 0)
         {
             details += $" • v{Header.Version}";
         }
 
         return details;
-    }
-
-    private static string FormatBytes(long bytes)
-    {
-        const long kb = 1024;
-        const long mb = 1024 * 1024;
-        const long gb = 1024L * 1024 * 1024;
-        return bytes switch
-        {
-            >= gb => $"{bytes / (double)gb:F1} GB",
-            >= mb => $"{bytes / (double)mb:F1} MB",
-            >= kb => $"{bytes / (double)kb:F1} KB",
-            _ => $"{bytes} B"
-        };
     }
 
     /// <summary>
