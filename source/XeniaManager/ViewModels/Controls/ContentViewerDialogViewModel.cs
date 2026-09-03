@@ -1084,9 +1084,6 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             SelectedContentType = ContentTypes[0];
         }
-
-        // Initialize secret code listener for Konami code detection
-        InitializeSecretCodeListener();
     }
 
     /// <summary>
@@ -1186,6 +1183,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
         if (SelectedContentType == null)
         {
+            DisposeSecretCodeListener();
             return;
         }
 
@@ -1201,10 +1199,15 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
         if (contentType == ContentType.Achievements)
         {
+            // The secret code listener is only active while achievements are shown
+            InitializeSecretCodeListener();
+
             // Load achievements from GPD file
             LoadAchievements();
             return;
         }
+
+        DisposeSecretCodeListener();
 
         // Get header files based on the content type
         List<HeaderFile> headers = contentType switch
@@ -1334,13 +1337,18 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
     /// <summary>
     /// Initializes the secret code listener for Konami code detection.
-    /// The listener will continue listening until the dialog is closed.
+    /// Only active while the Achievements content type is shown; stopped when switching away or closing the dialog.
     /// </summary>
     private void InitializeSecretCodeListener()
     {
         if (_secretCodeListener != null)
         {
             Logger.Debug<ContentViewerDialogViewModel>("Secret code listener already initialized");
+            return;
+        }
+
+        if (AreAchievementFeaturesEnabled)
+        {
             return;
         }
 
@@ -1363,7 +1371,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
     /// <summary>
     /// Disposes the secret code listener and stops the input listener.
-    /// Called when the dialog is closed or after the Konami code is entered.
+    /// Called when the dialog is closed, when switching away from achievements, or after the Konami code is entered.
     /// </summary>
     public void DisposeSecretCodeListener()
     {
