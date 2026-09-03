@@ -527,11 +527,32 @@
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="ContentView" />
                                         </MenuItem.Icon>
-                                        <!-- View Installed Content -->
-                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.InstalledContent.Header}"
-                                                  Command="{Binding ViewInstalledContentCommand}">
+                                        <!-- Saved Games -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.SavedGames.Header}"
+                                                  Command="{Binding ViewSavedGamesCommand}">
                                             <MenuItem.Icon>
-                                                <icons:SymbolIcon Symbol="ContentView" />
+                                                <icons:SymbolIcon Symbol="Save" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Achievements -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Achievements.Header}"
+                                                  Command="{Binding ViewAchievementsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Trophy" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Title Updates -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.TitleUpdates.Header}"
+                                                  Command="{Binding ViewTitleUpdatesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ArrowSyncCircle" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Marketplace Content -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.MarketplaceContent.Header}"
+                                                  Command="{Binding ViewMarketplaceContentCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="StoreMicrosoft" />
                                             </MenuItem.Icon>
                                         </MenuItem>
                                         <!-- Screenshots -->
@@ -868,11 +889,32 @@
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="ContentView" />
                                         </MenuItem.Icon>
-                                        <!-- View Installed Content -->
-                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.InstalledContent.Header}"
-                                                  Command="{Binding ViewInstalledContentCommand}">
+                                        <!-- Saved Games -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.SavedGames.Header}"
+                                                  Command="{Binding ViewSavedGamesCommand}">
                                             <MenuItem.Icon>
-                                                <icons:SymbolIcon Symbol="ContentView" />
+                                                <icons:SymbolIcon Symbol="Save" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Achievements -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Achievements.Header}"
+                                                  Command="{Binding ViewAchievementsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Trophy" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Title Updates -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.TitleUpdates.Header}"
+                                                  Command="{Binding ViewTitleUpdatesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ArrowSyncCircle" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Marketplace Content -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.MarketplaceContent.Header}"
+                                                  Command="{Binding ViewMarketplaceContentCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="StoreMicrosoft" />
                                             </MenuItem.Icon>
                                         </MenuItem>
                                         <!-- Screenshots -->

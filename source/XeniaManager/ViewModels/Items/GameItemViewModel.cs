@@ -228,24 +228,42 @@ public partial class GameItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task ViewInstalledContent()
+    private async Task ViewSavedGames() => await ViewContentAsync(ContentViewerDialog.ShowSavedGames);
+
+    [RelayCommand]
+    private async Task ViewAchievements() => await ViewContentAsync(ContentViewerDialog.ShowAchievements);
+
+    [RelayCommand]
+    private async Task ViewTitleUpdates() => await ViewContentAsync(ContentViewerDialog.ShowTitleUpdates);
+
+    [RelayCommand]
+    private async Task ViewMarketplaceContent() => await ViewContentAsync(ContentViewerDialog.ShowMarketplaceContent);
+
+    private List<AccountContent> BuildAccountContents()
+    {
+        List<AccountContent> accountContents =
+        [
+            new GameContent(Game.XeniaVersion, Game.GameId) // Game Content (universal content with XUID 0)
+        ];
+
+        // Add account-specific content
+        List<AccountInfo> accountInfos = ProfileManager.LoadProfiles(Game.XeniaVersion);
+        foreach (AccountInfo info in accountInfos)
+        {
+            accountContents.Add(new AccountContent(info, Game.XeniaVersion, Game.GameId));
+        }
+
+        return accountContents;
+    }
+
+    private async Task ViewContentAsync(Action<List<AccountContent>, Game> showDialog)
     {
         try
         {
-            List<AccountContent> accountContents =
-            [
-                new GameContent(Game.XeniaVersion, Game.GameId) // Game Content (universal content with XUID 0)
-            ];
-
-            // Add account-specific content
-            List<AccountInfo> accountInfos = ProfileManager.LoadProfiles(Game.XeniaVersion);
-            foreach (AccountInfo info in accountInfos)
-            {
-                accountContents.Add(new AccountContent(info, Game.XeniaVersion, Game.GameId));
-            }
+            List<AccountContent> accountContents = BuildAccountContents();
 
             // Show the installed content dialog
-            ContentViewerDialog.Show(accountContents, Game);
+            showDialog(accountContents, Game);
             Logger.Info<GameItemViewModel>("Opened installed content dialog");
         }
         catch (Exception ex)
