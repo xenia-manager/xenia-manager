@@ -132,6 +132,13 @@
                                                    FontWeight="SemiBold"
                                                    TextWrapping="Wrap"
                                                    TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding SizeDetails}"
+                                                   FontSize="12"
+                                                   IsVisible="{Binding HasSizeDetails}">
+                                            <TextBlock.Foreground>
+                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
                                     </StackPanel>
 
                                     <!-- File path tooltip -->

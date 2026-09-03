@@ -91,6 +91,17 @@ public class HeaderFile
     public bool IsPackageEntry { get; set; }
 
     /// <summary>
+    /// Gets or sets the package version (STFS metadata version field at offset 0x0358, e.g. title update version).
+    /// Only populated for package entries (<see cref="IsPackageEntry"/>); 0 otherwise.
+    /// </summary>
+    public int Version { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether <see cref="Version"/> was read from package metadata.
+    /// </summary>
+    public bool HasVersion { get; set; }
+
+    /// <summary>
     /// Gets or sets the thumbnail image data embedded in the package.
     /// Only populated for package entries (<see cref="IsPackageEntry"/>); empty for extracted content.
     /// </summary>

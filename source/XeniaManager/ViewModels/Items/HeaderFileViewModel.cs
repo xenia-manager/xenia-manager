@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -33,6 +34,99 @@ public partial class HeaderFileViewModel : ViewModelBase
         {
             return ThumbnailImage != null;
         }
+    }
+
+    /// <summary>
+    /// Gets the size details shown under the display name for title updates and marketplace content
+    /// (e.g. "12.4 MB" for folders, "12.4 MB • v2" for packages with a version).
+    /// Empty when the content type has no details or the size cannot be determined.
+    /// </summary>
+    public string SizeDetails
+    {
+        get
+        {
+            if (!_sizeDetailsResolved)
+            {
+                _sizeDetailsResolved = true;
+                _sizeDetails = BuildSizeDetails();
+            }
+
+            return _sizeDetails ?? string.Empty;
+        }
+    }
+
+    private string? _sizeDetails;
+    private bool _sizeDetailsResolved;
+
+    /// <summary>
+    /// Gets whether size details should be shown for this entry.
+    /// Only title updates and marketplace content show details.
+    /// </summary>
+    public bool HasSizeDetails
+    {
+        get
+        {
+            return Header.ContentType is Files.Models.Stfs.ContentType.TitleUpdates or Files.Models.Stfs.ContentType.MarketplaceContent
+                   && !string.IsNullOrEmpty(SizeDetails);
+        }
+    }
+
+    /// <summary>
+    /// Builds the size details string, or null when it cannot be determined.
+    /// Package entries use the package file size; folders use the recursive directory size.
+    /// </summary>
+    private string? BuildSizeDetails()
+    {
+        if (Header.ContentType is not (Files.Models.Stfs.ContentType.TitleUpdates or Files.Models.Stfs.ContentType.MarketplaceContent))
+        {
+            return null;
+        }
+
+        long size;
+        try
+        {
+            string path = FilePath;
+            if (File.Exists(path))
+            {
+                size = new FileInfo(path).Length;
+            }
+            else if (Directory.Exists(path))
+            {
+                size = new DirectoryInfo(path).EnumerateFiles("*", SearchOption.AllDirectories).Sum(file => file.Length);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<HeaderFileViewModel>($"Failed to determine size for '{Header.FileName}'");
+            Logger.LogExceptionDetails<HeaderFileViewModel>(ex);
+            return null;
+        }
+
+        string details = FormatBytes(size);
+        if (Header.HasVersion && Header.Version != 0)
+        {
+            details += $" • v{Header.Version}";
+        }
+
+        return details;
+    }
+
+    private static string FormatBytes(long bytes)
+    {
+        const long kb = 1024;
+        const long mb = 1024 * 1024;
+        const long gb = 1024L * 1024 * 1024;
+        return bytes switch
+        {
+            >= gb => $"{bytes / (double)gb:F1} GB",
+            >= mb => $"{bytes / (double)mb:F1} MB",
+            >= kb => $"{bytes / (double)kb:F1} KB",
+            _ => $"{bytes} B"
+        };
     }
 
     /// <summary>
