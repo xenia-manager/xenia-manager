@@ -401,6 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Contenuti</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Visualizza Contenuti Installati</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Backup Salvataggi</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Apre la cartella contenente tutti i backup dei salvataggi creati da Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Nessun Backup Trovato</sys:String>
@@ -822,6 +826,10 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Contenuti Installati</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Chiudi</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.Achievements.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Funzione Segreta Sbloccata!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Le funzioni di modifica obiettivi sono state abilitate.&#10;&#10;Usa con cautela - modificare gli obiettivi potrebbe influenzare il tuo profilo.</sys:String>
 

@@ -401,6 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Sadržaj</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Pregled instaliranog sadržaja</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">Spremljene igre</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">Postignuća</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">Ažuriranja naslova</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">Marketplace sadržaj</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Sigurnosne kopije</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Otvara mapu sa svim sigurnosnim kopijama spremljenih igara koje je napravio Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Sigurnosne kopije nisu pronađene</sys:String>
@@ -822,6 +826,10 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Instalirani sadržaj</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Zatvori</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">Spremljene igre</sys:String>
+    <sys:String x:Key="ContentViewerDialog.Achievements.Title">Postignuća</sys:String>
+    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">Ažuriranja naslova</sys:String>
+    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">Marketplace sadržaj</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Tajna značajka otključana!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Značajke uređivanja postignuća su omogućene.&#10;&#10;Koristite s oprezom - izmjena postignuća može utjecati na vaš profil.</sys:String>
 

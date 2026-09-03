@@ -401,6 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Игровые данные</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Установленные игровые данные</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Резервные сохранения</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Открытие папки с резервными копиями сохранений, созданные Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Резервные сохранения отсутствуют</sys:String>
@@ -822,6 +826,10 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Установленные игровые данные</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Закрыть</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.Achievements.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Скрытая функция разблокирована!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Редактирование достижений включено.&#10;&#10;Внимание: изменение достижений может повлиять на ваш профиль.</sys:String>
 
