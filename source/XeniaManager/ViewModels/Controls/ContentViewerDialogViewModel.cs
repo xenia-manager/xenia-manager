@@ -102,6 +102,12 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private bool _isAccountSelectorVisible;
 
+    /// <summary>
+    /// Indicates whether the content type selector should be visible.
+    /// False when the dialog was opened locked to a specific content type.
+    /// </summary>
+    [ObservableProperty] private bool _isContentTypeSelectorVisible = true;
+
     partial void OnIsAccountSelectorVisibleChanged(bool value) => OnPropertyChanged(nameof(IsAccountSelectorVisible));
 
     /// <summary>
@@ -1120,6 +1126,29 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
         UpdateAccountVisibility();
         UpdateContentList();
+    }
+
+    /// <summary>
+    /// Initializes the dialog with the provided account contents, locked to a specific content type.
+    /// Hides the content type selector.
+    /// </summary>
+    /// <param name="accountContents">List of all account contents (including GameContent).</param>
+    /// <param name="game">Game whose content we're showing</param>
+    /// <param name="initialType">Content type to display.</param>
+    public void Initialize(List<AccountContent> accountContents, Game game, ContentType initialType)
+    {
+        Initialize(accountContents, game);
+
+        foreach (EnumDisplayItem<ContentType> contentType in ContentTypes)
+        {
+            if (contentType.Value == initialType)
+            {
+                SelectedContentType = contentType;
+                break;
+            }
+        }
+
+        IsContentTypeSelectorVisible = false;
     }
 
     /// <summary>

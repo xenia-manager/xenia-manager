@@ -16,12 +16,20 @@
              Width="550">
 
     <Grid RowDefinitions="Auto,Auto,*,Auto">
-        <!-- Content Type Selector -->
-        <StackPanel Grid.Row="0">
+        <!-- Content Type Selector (hidden when locked to a specific type) -->
+        <StackPanel Grid.Row="0"
+                    IsVisible="{Binding IsContentTypeSelectorVisible}">
             <ComboBox ItemsSource="{Binding ContentTypes}"
                       SelectedItem="{Binding SelectedContentType, Mode=TwoWay}"
                       HorizontalAlignment="Stretch" />
         </StackPanel>
+
+        <!-- Locked Content Type Label -->
+        <TextBlock Grid.Row="0"
+                   Text="{Binding SelectedContentType.DisplayName}"
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Center"
+                   IsVisible="{Binding IsContentTypeSelectorVisible, Converter={StaticResource InverseBoolConverter}}" />
 
         <!-- Account Selector (for SavedGame & Achievements) -->
         <StackPanel Grid.Row="1"
