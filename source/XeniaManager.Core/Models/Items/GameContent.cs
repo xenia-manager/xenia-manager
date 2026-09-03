@@ -235,6 +235,8 @@ public class GameContent : AccountContent
             AccountXuid = new AccountXuid(0), // Universal XUID for installed content
             HeaderSize = HeaderFile.FullHeaderSize,
             IsPackageEntry = true,
+            Version = package.Metadata.Version,
+            HasVersion = true,
             ThumbnailImage = package.Metadata.ThumbnailImage.Length > 0
                 ? package.Metadata.ThumbnailImage
                 : package.Metadata.TitleThumbnailImage
