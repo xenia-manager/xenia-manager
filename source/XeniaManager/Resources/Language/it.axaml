@@ -826,10 +826,6 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Contenuti Installati</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Chiudi</sys:String>
-    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.Achievements.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Funzione Segreta Sbloccata!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Le funzioni di modifica obiettivi sono state abilitate.&#10;&#10;Usa con cautela - modificare gli obiettivi potrebbe influenzare il tuo profilo.</sys:String>
 

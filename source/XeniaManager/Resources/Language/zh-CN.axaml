@@ -826,10 +826,6 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">已安装内容</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">关闭</sys:String>
-    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.Achievements.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">秘密功能已解锁！</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">成就编辑功能已启用。&#10;&#10;请谨慎使用 - 修改成就可能会影响您的配置文件。</sys:String>
 

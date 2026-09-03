@@ -826,10 +826,6 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Installed Content</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Close</sys:String>
-    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">Saved Games</sys:String>
-    <sys:String x:Key="ContentViewerDialog.Achievements.Title">Achievements</sys:String>
-    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">Title Updates</sys:String>
-    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">Marketplace Content</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Secret Feature Unlocked!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Achievement editing features have been enabled.&#10;&#10;Use with caution - modifying achievements may affect your profile.</sys:String>
 
