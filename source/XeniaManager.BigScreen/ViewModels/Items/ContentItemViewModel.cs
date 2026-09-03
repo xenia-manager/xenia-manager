@@ -1,9 +1,11 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Files;
 using XeniaManager.Logging;
 using XeniaManager.Files.Models.Stfs;
@@ -112,6 +114,86 @@ public partial class ContentItemViewModel : ObservableObject, ISelectable
 
             return string.Empty;
         }
+    }
+
+    /// <summary>
+    /// The secondary row text: installation size and package version when known
+    /// (e.g. "12.4 MB • v2").
+    /// </summary>
+    public string SecondaryText
+    {
+        get
+        {
+            return SizeDetails ?? string.Empty;
+        }
+    }
+
+    /// <summary>
+    /// Gets whether installation size details should be shown for this row.
+    /// </summary>
+    public bool HasSizeDetails
+    {
+        get
+        {
+            return SizeDetails != null;
+        }
+    }
+
+    private string? _sizeDetails;
+    private bool _sizeDetailsResolved;
+
+    /// <summary>
+    /// The installation size and package version (e.g. "12.4 MB • v2"),
+    /// or null when the size cannot be determined.
+    /// Package entries use the package file size; folders use the recursive directory size.
+    /// </summary>
+    private string? SizeDetails
+    {
+        get
+        {
+            if (!_sizeDetailsResolved)
+            {
+                _sizeDetailsResolved = true;
+                _sizeDetails = BuildSizeDetails();
+            }
+
+            return _sizeDetails;
+        }
+    }
+
+    private string? BuildSizeDetails()
+    {
+        long size;
+        try
+        {
+            string path = FilePath;
+            if (File.Exists(path))
+            {
+                size = new FileInfo(path).Length;
+            }
+            else if (Directory.Exists(path))
+            {
+                size = new DirectoryInfo(path).EnumerateFiles("*", SearchOption.AllDirectories).Sum(file => file.Length);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<ContentItemViewModel>($"Failed to determine size for '{Header.FileName}'");
+            Logger.LogExceptionDetails<ContentItemViewModel>(ex);
+            return null;
+        }
+
+        string details = FileSizeFormatter.FormatBytes(size);
+        if (Header.HasVersion && Header.Version != 0)
+        {
+            details += $" • v{Header.Version}";
+        }
+
+        return details;
     }
 
     public ContentItemViewModel(HeaderFile header)

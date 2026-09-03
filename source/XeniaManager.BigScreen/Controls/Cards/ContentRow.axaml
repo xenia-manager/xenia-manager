@@ -47,10 +47,11 @@
                        TextTrimming="CharacterEllipsis"
                        FontSize="20"
                        Foreground="{DynamicResource TextPrimary}" />
-            <TextBlock Text="{Binding FileName}"
+            <TextBlock Text="{Binding SecondaryText}"
                        TextTrimming="CharacterEllipsis"
                        FontSize="15"
-                       Foreground="{DynamicResource TextSecondary}" />
+                       Foreground="{DynamicResource TextSecondary}"
+                       IsVisible="{Binding HasSizeDetails}" />
         </StackPanel>
         <fluent:SymbolIcon Grid.Column="2"
                            Symbol="Delete"
