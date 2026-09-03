@@ -6,6 +6,7 @@ using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Files.Models.Stfs;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -36,16 +37,25 @@ public partial class ContentViewerDialog : UserControl
     /// </summary>
     /// <param name="accountContents">List of all account contents (including GameContent).</param>
     /// <param name="game">Game whose content we're showing</param>
-    public static async void Show(List<AccountContent> accountContents, Game game)
+    /// <param name="initialType">Content type to display. When null, the content type selector stays visible.</param>
+    /// <param name="title">Dialog title. When null, the generic installed content title is used.</param>
+    public static async void Show(List<AccountContent> accountContents, Game game, ContentType? initialType = null, string? title = null)
     {
         ContentViewerDialog dialog = new ContentViewerDialog();
 
         // Initialize the ViewModel with the account contents
-        dialog._viewModel.Initialize(accountContents, game);
+        if (initialType.HasValue)
+        {
+            dialog._viewModel.Initialize(accountContents, game, initialType.Value);
+        }
+        else
+        {
+            dialog._viewModel.Initialize(accountContents, game);
+        }
 
         FAContentDialog contentDialog = new FAContentDialog
         {
-            Title = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.Title"),
+            Title = title ?? LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.Title"),
             Content = dialog,
             CloseButtonText = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.CloseButton.Text"),
             FullSizeDesired = true,
@@ -74,4 +84,28 @@ public partial class ContentViewerDialog : UserControl
             dialog._viewModel.DisposeSecretCodeListener();
         }
     }
+
+    /// <summary>
+    /// Shows the saved games dialog, locked to the <see cref="ContentType.SavedGame"/> content type.
+    /// </summary>
+    public static void ShowSavedGames(List<AccountContent> accountContents, Game game) =>
+        Show(accountContents, game, ContentType.SavedGame, LocalizationHelper.GetText("ContentViewerDialog.SavedGames.Title"));
+
+    /// <summary>
+    /// Shows the achievements dialog, locked to the <see cref="ContentType.Achievements"/> content type.
+    /// </summary>
+    public static void ShowAchievements(List<AccountContent> accountContents, Game game) =>
+        Show(accountContents, game, ContentType.Achievements, LocalizationHelper.GetText("ContentViewerDialog.Achievements.Title"));
+
+    /// <summary>
+    /// Shows the title updates dialog, locked to the <see cref="ContentType.TitleUpdates"/> content type.
+    /// </summary>
+    public static void ShowTitleUpdates(List<AccountContent> accountContents, Game game) =>
+        Show(accountContents, game, ContentType.TitleUpdates, LocalizationHelper.GetText("ContentViewerDialog.TitleUpdates.Title"));
+
+    /// <summary>
+    /// Shows the marketplace content dialog, locked to the <see cref="ContentType.MarketplaceContent"/> content type.
+    /// </summary>
+    public static void ShowMarketplaceContent(List<AccountContent> accountContents, Game game) =>
+        Show(accountContents, game, ContentType.MarketplaceContent, LocalizationHelper.GetText("ContentViewerDialog.MarketplaceContent.Title"));
 }
