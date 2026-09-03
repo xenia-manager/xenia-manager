@@ -401,6 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Content</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">View Installed Content</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">Saved Games</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">Achievements</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">Title Updates</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">Marketplace Content</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Save Backups</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Opens the folder containing all of the save backups made by Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">No Save Backups Found</sys:String>
@@ -822,6 +826,10 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Installed Content</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Close</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">Saved Games</sys:String>
+    <sys:String x:Key="ContentViewerDialog.Achievements.Title">Achievements</sys:String>
+    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">Title Updates</sys:String>
+    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">Marketplace Content</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Secret Feature Unlocked!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Achievement editing features have been enabled.&#10;&#10;Use with caution - modifying achievements may affect your profile.</sys:String>
 

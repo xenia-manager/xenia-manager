@@ -401,6 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">İçerik</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Yüklü İçeriği Görüntüle</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Kayıt Yedekleri</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Xenia Manager tarafından oluşturulan tüm kayıt yedeklerinin bulunduğu klasörü açar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Kayıt Yedeği Bulunamadı</sys:String>
@@ -822,6 +826,10 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Yüklü İçerik</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Kapat</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.Achievements.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Gizli Özellik Açıldı!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Başarım düzenleme özellikleri etkinleştirildi.&#10;&#10;Dikkatli kullanın - başarımları değiştirmek profilinizi etkileyebilir.</sys:String>
 

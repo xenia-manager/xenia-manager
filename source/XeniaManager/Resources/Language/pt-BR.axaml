@@ -401,6 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Conteúdo</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Exibir Conteúdo Instalado</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Backups de Salvamento</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Abre a pasta que contém todos Backups de salvamento feitas pelo Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Nenhum Backup de Salvamento Encontrado</sys:String>
@@ -822,6 +826,10 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Conteúdo Instalado</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Fechar</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SavedGames.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.Achievements.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.TitleUpdates.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ContentViewerDialog.MarketplaceContent.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Recurso secreto desbloqueado!</sys:String>
     <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Os recursos de edição de conquistas foram ativados.&#10;&#10;Use com cautela - modificar conquistas pode afetar seu perfil.</sys:String>
 
