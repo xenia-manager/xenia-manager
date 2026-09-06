@@ -260,7 +260,9 @@ public partial class GameItemViewModel : ViewModelBase
     {
         try
         {
+            EventManager.Instance.DisableWindow();
             List<AccountContent> accountContents = await Task.Run(BuildAccountContents);
+            EventManager.Instance.EnableWindow();
 
             // Show the installed content dialog
             showDialog(accountContents, Game);
@@ -360,8 +362,10 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             // Load Patches database (Canary & Netplay)
+            EventManager.Instance.DisableWindow();
             await PatchesDatabase.LoadCanaryAsync();
             await PatchesDatabase.LoadNetplayAsync();
+            EventManager.Instance.EnableWindow();
             Logger.Debug<GameItemViewModel>($"Patches database loaded successfully");
 
             Logger.Debug<GameItemViewModel>($"Opening patch selection dialog for game ID: '{Game.GameId}'");
@@ -618,12 +622,14 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task ConfigurePatches()
     {
+        EventManager.Instance.DisableWindow();
         Logger.Info<GameItemViewModel>($"Initializing patch configuration for: '{Game.Title}'");
 
         // Check if there's a patch file already installed
         if (string.IsNullOrEmpty(Game.FileLocations.Patch))
         {
             Logger.Warning<GameItemViewModel>($"No patch file installed for: '{Game.Title}'");
+            EventManager.Instance.EnableWindow();
             await _messageBoxService.ShowWarningAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Title"),
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Message"));
@@ -638,6 +644,7 @@ public partial class GameItemViewModel : ViewModelBase
 
             PatchFile patchFile = PatchFile.Load(currentPatchPath);
             Logger.Info<GameItemViewModel>($"Loaded patch file: TitleId='{patchFile.TitleId}', Patches={patchFile.Patches.Count}");
+            EventManager.Instance.EnableWindow();
 
             // Show the configuration dialog
             bool saved = await PatchConfigurationDialog.ShowAsync(Game.Title, patchFile, currentPatchPath);
