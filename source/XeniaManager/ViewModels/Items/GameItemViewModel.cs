@@ -260,7 +260,7 @@ public partial class GameItemViewModel : ViewModelBase
     {
         try
         {
-            List<AccountContent> accountContents = BuildAccountContents();
+            List<AccountContent> accountContents = await Task.Run(BuildAccountContents);
 
             // Show the installed content dialog
             showDialog(accountContents, Game);
