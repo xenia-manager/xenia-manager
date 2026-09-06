@@ -26,7 +26,8 @@
         <controls:FANavigationView.MenuItems>
             <!-- Open Xenia -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.OpenXenia}"
-                                           Tag="Open">
+                                           Tag="Open"
+                                           SelectsOnInvoked="False">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Play" />
                 </controls:FANavigationViewItem.IconSource>
@@ -35,6 +36,7 @@
             <!-- Big Screen -->
             <controls:FANavigationViewItem Content="{DynamicResource MainView.Navigation.BigScreen}"
                                            Tag="BigScreen"
+                                           SelectsOnInvoked="False"
                                            ToolTip.Tip="{DynamicResource MainView.Navigation.BigScreen.ToolTip}">
                 <controls:FANavigationViewItem.IconSource>
                     <ic:SymbolIconSource Symbol="Tv" />

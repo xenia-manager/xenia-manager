@@ -209,7 +209,6 @@ public class NavigationService
 
         Logger.Info<NavigationService>($"Starting navigation to tag: {tag}");
 
-        _currentPageTag = tag;
         Settings settings = App.Services.GetRequiredService<Settings>();
         List<XeniaVersion> installedVersions = settings.GetInstalledVersions(settings);
 
@@ -262,11 +261,13 @@ public class NavigationService
                     throw;
                 }
 
-                break;
+                // Action, not a page - don't change selection
+                return;
             case "BigScreen":
                 Logger.Info<NavigationService>("Processing 'BigScreen' tag - attempting to launch BigScreen");
                 await LaunchBigScreen();
-                break;
+                // Action, not a page - don't change selection
+                return;
             case "Library":
                 Logger.Debug<NavigationService>("Navigating to Library page");
                 frame.Navigate(typeof(LibraryPage), null, new FAEntranceNavigationTransitionInfo());
@@ -290,8 +291,10 @@ public class NavigationService
                 break;
             default:
                 Logger.Warning<NavigationService>($"Unknown navigation tag requested: {tag}");
-                break;
+                return;
         }
+
+        _currentPageTag = tag;
 
         // Update the icon if navigating by tag
         if (_navigationView != null)
