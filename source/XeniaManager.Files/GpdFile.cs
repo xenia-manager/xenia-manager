@@ -75,7 +75,8 @@ public class GpdFile : IDisposable
     {
         get
         {
-            return GetEntriesByNamespace<AchievementEntry>(EntryNamespace.Achievement).Where(a => a.IsValid);
+            _achievementsCache ??= GetEntriesByNamespace<AchievementEntry>(EntryNamespace.Achievement).Where(a => a.IsValid).ToList();
+            return _achievementsCache;
         }
     }
 
@@ -97,7 +98,8 @@ public class GpdFile : IDisposable
     {
         get
         {
-            return GetEntriesByNamespace<ImageEntry>(EntryNamespace.Image).Where(i => i.IsValid);
+            _imagesCache ??= GetEntriesByNamespace<ImageEntry>(EntryNamespace.Image).Where(i => i.IsValid).ToList();
+            return _imagesCache;
         }
     }
 
@@ -141,7 +143,8 @@ public class GpdFile : IDisposable
     {
         get
         {
-            return GetEntriesByNamespace<TitleEntry>(EntryNamespace.Title).Where(t => t.IsValid);
+            _titlesCache ??= GetEntriesByNamespace<TitleEntry>(EntryNamespace.Title).Where(t => t.IsValid).ToList();
+            return _titlesCache;
         }
     }
 
@@ -196,6 +199,11 @@ public class GpdFile : IDisposable
     }
 
     private SyncListEntry? _syncList;
+
+    private List<AchievementEntry>? _achievementsCache;
+    private List<ImageEntry>? _imagesCache;
+    private List<TitleEntry>? _titlesCache;
+    private Dictionary<ulong, ImageEntry>? _imageCacheById;
 
     /// <summary>
     /// Gets the sync data entry if it exists.
@@ -433,20 +441,33 @@ public class GpdFile : IDisposable
     /// <returns>The ImageEntry if found and valid, null otherwise.</returns>
     public ImageEntry? GetImage(uint imageId)
     {
-        EntryTableEntry entry = Entries.FirstOrDefault(e =>
-            e.Namespace == EntryNamespace.Image &&
-            e.Id == imageId);
+        _imageCacheById ??= BuildImageCache();
+        return _imageCacheById.GetValueOrDefault(imageId);
+    }
 
-        // Check if the entry is default (not found)
-        if (entry.Namespace == default)
+    private Dictionary<ulong, ImageEntry> BuildImageCache()
+    {
+        Dictionary<ulong, ImageEntry> dict = new Dictionary<ulong, ImageEntry>();
+        foreach (EntryTableEntry entry in Entries)
         {
-            return null;
+            if (entry.Namespace != EntryNamespace.Image)
+            {
+                continue;
+            }
+
+            if (dict.ContainsKey(entry.Id))
+            {
+                continue;
+            }
+
+            ImageEntry? image = ParseEntry<ImageEntry>(entry);
+            if (image is { IsValid: true, IsValidPng: true })
+            {
+                dict[entry.Id] = image;
+            }
         }
 
-        ImageEntry? image = ParseEntry<ImageEntry>(entry);
-
-        // Return null for invalid entries
-        return image is { IsValid: true, IsValidPng: true } ? image : null;
+        return dict;
     }
 
     /// <summary>
@@ -560,6 +581,7 @@ public class GpdFile : IDisposable
 
         // Add to entries
         Entries.Add(entry);
+        InvalidateCaches();
 
         // Update header counts (create a copy since Header is a struct)
         XdbfHeader header = Header;
@@ -600,6 +622,7 @@ public class GpdFile : IDisposable
 
         // Add to entries
         Entries.Add(entry);
+        InvalidateCaches();
 
         // Update header counts (create a copy since Header is a struct)
         XdbfHeader header = Header;
@@ -637,6 +660,7 @@ public class GpdFile : IDisposable
 
         // Add to entries
         Entries.Add(entry);
+        InvalidateCaches();
 
         // Update header counts (create a copy since Header is a struct)
         XdbfHeader header = Header;
@@ -674,6 +698,7 @@ public class GpdFile : IDisposable
 
         // Add to entries
         Entries.Add(entry);
+        InvalidateCaches();
 
         // Update header counts (create a copy since Header is a struct)
         XdbfHeader header = Header;
@@ -705,6 +730,7 @@ public class GpdFile : IDisposable
         }
 
         Entries.Remove(entry);
+        InvalidateCaches();
 
         // Update header counts (create a copy since Header is a struct)
         XdbfHeader header = Header;
@@ -882,6 +908,7 @@ public class GpdFile : IDisposable
     /// </summary>
     private void UpdateAchievementEntry(EntryTableEntry entry, AchievementEntry achievement)
     {
+        InvalidateCaches();
         byte[] newAchievementData = achievement.ToBytes(_isBigEndian);
 
         // Calculate data offset for this entry
@@ -941,6 +968,7 @@ public class GpdFile : IDisposable
             return false;
         }
 
+        InvalidateCaches();
         byte[] newTitleData = title.ToBytes();
 
         // Calculate data offset for this entry
@@ -998,6 +1026,17 @@ public class GpdFile : IDisposable
     }
 
     /// <summary>
+    /// Cleans up the caches
+    /// </summary>
+    private void InvalidateCaches()
+    {
+        _achievementsCache = null;
+        _imagesCache = null;
+        _titlesCache = null;
+        _imageCacheById = null;
+    }
+
+    /// <summary>
     /// Disposes of resources.
     /// </summary>
     public void Dispose()
@@ -1008,6 +1047,7 @@ public class GpdFile : IDisposable
             Data = Array.Empty<byte>();
             Entries.Clear();
             FreeSpaceEntries.Clear();
+            InvalidateCaches();
         }
     }
 }
