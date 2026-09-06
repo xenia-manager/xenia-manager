@@ -37,7 +37,7 @@ public class GameContent : AccountContent
     /// <param name="xeniaVersion">Xenia Version of the content.</param>
     /// <param name="titleId">Game TitleId</param>
     public GameContent(XeniaVersion xeniaVersion, string titleId)
-        : base(CreateTemporaryAccountInfo(), xeniaVersion, titleId)
+        : base(CreateTemporaryAccountInfo(), xeniaVersion, titleId, true)
     {
         LoadInstallerHeader(titleId);
         LoadMarketplaceContentHeader(titleId);

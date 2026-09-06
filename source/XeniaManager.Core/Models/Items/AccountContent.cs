@@ -112,6 +112,11 @@ public class AccountContent
     /// <param name="xeniaVersion">Xenia Version of the account.</param>
     /// <param name="titleId">Game TitleId</param>
     public AccountContent(AccountInfo accountInfo, XeniaVersion xeniaVersion, string titleId)
+        : this(accountInfo, xeniaVersion, titleId, false)
+    {
+    }
+
+    protected AccountContent(AccountInfo accountInfo, XeniaVersion xeniaVersion, string titleId, bool skipLoading)
     {
         AccountInfo = accountInfo;
         XeniaVersion = xeniaVersion;
@@ -128,6 +133,11 @@ public class AccountContent
             XuidHex,
             "FFFE07D1.gpd");
         TitleId = titleId;
+
+        if (skipLoading)
+        {
+            return;
+        }
 
         LoadProfileGpd();
         LoadGameAchievementGpd(TitleId);
