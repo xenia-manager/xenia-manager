@@ -76,6 +76,7 @@
     <sys:String x:Key="Settings.TimeFormat">Time Format</sys:String>
     <sys:String x:Key="Settings.TimeFormat.TwelveHour">12-Hour</sys:String>
     <sys:String x:Key="Settings.TimeFormat.TwentyFourHour">24-Hour</sys:String>
+    <sys:String x:Key="Settings.UiScale">UI Scale</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.Image">Image</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.Solid">Solid Colour</sys:String>
     <sys:String x:Key="Settings.BackgroundMode.LinearGradient">Linear Gradient</sys:String>

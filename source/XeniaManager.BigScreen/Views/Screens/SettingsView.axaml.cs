@@ -83,6 +83,7 @@ public partial class SettingsView : UserControl
         _rowCards[vm.RowLibraryView] = CardLibraryView;
         _rowCards[vm.RowCardImage] = CardCardImage;
         _rowCards[vm.RowTimeFormat] = CardTimeFormat;
+        _rowCards[vm.RowUiScale] = CardUiScale;
         _rowCards[vm.RowQuitToggle] = CardQuitToggle;
         _rowCards[vm.RowFullscreenToggle] = CardFullscreenToggle;
         _rowCards[vm.RowStartInBigScreenToggle] = CardStartInBigScreenToggle;

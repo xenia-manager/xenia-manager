@@ -110,8 +110,10 @@
                             IsHitTestVisible="True" />
                     <Popup x:Name="PART_Popup"
                            IsLightDismissEnabled="True"
-                           Placement="Bottom"
-                           HorizontalOffset="-140">
+                           InheritsTransform="True"
+                           Placement="AnchorAndGravity"
+                           PlacementAnchor="Bottom"
+                           PlacementGravity="Top">
                         <set:PalettePicker x:Name="PART_Palette" />
                     </Popup>
                 </Grid>
