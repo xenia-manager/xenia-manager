@@ -107,6 +107,31 @@
                     </DockPanel>
                 </Border>
 
+                <!-- UI SCALE -->
+                <Border x:Name="CardUiScale"
+                        Classes="settings-card settings-row"
+                        Classes.selected="{Binding RowUiScale.IsSelected}">
+                    <DockPanel>
+                        <TextBlock Classes="settings-value"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding UiScaleText}"
+                                   Width="60"
+                                   TextAlignment="Right" />
+                        <Slider x:Name="SldUiScale"
+                                DockPanel.Dock="Right"
+                                Minimum="25"
+                                Maximum="200"
+                                TickFrequency="5"
+                                IsSnapToTickEnabled="True"
+                                Value="{Binding UiScale, Mode=TwoWay}"
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center"
+                                Width="340" />
+                        <TextBlock Classes="settings-label"
+                                   Text="{DynamicResource Settings.UiScale}" />
+                    </DockPanel>
+                </Border>
+
                 <!-- QUIT BEHAVIOUR -->
                 <Border x:Name="CardQuitToggle"
                         Classes="settings-card settings-row"

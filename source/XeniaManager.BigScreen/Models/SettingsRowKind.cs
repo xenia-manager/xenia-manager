@@ -11,6 +11,7 @@ public enum SettingsRowKind
     LibraryView,
     CardImage,
     TimeFormat,
+    UiScale,
     QuitToggle,
     FullscreenToggle,
     StartInBigScreenToggle,

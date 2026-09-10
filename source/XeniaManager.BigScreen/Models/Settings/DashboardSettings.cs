@@ -74,6 +74,12 @@ public class DashboardSettings
     public TimeFormat TimeFormat { get; set; } = TimeFormat.TwelveHour;
 
     /// <summary>
+    /// UI scale percent (25-200, 100 = unscaled), applied to the whole dashboard.
+    /// </summary>
+    [JsonPropertyName("ui_scale")]
+    public int UiScale { get; set; } = 100;
+
+    /// <summary>
     /// Device GUID (hex) of the primary gamepad, restored at boot.
     /// </summary>
     [JsonPropertyName("primary_controller_guid")]

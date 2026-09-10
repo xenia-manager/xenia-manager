@@ -116,6 +116,11 @@ public partial class SettingsViewModel : ViewModelBase
     public event Action? TimeFormatChanged;
 
     /// <summary>
+    /// Raised after the UI scale changed, so the window can rescale.
+    /// </summary>
+    public event Action? UiScaleChanged;
+
+    /// <summary>
     /// Raised after the controller moved to a row, so the view can scroll it into view.
     /// </summary>
     public event Action<ISelectable>? RowSelectionChanged;
@@ -298,6 +303,11 @@ public partial class SettingsViewModel : ViewModelBase
     public SettingsRowViewModel RowTimeFormat { get; } = new SettingsRowViewModel(SettingsRowKind.TimeFormat);
 
     /// <summary>
+    /// Row for the UI scale dropdown card.
+    /// </summary>
+    public SettingsRowViewModel RowUiScale { get; } = new SettingsRowViewModel(SettingsRowKind.UiScale);
+
+    /// <summary>
     /// Row for the quit behaviour toggle card.
     /// </summary>
     public SettingsRowViewModel RowQuitToggle { get; } = new SettingsRowViewModel(SettingsRowKind.QuitToggle);
@@ -430,6 +440,17 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Display text for the UI scale as a percentage.
+    /// </summary>
+    public string UiScaleText
+    {
+        get
+        {
+            return $"{UiScale}%";
+        }
+    }
+
+    /// <summary>
     /// Display text for the vignette opacity as a percentage.
     /// </summary>
     public string VignetteText
@@ -512,6 +533,12 @@ public partial class SettingsViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     public partial TimeFormat TimeFormat { get; set; } = TimeFormat.TwelveHour;
+
+    /// <summary>
+    /// The UI scale percent for the whole dashboard (25-200).
+    /// </summary>
+    [ObservableProperty]
+    public partial int UiScale { get; set; } = 100;
 
     /// <summary>
     /// The primary color; gradients are derived from it.
@@ -639,6 +666,12 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Steps the UI scale by the given direction (5% per step), clamped to 25-200%.
+    /// </summary>
+    public void AdjustUiScale(int delta) =>
+        UiScale = Math.Clamp(UiScale + delta * LayoutConstants.UiScaleStep, 25, 200);
+
+    /// <summary>
     /// Steps the vignette opacity by the given direction (0.05 per step), clamped to 0-1.
     /// </summary>
     public void AdjustVignette(int delta) =>
@@ -733,6 +766,7 @@ public partial class SettingsViewModel : ViewModelBase
         _rows.Add(RowLibraryView);
         _rows.Add(RowCardImage);
         _rows.Add(RowTimeFormat);
+        _rows.Add(RowUiScale);
         _rows.Add(RowQuitToggle);
         _rows.Add(RowFullscreenToggle);
         _rows.Add(RowStartInBigScreenToggle);
@@ -1072,18 +1106,28 @@ public partial class SettingsViewModel : ViewModelBase
     public void NotifyColourPaletteClosed() => _colourPaletteOpen = false;
 
     /// <summary>
-    /// Steps the selected row's immediate-commit value directly (vignette
-    /// slider); returns false so other rows fall through (Left/Right stays unused).
+    /// Steps the selected row's immediate-commit value directly (vignette and
+    /// UI-scale sliders); returns false so other rows fall through (Left/Right
+    /// stays unused).
     /// </summary>
     private bool StepSelectedRow(int delta)
     {
-        if (_rows.FirstOrDefault(r => r.IsSelected) is SettingsRowViewModel { Kind: SettingsRowKind.Vignette })
+        if (_rows.FirstOrDefault(r => r.IsSelected) is not SettingsRowViewModel row)
         {
-            AdjustVignette(delta);
-            return true;
+            return false;
         }
 
-        return false;
+        switch (row.Kind)
+        {
+            case SettingsRowKind.Vignette:
+                AdjustVignette(delta);
+                return true;
+            case SettingsRowKind.UiScale:
+                AdjustUiScale(delta);
+                return true;
+            default:
+                return false;
+        }
     }
 
     /// <summary>
@@ -1261,6 +1305,7 @@ public partial class SettingsViewModel : ViewModelBase
         SelectedCardImageMode = CardImageModeOptions.FirstOrDefault(o => o.Mode == CardImageMode);
         TimeFormat = _backgroundService.Settings.TimeFormat;
         SelectedTimeFormat = TimeFormatOptions.FirstOrDefault(o => o.Format == TimeFormat);
+        UiScale = Math.Clamp(_backgroundService.Settings.UiScale / 5 * 5, 25, 200);
         LoadXConfig();
         RefreshActiveProfiles();
         RefreshControllers();
@@ -1429,6 +1474,14 @@ public partial class SettingsViewModel : ViewModelBase
         {
             TimeFormat = value.Format;
         }
+    }
+
+    partial void OnUiScaleChanged(int value)
+    {
+        SaveAppearance(s => s.UiScale = value);
+        OnPropertyChanged(nameof(UiScaleText));
+        UiScaleChanged?.Invoke();
+        Logger.Info<SettingsViewModel>($"UI scale changed to {value}%");
     }
 
     public SettingsViewModel(IBackgroundService backgroundService, IProfileService profileService,

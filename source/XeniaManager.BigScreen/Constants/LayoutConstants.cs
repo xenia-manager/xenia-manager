@@ -51,6 +51,11 @@ public static class LayoutConstants
     public const double VignetteStep = 0.05;
 
     /// <summary>
+    /// UI scale step in percent per adjustment press.
+    /// </summary>
+    public const int UiScaleStep = 5;
+
+    /// <summary>
     /// RGB channel step (0-255) per controller press in the colour editor.
     /// </summary>
     public const double ColourChannelStep = 5;

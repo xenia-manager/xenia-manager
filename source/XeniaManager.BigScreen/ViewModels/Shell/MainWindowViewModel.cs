@@ -172,6 +172,12 @@ public partial class MainWindowViewModel : ViewModelBase
     public partial bool ModalBackdropVisible { get; set; }
 
     /// <summary>
+    /// UI scale factor applied to the whole window content (1.0 = 100%).
+    /// </summary>
+    [ObservableProperty]
+    public partial double UiScaleFactor { get; set; } = 1.0;
+
+    /// <summary>
     /// Header state (profile, clock, wifi, controller battery).
     /// </summary>
     public HeaderViewModel Header { get; }
@@ -717,6 +723,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         };
         Settings.TimeFormatChanged += () => Header.ApplyTimeFormat(Settings.TimeFormat);
+        Settings.UiScaleChanged += () => UiScaleFactor = Settings.UiScale / 100.0;
 
         _profileService.ProfileChanged += () =>
         {
