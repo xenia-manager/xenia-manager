@@ -12,6 +12,26 @@ namespace XeniaManager.Files.Utilities;
 public class FileIdentifier
 {
     /// <summary>
+    /// Magic bytes for XEX0 files ("XEX0").
+    /// </summary>
+    private const uint Xex0Magic = 0x58455830;
+
+    /// <summary>
+    /// Magic bytes for XEX? files ("XEX?").
+    /// </summary>
+    private const uint XexQMagic = 0x5845583F;
+
+    /// <summary>
+    /// Magic bytes for XEX- files ("XEX-").
+    /// </summary>
+    private const uint XexHMagic = 0x5845582D;
+
+    /// <summary>
+    /// Magic bytes for XEX% files ("XEX%").
+    /// </summary>
+    private const uint Xex25Magic = 0x58455825;
+
+    /// <summary>
     /// Magic bytes for XEX1 files ("XEX1").
     /// </summary>
     private const uint Xex1Magic = 0x58455831;
@@ -20,6 +40,21 @@ public class FileIdentifier
     /// Magic bytes for XEX2 files ("XEX2").
     /// </summary>
     private const uint Xex2Magic = 0x58455832;
+
+    /// <summary>
+    /// Magic bytes for ELF files (0x7F "ELF").
+    /// </summary>
+    private const uint ElfMagic = 0x7F454C46;
+
+    /// <summary>
+    /// Magic bytes for XBE files ("XBEH").
+    /// </summary>
+    private const uint XbeMagic = 0x58424548;
+
+    /// <summary>
+    /// Magic bytes for GDFX/XISO discs ("XSF\x1A").
+    /// </summary>
+    private const uint XsfMagic = 0x5853461A;
 
     /// <summary>
     /// Magic bytes for CON STFS packages ("CON ").
@@ -35,6 +70,11 @@ public class FileIdentifier
     /// Magic bytes for PIRS STFS packages ("PIRS").
     /// </summary>
     private const uint PirsMagic = 0x50495253;
+
+    /// <summary>
+    /// ZAR footer magic, read from the last 4 bytes of the file.
+    /// </summary>
+    private const uint ZarMagic = 0x169F52D6;
 
     /// <summary>
     /// ISO file extensions.
@@ -77,7 +117,68 @@ public class FileIdentifier
             throw new FileNotFoundException($"File does not exist at {filePath}", filePath);
         }
 
-        // First check by extension for ISO and XEX files
+        // Read the header to detect file types (magic-first: extension must not shadow magic,
+        // e.g. an XEX1 file named .xex). Extension fallbacks below are leniency for unknown content.
+        byte[] headerBytes = ReadFirstBytes(filePath, 4);
+        Logger.Trace<FileIdentifier>($"File header: 0x{(headerBytes.Length < 4 ? 0 : BinaryPrimitives.ReadUInt32BigEndian(headerBytes)):X8}");
+
+        FileSignature detectedSignature = FileSignature.Unknown;
+        if (headerBytes.Length >= 4)
+        {
+            uint header = BinaryPrimitives.ReadUInt32BigEndian(headerBytes);
+            detectedSignature = header switch
+            {
+                Xex0Magic => FileSignature.XEX0,
+                XexQMagic => FileSignature.XEXQ,
+                XexHMagic => FileSignature.XEXH,
+                Xex25Magic => FileSignature.XEX25,
+                Xex1Magic => FileSignature.XEX1,
+                Xex2Magic => FileSignature.XEX2,
+                ElfMagic => FileSignature.ELF,
+                XbeMagic => FileSignature.XBE,
+                XsfMagic => FileSignature.XISO,
+                ConMagic => FileSignature.CON,
+                LiveMagic => FileSignature.LIVE,
+                PirsMagic => FileSignature.PIRS,
+                _ => FileSignature.Unknown
+            };
+        }
+
+        // "MZ" header (only the first 2 bytes are compared).
+        if (detectedSignature == FileSignature.Unknown && headerBytes.Length >= 2 && headerBytes[0] == (byte)'M' && headerBytes[1] == (byte)'Z')
+        {
+            Logger.Info<FileIdentifier>($"File identified as EXE by header: {filePath}");
+            return FileSignature.EXE;
+        }
+
+        // Differentiate STFS vs SVOD (GOD) when magic is CON/LIVE/PIRS – SVOD has DescriptorType == 1 at 0x3A9
+        if (detectedSignature is FileSignature.CON or FileSignature.LIVE or FileSignature.PIRS)
+        {
+            if (IsSvodPackage(filePath))
+            {
+                Logger.Info<FileIdentifier>($"File identified as SVOD by descriptor: {filePath}");
+                return FileSignature.SVOD;
+            }
+
+            Logger.Info<FileIdentifier>($"File identified as {detectedSignature} by header: {filePath}");
+            return detectedSignature;
+        }
+
+        if (detectedSignature != FileSignature.Unknown)
+        {
+            Logger.Info<FileIdentifier>($"File identified as {detectedSignature} by header: {filePath}");
+            return detectedSignature;
+        }
+
+        // ZAR footer magic (checked in the last 4 bytes, independent of extension).
+        if (HasZarFooter(filePath))
+        {
+            Logger.Info<FileIdentifier>($"File identified as ZAR by footer: {filePath}");
+            return FileSignature.ZAR;
+        }
+
+        // Extension fallbacks for files with unknown content (lenience, not magic detection).
+        // NOTE: These intentionally run after magic/footer detection so magic always wins.
         string extension = Path.GetExtension(filePath).ToLowerInvariant();
         Logger.Debug<FileIdentifier>($"File extension: {extension}");
 
@@ -99,69 +200,65 @@ public class FileIdentifier
             return FileSignature.ZAR;
         }
 
-        // Read the header to detect file types
-        uint header = ReadHeaderAsUInt32(filePath);
-        Logger.Trace<FileIdentifier>($"File header: 0x{header:X8}");
-
-        FileSignature detectedSignature = header switch
+        // Check if it might be an XISO by validating the structure (sector probe).
+        if (IsPossibleXiso(filePath))
         {
-            Xex1Magic => FileSignature.XEX1,
-            Xex2Magic => FileSignature.XEX2,
-            ConMagic => FileSignature.CON,
-            LiveMagic => FileSignature.LIVE,
-            PirsMagic => FileSignature.PIRS,
-            _ => FileSignature.Unknown
-        };
-
-        // Differentiate STFS vs SVOD (GOD) when magic is CON/LIVE/PIRS – SVOD has DescriptorType == 1 at 0x3A9
-        if (detectedSignature is FileSignature.CON or FileSignature.LIVE or FileSignature.PIRS)
-        {
-            if (IsSvodPackage(filePath))
-            {
-                Logger.Info<FileIdentifier>($"File identified as SVOD by descriptor: {filePath}");
-                return FileSignature.SVOD;
-            }
+            Logger.Info<FileIdentifier>($"File identified as XISO by structure: {filePath}");
+            return FileSignature.XISO;
         }
 
-        // Check if it might be an XISO by validating the structure
-        if (detectedSignature == FileSignature.Unknown)
-        {
-            if (IsPossibleXiso(filePath))
-            {
-                Logger.Info<FileIdentifier>($"File identified as XISO by structure: {filePath}");
-                return FileSignature.XISO;
-            }
-        }
-
-        if (detectedSignature != FileSignature.Unknown)
-        {
-            Logger.Info<FileIdentifier>($"File identified as {detectedSignature} by header: {filePath}");
-        }
-        else
-        {
-            Logger.Warning<FileIdentifier>($"Unable to identify file type. Header: 0x{header:X8}, Extension: {extension}");
-        }
-
-        return detectedSignature;
+        Logger.Warning<FileIdentifier>($"Unable to identify file type. Extension: {extension}");
+        return FileSignature.Unknown;
     }
 
     /// <summary>
-    /// Reads the first 4 bytes of a file and returns them as a big-endian UInt32.
+    /// Reads up to <paramref name="count"/> bytes from the start of a file.
     /// </summary>
     /// <param name="filePath">The path to the file to read.</param>
-    /// <returns>The first 4 bytes of the file as a big-endian UInt32.</returns>
-    private static uint ReadHeaderAsUInt32(string filePath)
+    /// <param name="count">Maximum number of bytes to read.</param>
+    /// <returns>The bytes read (fewer than <paramref name="count"/> for short files).</returns>
+    private static byte[] ReadFirstBytes(string filePath, int count)
     {
-        using FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        using BinaryReader reader = new BinaryReader(stream);
-
-        byte[] headerBytes = reader.ReadBytes(4);
-        if (headerBytes.Length < 4)
+        using FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        byte[] buffer = new byte[count];
+        int read = stream.Read(buffer, 0, count);
+        if (read < count)
         {
-            return 0;
+            Array.Resize(ref buffer, read);
         }
 
-        return BinaryPrimitives.ReadUInt32BigEndian(headerBytes);
+        return buffer;
+    }
+
+    /// <summary>
+    /// Checks if a file ends with the ZAR footer magic.
+    /// </summary>
+    /// <param name="filePath">The path to the file to check.</param>
+    /// <returns>True if the last 4 bytes equal <c>0x169F52D6</c> (big-endian), false otherwise.</returns>
+    private static bool HasZarFooter(string filePath)
+    {
+        try
+        {
+            using FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            if (stream.Length < 4)
+            {
+                return false;
+            }
+
+            byte[] footer = new byte[4];
+            stream.Seek(-4, SeekOrigin.End);
+            if (stream.Read(footer, 0, 4) < 4)
+            {
+                return false;
+            }
+
+            return BinaryPrimitives.ReadUInt32BigEndian(footer) == ZarMagic;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<FileIdentifier>($"ZAR footer check failed for {filePath}: {ex.Message}");
+            return false;
+        }
     }
 
     /// <summary>

@@ -31,6 +31,26 @@ public enum FileSignature
     XEX1,
 
     /// <summary>
+    /// XEX0 executable file (Xbox 360 beta format).
+    /// </summary>
+    XEX0,
+
+    /// <summary>
+    /// XEX? executable file (Xbox 360 beta format).
+    /// </summary>
+    XEXQ,
+
+    /// <summary>
+    /// XEX- executable file (Xbox 360 beta format).
+    /// </summary>
+    XEXH,
+
+    /// <summary>
+    /// XEX% executable file (Xbox 360 beta format).
+    /// </summary>
+    XEX25,
+
+    /// <summary>
     /// XEX2 executable file (Xbox 360 format).
     /// </summary>
     XEX2,
@@ -53,5 +73,20 @@ public enum FileSignature
     /// <summary>
     /// SVOD package (GOD / Installed Game) - disc-based STFS variant.
     /// </summary>
-    SVOD
+    SVOD,
+
+    /// <summary>
+    /// ELF executable file.
+    /// </summary>
+    ELF,
+
+    /// <summary>
+    /// XBE executable file (Original Xbox).
+    /// </summary>
+    XBE,
+
+    /// <summary>
+    /// Windows executable file ("MZ" header).
+    /// </summary>
+    EXE
 }

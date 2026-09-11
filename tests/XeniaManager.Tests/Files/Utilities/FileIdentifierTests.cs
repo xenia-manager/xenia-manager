@@ -103,6 +103,76 @@ public class FileIdentifierTests
     }
 
     [Test]
+    public void IdentifyFileType_Xex0Magic_ReturnsXex0()
+    {
+        string path = CreateTempFileWithHeader(".bin", 0x58455830);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.XEX0));
+    }
+
+    [Test]
+    public void IdentifyFileType_XexQMagic_ReturnsXexQ()
+    {
+        string path = CreateTempFileWithHeader(".bin", 0x5845583F);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.XEXQ));
+    }
+
+    [Test]
+    public void IdentifyFileType_XexHMagic_ReturnsXexH()
+    {
+        string path = CreateTempFileWithHeader(".bin", 0x5845582D);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.XEXH));
+    }
+
+    [Test]
+    public void IdentifyFileType_Xex25Magic_ReturnsXex25()
+    {
+        string path = CreateTempFileWithHeader(".bin", 0x58455825);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.XEX25));
+    }
+
+    [Test]
+    public void IdentifyFileType_ElfMagic_ReturnsElf()
+    {
+        string path = CreateTempFileWithHeader(".bin", 0x7F454C46);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.ELF));
+    }
+
+    [Test]
+    public void IdentifyFileType_XbeMagic_ReturnsXbe()
+    {
+        string path = CreateTempFileWithHeader(".bin", 0x58424548);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.XBE));
+    }
+
+    [Test]
+    public void IdentifyFileType_MzHeader_ReturnsExe()
+    {
+        string path = CreateTempFile(".bin", [(byte)'M', (byte)'Z', 0x00, 0x00]);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.EXE));
+    }
+
+    [Test]
+    public void IdentifyFileType_XsfMagic_ReturnsXiso()
+    {
+        string path = CreateTempFileWithHeader(".bin", 0x5853461A);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.XISO));
+    }
+
+    [Test]
+    public void IdentifyFileType_ZarFooterWithoutExtension_ReturnsZar()
+    {
+        string path = CreateTempFile(".bin", [0x00, 0x00, 0x00, 0x00, 0x16, 0x9F, 0x52, 0xD6]);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.ZAR));
+    }
+
+    [Test]
+    public void IdentifyFileType_MagicBeatsExtension_Xex1InXexFileReturnsXex1()
+    {
+        string path = CreateTempFileWithHeader(".xex", 0x58455831);
+        Assert.That(FileIdentifier.IdentifyFileType(path), Is.EqualTo(FileSignature.XEX1));
+    }
+
+    [Test]
     public void IdentifyFileType_ConMagic_ReturnsCon()
     {
         string path = CreateTempFileWithHeader(".bin", 0x434F4E20);
