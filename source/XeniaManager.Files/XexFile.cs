@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using XeniaManager.Files.Models.Xex;
@@ -449,10 +450,11 @@ public sealed class XexFile
                     if (fileFormatOffset + 12 <= xexData.Length)
                     {
                         uint windowSize = BinaryPrimitives.ReadUInt32BigEndian(xexData.AsSpan(fileFormatOffset + 8));
-                        windowBits = (int)Math.Log(windowSize, 2);
-                        if (windowBits < 15 || windowBits > 21)
+                        // Exact log2 (the reference uses bit_scan_forward); float Math.Log can
+                        // round non-powers of two to a wrong value. Default keeps 17 on garbage.
+                        if (windowSize >= 1u << 15 && windowSize <= 1u << 21 && BitOperations.PopCount(windowSize) == 1)
                         {
-                            windowBits = 17;
+                            windowBits = BitOperations.Log2(windowSize);
                         }
                     }
 

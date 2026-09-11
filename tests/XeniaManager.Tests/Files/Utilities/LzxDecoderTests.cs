@@ -317,4 +317,332 @@ public class LzxDecoderTests
     }
 
     #endregion
+
+    #region Real stream decoding
+
+    private sealed class BitWriter
+    {
+        private ulong _acc;
+        private int _count;
+        private readonly List<byte> _bytes = [];
+
+        public void Emit(int bits, uint value)
+        {
+            _acc = (_acc << bits) | (value & (bits == 32 ? 0xFFFFFFFFul : (1ul << bits) - 1ul));
+            _count += bits;
+            while (_count >= 16)
+            {
+                uint word = (uint)((_acc >> (_count - 16)) & 0xFFFFul);
+                _bytes.Add((byte)(word & 0xFF));
+                _bytes.Add((byte)((word >> 8) & 0xFF));
+                _count -= 16;
+                _acc &= (1ul << _count) - 1ul;
+            }
+        }
+
+        public byte[] ToArray()
+        {
+            if (_count > 0)
+            {
+                uint word = (uint)((_acc << (16 - _count)) & 0xFFFFul);
+                _bytes.Add((byte)(word & 0xFF));
+                _bytes.Add((byte)((word >> 8) & 0xFF));
+            }
+
+            return [.. _bytes];
+        }
+    }
+
+    private static readonly Dictionary<int, string> PretreeCodes = new Dictionary<int, string>
+    {
+        [15] = "0",
+        [16] = "10",
+        [17] = "110",
+        [18] = "111"
+    };
+
+    private static void EmitPretreeSymbol(BitWriter writer, int symbol)
+    {
+        foreach (char c in PretreeCodes[symbol])
+        {
+            writer.Emit(1, c == '1' ? 1u : 0u);
+        }
+    }
+
+    private static void EmitPretree(BitWriter writer)
+    {
+        // Fixed pretree used by these vectors: {15:1, 16:2, 17:3, 18:3}, rest 0.
+        for (int i = 0; i < 15; i++)
+        {
+            writer.Emit(4, 0);
+        }
+
+        writer.Emit(4, 1);
+        writer.Emit(4, 2);
+        writer.Emit(4, 3);
+        writer.Emit(4, 3);
+        writer.Emit(4, 0);
+    }
+
+    private static void EmitLengths(BitWriter writer, Dictionary<int, int> lengths, int first, int last)
+    {
+        // Delta-code each length like ReadLengths: runs of zeros via 17/18, else raw delta symbol.
+        int x = first;
+        while (x < last)
+        {
+            int want = lengths.TryGetValue(x, out int v) ? v : 0;
+            if (want == 0)
+            {
+                int run = 0;
+                while (x + run < last && !lengths.ContainsKey(x + run))
+                {
+                    run++;
+                }
+
+                EmitZeros(writer, run);
+                x += run;
+            }
+            else
+            {
+                // Delta from initial 0: z = (0 + 17 - want) % 17.
+                EmitPretreeSymbol(writer, (17 - want) % 17);
+                x++;
+            }
+        }
+    }
+
+    private static void EmitZeros(BitWriter writer, int count)
+    {
+        while (count > 0)
+        {
+            if (count >= 20)
+            {
+                int run = Math.Min(count, 39);
+                EmitPretreeSymbol(writer, 18);
+                writer.Emit(5, (uint)(run - 20));
+                count -= run;
+            }
+            else if (count >= 4)
+            {
+                int run = Math.Min(count, 19);
+                EmitPretreeSymbol(writer, 17);
+                writer.Emit(4, (uint)(run - 4));
+                count -= run;
+            }
+            else
+            {
+                // Runs under 4 need pretree symbol 0, which this minimal tree omits.
+                throw new InvalidOperationException("Zero run too short for test tree.");
+            }
+        }
+    }
+
+    [Test]
+    public void BitBuffer_WideRead_DoesNotExceed32Bits()
+    {
+        // Direct guard for the fixed overflow: a 24-bit read with 20 bits already
+        // buffered must return all 24 bits and leave at most 32 bits buffered.
+        Type? bbType = typeof(LzxDecoder).GetNestedType("BitBuffer", BindingFlags.NonPublic);
+        Assert.That(bbType, Is.Not.Null);
+        object? bb = Activator.CreateInstance(bbType!, new byte[]
+        {
+            0x12, 0x34, 0x56, 0x78
+        });
+        FieldInfo? buf = bbType!.GetField("Buf");
+        FieldInfo? bitsLeft = bbType.GetField("BitsLeft");
+        Assert.That(buf, Is.Not.Null);
+        Assert.That(bitsLeft, Is.Not.Null);
+        buf!.SetValue(bb, 0xABCDEu);
+        bitsLeft!.SetValue(bb, 20);
+        MethodInfo? read = bbType.GetMethod("ReadBits");
+        int val = (int)read!.Invoke(bb, new object[]
+        {
+            24
+        })!;
+        // Top 20 bits 0xABCDE followed by top 4 bits of next word 0x3412 (0x3).
+        Assert.That(val, Is.EqualTo((0xABCDE << 4) | 0x3));
+        Assert.That((int)bitsLeft.GetValue(bb)!, Is.LessThanOrEqualTo(32));
+    }
+
+    [Test]
+    public void Decompress_UncompressedBlock_ReturnsRawBytes()
+    {
+        // intel=0, type=3 (UNCOMPRESSED), len=5, R0/R1/R2, payload "HELLO".
+        byte[] data =
+        [
+            0x00, 0x30, 0x00, 0x05,
+            0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+            0x48, 0x45, 0x4C, 0x4C, 0x4F
+        ];
+        byte[] output = new LzxDecoder(15).Decompress(data, 5);
+        Assert.That(output, Is.EqualTo(new byte[]
+        {
+            0x48, 0x45, 0x4C, 0x4C, 0x4F
+        }));
+    }
+
+    [Test]
+    public void Decompress_MinimalVerbatimBlock_DecodesLiterals()
+    {
+        // Hand-built stream decoding to "ABC" (literals 65/66/67 with codes 0/10/11).
+        BitWriter writer = BuildAbcStream([[0], [1, 0], [1, 1]]);
+        byte[] output = new LzxDecoder(15).Decompress(writer.ToArray(), 3);
+        Assert.That(output, Is.EqualTo(new byte[]
+        {
+            0x41, 0x42, 0x43
+        }));
+    }
+
+    private static BitWriter BuildAbcStream(int[][] literals)
+    {
+        // Hand-built stream decoding to "ABC": pretree {15:1,16:2,17:3,18:3},
+        // maintree {65:1,66:2,67:2}, empty lentree, literals 65/66/67.
+        // NOTE: every length range is preceded by its own pretree, like the format requires.
+        BitWriter writer = new BitWriter();
+        writer.Emit(1, 0); // intel header: no E8 fixup
+        writer.Emit(3, 1); // VERBATIM
+        writer.Emit(24, (uint)literals.Length); // block length
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>
+        {
+            [65] = 1,
+            [66] = 2,
+            [67] = 2
+        }, 0, 256);
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>(), 256, 496);
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>(), 0, 249);
+        // Literals 65/66/67 with codes 0/10/11.
+        foreach (int[] code in literals)
+        foreach (int b in code)
+        {
+            writer.Emit(1, (uint)b);
+        }
+
+        return writer;
+    }
+
+    #endregion
+
+    #region Match and frame coverage
+
+    private static byte[] BuildUncompressedStream(uint filesize, byte[] payload)
+    {
+        // intel=1 + filesize, then UNCOMPRESSED block(s) with raw payload.
+        // Bit sections must abut with no gaps: the first header shares its
+        // writer with intel/filesize (60 bits -> 64 with 4 pad bits); later
+        // chunk headers start byte-aligned (27 bits -> 32 with 5 pad bits).
+        List<byte> stream = [];
+        BitWriter first = new BitWriter();
+        first.Emit(1, 1);
+        first.Emit(16, (filesize >> 16) & 0xFFFF);
+        first.Emit(16, filesize & 0xFFFF);
+        int pos = 0;
+        bool firstChunk = true;
+        while (pos < payload.Length)
+        {
+            int chunk = Math.Min(payload.Length - pos, 32768);
+            BitWriter header = firstChunk ? first : new BitWriter();
+            firstChunk = false;
+            header.Emit(3, 3); // UNCOMPRESSED
+            header.Emit(24, (uint)chunk);
+            stream.AddRange(header.ToArray());
+            stream.AddRange(new byte[]
+            {
+                1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0
+            }); // R0/R1/R2
+            for (int i = 0; i < chunk; i++)
+            {
+                stream.Add(payload[pos + i]);
+            }
+
+            pos += chunk;
+        }
+
+        return [.. stream];
+    }
+
+    [Test]
+    public void Decompress_E8NearFrameEnd_MatchesReferenceFraming()
+    {
+        // E8 leader at output offset 32760 (inside the last-10-bytes exclusion
+        // window of the first 32 KiB frame): the reference skips it, so the
+        // bytes must come back untransformed.
+        byte[] payload = new byte[32780];
+        payload[32760] = 0xE8;
+        payload[32761] = 0x10;
+        byte[] output = new LzxDecoder(15).Decompress(BuildUncompressedStream(0x1000, payload), payload.Length);
+        Assert.That(output[32760], Is.EqualTo(0xE8));
+        Assert.That(output.Skip(32761).Take(4).ToArray(), Is.EqualTo(new byte[]
+        {
+            0x10, 0x00, 0x00, 0x00
+        }));
+    }
+
+    [Test]
+    public void Decompress_MatchCopiesOverlappingBytes()
+    {
+        // Literals A B then match(offset 2, len 4) -> "ABABAB".
+        // Tree {65:2, 66:2, 290:2, 291:2} is exactly complete; codes 00/01/10(/11).
+        BitWriter writer = new BitWriter();
+        writer.Emit(1, 0);
+        writer.Emit(3, 1); // VERBATIM
+        writer.Emit(24, 6); // block length 6
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>
+        {
+            [65] = 2,
+            [66] = 2
+        }, 0, 256);
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>
+        {
+            [290] = 2,
+            [291] = 2
+        }, 256, 496);
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>(), 0, 249);
+        writer.Emit(2, 0b00); // 65
+        writer.Emit(2, 0b01); // 66
+        writer.Emit(2, 0b10); // match 290: slot 4, len header 2 -> len 4
+        writer.Emit(1, 0); // extra[4]=1 verbatim bit -> offset 4-2+0 = 2
+        byte[] output = new LzxDecoder(15).Decompress(writer.ToArray(), 6);
+        Assert.That(output, Is.EqualTo(new byte[]
+        {
+            0x41, 0x42, 0x41, 0x42, 0x41, 0x42
+        }));
+    }
+
+    [Test]
+    public void Decompress_LargeVerbatimBlock17_MatchesAcrossFrames()
+    {
+        // 150000 literals cross several 32 KiB frame boundaries at windowBits 17
+        // (and the 128 KiB point where window-sized framing would wrongly align).
+        // Tree {65:1, 66:1} is exactly complete; all literals use code '0'.
+        BitWriter writer = new BitWriter();
+        writer.Emit(1, 0);
+        writer.Emit(3, 1); // VERBATIM
+        writer.Emit(24, 150000);
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>
+        {
+            [65] = 1,
+            [66] = 1
+        }, 0, 256);
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>(), 256, 512);
+        EmitPretree(writer);
+        EmitLengths(writer, new Dictionary<int, int>(), 0, 249);
+        for (int i = 0; i < 150000; i++)
+        {
+            writer.Emit(1, 0);
+        }
+
+        byte[] output = new LzxDecoder(17).Decompress(writer.ToArray(), 150000);
+        Assert.That(output.Length, Is.EqualTo(150000));
+        Assert.That(output.All(b => b == 0x41), Is.True);
+    }
+
+    #endregion
 }

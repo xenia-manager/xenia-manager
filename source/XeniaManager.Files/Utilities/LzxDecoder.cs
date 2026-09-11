@@ -175,11 +175,22 @@ internal sealed class LzxDecoder
         }
 
         /// <summary>Reads <paramref name="n"/> bits (ensure + peek + remove). Mirrors <c>READ_BITS(n)</c>.</summary>
+        /// <remarks>
+        /// Reads wider than 16 bits in halves: buffering more than 31 bits would
+        /// overflow the 32-bit buffer and drop the oldest bits.
+        /// </remarks>
         public int ReadBits(int n)
         {
             if (n == 0)
             {
                 return 0;
+            }
+
+            if (n > 16)
+            {
+                int hi = ReadBits(16);
+                int lo = ReadBits(n - 16);
+                return (hi << (n - 16)) | lo;
             }
 
             EnsureBits(n);
@@ -478,7 +489,12 @@ internal sealed class LzxDecoder
         }
 
         _blockType = bb.ReadBits(3);
-        _blockLength = bb.ReadBits(24);
+        // Read the 24-bit length as 16+8 like mspack: a single 24-bit read can
+        // buffer up to 39 bits and overflow the 32-bit bit buffer, losing the
+        // oldest bits. Split reads never exceed 31 buffered bits.
+        int lengthHi = bb.ReadBits(16);
+        int lengthLo = bb.ReadBits(8);
+        _blockLength = (lengthHi << 8) | lengthLo;
         _blockRemaining = _blockLength;
 
         if (_blockType == BLOCKTYPE_ALIGNED)
@@ -547,7 +563,9 @@ internal sealed class LzxDecoder
         BitBuffer bb = new BitBuffer(data);
         byte[] output = new byte[outputSize];
         int outPos = 0;
-        int frameSize = _windowSize;
+        // mspack decodes in fixed 32 KiB frames regardless of window size; the
+        // bitstream is re-aligned to 16 bits at every frame boundary.
+        const int frameSize = 32768;
         int windowMask = _windowSize - 1;
         int windowPosn = _windowPos;
         int framePosn = 0;
@@ -725,25 +743,51 @@ internal sealed class LzxDecoder
     /// compression. After decompression, this pass restores them to relative form using
     /// <c>intel_filesize</c> and <c>intel_curpos</c> as in the C code. XEX PE code contains x86-like
     /// stubs so the filter is enabled when <c>maintree_len[0xE8] != 0</c> (set in <c>ReadBlockHeader</c>).
-    /// No-op when <c>intel_curpos &gt;= 0x40000000</c> or <c>size ≤ 10</c>, identical guard to <c>lzxd.c</c>.
+    /// Like the C code this runs per 32 KiB frame, skipping the last 10 bytes of each frame,
+    /// and does nothing when the stream carries no Intel filesize. No-op when
+    /// <c>intel_curpos &gt;= 0x40000000</c> or <c>size ≤ 10</c>, identical guard to <c>lzxd.c</c>.
     /// </remarks>
     private void E8Decode(byte[] data, int size)
     {
-        if (_intelCurpos >= 0x40000000)
+        if (_intelCurpos >= 0x40000000 || _intelFilesize == 0)
         {
             return;
         }
 
-        int i = 0;
-        while (i < size - 10)
+        int processed = 0;
+        while (processed < size)
+        {
+            int frameSize = Math.Min(32768, size - processed);
+            if (frameSize > 10)
+            {
+                E8DecodeFrame(data, processed, frameSize, _intelCurpos + processed);
+            }
+
+            processed += frameSize;
+        }
+    }
+
+    /// <summary>
+    /// Translates one frame's E8 leaders from absolute to relative offsets.
+    /// </summary>
+    /// <param name="data">The full output buffer.</param>
+    /// <param name="offset">The frame start offset within <paramref name="data"/>.</param>
+    /// <param name="frameSize">The frame length in bytes.</param>
+    /// <param name="basePos">The running position (<c>intel_curpos</c>) at frame start.</param>
+    private void E8DecodeFrame(byte[] data, int offset, int frameSize, int basePos)
+    {
+        int end = offset + frameSize - 10;
+        int i = offset;
+        while (i < end)
         {
             if (data[i] != 0xE8)
             {
                 i++;
+                basePos++;
                 continue;
             }
 
-            int curpos = _intelCurpos + i;
+            int curpos = basePos;
             int absOff = data[i + 1] | (data[i + 2] << 8) | (data[i + 3] << 16) | (data[i + 4] << 24);
             if ((absOff & 0x80000000) != 0)
             {
@@ -762,7 +806,6 @@ internal sealed class LzxDecoder
                     relOff = absOff + _intelFilesize;
                 }
 
-                relOff &= -1;
                 data[i + 1] = (byte)(relOff & 0xFF);
                 data[i + 2] = (byte)((relOff >> 8) & 0xFF);
                 data[i + 3] = (byte)((relOff >> 16) & 0xFF);
@@ -770,6 +813,7 @@ internal sealed class LzxDecoder
             }
 
             i += 5;
+            basePos += 5;
         }
     }
 }
