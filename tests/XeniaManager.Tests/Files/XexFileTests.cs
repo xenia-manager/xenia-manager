@@ -215,6 +215,71 @@ public class XexFileTests
     }
 
     /// <summary>
+    /// Builds a minimal synthetic XEX image with one optional header (execution info) and a zeroed security info.
+    /// </summary>
+    private static byte[] BuildMinimalXex(string magic, int securitySize)
+    {
+        const int execOffset = 0x20;
+        const int securityOffset = 0x40;
+        byte[] data = new byte[securityOffset + securitySize];
+        System.Text.Encoding.ASCII.GetBytes(magic, data.AsSpan(0, 4));
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), 0x1000); // header_size (PE offset)
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x10), (uint)securityOffset);
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x14), 1); // header_count
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x18), 0x00040006); // execution info key
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x1C), execOffset);
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(execOffset), 0x12345678); // media_id
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(execOffset + 4), 1); // version
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(execOffset + 8), 1); // base_version
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(execOffset + 12), 0x4D5309C9); // title_id
+        data[execOffset + 18] = 1; // disc_num
+        data[execOffset + 19] = 1; // disc_total
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(execOffset + 20), 0xAABBCCDD); // savegame_id
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(securityOffset + 4), 0x1000); // image_size
+        return data;
+    }
+
+    [Test]
+    public void FromBytes_Xex1Header_ParsesSuccessfully()
+    {
+        XexFile xex = XexFile.FromBytes(BuildMinimalXex("XEX1", 0x168));
+
+        Assert.That(xex.IsValid, Is.True, $"XEX1 parsing failed: {xex.ValidationError}");
+        Assert.That(xex.TitleId, Is.EqualTo("4D5309C9"));
+        Assert.That(xex.MediaId, Is.EqualTo("12345678"));
+        Assert.That(xex.Execution!.Value.SaveGameId, Is.EqualTo(0xAABBCCDD));
+        Assert.That(xex.SecurityInfo.ImageSize, Is.EqualTo(0x1000));
+    }
+
+    [Test]
+    public void FromBytes_Xex25Header_ParsesSuccessfully()
+    {
+        XexFile xex = XexFile.FromBytes(BuildMinimalXex("XEX%", 0x154));
+
+        Assert.That(xex.IsValid, Is.True, $"XEX% parsing failed: {xex.ValidationError}");
+        Assert.That(xex.TitleId, Is.EqualTo("4D5309C9"));
+        Assert.That(xex.MediaId, Is.EqualTo("12345678"));
+    }
+
+    [Test]
+    public void FromBytes_Xex0Header_ReturnsInvalidXexFile()
+    {
+        XexFile xex = XexFile.FromBytes(BuildMinimalXex("XEX0", 0x168));
+
+        Assert.That(xex.IsValid, Is.False);
+        Assert.That(xex.ValidationError, Does.Contain("Invalid XEX magic"));
+    }
+
+    [Test]
+    public void FromBytes_ExecutionInfo_IncludesSaveGameId()
+    {
+        XexFile xex = XexFile.FromBytes(BuildMinimalXex("XEX2", 0x184));
+
+        Assert.That(xex.IsValid, Is.True, $"XEX2 parsing failed: {xex.ValidationError}");
+        Assert.That(xex.Execution!.Value.SaveGameId, Is.EqualTo(0xAABBCCDD));
+    }
+
+    /// <summary>
     /// Helper method to convert byte array to ASCII string (mirrors XexFile.GetString).
     /// </summary>
     private static string GetString(byte[] bytes) => System.Text.Encoding.ASCII.GetString(bytes).Trim('\0');

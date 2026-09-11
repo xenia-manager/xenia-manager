@@ -39,6 +39,16 @@ public sealed class XexFile
     private const uint Xex2Magic = 0x58455832;
 
     /// <summary>
+    /// XEX1 magic "XEX1" as big-endian <c>uint32</c> (<c>0x58455831</c>).
+    /// </summary>
+    private const uint Xex1Magic = 0x58455831;
+
+    /// <summary>
+    /// XEX% magic "XEX%" as big-endian <c>uint32</c> (<c>0x58455825</c>).
+    /// </summary>
+    private const uint Xex25Magic = 0x58455825;
+
+    /// <summary>
     /// Raw XEX bytes as loaded (retained for on-demand PE/SPA extraction). Never exposed mutably; see <see cref="RawData"/>.
     /// </summary>
     private byte[] _rawData = Array.Empty<byte>();
@@ -56,6 +66,24 @@ public sealed class XexFile
     /// Devkit AES key (all zeroes). Tried second if retail fails.
     /// </summary>
     private static readonly byte[] DevkitKey = new byte[16];
+
+    /// <summary>
+    /// XEX1 retail AES key used to unwrap the per-file <c>ImageKey</c> of XEX1 images.
+    /// </summary>
+    private static readonly byte[] Xex1RetailKey =
+    [
+        0xA2, 0x6C, 0x10, 0xF7, 0x1F, 0xD9, 0x35, 0xE9,
+        0x8B, 0x99, 0x92, 0x2C, 0xE9, 0x32, 0x15, 0x72
+    ];
+
+    /// <summary>
+    /// XEX1 devkit AES key used to unwrap the per-file <c>ImageKey</c> of XEX1 devkit images.
+    /// </summary>
+    private static readonly byte[] Xex1DevkitKey =
+    [
+        0xA8, 0xB0, 0x05, 0x12, 0xED, 0xE3, 0x63, 0x8D,
+        0xC6, 0x58, 0xB3, 0x10, 0x1F, 0x9F, 0x50, 0xD1
+    ];
 
     /// <summary>
     /// Gets the parsed XEX header (magic, module flags, header size, security offset, directory count).
@@ -156,8 +184,8 @@ public sealed class XexFile
     /// Validation:
     /// <list type="number">
     /// <item>≥ 24 bytes for header.</item>
-    /// <item>Magic "XEX2" (<c>0x58455832</c>).</item>
-    /// <item>Security offset in-bounds and ≥ 0x1A0 bytes for <c>xex2_security_info</c>.</item>
+    /// <item>Magic "XEX1", "XEX2" or "XEX%" (XEX0/XEX?/XEX- are rejected as unsupported).</item>
+    /// <item>Security offset in-bounds and large enough for the per-format security info.</item>
     /// <item>Optional header <c>0x40006</c> (execution info, <c>(0x400 &lt;&lt; 8)|(24&gt;&gt;2)</c>) present.</item>
     /// </list>
     /// Stores <paramref name="data"/> in <see cref="_rawData"/> for later <see cref="TryGetSpaFile"/> decryption.
@@ -184,9 +212,9 @@ public sealed class XexFile
             Logger.Debug<XexFile>($"XEX Magic: {GetString(xexFile.Header.Magic)}, Security Info Offset: 0x{xexFile.Header.SecurityInfo:X8}");
 
             string magic = GetString(xexFile.Header.Magic);
-            if (magic != "XEX2")
+            if (magic != "XEX2" && magic != "XEX1" && magic != "XEX%")
             {
-                xexFile.ValidationError = $"Invalid XEX magic: {magic} (expected XEX2)";
+                xexFile.ValidationError = $"Invalid XEX magic: {magic} (expected XEX1, XEX2 or XEX%)";
                 Logger.Error<XexFile>(xexFile.ValidationError);
                 return xexFile;
             }
@@ -198,7 +226,7 @@ public sealed class XexFile
                 return xexFile;
             }
 
-            xexFile.SecurityInfo = ParseSecurityInfo(data, (int)xexFile.Header.SecurityInfo);
+            xexFile.SecurityInfo = ParseSecurityInfo(data, (int)xexFile.Header.SecurityInfo, magic);
             Logger.Debug<XexFile>($"Image Size: 0x{xexFile.SecurityInfo.ImageSize:X8}, Game Region: 0x{xexFile.SecurityInfo.ImageInfo.GameRegion:X8}");
 
             xexFile.Execution = FindExecutionInfo(data, xexFile.Header);
@@ -319,9 +347,9 @@ public sealed class XexFile
     /// <param name="xexData">Complete XEX bytes (from <see cref="_rawData"/>).</param>
     /// <returns>SPA/XDBF bytes if the PE section was found, null otherwise.</returns>
     /// <remarks>
-    /// Steps: validate <see cref="Xex2Magic"/>, read <c>header_size</c>/<c>security_offset</c>/<c>header_count</c>,
+    /// Steps: validate the XEX magic, read <c>header_size</c>/<c>security_offset</c>/<c>header_count</c>,
     /// find execution info <c>0x40006</c> for <c>TitleId</c> and file-format info <c>0x3FF</c>, unwrap
-    /// <c>ImageKey</c> at <c>security_offset+0x150</c>, call <see cref="TryGetPeImage"/> to obtain the PE,
+    /// <c>ImageKey</c> at the per-format key offset (<c>security_offset+0x150</c> for XEX2, <c>+0x134</c> for XEX1/XEX%), call <see cref="TryGetPeImage"/> to obtain the PE,
     /// then <see cref="TryFindPeSection"/> for <c>"{TitleId:X8}"</c> or <see cref="ScanForXdbf"/> fallback.
     /// </remarks>
     private static byte[]? TryGetSpaBytes(byte[] xexData)
@@ -334,10 +362,12 @@ public sealed class XexFile
             }
 
             uint magic = BinaryPrimitives.ReadUInt32BigEndian(xexData.AsSpan(0));
-            if (magic != Xex2Magic)
+            if (magic != Xex2Magic && magic != Xex1Magic && magic != Xex25Magic)
             {
                 return null;
             }
+
+            // XEX1/XEX% carry the AES key seed at +0x134, XEX2 at +0x150.
 
             uint headerSize = BinaryPrimitives.ReadUInt32BigEndian(xexData.AsSpan(8));
             uint securityOffset = BinaryPrimitives.ReadUInt32BigEndian(xexData.AsSpan(16));
@@ -378,13 +408,14 @@ public sealed class XexFile
             string sectionName = $"{titleId:X8}";
             Logger.Trace<XexFile>($"XEX SPA: searching section {sectionName}");
 
-            if (securityOffset + 0x180 > xexData.Length)
+            int imageKeyOffset = magic == Xex2Magic ? 0x150 : 0x134;
+            if (securityOffset + imageKeyOffset + 16 > (uint)xexData.Length)
             {
                 return null;
             }
 
             byte[] encryptedAesKey = new byte[16];
-            Buffer.BlockCopy(xexData, (int)securityOffset + 0x150, encryptedAesKey, 0, 16);
+            Buffer.BlockCopy(xexData, (int)securityOffset + imageKeyOffset, encryptedAesKey, 0, 16);
 
             byte[]? peImage = TryGetPeImage(xexData, headerSize, securityOffset, fileFormatOffset, encryptedAesKey);
             if (peImage == null || peImage.Length < 0x40)
@@ -420,12 +451,12 @@ public sealed class XexFile
     /// <param name="headerSize">PE offset (<c>Header.SizeOfHeaders</c>).</param>
     /// <param name="securityOffset">Security info offset (<c>Header.SecurityInfo</c>).</param>
     /// <param name="fileFormatOffset">Offset of <c>xex2_opt_file_format_info</c> (<c>0x3FF</c>) or -1.</param>
-    /// <param name="encryptedAesKey">16-byte <c>ImageKey</c> at <c>securityOffset+0x150</c> to unwrap.</param>
+    /// <param name="encryptedAesKey">16-byte <c>ImageKey</c> from the per-format key offset to unwrap.</param>
     /// <returns>Decompressed PE bytes (starts <c>4D 5A</c> "MZ") or null on failure.</returns>
     /// <remarks>
     /// Reads <c>encryptionType</c>/<c>compressionType</c> from file-format info
-    /// (<c>0=none,1=basic,2=normal/LZX</c>), tries retail then devkit unwrap
-    /// (<see cref="AesDecryptEcb"/> + <see cref="AesDecryptCbc"/> zero IV), then
+    /// (<c>0=none,1=basic,2=normal/LZX</c>), tries the XEX2 keys then the XEX1 keys
+    /// (retail then devkit, <see cref="AesDecryptEcb"/> + <see cref="AesDecryptCbc"/> zero IV), then
     /// <see cref="TryDecompress"/>; validates result starts with MZ before returning.
     /// </remarks>
     private static byte[]? TryGetPeImage(byte[] xexData, uint headerSize, uint securityOffset, int fileFormatOffset, byte[] encryptedAesKey)
@@ -487,10 +518,14 @@ public sealed class XexFile
         Buffer.BlockCopy(xexData, dataOffset, encryptedData, 0, dataLen);
 
         byte[]? decrypted = null;
-        foreach (byte[] key in new[]
-                 {
-                     RetailKey, DevkitKey
-                 })
+        (byte[] Key, string Name)[] keyAttempts =
+        [
+            (RetailKey, "retail"),
+            (DevkitKey, "devkit"),
+            (Xex1RetailKey, "xex1 retail"),
+            (Xex1DevkitKey, "xex1 devkit")
+        ];
+        foreach ((byte[] key, string name) in keyAttempts)
         {
             try
             {
@@ -500,7 +535,7 @@ public sealed class XexFile
                     firstBlockHash);
                 if (decompressed != null && decompressed.Length > 0x40 && decompressed[0] == 0x4D && decompressed[1] == 0x5A)
                 {
-                    Logger.Debug<XexFile>($"XEX decrypt succeeded with {(key == RetailKey ? "retail" : "devkit")} key");
+                    Logger.Debug<XexFile>($"XEX decrypt succeeded with {name} key");
                     return decompressed;
                 }
 
@@ -1031,17 +1066,53 @@ public sealed class XexFile
     }
 
     /// <summary>
-    /// Parses the <c>xex2_security_info</c> structure at <paramref name="offset"/>.
+    /// Parses the security info structure at <paramref name="offset"/> for the given XEX format.
     /// </summary>
     /// <param name="data">XEX bytes.</param>
     /// <param name="offset">Absolute offset of security info (<c>Header.SecurityInfo</c>).</param>
+    /// <param name="magic">XEX magic ("XEX1", "XEX2" or "XEX%"); XEX1/XEX% use shorter layouts with the AES key seed at <c>+0x134</c> instead of <c>+0x150</c>.</param>
     /// <returns>Populated <see cref="XexSecurityInfo"/>.</returns>
-    /// <exception cref="ArgumentException">Thrown when <c>data.Length &lt; offset+0x1A0</c>.</exception>
-    private static XexSecurityInfo ParseSecurityInfo(byte[] data, int offset)
+    /// <exception cref="ArgumentException">Thrown when <c>data</c> is shorter than the per-format security info.</exception>
+    private static XexSecurityInfo ParseSecurityInfo(byte[] data, int offset, string magic)
     {
-        if (data.Length < offset + 0x1A0)
+        int minSize = magic switch
+        {
+            "XEX1" => 0x168,
+            "XEX%" => 0x154,
+            _ => 0x184
+        };
+        if (data.Length < offset + minSize)
         {
             throw new ArgumentException("Data too short for security info");
+        }
+
+        if (magic == "XEX1" || magic == "XEX%")
+        {
+            bool isXex25 = magic == "XEX%";
+            HvImageInfo xex1ImageInfo = new HvImageInfo
+            {
+                Signature = data.Skip(offset + 0x8).Take(0x100).ToArray(),
+                InfoSize = 0,
+                ImageFlags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(isXex25 ? offset + 0x144 : offset + 0x158)),
+                LoadAddress = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x130)),
+                ImageHash = data.Skip(offset + 0x108).Take(0x14).ToArray(),
+                ImportTableCount = 0,
+                ImportDigest = data.Skip(offset + 0x11C).Take(0x14).ToArray(),
+                MediaId = isXex25 ? new byte[0x10] : data.Skip(offset + 0x144).Take(0x10).ToArray(),
+                ImageKey = data.Skip(offset + 0x134).Take(0x10).ToArray(),
+                ExportTableAddress = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(isXex25 ? offset + 0x148 : offset + 0x15C)),
+                HeaderHash = new byte[0x14],
+                GameRegion = isXex25 ? 0 : BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x154))
+            };
+
+            return new XexSecurityInfo
+            {
+                Size = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset)),
+                ImageSize = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 4)),
+                ImageInfo = xex1ImageInfo,
+                AllowedMediaTypes = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(isXex25 ? offset + 0x14C : offset + 0x160)),
+                PageDescriptorCount = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(isXex25 ? offset + 0x150 : offset + 0x164))
+            };
         }
 
         HvImageInfo imageInfo = new HvImageInfo
@@ -1097,7 +1168,7 @@ public sealed class XexFile
             uint value = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(entryOffset));
             uint offset = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(entryOffset + 4));
 
-            if (value == executionSearchId && offset > 0 && offset < data.Length - 20)
+            if (value == executionSearchId && offset > 0 && offset + 24 <= (uint)data.Length)
             {
                 return new XexExecutionInfo
                 {
@@ -1108,7 +1179,8 @@ public sealed class XexFile
                     Platform = data[offset + 16],
                     ExecutableType = data[offset + 17],
                     DiscNum = data[offset + 18],
-                    DiscTotal = data[offset + 19]
+                    DiscTotal = data[offset + 19],
+                    SaveGameId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan((int)offset + 20))
                 };
             }
         }
