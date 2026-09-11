@@ -391,8 +391,8 @@ public class HeaderFile
             Logger.Debug<HeaderFile>($"Header too small for XUID, using default (0)");
         }
 
-        // 0x140-0x143: title_id (in 0x138+ headers)
-        if (header.HeaderSize >= CrossTitleDataSize)
+        // 0x140-0x143: title_id (in 0x138+ headers with at least 0x144 bytes present)
+        if (header.HeaderSize >= CrossTitleDataSize && data.Length >= 0x144)
         {
             header.TitleId = BitConverter.ToUInt32(data, 0x140);
             if (BitConverter.IsLittleEndian)

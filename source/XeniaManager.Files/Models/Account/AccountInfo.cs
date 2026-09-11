@@ -176,7 +176,7 @@ public class AccountInfo
 
     /// <summary>
     /// Gets or sets the subscription tier for the account.
-    /// Corresponds to bits 16-19 in CachedUserFlags.
+    /// Corresponds to bits 20-23 in CachedUserFlags.
     /// </summary>
     public SubscriptionTier SubscriptionTier
     {

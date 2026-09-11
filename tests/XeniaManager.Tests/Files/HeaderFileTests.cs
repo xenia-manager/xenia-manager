@@ -113,6 +113,19 @@ public class HeaderFileTests
         }
     }
 
+    [Test]
+    public void FromBytes_TruncatedTitleField_ReturnsDefaultTitleId()
+    {
+        // 0x140 bytes: past the cross-title threshold but short of the title_id field
+        byte[] data = new byte[0x140];
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 1); // device_id
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 2); // content_type
+
+        HeaderFile header = HeaderFile.FromBytes(data);
+
+        Assert.That(header.TitleId, Is.EqualTo(0xFFFFFFFF));
+    }
+
     private static string[] GetHeaderTestFiles()
     {
         return
