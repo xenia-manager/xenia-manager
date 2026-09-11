@@ -1019,5 +1019,41 @@ value = 0x60000000
         Assert.That(patch.Commands[0].Value, Is.EqualTo(0xDEADBEEFCAFEBABEUL));
     }
 
+    [Test]
+    public void Parse_SingleLineHashArray_ParsesAllHashes()
+    {
+        string toml = "title_name = \"T\"\ntitle_id = \"00000000\"\nhash = [\"ABCDEF1234567890\", \"1234567890ABCDEF\"]\n";
+
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Hashes, Has.Count.EqualTo(2));
+        Assert.That(patchFile.Hashes[0], Is.EqualTo("ABCDEF1234567890"));
+        Assert.That(patchFile.Hashes[1], Is.EqualTo("1234567890ABCDEF"));
+    }
+
+    [Test]
+    public void Parse_SingleLineMediaIdArray_ParsesAllIds()
+    {
+        string toml = "title_name = \"T\"\ntitle_id = \"00000000\"\nhash = \"00FF00FF00FF00FF\"\nmedia_id = [\"2B7A1346\", \"3C8B2457\"]\n";
+
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.MediaIds, Has.Count.EqualTo(2));
+        Assert.That(patchFile.MediaIds[0].Id, Is.EqualTo("2B7A1346"));
+        Assert.That(patchFile.MediaIds[1].Id, Is.EqualTo("3C8B2457"));
+    }
+
+    [Test]
+    public void Parse_F32IntegerValue_ParsesAsFloat()
+    {
+        string toml =
+            "title_name = \"T\"\ntitle_id = \"00000000\"\nhash = \"00FF00FF00FF00FF\"\n\n[[patch]]\nname = \"P\"\nauthor = \"A\"\nis_enabled = false\n\n[[patch.f32]]\naddress = 0x82000000\nvalue = 123\n";
+
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(123f));
+    }
+
     #endregion
 }

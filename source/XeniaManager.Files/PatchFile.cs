@@ -415,6 +415,12 @@ public class PatchFile
         m = Regex.Match(rawLine, @"^hash\s*=\s*\[");
         if (m.Success)
         {
+            // Entries closed on the same line: hash = ["A", "B"]
+            if (TryParseInlineArrayHashes(rawLine, patchFile))
+            {
+                return;
+            }
+
             for (int i = lineIndex + 1; i < lines.Length; i++)
             {
                 string rawLineArray = lines[i];
@@ -460,6 +466,52 @@ public class PatchFile
     }
 
     /// <summary>
+    /// Parses hash entries closed on the same line (e.g. <c>hash = ["A", "B"]</c>).
+    /// </summary>
+    /// <returns>True when the array closes on this line (nothing more to read), false otherwise.</returns>
+    private static bool TryParseInlineArrayHashes(string rawLine, PatchFile patchFile)
+    {
+        int open = rawLine.IndexOf('[');
+        int close = open >= 0 ? rawLine.IndexOf(']', open) : -1;
+        if (open < 0 || close < 0)
+        {
+            return false;
+        }
+
+        foreach (Match hm in Regex.Matches(rawLine.Substring(open, close - open + 1), @"""([A-Fa-f0-9]+)"""))
+        {
+            patchFile.Document.Hashes.Add(hm.Groups[1].Value.ToUpper());
+            patchFile.Document.HashComments.Add(string.Empty);
+            Logger.Debug<PatchFile>($"Hash: {hm.Groups[1].Value}");
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Parses media IDs closed on the same line (e.g. <c>media_id = ["A", "B"]</c>).
+    /// </summary>
+    /// <returns>True when the array closes on this line (nothing more to read), false otherwise.</returns>
+    private static bool TryParseInlineMediaIds(string rawLine, bool isCommented, PatchFile patchFile)
+    {
+        int open = rawLine.IndexOf('[');
+        int close = open >= 0 ? rawLine.IndexOf(']', open) : -1;
+        if (open < 0 || close < 0)
+        {
+            return false;
+        }
+
+        foreach (Match mm in Regex.Matches(rawLine.Substring(open, close - open + 1), @"""([A-Fa-f0-9]+)"""))
+        {
+            string mediaId = mm.Groups[1].Value.ToUpper();
+            patchFile.Document.MediaIds.Add(new MediaIdEntry(mediaId, string.Empty, isCommented));
+            Logger.Debug<PatchFile>($"Media ID: {mediaId}");
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// Parses the media_id field from the TOML content (handles raw line with comment).
     /// </summary>
     private static void ParseMediaIdArray(string rawLine, string[] lines, int lineIndex, PatchFile patchFile)
@@ -478,6 +530,12 @@ public class PatchFile
 
         if (hasBracket)
         {
+            // Entries closed on the same line: media_id = ["A", "B"]
+            if (TryParseInlineMediaIds(rawLine, isCommented, patchFile))
+            {
+                return;
+            }
+
             // Array format (commented or not)
             for (int i = lineIndex + 1; i < lines.Length; i++)
             {
