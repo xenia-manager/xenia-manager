@@ -417,12 +417,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nenhuma captura de tela encontrada para {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Falha ao abrir a pasta</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Ocorreu um erro ao abrir a pasta de capturas de tela.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Baixar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Baixar patches do repositório</sys:String>
@@ -1406,4 +1402,31 @@
     <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">#NOTTRANSLATED#</sys:String>
+
+    <!-- Game Files Dialog -->
+    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.CloseButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Search.Watermark">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Folder.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.EmptyFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoResults">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoSelection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.SpaSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Size">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Path">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.TitleId">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.MediaId">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Version">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Disc">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ImageSize">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Achievements">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>

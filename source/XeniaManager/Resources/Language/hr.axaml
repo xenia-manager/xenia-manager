@@ -417,12 +417,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nema pronađenih snimaka zaslona za {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Otvaranje mape nije uspjelo</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Došlo je do greške prilikom otvaranja mape sa snimkama zaslona.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">Otvori lokaciju igre</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">Otvara mapu koja sadrži datoteku igre</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">Lokacija mape igre nije pronađena</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">Lokacija mape igre nije moguće pronaći.</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">Neuspjelo otvaranje mape</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">Došlo je do greške prilikom otvaranja lokacije igre.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Zakrpe</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Preuzmi</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Preuzmite zakrpe iz repozitorija</sys:String>
@@ -1406,4 +1402,31 @@
     <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">Pružatelj pohrane nije dostupan.</sys:String>
     <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Disk je već dodan</sys:String>
     <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">Ova je datoteka već povezana s ovom igrom.</sys:String>
+
+    <!-- Game Files Dialog -->
+    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.CloseButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Search.Watermark">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Folder.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.EmptyFolder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoResults">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoSelection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.SpaSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Size">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Path">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.TitleId">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.MediaId">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Version">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Disc">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ImageSize">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Achievements">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>

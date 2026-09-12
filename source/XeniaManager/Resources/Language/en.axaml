@@ -417,12 +417,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">No screenshots found for {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Failed to Open Folder</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">There was an error while opening the screenshots folder.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Header">Open Game Location</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.ToolTip">Opens the folder containing the game file</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title">Game File Not Found</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message">The game file directory could not be found.</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Title">Failed to Open Folder</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameLocation.Error.Message">There was an error while opening the game location.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">Browse Game Files</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">Browse the game files and inspect executables</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Download</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Download patches from repository</sys:String>
@@ -1406,4 +1402,31 @@
     <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
     <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Disc Already Added</sys:String>
     <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">This file is already associated with this game.</sys:String>
+
+    <!-- Game Files Dialog -->
+    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">Game Files</sys:String>
+    <sys:String x:Key="GameFilesDialog.CloseButton">Close</sys:String>
+    <sys:String x:Key="GameFilesDialog.Search.Watermark">Search files...</sys:String>
+    <sys:String x:Key="GameFilesDialog.Folder.Label">Folder</sys:String>
+    <sys:String x:Key="GameFilesDialog.EmptyFolder">This folder is empty.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoResults">No files match your search.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoSelection">Select a file to view its details.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">Open in Explorer</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexSection">Executable details</sys:String>
+    <sys:String x:Key="GameFilesDialog.SpaSection">SPA details</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Size">Size</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Path">Path</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.TitleId">Title ID</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Version">Version</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Disc">Disc</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ImageSize">Image size</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">Module flags</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">Title</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Achievements">Achievements</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">Gamerscore</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Title">Cannot Browse Game Files</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Message">The game files could not be opened. The file may be missing or in an unsupported format.</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">Cannot Open Folder</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">Failed to open the folder: {0}</sys:String>
 </ResourceDictionary>
