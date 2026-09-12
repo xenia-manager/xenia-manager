@@ -25,7 +25,8 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 /// The game modal's achievements pane: stats header, an X-cycled sort
 /// (Achieved / Gamerscore Awarded / Alphabetical) and a scrollable flat list
 /// of rows from the active profile's per-game achievement GPD. When there are
-/// no achievements, A creates them from the game disc.
+/// no achievements, A creates them from the game disc; Y fetches the
+/// achievement images from the disc.
 /// </summary>
 public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
 {
@@ -258,6 +259,75 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
             await ModalFactory.ConfirmAsync(_modalService,
                 LocalizationHelper.GetText("GameModal.Achievements.Create.Failed.Title"),
                 string.Format(LocalizationHelper.GetText("GameModal.Achievements.Create.Failed.Message"), ex.Message),
+                LocalizationHelper.GetText("Modal.Confirm"),
+                LocalizationHelper.GetText("Modal.Cancel"));
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    /// <summary>
+    /// Fetches achievement images from the game disc into the active profile's
+    /// GPD. The user chooses between filling only missing images or
+    /// overwriting all of them; multi-disc games ask which disc to read.
+    /// </summary>
+    private async Task FetchAchievementImagesAsync()
+    {
+        if (IsBusy || _gpdFile == null)
+        {
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            bool? missingOnly = await ModalFactory.ConfirmAsync(_modalService,
+                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.Title"),
+                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.Message"),
+                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.MissingOnly"),
+                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.OverwriteAll"));
+            if (missingOnly == null)
+            {
+                return;
+            }
+
+            int? disc = _game.FileLocations.IsMultiDisc
+                ? await _modalService.ShowAsync<int?>(new DiscSelectionViewModel(_game))
+                : _game.LastPlayedDisc;
+            if (disc == null || disc < 1)
+            {
+                Logger.Info<AchievementsPaneViewModel>("Disc selection cancelled, aborting image fetch");
+                return;
+            }
+
+            string? discPath = _game.FileLocations.GetDiscPath(disc.Value);
+            if (string.IsNullOrEmpty(discPath) || (!File.Exists(discPath) && !Directory.Exists(discPath)))
+            {
+                throw new FileNotFoundException($"Disc file not found: {discPath}", discPath);
+            }
+
+            string? titleGpdPath = _profileService.GetGameAchievementGpdPath(_game.XeniaVersion, _game.GameId);
+            if (titleGpdPath == null)
+            {
+                throw new InvalidOperationException("No active profile found");
+            }
+
+            bool overwriteAll = missingOnly == false;
+            int written = await Task.Run(() => AchievementGpdBuilder.FetchImages(discPath, titleGpdPath, overwriteAll));
+
+            Logger.Info<AchievementsPaneViewModel>($"Fetched {written} achievement images from disc (overwrite: {overwriteAll})");
+            GameDataCache.ClearAchievementGpds();
+            ReloadAchievements();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<AchievementsPaneViewModel>("Failed to fetch achievement images from disc");
+            Logger.LogExceptionDetails<AchievementsPaneViewModel>(ex);
+            await ModalFactory.ConfirmAsync(_modalService,
+                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("GameModal.Achievements.Fetch.Failed.Message"), ex.Message),
                 LocalizationHelper.GetText("Modal.Confirm"),
                 LocalizationHelper.GetText("Modal.Cancel"));
         }
