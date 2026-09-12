@@ -12,6 +12,8 @@ public sealed class IsoFile : IDisposable
 {
     private bool _disposed;
     private IsoSectorReader? _sectorReader;
+    private List<GdfxEntry>? _files;
+    private List<GdfxEntry>? _entries;
 
     /// <summary>
     /// Gets the parsed XEX file from the ISO's default.xex.
@@ -148,6 +150,186 @@ public sealed class IsoFile : IDisposable
     }
 
     /// <summary>
+    /// Gets a flat list of all files on the disc with their full paths and sizes.
+    /// Lazily computed and cached on first access. Empty when the sector reader is unavailable.
+    /// </summary>
+    public IReadOnlyList<GdfxEntry> Files
+    {
+        get
+        {
+            if (_files == null)
+            {
+                _files = WalkEntries().Where(e => e.IsFile).ToList();
+            }
+
+            return _files;
+        }
+    }
+
+    /// <summary>
+    /// Gets a flat list of all entries (files and directories) on the disc
+    /// with their full paths and sizes. Directories have IsFile = false and Size = 0.
+    /// Lazily computed and cached on first access. Empty when the sector reader is unavailable.
+    /// </summary>
+    public IReadOnlyList<GdfxEntry> Entries
+    {
+        get
+        {
+            if (_entries == null)
+            {
+                _entries = WalkEntries().ToList();
+            }
+
+            return _entries;
+        }
+    }
+
+    /// <summary>
+    /// Looks up a file or directory by its path within the disc.
+    /// Supports both forward and backslash path separators. Comparison is case-insensitive.
+    /// </summary>
+    /// <param name="path">The path to look up (e.g., "game/data.bin" or "default.xex").</param>
+    /// <returns>The entry if found; null if the path does not exist.</returns>
+    public GdfxEntry? Lookup(string path)
+    {
+        // Note: explicit array — Split('/', '\\', options) binds to the (separator, count, options)
+        // overload with '\\' as count and silently ignores the backslash.
+        string normalized = string.Join('/', path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries));
+        return WalkEntries().FirstOrDefault(e => e.FullPath.Equals(normalized, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// Lists the immediate children of a directory by path.
+    /// </summary>
+    /// <param name="path">The directory path (e.g., "game" or "" for root).</param>
+    /// <returns>A list of child entries, or null if the path does not exist or is a file.</returns>
+    public List<GdfxEntry>? ListDirectory(string path)
+    {
+        string normalized = string.Join('/', path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries));
+        if (normalized.Length == 0)
+        {
+            return WalkEntries().Where(e => !e.FullPath.Contains('/')).ToList();
+        }
+
+        GdfxEntry? dir = Lookup(normalized);
+        if (dir == null || dir.IsFile)
+        {
+            return null;
+        }
+
+        string prefix = normalized + '/';
+        return WalkEntries()
+            .Where(e => e.FullPath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+                        && !e.FullPath[prefix.Length..].Contains('/'))
+            .ToList();
+    }
+
+    /// <summary>
+    /// Reads the full contents of a file identified by its path within the disc.
+    /// </summary>
+    /// <param name="path">The path to the file (e.g., "default.xex").</param>
+    /// <returns>The complete file data, or null if the file was not found or is a directory.</returns>
+    public byte[]? ReadFile(string path)
+    {
+        GdfxEntry? entry = Lookup(path);
+        if (entry == null || !entry.IsFile)
+        {
+            return null;
+        }
+
+        return ReadFile(entry);
+    }
+
+    /// <summary>
+    /// Reads the full contents of a file from a <see cref="GdfxEntry"/>.
+    /// </summary>
+    /// <param name="entry">The file entry to read.</param>
+    /// <returns>The complete file data as a byte array.</returns>
+    public byte[] ReadFile(GdfxEntry entry) => ReadFile(entry, 0, entry.Size);
+
+    /// <summary>
+    /// Reads a portion of a file starting at the specified offset with the specified length.
+    /// </summary>
+    /// <param name="entry">The file entry to read from.</param>
+    /// <param name="offset">The byte offset within the file to start reading from.</param>
+    /// <param name="length">The number of bytes to read.</param>
+    /// <returns>The requested file data. Empty when offset is beyond the file size.</returns>
+    public byte[] ReadFile(GdfxEntry entry, ulong offset, ulong length)
+    {
+        if (offset >= entry.Size)
+        {
+            return Array.Empty<byte>();
+        }
+
+        ulong bytesToRead = Math.Min(length, entry.Size - offset);
+        if (bytesToRead == 0)
+        {
+            return Array.Empty<byte>();
+        }
+
+        // GDFX sectors are 0x800 bytes; the first sector may start mid-way when offset is unaligned.
+        const ulong sectorSize = IsoConstants.SECTOR_SIZE;
+        byte[] result = new byte[bytesToRead];
+        ulong remaining = bytesToRead;
+        ulong destOffset = 0;
+        ulong fileOffset = offset;
+        while (remaining > 0)
+        {
+            uint sectorIndex = (uint)(fileOffset / sectorSize);
+            uint sectorOffset = (uint)(fileOffset % sectorSize);
+            uint step = (uint)Math.Min(remaining, sectorSize - sectorOffset);
+            byte[]? sectorData = ReadSectors(entry.Sector + sectorIndex, IsoConstants.SECTOR_SIZE);
+            if (sectorData == null)
+            {
+                Logger.Error<IsoFile>($"Failed to read file sector for '{entry.FullPath}'");
+                return Array.Empty<byte>();
+            }
+
+            Array.Copy(sectorData, sectorOffset, result, (long)destOffset, step);
+            fileOffset += step;
+            remaining -= step;
+            destOffset += step;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Extracts all files from the disc to the specified output directory,
+    /// preserving the directory structure. Entries that would escape the output
+    /// directory are skipped with a warning (same guard as STFS extraction).
+    /// </summary>
+    /// <param name="outputDir">The root output directory to extract files into.</param>
+    public void ExtractAll(string outputDir)
+    {
+        Logger.Info<IsoFile>($"Extracting all files from {FilePath} to {outputDir}");
+        foreach (GdfxEntry file in Files)
+        {
+            string filePath;
+            try
+            {
+                filePath = Utilities.ArchiveExtractor.GetSafeEntryOutputPath(outputDir,
+                    file.FullPath.Replace('/', Path.DirectorySeparatorChar));
+            }
+            catch (IOException ex)
+            {
+                Logger.Warning<IsoFile>($"Skipping '{file.FullPath}': {ex.Message}");
+                continue;
+            }
+
+            string? parentDir = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(parentDir))
+            {
+                Directory.CreateDirectory(parentDir);
+            }
+
+            File.WriteAllBytes(filePath, ReadFile(file));
+        }
+
+        Logger.Info<IsoFile>($"Extraction complete to {outputDir}");
+    }
+
+    /// <summary>
     /// Gets all ISO file slices for a given file path.
     /// Handles split archives like game.iso, game.iso.1, game.iso.2, etc.
     /// </summary>
@@ -236,33 +418,90 @@ public sealed class IsoFile : IDisposable
 
     /// <summary>
     /// Finds and extracts a file from the ISO by name.
-    /// Uses a stack-based traversal of the XDVDFS directory structure.
+    /// Searches the whole GDFX tree and returns the first case-insensitive name match.
     /// </summary>
     /// <param name="fileName">The name of the file to find (case-insensitive).</param>
     /// <returns>The file data, or null if not found.</returns>
     private byte[]? FindFileInIso(string fileName)
     {
-        if (_sectorReader == null || XgdInformation == null)
+        foreach (GdfxEntry entry in WalkEntries())
         {
-            return null;
+            if (!entry.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (!entry.IsFile)
+            {
+                Logger.Error<IsoFile>($"Found {fileName} but it's a directory, not a file");
+                return null;
+            }
+
+            if (entry.Size == 0)
+            {
+                return Array.Empty<byte>();
+            }
+
+            byte[] fileData = ReadFile(entry);
+            if (entry.Size > 0 && fileData.Length == 0)
+            {
+                return null;
+            }
+
+            Logger.Info<IsoFile>($"Successfully extracted {fileName} ({fileData.Length} bytes)");
+            return fileData;
         }
 
-        // Read the root directory
-        uint rootSectors = (XgdInformation.RootDirSize + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
-        byte[] rootData = new byte[XgdInformation.RootDirSize];
+        Logger.Warning<IsoFile>($"File {fileName} not found in ISO");
+        return null;
+    }
 
-        for (uint i = 0; i < rootSectors; i++)
+    /// <summary>
+    /// Reads <paramref name="size"/> bytes starting at GDFX <paramref name="sector"/>
+    /// (relative to <see cref="XgdInfo.BaseSector"/>), or null when any sector fails to read.
+    /// </summary>
+    private byte[]? ReadSectors(uint sector, uint size)
+    {
+        if (_sectorReader == null || XgdInformation == null || size == 0)
         {
-            uint currentSector = XgdInformation.BaseSector + XgdInformation.RootDirSector + i;
-            if (!_sectorReader.TryReadSector(currentSector, out byte[] sectorData))
+            return size == 0 ? Array.Empty<byte>() : null;
+        }
+
+        uint sectorCount = (size + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
+        byte[] data = new byte[size];
+        for (uint i = 0; i < sectorCount; i++)
+        {
+            if (!_sectorReader.TryReadSector(XgdInformation.BaseSector + sector + i, out byte[] sectorData))
             {
-                Logger.Error<IsoFile>($"Failed to read root directory sector {i}");
                 return null;
             }
 
             uint offset = i * IsoConstants.SECTOR_SIZE;
-            uint length = Math.Min(IsoConstants.SECTOR_SIZE, XgdInformation.RootDirSize - offset);
-            Array.Copy(sectorData, 0, rootData, offset, length);
+            uint length = Math.Min(IsoConstants.SECTOR_SIZE, size - offset);
+            Array.Copy(sectorData, 0, data, offset, length);
+        }
+
+        return data;
+    }
+
+    /// <summary>
+    /// Walks the whole GDFX tree preorder (entry, then subdirectory contents,
+    /// then left and right sibling subtrees), yielding every file and directory
+    /// with its full root-relative path. Same visit order as the previous
+    /// duplicated walkers; table linkage matches <c>DiscImageDevice::ReadEntry</c>.
+    /// </summary>
+    private IEnumerable<GdfxEntry> WalkEntries()
+    {
+        if (_sectorReader == null || XgdInformation == null)
+        {
+            yield break;
+        }
+
+        byte[]? rootData = ReadSectors(XgdInformation.RootDirSector, XgdInformation.RootDirSize);
+        if (rootData == null)
+        {
+            Logger.Error<IsoFile>("Failed to read ISO root directory");
+            yield break;
         }
 
         // Stack-based directory traversal (preorder)
@@ -270,50 +509,46 @@ public sealed class IsoFile : IDisposable
         directoryStack.Push(new DirectoryNode
         {
             Data = rootData,
-            Offset = 0
+            Offset = 0,
+            ParentPath = string.Empty
         });
 
         while (directoryStack.Count > 0)
         {
             DirectoryNode currentNode = directoryStack.Pop();
 
-            using MemoryStream dirStream = new MemoryStream(currentNode.Data);
-            using BinaryReader dirReader = new BinaryReader(dirStream);
-
-            if (currentNode.Offset * 4 >= (uint)dirStream.Length)
+            if (currentNode.Offset * 4 >= (uint)currentNode.Data.Length)
             {
                 continue;
             }
 
             uint entryOffset = currentNode.Offset * 4;
-            dirStream.Position = entryOffset;
-
-            // Read the directory entry header (14 bytes)
-            byte[] headerBuffer = dirReader.ReadBytes(14);
-            if (headerBuffer.Length != 14)
+            if (entryOffset + 14 > (uint)currentNode.Data.Length)
             {
                 continue;
             }
 
-            // Parse header (little-endian format per XDVDFS spec)
-            ushort left = (ushort)(headerBuffer[0] | (headerBuffer[1] << 8));
-            ushort right = (ushort)(headerBuffer[2] | (headerBuffer[3] << 8));
-            uint sector = (uint)(headerBuffer[4] | (headerBuffer[5] << 8) | (headerBuffer[6] << 16) | (headerBuffer[7] << 24));
-            uint size = (uint)(headerBuffer[8] | (headerBuffer[9] << 8) | (headerBuffer[10] << 16) | (headerBuffer[11] << 24));
-            byte attribute = headerBuffer[12];
-            byte nameLength = headerBuffer[13];
+            // Read the directory entry header (14 bytes, little-endian per XDVDFS spec)
+            ushort left = (ushort)(currentNode.Data[entryOffset] | (currentNode.Data[entryOffset + 1] << 8));
+            ushort right = (ushort)(currentNode.Data[entryOffset + 2] | (currentNode.Data[entryOffset + 3] << 8));
+            uint sector = (uint)(currentNode.Data[entryOffset + 4] | (currentNode.Data[entryOffset + 5] << 8) | (currentNode.Data[entryOffset + 6] << 16) |
+                                 (currentNode.Data[entryOffset + 7] << 24));
+            uint size = (uint)(currentNode.Data[entryOffset + 8] | (currentNode.Data[entryOffset + 9] << 8) | (currentNode.Data[entryOffset + 10] << 16) |
+                               (currentNode.Data[entryOffset + 11] << 24));
+            byte attribute = currentNode.Data[entryOffset + 12];
+            byte nameLength = currentNode.Data[entryOffset + 13];
 
             // Check for empty entry
             bool allFF = true;
             bool allZero = true;
             for (int i = 0; i < 14; i++)
             {
-                if (headerBuffer[i] != 0xFF)
+                if (currentNode.Data[entryOffset + i] != 0xFF)
                 {
                     allFF = false;
                 }
 
-                if (headerBuffer[i] != 0x00)
+                if (currentNode.Data[entryOffset + i] != 0x00)
                 {
                     allZero = false;
                 }
@@ -332,62 +567,37 @@ public sealed class IsoFile : IDisposable
 
             // Read filename
             uint filenameOffset = entryOffset + 14;
-            if (filenameOffset + nameLength > (uint)dirStream.Length)
+            if (filenameOffset + nameLength > (uint)currentNode.Data.Length)
             {
                 continue;
             }
 
-            dirStream.Position = filenameOffset;
-            byte[] filenameBytes = dirReader.ReadBytes(nameLength);
+            byte[] filenameBytes = new byte[nameLength];
+            Array.Copy(currentNode.Data, filenameOffset, filenameBytes, 0, nameLength);
             string filename = Utilities.Windows1252.GetString(filenameBytes);
+            string fullPath = string.IsNullOrEmpty(currentNode.ParentPath) ? filename : $"{currentNode.ParentPath}/{filename}";
+            bool isDirectory = (attribute & 0x10) != 0;
 
-            // Check if this is the file we're looking for
-            if (filename.Equals(fileName, StringComparison.OrdinalIgnoreCase))
+            yield return new GdfxEntry
             {
-                if ((attribute & 0x10) != 0)
-                {
-                    Logger.Error<IsoFile>($"Found {fileName} but it's a directory, not a file");
-                    return null;
-                }
-
-                // Extract file data
-                if (size == 0)
-                {
-                    return Array.Empty<byte>();
-                }
-
-                byte[] fileData = new byte[size];
-                uint readSector = sector + XgdInformation.BaseSector;
-                uint processed = 0;
-
-                while (processed < size)
-                {
-                    if (!_sectorReader.TryReadSector(readSector, out byte[] sectorData))
-                    {
-                        Logger.Error<IsoFile>($"Failed to read file sector at {readSector}");
-                        return null;
-                    }
-
-                    uint bytesToCopy = Math.Min(size - processed, IsoConstants.SECTOR_SIZE);
-                    Array.Copy(sectorData, 0, fileData, processed, bytesToCopy);
-                    readSector++;
-                    processed += bytesToCopy;
-                }
-
-                Logger.Info<IsoFile>($"Successfully extracted {fileName} ({fileData.Length} bytes)");
-                return fileData;
-            }
+                Name = filename,
+                FullPath = fullPath,
+                IsFile = !isDirectory,
+                Size = isDirectory ? 0 : size,
+                Sector = sector
+            };
 
             // Push the right child first (so the left is processed first)
             if (right != 0 && right != 0xFFFF)
             {
                 uint rightOffsetBytes = (uint)right * 4;
-                if (rightOffsetBytes < (ulong)dirStream.Length)
+                if (rightOffsetBytes < (ulong)currentNode.Data.Length)
                 {
                     directoryStack.Push(new DirectoryNode
                     {
                         Data = currentNode.Data,
-                        Offset = right
+                        Offset = right,
+                        ParentPath = currentNode.ParentPath
                     });
                 }
             }
@@ -396,43 +606,32 @@ public sealed class IsoFile : IDisposable
             if (left != 0 && left != 0xFFFF)
             {
                 uint leftOffsetBytes = (uint)left * 4;
-                if (leftOffsetBytes < (ulong)dirStream.Length)
+                if (leftOffsetBytes < (ulong)currentNode.Data.Length)
                 {
                     directoryStack.Push(new DirectoryNode
                     {
                         Data = currentNode.Data,
-                        Offset = left
+                        Offset = left,
+                        ParentPath = currentNode.ParentPath
                     });
                 }
             }
 
             // If directory, add its contents to the stack
-            if ((attribute & 0x10) != 0 && size > 0)
+            if (isDirectory && size > 0)
             {
-                uint directorySectors = (size + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
-                byte[] directoryData = new byte[size];
-
-                for (uint i = 0; i < directorySectors; i++)
+                byte[]? directoryData = ReadSectors(sector, size);
+                if (directoryData != null)
                 {
-                    uint currentDirectorySector = XgdInformation.BaseSector + sector + i;
-                    if (_sectorReader.TryReadSector(currentDirectorySector, out byte[] sectorData))
+                    directoryStack.Push(new DirectoryNode
                     {
-                        uint offset = i * IsoConstants.SECTOR_SIZE;
-                        uint length = Math.Min(IsoConstants.SECTOR_SIZE, size - offset);
-                        Array.Copy(sectorData, 0, directoryData, offset, length);
-                    }
+                        Data = directoryData,
+                        Offset = 0,
+                        ParentPath = fullPath
+                    });
                 }
-
-                directoryStack.Push(new DirectoryNode
-                {
-                    Data = directoryData,
-                    Offset = 0
-                });
             }
         }
-
-        Logger.Warning<IsoFile>($"File {fileName} not found in ISO");
-        return null;
     }
 
     /// <summary>
@@ -570,167 +769,25 @@ public sealed class IsoFile : IDisposable
             return null;
         }
 
-        // Re-use the directory walk but collect any .xex candidate different from default.xex.
-        // To avoid duplicating traversal, we do a lightweight search that looks for *.xex entries.
-        // We scan the same GDFX tree used by FindFileInIso, but with a predicate for any .xex.
         try
         {
-            uint rootSectors = (XgdInformation.RootDirSize + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
-            byte[] rootData = new byte[XgdInformation.RootDirSize];
-            for (uint i = 0; i < rootSectors; i++)
+            foreach (GdfxEntry entry in WalkEntries())
             {
-                uint currentSector = XgdInformation.BaseSector + XgdInformation.RootDirSector + i;
-                if (!_sectorReader.TryReadSector(currentSector, out byte[] sectorData))
-                {
-                    return null;
-                }
-
-                uint offset = i * IsoConstants.SECTOR_SIZE;
-                uint length = Math.Min(IsoConstants.SECTOR_SIZE, XgdInformation.RootDirSize - offset);
-                Array.Copy(sectorData, 0, rootData, offset, length);
-            }
-
-            Stack<DirectoryNode> stack = new Stack<DirectoryNode>();
-            stack.Push(new DirectoryNode
-            {
-                Data = rootData,
-                Offset = 0
-            });
-
-            while (stack.Count > 0)
-            {
-                DirectoryNode node = stack.Pop();
-                if (node.Offset * 4 >= (uint)node.Data.Length)
+                if (!entry.IsFile || entry.Size == 0)
                 {
                     continue;
                 }
 
-                using MemoryStream dirStream = new MemoryStream(node.Data);
-                using BinaryReader dirReader = new BinaryReader(dirStream);
-
-                uint entryOffset = node.Offset * 4;
-                if (entryOffset + 14 > (uint)dirStream.Length)
+                bool isXex = entry.Name.EndsWith(".xex", StringComparison.OrdinalIgnoreCase);
+                bool isDefault = entry.Name.Equals(IsoConstants.DEFAULT_EXECUTABLE_NAME, StringComparison.OrdinalIgnoreCase);
+                if (isXex && !isDefault)
                 {
-                    continue;
-                }
-
-                dirStream.Position = entryOffset;
-                byte[] headerBuffer = dirReader.ReadBytes(14);
-                if (headerBuffer.Length != 14)
-                {
-                    continue;
-                }
-
-                ushort left = (ushort)(headerBuffer[0] | (headerBuffer[1] << 8));
-                ushort right = (ushort)(headerBuffer[2] | (headerBuffer[3] << 8));
-                uint sector = (uint)(headerBuffer[4] | (headerBuffer[5] << 8) | (headerBuffer[6] << 16) | (headerBuffer[7] << 24));
-                uint size = (uint)(headerBuffer[8] | (headerBuffer[9] << 8) | (headerBuffer[10] << 16) | (headerBuffer[11] << 24));
-                byte attr = headerBuffer[12];
-                byte nameLen = headerBuffer[13];
-
-                bool allFF = true, allZero = true;
-                for (int i = 0; i < 14; i++)
-                {
-                    if (headerBuffer[i] != 0xFF)
+                    byte[] fileData = ReadFile(entry);
+                    if ((ulong)fileData.Length == entry.Size)
                     {
-                        allFF = false;
-                    }
-
-                    if (headerBuffer[i] != 0x00)
-                    {
-                        allZero = false;
-                    }
-                }
-
-                if (allFF || allZero || nameLen == 0)
-                {
-                    continue;
-                }
-
-                uint filenameOffset = entryOffset + 14;
-                if (filenameOffset + nameLen > (uint)dirStream.Length)
-                {
-                    continue;
-                }
-
-                dirStream.Position = filenameOffset;
-                byte[] filenameBytes = dirReader.ReadBytes(nameLen);
-                string filename = Utilities.Windows1252.GetString(filenameBytes);
-
-                // If this is a .xex different from default.xex, extract and return it.
-                bool isXex = filename.EndsWith(".xex", StringComparison.OrdinalIgnoreCase);
-                bool isDefault = filename.Equals(IsoConstants.DEFAULT_EXECUTABLE_NAME, StringComparison.OrdinalIgnoreCase);
-                if (isXex && !isDefault && (attr & 0x10) == 0 && size > 0)
-                {
-                    byte[] fileData = new byte[size];
-                    uint readSector = sector + XgdInformation.BaseSector;
-                    uint processed = 0;
-                    while (processed < size)
-                    {
-                        if (!_sectorReader.TryReadSector(readSector, out byte[] sectorData))
-                        {
-                            break;
-                        }
-
-                        uint toCopy = Math.Min(size - processed, IsoConstants.SECTOR_SIZE);
-                        Array.Copy(sectorData, 0, fileData, processed, toCopy);
-                        readSector++;
-                        processed += toCopy;
-                    }
-
-                    if (processed == size)
-                    {
-                        Logger.Trace<IsoFile>($"ISO alternative XEX candidate found: '{filename}' ({size} bytes)");
+                        Logger.Trace<IsoFile>($"ISO alternative XEX candidate found: '{entry.FullPath}' ({entry.Size} bytes)");
                         return fileData;
                     }
-                }
-
-                if (right != 0 && right != 0xFFFF)
-                {
-                    uint ro = (uint)right * 4;
-                    if (ro < (ulong)dirStream.Length)
-                    {
-                        stack.Push(new DirectoryNode
-                        {
-                            Data = node.Data,
-                            Offset = right
-                        });
-                    }
-                }
-
-                if (left != 0 && left != 0xFFFF)
-                {
-                    uint lo = (uint)left * 4;
-                    if (lo < (ulong)dirStream.Length)
-                    {
-                        stack.Push(new DirectoryNode
-                        {
-                            Data = node.Data,
-                            Offset = left
-                        });
-                    }
-                }
-
-                if ((attr & 0x10) != 0 && size > 0)
-                {
-                    uint dirSectors = (size + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
-                    byte[] directoryData = new byte[size];
-                    for (uint i = 0; i < dirSectors; i++)
-                    {
-                        uint s = XgdInformation.BaseSector + sector + i;
-                        if (_sectorReader.TryReadSector(s, out byte[] sd))
-                        {
-                            uint off = i * IsoConstants.SECTOR_SIZE;
-                            uint len = Math.Min(IsoConstants.SECTOR_SIZE, size - off);
-                            Array.Copy(sd, 0, directoryData, off, len);
-                        }
-                    }
-
-                    stack.Push(new DirectoryNode
-                    {
-                        Data = directoryData,
-                        Offset = 0
-                    });
                 }
             }
         }
@@ -749,6 +806,7 @@ public sealed class IsoFile : IDisposable
     {
         public byte[] Data { get; init; } = Array.Empty<byte>();
         public uint Offset { get; init; }
+        public string ParentPath { get; init; } = string.Empty;
     }
 
     /// <summary>
