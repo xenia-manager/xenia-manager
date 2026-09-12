@@ -822,6 +822,13 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Failed to unlock achievements.&#10;Error: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Lock Failed</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Failed to lock achievements.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">Fetch Achievements from Game Files</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">Achievements Ready</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">Achievements ready: {1} total ({0} added from the game files).</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">Creation Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">Failed to create achievements from the game files.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">Disc/Game Files Missing</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">The selected disc/game files could not be found.</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Installed Content</sys:String>
