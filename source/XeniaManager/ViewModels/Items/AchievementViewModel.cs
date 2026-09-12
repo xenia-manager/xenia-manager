@@ -118,20 +118,14 @@ public partial class AchievementViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Gets the achievement image if available and unlocked, otherwise null.
+    /// Gets the achievement image: full color when unlocked, black and white
+    /// when locked, null when the GPD holds no art for it.
     /// The image is cached after the first load to avoid repeated decoding.
-    /// Images are only shown for unlocked achievements to avoid spoilers.
     /// </summary>
     public IImage? AchievementImage
     {
         get
         {
-            // Don't show image for locked achievements (avoid spoilers)
-            if (!IsUnlocked)
-            {
-                return null;
-            }
-
             // Return a cached image if already loaded
             if (_cachedImage != null)
             {
@@ -150,21 +144,40 @@ public partial class AchievementViewModel : ViewModelBase
                 return null;
             }
 
-            // Decode and cache the image
-            using MemoryStream ms = new MemoryStream(imageData.ImageData);
-            _cachedImage = new Bitmap(ms);
+            // Decode and cache the image (grayscale while locked)
+            if (IsUnlocked)
+            {
+                using MemoryStream ms = new MemoryStream(imageData.ImageData);
+                _cachedImage = new Bitmap(ms);
+            }
+            else
+            {
+                _cachedImage = GrayscaleImage.ToGrayscale(imageData.ImageData);
+            }
+
             return _cachedImage;
         }
     }
 
     /// <summary>
-    /// Gets whether an achievement image is available.
+    /// Gets whether an achievement image is available (locked or unlocked).
     /// </summary>
     public bool HasAchievementImage
     {
         get
         {
             return AchievementImage != null;
+        }
+    }
+
+    /// <summary>
+    /// Gets whether to show the lock icon (locked without an image).
+    /// </summary>
+    public bool ShowLockedIcon
+    {
+        get
+        {
+            return !IsUnlocked && !HasAchievementImage;
         }
     }
 
@@ -219,6 +232,7 @@ public partial class AchievementViewModel : ViewModelBase
         OnPropertyChanged(nameof(Description));
         OnPropertyChanged(nameof(AchievementImage));
         OnPropertyChanged(nameof(HasAchievementImage));
+        OnPropertyChanged(nameof(ShowLockedIcon));
         OnPropertyChanged(nameof(ShowLockOpenIcon));
     }
 }

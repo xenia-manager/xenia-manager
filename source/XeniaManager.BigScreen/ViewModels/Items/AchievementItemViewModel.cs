@@ -12,8 +12,9 @@ using XeniaManager.Core.Utilities;
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
 /// <summary>
-/// A single achievement row: name, gamerscore, description and unlock date,
-/// with the achievement image shown only when unlocked (no spoilers).
+/// A single achievement row: name, gamerscore, description and unlock date.
+/// The image shows in full color when unlocked and black and white when
+/// locked (secret locked achievements stay hidden behind the lock icon).
 /// </summary>
 public partial class AchievementItemViewModel : ObservableObject, ISelectable
 {
@@ -62,14 +63,14 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     public partial bool IsSelected { get; set; }
 
     /// <summary>
-    /// Whether the achievement image can be decoded: the achievement is
-    /// unlocked, a GPD is available and the achievement carries an image.
+    /// Whether the achievement image can be decoded: a GPD is available and
+    /// the achievement carries an image.
     /// </summary>
     public bool CanLoadImage
     {
         get
         {
-            return IsUnlocked && _gpdFile != null && Achievement.ImageId != 0;
+            return _gpdFile != null && Achievement.ImageId != 0;
         }
     }
 
@@ -81,6 +82,18 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
         get
         {
             return AchievementImage != null;
+        }
+    }
+
+    /// <summary>
+    /// Whether a lock icon shows instead of the image (locked without art,
+    /// or a locked secret hiding its surprise).
+    /// </summary>
+    public bool ShowLockedIcon
+    {
+        get
+        {
+            return !IsUnlocked && !HasAchievementImage;
         }
     }
 
@@ -165,12 +178,13 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     }
 
     /// <summary>
-    /// Decodes the achievement image from the GPD. Returns null when the
-    /// achievement is locked (spoiler guard), has no image or the decode fails.
+    /// Decodes the achievement image from the GPD: full color when unlocked,
+    /// black and white when locked. Returns null when there is no image,
+    /// decoding fails, or a locked secret hides its surprise.
     /// </summary>
     private Bitmap? LoadImage()
     {
-        if (!CanLoadImage)
+        if (!CanLoadImage || (!IsUnlocked && IsSpoilerGated))
         {
             return null;
         }
@@ -184,7 +198,8 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
             }
 
             using MemoryStream stream = new MemoryStream(image.ImageData);
-            return new Bitmap(stream);
+            // WriteableBitmap derives from Bitmap, keeping the declared type.
+            return IsUnlocked ? new Bitmap(stream) : GrayscaleImage.ToGrayscale(image.ImageData);
         }
         catch (Exception ex)
         {
@@ -195,7 +210,7 @@ public partial class AchievementItemViewModel : ObservableObject, ISelectable
     }
 
     /// <summary>
-    /// The achievement image, decoded lazily and only when unlocked.
+    /// The achievement image, decoded lazily (grayscale while locked).
     /// </summary>
     public Bitmap? AchievementImage
     {
