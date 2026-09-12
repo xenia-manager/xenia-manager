@@ -25,13 +25,15 @@ public record struct FreeSpaceEntry
     public uint Length;
 
     /// <summary>
-    /// Gets whether this entry represents actual free space (vs. end-of-file marker).
+    /// Gets whether this entry represents actual free space (vs. end-of-data marker).
+    /// The marker spans to the end of the address space (offset + length == 0xFFFFFFFF);
+    /// real holes never reach that far.
     /// </summary>
     public bool IsFreeSpace
     {
         get
         {
-            return Length != 0xFFFFFFFF;
+            return (ulong)OffsetSpecifier + Length != uint.MaxValue;
         }
     }
 

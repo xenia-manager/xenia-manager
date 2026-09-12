@@ -1,3 +1,4 @@
+using System.Text;
 using XeniaManager.Logging;
 using XeniaManager.Files.Models.Gpd;
 
@@ -239,6 +240,14 @@ public class GpdFile : IDisposable
             FreeSpaceTableLength = 512,
             FreeSpaceTableEntryCount = 0
         };
+
+        // The emulator discards files without an end-of-data free entry as invalid,
+        // so every new file starts with its marker (offset 0, length -1 - offset).
+        FreeSpaceEntries.Add(new FreeSpaceEntry
+        {
+            OffsetSpecifier = 0,
+            Length = uint.MaxValue
+        });
     }
 
     /// <summary>
@@ -292,6 +301,10 @@ public class GpdFile : IDisposable
 
         GpdFile gpd = new GpdFile(header.IsBigEndian);
         gpd.Header = header;
+
+        // The constructor seeds an end-of-data marker; drop it so loading stays
+        // faithful to the file (a stale seed would duplicate the stored marker).
+        gpd.FreeSpaceEntries.Clear();
 
         // Parse entry table
         int entryTableOffset = 24;
@@ -364,6 +377,16 @@ public class GpdFile : IDisposable
     {
         Logger.Trace<GpdFile>("Converting GPD to bytes");
 
+        // The emulator discards files without an end-of-data free entry as invalid:
+        // drop any stale markers (offset + length wraps to -1), then mark the
+        // current end of data. Real holes never reach -1, so they are kept.
+        FreeSpaceEntries.RemoveAll(f => (ulong)f.OffsetSpecifier + f.Length == uint.MaxValue);
+        FreeSpaceEntries.Add(new FreeSpaceEntry
+        {
+            OffsetSpecifier = (uint)Data.Length,
+            Length = uint.MaxValue - (uint)Data.Length
+        });
+
         // Update header counts (create a copy since Header is a struct)
         XdbfHeader header = Header;
         header.EntryCount = (uint)Entries.Count;
@@ -382,12 +405,13 @@ public class GpdFile : IDisposable
         byte[] headerBytes = Header.ToBytes();
         headerBytes.CopyTo(fileData, 0);
 
-        // Write entry table
+        // Write entry table, sorted by namespace then ID like the emulator does
+        List<EntryTableEntry> orderedEntries = Entries.OrderBy(e => e.Namespace).ThenBy(e => e.Id).ToList();
         int offset = 24;
         for (int i = 0; i < Header.EntryTableLength; i++)
         {
-            byte[] entryBytes = i < Entries.Count
-                ? Entries[i].ToBytes(_isBigEndian)
+            byte[] entryBytes = i < orderedEntries.Count
+                ? orderedEntries[i].ToBytes(_isBigEndian)
                 : new byte[18]; // Zero-fill unused entries
             entryBytes.CopyTo(fileData, offset + i * 18);
         }
@@ -634,6 +658,69 @@ public class GpdFile : IDisposable
     }
 
     /// <summary>
+    /// Gets a string by its ID.
+    /// Returns null if the string is not found or is invalid/corrupted.
+    /// </summary>
+    /// <param name="stringId">The string ID to find.</param>
+    /// <returns>The StringEntry if found and valid, null otherwise.</returns>
+    public StringEntry? GetString(uint stringId)
+    {
+        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+            e.Namespace == EntryNamespace.String &&
+            e.Id == stringId);
+
+        // Check if the entry is default (not found)
+        if (entry.Namespace == default)
+        {
+            return null;
+        }
+
+        StringEntry? result = ParseEntry<StringEntry>(entry);
+        return result?.IsValid == true ? result : null;
+    }
+
+    /// <summary>
+    /// Adds a new string entry to the GPD file.
+    /// </summary>
+    /// <param name="stringId">The string ID.</param>
+    /// <param name="value">The string value (stored as null-terminated big-endian Unicode).</param>
+    /// <returns>The added StringEntry.</returns>
+    public StringEntry AddString(uint stringId, string value)
+    {
+        Logger.Info<GpdFile>($"Adding new string (ID: 0x{stringId:X8})");
+
+        StringEntry result = StringEntry.FromString(value);
+        byte[] stringData = Encoding.BigEndianUnicode.GetBytes(value + '\0');
+
+        // Create entry table entry
+        EntryTableEntry entry = new EntryTableEntry
+        {
+            Namespace = EntryNamespace.String,
+            Id = stringId,
+            OffsetSpecifier = (uint)Data.Length,
+            Length = (uint)stringData.Length
+        };
+
+        // Add to the data section
+        byte[] newData = new byte[Data.Length + stringData.Length];
+        Data.CopyTo(newData, 0);
+        stringData.CopyTo(newData, Data.Length);
+        Data = newData;
+
+        // Add to entries
+        Entries.Add(entry);
+        InvalidateCaches();
+
+        // Update header counts (create a copy since Header is a struct)
+        XdbfHeader header = Header;
+        header.EntryCount = (uint)Entries.Count;
+        Header = header;
+
+        Logger.Info<GpdFile>($"Successfully added string (ID: 0x{stringId:X8})");
+        return result;
+    }
+
+    /// <summary>
     /// Adds a new title entry to the GPD file.
     /// </summary>
     /// <param name="title">The title to add.</param>
@@ -771,6 +858,39 @@ public class GpdFile : IDisposable
 
         // Note: This doesn't reclaim the data space - would need compaction for that
         Logger.Info<GpdFile>($"Successfully removed achievement");
+        return true;
+    }
+
+    /// <summary>
+    /// Removes an image entry by its image ID, freeing its table row.
+    /// </summary>
+    /// <param name="imageId">The image ID to remove.</param>
+    /// <returns>True if the image was found and removed, false otherwise.</returns>
+    public bool RemoveImage(uint imageId)
+    {
+        Logger.Info<GpdFile>($"Removing image 0x{imageId:X8}");
+
+        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+            e.Namespace == EntryNamespace.Image &&
+            e.Id == imageId);
+
+        // Check if the entry is default (not found)
+        if (entry.Namespace == default)
+        {
+            Logger.Warning<GpdFile>($"Image 0x{imageId:X8} not found");
+            return false;
+        }
+
+        Entries.Remove(entry);
+        InvalidateCaches();
+
+        // Update header counts (create a copy since Header is a struct)
+        XdbfHeader header = Header;
+        header.EntryCount = (uint)Entries.Count;
+        Header = header;
+
+        // Note: This doesn't reclaim the data space - would need compaction for that
+        Logger.Info<GpdFile>($"Successfully removed image");
         return true;
     }
 
