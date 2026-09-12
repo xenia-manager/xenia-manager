@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -344,19 +343,28 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// The fetch button text for the dialog chrome, or null to hide it.
+    /// Shown only while the achievements of an account with a GPD are displayed.
+    /// </summary>
+    public string? FetchButtonText
+    {
+        get
+        {
+            return IsAchievementsListVisible && IsAchievementGpdPresent
+                ? LocalizationHelper.GetText("InstalledContentDialog.Achievements.Fetch")
+                : null;
+        }
+    }
+
+    /// <summary>
     /// Whether an achievement GPD build from disc is currently running.
     /// </summary>
     [ObservableProperty] private bool _isCreatingAchievements;
 
     /// <summary>
-    /// Whether achievement images are currently being fetched from disc.
+    /// Whether an achievement fetch from disc is currently running.
     /// </summary>
-    [ObservableProperty] private bool _isFetchingImages;
-
-    /// <summary>
-    /// Whether achievement strings are currently being refetched from disc.
-    /// </summary>
-    [ObservableProperty] private bool _isRefreshingStrings;
+    [ObservableProperty] private bool _isFetching;
 
     /// <summary>
     /// Gets the total achievement count.
@@ -429,6 +437,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         OnPropertyChanged(nameof(IsHeaderFilesListVisible));
         OnPropertyChanged(nameof(IsHeaderFilesEmptyStateVisible));
         OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
+        OnPropertyChanged(nameof(FetchButtonText));
     }
 
     /// <summary>
@@ -525,23 +534,20 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Fetches achievement images from the game disc into the selected account's GPD.
-    /// The user chooses between filling only missing images or overwriting all of them.
+    /// Fetches achievement data from the game disc into the selected account's GPD.
+    /// The user picks what to fetch (images and/or strings) from a dialog first;
+    /// multi-disc games then ask which disc to read.
     /// </summary>
     [RelayCommand]
-    private async Task FetchAchievementImages()
+    private async Task FetchAchievements()
     {
-        if (IsFetchingImages || SelectedAccountContent?.GameAchievementGpdFile == null)
+        if (IsFetching || SelectedAccountContent?.GameAchievementGpdFile == null)
         {
             return;
         }
 
-        FAContentDialogResult choice = await _messageBoxService.ShowCustomDialogAsync(
-            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.Title"),
-            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.Message"),
-            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.MissingOnly"),
-            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.OverwriteAll"));
-        if (choice == FAContentDialogResult.None)
+        AchievementFetchOption? choice = await AchievementFetchDialog.ShowAsync();
+        if (choice == null)
         {
             return;
         }
@@ -558,85 +564,56 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             return;
         }
 
-        bool overwriteAll = choice == FAContentDialogResult.Secondary;
-        IsFetchingImages = true;
+        IsFetching = true;
         try
         {
-            int written = await Task.Run(() => AchievementGpdBuilder.FetchImages(discPath, account.GameAchievementGpdPath, overwriteAll));
+            if (choice == AchievementFetchOption.Strings)
+            {
+                XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(account.AccountInfo.Language);
+                int updated = await Task.Run(() =>
+                    AchievementGpdBuilder.RefreshStrings(discPath, account.GameAchievementGpdPath, language));
 
-            account.ReloadAchievementGpd();
-            LoadAchievements();
+                account.ReloadAchievementGpd();
+                LoadAchievements();
 
-            Logger.Info<ContentViewerDialogViewModel>($"Fetched {written} achievement images from disc (overwrite: {overwriteAll})");
-            await _messageBoxService.ShowInfoAsync(
-                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Success.Title"),
-                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Success.Message"), written));
+                Logger.Info<ContentViewerDialogViewModel>($"Refetched {updated} achievement strings from disc");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Success.Message"), updated));
+            }
+            else
+            {
+                bool overwriteAll = choice == AchievementFetchOption.OverwriteImages;
+                bool unlockedOnly = choice == AchievementFetchOption.UnlockedImages;
+                int written = await Task.Run(() =>
+                    AchievementGpdBuilder.FetchImages(discPath, account.GameAchievementGpdPath, overwriteAll, unlockedOnly));
+
+                account.ReloadAchievementGpd();
+                LoadAchievements();
+
+                Logger.Info<ContentViewerDialogViewModel>(
+                    $"Fetched {written} achievement images from disc (overwrite: {overwriteAll}, unlocked only: {unlockedOnly})");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Success.Message"), written));
+            }
         }
         catch (Exception ex)
         {
-            Logger.Error<ContentViewerDialogViewModel>($"Failed to fetch achievement images from disc: {ex.Message}");
+            Logger.Error<ContentViewerDialogViewModel>($"Failed to fetch achievements from disc: {ex.Message}");
             Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
+            (string titleKey, string messageKey) = choice == AchievementFetchOption.Strings
+                ? ("InstalledContentDialog.Achievements.FetchStrings.Failed.Title",
+                    "InstalledContentDialog.Achievements.FetchStrings.Failed.Message")
+                : ("InstalledContentDialog.Achievements.FetchImages.Failed.Title",
+                    "InstalledContentDialog.Achievements.FetchImages.Failed.Message");
             await _messageBoxService.ShowErrorAsync(
-                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Failed.Message"), ex.Message));
+                LocalizationHelper.GetText(titleKey),
+                string.Format(LocalizationHelper.GetText(messageKey), ex.Message));
         }
         finally
         {
-            IsFetchingImages = false;
-        }
-    }
-
-    /// <summary>
-    /// Refetches achievement names and descriptions from the game disc into the
-    /// selected account's GPD, preserving unlock state. For multi-disc games the
-    /// user picks which disc to read.
-    /// </summary>
-    [RelayCommand]
-    private async Task FetchAchievementStrings()
-    {
-        if (IsRefreshingStrings || SelectedAccountContent?.GameAchievementGpdFile == null)
-        {
-            return;
-        }
-
-        string? discPath = await ResolveDiscPathAsync();
-        if (discPath == null)
-        {
-            return;
-        }
-
-        AccountContent? account = SelectedAccountContent;
-        if (account?.GameAchievementGpdFile == null)
-        {
-            return;
-        }
-
-        IsRefreshingStrings = true;
-        try
-        {
-            XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(account.AccountInfo.Language);
-            int updated = await Task.Run(() =>
-                AchievementGpdBuilder.RefreshStrings(discPath, account.GameAchievementGpdPath, language));
-
-            account.ReloadAchievementGpd();
-            LoadAchievements();
-
-            Logger.Info<ContentViewerDialogViewModel>($"Refetched {updated} achievement strings from disc");
-            await _messageBoxService.ShowInfoAsync(
-                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Success.Title"),
-                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Success.Message"), updated));
-        }
-        catch (Exception ex)
-        {
-            Logger.Error<ContentViewerDialogViewModel>($"Failed to refetch achievement strings from disc: {ex.Message}");
-            Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
-            await _messageBoxService.ShowErrorAsync(
-                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Failed.Message"), ex.Message));
-        }
-        finally
-        {
-            IsRefreshingStrings = false;
+            IsFetching = false;
         }
     }
 
@@ -1436,6 +1413,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         // Explicitly notify empty state visibility changes
         OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
         OnPropertyChanged(nameof(IsAchievementGpdMissing));
+        OnPropertyChanged(nameof(FetchButtonText));
         OnPropertyChanged(nameof(IsHeaderFilesEmptyStateVisible));
 
         if (contentType == ContentType.Achievements)
@@ -1487,6 +1465,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
             OnPropertyChanged(nameof(IsAchievementGpdMissing));
             OnPropertyChanged(nameof(IsAchievementGpdPresent));
+            OnPropertyChanged(nameof(FetchButtonText));
             return;
         }
 
@@ -1511,6 +1490,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
             OnPropertyChanged(nameof(IsAchievementGpdMissing));
             OnPropertyChanged(nameof(IsAchievementGpdPresent));
+            OnPropertyChanged(nameof(FetchButtonText));
         }
         catch (Exception ex)
         {

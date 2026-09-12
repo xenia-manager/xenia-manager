@@ -145,10 +145,11 @@ public static class AchievementGpdBuilder
     /// <param name="discPath">Path to the disc file or SVOD directory.</param>
     /// <param name="titleGpdPath">Path of the existing <c>{TitleId}.gpd</c> file.</param>
     /// <param name="overwriteAll">True to replace existing images, false to only fill missing ones.</param>
+    /// <param name="unlockedOnly">True to only fetch images of unlocked achievements (the title icon is skipped).</param>
     /// <returns>How many images were written.</returns>
     /// <exception cref="FileNotFoundException">Thrown when the disc or GPD does not exist.</exception>
     /// <exception cref="InvalidOperationException">Thrown when the disc holds no achievement data.</exception>
-    public static int FetchImages(string discPath, string titleGpdPath, bool overwriteAll)
+    public static int FetchImages(string discPath, string titleGpdPath, bool overwriteAll, bool unlockedOnly = false)
     {
         EnsureDiscExists(discPath);
         if (!File.Exists(titleGpdPath))
@@ -157,7 +158,7 @@ public static class AchievementGpdBuilder
         }
 
         using SpaFile spa = OpenSpaOrThrow(discPath);
-        return FetchFromSpa(spa, titleGpdPath, overwriteAll);
+        return FetchFromSpa(spa, titleGpdPath, overwriteAll, unlockedOnly);
     }
 
     internal static AchievementGpdBuildResult EnsureFromSpa(SpaFile spa, string titleGpdPath, string? profileGpdPath, XLanguage userLanguage)
@@ -280,14 +281,22 @@ public static class AchievementGpdBuilder
         return updated;
     }
 
-    internal static int FetchFromSpa(SpaFile spa, string titleGpdPath, bool overwriteAll)
+    internal static int FetchFromSpa(SpaFile spa, string titleGpdPath, bool overwriteAll, bool unlockedOnly = false)
     {
         using GpdFile titleGpd = GpdFile.Load(titleGpdPath);
+        HashSet<uint>? unlockedImageIds = unlockedOnly
+            ? titleGpd.Achievements.Where(a => a.IsEarned).Select(a => a.ImageId).ToHashSet()
+            : null;
         int written = 0;
         foreach ((ulong id, ImageEntry image) in spa.EnumerateImagesWithIds())
         {
             uint imageId = (uint)id;
             if (image.ImageData.Length == 0 || !image.IsValidPng)
+            {
+                continue;
+            }
+
+            if (unlockedImageIds != null && !unlockedImageIds.Contains(imageId))
             {
                 continue;
             }

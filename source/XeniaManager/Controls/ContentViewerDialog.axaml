@@ -153,7 +153,7 @@
 
                 <!-- Achievements ListBox (for Achievements content type) -->
                 <Grid IsVisible="{Binding IsAchievementsListVisible}"
-                      RowDefinitions="Auto,Auto,Auto,*">
+                      RowDefinitions="Auto,Auto,*">
                     <!-- Achievement Statistics Header -->
                     <Border Grid.Row="0"
                             Padding="12,8"
@@ -219,23 +219,9 @@
                                 IsVisible="{Binding AreAchievementFeaturesEnabled}" />
                     </StackPanel>
 
-                    <!-- Fetch actions -->
-                    <StackPanel Grid.Row="2"
-                                Orientation="Horizontal"
-                                Margin="8,0, 8, 8"
-                                Spacing="8"
-                                IsVisible="{Binding IsAchievementGpdPresent}">
-                        <Button Content="{DynamicResource InstalledContentDialog.Achievements.FetchImages}"
-                                Command="{Binding FetchAchievementImagesCommand}"
-                                IsEnabled="{Binding IsFetchingImages, Converter={StaticResource InverseBoolConverter}}" />
-                        <Button Content="{DynamicResource InstalledContentDialog.Achievements.FetchStrings}"
-                                Command="{Binding FetchAchievementStringsCommand}"
-                                IsEnabled="{Binding IsRefreshingStrings, Converter={StaticResource InverseBoolConverter}}" />
-                    </StackPanel>
-
                     <!-- Achievements List -->
                     <!-- TODO: Improve controller navigation through this -->
-                    <ScrollViewer Grid.Row="3"
+                    <ScrollViewer Grid.Row="2"
                                   HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Auto">
                         <ItemsControl Background="Transparent"

@@ -584,6 +584,72 @@ public class AchievementGpdBuilderTests
     }
 
     [Test]
+    public void FetchFromSpa_UnlockedOnly_FillsOnlyUnlocked()
+    {
+        string dir = NewTempDir();
+        try
+        {
+            string titlePath = Path.Combine(dir, "4D5309C9.gpd");
+            using SpaFile spa = BuildSpa();
+            AchievementGpdBuilder.EnsureFromSpa(spa, titlePath, null, XLanguage.English);
+
+            using (GpdFile gpd = GpdFile.Load(titlePath))
+            {
+                Assert.That(gpd.UnlockAchievement(1), Is.True);
+                gpd.Save(titlePath);
+            }
+
+            int written = AchievementGpdBuilder.FetchFromSpa(spa, titlePath, false, true);
+            Assert.That(written, Is.EqualTo(1));
+
+            using GpdFile fetched = GpdFile.Load(titlePath);
+            Assert.That(fetched.GetImage(0x100)!.IsValidPng, Is.True);
+            Assert.That(fetched.GetImage(0x101), Is.Null);
+            Assert.That(fetched.GetImage(0x102), Is.Null);
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Test]
+    public void FetchFromSpa_UnlockedOnlyOverwrite_ReplacesOnlyUnlocked()
+    {
+        string dir = NewTempDir();
+        try
+        {
+            string titlePath = Path.Combine(dir, "4D5309C9.gpd");
+            using SpaFile spa = BuildSpa();
+            AchievementGpdBuilder.EnsureFromSpa(spa, titlePath, null, XLanguage.English);
+            using (GpdFile gpd = GpdFile.Load(titlePath))
+            {
+                Assert.That(gpd.UnlockAchievement(1), Is.True);
+                gpd.Save(titlePath);
+            }
+
+            Assert.That(AchievementGpdBuilder.FetchFromSpa(spa, titlePath, false), Is.EqualTo(3));
+
+            int countBefore;
+            using (GpdFile before = GpdFile.Load(titlePath))
+            {
+                countBefore = before.Entries.Count;
+            }
+
+            int written = AchievementGpdBuilder.FetchFromSpa(spa, titlePath, true, true);
+            Assert.That(written, Is.EqualTo(1));
+
+            using GpdFile after = GpdFile.Load(titlePath);
+            Assert.That(after.Entries.Count, Is.EqualTo(countBefore));
+            Assert.That(after.GetImage(0x100)!.IsValidPng, Is.True);
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Test]
     public void EnsureAchievements_MissingDisc_ThrowsFileNotFound()
     {
         string missing = Path.Combine(Path.GetTempPath(), $"missing_{Guid.NewGuid():N}.iso");
