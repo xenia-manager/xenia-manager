@@ -838,6 +838,11 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">Wrote {0} image(s) from the game files.</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">Fetch Failed</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">Failed to fetch achievement images from the game files.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings">Fetch Strings</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">Strings Updated</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">Updated {0} achievement(s) from the game files.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">Refresh Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">Failed to refetch achievement strings from the game files.&#10;Error: {0}</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Installed Content</sys:String>
