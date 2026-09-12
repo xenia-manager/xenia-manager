@@ -822,6 +822,13 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Не удалось разблокировать достижения.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Не удалось заблокировать</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Не удалось заблокировать достижения.&#10;Ошибка: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Установленные игровые данные</sys:String>

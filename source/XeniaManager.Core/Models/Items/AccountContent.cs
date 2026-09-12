@@ -97,6 +97,43 @@ public class AccountContent
     public string GameAchievementGpdPath { get; internal set; } = string.Empty;
 
     /// <summary>
+    /// Gets the expected path of the game achievement GPD, whether or not the file exists.
+    /// </summary>
+    public string ExpectedGameAchievementGpdPath
+    {
+        get
+        {
+            return Path.Combine(XeniaContentFolder,
+                XuidHex,
+                "FFFE07D1",
+                ContentType.Profile.ToHexString(),
+                XuidHex,
+                $"{TitleId.ToUpperInvariant()}.gpd");
+        }
+    }
+
+    /// <summary>
+    /// Reloads the game-specific achievement GPD from disk, replacing the current instance.
+    /// </summary>
+    public void ReloadAchievementGpd()
+    {
+        GameAchievementGpdFile?.Dispose();
+        GameAchievementGpdFile = null;
+        GameAchievementGpdPath = string.Empty;
+        LoadGameAchievementGpd();
+    }
+
+    /// <summary>
+    /// Reloads the profile GPD from disk, replacing the current instance.
+    /// </summary>
+    public void ReloadProfileGpd()
+    {
+        ProfileGpd?.Dispose();
+        ProfileGpd = null;
+        LoadProfileGpd();
+    }
+
+    /// <summary>
     /// Gets the list of saved game header files associated with the Xbox 360 account profile.
     /// These files contain metadata for saved games, such as titles, file paths, and related account information.
     /// <para>
@@ -140,7 +177,7 @@ public class AccountContent
         }
 
         LoadProfileGpd();
-        LoadGameAchievementGpd(TitleId);
+        LoadGameAchievementGpd();
         LoadSavedGamesHeader(TitleId);
     }
 
@@ -168,34 +205,28 @@ public class AccountContent
     }
 
     /// <summary>
-    /// Loads a game-specific achievement GPD file if it exists.
+    /// Loads the game-specific achievement GPD file if it exists.
     /// </summary>
-    /// <param name="titleId">The Title ID of the game.</param>
-    private void LoadGameAchievementGpd(string titleId)
+    private void LoadGameAchievementGpd()
     {
         try
         {
-            string gpdPath = Path.Combine(XeniaContentFolder,
-                XuidHex,
-                "FFFE07D1",
-                ContentType.Profile.ToHexString(),
-                XuidHex,
-                $"{titleId.ToUpperInvariant()}.gpd");
+            string gpdPath = ExpectedGameAchievementGpdPath;
 
             if (File.Exists(gpdPath))
             {
                 GameAchievementGpdFile = GpdFile.Load(gpdPath);
                 GameAchievementGpdPath = gpdPath;
-                Logger.Debug<AccountContent>($"Loaded game achievement GPD for Title ID {titleId} from {gpdPath}");
+                Logger.Debug<AccountContent>($"Loaded game achievement GPD for Title ID {TitleId} from {gpdPath}");
             }
             else
             {
-                Logger.Debug<AccountContent>($"Game achievement GPD not found at {gpdPath} for Title ID {titleId}");
+                Logger.Debug<AccountContent>($"Game achievement GPD not found at {gpdPath} for Title ID {TitleId}");
             }
         }
         catch (Exception ex)
         {
-            Logger.Warning<AccountContent>($"Failed to load game achievement GPD for Title ID {titleId}: {ex.Message}");
+            Logger.Warning<AccountContent>($"Failed to load game achievement GPD for Title ID {TitleId}: {ex.Message}");
         }
     }
 
