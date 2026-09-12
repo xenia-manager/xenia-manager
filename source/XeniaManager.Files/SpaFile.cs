@@ -815,6 +815,427 @@ public sealed class SpaFile : IDisposable
     }
 
     /// <summary>
+    /// XDBF entry ID for the presence modes ("XRPT" = 0x58525054 BE).
+    /// </summary>
+    private const ulong XrptId = 0x58525054;
+
+    /// <summary>
+    /// XRPT section magic "XRPT" (0x58525054 BE) at start of the presence data.
+    /// </summary>
+    private const uint XrptMagic = 0x58525054;
+
+    /// <summary>
+    /// XDBF entry ID for the matchmaking schema ("XMAT" = 0x584D4154 BE).
+    /// </summary>
+    private const ulong XmatId = 0x584D4154;
+
+    /// <summary>
+    /// XMAT section magic "XMAT" (0x584D4154 BE) at start of the matchmaking data.
+    /// </summary>
+    private const uint XmatMagic = 0x584D4154;
+
+    /// <summary>
+    /// XPBM section magic "XPBM" (0x5850424D BE) at start of a property bag.
+    /// </summary>
+    private const uint XpbmMagic = 0x5850424D;
+
+    /// <summary>
+    /// Cached presence parsed from the XRPT section. Null until first access.
+    /// </summary>
+    private SpaPresence? _presence;
+
+    /// <summary>
+    /// Cached matchmaking bag parsed from the XMAT section. Null until first access.
+    /// </summary>
+    private SpaPropertyBag? _matchmaking;
+
+    /// <summary>
+    /// Gets the presence data parsed from the XRPT section (section 0x0001, id "XRPT").
+    /// Empty when the SPA is invalid or has no XRPT section.
+    /// </summary>
+    public SpaPresence Presence
+    {
+        get
+        {
+            _presence ??= ParsePresence();
+            return _presence;
+        }
+    }
+
+    /// <summary>
+    /// Gets the matchmaking property bag parsed from the XMAT section (section 0x0001, id "XMAT").
+    /// Empty when the SPA is invalid or has no XMAT section.
+    /// </summary>
+    public SpaPropertyBag Matchmaking
+    {
+        get
+        {
+            _matchmaking ??= ParseMatchmaking();
+            return _matchmaking;
+        }
+    }
+
+    /// <summary>
+    /// Gets a presence mode by context value (index into the mode list), or null when out of range.
+    /// </summary>
+    /// <param name="contextValue">The presence mode index.</param>
+    public SpaPropertyBag? GetPresenceMode(uint contextValue) =>
+        contextValue < Presence.PresenceModes.Count ? Presence.PresenceModes[(int)contextValue] : null;
+
+    /// <summary>
+    /// Parses the XRPT section's presence data from the XDBF data section.
+    /// </summary>
+    /// <returns>The presence data; empty when missing, truncated, or invalid.</returns>
+    /// <remarks>
+    /// Layout: 12-byte XRPT header, nested 12-byte XPBM header with the default bag,
+    /// 2-byte mode count, then one nested XPBM bag per mode.
+    /// </remarks>
+    private SpaPresence ParsePresence()
+    {
+        SpaPresence presence = new SpaPresence();
+        byte[]? data = GetSectionData(SpaSectionMetadata, XrptId, XrptMagic);
+        if (data == null)
+        {
+            return presence;
+        }
+
+        int pos = 12;
+        if (!TryParsePropertyBag(data, ref pos, XpbmMagic, presence.PropertyBag))
+        {
+            return presence;
+        }
+
+        if (pos + 2 > data.Length)
+        {
+            Logger.Warning<SpaFile>("XRPT data truncated at presence mode count");
+            return presence;
+        }
+
+        ushort modeCount = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos));
+        pos += 2;
+        for (int i = 0; i < modeCount; i++)
+        {
+            SpaPropertyBag mode = new SpaPropertyBag();
+            if (!TryParsePropertyBag(data, ref pos, XpbmMagic, mode))
+            {
+                Logger.Warning<SpaFile>($"XRPT data truncated at presence mode {i}, stopping");
+                break;
+            }
+
+            presence.PresenceModes.Add(mode);
+        }
+
+        return presence;
+    }
+
+    /// <summary>
+    /// Parses the XMAT section's matchmaking bag from the XDBF data section.
+    /// </summary>
+    /// <returns>The matchmaking bag; empty when missing, truncated, or invalid.</returns>
+    /// <remarks>
+    /// Layout: 12-byte XMAT header, then a single nested XPBM property bag.
+    /// </remarks>
+    private SpaPropertyBag ParseMatchmaking()
+    {
+        SpaPropertyBag bag = new SpaPropertyBag();
+        byte[]? data = GetSectionData(SpaSectionMetadata, XmatId, XmatMagic);
+        if (data == null)
+        {
+            return bag;
+        }
+
+        int pos = 12;
+        TryParsePropertyBag(data, ref pos, XpbmMagic, bag);
+        return bag;
+    }
+
+    /// <summary>
+    /// Finds a metadata section entry and returns its payload bytes.
+    /// </summary>
+    /// <param name="section">The XDBF section (e.g., <see cref="SpaSectionMetadata"/>).</param>
+    /// <param name="id">The entry ID (e.g., <see cref="XrptId"/>).</param>
+    /// <param name="magic">The expected section magic.</param>
+    /// <returns>The payload bytes, or null when missing, out of bounds, or truncated.</returns>
+    private byte[]? GetSectionData(ushort section, ulong id, uint magic)
+    {
+        if (!IsValid)
+        {
+            return null;
+        }
+
+        EntryTableEntry entry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == section && e.Id == id);
+        if (entry.Namespace == default)
+        {
+            return null;
+        }
+
+        if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
+        {
+            Logger.Warning<SpaFile>($"Section 0x{id:X} data out of bounds");
+            return null;
+        }
+
+        byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
+        if (data.Length < 12)
+        {
+            Logger.Warning<SpaFile>($"Section 0x{id:X} data too short ({data.Length}) for header");
+            return null;
+        }
+
+        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != magic)
+        {
+            Logger.Warning<SpaFile>($"Section 0x{id:X} magic mismatch");
+            return null;
+        }
+
+        return data;
+    }
+
+    /// <summary>
+    /// Parses one XPBM property bag at the current position and advances past it.
+    /// </summary>
+    /// <param name="data">The section payload bytes.</param>
+    /// <param name="pos">The current offset; advanced past the bag on success.</param>
+    /// <param name="magic">The expected bag magic (XPBM).</param>
+    /// <param name="bag">The bag to fill.</param>
+    /// <returns>True when a full bag was parsed, false on truncation or magic mismatch.</returns>
+    private bool TryParsePropertyBag(byte[] data, ref int pos, uint magic, SpaPropertyBag bag)
+    {
+        if (pos + 20 > data.Length)
+        {
+            return false;
+        }
+
+        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos)) != magic)
+        {
+            Logger.Warning<SpaFile>("XPBM magic mismatch");
+            return false;
+        }
+
+        uint contextCount = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 12));
+        uint propertyCount = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 16));
+        pos += 20;
+        // Overflow-safe: promote counts before multiplying.
+        if ((ulong)pos + ((ulong)contextCount + propertyCount) * 4 > (ulong)data.Length)
+        {
+            Logger.Warning<SpaFile>("XPBM bag overruns section data");
+            return false;
+        }
+
+        for (uint i = 0; i < contextCount; i++)
+        {
+            bag.Contexts.Add(BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos)));
+            pos += 4;
+        }
+
+        for (uint i = 0; i < propertyCount; i++)
+        {
+            bag.Properties.Add(BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos)));
+            pos += 4;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// XDBF entry ID for the stats views ("XVC2" = 0x58564332 BE).
+    /// </summary>
+    private const ulong Xvc2Id = 0x58564332;
+
+    /// <summary>
+    /// XVC2 section magic "XVC2" (0x58564332 BE) at start of the stats view data.
+    /// </summary>
+    private const uint Xvc2Magic = 0x58564332;
+
+    /// <summary>
+    /// Cached stats views parsed from the XVC2 section. Null until first access.
+    /// </summary>
+    private List<SpaStatsView>? _statsViews;
+
+    /// <summary>
+    /// Gets the stats views parsed from the XVC2 section (section 0x0001, id "XVC2").
+    /// </summary>
+    public IReadOnlyList<SpaStatsView> StatsViews
+    {
+        get
+        {
+            _statsViews ??= ParseStatsViews();
+            return _statsViews;
+        }
+    }
+
+    /// <summary>
+    /// Gets a stats view by its ID, or null when absent.
+    /// </summary>
+    /// <param name="id">The view ID.</param>
+    public SpaStatsView? GetStatsView(uint id) => StatsViews.FirstOrDefault(v => v.Id == id);
+
+    /// <summary>
+    /// Parses the XVC2 section's stats views from the XDBF data section.
+    /// </summary>
+    /// <returns>List of views (0..N); empty when missing, truncated, or invalid.</returns>
+    /// <remarks>
+    /// Layout: 12-byte XVC2 header, 2-byte shared-view count, then per shared view a
+    /// 12-byte meta entry (column/row counts), column fields, row fields (32 bytes each),
+    /// and a nested XPBM bag; finally a 2-byte view count and 16-byte view entries
+    /// referencing shared views by index.
+    /// </remarks>
+    private List<SpaStatsView> ParseStatsViews()
+    {
+        List<SpaStatsView> views = [];
+        byte[]? data = GetSectionData(SpaSectionMetadata, Xvc2Id, Xvc2Magic);
+        if (data == null || data.Length < 14)
+        {
+            return views;
+        }
+
+        int pos = 12;
+        ushort sharedCount = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos));
+        pos += 2;
+
+        List<SpaStatsView> sharedViews = [];
+        for (int i = 0; i < sharedCount; i++)
+        {
+            SpaStatsView? shared = ParseSharedView(data, ref pos);
+            if (shared == null)
+            {
+                Logger.Warning<SpaFile>($"XVC2 data truncated at shared view {i}, stopping");
+                break;
+            }
+
+            sharedViews.Add(shared);
+        }
+
+        if (pos + 2 > data.Length)
+        {
+            Logger.Warning<SpaFile>("XVC2 data truncated at view count");
+            return views;
+        }
+
+        ushort viewCount = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos));
+        pos += 2;
+        for (int i = 0; i < viewCount; i++)
+        {
+            if (pos + 16 > data.Length)
+            {
+                Logger.Warning<SpaFile>($"XVC2 data truncated at view {i}, stopping");
+                break;
+            }
+
+            SpaStatsView view = new SpaStatsView
+            {
+                Id = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos)),
+                Flags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 4)),
+                SharedIndex = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 8)),
+                StringId = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 10))
+            };
+            pos += 16;
+            if (view.SharedIndex < sharedViews.Count)
+            {
+                SpaStatsView shared = sharedViews[view.SharedIndex];
+                view.Columns.AddRange(shared.Columns);
+                view.Rows.AddRange(shared.Rows);
+                view.PropertyBag.Contexts.AddRange(shared.PropertyBag.Contexts);
+                view.PropertyBag.Properties.AddRange(shared.PropertyBag.Properties);
+            }
+
+            views.Add(view);
+        }
+
+        return views;
+    }
+
+    /// <summary>
+    /// Parses one shared view (meta entry, fields, property bag) at the current position.
+    /// </summary>
+    /// <param name="data">The XVC2 payload bytes.</param>
+    /// <param name="pos">The current offset; advanced past the view on success.</param>
+    /// <returns>The shared view, or null on truncation or magic mismatch.</returns>
+    private SpaStatsView? ParseSharedView(byte[] data, ref int pos)
+    {
+        if (pos + 12 > data.Length)
+        {
+            return null;
+        }
+
+        ushort columns = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos));
+        ushort rows = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 2));
+        pos += 12;
+
+        SpaStatsView shared = new SpaStatsView();
+        for (int i = 0; i < columns + rows; i++)
+        {
+            if (pos + 32 > data.Length)
+            {
+                Logger.Warning<SpaFile>("XVC2 shared view fields truncated");
+                return null;
+            }
+
+            SpaViewField field = new SpaViewField
+            {
+                Size = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos)),
+                PropertyId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 4)),
+                Flags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 8)),
+                AttributeId = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 12)),
+                StringId = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 14)),
+                AggregationType = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 16)),
+                Ordinal = data[pos + 18],
+                FieldType = data[pos + 19],
+                FormatType = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 20))
+            };
+            pos += 32;
+            if (i < columns)
+            {
+                shared.Columns.Add(field);
+            }
+            else
+            {
+                shared.Rows.Add(field);
+            }
+        }
+
+        // The bag advance reconciles with the XPBM size field: jump past any
+        // trailing bytes the sequential walk would otherwise misread as fields.
+        int bagStart = pos;
+        SpaPropertyBag bag = new SpaPropertyBag();
+        if (!TryParsePropertyBag(data, ref pos, XpbmMagic, bag))
+        {
+            return null;
+        }
+
+        if (bagStart + 12 <= data.Length)
+        {
+            uint declared = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(bagStart + 8));
+            long referenceLanding = (long)bagStart + declared + 4;
+            if (referenceLanding > pos && referenceLanding <= data.Length)
+            {
+                pos = (int)referenceLanding;
+            }
+        }
+
+        shared.PropertyBag.Contexts.AddRange(bag.Contexts);
+        shared.PropertyBag.Properties.AddRange(bag.Properties);
+        return shared;
+    }
+
+    /// <summary>
+    /// Gets the total gamerscore across all SPA achievements.
+    /// </summary>
+    public uint TotalGamerscore
+    {
+        get
+        {
+            return (uint)SpaAchievements.Sum(a => a.Gamerscore);
+        }
+    }
+
+    /// <summary>
+    /// Gets an SPA achievement by its ID, or null when absent.
+    /// </summary>
+    /// <param name="id">The achievement ID.</param>
+    public SpaAchievement? GetAchievement(uint id) => SpaAchievements.FirstOrDefault(a => a.Id == id);
+
+    /// <summary>
     /// Enumerates all image entries together with their XDBF entry IDs (e.g., <c>0x8000</c> for title icon).
     /// </summary>
     /// <returns>Sequence of <c>(Id, Image)</c> where <c>Image.ImageId</c> is populated from the entry table.</returns>

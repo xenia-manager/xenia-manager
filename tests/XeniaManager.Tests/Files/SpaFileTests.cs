@@ -902,4 +902,273 @@ public class SpaFileTests
     }
 
     #endregion
+
+    #region Presence and matchmaking
+
+    private static byte[] BuildXpbmBag(uint[] contexts, uint[] properties)
+    {
+        byte[] data = new byte[20 + (contexts.Length + properties.Length) * 4];
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 0x5850424D); // XPBM
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), (uint)(8 + (contexts.Length + properties.Length) * 4));
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(12), (uint)contexts.Length);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(16), (uint)properties.Length);
+        int pos = 20;
+        foreach (uint c in contexts)
+        {
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(pos), c);
+            pos += 4;
+        }
+
+        foreach (uint p in properties)
+        {
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(pos), p);
+            pos += 4;
+        }
+
+        return data;
+    }
+
+    private static byte[] BuildXrptData(byte[] defaultBag, params byte[][] modes)
+    {
+        List<byte> data = [];
+        byte[] header = new byte[12];
+        BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(0), 0x58525054); // XRPT
+        BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(4), 1);
+        data.AddRange(header);
+        data.AddRange(defaultBag);
+        byte[] count = new byte[2];
+        BinaryPrimitives.WriteUInt16BigEndian(count.AsSpan(0), (ushort)modes.Length);
+        data.AddRange(count);
+        foreach (byte[] mode in modes)
+        {
+            data.AddRange(mode);
+        }
+
+        return [.. data];
+    }
+
+    private static byte[] BuildXmatData(byte[] bag)
+    {
+        byte[] header = new byte[12];
+        BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(0), 0x584D4154); // XMAT
+        BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(4), 1);
+        return [.. header, .. bag];
+    }
+
+    [Test]
+    public void Presence_ValidXrpt_ParsesBagsAndModes()
+    {
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x58525054,
+            BuildXrptData(BuildXpbmBag([7], [0x1000]), BuildXpbmBag([8], []), BuildXpbmBag([], [0x1001]))));
+
+        Assert.That(spa.Presence.PropertyBag.Contexts, Is.EqualTo(new List<uint>
+        {
+            7
+        }));
+        Assert.That(spa.Presence.PropertyBag.Properties, Is.EqualTo(new List<uint>
+        {
+            0x1000
+        }));
+        Assert.That(spa.Presence.PresenceModes.Count, Is.EqualTo(2));
+        Assert.That(spa.Presence.PresenceModes[1].Properties, Is.EqualTo(new List<uint>
+        {
+            0x1001
+        }));
+        Assert.That(spa.GetPresenceMode(0)?.Contexts, Is.EqualTo(new List<uint>
+        {
+            8
+        }));
+        Assert.That(spa.GetPresenceMode(2), Is.Null);
+    }
+
+    [Test]
+    public void Matchmaking_ValidXmat_ParsesBag()
+    {
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x584D4154,
+            BuildXmatData(BuildXpbmBag([1, 2], [0x2000]))));
+
+        Assert.That(spa.Matchmaking.Contexts, Is.EqualTo(new List<uint>
+        {
+            1,
+            2
+        }));
+        Assert.That(spa.Matchmaking.Properties, Is.EqualTo(new List<uint>
+        {
+            0x2000
+        }));
+    }
+
+    [Test]
+    public void PresenceAndMatchmaking_Missing_ReturnsEmpty()
+    {
+        using SpaFile spa = BuildSpaWithSections();
+
+        Assert.That(spa.Presence.PropertyBag.Contexts, Is.Empty);
+        Assert.That(spa.Presence.PresenceModes, Is.Empty);
+        Assert.That(spa.Matchmaking.Contexts, Is.Empty);
+        Assert.That(spa.GetPresenceMode(0), Is.Null);
+    }
+
+    [Test]
+    public void Presence_Truncated_StopsWithoutThrowing()
+    {
+        byte[] full = BuildXrptData(BuildXpbmBag([7], [0x1000]), BuildXpbmBag([8], []));
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x58525054, full[..20]));
+
+        Assert.That(spa.Presence.PresenceModes, Is.Empty);
+    }
+
+    #endregion
+
+    #region Stats views
+
+    private static byte[] BuildViewField(uint propertyId, ushort stringId = 1)
+    {
+        byte[] field = new byte[32];
+        BinaryPrimitives.WriteUInt32BigEndian(field.AsSpan(0), 32);
+        BinaryPrimitives.WriteUInt32BigEndian(field.AsSpan(4), propertyId);
+        BinaryPrimitives.WriteUInt16BigEndian(field.AsSpan(14), stringId);
+        return field;
+    }
+
+    private static byte[] BuildXvc2Data(byte[] sharedMeta, byte[][] fields, byte[] bag, params byte[][] tables)
+    {
+        List<byte> data = [];
+        byte[] header = new byte[12];
+        BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(0), 0x58564332); // XVC2
+        BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(4), 1);
+        data.AddRange(header);
+        byte[] sharedCount = new byte[2];
+        BinaryPrimitives.WriteUInt16BigEndian(sharedCount.AsSpan(0), 1);
+        data.AddRange(sharedCount);
+        data.AddRange(sharedMeta);
+        foreach (byte[] field in fields)
+        {
+            data.AddRange(field);
+        }
+
+        data.AddRange(bag);
+        byte[] tableCount = new byte[2];
+        BinaryPrimitives.WriteUInt16BigEndian(tableCount.AsSpan(0), (ushort)tables.Length);
+        data.AddRange(tableCount);
+        foreach (byte[] table in tables)
+        {
+            data.AddRange(table);
+        }
+
+        return [.. data];
+    }
+
+    private static byte[] BuildSharedMeta(ushort columns, ushort rows)
+    {
+        byte[] meta = new byte[12];
+        BinaryPrimitives.WriteUInt16BigEndian(meta.AsSpan(0), columns);
+        BinaryPrimitives.WriteUInt16BigEndian(meta.AsSpan(2), rows);
+        return meta;
+    }
+
+    private static byte[] BuildViewTable(uint id, ushort sharedIndex = 0)
+    {
+        byte[] table = new byte[16];
+        BinaryPrimitives.WriteUInt32BigEndian(table.AsSpan(0), id);
+        BinaryPrimitives.WriteUInt16BigEndian(table.AsSpan(8), sharedIndex);
+        return table;
+    }
+
+    private static byte[] BuildXpbmForStats(uint[] contexts, uint[] properties)
+    {
+        byte[] data = new byte[20 + (contexts.Length + properties.Length) * 4];
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 0x5850424D); // XPBM
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), (uint)(16 + (contexts.Length + properties.Length) * 4));
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(12), (uint)contexts.Length);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(16), (uint)properties.Length);
+        int pos = 20;
+        foreach (uint c in contexts)
+        {
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(pos), c);
+            pos += 4;
+        }
+
+        foreach (uint p in properties)
+        {
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(pos), p);
+            pos += 4;
+        }
+
+        return data;
+    }
+
+    [Test]
+    public void StatsViews_ValidXvc2_ParsesViewsWithSharedData()
+    {
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x58564332,
+            BuildXvc2Data(BuildSharedMeta(1, 1), [BuildViewField(0x1000), BuildViewField(0x1001)],
+                BuildXpbmForStats([7], [0x2000]), [BuildViewTable(0x5000), BuildViewTable(0x5001)])));
+
+        Assert.That(spa.StatsViews.Count, Is.EqualTo(2));
+        SpaStatsView view = spa.StatsViews[0];
+        Assert.That(view.Id, Is.EqualTo(0x5000u));
+        Assert.That(view.Columns.Count, Is.EqualTo(1));
+        Assert.That(view.Rows.Count, Is.EqualTo(1));
+        Assert.That(view.Columns[0].PropertyId, Is.EqualTo(0x1000u));
+        Assert.That(view.Rows[0].PropertyId, Is.EqualTo(0x1001u));
+        Assert.That(view.PropertyBag.Contexts, Is.EqualTo(new List<uint>
+        {
+            7
+        }));
+        Assert.That(view.PropertyBag.Properties, Is.EqualTo(new List<uint>
+        {
+            0x2000
+        }));
+        Assert.That(spa.GetStatsView(0x5001), Is.Not.Null);
+        Assert.That(spa.GetStatsView(0x9999), Is.Null);
+    }
+
+    [Test]
+    public void StatsViews_Missing_ReturnsEmpty()
+    {
+        using SpaFile spa = BuildSpaWithSections();
+
+        Assert.That(spa.StatsViews, Is.Empty);
+        Assert.That(spa.GetStatsView(1), Is.Null);
+    }
+
+    [Test]
+    public void StatsViews_Truncated_StopsWithoutThrowing()
+    {
+        byte[] full = BuildXvc2Data(BuildSharedMeta(1, 0), [BuildViewField(0x1000)],
+            BuildXpbmForStats([], []), [BuildViewTable(1)]);
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x58564332, full[..20]));
+
+        Assert.That(spa.StatsViews, Is.Empty);
+    }
+
+    #endregion
+
+    #region Convenience getters
+
+    [Test]
+    public void TotalGamerscore_SumsAchievements()
+    {
+        byte[] xach = BuildXachData(3);
+        byte[] spaBytes = BuildSpaWithXach(xach);
+        using SpaFile spa = SpaFile.FromBytes(spaBytes);
+
+        Assert.That(spa.TotalGamerscore, Is.EqualTo(30u));
+    }
+
+    [Test]
+    public void GetAchievement_ById_ReturnsEntryOrNull()
+    {
+        byte[] xach = BuildXachData(3);
+        byte[] spaBytes = BuildSpaWithXach(xach);
+        using SpaFile spa = SpaFile.FromBytes(spaBytes);
+
+        Assert.That(spa.GetAchievement(2)?.Id, Is.EqualTo(2));
+        Assert.That(spa.GetAchievement(99), Is.Null);
+    }
+
+    #endregion
 }
