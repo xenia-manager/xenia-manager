@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
+using Avalonia.Data;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
@@ -61,6 +63,21 @@ public partial class ContentViewerDialog : UserControl
             CloseButtonText = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.CloseButton.Text"),
             FullSizeDesired = true,
             DefaultButton = FAContentDialogButton.Close
+        };
+
+        // The fetch action lives on the dialog itself (primary button) instead of
+        // the content: it shows only for achievements with a GPD, and clicking it
+        // must not close the viewer, so the close is cancelled and the ViewModel
+        // command runs directly.
+        contentDialog.DataContext = dialog._viewModel;
+        contentDialog.Bind(FAContentDialog.PrimaryButtonTextProperty,
+            new Binding(nameof(ContentViewerDialogViewModel.FetchButtonText)));
+        contentDialog.PrimaryButtonClick += (_, args) =>
+        {
+            FADeferral deferral = args.GetDeferral();
+            args.Cancel = true;
+            deferral.Complete();
+            dialog._viewModel.FetchAchievementsCommand.Execute(null);
         };
 
         // Controlling ContentDialog

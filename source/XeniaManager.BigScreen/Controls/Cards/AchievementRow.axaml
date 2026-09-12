@@ -39,7 +39,7 @@
                        IsVisible="{Binding HasAchievementImage}"
                        Stretch="Uniform" />
                 <fluent:SymbolIcon Symbol="LockClosed"
-                                   IsVisible="{Binding !IsUnlocked}"
+                                   IsVisible="{Binding ShowLockedIcon}"
                                    FontSize="22"
                                    Foreground="{DynamicResource TextSecondary}"
                                    HorizontalAlignment="Center"

@@ -544,6 +544,58 @@ public class ProfileService : IProfileService
     }
 
     /// <summary>
+    /// Returns the expected path of the version's active profile's per-game
+    /// achievement GPD, whether or not the file exists. Null when the version
+    /// is custom, has no active profile, or the game id is empty.
+    /// </summary>
+    public string? GetGameAchievementGpdPath(XeniaVersion version, string gameId)
+    {
+        if (version == XeniaVersion.Custom || string.IsNullOrEmpty(gameId))
+        {
+            return null;
+        }
+
+        AccountInfo? profileAccount = StateForVersion(version).ActiveProfile;
+        if (profileAccount == null)
+        {
+            return null;
+        }
+
+        string xuid =
+            (profileAccount.PathXuid?.Value ?? profileAccount.Xuid.Value).ToString(FormatConstants.XuidFormat);
+        string contentFolder = AppPathResolver.GetFullPath(
+            XeniaVersionInfo.GetXeniaVersionInfo(version).ContentFolderLocation);
+        return Path.Combine(contentFolder, xuid, XboxConstants.ProfileContentTitleId,
+            ContentType.Profile.ToHexString(), xuid, $"{gameId.ToUpperInvariant()}.gpd");
+    }
+
+    /// <summary>
+    /// Returns the expected path of the version's active profile GPD
+    /// (<c>FFFE07D1.gpd</c>), whether or not the file exists. Null when the
+    /// version is custom or has no active profile.
+    /// </summary>
+    public string? GetProfileGpdPath(XeniaVersion version)
+    {
+        if (version == XeniaVersion.Custom)
+        {
+            return null;
+        }
+
+        AccountInfo? profileAccount = StateForVersion(version).ActiveProfile;
+        if (profileAccount == null)
+        {
+            return null;
+        }
+
+        string xuid =
+            (profileAccount.PathXuid?.Value ?? profileAccount.Xuid.Value).ToString(FormatConstants.XuidFormat);
+        string contentFolder = AppPathResolver.GetFullPath(
+            XeniaVersionInfo.GetXeniaVersionInfo(version).ContentFolderLocation);
+        return Path.Combine(contentFolder, xuid, XboxConstants.ProfileContentTitleId,
+            ContentType.Profile.ToHexString(), xuid, "FFFE07D1.gpd");
+    }
+
+    /// <summary>
     /// Resolves the given profile's total gamerscore from its profile GPD,
     /// reusing the loaded GPD when the profile is the version's active one.
     /// </summary>

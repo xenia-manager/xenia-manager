@@ -822,6 +822,28 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Failed to unlock achievements.&#10;Error: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Lock Failed</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Failed to lock achievements.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">Fetch Achievements from Game Files</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">Achievements Ready</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">Achievements ready: {1} total ({0} added from the game files).</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">Creation Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">Failed to create achievements from the game files.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">Disc/Game Files Missing</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">The selected disc/game files could not be found.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">Fetch from Game Files</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">Fetch from Game Files</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">Choose what to fetch from the game files.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">Missing images</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">Unlocked images only</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">Overwrite all images</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">Achievement strings</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">Images Updated</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">Wrote {0} image(s) from the game files.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">Fetch Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">Failed to fetch achievement images from the game files.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">Strings Updated</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">Updated {0} achievement(s) from the game files.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">Refresh Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">Failed to refetch achievement strings from the game files.&#10;Error: {0}</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Installed Content</sys:String>

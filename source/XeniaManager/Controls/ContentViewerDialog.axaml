@@ -272,13 +272,13 @@
                                                    Margin="0,0,12,0"
                                                    Width="48"
                                                    Height="48">
-                                                <!-- Achievement image (only for unlocked achievements) -->
+                                                <!-- Achievement image (color when unlocked, grayscale when locked) -->
                                                 <Image Source="{Binding AchievementImage}"
                                                        IsVisible="{Binding HasAchievementImage}"
                                                        Stretch="Uniform" />
-                                                <!-- Lock icon for locked achievements -->
+                                                <!-- Lock icon for locked achievements without an image -->
                                                 <fluent:SymbolIcon Symbol="LockClosed"
-                                                                   IsVisible="{Binding IsUnlocked, Converter={StaticResource InverseBoolConverter}}">
+                                                                   IsVisible="{Binding ShowLockedIcon}">
                                                     <fluent:SymbolIcon.Foreground>
                                                         <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
                                                     </fluent:SymbolIcon.Foreground>
@@ -358,6 +358,12 @@
                     <TextBlock Text="{DynamicResource InstalledContentDialog.NoAchievementsFound}"
                                HorizontalAlignment="Center"
                                Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    <Button Content="{DynamicResource InstalledContentDialog.Achievements.CreateMissing}"
+                            Command="{Binding CreateMissingAchievementsCommand}"
+                            IsVisible="{Binding IsAchievementGpdMissing}"
+                            IsEnabled="{Binding IsCreatingAchievements, Converter={StaticResource InverseBoolConverter}}"
+                            HorizontalAlignment="Center"
+                            Classes="accent" />
                 </StackPanel>
 
                 <!-- Empty state overlay for header files (only visible when the header files list is visible and empty) -->
