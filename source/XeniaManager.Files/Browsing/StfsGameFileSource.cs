@@ -69,6 +69,24 @@ public sealed class StfsGameFileSource : GameFileSourceBase
     /// <inheritdoc />
     public override byte[]? ReadFile(string path) => _stfs.ReadFile(path);
 
+    /// <inheritdoc />
+    public override string FormatName
+    {
+        get
+        {
+            return "STFS";
+        }
+    }
+
+    /// <inheritdoc />
+    public override string FormatDescription
+    {
+        get
+        {
+            return "Package (CON/LIVE/PIRS)";
+        }
+    }
+
     private static GameFileNode ToNode(string fullPath, StfsFileEntry entry) => new GameFileNode
     {
         Name = entry.FileName,

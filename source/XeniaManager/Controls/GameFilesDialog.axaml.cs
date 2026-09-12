@@ -44,17 +44,6 @@ public partial class GameFilesDialog : UserControl
     }
 
     /// <summary>
-    /// Reveals an activated search result in the tree when its row is double-tapped.
-    /// </summary>
-    private void OnSearchResultDoubleTapped(object? sender, TappedEventArgs e)
-    {
-        if (sender is Border { DataContext: GameFileNode node })
-        {
-            _viewModel?.RevealSearchResult(node);
-        }
-    }
-
-    /// <summary>
     /// Shows the game files dialog for the given game path.
     /// </summary>
     /// <param name="gamePath">The resolved game file or directory to browse.</param>
@@ -73,24 +62,26 @@ public partial class GameFilesDialog : UserControl
                 return;
             }
 
-            FAContentDialog contentDialog = new FAContentDialog
+            FATaskDialog taskDialog = new FATaskDialog
             {
                 Title = !string.IsNullOrEmpty(gameTitle)
                     ? gameTitle
                     : LocalizationHelper.GetText("GameFilesDialog.ContentDialog.Title"),
                 Content = dialogContent,
-                CloseButtonText = LocalizationHelper.GetText("GameFilesDialog.CloseButton"),
-                FullSizeDesired = true,
-                DefaultButton = FAContentDialogButton.Close
+                XamlRoot = App.MainWindow
             };
 
-            // Controlling ContentDialog
-            contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
-            contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
-            contentDialog.Resources.Add("ContentDialogMinHeight", 700.0);
-            contentDialog.Resources.Add("ContentDialogMaxHeight", 900.0);
+            // Widen beyond the default 648px TaskDialog max so the tree + details fit
+            taskDialog.Resources.Add("TaskDialogMaxWidth", 1000.0);
 
-            await contentDialog.ShowAsync();
+            FATaskDialogButton closeButton = new FATaskDialogButton
+            {
+                Text = LocalizationHelper.GetText("GameFilesDialog.CloseButton"),
+                DialogResult = "Close"
+            };
+            taskDialog.Buttons.Add(closeButton);
+
+            await taskDialog.ShowAsync();
         }
         catch (Exception ex)
         {
