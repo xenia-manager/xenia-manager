@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Avalonia.Controls;
+using Avalonia.Data;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Logging;
 using XeniaManager.Core.Models.Game;
@@ -63,6 +66,39 @@ public partial class ContentViewerDialog : UserControl
             DefaultButton = FAContentDialogButton.Close
         };
 
+        // The fetch action lives on the dialog itself (primary button) instead of
+        // the content: it shows only for achievements that can be fetched from
+        // the game files, and clicking it must not close the viewer, so the
+        // close is cancelled and the ViewModel command runs directly.
+        // FAContentDialog only evaluates button texts once on load, so keep the
+        // :primary pseudoclass in sync or a stale empty button stays visible.
+        contentDialog.DataContext = dialog._viewModel;
+        contentDialog.Bind(FAContentDialog.PrimaryButtonTextProperty,
+            new Binding(nameof(ContentViewerDialogViewModel.FetchButtonText)));
+
+        void UpdatePrimaryVisibility()
+        {
+            ((IPseudoClasses)contentDialog.Classes).Set(":primary", !string.IsNullOrEmpty(dialog._viewModel.FetchButtonText));
+        }
+
+        void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ContentViewerDialogViewModel.FetchButtonText))
+            {
+                UpdatePrimaryVisibility();
+            }
+        }
+
+        dialog._viewModel.PropertyChanged += OnViewModelPropertyChanged;
+        UpdatePrimaryVisibility();
+        contentDialog.PrimaryButtonClick += (_, args) =>
+        {
+            FADeferral deferral = args.GetDeferral();
+            args.Cancel = true;
+            deferral.Complete();
+            dialog._viewModel.FetchAchievementsCommand.Execute(null);
+        };
+
         // Controlling ContentDialog
         contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
         contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
@@ -83,6 +119,10 @@ public partial class ContentViewerDialog : UserControl
 
             // Clean up secret code listener on error
             dialog._viewModel.DisposeSecretCodeListener();
+        }
+        finally
+        {
+            dialog._viewModel.PropertyChanged -= OnViewModelPropertyChanged;
         }
     }
 
