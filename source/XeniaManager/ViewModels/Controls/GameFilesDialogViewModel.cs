@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Files;
 using XeniaManager.Files.Browsing;
+using XeniaManager.Files.Models.Spa;
 using XeniaManager.Logging;
 using XeniaManager.Services;
 
@@ -40,12 +41,35 @@ public partial class GameFileTreeNode : ObservableObject
 }
 
 /// <summary>
+/// A single SPA achievement row shown in the game files details pane.
+/// </summary>
+public sealed class SpaAchievementRow
+{
+    /// <summary>Achievement name.</summary>
+    public string Name { get; init; } = string.Empty;
+
+    /// <summary>Achieved description.</summary>
+    public string Description { get; init; } = string.Empty;
+
+    /// <summary>Gamerscore value.</summary>
+    public ushort Gamerscore { get; init; }
+
+    /// <summary>Achievement icon image.</summary>
+    public Bitmap? Image { get; init; }
+
+    /// <summary>Whether an icon image is available.</summary>
+    public bool HasImage { get; init; }
+}
+
+/// <summary>
 /// ViewModel for the Game Files dialog, which browses a game's container
 /// (ISO, ZAR, STFS, SVOD, or loose directory) read-only, with XEX/SPA details.
 /// </summary>
 public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 {
     private const int MaxSearchResults = 200;
+    private const int MaxPreviewBytes = 64 * 1024 * 1024;
+    private static readonly string[] PreviewableExtensions = [".png", ".jpg", ".jpeg", ".bmp"];
 
     private readonly string _gamePath;
     private readonly IMessageBoxService _messageBoxService;
@@ -118,6 +142,18 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
     /// <summary>XEX/SPA icon image.</summary>
     [ObservableProperty] private Bitmap? _selectedIcon;
+
+    /// <summary>Decoded preview of the selected image file.</summary>
+    [ObservableProperty] private Bitmap? _previewImage;
+
+    /// <summary>Whether an image-file preview is available.</summary>
+    [ObservableProperty] private bool _hasPreviewImage;
+
+    /// <summary>SPA achievement rows for the selected XEX.</summary>
+    [ObservableProperty] private ObservableCollection<SpaAchievementRow> _spaAchievementRows = [];
+
+    /// <summary>Whether the selected XEX has SPA achievements to list.</summary>
+    [ObservableProperty] private bool _hasAchievements;
 
     /// <summary>XEX title ID (hex).</summary>
     [ObservableProperty] private string _xexTitleId = string.Empty;
@@ -335,6 +371,10 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         IsXexSelected = false;
         HasSelectedIcon = false;
         SelectedIcon = null;
+        HasPreviewImage = false;
+        PreviewImage = null;
+        HasAchievements = false;
+        SpaAchievementRows = [];
         if (node == null)
         {
             return;
@@ -345,6 +385,29 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         SelectedSizeText = node.IsFile
             ? FileSizeFormatter.FormatBytes((long)node.Size)
             : LocalizationHelper.GetText("GameFilesDialog.Folder.Label");
+
+        if (node.IsFile && IsPreviewableImage(node.Name))
+        {
+            byte[]? imageBytes = await Task.Run(() => TryReadPreview(node.FullPath));
+            if (loadId != _detailsLoadId)
+            {
+                return;
+            }
+
+            if (imageBytes != null)
+            {
+                try
+                {
+                    using MemoryStream imageStream = new MemoryStream(imageBytes);
+                    PreviewImage = new Bitmap(imageStream);
+                    HasPreviewImage = true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Trace<GameFilesDialogViewModel>($"Failed to decode image preview for '{node.FullPath}': {ex.Message}");
+                }
+            }
+        }
 
         if (!node.IsFile || !node.Name.EndsWith(".xex", StringComparison.OrdinalIgnoreCase))
         {
@@ -366,6 +429,35 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         SpaTitle = details.SpaTitle;
         SpaAchievements = details.Achievements;
         SpaGamerscore = details.Gamerscore;
+        List<SpaAchievementRow> rows = new List<SpaAchievementRow>();
+        foreach (SpaAchievementDetails achievement in details.AchievementList)
+        {
+            Bitmap? image = null;
+            if (achievement.Image != null)
+            {
+                try
+                {
+                    using MemoryStream imageStream = new MemoryStream(achievement.Image);
+                    image = new Bitmap(imageStream);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Trace<GameFilesDialogViewModel>($"Failed to decode achievement icon '{achievement.Name}': {ex.Message}");
+                }
+            }
+
+            rows.Add(new SpaAchievementRow
+            {
+                Name = achievement.Name,
+                Description = achievement.Description,
+                Gamerscore = achievement.Gamerscore,
+                Image = image,
+                HasImage = image != null
+            });
+        }
+
+        SpaAchievementRows = new ObservableCollection<SpaAchievementRow>(rows);
+        HasAchievements = rows.Count > 0;
         if (details.Icon != null)
         {
             try
@@ -381,6 +473,28 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         }
 
         IsXexSelected = true;
+    }
+
+    private static bool IsPreviewableImage(string fileName) =>
+        PreviewableExtensions.Contains(Path.GetExtension(fileName).ToLowerInvariant());
+
+    private byte[]? TryReadPreview(string fullPath)
+    {
+        try
+        {
+            byte[]? bytes = _source?.ReadFile(fullPath);
+            if (bytes == null || bytes.Length == 0 || bytes.Length > MaxPreviewBytes)
+            {
+                return null;
+            }
+
+            return bytes;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameFilesDialogViewModel>($"Failed to read preview for '{fullPath}': {ex.Message}");
+            return null;
+        }
     }
 
     private XexDetails? TryParseXex(string fullPath)
@@ -411,6 +525,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             string achievements = string.Empty;
             string gamerscore = string.Empty;
             byte[]? icon = null;
+            List<SpaAchievementDetails> achievementList = new List<SpaAchievementDetails>();
             if (xex.TryGetSpaFile(out SpaFile? spa) && spa != null)
             {
                 using (spa)
@@ -419,6 +534,15 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                     achievements = spa.SpaAchievements.Count.ToString();
                     gamerscore = spa.TotalGamerscore.ToString();
                     icon = spa.GetTitleIcon() ?? spa.GetAnyValidIcon();
+                    ushort language = (ushort)spa.DefaultLanguage;
+                    foreach (SpaAchievement achievement in spa.SpaAchievements)
+                    {
+                        achievementList.Add(new SpaAchievementDetails(
+                            spa.GetString(language, achievement.LabelId),
+                            spa.GetString(language, achievement.DescriptionId),
+                            achievement.Gamerscore,
+                            spa.GetImage(achievement.ImageId)?.ImageData));
+                    }
                 }
             }
 
@@ -432,7 +556,8 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 spaTitle,
                 achievements,
                 gamerscore,
-                icon);
+                icon,
+                achievementList);
         }
         catch (Exception ex)
         {
@@ -440,6 +565,8 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             return null;
         }
     }
+
+    private sealed record SpaAchievementDetails(string Name, string Description, ushort Gamerscore, byte[]? Image);
 
     private sealed record XexDetails(
         string TitleId,
@@ -451,7 +578,8 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         string SpaTitle,
         string Achievements,
         string Gamerscore,
-        byte[]? Icon);
+        byte[]? Icon,
+        IReadOnlyList<SpaAchievementDetails> AchievementList);
 
     /// <inheritdoc />
     public void Dispose()
