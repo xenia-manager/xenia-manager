@@ -1,8 +1,10 @@
 using System.Buffers.Binary;
 using System.Reflection;
+using System.Text;
 using XeniaManager.Files;
 using XeniaManager.Files.Models.Gpd;
 using XeniaManager.Files.Models.Spa;
+using XeniaManager.Files.Models.XConfig;
 
 namespace XeniaManager.Tests.Files;
 
@@ -417,7 +419,7 @@ public class SpaFileTests
     {
         // Create GPD with non-PNG data that GetImage would reject (IsValidPng false) but fallback yields
         using GpdFile gpd = GpdFile.Create();
-        byte[] notPng = System.Text.Encoding.ASCII.GetBytes("NOT_A_PNG_BUT_DATA");
+        byte[] notPng = Encoding.ASCII.GetBytes("NOT_A_PNG_BUT_DATA");
         // Add via raw manipulation to bypass IsValidPng check in GetImage
         byte[] png = MinimalPng();
         gpd.AddImage(0x8000, png); // valid one
@@ -673,6 +675,230 @@ public class SpaFileTests
         Assert.That(a.Id, Is.EqualTo(1));
         Assert.That(a.ImageId, Is.EqualTo(0x8000u));
         Assert.That(a.Gamerscore, Is.EqualTo(10));
+    }
+
+    #endregion
+
+    #region Title header and languages
+
+    private static byte[] BuildXthdData(uint titleId = 0x584109C2, uint type = 1, ushort major = 2, ushort minor = 3,
+        ushort build = 4, ushort revision = 5, uint flags = 0)
+    {
+        byte[] data = new byte[12 + 32];
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 0x58544844); // XTHD
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), 32);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(12), titleId);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(16), type);
+        BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(20), major);
+        BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(22), minor);
+        BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(24), build);
+        BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(26), revision);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(28), flags);
+        return data;
+    }
+
+    private static byte[] BuildXstcData(uint defaultLanguage = 1)
+    {
+        byte[] data = new byte[16];
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 0x58535443); // XSTC
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), 4);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(12), defaultLanguage);
+        return data;
+    }
+
+    private static byte[] BuildXstrData(params (ushort id, string text)[] strings)
+    {
+        List<byte> rows = [];
+        foreach ((ushort id, string text) in strings)
+        {
+            byte[] textBytes = Encoding.UTF8.GetBytes(text);
+            byte[] row = new byte[4 + textBytes.Length];
+            BinaryPrimitives.WriteUInt16BigEndian(row.AsSpan(0), id);
+            BinaryPrimitives.WriteUInt16BigEndian(row.AsSpan(2), (ushort)textBytes.Length);
+            textBytes.CopyTo(row, 4);
+            rows.AddRange(row);
+        }
+
+        byte[] data = new byte[14 + rows.Count];
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 0x58535452); // XSTR
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), (uint)rows.Count);
+        BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(12), (ushort)strings.Length);
+        rows.CopyTo(data, 14);
+        return data;
+    }
+
+    private static SpaFile BuildSpaWithSections(params (EntryNamespace ns, ulong id, byte[] payload)[] sections)
+    {
+        using GpdFile gpd = GpdFile.Create(true);
+        foreach ((EntryNamespace ns, ulong id, byte[] payload) in sections)
+        {
+            gpd.AddRawEntry(ns, id, payload);
+        }
+
+        return SpaFile.FromBytes(gpd.ToBytes());
+    }
+
+    [Test]
+    public void TitleHeader_ValidXthd_ParsesFields()
+    {
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x58544844, BuildXthdData()));
+
+        Assert.That(spa.TitleHeader, Is.Not.Null);
+        Assert.That(spa.TitleId, Is.EqualTo(0x584109C2u));
+        Assert.That(spa.TitleType, Is.EqualTo(TitleType.Full));
+        Assert.That(spa.TitleHeader!.Major, Is.EqualTo(2));
+        Assert.That(spa.TitleHeader.Revision, Is.EqualTo(5));
+        Assert.That(spa.IsDemo, Is.False);
+        Assert.That(spa.IsSystemApp, Is.False);
+        Assert.That(spa.IncludeInProfile, Is.True);
+    }
+
+    [Test]
+    public void TitleHeader_DemoType_ExcludesFromProfileUnlessForced()
+    {
+        using SpaFile demo = BuildSpaWithSections(((EntryNamespace)1, 0x58544844, BuildXthdData(type: 2)));
+        Assert.That(demo.IsDemo, Is.True);
+        Assert.That(demo.IncludeInProfile, Is.False);
+
+        using SpaFile forced = BuildSpaWithSections(((EntryNamespace)1, 0x58544844, BuildXthdData(type: 2, flags: 1)));
+        Assert.That(forced.IncludeInProfile, Is.True);
+
+        using SpaFile excluded = BuildSpaWithSections(((EntryNamespace)1, 0x58544844, BuildXthdData(flags: 2)));
+        Assert.That(excluded.IncludeInProfile, Is.False);
+    }
+
+    [Test]
+    public void TitleHeader_Missing_ReturnsDefaults()
+    {
+        using SpaFile spa = BuildSpaWithSections();
+
+        Assert.That(spa.TitleHeader, Is.Null);
+        Assert.That(spa.TitleId, Is.EqualTo(0u));
+        Assert.That(spa.TitleType, Is.EqualTo(TitleType.Unknown));
+    }
+
+    [Test]
+    public void TitleHeader_Truncated_ReturnsNullWithoutThrowing()
+    {
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x58544844, new byte[10]));
+
+        Assert.That(spa.TitleHeader, Is.Null);
+    }
+
+    [Test]
+    public void TitleName_ResolvesViaDefaultLanguageWithFallback()
+    {
+        using SpaFile spa = BuildSpaWithSections(
+            ((EntryNamespace)1, 0x58535443, BuildXstcData(2)),
+            ((EntryNamespace)3, 1, BuildXstrData((0x8000, "Perfect Dark"))),
+            ((EntryNamespace)3, 2, BuildXstrData((0x8000, "JP Title"))));
+
+        Assert.That(spa.DefaultLanguage, Is.EqualTo(XLanguage.Japanese));
+        Assert.That(spa.TitleName(), Is.EqualTo("JP Title"));
+        Assert.That(spa.TitleName(XLanguage.English), Is.EqualTo("Perfect Dark"));
+        Assert.That(spa.TitleName(XLanguage.German), Is.EqualTo("JP Title"));
+        Assert.That(spa.GetString(1, 0x8000), Is.EqualTo("Perfect Dark"));
+        Assert.That(spa.GetString(1, 0x1234), Is.Empty);
+    }
+
+    [Test]
+    public void TitleName_NoTables_ReturnsEmpty()
+    {
+        using SpaFile spa = BuildSpaWithSections();
+
+        Assert.That(spa.DefaultLanguage, Is.EqualTo(XLanguage.English));
+        Assert.That(spa.TitleName(), Is.Empty);
+    }
+
+    #endregion
+
+    #region Contexts and properties
+
+    private static byte[] BuildXctxData(params (uint id, ushort unk1, ushort stringId, uint max, uint def)[] rows)
+    {
+        byte[] data = new byte[16 + rows.Length * 16];
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 0x58435854); // XCTX
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), (uint)(16 + rows.Length * 16));
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(12), (uint)rows.Length);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            int off = 16 + i * 16;
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(off), rows[i].id);
+            BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(off + 4), rows[i].unk1);
+            BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(off + 6), rows[i].stringId);
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(off + 8), rows[i].max);
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(off + 12), rows[i].def);
+        }
+
+        return data;
+    }
+
+    private static byte[] BuildXprpData(params (uint id, ushort stringId, ushort size)[] rows)
+    {
+        byte[] data = new byte[14 + rows.Length * 8];
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0), 0x58505250); // XPRP
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(8), (uint)(14 + rows.Length * 8));
+        BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(12), (ushort)rows.Length);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            int off = 14 + i * 8;
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(off), rows[i].id);
+            BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(off + 4), rows[i].stringId);
+            BinaryPrimitives.WriteUInt16BigEndian(data.AsSpan(off + 6), rows[i].size);
+        }
+
+        return data;
+    }
+
+    [Test]
+    public void Contexts_ValidXctx_ParsesRows()
+    {
+        using SpaFile spa = BuildSpaWithSections(
+            ((EntryNamespace)1, 0x58435854, BuildXctxData((0x1000, 1, 10, 100, 50), (0x1001, 0, 11, 5, 1))));
+
+        Assert.That(spa.Contexts.Count, Is.EqualTo(2));
+        Assert.That(spa.Contexts[0].Id, Is.EqualTo(0x1000u));
+        Assert.That(spa.Contexts[0].StringId, Is.EqualTo(10));
+        Assert.That(spa.Contexts[0].MaxValue, Is.EqualTo(100u));
+        Assert.That(spa.Contexts[0].DefaultValue, Is.EqualTo(50u));
+        Assert.That(spa.GetContext(0x1001)?.StringId, Is.EqualTo(11));
+        Assert.That(spa.GetContext(0x9999), Is.Null);
+    }
+
+    [Test]
+    public void Properties_ValidXprp_ParsesRows()
+    {
+        using SpaFile spa = BuildSpaWithSections(
+            ((EntryNamespace)1, 0x58505250, BuildXprpData((0x2000, 20, 4), (0x2001, 21, 8))));
+
+        Assert.That(spa.Properties.Count, Is.EqualTo(2));
+        Assert.That(spa.Properties[1].Id, Is.EqualTo(0x2001u));
+        Assert.That(spa.Properties[1].DataSize, Is.EqualTo(8));
+        Assert.That(spa.GetProperty(0x2000)?.StringId, Is.EqualTo(20));
+        Assert.That(spa.GetProperty(0x9999), Is.Null);
+    }
+
+    [Test]
+    public void ContextsAndProperties_Missing_ReturnsEmpty()
+    {
+        using SpaFile spa = BuildSpaWithSections();
+
+        Assert.That(spa.Contexts, Is.Empty);
+        Assert.That(spa.Properties, Is.Empty);
+    }
+
+    [Test]
+    public void Contexts_Truncated_StopsWithoutThrowing()
+    {
+        byte[] full = BuildXctxData((1, 0, 1, 1, 1), (2, 0, 2, 2, 2));
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)1, 0x58435854, full[..20]));
+
+        Assert.That(spa.Contexts.Count, Is.EqualTo(0));
     }
 
     #endregion

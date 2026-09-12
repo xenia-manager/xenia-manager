@@ -672,6 +672,38 @@ public class GpdFile : IDisposable
     }
 
     /// <summary>
+    /// Adds a raw entry with arbitrary namespace, ID, and payload bytes.
+    /// Used for SPA sections (metadata, string tables) that have no typed entry class.
+    /// </summary>
+    /// <param name="ns">The entry namespace.</param>
+    /// <param name="id">The entry ID within the namespace.</param>
+    /// <param name="payload">The entry payload bytes.</param>
+    public void AddRawEntry(EntryNamespace ns, ulong id, byte[] payload)
+    {
+        Logger.Info<GpdFile>($"Adding raw entry (Namespace: {ns}, ID: 0x{id:X}, {payload.Length} bytes)");
+
+        EntryTableEntry entry = new EntryTableEntry
+        {
+            Namespace = ns,
+            Id = id,
+            OffsetSpecifier = (uint)Data.Length,
+            Length = (uint)payload.Length
+        };
+
+        byte[] newData = new byte[Data.Length + payload.Length];
+        Data.CopyTo(newData, 0);
+        payload.CopyTo(newData, Data.Length);
+        Data = newData;
+
+        Entries.Add(entry);
+        InvalidateCaches();
+
+        XdbfHeader header = Header;
+        header.EntryCount = (uint)Entries.Count;
+        Header = header;
+    }
+
+    /// <summary>
     /// Adds a new setting entry to the GPD file.
     /// </summary>
     /// <param name="setting">The setting to add.</param>

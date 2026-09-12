@@ -35,8 +35,8 @@ public sealed class SpaAchievement
     /// </summary>
     public uint ImageId { get; set; }
 
-    /// <summary
-    /// >Gets or sets the gamerscore value for this achievement.
+    /// <summary>
+    /// Gets or sets the gamerscore value for this achievement.
     /// </summary>
     public ushort Gamerscore { get; set; }
 

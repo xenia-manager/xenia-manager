@@ -1,6 +1,8 @@
 using System.Buffers.Binary;
+using System.Text;
 using XeniaManager.Files.Models.Gpd;
 using XeniaManager.Files.Models.Spa;
+using XeniaManager.Files.Models.XConfig;
 using XeniaManager.Logging;
 
 namespace XeniaManager.Files;
@@ -118,6 +120,71 @@ public sealed class SpaFile : IDisposable
     /// XDBF section for images (contains title icon 0x8000 and other PNGs).
     /// </summary>
     private const ushort SpaSectionImage = 0x0002;
+
+    /// <summary>
+    /// XDBF section for string tables (contains per-language title names).
+    /// </summary>
+    private const ushort SpaSectionStringTable = 0x0003;
+
+    /// <summary>
+    /// XDBF entry ID for the context table ("XCTX" = 0x58435854 BE).
+    /// </summary>
+    private const ulong XctxId = 0x58435854;
+
+    /// <summary>
+    /// XCTX section magic "XCTX" (0x58435854 BE) at start of the context table data.
+    /// </summary>
+    private const uint XctxMagic = 0x58435854;
+
+    /// <summary>
+    /// XDBF entry ID for the property table ("XPRP" = 0x58505250 BE).
+    /// </summary>
+    private const ulong XprpId = 0x58505250;
+
+    /// <summary>
+    /// XPRP section magic "XPRP" (0x58505250 BE) at start of the property table data.
+    /// </summary>
+    private const uint XprpMagic = 0x58505250;
+
+    /// <summary>
+    /// XDBF entry ID for the title header ("XTHD" = 0x58544844 BE).
+    /// </summary>
+    private const ulong XthdId = 0x58544844;
+
+    /// <summary>
+    /// XTHD section magic "XTHD" (0x58544844 BE) at start of the title header data.
+    /// </summary>
+    private const uint XthdMagic = 0x58544844;
+
+    /// <summary>
+    /// XDBF entry ID for the title defaults ("XSTC" = 0x58535443 BE).
+    /// </summary>
+    private const ulong XstcId = 0x58535443;
+
+    /// <summary>
+    /// XSTC section magic "XSTC" (0x58535443 BE) at start of the defaults data.
+    /// </summary>
+    private const uint XstcMagic = 0x58535443;
+
+    /// <summary>
+    /// XSTR section magic "XSTR" (0x58535452 BE) at start of a language string table.
+    /// </summary>
+    private const uint XstrMagic = 0x58535452;
+
+    /// <summary>
+    /// String ID of the title name inside a language string table (same value as the title icon ID).
+    /// </summary>
+    private const ushort TitleNameStringId = 0x8000;
+
+    /// <summary>
+    /// Title flag forcing profile inclusion.
+    /// </summary>
+    private const uint TitleFlagAlwaysIncludeInProfile = 1;
+
+    /// <summary>
+    /// Title flag forcing profile exclusion.
+    /// </summary>
+    private const uint TitleFlagNeverIncludeInProfile = 2;
 
     /// <summary>
     /// XDBF entry ID for the achievement table ("XACH" = 0x58414348 BE).
@@ -238,6 +305,512 @@ public sealed class SpaFile : IDisposable
         }
 
         Logger.Debug<SpaFile>($"Parsed {result.Count} SPA achievements from XACH (count={count})");
+        return result;
+    }
+
+    /// <summary>
+    /// Cached title header parsed from the XTHD section. Null until first access.
+    /// </summary>
+    private TitleHeaderData? _titleHeader;
+
+    /// <summary>
+    /// Whether the title header was already looked up (present or not).
+    /// </summary>
+    private bool _titleHeaderParsed;
+
+    /// <summary>
+    /// Cached default language parsed from the XSTC section. Null until first access.
+    /// </summary>
+    private XLanguage? _defaultLanguage;
+
+    /// <summary>
+    /// Cached language string tables (language ID → string ID → text). Null until first access.
+    /// </summary>
+    private Dictionary<ushort, Dictionary<ushort, string>>? _languageStrings;
+
+    /// <summary>
+    /// Gets the title header parsed from the XTHD section (title ID, type, version, flags).
+    /// Null when the SPA is invalid or has no XTHD section.
+    /// </summary>
+    public TitleHeaderData? TitleHeader
+    {
+        get
+        {
+            if (!_titleHeaderParsed)
+            {
+                _titleHeader = ParseTitleHeader();
+                _titleHeaderParsed = true;
+            }
+
+            return _titleHeader;
+        }
+    }
+
+    /// <summary>
+    /// Gets the title ID from the XTHD section, or 0 when absent.
+    /// </summary>
+    public uint TitleId
+    {
+        get
+        {
+            return TitleHeader?.TitleId ?? 0;
+        }
+    }
+
+    /// <summary>
+    /// Gets the title type from the XTHD section, or <see cref="TitleType.Unknown"/> when absent.
+    /// </summary>
+    public TitleType TitleType
+    {
+        get
+        {
+            return TitleHeader?.TitleType ?? TitleType.Unknown;
+        }
+    }
+
+    /// <summary>
+    /// Gets whether the title is a system application.
+    /// </summary>
+    public bool IsSystemApp
+    {
+        get
+        {
+            return TitleType == TitleType.System;
+        }
+    }
+
+    /// <summary>
+    /// Gets whether the title is a demo.
+    /// </summary>
+    public bool IsDemo
+    {
+        get
+        {
+            return TitleType == TitleType.Demo;
+        }
+    }
+
+    /// <summary>
+    /// Gets whether the title should be included in the profile.
+    /// Forced by flags when set, otherwise demos are excluded.
+    /// </summary>
+    public bool IncludeInProfile
+    {
+        get
+        {
+            uint flags = TitleHeader?.Flags ?? 0;
+            if ((flags & TitleFlagAlwaysIncludeInProfile) != 0)
+            {
+                return true;
+            }
+
+            if ((flags & TitleFlagNeverIncludeInProfile) != 0)
+            {
+                return false;
+            }
+
+            return !IsDemo;
+        }
+    }
+
+    /// <summary>
+    /// Gets the game's default language from the XSTC section, or English when absent.
+    /// </summary>
+    public XLanguage DefaultLanguage
+    {
+        get
+        {
+            _defaultLanguage ??= ParseDefaultLanguage();
+            return _defaultLanguage.Value;
+        }
+    }
+
+    /// <summary>
+    /// Gets the game's title in its default language.
+    /// </summary>
+    public string TitleName() => TitleName(DefaultLanguage);
+
+    /// <summary>
+    /// Gets the game's title in the requested language, falling back to the default
+    /// language, then English, then empty string.
+    /// </summary>
+    /// <param name="language">The requested language.</param>
+    public string TitleName(XLanguage language) => GetString((ushort)language, TitleNameStringId);
+
+    /// <summary>
+    /// Gets a string table entry for a language, falling back to the default
+    /// language, then English, then empty string.
+    /// </summary>
+    /// <param name="languageId">The requested language ID.</param>
+    /// <param name="stringId">The string ID within the language table.</param>
+    public string GetString(ushort languageId, ushort stringId)
+    {
+        _languageStrings ??= ParseLanguageStrings();
+        if (_languageStrings.TryGetValue(languageId, out Dictionary<ushort, string>? strings) &&
+            strings.TryGetValue(stringId, out string? value))
+        {
+            return value;
+        }
+
+        ushort fallback = (ushort)DefaultLanguage;
+        if (fallback != languageId &&
+            _languageStrings.TryGetValue(fallback, out strings) &&
+            strings.TryGetValue(stringId, out value))
+        {
+            return value;
+        }
+
+        if (languageId != (ushort)XLanguage.English && fallback != (ushort)XLanguage.English &&
+            _languageStrings.TryGetValue((ushort)XLanguage.English, out strings) &&
+            strings.TryGetValue(stringId, out value))
+        {
+            return value;
+        }
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    /// Parses the XTHD section's title header from the XDBF data section.
+    /// </summary>
+    /// <returns>The title header, or null when missing, truncated, or invalid.</returns>
+    /// <remarks>
+    /// Finds the XDBF entry with section <see cref="SpaSectionMetadata"/> and id <see cref="XthdId"/>,
+    /// validates the 12-byte section header (magic, version), then reads the 32-byte title data.
+    /// </remarks>
+    private TitleHeaderData? ParseTitleHeader()
+    {
+        if (!IsValid)
+        {
+            return null;
+        }
+
+        EntryTableEntry xthdEntry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XthdId);
+        if (xthdEntry.Namespace == default)
+        {
+            Logger.Trace<SpaFile>("XTHD section not found in SPA");
+            return null;
+        }
+
+        if (xthdEntry.OffsetSpecifier >= (uint)_gpd.Data.Length || xthdEntry.Length > (uint)_gpd.Data.Length - xthdEntry.OffsetSpecifier)
+        {
+            Logger.Warning<SpaFile>($"XTHD entry data out of bounds (off={xthdEntry.OffsetSpecifier} len={xthdEntry.Length} dataLen={_gpd.Data.Length})");
+            return null;
+        }
+
+        byte[] data = _gpd.Data[(int)xthdEntry.OffsetSpecifier..(int)(xthdEntry.OffsetSpecifier + xthdEntry.Length)];
+        if (data.Length < 12 + 32)
+        {
+            Logger.Warning<SpaFile>($"XTHD data too short ({data.Length}) for title header");
+            return null;
+        }
+
+        uint magic = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0));
+        uint version = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(4));
+        if (magic != XthdMagic)
+        {
+            Logger.Warning<SpaFile>($"XTHD magic mismatch: 0x{magic:X8} (expected 0x{XthdMagic:X8})");
+            return null;
+        }
+
+        if (version != 1)
+        {
+            Logger.Trace<SpaFile>($"XTHD version {version} (expected 1)");
+        }
+
+        TitleHeaderData header = new TitleHeaderData
+        {
+            TitleId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(12)),
+            TitleType = (TitleType)BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(16)),
+            Major = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(20)),
+            Minor = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(22)),
+            Build = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(24)),
+            Revision = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(26)),
+            Flags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(28))
+        };
+        Logger.Debug<SpaFile>($"Parsed title header: ID 0x{header.TitleId:X8}, type {header.TitleType}");
+        return header;
+    }
+
+    /// <summary>
+    /// Parses the default language from the XSTC section.
+    /// </summary>
+    /// <returns>The default language, or English when missing, truncated, or invalid.</returns>
+    private XLanguage ParseDefaultLanguage()
+    {
+        if (!IsValid)
+        {
+            return XLanguage.English;
+        }
+
+        EntryTableEntry xstcEntry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XstcId);
+        if (xstcEntry.Namespace == default)
+        {
+            return XLanguage.English;
+        }
+
+        if (xstcEntry.OffsetSpecifier >= (uint)_gpd.Data.Length || xstcEntry.Length > (uint)_gpd.Data.Length - xstcEntry.OffsetSpecifier)
+        {
+            Logger.Warning<SpaFile>("XSTC entry data out of bounds");
+            return XLanguage.English;
+        }
+
+        byte[] data = _gpd.Data[(int)xstcEntry.OffsetSpecifier..(int)(xstcEntry.OffsetSpecifier + xstcEntry.Length)];
+        if (data.Length < 16)
+        {
+            Logger.Warning<SpaFile>($"XSTC data too short ({data.Length})");
+            return XLanguage.English;
+        }
+
+        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XstcMagic)
+        {
+            Logger.Warning<SpaFile>("XSTC magic mismatch");
+            return XLanguage.English;
+        }
+
+        return (XLanguage)BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(12));
+    }
+
+    /// <summary>
+    /// Parses all language string tables (section <see cref="SpaSectionStringTable"/>).
+    /// </summary>
+    /// <returns>Map of language ID to string ID to text; empty when none parse.</returns>
+    /// <remarks>
+    /// Each table starts with a 14-byte header (magic, version, size, count) followed by
+    /// <c>count</c> entries of id (2 bytes), length (2 bytes), and UTF-8 text.
+    /// </remarks>
+    private Dictionary<ushort, Dictionary<ushort, string>> ParseLanguageStrings()
+    {
+        Dictionary<ushort, Dictionary<ushort, string>> tables = new Dictionary<ushort, Dictionary<ushort, string>>();
+        if (!IsValid)
+        {
+            return tables;
+        }
+
+        foreach (EntryTableEntry entry in _gpd.Entries.Where(e => (ushort)e.Namespace == SpaSectionStringTable))
+        {
+            if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
+            {
+                Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} data out of bounds, skipping");
+                continue;
+            }
+
+            byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
+            if (data.Length < 14)
+            {
+                Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} too short ({data.Length}) for header, skipping");
+                continue;
+            }
+
+            if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XstrMagic)
+            {
+                Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} magic mismatch, skipping");
+                continue;
+            }
+
+            ushort count = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(12));
+            Dictionary<ushort, string> strings = new Dictionary<ushort, string>();
+            int pos = 14;
+            for (int i = 0; i < count; i++)
+            {
+                if (pos + 4 > data.Length)
+                {
+                    Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} truncated at string {i}, stopping");
+                    break;
+                }
+
+                ushort id = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos));
+                ushort length = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 2));
+                pos += 4;
+                if (pos + length > data.Length)
+                {
+                    Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} string {id} overruns table, stopping");
+                    break;
+                }
+
+                strings[id] = Encoding.UTF8.GetString(data, pos, length);
+                pos += length;
+            }
+
+            tables[(ushort)entry.Id] = strings;
+        }
+
+        return tables;
+    }
+
+    /// <summary>
+    /// Cached contexts parsed from the XCTX section. Null until first access.
+    /// </summary>
+    private List<SpaContext>? _contexts;
+
+    /// <summary>
+    /// Cached properties parsed from the XPRP section. Null until first access.
+    /// </summary>
+    private List<SpaProperty>? _properties;
+
+    /// <summary>
+    /// Gets the contexts parsed from the XCTX section (section 0x0001, id "XCTX").
+    /// </summary>
+    public IReadOnlyList<SpaContext> Contexts
+    {
+        get
+        {
+            _contexts ??= ParseContexts();
+            return _contexts;
+        }
+    }
+
+    /// <summary>
+    /// Gets the properties parsed from the XPRP section (section 0x0001, id "XPRP").
+    /// </summary>
+    public IReadOnlyList<SpaProperty> Properties
+    {
+        get
+        {
+            _properties ??= ParseProperties();
+            return _properties;
+        }
+    }
+
+    /// <summary>
+    /// Gets a context by its ID, or null when absent.
+    /// </summary>
+    /// <param name="id">The context ID.</param>
+    public SpaContext? GetContext(uint id) => Contexts.FirstOrDefault(c => c.Id == id);
+
+    /// <summary>
+    /// Gets a property by its ID, or null when absent.
+    /// </summary>
+    /// <param name="id">The property ID.</param>
+    public SpaProperty? GetProperty(uint id) => Properties.FirstOrDefault(p => p.Id == id);
+
+    /// <summary>
+    /// Parses the XCTX section's context table from the XDBF data section.
+    /// </summary>
+    /// <returns>List of contexts (0..N); empty when missing, truncated, or invalid.</returns>
+    /// <remarks>
+    /// Finds the XDBF entry with section <see cref="SpaSectionMetadata"/> and id <see cref="XctxId"/>,
+    /// validates the 12-byte section header (magic, version), reads the 4-byte count, then
+    /// <c>count</c> entries of 16 bytes each.
+    /// </remarks>
+    private List<SpaContext> ParseContexts()
+    {
+        List<SpaContext> result = [];
+        if (!IsValid)
+        {
+            return result;
+        }
+
+        EntryTableEntry entry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XctxId);
+        if (entry.Namespace == default)
+        {
+            return result;
+        }
+
+        if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
+        {
+            Logger.Warning<SpaFile>("XCTX entry data out of bounds");
+            return result;
+        }
+
+        byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
+        if (data.Length < 16)
+        {
+            Logger.Warning<SpaFile>($"XCTX data too short ({data.Length}) for header and count");
+            return result;
+        }
+
+        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XctxMagic)
+        {
+            Logger.Warning<SpaFile>("XCTX magic mismatch");
+            return result;
+        }
+
+        uint count = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(12));
+        int pos = 16;
+        for (uint i = 0; i < count; i++)
+        {
+            if (pos + 16 > data.Length)
+            {
+                Logger.Warning<SpaFile>($"XCTX data truncated at context {i}, stopping");
+                break;
+            }
+
+            result.Add(new SpaContext
+            {
+                Id = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos)),
+                Unk1 = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 4)),
+                StringId = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 6)),
+                MaxValue = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 8)),
+                DefaultValue = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos + 12))
+            });
+            pos += 16;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Parses the XPRP section's property table from the XDBF data section.
+    /// </summary>
+    /// <returns>List of properties (0..N); empty when missing, truncated, or invalid.</returns>
+    /// <remarks>
+    /// Finds the XDBF entry with section <see cref="SpaSectionMetadata"/> and id <see cref="XprpId"/>,
+    /// validates the 12-byte section header (magic, version), reads the 2-byte count, then
+    /// <c>count</c> entries of 8 bytes each.
+    /// </remarks>
+    private List<SpaProperty> ParseProperties()
+    {
+        List<SpaProperty> result = [];
+        if (!IsValid)
+        {
+            return result;
+        }
+
+        EntryTableEntry entry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XprpId);
+        if (entry.Namespace == default)
+        {
+            return result;
+        }
+
+        if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
+        {
+            Logger.Warning<SpaFile>("XPRP entry data out of bounds");
+            return result;
+        }
+
+        byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
+        if (data.Length < 14)
+        {
+            Logger.Warning<SpaFile>($"XPRP data too short ({data.Length}) for header and count");
+            return result;
+        }
+
+        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XprpMagic)
+        {
+            Logger.Warning<SpaFile>("XPRP magic mismatch");
+            return result;
+        }
+
+        ushort count = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(12));
+        int pos = 14;
+        for (int i = 0; i < count; i++)
+        {
+            if (pos + 8 > data.Length)
+            {
+                Logger.Warning<SpaFile>($"XPRP data truncated at property {i}, stopping");
+                break;
+            }
+
+            result.Add(new SpaProperty
+            {
+                Id = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos)),
+                StringId = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 4)),
+                DataSize = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(pos + 6))
+            });
+            pos += 8;
+        }
+
         return result;
     }
 
