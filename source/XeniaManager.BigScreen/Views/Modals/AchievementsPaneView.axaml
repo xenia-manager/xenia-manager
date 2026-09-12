@@ -59,10 +59,10 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <!-- Empty state: no GPD or no achievements -->
+            <!-- Empty state: no GPD or no achievements (A creates them from the disc) -->
             <prim:EmptyState IsVisible="{Binding ShowEmpty}"
                              Symbol="Trophy"
-                             Text="{DynamicResource GameModal.Achievements.Empty}"
+                             Text="{Binding EmptyStateText}"
                              Width="520"
                              Height="220"
                              HorizontalAlignment="Center"

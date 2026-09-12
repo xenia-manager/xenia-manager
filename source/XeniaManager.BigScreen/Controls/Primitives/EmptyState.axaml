@@ -11,7 +11,9 @@
             <fluent:SymbolIcon Symbol="{Binding Symbol, RelativeSource={RelativeSource AncestorType=self:EmptyState}}"
                                FontSize="{Binding SymbolSize, RelativeSource={RelativeSource AncestorType=self:EmptyState}}" />
             <TextBlock Text="{Binding Text, RelativeSource={RelativeSource AncestorType=self:EmptyState}}"
-                       FontSize="{Binding TextSize, RelativeSource={RelativeSource AncestorType=self:EmptyState}}" />
+                       FontSize="{Binding TextSize, RelativeSource={RelativeSource AncestorType=self:EmptyState}}"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center" />
         </StackPanel>
     </Border>
 </UserControl>

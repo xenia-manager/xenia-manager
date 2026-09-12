@@ -220,6 +220,18 @@ public partial class GameModalViewModel : ModalViewModelBase
             case NavigationCommand.MoveRight:
                 IsPaneActive = true;
                 return true;
+            case NavigationCommand.Details:
+                // Y on the achievements option reuses the pane's own shortcut:
+                // creating from the game files when empty, fetching images
+                // otherwise. No need to enter the pane first.
+                if (SelectedOption?.Pane == GameModalPane.Achievements
+                    && GetOrCreatePane(GameModalPane.Achievements) is AchievementsPaneViewModel achievements
+                    && achievements.HandleInput(NavigationCommand.Details))
+                {
+                    return true;
+                }
+
+                return false;
             case NavigationCommand.Back:
                 Close();
                 return true;
