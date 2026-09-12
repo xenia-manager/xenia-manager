@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Factories;
@@ -124,6 +125,37 @@ public partial class GameModalViewModel : ModalViewModelBase
     }
 
     /// <summary>
+    /// The Y hint label: creating the achievements from the game files when
+    /// the achievements pane is empty, fetching their images otherwise.
+    /// Empty when the shown pane has no Y action.
+    /// </summary>
+    public string YHintText
+    {
+        get
+        {
+            if (Pane is AchievementsPaneViewModel achievements)
+            {
+                return achievements.ShowEmpty
+                    ? LocalizationHelper.GetText("GameModal.Hint.FetchAchievements")
+                    : LocalizationHelper.GetText("GameModal.Hint.FetchImages");
+            }
+
+            return string.Empty;
+        }
+    }
+
+    /// <summary>
+    /// Whether the Y hint is shown (the shown pane has a Y action).
+    /// </summary>
+    public bool IsYHintVisible
+    {
+        get
+        {
+            return YHintText.Length > 0;
+        }
+    }
+
+    /// <summary>
     /// The currently selected option row.
     /// </summary>
     [ObservableProperty]
@@ -153,6 +185,11 @@ public partial class GameModalViewModel : ModalViewModelBase
         if (created is GameSettingsPaneViewModel settings)
         {
             settings.ExitRequested += () => IsPaneActive = false;
+        }
+
+        if (created is AchievementsPaneViewModel achievementsPane)
+        {
+            achievementsPane.PropertyChanged += OnAchievementsPanePropertyChanged;
         }
 
         _panes[pane] = created;
@@ -245,6 +282,20 @@ public partial class GameModalViewModel : ModalViewModelBase
         OnPropertyChanged(nameof(XHintText));
         OnPropertyChanged(nameof(IsXHintVisible));
         OnPropertyChanged(nameof(AHintText));
+        OnPropertyChanged(nameof(YHintText));
+        OnPropertyChanged(nameof(IsYHintVisible));
+    }
+
+    /// <summary>
+    /// Refreshes the Y hint when the achievements pane gains or loses its rows.
+    /// </summary>
+    private void OnAchievementsPanePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AchievementsPaneViewModel.ShowEmpty))
+        {
+            OnPropertyChanged(nameof(YHintText));
+            OnPropertyChanged(nameof(IsYHintVisible));
+        }
     }
 
     /// <summary>
