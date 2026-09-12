@@ -197,6 +197,68 @@ public sealed class SpaFile : IDisposable
     private const uint XachMagic = 0x58414348;
 
     /// <summary>
+    /// XDBF entry ID for the XLAST blob ("XSRC" = 0x58535243 BE).
+    /// </summary>
+    private const ulong XsrcId = 0x58535243;
+
+    /// <summary>
+    /// XSRC section magic "XSRC" (0x58535243 BE) at start of the XLAST data.
+    /// </summary>
+    private const uint XsrcMagic = 0x58535243;
+
+    /// <summary>
+    /// Reads the compressed XLAST XML blob from the XSRC section.
+    /// </summary>
+    /// <param name="compressedSize">The compressed payload size on success.</param>
+    /// <param name="decompressedSize">The declared decompressed size on success.</param>
+    /// <returns>The gzip payload bytes, or null when missing, truncated, or invalid.</returns>
+    /// <remarks>
+    /// Layout after the 12-byte section header: filename length (4 bytes), filename,
+    /// decompressed size (4 bytes), compressed size (4 bytes), then the gzip payload.
+    /// </remarks>
+    public byte[]? ReadXLast(out uint compressedSize, out uint decompressedSize)
+    {
+        compressedSize = 0;
+        decompressedSize = 0;
+        byte[]? data = GetSectionData(SpaSectionMetadata, XsrcId, XsrcMagic);
+        if (data == null || data.Length < 24)
+        {
+            return null;
+        }
+
+        int pos = 12;
+        uint filenameLength = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos));
+        pos += 4;
+        // Overflow-safe: filename + two size fields must fit.
+        if ((ulong)pos + filenameLength + 8 > (ulong)data.Length)
+        {
+            Logger.Warning<SpaFile>("XSRC data truncated at filename");
+            return null;
+        }
+
+        pos += (int)filenameLength;
+        decompressedSize = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos));
+        pos += 4;
+        compressedSize = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(pos));
+        pos += 4;
+        if (compressedSize == 0 || decompressedSize == 0)
+        {
+            Logger.Trace<SpaFile>("XSRC section has no XLAST payload");
+            return null;
+        }
+
+        if ((ulong)pos + compressedSize > (ulong)data.Length)
+        {
+            Logger.Warning<SpaFile>("XSRC payload overruns section data");
+            return null;
+        }
+
+        byte[] payload = new byte[compressedSize];
+        Array.Copy(data, pos, payload, 0, (int)compressedSize);
+        return payload;
+    }
+
+    /// <summary>
     /// Cached SPA achievements parsed from the XACH section. Null until first access.
     /// </summary>
     private List<SpaAchievement>? _spaAchievements;
