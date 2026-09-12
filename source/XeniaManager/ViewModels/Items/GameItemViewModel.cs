@@ -1097,34 +1097,41 @@ public partial class GameItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task OpenGameLocation()
+    private async Task BrowseGameFiles()
     {
         try
         {
-            string? directory = Path.GetDirectoryName(Game.FileLocations.ResolvedGamePath);
-            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            // For multi-disc games, ask the user which disc to browse before proceeding
+            int discNumber = 1;
+            if (Game.FileLocations.IsMultiDisc)
             {
-                await _messageBoxService.ShowInfoAsync(
-                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Title"),
-                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.NoGameDir.Message"));
+                Logger.Info<GameItemViewModel>($"{Game.Title} has {Game.FileLocations.DiscCount} discs, showing disc selection dialog");
+                int? selectedDisc = await DiscSelectionDialog.ShowAsync(Game);
+                if (selectedDisc == null)
+                {
+                    Logger.Info<GameItemViewModel>("Disc selection cancelled, aborting game files browser");
+                    return;
+                }
+
+                discNumber = selectedDisc.Value;
+            }
+
+            string? gamePath = Game.FileLocations.GetDiscPath(discNumber);
+            if (string.IsNullOrWhiteSpace(gamePath))
+            {
+                Logger.Warning<GameItemViewModel>($"Invalid disc path for {Game.Title} (Disc {discNumber})");
                 return;
             }
 
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = directory,
-                UseShellExecute = true,
-                Verb = "open"
-            });
+            await GameFilesDialog.ShowAsync(gamePath, Game.Title);
         }
         catch (Exception ex)
         {
-            Logger.Error<GameItemViewModel>($"Failed to open game location for: {Game.Title}");
+            Logger.Error<GameItemViewModel>($"Failed to browse game files for: {Game.Title}");
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
-                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.GameLocation.Error.Message"),
-                    ex.Message));
+                LocalizationHelper.GetText("GameFilesDialog.LoadError.Title"),
+                ex.Message);
         }
     }
 }
