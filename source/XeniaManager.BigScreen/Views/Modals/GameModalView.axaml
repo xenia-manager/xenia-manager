@@ -103,6 +103,10 @@
                                 KeyColour="{DynamicResource HintKeyX}"
                                 Text="{Binding XHintText}"
                                 IsVisible="{Binding IsXHintVisible}" />
+                <prim:InputHint Char="Y"
+                                KeyColour="{DynamicResource HintKeyY}"
+                                Text="{Binding YHintText}"
+                                IsVisible="{Binding IsYHintVisible}" />
             </StackPanel>
         </Grid>
     </Border>
