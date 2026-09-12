@@ -775,6 +775,58 @@ public class GpdFile : IDisposable
     }
 
     /// <summary>
+    /// Removes a title entry by its title ID, freeing its table row.
+    /// </summary>
+    /// <param name="titleId">The title ID to remove.</param>
+    /// <returns>True if the title was found and removed, false otherwise.</returns>
+    public bool RemoveTitle(uint titleId)
+    {
+        Logger.Info<GpdFile>($"Removing title 0x{titleId:X8}");
+
+        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+            e.Namespace == EntryNamespace.Title &&
+            e.Id == titleId);
+
+        // Check if the entry is default (not found)
+        if (entry.Namespace == default)
+        {
+            Logger.Warning<GpdFile>($"Title 0x{titleId:X8} not found");
+            return false;
+        }
+
+        Entries.Remove(entry);
+        InvalidateCaches();
+
+        // Update header counts (create a copy since Header is a struct)
+        XdbfHeader header = Header;
+        header.EntryCount = (uint)Entries.Count;
+        Header = header;
+
+        // Note: This doesn't reclaim the data space - would need compaction for that
+        Logger.Info<GpdFile>($"Successfully removed title");
+        return true;
+    }
+
+    /// <summary>
+    /// Builds a zero-initialized title-played entry from SPA data: only the title ID,
+    /// achievement count, gamerscore total, and title name are set; unlocked counts,
+    /// avatar awards, flags, and last-played time stay at their defaults.
+    /// Pair with <see cref="AddTitle"/> or <see cref="UpdateTitleEntry"/> to persist.
+    /// </summary>
+    /// <param name="spa">The parsed title SPA to fill from.</param>
+    /// <returns>A new <see cref="TitleEntry"/> with defaults filled from the SPA.</returns>
+    public static TitleEntry FillTitlePlayedData(SpaFile spa)
+    {
+        return new TitleEntry
+        {
+            TitleId = spa.TitleId,
+            AchievementCount = spa.SpaAchievements.Count,
+            GamerscoreTotal = (int)spa.TotalGamerscore,
+            TitleName = spa.TitleName()
+        };
+    }
+
+    /// <summary>
     /// Gets all achievements for a specific title.
     /// </summary>
     /// <param name="titleId">The title ID to filter by.</param>
@@ -989,18 +1041,18 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Updating title entry 0x{titleId:X8}");
 
-        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+        int index = Entries.FindIndex(e =>
             e.Namespace == EntryNamespace.Title &&
             e.Id == titleId);
 
-        // Check if the entry is default (not found)
-        if (entry.Namespace == default)
+        if (index < 0)
         {
             Logger.Warning<GpdFile>($"Title entry {titleId:X8} not found");
             return false;
         }
 
         InvalidateCaches();
+        EntryTableEntry entry = Entries[index];
         byte[] newTitleData = title.ToBytes();
 
         // Calculate data offset for this entry
@@ -1016,12 +1068,12 @@ public class GpdFile : IDisposable
         }
         else
         {
-            // TODO: Need to resize, remove old and add new
-            // Currently we just append and mark old as free space
-
-            // Update the entry to point to a new location
+            // Append the new data and mark the old space as free.
+            // EntryTableEntry is a struct, so write the updated row back into the list.
+            uint oldLength = entry.Length;
             entry.OffsetSpecifier = (uint)Data.Length;
             entry.Length = (uint)newTitleData.Length;
+            Entries[index] = entry;
 
             // Append new data
             byte[] newData = new byte[Data.Length + newTitleData.Length];
@@ -1033,7 +1085,7 @@ public class GpdFile : IDisposable
             FreeSpaceEntries.Add(new FreeSpaceEntry
             {
                 OffsetSpecifier = (uint)(dataOffset - DataOffset),
-                Length = entry.Length
+                Length = oldLength
             });
         }
 
