@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -331,9 +332,26 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Whether the selected account has an achievement GPD file.
+    /// Controls the "fetch images" button in the achievements view.
+    /// </summary>
+    public bool IsAchievementGpdPresent
+    {
+        get
+        {
+            return SelectedAccountContent?.GameAchievementGpdFile != null;
+        }
+    }
+
+    /// <summary>
     /// Whether an achievement GPD build from disc is currently running.
     /// </summary>
     [ObservableProperty] private bool _isCreatingAchievements;
+
+    /// <summary>
+    /// Whether achievement images are currently being fetched from disc.
+    /// </summary>
+    [ObservableProperty] private bool _isFetchingImages;
 
     /// <summary>
     /// Gets the total achievement count.
@@ -421,6 +439,37 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Resolves which disc file to read achievement data from.
+    /// For multi-disc games the user picks a disc; returns null when cancelled or missing.
+    /// </summary>
+    /// <returns>The disc path, or null when no disc should be read.</returns>
+    private async Task<string?> ResolveDiscPathAsync()
+    {
+        int? discNumber = 1;
+        if (Game.FileLocations.IsMultiDisc)
+        {
+            Logger.Info<ContentViewerDialogViewModel>($"'{Game.Title}' has {Game.FileLocations.DiscCount} discs, showing disc selection dialog");
+            discNumber = await DiscSelectionDialog.ShowAsync(Game);
+            if (discNumber == null)
+            {
+                Logger.Info<ContentViewerDialogViewModel>("Disc selection cancelled");
+                return null;
+            }
+        }
+
+        string? discPath = Game.FileLocations.GetDiscPath(discNumber.Value);
+        if (string.IsNullOrEmpty(discPath) || (!File.Exists(discPath) && !Directory.Exists(discPath)))
+        {
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title"),
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message"));
+            return null;
+        }
+
+        return discPath;
+    }
+
+    /// <summary>
     /// Creates or fills the achievement GPD for the selected account from the game disc.
     /// For multi-disc games the user picks which disc to read.
     /// </summary>
@@ -432,24 +481,9 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             return;
         }
 
-        int? discNumber = 1;
-        if (Game.FileLocations.IsMultiDisc)
+        string? discPath = await ResolveDiscPathAsync();
+        if (discPath == null)
         {
-            Logger.Info<ContentViewerDialogViewModel>($"'{Game.Title}' has {Game.FileLocations.DiscCount} discs, showing disc selection dialog");
-            discNumber = await DiscSelectionDialog.ShowAsync(Game);
-            if (discNumber == null)
-            {
-                Logger.Info<ContentViewerDialogViewModel>("Disc selection cancelled, aborting achievement creation");
-                return;
-            }
-        }
-
-        string? discPath = Game.FileLocations.GetDiscPath(discNumber.Value);
-        if (string.IsNullOrEmpty(discPath) || (!File.Exists(discPath) && !Directory.Exists(discPath)))
-        {
-            await _messageBoxService.ShowErrorAsync(
-                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title"),
-                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message"));
             return;
         }
 
@@ -482,6 +516,68 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         finally
         {
             IsCreatingAchievements = false;
+        }
+    }
+
+    /// <summary>
+    /// Fetches achievement images from the game disc into the selected account's GPD.
+    /// The user chooses between filling only missing images or overwriting all of them.
+    /// </summary>
+    [RelayCommand]
+    private async Task FetchAchievementImages()
+    {
+        if (IsFetchingImages || SelectedAccountContent?.GameAchievementGpdFile == null)
+        {
+            return;
+        }
+
+        FAContentDialogResult choice = await _messageBoxService.ShowCustomDialogAsync(
+            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.Title"),
+            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.Message"),
+            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.MissingOnly"),
+            LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Mode.OverwriteAll"));
+        if (choice == FAContentDialogResult.None)
+        {
+            return;
+        }
+
+        string? discPath = await ResolveDiscPathAsync();
+        if (discPath == null)
+        {
+            return;
+        }
+
+        AccountContent? account = SelectedAccountContent;
+        if (account?.GameAchievementGpdFile == null)
+        {
+            return;
+        }
+
+        bool overwriteAll = choice == FAContentDialogResult.Secondary;
+        IsFetchingImages = true;
+        try
+        {
+            int written = await Task.Run(() => AchievementGpdBuilder.FetchImages(discPath, account.GameAchievementGpdPath, overwriteAll));
+
+            account.ReloadAchievementGpd();
+            LoadAchievements();
+
+            Logger.Info<ContentViewerDialogViewModel>($"Fetched {written} achievement images from disc (overwrite: {overwriteAll})");
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Success.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Success.Message"), written));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ContentViewerDialogViewModel>($"Failed to fetch achievement images from disc: {ex.Message}");
+            Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchImages.Failed.Message"), ex.Message));
+        }
+        finally
+        {
+            IsFetchingImages = false;
         }
     }
 
@@ -1331,6 +1427,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             _allAchievements = [];
             OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
             OnPropertyChanged(nameof(IsAchievementGpdMissing));
+            OnPropertyChanged(nameof(IsAchievementGpdPresent));
             return;
         }
 
@@ -1354,6 +1451,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             OnPropertyChanged(nameof(IsAchievementsEmpty));
             OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
             OnPropertyChanged(nameof(IsAchievementGpdMissing));
+            OnPropertyChanged(nameof(IsAchievementGpdPresent));
         }
         catch (Exception ex)
         {

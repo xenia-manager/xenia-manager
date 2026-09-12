@@ -217,6 +217,10 @@
                         <Button Content="{DynamicResource InstalledContentDialog.UnselectAll}"
                                 Command="{Binding UnselectAllAchievementsCommand}"
                                 IsVisible="{Binding AreAchievementFeaturesEnabled}" />
+                        <Button Content="{DynamicResource InstalledContentDialog.Achievements.FetchImages}"
+                                Command="{Binding FetchAchievementImagesCommand}"
+                                IsVisible="{Binding IsAchievementGpdPresent}"
+                                IsEnabled="{Binding IsFetchingImages, Converter={StaticResource InverseBoolConverter}}" />
                     </StackPanel>
 
                     <!-- Achievements List -->
