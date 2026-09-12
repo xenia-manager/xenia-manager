@@ -1166,6 +1166,210 @@ public class StfsFile : IDisposable
     public List<StfsFileEntry> GetEntriesByPath(short pathIndicator) => FileEntries.Where(e => e.PathIndicator == pathIndicator).ToList();
 
     /// <summary>
+    /// Normalizes a browsing path to '/'-separated segments without empty entries,
+    /// so forward and backslash separators resolve identically (same as <see cref="IsoFile.Lookup"/>).
+    /// </summary>
+    /// <param name="path">The raw path.</param>
+    /// <returns>The normalized path ("" for root).</returns>
+    private static string NormalizeBrowsingPath(string path) =>
+        string.Join('/', path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries));
+
+    /// <summary>
+    /// Cached full '/'-separated path per file-table index. Built lazily on first browse.
+    /// </summary>
+    private Dictionary<int, string>? _fullPathCache;
+
+    /// <summary>
+    /// Resolves the parent file-table index of an entry, treating missing, out-of-range,
+    /// and non-directory parents as root (-1), matching the extraction fallback behaviour.
+    /// </summary>
+    /// <param name="index">The file-table index of the entry.</param>
+    /// <returns>The parent file-table index, or -1 for root-level entries.</returns>
+    private int ResolveParentIndex(int index)
+    {
+        int parent = FileEntries[index].PathIndicator;
+        if (parent == -1)
+        {
+            return -1;
+        }
+
+        if (parent < 0 || parent >= FileEntries.Count || !FileEntries[parent].IsDirectory)
+        {
+            return -1;
+        }
+
+        return parent;
+    }
+
+    /// <summary>
+    /// Computes the full '/'-separated path of the entry at the given file-table index
+    /// by walking its directory chain.
+    /// </summary>
+    /// <param name="index">The file-table index of the entry.</param>
+    /// <returns>The full path (e.g., "game/data.bin").</returns>
+    private string ComputeFullPath(int index)
+    {
+        Stack<string> segments = new Stack<string>();
+        HashSet<int> visited = new HashSet<int>();
+        int current = index;
+        while (current >= 0 && current < FileEntries.Count && visited.Add(current))
+        {
+            segments.Push(FileEntries[current].FileName);
+            int parent = ResolveParentIndex(current);
+            if (parent == -1)
+            {
+                break;
+            }
+
+            current = parent;
+        }
+
+        return string.Join('/', segments);
+    }
+
+    /// <summary>
+    /// Gets the cached full path of the entry at the given file-table index.
+    /// </summary>
+    /// <param name="index">The file-table index of the entry.</param>
+    /// <returns>The full path (e.g., "game/data.bin").</returns>
+    private string GetFullPath(int index)
+    {
+        _fullPathCache ??= new Dictionary<int, string>();
+        if (!_fullPathCache.TryGetValue(index, out string? fullPath))
+        {
+            fullPath = ComputeFullPath(index);
+            _fullPathCache[index] = fullPath;
+        }
+
+        return fullPath;
+    }
+
+    /// <summary>
+    /// Finds the file-table index of the entry at the given normalized browsing path.
+    /// Comparison is case-insensitive.
+    /// </summary>
+    /// <param name="normalizedPath">The normalized path to find.</param>
+    /// <returns>The file-table index, or -1 when not found.</returns>
+    private int LookupIndex(string normalizedPath)
+    {
+        for (int i = 0; i < FileEntries.Count; i++)
+        {
+            if (GetFullPath(i).Equals(normalizedPath, StringComparison.OrdinalIgnoreCase))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// Looks up a file or directory by its path within the package.
+    /// Supports both forward and backslash path separators. Comparison is case-insensitive.
+    /// </summary>
+    /// <param name="path">The path to look up (e.g., "game/data.bin" or "default.xex").</param>
+    /// <returns>The entry if found; null if the path does not exist.</returns>
+    public StfsFileEntry? Lookup(string path)
+    {
+        string normalized = NormalizeBrowsingPath(path);
+        if (normalized.Length == 0)
+        {
+            return null;
+        }
+
+        int index = LookupIndex(normalized);
+        return index >= 0 ? FileEntries[index] : null;
+    }
+
+    /// <summary>
+    /// Lists the immediate children of a directory by path.
+    /// </summary>
+    /// <param name="path">The directory path (e.g., "game" or "" for root).</param>
+    /// <returns>A list of child entries, or null if the path does not exist or is a file.</returns>
+    public List<StfsFileEntry>? ListDirectory(string path)
+    {
+        string normalized = NormalizeBrowsingPath(path);
+        if (normalized.Length == 0)
+        {
+            List<StfsFileEntry> root = new List<StfsFileEntry>();
+            for (int i = 0; i < FileEntries.Count; i++)
+            {
+                if (ResolveParentIndex(i) == -1)
+                {
+                    root.Add(FileEntries[i]);
+                }
+            }
+
+            return root;
+        }
+
+        int dirIndex = LookupIndex(normalized);
+        if (dirIndex < 0 || !FileEntries[dirIndex].IsDirectory)
+        {
+            return null;
+        }
+
+        List<StfsFileEntry> children = new List<StfsFileEntry>();
+        for (int i = 0; i < FileEntries.Count; i++)
+        {
+            if (ResolveParentIndex(i) == dirIndex)
+            {
+                children.Add(FileEntries[i]);
+            }
+        }
+
+        return children;
+    }
+
+    /// <summary>
+    /// Reads the full contents of a file identified by its path within the package.
+    /// </summary>
+    /// <param name="path">The path to the file (e.g., "default.xex").</param>
+    /// <returns>The complete file data, or null if the file was not found or is a directory.</returns>
+    public byte[]? ReadFile(string path)
+    {
+        StfsFileEntry? entry = Lookup(path);
+        if (entry == null || entry.IsDirectory)
+        {
+            return null;
+        }
+
+        return ExtractFile(entry);
+    }
+
+    /// <summary>
+    /// Reads a portion of a file starting at the specified offset with the specified length.
+    /// </summary>
+    /// <param name="entry">The file entry to read from.</param>
+    /// <param name="offset">The byte offset within the file to start reading from.</param>
+    /// <param name="length">The number of bytes to read.</param>
+    /// <returns>The requested file data. Empty when offset is beyond the file size.</returns>
+    public byte[] ReadFile(StfsFileEntry entry, ulong offset, ulong length)
+    {
+        if (entry.IsDirectory)
+        {
+            return Array.Empty<byte>();
+        }
+
+        // ponytail: full extract then slice; per-block ranged reads if large-file previews ever need them.
+        byte[] full = ExtractFile(entry);
+        if (offset >= (ulong)full.Length)
+        {
+            return Array.Empty<byte>();
+        }
+
+        ulong count = Math.Min(length, (ulong)full.Length - offset);
+        if (count == 0)
+        {
+            return Array.Empty<byte>();
+        }
+
+        byte[] result = new byte[count];
+        Array.Copy(full, (long)offset, result, 0, (long)count);
+        return result;
+    }
+
+    /// <summary>
     /// Disposes of resources used by the STFS file.
     /// </summary>
     public void Dispose()
