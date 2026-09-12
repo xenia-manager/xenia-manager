@@ -99,6 +99,20 @@ public interface IProfileService
     Files.GpdFile? LoadGameAchievementGpd(XeniaVersion version, string gameId);
 
     /// <summary>
+    /// Returns the expected path of the version's active profile's per-game
+    /// achievement GPD, whether or not the file exists. Null when the version
+    /// is custom, has no active profile, or the game id is empty.
+    /// </summary>
+    string? GetGameAchievementGpdPath(XeniaVersion version, string gameId);
+
+    /// <summary>
+    /// Returns the expected path of the version's active profile GPD
+    /// (<c>FFFE07D1.gpd</c>), whether or not the file exists. Null when the
+    /// version is custom or has no active profile.
+    /// </summary>
+    string? GetProfileGpdPath(XeniaVersion version);
+
+    /// <summary>
     /// Resolves achievement/gamerscore counters for the given game.
     /// </summary>
     GameStatInfo? GetGameStats(Game game);

@@ -192,6 +192,9 @@
     <sys:String x:Key="GameModal.Achievements.Sort.Alphabetical">Alphabetical</sys:String>
     <sys:String x:Key="GameModal.Achievements.Sort.Achieved">Achieved</sys:String>
     <sys:String x:Key="GameModal.Achievements.Empty">No achievements found</sys:String>
+    <sys:String x:Key="GameModal.Achievements.EmptyCreate">No achievements found.</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Create.Failed.Title">Creation Failed</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Create.Failed.Message">Failed to fetch achievements from the game files. Error: {0}</sys:String>
     <sys:String x:Key="GameModal.Achievements.NotUnlocked">Not Unlocked</sys:String>
     <sys:String x:Key="GameModal.Achievements.HiddenName">Hidden Achievement</sys:String>
     <sys:String x:Key="GameModal.Achievements.SpoilerWarning">This achievement contains spoilers</sys:String>
