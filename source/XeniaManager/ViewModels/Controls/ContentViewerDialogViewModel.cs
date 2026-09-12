@@ -14,6 +14,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Files;
+using XeniaManager.Files.Models.XConfig;
+using XeniaManager.Files.Utilities;
 using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
@@ -22,6 +24,7 @@ using XeniaManager.Files.Models.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Controls;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Items;
 
@@ -316,6 +319,23 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Whether the selected account is missing achievement data (no GPD file or no achievements in it).
+    /// Controls the "create from disc" button in the achievements empty state.
+    /// </summary>
+    public bool IsAchievementGpdMissing
+    {
+        get
+        {
+            return SelectedAccountContent?.GameAchievementGpdFile == null || _allAchievements.Count == 0;
+        }
+    }
+
+    /// <summary>
+    /// Whether an achievement GPD build from disc is currently running.
+    /// </summary>
+    [ObservableProperty] private bool _isCreatingAchievements;
+
+    /// <summary>
     /// Gets the total achievement count.
     /// </summary>
     [ObservableProperty] private int _achievementCount;
@@ -398,6 +418,71 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     {
         OnPropertyChanged(nameof(IsHeaderFilesEmptyStateVisible));
         OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
+    }
+
+    /// <summary>
+    /// Creates or fills the achievement GPD for the selected account from the game disc.
+    /// For multi-disc games the user picks which disc to read.
+    /// </summary>
+    [RelayCommand]
+    private async Task CreateMissingAchievements()
+    {
+        if (IsCreatingAchievements || SelectedAccountContent == null)
+        {
+            return;
+        }
+
+        int? discNumber = 1;
+        if (Game.FileLocations.IsMultiDisc)
+        {
+            Logger.Info<ContentViewerDialogViewModel>($"'{Game.Title}' has {Game.FileLocations.DiscCount} discs, showing disc selection dialog");
+            discNumber = await DiscSelectionDialog.ShowAsync(Game);
+            if (discNumber == null)
+            {
+                Logger.Info<ContentViewerDialogViewModel>("Disc selection cancelled, aborting achievement creation");
+                return;
+            }
+        }
+
+        string? discPath = Game.FileLocations.GetDiscPath(discNumber.Value);
+        if (string.IsNullOrEmpty(discPath) || (!File.Exists(discPath) && !Directory.Exists(discPath)))
+        {
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title"),
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message"));
+            return;
+        }
+
+        IsCreatingAchievements = true;
+        try
+        {
+            AccountContent account = SelectedAccountContent;
+            XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(account.AccountInfo.Language);
+            AchievementGpdBuildResult result = await Task.Run(() =>
+                AchievementGpdBuilder.EnsureAchievements(discPath, account.ExpectedGameAchievementGpdPath, account.ProfileGpdPath, language));
+
+            account.ReloadAchievementGpd();
+            account.ReloadProfileGpd();
+            LoadAchievements();
+
+            Logger.Info<ContentViewerDialogViewModel>($"Created achievements from disc: {result.AchievementsAdded} added, {result.AchievementsTotal} total");
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.Success.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.Success.Message"),
+                    result.AchievementsAdded, result.AchievementsTotal));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ContentViewerDialogViewModel>($"Failed to create achievements from disc: {ex.Message}");
+            Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.CreateMissing.Failed.Message"), ex.Message));
+        }
+        finally
+        {
+            IsCreatingAchievements = false;
+        }
     }
 
     /// <summary>
@@ -1195,6 +1280,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
         // Explicitly notify empty state visibility changes
         OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
+        OnPropertyChanged(nameof(IsAchievementGpdMissing));
         OnPropertyChanged(nameof(IsHeaderFilesEmptyStateVisible));
 
         if (contentType == ContentType.Achievements)
@@ -1242,7 +1328,9 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         if (SelectedAccountContent?.GameAchievementGpdFile == null)
         {
             Logger.Warning<ContentViewerDialogViewModel>("No achievement GPD file found for selected account");
+            _allAchievements = [];
             OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
+            OnPropertyChanged(nameof(IsAchievementGpdMissing));
             return;
         }
 
@@ -1265,6 +1353,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             // Notify empty state changed after loading
             OnPropertyChanged(nameof(IsAchievementsEmpty));
             OnPropertyChanged(nameof(IsAchievementsEmptyStateVisible));
+            OnPropertyChanged(nameof(IsAchievementGpdMissing));
         }
         catch (Exception ex)
         {
