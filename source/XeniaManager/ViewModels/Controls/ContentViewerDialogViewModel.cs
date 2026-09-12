@@ -354,6 +354,11 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     [ObservableProperty] private bool _isFetchingImages;
 
     /// <summary>
+    /// Whether achievement strings are currently being refetched from disc.
+    /// </summary>
+    [ObservableProperty] private bool _isRefreshingStrings;
+
+    /// <summary>
     /// Gets the total achievement count.
     /// </summary>
     [ObservableProperty] private int _achievementCount;
@@ -578,6 +583,60 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         finally
         {
             IsFetchingImages = false;
+        }
+    }
+
+    /// <summary>
+    /// Refetches achievement names and descriptions from the game disc into the
+    /// selected account's GPD, preserving unlock state. For multi-disc games the
+    /// user picks which disc to read.
+    /// </summary>
+    [RelayCommand]
+    private async Task FetchAchievementStrings()
+    {
+        if (IsRefreshingStrings || SelectedAccountContent?.GameAchievementGpdFile == null)
+        {
+            return;
+        }
+
+        string? discPath = await ResolveDiscPathAsync();
+        if (discPath == null)
+        {
+            return;
+        }
+
+        AccountContent? account = SelectedAccountContent;
+        if (account?.GameAchievementGpdFile == null)
+        {
+            return;
+        }
+
+        IsRefreshingStrings = true;
+        try
+        {
+            XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(account.AccountInfo.Language);
+            int updated = await Task.Run(() =>
+                AchievementGpdBuilder.RefreshStrings(discPath, account.GameAchievementGpdPath, language));
+
+            account.ReloadAchievementGpd();
+            LoadAchievements();
+
+            Logger.Info<ContentViewerDialogViewModel>($"Refetched {updated} achievement strings from disc");
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Success.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Success.Message"), updated));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ContentViewerDialogViewModel>($"Failed to refetch achievement strings from disc: {ex.Message}");
+            Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.Achievements.FetchStrings.Failed.Message"), ex.Message));
+        }
+        finally
+        {
+            IsRefreshingStrings = false;
         }
     }
 

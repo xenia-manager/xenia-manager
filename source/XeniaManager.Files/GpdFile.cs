@@ -505,18 +505,17 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Unlocking achievement 0x{achievementId:X8}");
 
-        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+        int index = Entries.FindIndex(e =>
             e.Namespace == EntryNamespace.Achievement &&
             e.Id == achievementId);
 
-        // Check if the entry is default (not found)
-        if (entry.Namespace == default)
+        if (index < 0)
         {
             Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} not found");
             return false;
         }
 
-        AchievementEntry? achievement = ParseAchievementEntry(entry);
+        AchievementEntry? achievement = ParseAchievementEntry(Entries[index]);
         if (achievement == null)
         {
             Logger.Warning<GpdFile>($"Failed to parse achievement 0x{achievementId:X8}");
@@ -530,7 +529,7 @@ public class GpdFile : IDisposable
         }
 
         achievement.Unlock(unlockTime);
-        UpdateAchievementEntry(entry, achievement);
+        UpdateAchievementEntry(index, achievement);
 
         Logger.Info<GpdFile>($"Successfully unlocked achievement: {achievement.Name}");
         return true;
@@ -546,18 +545,17 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Locking achievement 0x{achievementId:X8}");
 
-        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+        int index = Entries.FindIndex(e =>
             e.Namespace == EntryNamespace.Achievement &&
             e.Id == achievementId);
 
-        // Check if the entry is default (not found)
-        if (entry.Namespace == default)
+        if (index < 0)
         {
             Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} not found");
             return false;
         }
 
-        AchievementEntry? achievement = ParseAchievementEntry(entry);
+        AchievementEntry? achievement = ParseAchievementEntry(Entries[index]);
         if (achievement == null)
         {
             Logger.Warning<GpdFile>($"Failed to parse achievement 0x{achievementId:X8}");
@@ -571,7 +569,7 @@ public class GpdFile : IDisposable
         }
 
         achievement.Lock();
-        UpdateAchievementEntry(entry, achievement);
+        UpdateAchievementEntry(index, achievement);
 
         Logger.Info<GpdFile>($"Successfully locked achievement: {achievement.Name}");
         return true;
@@ -1110,9 +1108,12 @@ public class GpdFile : IDisposable
     /// <summary>
     /// Updates an achievement entry in the data section.
     /// </summary>
-    private void UpdateAchievementEntry(EntryTableEntry entry, AchievementEntry achievement)
+    /// <param name="index">The index of the entry table row to update.</param>
+    /// <param name="achievement">The updated achievement entry.</param>
+    private void UpdateAchievementEntry(int index, AchievementEntry achievement)
     {
         InvalidateCaches();
+        EntryTableEntry entry = Entries[index];
         byte[] newAchievementData = achievement.ToBytes(_isBigEndian);
 
         // Calculate data offset for this entry
@@ -1131,9 +1132,12 @@ public class GpdFile : IDisposable
             // TODO: Need to resize, remove old and add new
             // Currently we just append and mark old as free space
 
-            // Update the entry to point to a new location
+            // Update the entry to point to a new location.
+            // EntryTableEntry is a struct, so write the updated row back into the list.
+            uint oldLength = entry.Length;
             entry.OffsetSpecifier = (uint)Data.Length;
             entry.Length = (uint)newAchievementData.Length;
+            Entries[index] = entry;
 
             // Append new data
             byte[] newData = new byte[Data.Length + newAchievementData.Length];
@@ -1145,9 +1149,44 @@ public class GpdFile : IDisposable
             FreeSpaceEntries.Add(new FreeSpaceEntry
             {
                 OffsetSpecifier = (uint)(dataOffset - DataOffset),
-                Length = entry.Length
+                Length = oldLength
             });
         }
+    }
+
+    /// <summary>
+    /// Updates an achievement's strings by its ID, preserving its ID, image,
+    /// gamerscore, flags, and unlock time.
+    /// Invalid/corrupted entries are skipped and cannot be modified.
+    /// </summary>
+    /// <param name="achievementId">The achievement ID to update.</param>
+    /// <param name="achievement">The updated achievement entry.</param>
+    /// <returns>True if the achievement was found and updated, false otherwise.</returns>
+    public bool UpdateAchievement(uint achievementId, AchievementEntry achievement)
+    {
+        Logger.Info<GpdFile>($"Updating achievement 0x{achievementId:X8}");
+
+        int index = Entries.FindIndex(e =>
+            e.Namespace == EntryNamespace.Achievement &&
+            e.Id == achievementId);
+
+        if (index < 0)
+        {
+            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} not found");
+            return false;
+        }
+
+        AchievementEntry? existing = ParseAchievementEntry(Entries[index]);
+        if (existing == null || !existing.IsValid)
+        {
+            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} is invalid/corrupted and cannot be updated");
+            return false;
+        }
+
+        UpdateAchievementEntry(index, achievement);
+
+        Logger.Info<GpdFile>($"Successfully updated achievement: {achievement.Name}");
+        return true;
     }
 
     /// <summary>

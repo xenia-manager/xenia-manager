@@ -478,6 +478,112 @@ public class AchievementGpdBuilderTests
     }
 
     [Test]
+    public void RefreshStringsFromSpa_UpdatesLanguageAndPreservesProgress()
+    {
+        string dir = NewTempDir();
+        try
+        {
+            string titlePath = Path.Combine(dir, "4D5309C9.gpd");
+            using SpaFile spa = BuildSpa();
+            AchievementGpdBuilder.EnsureFromSpa(spa, titlePath, null, XLanguage.English);
+
+            long unlockTime;
+            using (GpdFile built = GpdFile.Load(titlePath))
+            {
+                Assert.That(built.UnlockAchievement(1), Is.True);
+                built.Save(titlePath);
+                unlockTime = built.GetAchievement(1)!.UnlockTime;
+                Assert.That(unlockTime, Is.Not.EqualTo(0));
+            }
+
+            int updated = AchievementGpdBuilder.RefreshStringsFromSpa(spa, titlePath, XLanguage.French);
+            Assert.That(updated, Is.EqualTo(3));
+
+            using GpdFile refreshed = GpdFile.Load(titlePath);
+            AchievementEntry first = refreshed.GetAchievement(1)!;
+            Assert.That(first.Name, Is.EqualTo("Premier"));
+            Assert.That(first.UnlockedDescription, Is.EqualTo("Premier débloqué"));
+            Assert.That(first.IsEarned, Is.True);
+            Assert.That(first.UnlockTime, Is.EqualTo(unlockTime));
+            Assert.That(first.Gamerscore, Is.EqualTo(100));
+            Assert.That(first.ImageId, Is.EqualTo(0x100));
+
+            // Second run finds nothing to change.
+            Assert.That(AchievementGpdBuilder.RefreshStringsFromSpa(spa, titlePath, XLanguage.French), Is.EqualTo(0));
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Test]
+    public void RefreshStringsFromSpa_ResizeFreesOldLength()
+    {
+        string dir = NewTempDir();
+        try
+        {
+            string titlePath = Path.Combine(dir, "4D5309C9.gpd");
+            using SpaFile spa = BuildSpa();
+            AchievementGpdBuilder.EnsureFromSpa(spa, titlePath, null, XLanguage.English);
+
+            uint oldOffset;
+            uint oldLength;
+            using (GpdFile before = GpdFile.Load(titlePath))
+            {
+                EntryTableEntry row = before.Entries.First(e => e.Namespace == EntryNamespace.Achievement && e.Id == 1);
+                oldOffset = row.OffsetSpecifier;
+                oldLength = row.Length;
+            }
+
+            // French strings are longer, forcing the resize path.
+            Assert.That(AchievementGpdBuilder.RefreshStringsFromSpa(spa, titlePath, XLanguage.French), Is.EqualTo(3));
+
+            using GpdFile after = GpdFile.Load(titlePath);
+            Assert.That(after.FreeSpaceEntries.Any(f => f.OffsetSpecifier == oldOffset && f.Length == oldLength), Is.True);
+            Assert.That(after.GetAchievement(1)!.Name, Is.EqualTo("Premier"));
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Test]
+    public void RefreshStringsFromSpa_SkipsAchievementsMissingFromSpa()
+    {
+        string dir = NewTempDir();
+        try
+        {
+            string titlePath = Path.Combine(dir, "4D5309C9.gpd");
+            using SpaFile spa = BuildSpa();
+            AchievementGpdBuilder.EnsureFromSpa(spa, titlePath, null, XLanguage.English);
+
+            using (GpdFile gpd = GpdFile.Load(titlePath))
+            {
+                gpd.AddAchievement(new AchievementEntry
+                {
+                    AchievementId = 99,
+                    Gamerscore = 5,
+                    Name = "Extra",
+                    UnlockedDescription = "Extra unlocked",
+                    LockedDescription = "Extra locked"
+                });
+                gpd.Save(titlePath);
+            }
+
+            Assert.That(AchievementGpdBuilder.RefreshStringsFromSpa(spa, titlePath, XLanguage.French), Is.EqualTo(3));
+
+            using GpdFile refreshed = GpdFile.Load(titlePath);
+            Assert.That(refreshed.GetAchievement(99)!.Name, Is.EqualTo("Extra"));
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Test]
     public void EnsureAchievements_MissingDisc_ThrowsFileNotFound()
     {
         string missing = Path.Combine(Path.GetTempPath(), $"missing_{Guid.NewGuid():N}.iso");

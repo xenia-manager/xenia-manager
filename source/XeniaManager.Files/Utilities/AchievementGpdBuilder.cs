@@ -219,6 +219,67 @@ public static class AchievementGpdBuilder
         return new AchievementGpdBuildResult(spa.TitleId, added, titleGpd.AllAchievements.Count(), profileUpdated);
     }
 
+    /// <summary>
+    /// Re-resolves achievement names and descriptions from the disc's SPA data
+    /// and rewrites the ones that changed. IDs, images, gamerscore, flags, and
+    /// unlock state are preserved. Achievements missing from either side are left alone.
+    /// </summary>
+    /// <param name="discPath">Path to the disc file or SVOD directory.</param>
+    /// <param name="titleGpdPath">Path of the existing <c>{TitleId}.gpd</c> file.</param>
+    /// <param name="userLanguage">The player's language; falls back to the SPA default language.</param>
+    /// <returns>How many achievements were updated.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the disc or GPD does not exist.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the disc holds no achievement data.</exception>
+    public static int RefreshStrings(string discPath, string titleGpdPath, XLanguage userLanguage)
+    {
+        EnsureDiscExists(discPath);
+        if (!File.Exists(titleGpdPath))
+        {
+            throw new FileNotFoundException($"Achievement GPD does not exist at {titleGpdPath}", titleGpdPath);
+        }
+
+        using SpaFile spa = OpenSpaOrThrow(discPath);
+        return RefreshStringsFromSpa(spa, titleGpdPath, userLanguage);
+    }
+
+    internal static int RefreshStringsFromSpa(SpaFile spa, string titleGpdPath, XLanguage userLanguage)
+    {
+        using GpdFile titleGpd = GpdFile.Load(titleGpdPath);
+        XLanguage language = ResolveLanguage(spa, userLanguage);
+        int updated = 0;
+        foreach (SpaAchievement spaAchievement in spa.SpaAchievements)
+        {
+            AchievementEntry? existing = titleGpd.Achievements.FirstOrDefault(a => a.AchievementId == spaAchievement.Id);
+            if (existing == null)
+            {
+                continue;
+            }
+
+            string name = spa.GetString((ushort)language, spaAchievement.LabelId);
+            string unlocked = spa.GetString((ushort)language, spaAchievement.DescriptionId);
+            string locked = spa.GetString((ushort)language, spaAchievement.UnachievedId);
+            if (existing.Name == name && existing.UnlockedDescription == unlocked && existing.LockedDescription == locked)
+            {
+                continue;
+            }
+
+            existing.Name = name;
+            existing.UnlockedDescription = unlocked;
+            existing.LockedDescription = locked;
+            titleGpd.UpdateAchievement(existing.AchievementId, existing);
+            updated++;
+        }
+
+        // Re-save files predating the end-of-data marker so the emulator accepts them.
+        if (updated > 0 || IsMissingEndOfDataMarker(titleGpd))
+        {
+            titleGpd.Save(titleGpdPath);
+        }
+
+        Logger.Info<GpdFile>($"Updated {updated} achievement strings in {titleGpdPath}");
+        return updated;
+    }
+
     internal static int FetchFromSpa(SpaFile spa, string titleGpdPath, bool overwriteAll)
     {
         using GpdFile titleGpd = GpdFile.Load(titleGpdPath);

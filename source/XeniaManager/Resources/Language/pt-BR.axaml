@@ -838,6 +838,11 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">#NOTTRANSLATED#</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Conteúdo Instalado</sys:String>
