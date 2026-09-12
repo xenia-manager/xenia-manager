@@ -30,68 +30,44 @@ internal sealed class IsoSectorReader : IDisposable
     {
         Logger.Trace<IsoSectorReader>("Initializing ISO sector reader");
 
-        uint baseSector = 0;
-        XgdHeader? header = null;
+        // Probe candidates in layout order: each holds the game-partition volume
+        // descriptor ("MICROSOFT*XBOX*MEDIA") at sector 32, so the partition base
+        // is the magic sector minus ISO_BASE_SECTOR.
+        (uint MagicSector, string Name)[] probes =
+        [
+            (IsoConstants.MAGIC_SECTOR_XDKI, "XDKI"),
+            (IsoConstants.MAGIC_SECTOR_XGD1, "XGD1"),
+            (IsoConstants.MAGIC_SECTOR_XGD3, "XGD3"),
+            (IsoConstants.MAGIC_SECTOR_XGD2, "XGD2")
+        ];
 
-        // Try different magic sector locations to detect the XGD format version
-        if (TotalSectors() >= IsoConstants.MAGIC_SECTOR_XDKI)
+        foreach ((uint magicSector, string name) in probes)
         {
-            if (TryReadSector(IsoConstants.MAGIC_SECTOR_XDKI, out byte[] sector))
+            if (TotalSectors() < magicSector)
             {
-                XgdHeader? foundHeader = ParseXgdHeader(sector);
-                if (foundHeader != null && IsValidMagic(foundHeader))
-                {
-                    baseSector = IsoConstants.MAGIC_SECTOR_XDKI - IsoConstants.ISO_BASE_SECTOR;
-                    Logger.Debug<IsoSectorReader>("Detected XDKI format");
-                    header = foundHeader;
-                }
+                continue;
             }
-        }
 
-        if (header == null && TotalSectors() >= IsoConstants.MAGIC_SECTOR_XGD1)
-        {
-            if (TryReadSector(IsoConstants.MAGIC_SECTOR_XGD1, out byte[] sector))
+            if (!TryReadSector(magicSector, out byte[] sector))
             {
-                XgdHeader? foundHeader = ParseXgdHeader(sector);
-                if (foundHeader != null && IsValidMagic(foundHeader))
-                {
-                    baseSector = IsoConstants.MAGIC_SECTOR_XGD1 - IsoConstants.ISO_BASE_SECTOR;
-                    Logger.Debug<IsoSectorReader>("Detected XGD1 format");
-                    header = foundHeader;
-                }
+                continue;
             }
-        }
 
-        if (header == null && TotalSectors() >= IsoConstants.MAGIC_SECTOR_XGD3)
-        {
-            if (TryReadSector(IsoConstants.MAGIC_SECTOR_XGD3, out byte[] sector))
+            XgdHeader? header = ParseXgdHeader(sector);
+            if (header == null || !IsValidMagic(header))
             {
-                XgdHeader? foundHeader = ParseXgdHeader(sector);
-                if (foundHeader != null && IsValidMagic(foundHeader))
-                {
-                    baseSector = IsoConstants.MAGIC_SECTOR_XGD3 - IsoConstants.ISO_BASE_SECTOR;
-                    Logger.Debug<IsoSectorReader>("Detected XGD3 format");
-                    header = foundHeader;
-                }
+                continue;
             }
-        }
 
-        if (header == null && TotalSectors() >= IsoConstants.MAGIC_SECTOR_XGD2)
-        {
-            if (TryReadSector(IsoConstants.MAGIC_SECTOR_XGD2, out byte[] sector))
+            // Guard against corrupt descriptors: the root directory must be between 13 bytes and 32 MiB.
+            if (header.Value.RootDirSize < 13 || header.Value.RootDirSize > 32 * 1024 * 1024)
             {
-                XgdHeader? foundHeader = ParseXgdHeader(sector);
-                if (foundHeader != null && IsValidMagic(foundHeader))
-                {
-                    baseSector = IsoConstants.MAGIC_SECTOR_XGD2 - IsoConstants.ISO_BASE_SECTOR;
-                    Logger.Debug<IsoSectorReader>("Detected XGD2 format");
-                    header = foundHeader;
-                }
+                Logger.Warning<IsoSectorReader>($"Rejected {name} descriptor with invalid root size {header.Value.RootDirSize}");
+                continue;
             }
-        }
 
-        if (header.HasValue)
-        {
+            uint baseSector = magicSector - IsoConstants.ISO_BASE_SECTOR;
+            Logger.Debug<IsoSectorReader>($"Detected {name} format");
             _xgdInfo = new XgdInfo
             {
                 BaseSector = baseSector,
@@ -192,10 +168,10 @@ internal sealed class IsoSectorReader : IDisposable
     }
 
     /// <summary>
-    /// Validates the magic strings in the XGD header.
+    /// Validates the leading magic string in the XGD header.
     /// </summary>
     /// <param name="header">The XGD header to validate.</param>
-    /// <returns>True if the magic strings are valid, false otherwise.</returns>
+    /// <returns>True if the leading magic string is valid, false otherwise.</returns>
     private static bool IsValidMagic(XgdHeader? header)
     {
         if (!header.HasValue)
@@ -204,8 +180,7 @@ internal sealed class IsoSectorReader : IDisposable
         }
 
         string magic = System.Text.Encoding.ASCII.GetString(header.Value.Magic).Trim('\0');
-        string magicTail = System.Text.Encoding.ASCII.GetString(header.Value.MagicTail).Trim('\0');
-        return magic == IsoConstants.XGD_IMAGE_MAGIC && magicTail == IsoConstants.XGD_IMAGE_MAGIC;
+        return magic == IsoConstants.XGD_IMAGE_MAGIC;
     }
 
     /// <summary>

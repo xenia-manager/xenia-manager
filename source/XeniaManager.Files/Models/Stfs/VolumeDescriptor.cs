@@ -40,6 +40,17 @@ public struct StfsVolumeDescriptor
     }
 
     /// <summary>
+    /// Gets whether the secondary hash table block is active for the highest level.
+    /// </summary>
+    public bool RootActiveIndex
+    {
+        get
+        {
+            return (Flags & 0x02) != 0;
+        }
+    }
+
+    /// <summary>
     /// Gets the number of hash table blocks per level (1 for read-only, 2 for writable).
     /// </summary>
     public int BlocksPerHashTable

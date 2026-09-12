@@ -230,4 +230,63 @@ public class ZarFileTests
         Assert.That(entries, Is.Not.Null);
         Assert.That(entries.Count, Is.GreaterThan(0));
     }
+
+    private static string WriteFooterTestFile(Action<byte[]> patchFooter)
+    {
+        string tempPath = Path.Combine(Path.GetTempPath(), $"test_footer_{Guid.NewGuid()}.zar");
+        byte[] body = new byte[256];
+        byte[] footer = new byte[ZarFooter.Size];
+        patchFooter(footer);
+        // totalSize, version, magic
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt64BigEndian(footer.AsSpan(128), (ulong)(body.Length + footer.Length));
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(footer.AsSpan(136), ZarFooter.ExpectedVersion);
+        System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(footer.AsSpan(140), ZarFooter.ExpectedMagic);
+        File.WriteAllBytes(tempPath, [.. body, .. footer]);
+        return tempPath;
+    }
+
+    /// <summary>
+    /// Tests that a footer section outside the file bounds fails validation without throwing.
+    /// </summary>
+    [Test]
+    public void Load_SectionOutsideFile_ReturnsInvalidZarFile()
+    {
+        string tempPath = WriteFooterTestFile(footer =>
+        {
+            // OffsetRecords points past the end of the file
+            System.Buffers.Binary.BinaryPrimitives.WriteUInt64BigEndian(footer.AsSpan(16), 1000);
+            System.Buffers.Binary.BinaryPrimitives.WriteUInt64BigEndian(footer.AsSpan(24), 40);
+        });
+        try
+        {
+            using ZarFile zar = ZarFile.Load(tempPath);
+
+            Assert.That(zar.IsValid, Is.False);
+            Assert.That(zar.ValidationError, Does.Contain("outside file bounds"));
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
+    /// <summary>
+    /// Tests that an archive without offset records or file tree fails validation without throwing.
+    /// </summary>
+    [Test]
+    public void Load_EmptySections_ReturnsInvalidZarFile()
+    {
+        string tempPath = WriteFooterTestFile(_ => { });
+        try
+        {
+            using ZarFile zar = ZarFile.Load(tempPath);
+
+            Assert.That(zar.IsValid, Is.False);
+            Assert.That(zar.ValidationError, Does.Contain("no offset records or file tree"));
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
 }

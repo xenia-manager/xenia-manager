@@ -197,6 +197,21 @@ public sealed class ZarFile : IDisposable
                 throw new InvalidDataException("ZAR total size mismatch");
             }
 
+            if (!IsSectionInRange(footer.CompressedData, fs.Length) ||
+                !IsSectionInRange(footer.OffsetRecords, fs.Length) ||
+                !IsSectionInRange(footer.Names, fs.Length) ||
+                !IsSectionInRange(footer.FileTree, fs.Length) ||
+                !IsSectionInRange(footer.MetaDirectory, fs.Length) ||
+                !IsSectionInRange(footer.MetaData, fs.Length))
+            {
+                throw new InvalidDataException("ZAR section outside file bounds");
+            }
+
+            if (footer.OffsetRecords.Size == 0 || footer.FileTree.Size == 0)
+            {
+                throw new InvalidDataException("ZAR archive has no offset records or file tree");
+            }
+
             Logger.Debug<ZarFile>($"File size: {fs.Length} bytes, " +
                                   $"CompressedData: 0x{footer.CompressedData.Offset:X} ({footer.CompressedData.Size} bytes), " +
                                   $"OffsetRecords: {footer.OffsetRecords.Size / CompressionOffsetRecord.Size} records, " +
@@ -971,6 +986,12 @@ public sealed class ZarFile : IDisposable
     /// <param name="offset">The byte offset in the buffer to start writing at.</param>
     /// <param name="count">The exact number of bytes to read.</param>
     /// <exception cref="EndOfStreamException">Thrown when the stream ends before all bytes are read.</exception>
+    /// <summary>
+    /// Checks that a footer section lies entirely within the file.
+    /// </summary>
+    private static bool IsSectionInRange(SectionInfo section, long fileLength) =>
+        section.Size <= (ulong)fileLength && section.Offset <= (ulong)fileLength - section.Size;
+
     private static void ReadExact(Stream stream, byte[] buffer, int offset, int count)
     {
         int read = 0;

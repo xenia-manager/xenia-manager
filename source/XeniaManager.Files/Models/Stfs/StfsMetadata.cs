@@ -333,8 +333,9 @@ public class StfsMetadata
         metadata.DescriptorType = BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(0x03A9));
         Logger.Trace<StfsMetadata>($"DescriptorType: {metadata.DescriptorType}");
 
-        // Reserved (4 bytes) - at offset 0x03AD
-        // Padding (0x4C bytes) - at offset 0x03B1 (or 0x03AD+4)
+        // Online Creator (8 bytes) - at offset 0x03AD
+        // Category (4 bytes) - at offset 0x03B5
+        // Reserved (0x20 bytes) - at offset 0x03B9
 
         // Device ID (0x14 bytes) - at offset 0x03FD
         metadata.DeviceId = new byte[0x14];
@@ -389,25 +390,25 @@ public class StfsMetadata
         {
             Logger.Trace<StfsMetadata>($"Parsing Version 2 metadata fields");
 
-            // Series ID (0x10 bytes) - at offset 0x03B1
+            // Series ID (0x10 bytes) - at offset 0x03D9
             metadata.SeriesId = new byte[0x10];
-            Array.Copy(data, 0x03B1, metadata.SeriesId, 0, 0x10);
+            Array.Copy(data, 0x03D9, metadata.SeriesId, 0, 0x10);
             Logger.Trace<StfsMetadata>($"SeriesId: {BitConverter.ToString(metadata.SeriesId)}");
 
-            // Season ID (0x10 bytes) - at offset 0x03C1
+            // Season ID (0x10 bytes) - at offset 0x03E9
             metadata.SeasonId = new byte[0x10];
-            Array.Copy(data, 0x03C1, metadata.SeasonId, 0, 0x10);
+            Array.Copy(data, 0x03E9, metadata.SeasonId, 0, 0x10);
             Logger.Trace<StfsMetadata>($"SeasonId: {BitConverter.ToString(metadata.SeasonId)}");
 
-            // Season Number - at offset 0x03D1
-            metadata.SeasonNumber = BinaryPrimitives.ReadInt16BigEndian(data.AsSpan(0x03D1));
+            // Season Number - at offset 0x03F9
+            metadata.SeasonNumber = (short)BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(0x03F9));
             Logger.Trace<StfsMetadata>($"SeasonNumber: {metadata.SeasonNumber}");
 
-            // Episode Number - at offset 0x03D3
-            metadata.EpisodeNumber = BinaryPrimitives.ReadInt16BigEndian(data.AsSpan(0x03D3));
+            // Episode Number - at offset 0x03FB
+            metadata.EpisodeNumber = (short)BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(0x03FB));
             Logger.Trace<StfsMetadata>($"EpisodeNumber: {metadata.EpisodeNumber}");
 
-            // Padding (0x28 bytes) - at offset 0x03D5
+            // Padding (0x06 bytes) - at offset 0x03FD is DeviceId; media data ends at 0x03FD
             // No need to read, just for documentation
 
             // Additional Display Names (Version 2) - at offset 0x541A, 0x300 bytes, UTF-16 BE

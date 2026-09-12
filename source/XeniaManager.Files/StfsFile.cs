@@ -276,6 +276,14 @@ public class StfsFile : IDisposable
 
         Logger.Info<StfsFile>($"STFS package type: {stfs.SignatureType}");
 
+        // The fixed header (magic + signature + licenses + content ID) is 0x344 bytes
+        // and metadata fields reach 0x971A; reject truncated buffers up front.
+        if (data.Length < 0x971A)
+        {
+            Logger.Error<StfsFile>($"Data too short for STFS header/metadata ({data.Length} bytes, required: 0x971A)");
+            throw new ArgumentException($"Data too short for STFS header/metadata ({data.Length} bytes, required: 0x971A)", nameof(data));
+        }
+
         // Parse signature based on type
         if (stfs.SignatureType == SignatureType.CON)
         {
@@ -287,8 +295,8 @@ public class StfsFile : IDisposable
             ushort certSize = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(0x004));
             Logger.Debug<StfsFile>($"Certificate Size: 0x{certSize:X4}");
 
-            stfs.PublicKeyCertificate = new byte[0x1AC];
-            Array.Copy(data, 0x004, stfs.PublicKeyCertificate, 0, 0x1AC);
+            stfs.PublicKeyCertificate = new byte[0x1A8];
+            Array.Copy(data, 0x004, stfs.PublicKeyCertificate, 0, 0x1A8);
             Logger.Trace<StfsFile>($"Public Key Certificate (first 32 bytes): {BitConverter.ToString(stfs.PublicKeyCertificate.Take(32).ToArray())}");
 
             stfs.Signature = new byte[0x80];
@@ -307,9 +315,9 @@ public class StfsFile : IDisposable
             Logger.Trace<StfsFile>($"Padding after signature (0x104-0x22B): {BitConverter.ToString(data.Skip(0x104).Take(64).ToArray())}");
         }
 
-        // Content ID is at offset 0x218 (20 bytes)
+        // Content ID is the 20-byte header hash at offset 0x32C (after the licenses)
         stfs.ContentId = new byte[0x14];
-        Array.Copy(data, 0x218, stfs.ContentId, 0, 0x14);
+        Array.Copy(data, 0x32C, stfs.ContentId, 0, 0x14);
         Logger.Trace<StfsFile>($"Content ID: {BitConverter.ToString(stfs.ContentId)}");
 
         // Parse metadata
@@ -336,6 +344,8 @@ public class StfsFile : IDisposable
     /// <summary>
     /// Parses the file table from the STFS package.
     /// The file table location is determined from the volume descriptor.
+    /// Table blocks are followed through the level-0 hash chain, like the
+    /// reference container loader.
     /// </summary>
     private void ParseFileTable()
     {
@@ -345,57 +355,83 @@ public class StfsFile : IDisposable
         Logger.Debug<StfsFile>($"File Table Block Number: {fileTableBlockNumber}, Block Count: {fileTableBlockCount}");
         Logger.Trace<StfsFile>($"Volume Descriptor bytes: {BitConverter.ToString(Metadata.VolumeDescriptor.ToBytes())}");
 
-        int fileTableOffset = BlockNumberToOffset(fileTableBlockNumber);
-        Logger.Debug<StfsFile>($"File Table Offset: 0x{fileTableOffset:X8}");
-
-        // Validate file table offset - if it's beyond the file size, the package is corrupted or incomplete
-        if (fileTableOffset < 0 || fileTableOffset >= _rawData.Length)
+        int tableBlockNumber = fileTableBlockNumber;
+        for (int n = 0; n < fileTableBlockCount; n++)
         {
-            Logger.Warning<StfsFile>(
-                $"Invalid file table offset 0x{fileTableOffset:X8} (file size: {_rawData.Length} bytes). Package may be corrupted or incomplete.");
-            return;
-        }
+            int fileTableOffset = BlockNumberToOffset(tableBlockNumber);
+            Logger.Debug<StfsFile>($"File Table Offset: 0x{fileTableOffset:X8}");
 
-        Logger.Trace<StfsFile>($"Raw bytes at file table offset: {BitConverter.ToString(_rawData.Skip(fileTableOffset).Take(128).ToArray())}");
-
-        // Read file entries
-        int offset = fileTableOffset;
-        int entriesRead = 0;
-
-        while (entriesRead < fileTableBlockCount * (BlockSize / StfsFileEntry.Size))
-        {
-            // Check if there's enough data remaining for a file entry
-            if (offset + StfsFileEntry.Size > _rawData.Length)
+            // Validate file table offset - if it's beyond the file size, the package is corrupted or incomplete
+            if (fileTableOffset < 0 || fileTableOffset >= _rawData.Length)
             {
-                Logger.Warning<StfsFile>($"Insufficient data remaining for file entry at offset 0x{offset:X8} (remaining: {_rawData.Length - offset} bytes)");
+                Logger.Warning<StfsFile>(
+                    $"Invalid file table offset 0x{fileTableOffset:X8} (file size: {_rawData.Length} bytes). Package may be corrupted or incomplete.");
+                return;
+            }
+
+            Logger.Trace<StfsFile>($"Raw bytes at file table offset: {BitConverter.ToString(_rawData.Skip(fileTableOffset).Take(128).ToArray())}");
+
+            // Read file entries
+            for (int m = 0; m < BlockSize / StfsFileEntry.Size; m++)
+            {
+                int offset = fileTableOffset + m * StfsFileEntry.Size;
+
+                // Check if there's enough data remaining for a file entry
+                if (offset + StfsFileEntry.Size > _rawData.Length)
+                {
+                    Logger.Warning<StfsFile>(
+                        $"Insufficient data remaining for file entry at offset 0x{offset:X8} (remaining: {_rawData.Length - offset} bytes)");
+                    return;
+                }
+
+                Logger.Trace<StfsFile>($"Reading file entry at offset 0x{offset:X8}: {BitConverter.ToString(_rawData.Skip(offset).Take(64).ToArray())}");
+
+                StfsFileEntry entry = StfsFileEntry.FromBytes(_rawData, offset);
+
+                // Check for empty entry (end of file table block)
+                if (string.IsNullOrEmpty(entry.FileName) || entry.Flags == 0)
+                {
+                    Logger.Debug<StfsFile>($"Found empty entry at offset 0x{offset:X8}, ending file table block parsing");
+                    break;
+                }
+
+                FileEntries.Add(entry);
+                Logger.Trace<StfsFile>($"File Entry {FileEntries.Count - 1}: {entry}");
+                Logger.Trace<StfsFile>($"  - FileName: '{entry.FileName}' (NameLength: {entry.NameLength})");
+                Logger.Trace<StfsFile>($"  - Flags: 0x{entry.Flags:X2} (IsDirectory: {entry.IsDirectory}, HasConsecutiveBlocks: {entry.HasConsecutiveBlocks})");
+                Logger.Trace<StfsFile>($"  - ValidDataBlocks: {entry.ValidDataBlocks}, AllocatedDataBlocks: {entry.AllocatedDataBlocks}");
+                Logger.Trace<StfsFile>($"  - StartingBlock: {entry.StartingBlock}");
+                Logger.Trace<StfsFile>($"  - PathIndicator: {entry.PathIndicator}, FileSize: {entry.FileSize}");
+                Logger.Trace<StfsFile>($"  - UpdateDateTime: {entry.UpdateDateTime}, AccessDateTime: {entry.AccessDateTime}");
+            }
+
+            // Follow the hash chain to the next file table block
+            uint nextTableBlock = GetLevel0NextBlock(tableBlockNumber);
+            if (nextTableBlock == kEndOfChain)
+            {
                 break;
             }
 
-            Logger.Trace<StfsFile>($"Reading file entry at offset 0x{offset:X8}: {BitConverter.ToString(_rawData.Skip(offset).Take(64).ToArray())}");
-
-            StfsFileEntry entry = StfsFileEntry.FromBytes(_rawData, offset);
-
-            // Check for empty entry (end of file table)
-            if (string.IsNullOrEmpty(entry.FileName) || entry.Flags == 0)
-            {
-                Logger.Debug<StfsFile>($"Found empty entry at offset 0x{offset:X8}, ending file table parsing");
-                break;
-            }
-
-            FileEntries.Add(entry);
-            Logger.Trace<StfsFile>($"File Entry {entriesRead}: {entry}");
-            Logger.Trace<StfsFile>($"  - FileName: '{entry.FileName}' (NameLength: {entry.NameLength})");
-            Logger.Trace<StfsFile>($"  - Flags: 0x{entry.Flags:X2} (IsDirectory: {entry.IsDirectory}, HasConsecutiveBlocks: {entry.HasConsecutiveBlocks})");
-            Logger.Trace<StfsFile>($"  - ValidDataBlocks: {entry.ValidDataBlocks}, AllocatedDataBlocks: {entry.AllocatedDataBlocks}");
-            Logger.Trace<StfsFile>($"  - StartingBlock: {entry.StartingBlock}");
-            Logger.Trace<StfsFile>($"  - PathIndicator: {entry.PathIndicator}, FileSize: {entry.FileSize}");
-            Logger.Trace<StfsFile>($"  - UpdateDateTime: {entry.UpdateDateTime}, AccessDateTime: {entry.AccessDateTime}");
-
-            offset += StfsFileEntry.Size;
-            entriesRead++;
+            tableBlockNumber = (int)nextTableBlock;
         }
 
         Logger.Info<StfsFile>($"Parsed {FileEntries.Count} file entries from file table");
+    }
+
+    /// <summary>
+    /// Reads the level-0 next-block link of a block from its hash table entry.
+    /// </summary>
+    /// <param name="blockNumber">The block number whose link to read.</param>
+    /// <returns>The next block number, or end-of-chain when unreadable.</returns>
+    private uint GetLevel0NextBlock(int blockNumber)
+    {
+        int hashTableOffset = GetHashTableOffset(blockNumber, 0);
+        if (hashTableOffset < 0 || hashTableOffset + 0x18 > _rawData.Length)
+        {
+            return kEndOfChain;
+        }
+
+        return BinaryPrimitives.ReadUInt32BigEndian(_rawData.AsSpan(hashTableOffset + 0x14)) & 0xFFFFFF;
     }
 
     /// <summary>
@@ -454,7 +490,20 @@ public class StfsFile : IDisposable
         }
 
         uint block = BlockToHashBlockNumber(blockNumber, level);
-        return RoundUp(HeaderSize, BlockSize) + ((int)block << 12);
+        return RoundUp(HeaderSize, BlockSize) + ((int)block << 12) + SecondaryHashTableOffset;
+    }
+
+    /// <summary>
+    /// Offset of the secondary hash table block for packages that use one.
+    /// Writable packages with the root-active flag set keep the active hash
+    /// tables one block (0x1000) past the primary location.
+    /// </summary>
+    private int SecondaryHashTableOffset
+    {
+        get
+        {
+            return !Metadata.VolumeDescriptor.IsReadOnlyFormat && Metadata.VolumeDescriptor.RootActiveIndex ? BlockSize : 0;
+        }
     }
 
     /// <summary>
@@ -506,12 +555,6 @@ public class StfsFile : IDisposable
     /// <returns>The offset of the hash table entry.</returns>
     private int GetHashTableOffset(int blockNumber, int level = 0)
     {
-        // For read-only packages (CON), we only need to check level 0
-        if (SignatureType == SignatureType.CON)
-        {
-            level = 0;
-        }
-
         uint hashTableBlock = BlockToHashBlockNumber(blockNumber, level);
         int hashTableOffset = HashTableBlockNumberToOffset((int)hashTableBlock, level);
 
@@ -556,16 +599,13 @@ public class StfsFile : IDisposable
 
             // Hash table entry structure (StfsHashEntry - 0x18 bytes):
             // 0x00-0x13: SHA1 hash (0x14 bytes)
-            // 0x14-0x17: info_raw (uint32_t little endian)
+            // 0x14-0x17: info_raw (uint32_t big endian)
             //   - Bits 0-23: level0_next_block
             //   - Bits 30-31: level0_allocation_state (2 = in use)
             Logger.Trace<StfsFile>($"  Hash table entry: {BitConverter.ToString(_rawData.Skip(hashTableOffset).Take(24).ToArray())}");
 
-            // Read info_raw as little-endian uint32
-            uint infoRaw = (uint)(_rawData[hashTableOffset + 0x14] |
-                                  (_rawData[hashTableOffset + 0x15] << 8) |
-                                  (_rawData[hashTableOffset + 0x16] << 16) |
-                                  (_rawData[hashTableOffset + 0x17] << 24));
+            // Read info_raw as big-endian uint32
+            uint infoRaw = BinaryPrimitives.ReadUInt32BigEndian(_rawData.AsSpan(hashTableOffset + 0x14));
             Logger.Trace<StfsFile>($"  info_raw: 0x{infoRaw:X8}");
 
             // Check allocation state (bits 30-31)

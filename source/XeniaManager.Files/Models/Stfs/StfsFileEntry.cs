@@ -222,9 +222,8 @@ public class StfsFileEntry
             return new StfsFileEntry();
         }
 
-        // File name (40 bytes, ASCII, null-padded)
-        // Note: While Xenia uses Windows-1252, ASCII works for most English filenames
-        string fileName = Encoding.ASCII.GetString(data, offset, 40).TrimEnd('\0');
+        // File name (40 bytes, Windows-1252, null-padded)
+        string fileName = Utilities.Windows1252.GetString(data, offset, 40).TrimEnd('\0');
 
         StfsFileEntry entry = new StfsFileEntry
         {
@@ -266,8 +265,8 @@ public class StfsFileEntry
     {
         byte[] data = new byte[Size];
 
-        // File name (40 bytes, ASCII, null-padded)
-        byte[] nameBytes = Encoding.ASCII.GetBytes(FileName);
+        // File name (40 bytes, Windows-1252, null-padded)
+        byte[] nameBytes = Utilities.Windows1252.GetBytes(FileName);
         int nameLen = Math.Min(nameBytes.Length, 40);
         Array.Copy(nameBytes, 0, data, 0, nameLen);
 

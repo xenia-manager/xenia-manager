@@ -122,12 +122,14 @@ public sealed class SvodFile : IDisposable
 
         if (IsXsfLayout())
         {
-            _svodLayout = SvodLayout.Xsf;
+            // MEDIA at 0x12000 with an XSF header at 0x2000 is XSF; MEDIA without
+            // it uses the same offsets but is tagged Unknown.
+            _svodLayout = HasXsfHeader() ? SvodLayout.Xsf : SvodLayout.Unknown;
             _svodBaseOffset = 0x10000;
             _magicOffset = 0x12000;
             _baseAddress = 0x12000;
             _sectorOffset = 0x1000; // XSF still uses 0x1000 sector offset for data (base is separate)
-            Logger.Debug<SvodFile>($"SVOD layout XSF base 0x{_svodBaseOffset:X} magic 0x{_magicOffset:X}");
+            Logger.Debug<SvodFile>($"SVOD layout {_svodLayout} base 0x{_svodBaseOffset:X} magic 0x{_magicOffset:X}");
             return;
         }
 
@@ -191,7 +193,7 @@ public sealed class SvodFile : IDisposable
     }
 
     /// <summary>
-    /// Detects XSF layout by checking for <c>"XSF"</c> at <c>0x2000</c> and <c>MICROSOFT*XBOX*MEDIA</c> at <c>0x12000</c> raw in the first data file.
+    /// Detects XSF-style layout by checking for <c>MICROSOFT*XBOX*MEDIA</c> at <c>0x12000</c> raw in the first data file.
     /// </summary>
     private bool IsXsfLayout()
     {
@@ -210,19 +212,47 @@ public sealed class SvodFile : IDisposable
 
             long pos = first.Position;
             byte[] buf12000 = new byte[20];
-            byte[] buf2000 = new byte[20];
             first.Seek(0x12000, SeekOrigin.Begin);
             int r1 = first.Read(buf12000, 0, 20);
-            first.Seek(0x2000, SeekOrigin.Begin);
-            int r2 = first.Read(buf2000, 0, 20);
             first.Seek(pos, SeekOrigin.Begin);
             string m12000 = r1 >= 20 ? Encoding.ASCII.GetString(buf12000).Trim('\0') : string.Empty;
-            string m2000 = r2 >= 3 ? Encoding.ASCII.GetString(buf2000, 0, 3) : string.Empty;
-            return m12000 == IsoConstants.XGD_IMAGE_MAGIC && m2000 == "XSF";
+            return m12000 == IsoConstants.XGD_IMAGE_MAGIC;
         }
         catch (Exception ex)
         {
             Logger.Trace<SvodFile>($"IsXsfLayout probe failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks for the third-party <c>"XSF"</c> header at <c>0x2000</c> raw in the first data file.
+    /// </summary>
+    private bool HasXsfHeader()
+    {
+        try
+        {
+            if (_dataStreams == null || _dataStreams.Count == 0)
+            {
+                return false;
+            }
+
+            FileStream first = _dataStreams[0];
+            if (first.Length < 0x2003)
+            {
+                return false;
+            }
+
+            long pos = first.Position;
+            byte[] buf2000 = new byte[3];
+            first.Seek(0x2000, SeekOrigin.Begin);
+            int r = first.Read(buf2000, 0, 3);
+            first.Seek(pos, SeekOrigin.Begin);
+            return r >= 3 && Encoding.ASCII.GetString(buf2000, 0, 3) == "XSF";
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<SvodFile>($"HasXsfHeader probe failed: {ex.Message}");
             return false;
         }
     }
@@ -714,30 +744,48 @@ public sealed class SvodFile : IDisposable
 
     /// <summary>
     /// Parses a GDFX header sector and populates <see cref="_xgdInfo"/> if the magic is valid.
+    /// Only the leading magic is required; the root directory fields follow it.
     /// </summary>
     /// <param name="headerSector">2048-byte sector containing the GDFX volume descriptor.</param>
     /// <returns>True if the magic was valid and <see cref="_xgdInfo"/> was populated.</returns>
     private bool TryParseGdfxHeader(byte[] headerSector)
     {
         string magic = Encoding.ASCII.GetString(headerSector, 0, 20).Trim('\0');
-        string magicTail = Encoding.ASCII.GetString(headerSector, 0x800 - 20, 20).Trim('\0');
-        if (magic != IsoConstants.XGD_IMAGE_MAGIC || magicTail != IsoConstants.XGD_IMAGE_MAGIC)
+        if (magic != IsoConstants.XGD_IMAGE_MAGIC)
         {
             return false;
         }
 
         uint rootSector = BinaryPrimitives.ReadUInt32LittleEndian(headerSector.AsSpan(20));
         uint rootSize = BinaryPrimitives.ReadUInt32LittleEndian(headerSector.AsSpan(24));
-        long creationTime = BinaryPrimitives.ReadInt64LittleEndian(headerSector.AsSpan(28));
+        uint creationDate = BinaryPrimitives.ReadUInt32LittleEndian(headerSector.AsSpan(28));
+        uint creationTime = BinaryPrimitives.ReadUInt32LittleEndian(headerSector.AsSpan(32));
 
         _xgdInfo = new XgdInfo
         {
             BaseSector = 0,
             RootDirSector = rootSector,
             RootDirSize = rootSize,
-            CreationDateTime = DateTime.FromFileTime(creationTime)
+            CreationDateTime = FatTimestampToDateTime(creationDate, creationTime)
         };
         return true;
+    }
+
+    /// <summary>
+    /// Converts a FAT date/time pair to UTC, like the console filesystem timestamps.
+    /// Returns 1601-01-01 UTC for out-of-range values.
+    /// </summary>
+    private static DateTime FatTimestampToDateTime(uint date, uint time)
+    {
+        try
+        {
+            return new DateTime((int)((date & 0xFE00) >> 9) + 1980, (int)((date & 0x01E0) >> 5), (int)(date & 0x001F),
+                (int)((time & 0xF800) >> 11), (int)((time & 0x07E0) >> 5), (int)((time & 0x001F) << 1), DateTimeKind.Utc);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return new DateTime(1601, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        }
     }
 
     private bool TryReadSvodSectorForGdfxHeader(byte[] sectorData) => TryReadSvodSectorForGdfxHeader(sectorData, _magicOffset);
@@ -892,7 +940,7 @@ public sealed class SvodFile : IDisposable
                 continue;
             }
 
-            string filename = Encoding.ASCII.GetString(node.Data, (int)filenameOffset, nameLen);
+            string filename = Utilities.Windows1252.GetString(node.Data, (int)filenameOffset, nameLen);
 
             if (filename.Equals(fileName, StringComparison.OrdinalIgnoreCase))
             {
@@ -1264,7 +1312,7 @@ public sealed class SvodFile : IDisposable
                     continue;
                 }
 
-                string filename = Encoding.ASCII.GetString(node.Data, (int)fnOff, nameLen);
+                string filename = Utilities.Windows1252.GetString(node.Data, (int)fnOff, nameLen);
                 bool isXex = filename.EndsWith(".xex", StringComparison.OrdinalIgnoreCase);
                 bool isDefault = filename.Equals(IsoConstants.DEFAULT_EXECUTABLE_NAME, StringComparison.OrdinalIgnoreCase);
                 if (isXex && !isDefault && (attr & 0x10) == 0 && size > 0)

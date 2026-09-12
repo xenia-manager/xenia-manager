@@ -339,7 +339,7 @@ public sealed class IsoFile : IDisposable
 
             dirStream.Position = filenameOffset;
             byte[] filenameBytes = dirReader.ReadBytes(nameLength);
-            string filename = System.Text.Encoding.ASCII.GetString(filenameBytes);
+            string filename = Utilities.Windows1252.GetString(filenameBytes);
 
             // Check if this is the file we're looking for
             if (filename.Equals(fileName, StringComparison.OrdinalIgnoreCase))
@@ -655,7 +655,7 @@ public sealed class IsoFile : IDisposable
 
                 dirStream.Position = filenameOffset;
                 byte[] filenameBytes = dirReader.ReadBytes(nameLen);
-                string filename = System.Text.Encoding.ASCII.GetString(filenameBytes);
+                string filename = Utilities.Windows1252.GetString(filenameBytes);
 
                 // If this is a .xex different from default.xex, extract and return it.
                 bool isXex = filename.EndsWith(".xex", StringComparison.OrdinalIgnoreCase);

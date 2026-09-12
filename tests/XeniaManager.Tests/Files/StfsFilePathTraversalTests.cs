@@ -128,13 +128,13 @@ public class StfsFilePathTraversalTests
     }
 
     /// <summary>
-    /// Builds a minimal valid STFS package (CON, 16 KiB) with a single file entry.
+    /// Builds a minimal valid STFS package (CON, 40 KiB) with a single file entry.
     /// Layout: header with HeaderSize 0x1000, read-only volume descriptor (file table
     /// block 0 at 0x2000), payload block 1 at 0x3000.
     /// </summary>
     private static byte[] BuildPackage(string fileName, byte[] payload)
     {
-        byte[] package = new byte[0x4000];
+        byte[] package = new byte[0xA000];
 
         // Magic
         Encoding.ASCII.GetBytes("CON ").CopyTo(package, 0x000);
@@ -178,7 +178,7 @@ public class StfsFilePathTraversalTests
     /// </summary>
     private static byte[] BuildChainPackage(string chainBase, byte[] payload)
     {
-        byte[] package = new byte[0x4000];
+        byte[] package = new byte[0xA000];
 
         // Magic
         Encoding.ASCII.GetBytes("CON ").CopyTo(package, 0x000);
