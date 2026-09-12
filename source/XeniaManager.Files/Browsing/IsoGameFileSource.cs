@@ -33,6 +33,24 @@ public sealed class IsoGameFileSource : GameFileSourceBase
     /// <inheritdoc />
     public override byte[]? ReadFile(string path) => _iso.ReadFile(path);
 
+    /// <inheritdoc />
+    public override string FormatName
+    {
+        get
+        {
+            return "ISO";
+        }
+    }
+
+    /// <inheritdoc />
+    public override string FormatDescription
+    {
+        get
+        {
+            return "Disc image (GDFX/XISO)";
+        }
+    }
+
     private static GameFileNode ToNode(GdfxEntry entry) => new GameFileNode
     {
         Name = entry.Name,

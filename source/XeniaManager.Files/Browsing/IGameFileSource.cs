@@ -31,4 +31,14 @@ public interface IGameFileSource : IDisposable
     /// </summary>
     /// <returns>The XEX full path, or null when the container holds no XEX.</returns>
     string? FindDefaultXexPath();
+
+    /// <summary>
+    /// Gets a short human-readable format label for this container (e.g., "ISO", "Loose").
+    /// </summary>
+    string FormatName { get; }
+
+    /// <summary>
+    /// Gets a longer description of the container format.
+    /// </summary>
+    string FormatDescription { get; }
 }

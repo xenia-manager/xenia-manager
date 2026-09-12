@@ -33,6 +33,24 @@ public sealed class SvodGameFileSource : GameFileSourceBase
     /// <inheritdoc />
     public override byte[]? ReadFile(string path) => _svod.ReadFile(path);
 
+    /// <inheritdoc />
+    public override string FormatName
+    {
+        get
+        {
+            return "GOD";
+        }
+    }
+
+    /// <inheritdoc />
+    public override string FormatDescription
+    {
+        get
+        {
+            return "Installed game (GOD/SVOD)";
+        }
+    }
+
     private static GameFileNode ToNode(GdfxEntry entry) => new GameFileNode
     {
         Name = entry.Name,

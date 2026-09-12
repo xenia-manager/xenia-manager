@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -33,6 +34,9 @@ public partial class GameFileTreeNode : ObservableObject
 
     /// <summary>Whether the node is expanded in the tree.</summary>
     [ObservableProperty] private bool _isExpanded;
+
+    /// <summary>Whether the node is visible under the current filter.</summary>
+    [ObservableProperty] private bool _isVisible = true;
 
     public GameFileTreeNode(GameFileNode entry)
     {
@@ -67,7 +71,6 @@ public sealed class SpaAchievementRow
 /// </summary>
 public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 {
-    private const int MaxSearchResults = 200;
     private const int MaxPreviewBytes = 64 * 1024 * 1024;
     private static readonly string[] PreviewableExtensions = [".png", ".jpg", ".jpeg", ".bmp"];
 
@@ -104,22 +107,19 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     /// <summary>Currently selected entry (drives the details pane).</summary>
     [ObservableProperty] private GameFileNode? _selectedEntry;
 
+    /// <summary>All selected tree nodes. Details are shown only when exactly one is selected.</summary>
+    public ObservableCollection<GameFileTreeNode> SelectedTreeNodes { get; } = [];
+
     /// <summary>Whether the tree holds any entries.</summary>
     [ObservableProperty] private bool _hasContent;
 
     /// <summary>Whether the empty-tree overlay is visible.</summary>
     [ObservableProperty] private bool _isTreeEmptyVisible;
 
-    /// <summary>Live file search text. Non-empty switches the list to flat results.</summary>
+    /// <summary>Live file search text. Filters the tree in place.</summary>
     [ObservableProperty] private string _searchText = string.Empty;
 
-    /// <summary>Flat search results for the current search text.</summary>
-    [ObservableProperty] private ObservableCollection<GameFileNode> _searchResults = [];
-
-    /// <summary>Whether the list shows search results instead of the current directory.</summary>
-    [ObservableProperty] private bool _isSearching;
-
-    /// <summary>Whether the no-results overlay is visible.</summary>
+    /// <summary>Whether the filtered no-results overlay is visible.</summary>
     [ObservableProperty] private bool _isSearchEmptyVisible;
 
     /// <summary>Whether the details pane is visible.</summary>
@@ -182,11 +182,87 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     /// <summary>SPA total gamerscore.</summary>
     [ObservableProperty] private string _spaGamerscore = string.Empty;
 
+    /// <summary>Whether the SPA title row can be shown.</summary>
+    public bool HasSpaTitle
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(SpaTitle);
+        }
+    }
+
+    /// <summary>Whether the SPA achievements count row can be shown.</summary>
+    public bool HasSpaAchievementsText
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(SpaAchievements);
+        }
+    }
+
+    /// <summary>Whether the SPA gamerscore row can be shown.</summary>
+    public bool HasSpaGamerscoreText
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(SpaGamerscore);
+        }
+    }
+
+    /// <summary>Whether any SPA summary rows can be shown.</summary>
+    public bool HasAnySpaSummary
+    {
+        get
+        {
+            return HasSpaTitle || HasSpaAchievementsText || HasSpaGamerscoreText;
+        }
+    }
+
+    /// <summary>Whether the SPA summary section can be shown.</summary>
+    public bool IsSpaSummaryVisible
+    {
+        get
+        {
+            return IsXexSelected && HasAnySpaSummary;
+        }
+    }
+
+    /// <summary>Container format short name (e.g., ISO, Loose).</summary>
+    [ObservableProperty] private string _containerFormatName = string.Empty;
+
+    /// <summary>Container format description.</summary>
+    [ObservableProperty] private string _containerFormatDescription = string.Empty;
+
+    /// <summary>Formatted summary of the container (file count + total size).</summary>
+    [ObservableProperty] private string _containerSummary = string.Empty;
+
+    /// <summary>Whether achievements are expanded in the bottom panel.</summary>
+    [ObservableProperty] private bool _isAchievementsExpanded;
+
+    /// <summary>Whether the achievements column is visible.</summary>
+    public bool IsAchievementsColumnVisible
+    {
+        get
+        {
+            return HasAchievements && IsAchievementsExpanded;
+        }
+    }
+
+    /// <summary>Column span for the details pane (1 when achievements shown, 2 when hidden).</summary>
+    public int BottomDetailsColumnSpan
+    {
+        get
+        {
+            return IsAchievementsColumnVisible ? 1 : 2;
+        }
+    }
+
     public GameFilesDialogViewModel(string gamePath, string gameTitle)
     {
         _gamePath = gamePath;
         GameTitle = gameTitle;
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
+        SelectedTreeNodes.CollectionChanged += OnSelectedTreeNodesChanged;
     }
 
     /// <summary>
@@ -214,8 +290,30 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         }
 
         _source = source;
+        ContainerFormatName = source.FormatName;
+        ContainerFormatDescription = source.FormatDescription;
+        UpdateContainerSummary();
         BuildTree();
         return true;
+    }
+
+    private void UpdateContainerSummary()
+    {
+        if (_source == null)
+        {
+            ContainerSummary = string.Empty;
+            return;
+        }
+
+        int fileCount = _source.Files.Count;
+        ulong totalBytes = 0;
+        foreach (GameFileNode file in _source.Files)
+        {
+            totalBytes += file.Size;
+        }
+
+        ContainerSummary = string.Format(LocalizationHelper.GetText("GameFilesDialog.Container.Summary"),
+            fileCount, FileSizeFormatter.FormatBytes((long)totalBytes));
     }
 
     /// <summary>
@@ -281,22 +379,32 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         }
     }
 
-    /// <summary>
-    /// Reveals an activated search result in the tree and selects it.
-    /// </summary>
-    /// <param name="node">The activated search result.</param>
-    public void RevealSearchResult(GameFileNode? node)
+    partial void OnSelectedTreeNodeChanged(GameFileTreeNode? value)
     {
-        if (node == null)
+        // While multiple nodes are selected the details pane stays hidden.
+        if (SelectedTreeNodes.Count > 1)
         {
             return;
         }
 
-        SearchText = string.Empty;
-        RevealInTree(node);
+        SelectedEntry = value?.Entry;
     }
 
-    partial void OnSelectedTreeNodeChanged(GameFileTreeNode? value) => SelectedEntry = value?.Entry;
+    private void OnSelectedTreeNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (SelectedTreeNodes.Count == 1)
+        {
+            GameFileNode single = SelectedTreeNodes[0].Entry;
+            if (!ReferenceEquals(SelectedEntry, single))
+            {
+                SelectedEntry = single;
+            }
+        }
+        else if (SelectedEntry != null)
+        {
+            SelectedEntry = null;
+        }
+    }
 
     /// <summary>
     /// Opens the game location in the system file explorer.
@@ -334,35 +442,106 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         }
     }
 
-    partial void OnSearchTextChanged(string value)
+    partial void OnSearchTextChanged(string value) => ApplyTreeFilter(value);
+
+    private void ApplyTreeFilter(string? query)
     {
         SelectedTreeNode = null;
         SelectedEntry = null;
-        if (_source == null || string.IsNullOrWhiteSpace(value))
+
+        if (!HasContent)
         {
-            IsSearching = false;
-            SearchResults.Clear();
             IsSearchEmptyVisible = false;
             return;
         }
 
-        IsSearching = true;
-        List<GameFileNode> matches = _source.Files
-            .Where(f => f.Name.Contains(value, StringComparison.OrdinalIgnoreCase))
-            .OrderBy(f => f.FullPath, StringComparer.OrdinalIgnoreCase)
-            .Take(MaxSearchResults)
-            .ToList();
-        SearchResults = new ObservableCollection<GameFileNode>(matches);
-        IsSearchEmptyVisible = matches.Count == 0;
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            foreach (GameFileTreeNode root in RootNodes)
+            {
+                SetVisibleRecursive(root, true, false);
+            }
+
+            IsSearchEmptyVisible = false;
+            return;
+        }
+
+        string trimmed = query.Trim();
+        bool anyVisible = false;
+        foreach (GameFileTreeNode root in RootNodes)
+        {
+            if (UpdateVisibility(root, trimmed))
+            {
+                anyVisible = true;
+            }
+        }
+
+        IsSearchEmptyVisible = !anyVisible;
     }
 
-    partial void OnSelectedEntryChanged(GameFileNode? value)
+    private void SetVisibleRecursive(GameFileTreeNode node, bool visible, bool expanded)
     {
-        _ = LoadDetailsAsync(value, ++_detailsLoadId);
-        if (IsSearching && value != null)
+        node.IsVisible = visible;
+        node.IsExpanded = expanded && node.Children.Count > 0;
+        foreach (GameFileTreeNode child in node.Children)
         {
-            RevealInTree(value);
+            SetVisibleRecursive(child, visible, false);
         }
+    }
+
+    private bool UpdateVisibility(GameFileTreeNode node, string query)
+    {
+        bool selfMatch = node.Entry.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
+        bool childVisible = false;
+        foreach (GameFileTreeNode child in node.Children)
+        {
+            if (UpdateVisibility(child, query))
+            {
+                childVisible = true;
+            }
+        }
+
+        bool visible = selfMatch || childVisible;
+        node.IsVisible = visible;
+        node.IsExpanded = childVisible;
+        return visible;
+    }
+
+    partial void OnSelectedEntryChanged(GameFileNode? value) => _ = LoadDetailsAsync(value, ++_detailsLoadId);
+
+    partial void OnIsAchievementsExpandedChanged(bool value)
+    {
+        OnPropertyChanged(nameof(IsAchievementsColumnVisible));
+        OnPropertyChanged(nameof(BottomDetailsColumnSpan));
+    }
+
+    partial void OnHasAchievementsChanged(bool value)
+    {
+        OnPropertyChanged(nameof(IsAchievementsColumnVisible));
+        OnPropertyChanged(nameof(BottomDetailsColumnSpan));
+    }
+
+    partial void OnIsXexSelectedChanged(bool value) => OnPropertyChanged(nameof(IsSpaSummaryVisible));
+
+    partial void OnSpaTitleChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasSpaTitle));
+        OnPropertyChanged(nameof(HasAnySpaSummary));
+        OnPropertyChanged(nameof(IsSpaSummaryVisible));
+    }
+
+    partial void OnSpaAchievementsChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasSpaAchievementsText));
+        OnPropertyChanged(nameof(HasAnySpaSummary));
+        OnPropertyChanged(nameof(IsSpaSummaryVisible));
+    }
+
+    partial void OnSpaGamerscoreChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasSpaGamerscoreText));
+        OnPropertyChanged(nameof(HasAnySpaSummary));
+        OnPropertyChanged(nameof(IsSpaSummaryVisible));
     }
 
     private async Task LoadDetailsAsync(GameFileNode? node, int loadId)
@@ -458,6 +637,9 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
         SpaAchievementRows = new ObservableCollection<SpaAchievementRow>(rows);
         HasAchievements = rows.Count > 0;
+        IsAchievementsExpanded = false;
+        OnPropertyChanged(nameof(IsAchievementsColumnVisible));
+        OnPropertyChanged(nameof(BottomDetailsColumnSpan));
         if (details.Icon != null)
         {
             try

@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
-             xmlns:browsing="using:XeniaManager.Files.Browsing"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d"
@@ -17,155 +16,112 @@
         <Style Selector="TreeViewItem">
             <Setter Property="IsExpanded"
                     Value="{ReflectionBinding IsExpanded, Mode=TwoWay}" />
+            <Setter Property="IsVisible"
+                    Value="{ReflectionBinding IsVisible}" />
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto,*,Auto">
-        <!-- Search -->
-        <TextBox Grid.Row="0"
-                 Text="{Binding SearchText, Mode=TwoWay}"
-                 PlaceholderText="{DynamicResource GameFilesDialog.Search.Watermark}"
-                 Margin="0,0,0,8" />
+    <Grid RowDefinitions="Auto,380,Auto">
+        <!-- Search + Open -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,Auto"
+              Margin="0,0,0,8">
+            <TextBox Grid.Column="0"
+                     Text="{Binding SearchText, Mode=TwoWay}"
+                     PlaceholderText="{DynamicResource GameFilesDialog.Search.Watermark}"
+                     VerticalAlignment="Stretch" />
+            <Button Grid.Column="1"
+                    Command="{Binding OpenExplorerFolderCommand}"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Stretch"
+                    Padding="12,8">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="6">
+                    <fluent:SymbolIcon Symbol="OpenFolder" />
+                    <TextBlock Text="{DynamicResource GameFilesDialog.OpenExplorer.Button}" />
+                </StackPanel>
+            </Button>
+        </Grid>
 
         <!-- Tree + details -->
         <Grid Grid.Row="1"
               ColumnDefinitions="3*,2*">
             <!-- File tree -->
             <cards:CustomCard Grid.Column="0"
-                              Margin="0,0,8,0">
+                              Margin="0,0,16,0">
                 <Grid>
-                    <Grid IsVisible="{Binding !IsSearching}">
-                        <TreeView ItemsSource="{Binding RootNodes}"
-                                  SelectedItem="{Binding SelectedTreeNode, Mode=TwoWay}"
-                                  SelectionMode="Single"
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            <TreeView.ItemTemplate>
-                                <TreeDataTemplate x:DataType="vm:GameFileTreeNode"
-                                                  ItemsSource="{Binding Children}">
-                                    <StackPanel Orientation="Horizontal"
-                                                Spacing="8"
-                                                Margin="0,2"
-                                                ToolTip.Tip="{Binding Entry.FullPath}">
-                                        <fluent:SymbolIcon Symbol="Folder"
-                                                           VerticalAlignment="Center"
-                                                           IsVisible="{Binding !Entry.IsFile}">
-                                            <fluent:SymbolIcon.Foreground>
-                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                            </fluent:SymbolIcon.Foreground>
-                                        </fluent:SymbolIcon>
-                                        <fluent:SymbolIcon Symbol="Document"
-                                                           VerticalAlignment="Center"
-                                                           IsVisible="{Binding Entry.IsFile}">
-                                            <fluent:SymbolIcon.Foreground>
-                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                            </fluent:SymbolIcon.Foreground>
-                                        </fluent:SymbolIcon>
-                                        <TextBlock Text="{Binding Entry.Name}"
-                                                   VerticalAlignment="Center"
-                                                   TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                </TreeDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
+                    <TreeView ItemsSource="{Binding RootNodes}"
+                              SelectedItem="{Binding SelectedTreeNode, Mode=TwoWay}"
+                              SelectedItems="{Binding SelectedTreeNodes}"
+                              SelectionMode="Multiple"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate x:DataType="vm:GameFileTreeNode"
+                                              ItemsSource="{Binding Children}">
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="8"
+                                            Margin="0,2"
+                                            ToolTip.Tip="{Binding Entry.FullPath}">
+                                    <fluent:SymbolIcon Symbol="Folder"
+                                                       VerticalAlignment="Center"
+                                                       IsVisible="{Binding !Entry.IsFile}">
+                                        <fluent:SymbolIcon.Foreground>
+                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                        </fluent:SymbolIcon.Foreground>
+                                    </fluent:SymbolIcon>
+                                    <fluent:SymbolIcon Symbol="Document"
+                                                       VerticalAlignment="Center"
+                                                       IsVisible="{Binding Entry.IsFile}">
+                                        <fluent:SymbolIcon.Foreground>
+                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                        </fluent:SymbolIcon.Foreground>
+                                    </fluent:SymbolIcon>
+                                    <TextBlock Text="{Binding Entry.Name}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
 
-                        <!-- Empty tree overlay -->
-                        <StackPanel HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Margin="20"
-                                    Spacing="8"
-                                    IsVisible="{Binding IsTreeEmptyVisible}">
-                            <fluent:SymbolIcon Symbol="Folder"
-                                               HorizontalAlignment="Center">
-                                <fluent:SymbolIcon.Foreground>
-                                    <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
-                                </fluent:SymbolIcon.Foreground>
-                            </fluent:SymbolIcon>
-                            <TextBlock Text="{DynamicResource GameFilesDialog.EmptyFolder}"
-                                       HorizontalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                       FontSize="14" />
-                        </StackPanel>
-                    </Grid>
+                    <!-- Empty tree overlay -->
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="20"
+                                Spacing="8"
+                                IsVisible="{Binding IsTreeEmptyVisible}">
+                        <fluent:SymbolIcon Symbol="Folder"
+                                           HorizontalAlignment="Center">
+                            <fluent:SymbolIcon.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
+                            </fluent:SymbolIcon.Foreground>
+                        </fluent:SymbolIcon>
+                        <TextBlock Text="{DynamicResource GameFilesDialog.EmptyFolder}"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                   FontSize="14" />
+                    </StackPanel>
 
-                    <Grid IsVisible="{Binding IsSearching}">
-                        <!-- Search results -->
-                        <ListBox Background="Transparent"
-                                 BorderThickness="0"
-                                 SelectionMode="Single"
-                                 SelectedItem="{Binding SelectedEntry, Mode=TwoWay}"
-                                 ItemsSource="{Binding SearchResults}"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate x:DataType="browsing:GameFileNode">
-                                    <Border Padding="12,8"
-                                            Margin="4,2"
-                                            DoubleTapped="OnSearchResultDoubleTapped">
-                                        <Grid ColumnDefinitions="Auto,*">
-                                            <Panel Grid.Column="0"
-                                                   Width="32"
-                                                   Height="32"
-                                                   VerticalAlignment="Center"
-                                                   Margin="0,0,12,0">
-                                                <fluent:SymbolIcon Symbol="Folder"
-                                                                   VerticalAlignment="Center"
-                                                                   IsVisible="{Binding !IsFile}">
-                                                    <fluent:SymbolIcon.Foreground>
-                                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                                    </fluent:SymbolIcon.Foreground>
-                                                </fluent:SymbolIcon>
-                                                <fluent:SymbolIcon Symbol="Document"
-                                                                   VerticalAlignment="Center"
-                                                                   IsVisible="{Binding IsFile}">
-                                                    <fluent:SymbolIcon.Foreground>
-                                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                                    </fluent:SymbolIcon.Foreground>
-                                                </fluent:SymbolIcon>
-                                            </Panel>
-                                            <StackPanel Grid.Column="1"
-                                                        VerticalAlignment="Center"
-                                                        Spacing="4">
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontWeight="SemiBold"
-                                                           TextWrapping="Wrap"
-                                                           TextTrimming="CharacterEllipsis" />
-                                                <TextBlock Text="{Binding FullPath}"
-                                                           FontSize="12"
-                                                           TextTrimming="CharacterEllipsis">
-                                                    <TextBlock.Foreground>
-                                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                                    </TextBlock.Foreground>
-                                                </TextBlock>
-                                            </StackPanel>
-                                            <ToolTip.Tip>
-                                                <TextBlock Text="{Binding FullPath}" />
-                                            </ToolTip.Tip>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-
-                        <!-- No search results overlay -->
-                        <StackPanel HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Margin="20"
-                                    Spacing="8"
-                                    IsVisible="{Binding IsSearchEmptyVisible}">
-                            <fluent:SymbolIcon Symbol="Search"
-                                               HorizontalAlignment="Center">
-                                <fluent:SymbolIcon.Foreground>
-                                    <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
-                                </fluent:SymbolIcon.Foreground>
-                            </fluent:SymbolIcon>
-                            <TextBlock Text="{DynamicResource GameFilesDialog.NoResults}"
-                                       HorizontalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                       FontSize="14" />
-                        </StackPanel>
-                    </Grid>
+                    <!-- No search results overlay -->
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="20"
+                                Spacing="8"
+                                IsVisible="{Binding IsSearchEmptyVisible}">
+                        <fluent:SymbolIcon Symbol="Search"
+                                           HorizontalAlignment="Center">
+                            <fluent:SymbolIcon.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
+                            </fluent:SymbolIcon.Foreground>
+                        </fluent:SymbolIcon>
+                        <TextBlock Text="{DynamicResource GameFilesDialog.NoResults}"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                   FontSize="14" />
+                    </StackPanel>
                 </Grid>
             </cards:CustomCard>
 
@@ -256,85 +212,6 @@
                                     <Run Text=": " />
                                     <Run Text="{Binding XexModuleFlags}" />
                                 </TextBlock>
-                                <TextBlock Text="{DynamicResource GameFilesDialog.SpaSection}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,6,0,2" />
-                                <TextBlock FontSize="12"
-                                           TextWrapping="Wrap">
-                                    <Run Text="{DynamicResource GameFilesDialog.Details.SpaTitle}" />
-                                    <Run Text=": " />
-                                    <Run Text="{Binding SpaTitle}" />
-                                </TextBlock>
-                                <TextBlock FontSize="12">
-                                    <Run Text="{DynamicResource GameFilesDialog.Details.Achievements}" />
-                                    <Run Text=": " />
-                                    <Run Text="{Binding SpaAchievements}" />
-                                </TextBlock>
-                                <TextBlock FontSize="12">
-                                    <Run Text="{DynamicResource GameFilesDialog.Details.Gamerscore}" />
-                                    <Run Text=": " />
-                                    <Run Text="{Binding SpaGamerscore}" />
-                                </TextBlock>
-                                <TextBlock Text="{DynamicResource GameFilesDialog.Details.Achievements}"
-                                           FontWeight="SemiBold"
-                                           Margin="0,6,0,2"
-                                           IsVisible="{Binding HasAchievements}" />
-                                <ItemsControl ItemsSource="{Binding SpaAchievementRows}"
-                                              IsVisible="{Binding HasAchievements}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate x:DataType="vm:SpaAchievementRow">
-                                            <Grid ColumnDefinitions="Auto,*,Auto"
-                                                  Margin="0,2">
-                                                <Panel Grid.Column="0"
-                                                       Width="32"
-                                                       Height="32"
-                                                       VerticalAlignment="Center"
-                                                       Margin="0,0,8,0">
-                                                    <Image Source="{Binding Image}"
-                                                           IsVisible="{Binding HasImage}"
-                                                           Stretch="Uniform" />
-                                                    <fluent:SymbolIcon Symbol="Trophy"
-                                                                       VerticalAlignment="Center"
-                                                                       IsVisible="{Binding !HasImage}">
-                                                        <fluent:SymbolIcon.Foreground>
-                                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                                        </fluent:SymbolIcon.Foreground>
-                                                    </fluent:SymbolIcon>
-                                                </Panel>
-                                                <StackPanel Grid.Column="1"
-                                                            VerticalAlignment="Center"
-                                                            Spacing="2">
-                                                    <TextBlock Text="{Binding Name}"
-                                                               FontWeight="SemiBold"
-                                                               TextWrapping="Wrap"
-                                                               TextTrimming="CharacterEllipsis" />
-                                                    <TextBlock Text="{Binding Description}"
-                                                               FontSize="12"
-                                                               TextWrapping="Wrap"
-                                                               TextTrimming="CharacterEllipsis">
-                                                        <TextBlock.Foreground>
-                                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                                        </TextBlock.Foreground>
-                                                    </TextBlock>
-                                                </StackPanel>
-                                                <Border Grid.Column="2"
-                                                        Background="{DynamicResource AccentFillColorDefaultBrush}"
-                                                        CornerRadius="4"
-                                                        Padding="6,2"
-                                                        VerticalAlignment="Center"
-                                                        Margin="8,0,0,0">
-                                                    <TextBlock Text="{Binding Gamerscore, StringFormat={}{0}G}"
-                                                               FontSize="11"
-                                                               FontWeight="SemiBold"
-                                                               Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
-                                                </Border>
-                                                <ToolTip.Tip>
-                                                    <TextBlock Text="{Binding Description}" />
-                                                </ToolTip.Tip>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
                             </StackPanel>
                         </StackPanel>
                     </cards:CustomCard>
@@ -353,17 +230,148 @@
             </Grid>
         </Grid>
 
-        <!-- Footer -->
-        <Button Grid.Row="2"
-                Command="{Binding OpenExplorerFolderCommand}"
-                HorizontalAlignment="Left"
-                Margin="0,8,0,0"
-                Padding="12,8">
-            <StackPanel Orientation="Horizontal"
-                        Spacing="6">
-                <fluent:SymbolIcon Symbol="OpenFolder" />
-                <TextBlock Text="{DynamicResource GameFilesDialog.OpenExplorer.Button}" />
-            </StackPanel>
-        </Button>
+        <!-- Container + SPA details -->
+        <cards:CustomCard Grid.Row="2"
+                          Height="220"
+                          Margin="0,8,0,0">
+            <Grid ColumnDefinitions="*,*">
+                <!-- Details column: expands to full width when achievements are not shown -->
+                <Grid Grid.Column="0"
+                      Grid.ColumnSpan="{Binding BottomDetailsColumnSpan}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Spacing="8">
+                            <!-- Container format -->
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{DynamicResource GameFilesDialog.ContainerSection}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,2" />
+                                <TextBlock FontSize="12"
+                                           TextWrapping="Wrap">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.Format}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding ContainerFormatName}" />
+                                    <Run Text=" — " />
+                                    <Run Text="{Binding ContainerFormatDescription}" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding ContainerSummary}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap">
+                                    <TextBlock.Foreground>
+                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- SPA summary -->
+                            <StackPanel Spacing="2"
+                                        IsVisible="{Binding IsSpaSummaryVisible}">
+                                <TextBlock Text="{DynamicResource GameFilesDialog.SpaSection}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,2" />
+                                <TextBlock FontSize="12"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{Binding HasSpaTitle}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.SpaTitle}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding SpaTitle}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           IsVisible="{Binding HasSpaAchievementsText}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.Achievements}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding SpaAchievements}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           IsVisible="{Binding HasSpaGamerscoreText}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.Gamerscore}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding SpaGamerscore}" />
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- Achievements toggle (always shown when available, controls the right column) -->
+                            <ToggleButton Content="{DynamicResource GameFilesDialog.AchievementsToggle}"
+                                          IsChecked="{Binding IsAchievementsExpanded, Mode=TwoWay}"
+                                          IsVisible="{Binding HasAchievements}"
+                                          HorizontalAlignment="Left" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- Achievements column -->
+                <Border Grid.Column="1"
+                        Margin="8,0,0,0"
+                        IsVisible="{Binding IsAchievementsColumnVisible}">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Grid.Row="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.Achievements}"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,6" />
+                        <ScrollViewer Grid.Row="1"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding SpaAchievementRows}"
+                                          Margin="0,0,16,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:SpaAchievementRow">
+                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                              Margin="0,2">
+                                            <Panel Grid.Column="0"
+                                                   Width="32"
+                                                   Height="32"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,8,0">
+                                                <Image Source="{Binding Image}"
+                                                       IsVisible="{Binding HasImage}"
+                                                       Stretch="Uniform" />
+                                                <fluent:SymbolIcon Symbol="Trophy"
+                                                                   VerticalAlignment="Center"
+                                                                   IsVisible="{Binding !HasImage}">
+                                                    <fluent:SymbolIcon.Foreground>
+                                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                                    </fluent:SymbolIcon.Foreground>
+                                                </fluent:SymbolIcon>
+                                            </Panel>
+                                            <StackPanel Grid.Column="1"
+                                                        VerticalAlignment="Center"
+                                                        Spacing="2">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="SemiBold"
+                                                           TextWrapping="Wrap"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{Binding Description}"
+                                                           FontSize="12"
+                                                           TextWrapping="Wrap"
+                                                           TextTrimming="CharacterEllipsis">
+                                                    <TextBlock.Foreground>
+                                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                                    </TextBlock.Foreground>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <Border Grid.Column="2"
+                                                    Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                                    CornerRadius="4"
+                                                    Padding="6,2"
+                                                    VerticalAlignment="Center"
+                                                    Margin="8,0,0,0">
+                                                <TextBlock Text="{Binding Gamerscore, StringFormat={}{0}G}"
+                                                           FontSize="11"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                            </Border>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{Binding Description}" />
+                                            </ToolTip.Tip>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+        </cards:CustomCard>
+
     </Grid>
 </UserControl>

@@ -1413,6 +1413,10 @@
     <sys:String x:Key="GameFilesDialog.NoSelection">Select a file to view its details.</sys:String>
     <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">Open in Explorer</sys:String>
     <sys:String x:Key="GameFilesDialog.XexSection">Executable details</sys:String>
+    <sys:String x:Key="GameFilesDialog.ContainerSection">Container</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Format">Format</sys:String>
+    <sys:String x:Key="GameFilesDialog.Container.Summary">{0} files — {1} total</sys:String>
+    <sys:String x:Key="GameFilesDialog.AchievementsToggle">Achievements</sys:String>
     <sys:String x:Key="GameFilesDialog.SpaSection">SPA details</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.Size">Size</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.Path">Path</sys:String>

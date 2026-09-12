@@ -76,6 +76,24 @@ public sealed class ZarGameFileSource : GameFileSourceBase
     }
 
     /// <inheritdoc />
+    public override string FormatName
+    {
+        get
+        {
+            return "ZAR";
+        }
+    }
+
+    /// <inheritdoc />
+    public override string FormatDescription
+    {
+        get
+        {
+            return "Xbox archive (ZAR)";
+        }
+    }
+
+    /// <inheritdoc />
     public override void Dispose()
     {
         if (_disposed)

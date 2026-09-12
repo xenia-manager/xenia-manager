@@ -28,6 +28,12 @@ public abstract class GameFileSourceBase : IGameFileSource
     }
 
     /// <inheritdoc />
+    public abstract string FormatName { get; }
+
+    /// <inheritdoc />
+    public abstract string FormatDescription { get; }
+
+    /// <inheritdoc />
     public abstract void Dispose();
 
     /// <summary>

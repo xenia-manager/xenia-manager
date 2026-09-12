@@ -157,6 +157,24 @@ public sealed class LooseGameFileSource : GameFileSourceBase
     };
 
     /// <inheritdoc />
+    public override string FormatName
+    {
+        get
+        {
+            return "Loose";
+        }
+    }
+
+    /// <inheritdoc />
+    public override string FormatDescription
+    {
+        get
+        {
+            return "Extracted directory";
+        }
+    }
+
+    /// <inheritdoc />
     public override void Dispose()
     {
     }
