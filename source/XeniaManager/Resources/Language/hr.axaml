@@ -1462,4 +1462,7 @@
     <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">#NOTTRANSLATED#</sys:String>
+
+    <!-- GPD Viewer Dialog -->
+    <sys:String x:Key="GpdViewerDialog.Entries.Header">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>

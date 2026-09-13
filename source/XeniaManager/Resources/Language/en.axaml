@@ -1462,4 +1462,7 @@
     <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">The file is too large to preview as text.</sys:String>
     <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">Cannot Open File</sys:String>
     <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">Failed to open '{0}': {1}</sys:String>
+
+    <!-- GPD Viewer Dialog -->
+    <sys:String x:Key="GpdViewerDialog.Entries.Header">Entries</sys:String>
 </ResourceDictionary>
