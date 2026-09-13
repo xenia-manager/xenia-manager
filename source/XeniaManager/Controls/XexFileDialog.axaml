@@ -1,0 +1,488 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="750"
+             d:DesignHeight="500"
+             x:Class="XeniaManager.Controls.XexFileDialog"
+             x:DataType="vm:XexFileDialogViewModel"
+             Width="750">
+
+    <ScrollViewer MaxHeight="480"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Spacing="4"
+                    Margin="0,0,16,0">
+            <!-- Title icon + file name -->
+            <Grid ColumnDefinitions="Auto,*">
+                <Image Grid.Column="0"
+                       Source="{Binding SelectedIcon}"
+                       IsVisible="{Binding HasSelectedIcon}"
+                       Width="64"
+                       Height="64"
+                       Stretch="Uniform"
+                       VerticalAlignment="Top"
+                       Margin="0,0,12,0" />
+                <StackPanel Grid.Column="1"
+                            Spacing="2"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding FileName}"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap" />
+                    <Button Content="{DynamicResource GameFilesDialog.XexIcon.Button}"
+                            Command="{Binding ExtractXexIconCommand}"
+                            IsVisible="{Binding HasSelectedIcon}"
+                            HorizontalAlignment="Left"
+                            Margin="0,6,0,0" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Executable + SPA details side by side -->
+            <Grid ColumnDefinitions="*,*">
+                <!-- Executable details -->
+                <StackPanel Grid.Column="0"
+                            Spacing="2">
+                    <TextBlock Text="{DynamicResource GameFilesDialog.XexSection}"
+                               FontWeight="SemiBold"
+                               Margin="0,8,0,2" />
+                    <Grid ColumnDefinitions="Auto,*"
+                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.TitleId}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="{Binding XexTitleId}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.MediaId}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding XexMediaId}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.Version}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Text="{Binding XexVersion}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.BaseVersion}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="1"
+                                   Text="{Binding XexBaseVersion}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.ExecutableType}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="1"
+                                   Text="{Binding XexExecutableType}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="5"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.Disc}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="5"
+                                   Grid.Column="1"
+                                   Text="{Binding XexDisc}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="6"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.ImageSize}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="6"
+                                   Grid.Column="1"
+                                   Text="{Binding XexImageSize}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="7"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.ModuleFlags}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="7"
+                                   Grid.Column="1"
+                                   Text="{Binding XexModuleFlags}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                    </Grid>
+                </StackPanel>
+
+                <!-- SPA summary -->
+                <StackPanel Grid.Column="1"
+                            Spacing="2"
+                            Margin="8,0,0,0">
+                    <TextBlock Text="{DynamicResource GameFilesDialog.SpaSection}"
+                               FontWeight="SemiBold"
+                               Margin="0,8,0,2"
+                               IsVisible="{Binding HasSpaDetails}" />
+                    <Grid ColumnDefinitions="Auto,*"
+                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                          IsVisible="{Binding HasSpaDetails}">
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.SpaTitle}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="{Binding SpaTitle}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource XexFileDialog.Details.DefaultLanguage}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding SpaDefaultLanguage}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource XexFileDialog.Details.TitleType}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Text="{Binding SpaTitleType}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource XexFileDialog.Details.TitleVersion}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="1"
+                                   Text="{Binding SpaTitleVersion}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.Achievements}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="1"
+                                   Text="{Binding SpaAchievements}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="5"
+                                   Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.Gamerscore}"
+                                   FontSize="12"
+                                   Margin="0,0,8,0">
+                            <TextBlock.Foreground>
+                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock Grid.Row="5"
+                                   Grid.Column="1"
+                                   Text="{Binding SpaGamerscore}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                    </Grid>
+                    <TextBlock Text="{DynamicResource XexFileDialog.NoSpaDetails}"
+                               FontSize="12"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"
+                               IsVisible="{Binding !HasSpaDetails}">
+                        <TextBlock.Foreground>
+                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+
+            <!-- Achievements -->
+            <Expander IsVisible="{Binding HasAchievements}"
+                      Margin="0,8,0,0">
+                <Expander.Header>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <TextBlock Grid.Column="0"
+                                   Text="{DynamicResource GameFilesDialog.Details.Achievements}"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center" />
+                        <ToggleSwitch Grid.Column="2"
+                                      IsChecked="{Binding ShowUnlockedAchievements, Mode=TwoWay}"
+                                      OffContent="{DynamicResource XexFileDialog.Achievements.Locked}"
+                                      OnContent="{DynamicResource XexFileDialog.Achievements.Unlocked}" />
+                    </Grid>
+                </Expander.Header>
+                <Expander.Content>
+                    <ItemsControl ItemsSource="{Binding Achievements}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:SpaAchievementRow">
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      Margin="0,4">
+                                    <Panel Grid.Column="0"
+                                           Width="32"
+                                           Height="32"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0">
+                                        <Image Source="{Binding DisplayImage}"
+                                               IsVisible="{Binding HasDisplayImage}"
+                                               Stretch="Uniform" />
+                                        <fluent:SymbolIcon Symbol="Trophy"
+                                                           VerticalAlignment="Center"
+                                                           IsVisible="{Binding !HasDisplayImage}">
+                                            <fluent:SymbolIcon.Foreground>
+                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                            </fluent:SymbolIcon.Foreground>
+                                        </fluent:SymbolIcon>
+                                    </Panel>
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Spacing="2">
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontWeight="SemiBold"
+                                                   TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding DisplayDescription}"
+                                                   FontSize="12"
+                                                   TextWrapping="Wrap">
+                                            <TextBlock.Foreground>
+                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <Border Grid.Column="2"
+                                            Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                            CornerRadius="4"
+                                            Padding="6,2"
+                                            VerticalAlignment="Center"
+                                            Margin="8,0,0,0">
+                                        <TextBlock Text="{Binding Gamerscore, StringFormat={}{0}G}"
+                                                   FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Expander.Content>
+            </Expander>
+
+            <!-- Titles -->
+            <Expander IsVisible="{Binding HasTitles}"
+                      Margin="0,8,0,0">
+                <Expander.Header>
+                    <TextBlock Text="{DynamicResource XexFileDialog.TitlesSection}"
+                               FontWeight="SemiBold" />
+                </Expander.Header>
+                <Expander.Content>
+                    <ItemsControl ItemsSource="{Binding Titles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:XexTitleRow">
+                                <StackPanel Margin="0,2"
+                                            Spacing="2">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontWeight="SemiBold"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Detail}"
+                                               FontSize="12"
+                                               TextWrapping="Wrap">
+                                        <TextBlock.Foreground>
+                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Expander.Content>
+            </Expander>
+
+            <!-- Contexts -->
+            <Expander IsVisible="{Binding HasContexts}"
+                      Margin="0,8,0,0">
+                <Expander.Header>
+                    <TextBlock Text="{DynamicResource XexFileDialog.ContextsSection}"
+                               FontWeight="SemiBold" />
+                </Expander.Header>
+                <Expander.Content>
+                    <ItemsControl ItemsSource="{Binding Contexts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:XexContextRow">
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      Margin="0,2">
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding Id}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Name}"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               Margin="8,0,0,0" />
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Detail}"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"
+                                               Margin="8,0,0,0">
+                                        <TextBlock.Foreground>
+                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Expander.Content>
+            </Expander>
+
+            <!-- Properties -->
+            <Expander IsVisible="{Binding HasProperties}"
+                      Margin="0,8,0,0">
+                <Expander.Header>
+                    <TextBlock Text="{DynamicResource XexFileDialog.PropertiesSection}"
+                               FontWeight="SemiBold" />
+                </Expander.Header>
+                <Expander.Content>
+                    <ItemsControl ItemsSource="{Binding Properties}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:XexPropertyRow">
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      Margin="0,2">
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding Id}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Name}"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               Margin="8,0,0,0" />
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Detail}"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"
+                                               Margin="8,0,0,0">
+                                        <TextBlock.Foreground>
+                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Expander.Content>
+            </Expander>
+
+            <!-- Stats views -->
+            <Expander IsVisible="{Binding HasStatsViews}"
+                      Margin="0,8,0,0">
+                <Expander.Header>
+                    <TextBlock Text="{DynamicResource XexFileDialog.StatsViewsSection}"
+                               FontWeight="SemiBold" />
+                </Expander.Header>
+                <Expander.Content>
+                    <ItemsControl ItemsSource="{Binding StatsViews}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:XexStatsViewRow">
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      Margin="0,2">
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding Id}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Name}"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               Margin="8,0,0,0" />
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Detail}"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"
+                                               Margin="8,0,0,0">
+                                        <TextBlock.Foreground>
+                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Expander.Content>
+            </Expander>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

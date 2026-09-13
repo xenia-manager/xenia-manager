@@ -1466,6 +1466,18 @@
     <!-- GPD Viewer Dialog -->
     <sys:String x:Key="GpdViewerDialog.Entries.Header">Entries</sys:String>
 
+    <!-- XEX File Dialog -->
+    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">Default language</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleType">Title type</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleVersion">Title version</sys:String>
+    <sys:String x:Key="XexFileDialog.NoSpaDetails">No embedded SPA details found in this executable.</sys:String>
+    <sys:String x:Key="XexFileDialog.TitlesSection">Titles</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Locked">Locked</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">Unlocked</sys:String>
+    <sys:String x:Key="XexFileDialog.ContextsSection">Contexts</sys:String>
+    <sys:String x:Key="XexFileDialog.PropertiesSection">Properties</sys:String>
+    <sys:String x:Key="XexFileDialog.StatsViewsSection">Stats views</sys:String>
+
     <!-- Game Files XEX -->
     <sys:String x:Key="GameFilesDialog.Details.BaseVersion">Base version</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.ExecutableType">Executable type</sys:String>

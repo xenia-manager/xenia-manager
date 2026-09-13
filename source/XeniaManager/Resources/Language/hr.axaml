@@ -1466,6 +1466,18 @@
     <!-- GPD Viewer Dialog -->
     <sys:String x:Key="GpdViewerDialog.Entries.Header">#NOTTRANSLATED#</sys:String>
 
+    <!-- XEX File Dialog -->
+    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleType">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleVersion">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.NoSpaDetails">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.TitlesSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Locked">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.ContextsSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.PropertiesSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.StatsViewsSection">#NOTTRANSLATED#</sys:String>
+
     <!-- Game Files XEX -->
     <sys:String x:Key="GameFilesDialog.Details.BaseVersion">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.ExecutableType">#NOTTRANSLATED#</sys:String>
