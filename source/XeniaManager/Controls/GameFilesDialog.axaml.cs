@@ -51,6 +51,7 @@ public partial class GameFilesDialog : UserControl
     public static async Task ShowAsync(string gamePath, string gameTitle)
     {
         GameFilesDialog dialogContent = new GameFilesDialog(gamePath, gameTitle);
+        FATaskDialog? taskDialog = null;
         try
         {
             if (dialogContent._viewModel == null || !await dialogContent._viewModel.LoadAsync())
@@ -62,7 +63,7 @@ public partial class GameFilesDialog : UserControl
                 return;
             }
 
-            FATaskDialog taskDialog = new FATaskDialog
+            taskDialog = new FATaskDialog
             {
                 Title = !string.IsNullOrEmpty(gameTitle)
                     ? gameTitle
@@ -91,6 +92,12 @@ public partial class GameFilesDialog : UserControl
         finally
         {
             dialogContent._viewModel?.Dispose();
+            dialogContent.DataContext = null;
+            if (taskDialog != null)
+            {
+                taskDialog.Content = null;
+                taskDialog.Buttons.Clear();
+            }
         }
     }
 }

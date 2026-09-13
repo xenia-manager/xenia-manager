@@ -1429,6 +1429,12 @@
     <sys:String x:Key="GameFilesDialog.Details.SpaTitle">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.Achievements">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.Gamerscore">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.StfsSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.DisplayName">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SignatureType">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentType">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentSize">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.LoadError.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.LoadError.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.ExplorerError.Title">#NOTTRANSLATED#</sys:String>
