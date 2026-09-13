@@ -187,7 +187,7 @@
     <sys:String x:Key="GameModal.Hint.Download">Download</sys:String>
     <sys:String x:Key="GameModal.Hint.Save">Save</sys:String>
     <sys:String x:Key="GameModal.Hint.FetchAchievements">Fetch Achievements</sys:String>
-    <sys:String x:Key="GameModal.Hint.FetchImages">Fetch Images</sys:String>
+    <sys:String x:Key="GameModal.Hint.Fetch">Fetch</sys:String>
 
     <!-- game modal achievements pane -->
     <sys:String x:Key="GameModal.Achievements.Sort.GamerscoreAwarded">Gamerscore Awarded</sys:String>
@@ -197,12 +197,16 @@
     <sys:String x:Key="GameModal.Achievements.EmptyCreate">No achievements found.</sys:String>
     <sys:String x:Key="GameModal.Achievements.Create.Failed.Title">Creation Failed</sys:String>
     <sys:String x:Key="GameModal.Achievements.Create.Failed.Message">Failed to fetch achievements from the game files. Error: {0}</sys:String>
-    <sys:String x:Key="GameModal.Achievements.Fetch.Mode.Title">Fetch Achievement Images</sys:String>
-    <sys:String x:Key="GameModal.Achievements.Fetch.Mode.Message">Fill in only the missing images, or re-fetch and overwrite all images from the game files?</sys:String>
-    <sys:String x:Key="GameModal.Achievements.Fetch.Mode.MissingOnly">Missing only</sys:String>
-    <sys:String x:Key="GameModal.Achievements.Fetch.Mode.OverwriteAll">Overwrite all</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.Title">Fetch from Game Files</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.Message">Choose what to fetch from the game files.</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.ImagesMissing">Missing images</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.ImagesUnlocked">Unlocked images only</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.ImagesOverwrite">Overwrite all images</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.Strings">Achievement strings</sys:String>
     <sys:String x:Key="GameModal.Achievements.Fetch.Failed.Title">Fetch Failed</sys:String>
     <sys:String x:Key="GameModal.Achievements.Fetch.Failed.Message">Failed to fetch achievement images from the game files. Error: {0}</sys:String>
+    <sys:String x:Key="GameModal.Achievements.FetchStrings.Failed.Title">Refresh Failed</sys:String>
+    <sys:String x:Key="GameModal.Achievements.FetchStrings.Failed.Message">Failed to refetch achievement strings from the game files. Error: {0}</sys:String>
     <sys:String x:Key="GameModal.Achievements.NotUnlocked">Not Unlocked</sys:String>
     <sys:String x:Key="GameModal.Achievements.HiddenName">Hidden Achievement</sys:String>
     <sys:String x:Key="GameModal.Achievements.SpoilerWarning">This achievement contains spoilers</sys:String>

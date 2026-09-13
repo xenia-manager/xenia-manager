@@ -25,8 +25,8 @@ namespace XeniaManager.BigScreen.ViewModels.Modals;
 /// The game modal's achievements pane: stats header, an X-cycled sort
 /// (Achieved / Gamerscore Awarded / Alphabetical) and a scrollable flat list
 /// of rows from the active profile's per-game achievement GPD. When there are
-/// no achievements, A creates them from the game disc; Y fetches the
-/// achievement images from the disc.
+/// no achievements, A creates them from the game disc; Y fetches
+/// achievement data from the disc.
 /// </summary>
 public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
 {
@@ -158,7 +158,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     /// <summary>
     /// Handles pane input: Up/Down moves the rows (scrolling into view), X
     /// cycles the sort, A creates the achievements from the disc when empty,
-    /// Y fetches the achievement images from the disc (or creates the
+    /// Y fetches achievement data from the disc (or creates the
     /// achievements when empty).
     /// </summary>
     public bool HandleInput(NavigationCommand command)
@@ -196,7 +196,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
                     return true;
                 }
 
-                TaskUtilities.RunSafely<AchievementsPaneViewModel>(FetchAchievementImagesAsync, "Fetching achievement images");
+                TaskUtilities.RunSafely<AchievementsPaneViewModel>(FetchAchievementsAsync, "Fetching achievements");
                 return true;
             default:
                 return false;
@@ -269,11 +269,11 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
     }
 
     /// <summary>
-    /// Fetches achievement images from the game disc into the active profile's
-    /// GPD. The user chooses between filling only missing images or
-    /// overwriting all of them; multi-disc games ask which disc to read.
+    /// Fetches achievement data from the game disc into the active profile's
+    /// GPD. The user picks what to fetch (images and/or strings) first;
+    /// multi-disc games then ask which disc to read.
     /// </summary>
-    private async Task FetchAchievementImagesAsync()
+    private async Task FetchAchievementsAsync()
     {
         if (IsBusy || _gpdFile == null)
         {
@@ -281,14 +281,11 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
         }
 
         IsBusy = true;
+        AchievementFetchOption? choice = null;
         try
         {
-            bool? missingOnly = await ModalFactory.ConfirmAsync(_modalService,
-                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.Title"),
-                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.Message"),
-                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.MissingOnly"),
-                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Mode.OverwriteAll"));
-            if (missingOnly == null)
+            choice = await _modalService.ShowAsync<AchievementFetchOption?>(new AchievementFetchViewModel());
+            if (choice == null)
             {
                 return;
             }
@@ -298,7 +295,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
                 : _game.LastPlayedDisc;
             if (disc == null || disc < 1)
             {
-                Logger.Info<AchievementsPaneViewModel>("Disc selection cancelled, aborting image fetch");
+                Logger.Info<AchievementsPaneViewModel>("Disc selection cancelled, aborting fetch");
                 return;
             }
 
@@ -314,20 +311,46 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
                 throw new InvalidOperationException("No active profile found");
             }
 
-            bool overwriteAll = missingOnly == false;
-            int written = await Task.Run(() => AchievementGpdBuilder.FetchImages(discPath, titleGpdPath, overwriteAll));
+            if (choice == AchievementFetchOption.Strings)
+            {
+                AccountInfo? profile = _profileService.ActiveProfileFor(_game.XeniaVersion);
+                if (profile == null)
+                {
+                    throw new InvalidOperationException("No active profile found");
+                }
 
-            Logger.Info<AchievementsPaneViewModel>($"Fetched {written} achievement images from disc (overwrite: {overwriteAll})");
+                XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(profile.Language);
+                int updated = await Task.Run(() =>
+                    AchievementGpdBuilder.RefreshStrings(discPath, titleGpdPath, language));
+
+                Logger.Info<AchievementsPaneViewModel>($"Refetched {updated} achievement strings from disc");
+            }
+            else
+            {
+                bool overwriteAll = choice == AchievementFetchOption.OverwriteImages;
+                bool unlockedOnly = choice == AchievementFetchOption.UnlockedImages;
+                int written = await Task.Run(() =>
+                    AchievementGpdBuilder.FetchImages(discPath, titleGpdPath, overwriteAll, unlockedOnly));
+
+                Logger.Info<AchievementsPaneViewModel>(
+                    $"Fetched {written} achievement images from disc (overwrite: {overwriteAll}, unlocked only: {unlockedOnly})");
+            }
+
             GameDataCache.ClearAchievementGpds();
             ReloadAchievements();
         }
         catch (Exception ex)
         {
-            Logger.Error<AchievementsPaneViewModel>("Failed to fetch achievement images from disc");
+            Logger.Error<AchievementsPaneViewModel>("Failed to fetch achievements from disc");
             Logger.LogExceptionDetails<AchievementsPaneViewModel>(ex);
+            (string titleKey, string messageKey) = choice == AchievementFetchOption.Strings
+                ? ("GameModal.Achievements.FetchStrings.Failed.Title",
+                    "GameModal.Achievements.FetchStrings.Failed.Message")
+                : ("GameModal.Achievements.Fetch.Failed.Title",
+                    "GameModal.Achievements.Fetch.Failed.Message");
             await ModalFactory.ConfirmAsync(_modalService,
-                LocalizationHelper.GetText("GameModal.Achievements.Fetch.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("GameModal.Achievements.Fetch.Failed.Message"), ex.Message),
+                LocalizationHelper.GetText(titleKey),
+                string.Format(LocalizationHelper.GetText(messageKey), ex.Message),
                 LocalizationHelper.GetText("Modal.Confirm"),
                 LocalizationHelper.GetText("Modal.Cancel"));
         }

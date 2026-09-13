@@ -17,6 +17,9 @@
         <DataTemplate DataType="vm:ConfirmationModalViewModel">
             <modal:ConfirmationModal />
         </DataTemplate>
+        <DataTemplate DataType="vm:AchievementFetchViewModel">
+            <modal:AchievementFetchModal />
+        </DataTemplate>
         <DataTemplate DataType="items:ProfileItemViewModel">
             <prof:ProfileRow />
         </DataTemplate>
