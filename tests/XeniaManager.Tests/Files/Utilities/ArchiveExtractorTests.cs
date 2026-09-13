@@ -318,4 +318,52 @@ public class ArchiveExtractorTests
         Assert.DoesNotThrow(() =>
             ArchiveExtractor.ExtractArchive(_testZipPath, _testOutputPath));
     }
+
+    [Test]
+    public void GetSafeEntryOutputPath_NestedEntry_StaysInsideOutputDirectory()
+    {
+        // Arrange
+        string outputDir = Path.Combine(Path.GetTempPath(), "xm-safe-out");
+
+        // Act
+        string result = ArchiveExtractor.GetSafeEntryOutputPath(outputDir, Path.Combine("sub", "file.bin"));
+
+        // Assert
+        Assert.That(result, Is.EqualTo(Path.GetFullPath(Path.Combine(outputDir, "sub", "file.bin"))));
+    }
+
+    [Test]
+    public void GetSafeEntryOutputPath_DotDotEntry_ThrowsIOException()
+    {
+        // Arrange
+        string outputDir = Path.Combine(Path.GetTempPath(), "xm-safe-out");
+
+        // Act & Assert
+        Assert.Throws<IOException>(() =>
+            ArchiveExtractor.GetSafeEntryOutputPath(outputDir, Path.Combine("..", "evil.txt")));
+    }
+
+    [Test]
+    public void GetSafeEntryOutputPath_AbsoluteEntry_ThrowsIOException()
+    {
+        // Arrange
+        string outputDir = Path.Combine(Path.GetTempPath(), "xm-safe-out");
+        string absolute = Path.Combine(Path.GetPathRoot(outputDir)!, "evil.txt");
+
+        // Act & Assert
+        Assert.Throws<IOException>(() =>
+            ArchiveExtractor.GetSafeEntryOutputPath(outputDir, absolute));
+    }
+
+    [Test]
+    public void GetSafeEntryOutputPath_SiblingPrefixEntry_ThrowsIOException()
+    {
+        // Arrange
+        string outputDir = Path.Combine(Path.GetTempPath(), "xm-safe-out");
+        string sibling = $"..{Path.DirectorySeparatorChar}xm-safe-out-evil{Path.DirectorySeparatorChar}evil.txt";
+
+        // Act & Assert
+        Assert.Throws<IOException>(() =>
+            ArchiveExtractor.GetSafeEntryOutputPath(outputDir, sibling));
+    }
 }
