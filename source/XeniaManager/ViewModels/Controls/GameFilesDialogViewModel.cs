@@ -137,10 +137,13 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     /// <summary>Whether the selected entry is an XEX with parsed details.</summary>
     [ObservableProperty] private bool _isXexSelected;
 
-    /// <summary>Whether an XEX/SPA icon is available.</summary>
+    /// <summary>Whether the selected entry is an STFS package with parsed details.</summary>
+    [ObservableProperty] private bool _isStfsSelected;
+
+    /// <summary>Whether an XEX/SPA or STFS icon is available.</summary>
     [ObservableProperty] private bool _hasSelectedIcon;
 
-    /// <summary>XEX/SPA icon image.</summary>
+    /// <summary>XEX/SPA or STFS icon image.</summary>
     [ObservableProperty] private Bitmap? _selectedIcon;
 
     /// <summary>Decoded preview of the selected image file.</summary>
@@ -181,6 +184,27 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
     /// <summary>SPA total gamerscore.</summary>
     [ObservableProperty] private string _spaGamerscore = string.Empty;
+
+    /// <summary>STFS signature type (CON/LIVE/PIRS).</summary>
+    [ObservableProperty] private string _stfsSignatureType = string.Empty;
+
+    /// <summary>STFS content type.</summary>
+    [ObservableProperty] private string _stfsContentType = string.Empty;
+
+    /// <summary>STFS title ID.</summary>
+    [ObservableProperty] private string _stfsTitleId = string.Empty;
+
+    /// <summary>STFS media ID.</summary>
+    [ObservableProperty] private string _stfsMediaId = string.Empty;
+
+    /// <summary>STFS display name.</summary>
+    [ObservableProperty] private string _stfsDisplayName = string.Empty;
+
+    /// <summary>STFS title name.</summary>
+    [ObservableProperty] private string _stfsTitleName = string.Empty;
+
+    /// <summary>STFS content size.</summary>
+    [ObservableProperty] private string _stfsContentSize = string.Empty;
 
     /// <summary>Whether the SPA title row can be shown.</summary>
     public bool HasSpaTitle
@@ -224,6 +248,88 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         get
         {
             return IsXexSelected && HasAnySpaSummary;
+        }
+    }
+
+    /// <summary>Whether the STFS display name row can be shown.</summary>
+    public bool HasStfsDisplayName
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(StfsDisplayName);
+        }
+    }
+
+    /// <summary>Whether the STFS title name row can be shown.</summary>
+    public bool HasStfsTitleName
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(StfsTitleName);
+        }
+    }
+
+    /// <summary>Whether the STFS signature type row can be shown.</summary>
+    public bool HasStfsSignatureType
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(StfsSignatureType);
+        }
+    }
+
+    /// <summary>Whether the STFS content type row can be shown.</summary>
+    public bool HasStfsContentType
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(StfsContentType);
+        }
+    }
+
+    /// <summary>Whether the STFS title ID row can be shown.</summary>
+    public bool HasStfsTitleId
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(StfsTitleId);
+        }
+    }
+
+    /// <summary>Whether the STFS media ID row can be shown.</summary>
+    public bool HasStfsMediaId
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(StfsMediaId);
+        }
+    }
+
+    /// <summary>Whether the STFS content size row can be shown.</summary>
+    public bool HasStfsContentSize
+    {
+        get
+        {
+            return !string.IsNullOrWhiteSpace(StfsContentSize);
+        }
+    }
+
+    /// <summary>Whether any STFS summary rows can be shown.</summary>
+    public bool HasAnyStfsSummary
+    {
+        get
+        {
+            return HasStfsDisplayName || HasStfsTitleName || HasStfsSignatureType || HasStfsContentType || HasStfsTitleId || HasStfsMediaId ||
+                   HasStfsContentSize;
+        }
+    }
+
+    /// <summary>Whether the STFS summary section can be shown.</summary>
+    public bool IsStfsSummaryVisible
+    {
+        get
+        {
+            return IsStfsSelected && HasAnyStfsSummary;
         }
     }
 
@@ -523,6 +629,57 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
     partial void OnIsXexSelectedChanged(bool value) => OnPropertyChanged(nameof(IsSpaSummaryVisible));
 
+    partial void OnIsStfsSelectedChanged(bool value) => OnPropertyChanged(nameof(IsStfsSummaryVisible));
+
+    partial void OnStfsDisplayNameChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasStfsDisplayName));
+        OnPropertyChanged(nameof(HasAnyStfsSummary));
+        OnPropertyChanged(nameof(IsStfsSummaryVisible));
+    }
+
+    partial void OnStfsTitleNameChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasStfsTitleName));
+        OnPropertyChanged(nameof(HasAnyStfsSummary));
+        OnPropertyChanged(nameof(IsStfsSummaryVisible));
+    }
+
+    partial void OnStfsSignatureTypeChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasStfsSignatureType));
+        OnPropertyChanged(nameof(HasAnyStfsSummary));
+        OnPropertyChanged(nameof(IsStfsSummaryVisible));
+    }
+
+    partial void OnStfsContentTypeChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasStfsContentType));
+        OnPropertyChanged(nameof(HasAnyStfsSummary));
+        OnPropertyChanged(nameof(IsStfsSummaryVisible));
+    }
+
+    partial void OnStfsTitleIdChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasStfsTitleId));
+        OnPropertyChanged(nameof(HasAnyStfsSummary));
+        OnPropertyChanged(nameof(IsStfsSummaryVisible));
+    }
+
+    partial void OnStfsMediaIdChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasStfsMediaId));
+        OnPropertyChanged(nameof(HasAnyStfsSummary));
+        OnPropertyChanged(nameof(IsStfsSummaryVisible));
+    }
+
+    partial void OnStfsContentSizeChanged(string value)
+    {
+        OnPropertyChanged(nameof(HasStfsContentSize));
+        OnPropertyChanged(nameof(HasAnyStfsSummary));
+        OnPropertyChanged(nameof(IsStfsSummaryVisible));
+    }
+
     partial void OnSpaTitleChanged(string value)
     {
         OnPropertyChanged(nameof(HasSpaTitle));
@@ -544,16 +701,52 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         OnPropertyChanged(nameof(IsSpaSummaryVisible));
     }
 
+    /// <summary>
+    /// Releases the current detail images (icon, preview, achievement icons).
+    /// </summary>
+    private void ClearDetailImages()
+    {
+        SelectedIcon?.Dispose();
+        SelectedIcon = null;
+        PreviewImage?.Dispose();
+        PreviewImage = null;
+        foreach (SpaAchievementRow row in SpaAchievementRows)
+        {
+            row.Image?.Dispose();
+        }
+    }
+
     private async Task LoadDetailsAsync(GameFileNode? node, int loadId)
     {
+        if (_disposed)
+        {
+            return;
+        }
+
+        ClearDetailImages();
         HasSelection = node != null;
         IsXexSelected = false;
+        IsStfsSelected = false;
         HasSelectedIcon = false;
-        SelectedIcon = null;
         HasPreviewImage = false;
-        PreviewImage = null;
         HasAchievements = false;
         SpaAchievementRows = [];
+        XexTitleId = string.Empty;
+        XexMediaId = string.Empty;
+        XexVersion = string.Empty;
+        XexDisc = string.Empty;
+        XexImageSize = string.Empty;
+        XexModuleFlags = string.Empty;
+        SpaTitle = string.Empty;
+        SpaAchievements = string.Empty;
+        SpaGamerscore = string.Empty;
+        StfsSignatureType = string.Empty;
+        StfsContentType = string.Empty;
+        StfsTitleId = string.Empty;
+        StfsMediaId = string.Empty;
+        StfsDisplayName = string.Empty;
+        StfsTitleName = string.Empty;
+        StfsContentSize = string.Empty;
         if (node == null)
         {
             return;
@@ -568,93 +761,177 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         if (node.IsFile && IsPreviewableImage(node.Name))
         {
             byte[]? imageBytes = await Task.Run(() => TryReadPreview(node.FullPath));
-            if (loadId != _detailsLoadId)
+            if (_disposed || loadId != _detailsLoadId)
             {
                 return;
             }
 
             if (imageBytes != null)
             {
+                Bitmap? preview = null;
                 try
                 {
                     using MemoryStream imageStream = new MemoryStream(imageBytes);
-                    PreviewImage = new Bitmap(imageStream);
-                    HasPreviewImage = true;
+                    preview = new Bitmap(imageStream);
                 }
                 catch (Exception ex)
                 {
                     Logger.Trace<GameFilesDialogViewModel>($"Failed to decode image preview for '{node.FullPath}': {ex.Message}");
                 }
+
+                if (_disposed || loadId != _detailsLoadId)
+                {
+                    preview?.Dispose();
+                    return;
+                }
+
+                if (preview != null)
+                {
+                    PreviewImage = preview;
+                    HasPreviewImage = true;
+                }
             }
         }
 
-        if (!node.IsFile || !node.Name.EndsWith(".xex", StringComparison.OrdinalIgnoreCase))
+        if (node.IsFile && node.Name.EndsWith(".xex", StringComparison.OrdinalIgnoreCase))
         {
-            return;
-        }
-
-        XexDetails? details = await Task.Run(() => TryParseXex(node.FullPath));
-        if (loadId != _detailsLoadId || details == null)
-        {
-            return;
-        }
-
-        XexTitleId = details.TitleId;
-        XexMediaId = details.MediaId;
-        XexVersion = details.Version;
-        XexDisc = details.Disc;
-        XexImageSize = details.ImageSize;
-        XexModuleFlags = details.ModuleFlags;
-        SpaTitle = details.SpaTitle;
-        SpaAchievements = details.Achievements;
-        SpaGamerscore = details.Gamerscore;
-        List<SpaAchievementRow> rows = new List<SpaAchievementRow>();
-        foreach (SpaAchievementDetails achievement in details.AchievementList)
-        {
-            Bitmap? image = null;
-            if (achievement.Image != null)
+            XexDetails? details = await Task.Run(() => TryParseXex(node.FullPath));
+            if (_disposed || loadId != _detailsLoadId || details == null)
             {
+                return;
+            }
+
+            XexTitleId = details.TitleId;
+            XexMediaId = details.MediaId;
+            XexVersion = details.Version;
+            XexDisc = details.Disc;
+            XexImageSize = details.ImageSize;
+            XexModuleFlags = details.ModuleFlags;
+            SpaTitle = details.SpaTitle;
+            SpaAchievements = details.Achievements;
+            SpaGamerscore = details.Gamerscore;
+            List<SpaAchievementRow> rows = new List<SpaAchievementRow>();
+            foreach (SpaAchievementDetails achievement in details.AchievementList)
+            {
+                Bitmap? image = null;
+                if (achievement.Image != null)
+                {
+                    try
+                    {
+                        using MemoryStream imageStream = new MemoryStream(achievement.Image);
+                        image = new Bitmap(imageStream);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameFilesDialogViewModel>($"Failed to decode achievement icon '{achievement.Name}': {ex.Message}");
+                    }
+                }
+
+                rows.Add(new SpaAchievementRow
+                {
+                    Name = achievement.Name,
+                    Description = achievement.Description,
+                    Gamerscore = achievement.Gamerscore,
+                    Image = image,
+                    HasImage = image != null
+                });
+            }
+
+            SpaAchievementRows = new ObservableCollection<SpaAchievementRow>(rows);
+            HasAchievements = rows.Count > 0;
+            IsAchievementsExpanded = false;
+            OnPropertyChanged(nameof(IsAchievementsColumnVisible));
+            OnPropertyChanged(nameof(BottomDetailsColumnSpan));
+            if (details.Icon != null)
+            {
+                Bitmap? icon = null;
                 try
                 {
-                    using MemoryStream imageStream = new MemoryStream(achievement.Image);
-                    image = new Bitmap(imageStream);
+                    using MemoryStream stream = new MemoryStream(details.Icon);
+                    icon = new Bitmap(stream);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Trace<GameFilesDialogViewModel>($"Failed to decode achievement icon '{achievement.Name}': {ex.Message}");
+                    Logger.Trace<GameFilesDialogViewModel>($"Failed to decode XEX icon for '{node.FullPath}': {ex.Message}");
+                }
+
+                if (_disposed || loadId != _detailsLoadId)
+                {
+                    icon?.Dispose();
+                    foreach (SpaAchievementRow row in rows)
+                    {
+                        row.Image?.Dispose();
+                    }
+
+                    return;
+                }
+
+                if (icon != null)
+                {
+                    SelectedIcon = icon;
+                    HasSelectedIcon = true;
                 }
             }
-
-            rows.Add(new SpaAchievementRow
+            else if (_disposed || loadId != _detailsLoadId)
             {
-                Name = achievement.Name,
-                Description = achievement.Description,
-                Gamerscore = achievement.Gamerscore,
-                Image = image,
-                HasImage = image != null
-            });
+                foreach (SpaAchievementRow row in rows)
+                {
+                    row.Image?.Dispose();
+                }
+
+                return;
+            }
+
+            IsXexSelected = true;
+            return;
         }
 
-        SpaAchievementRows = new ObservableCollection<SpaAchievementRow>(rows);
-        HasAchievements = rows.Count > 0;
-        IsAchievementsExpanded = false;
-        OnPropertyChanged(nameof(IsAchievementsColumnVisible));
-        OnPropertyChanged(nameof(BottomDetailsColumnSpan));
-        if (details.Icon != null)
+        // Try STFS package details for any other file (magic is checked inside).
+        StfsDetails? stfsDetails = await Task.Run(() => TryParseStfs(node.FullPath));
+        if (_disposed || loadId != _detailsLoadId || stfsDetails == null)
         {
+            return;
+        }
+
+        StfsSignatureType = stfsDetails.SignatureType;
+        StfsContentType = stfsDetails.ContentType;
+        StfsTitleId = stfsDetails.TitleId;
+        StfsMediaId = stfsDetails.MediaId;
+        StfsDisplayName = stfsDetails.DisplayName;
+        StfsTitleName = stfsDetails.TitleName;
+        StfsContentSize = stfsDetails.ContentSize;
+        if (stfsDetails.Thumbnail != null)
+        {
+            Bitmap? thumbnail = null;
             try
             {
-                using MemoryStream stream = new MemoryStream(details.Icon);
-                SelectedIcon = new Bitmap(stream);
-                HasSelectedIcon = true;
+                using MemoryStream stream = new MemoryStream(stfsDetails.Thumbnail);
+                thumbnail = new Bitmap(stream);
             }
             catch (Exception ex)
             {
-                Logger.Trace<GameFilesDialogViewModel>($"Failed to decode XEX icon for '{node.FullPath}': {ex.Message}");
+                Logger.Trace<GameFilesDialogViewModel>($"Failed to decode STFS thumbnail for '{node.FullPath}': {ex.Message}");
+            }
+
+            if (_disposed || loadId != _detailsLoadId)
+            {
+                thumbnail?.Dispose();
+                return;
+            }
+
+            if (thumbnail != null)
+            {
+                SelectedIcon = thumbnail;
+                HasSelectedIcon = true;
             }
         }
 
-        IsXexSelected = true;
+        if (_disposed || loadId != _detailsLoadId)
+        {
+            return;
+        }
+
+        IsStfsSelected = true;
     }
 
     private static bool IsPreviewableImage(string fileName) =>
@@ -678,6 +955,79 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             return null;
         }
     }
+
+    private StfsDetails? TryParseStfs(string fullPath)
+    {
+        try
+        {
+            byte[]? bytes = _source?.ReadFile(fullPath);
+            if (bytes == null || bytes.Length < 4)
+            {
+                return null;
+            }
+
+            string magic = System.Text.Encoding.ASCII.GetString(bytes, 0, 4);
+            if (magic is not ("CON " or "PIRS" or "LIVE"))
+            {
+                return null;
+            }
+
+            // FromBytes validates size/header; catch invalid packages.
+            StfsFile stfs;
+            try
+            {
+                stfs = StfsFile.FromBytes(bytes);
+            }
+            catch
+            {
+                return null;
+            }
+
+            using (stfs)
+            {
+                // StfsFile keeps raw data; ensure we at least have metadata parsed.
+                // FromBytes may succeed even for non-STFS; check signature round-trip.
+                string sig = stfs.SignatureType.ToString();
+                string contentType = stfs.Metadata.ContentType.ToString();
+                string titleId = stfs.Metadata.TitleIdHex;
+                string mediaId = stfs.Metadata.MediaIdHex;
+                string displayName = stfs.Metadata.DisplayName?.Trim() ?? string.Empty;
+                string titleName = stfs.Metadata.TitleName?.Trim() ?? string.Empty;
+                string contentSize = FileSizeFormatter.FormatBytes(stfs.Metadata.ContentSize);
+                byte[]? thumb = stfs.Metadata.ThumbnailImage is { Length: > 0 } t && stfs.TryGetIcon() != null
+                    ? stfs.Metadata.ThumbnailImage
+                    : stfs.Metadata.ThumbnailImage is { Length: > 0 } t2
+                        ? t2
+                        : null;
+                // Prefer validated icon bytes if thumbnail looks like image.
+                byte[]? icon = stfs.TryGetIcon();
+
+                // If all key display fields are empty and no icon, treat as not an STFS worth showing.
+                if (string.IsNullOrWhiteSpace(displayName) && string.IsNullOrWhiteSpace(titleName)
+                                                           && titleId == "00000000" && mediaId == "00000000" && icon == null)
+                {
+                    return null;
+                }
+
+                return new StfsDetails(sig, contentType, titleId, mediaId, displayName, titleName, contentSize, icon ?? thumb);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameFilesDialogViewModel>($"Failed to parse STFS '{fullPath}': {ex.Message}");
+            return null;
+        }
+    }
+
+    private sealed record StfsDetails(
+        string SignatureType,
+        string ContentType,
+        string TitleId,
+        string MediaId,
+        string DisplayName,
+        string TitleName,
+        string ContentSize,
+        byte[]? Thumbnail);
 
     private XexDetails? TryParseXex(string fullPath)
     {
@@ -771,9 +1121,20 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             return;
         }
 
-          _disposed = true;
-          OwnerProvider = null;
-          _source?.Dispose();
+        _disposed = true;
+        _detailsLoadId++; // Invalidate in-flight LoadDetailsAsync continuations.
+        OwnerProvider = null;
+        _searchCts?.Cancel();
+        _searchCts?.Dispose();
+        _searchCts = null;
+        ClearDetailImages();
+        SelectedTreeNode = null;
+        SelectedEntry = null;
+        SelectedTreeNodes.Clear();
+        SpaAchievementRows.Clear();
+        RootNodes.Clear();
+        _nodeLookup.Clear();
+        _source?.Dispose();
         _source = null;
         GC.SuppressFinalize(this);
     }

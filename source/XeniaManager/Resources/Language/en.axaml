@@ -1429,6 +1429,12 @@
     <sys:String x:Key="GameFilesDialog.Details.SpaTitle">Title</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.Achievements">Achievements</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.Gamerscore">Gamerscore</sys:String>
+    <sys:String x:Key="GameFilesDialog.StfsSection">STFS details</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.DisplayName">Display name</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">Title name</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SignatureType">Signature type</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentType">Content type</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentSize">Content size</sys:String>
     <sys:String x:Key="GameFilesDialog.LoadError.Title">Cannot Browse Game Files</sys:String>
     <sys:String x:Key="GameFilesDialog.LoadError.Message">The game files could not be opened. The file may be missing or in an unsupported format.</sys:String>
     <sys:String x:Key="GameFilesDialog.ExplorerError.Title">Cannot Open Folder</sys:String>

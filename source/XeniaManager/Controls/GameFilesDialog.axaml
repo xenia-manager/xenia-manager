@@ -213,6 +213,59 @@
                                     <Run Text="{Binding XexModuleFlags}" />
                                 </TextBlock>
                             </StackPanel>
+
+                            <!-- STFS details -->
+                            <StackPanel Spacing="2"
+                                        Margin="0,8,0,0"
+                                        IsVisible="{Binding IsStfsSummaryVisible}">
+                                <TextBlock Text="{DynamicResource GameFilesDialog.StfsSection}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,2" />
+                                <TextBlock FontSize="12"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{Binding HasStfsDisplayName}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.DisplayName}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding StfsDisplayName}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{Binding HasStfsTitleName}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.StfsTitleName}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding StfsTitleName}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           IsVisible="{Binding HasStfsSignatureType}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.SignatureType}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding StfsSignatureType}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           IsVisible="{Binding HasStfsContentType}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.ContentType}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding StfsContentType}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           IsVisible="{Binding HasStfsTitleId}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.TitleId}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding StfsTitleId}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           IsVisible="{Binding HasStfsMediaId}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.MediaId}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding StfsMediaId}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12"
+                                           IsVisible="{Binding HasStfsContentSize}">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.ContentSize}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding StfsContentSize}" />
+                                </TextBlock>
+                            </StackPanel>
                         </StackPanel>
                     </cards:CustomCard>
                 </ScrollViewer>
