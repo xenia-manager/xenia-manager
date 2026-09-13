@@ -488,6 +488,29 @@ public sealed class SpaFile : IDisposable
     }
 
     /// <summary>
+    /// Gets the languages present in the SPA string tables (section 0x0003 entry IDs),
+    /// in ascending order. Used to offer localized achievement text per language.
+    /// </summary>
+    public IReadOnlyList<XLanguage> AvailableLanguages
+    {
+        get
+        {
+            if (!IsValid)
+            {
+                return [];
+            }
+
+            return _gpd.Entries
+                .Where(e => (ushort)e.Namespace == SpaSectionStringTable)
+                .Select(e => (XLanguage)(uint)e.Id)
+                .Where(language => language != XLanguage.Invalid)
+                .Distinct()
+                .OrderBy(language => language)
+                .ToList();
+        }
+    }
+
+    /// <summary>
     /// Gets the game's title in its default language.
     /// </summary>
     public string TitleName() => TitleName(DefaultLanguage);

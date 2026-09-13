@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Files;
+using XeniaManager.Files.Models.XConfig;
 using XeniaManager.Logging;
 using XeniaManager.Services;
 
@@ -76,19 +77,31 @@ public sealed class XexStatsViewRow
 }
 
 /// <summary>
+/// Localized achievement text for a single SPA language.
+/// </summary>
+/// <param name="Name">Achievement name.</param>
+/// <param name="Unlocked">Achieved (unlocked) description.</param>
+/// <param name="Locked">Unachieved (locked) description.</param>
+public sealed record AchievementText(string Name, string Unlocked, string Locked);
+
+/// <summary>
 /// A single SPA achievement row shown in the XEX file dialog, with locked and
 /// unlocked descriptions and icons. The locked view is shown by default.
 /// </summary>
 public sealed partial class SpaAchievementRow : ObservableObject
 {
-    /// <summary>Achievement name.</summary>
+    /// <summary>Achievement name in the default language (fallback).</summary>
     public string Name { get; init; } = string.Empty;
 
-    /// <summary>Achieved (unlocked) description.</summary>
+    /// <summary>Achieved (unlocked) description in the default language (fallback).</summary>
     public string UnlockedDescription { get; init; } = string.Empty;
 
-    /// <summary>Unachieved (locked) description.</summary>
+    /// <summary>Unachieved (locked) description in the default language (fallback).</summary>
     public string LockedDescription { get; init; } = string.Empty;
+
+    /// <summary>Localized text per language.</summary>
+    public IReadOnlyDictionary<XLanguage, AchievementText> Texts { get; init; } =
+        new Dictionary<XLanguage, AchievementText>();
 
     /// <summary>Gamerscore value.</summary>
     public ushort Gamerscore { get; init; }
@@ -102,11 +115,38 @@ public sealed partial class SpaAchievementRow : ObservableObject
     /// <summary>Whether the unlocked description and icon are shown.</summary>
     [ObservableProperty] private bool _showUnlocked;
 
+    /// <summary>The language shown.</summary>
+    [ObservableProperty] private XLanguage _selectedLanguage;
+
+    /// <summary>Currently shown name.</summary>
+    public string DisplayName
+    {
+        get
+        {
+            if (Texts.TryGetValue(SelectedLanguage, out AchievementText? text) &&
+                !string.IsNullOrWhiteSpace(text.Name))
+            {
+                return text.Name;
+            }
+
+            return Name;
+        }
+    }
+
     /// <summary>Currently shown description.</summary>
     public string DisplayDescription
     {
         get
         {
+            if (Texts.TryGetValue(SelectedLanguage, out AchievementText? text))
+            {
+                string description = ShowUnlocked ? text.Unlocked : text.Locked;
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    return description;
+                }
+            }
+
             return ShowUnlocked ? UnlockedDescription : LockedDescription;
         }
     }
@@ -134,6 +174,12 @@ public sealed partial class SpaAchievementRow : ObservableObject
         OnPropertyChanged(nameof(DisplayDescription));
         OnPropertyChanged(nameof(DisplayImage));
         OnPropertyChanged(nameof(HasDisplayImage));
+    }
+
+    partial void OnSelectedLanguageChanged(XLanguage value)
+    {
+        OnPropertyChanged(nameof(DisplayName));
+        OnPropertyChanged(nameof(DisplayDescription));
     }
 }
 
@@ -227,6 +273,15 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
     /// <summary>Whether achievements show unlocked descriptions and icons instead of locked ones.</summary>
     [ObservableProperty] private bool _showUnlockedAchievements;
 
+    /// <summary>Languages with achievement text in the SPA.</summary>
+    [ObservableProperty] private ObservableCollection<XLanguage> _achievementLanguages = [];
+
+    /// <summary>The language achievements are shown in.</summary>
+    [ObservableProperty] private XLanguage _selectedAchievementLanguage;
+
+    /// <summary>Whether the SPA holds achievement text in more than one language.</summary>
+    [ObservableProperty] private bool _hasMultipleAchievementLanguages;
+
     /// <summary>SPA title rows.</summary>
     [ObservableProperty] private ObservableCollection<XexTitleRow> _titles = [];
 
@@ -304,6 +359,16 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
         SpaGamerscore = parsed.SpaGamerscore;
         _iconBytes = parsed.Icon;
 
+        XLanguage selectedLanguage = XLanguage.English;
+        if (parsed.Languages.Count > 0)
+        {
+            selectedLanguage = parsed.Languages.Contains(parsed.DefaultLanguage)
+                ? parsed.DefaultLanguage
+                : parsed.Languages[0];
+            AchievementLanguages = new ObservableCollection<XLanguage>(parsed.Languages);
+            HasMultipleAchievementLanguages = parsed.Languages.Count > 1;
+        }
+
         List<SpaAchievementRow> achievementRows = new List<SpaAchievementRow>();
         foreach (SpaAchievementDetails achievement in parsed.AchievementList)
         {
@@ -316,15 +381,18 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
                 Name = achievement.Name,
                 UnlockedDescription = achievement.Description,
                 LockedDescription = achievement.LockedDescription,
+                Texts = achievement.Texts,
                 Gamerscore = achievement.Gamerscore,
                 UnlockedImage = image,
                 LockedImage = lockedImage,
-                ShowUnlocked = ShowUnlockedAchievements
+                ShowUnlocked = ShowUnlockedAchievements,
+                SelectedLanguage = selectedLanguage
             });
         }
 
         Achievements = new ObservableCollection<SpaAchievementRow>(achievementRows);
         HasAchievements = achievementRows.Count > 0;
+        SelectedAchievementLanguage = selectedLanguage;
         Titles = new ObservableCollection<XexTitleRow>(parsed.Titles);
         HasTitles = parsed.Titles.Count > 0;
         Contexts = new ObservableCollection<XexContextRow>(parsed.Contexts);
@@ -424,6 +492,14 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
         }
     }
 
+    partial void OnSelectedAchievementLanguageChanged(XLanguage value)
+    {
+        foreach (SpaAchievementRow row in Achievements)
+        {
+            row.SelectedLanguage = value;
+        }
+    }
+
     private static Bitmap? DecodeBitmap(byte[]? bytes)
     {
         if (bytes == null || bytes.Length == 0)
@@ -499,18 +575,37 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
                 parsed.SpaAchievements = spa.SpaAchievements.Count.ToString();
                 parsed.SpaGamerscore = spa.TotalGamerscore.ToString();
                 parsed.Icon = spa.GetTitleIcon() ?? spa.GetAnyValidIcon();
+                parsed.DefaultLanguage = spa.DefaultLanguage;
+                parsed.Languages.AddRange(spa.AvailableLanguages);
+                if (parsed.Languages.Count == 0)
+                {
+                    parsed.Languages.Add(spa.DefaultLanguage);
+                }
 
                 foreach (Files.Models.Spa.SpaAchievement achievement in spa.SpaAchievements)
                 {
                     string description = spa.GetString(language, achievement.DescriptionId);
                     string lockedDescription = spa.GetString(language, achievement.UnachievedId);
                     byte[]? image = spa.GetImage(achievement.ImageId)?.ImageData;
+                    Dictionary<XLanguage, AchievementText> texts = new Dictionary<XLanguage, AchievementText>();
+                    foreach (XLanguage textLanguage in parsed.Languages)
+                    {
+                        ushort textLanguageId = (ushort)textLanguage;
+                        string unlocked = spa.GetString(textLanguageId, achievement.DescriptionId);
+                        string locked = spa.GetString(textLanguageId, achievement.UnachievedId);
+                        texts[textLanguage] = new AchievementText(
+                            spa.GetString(textLanguageId, achievement.LabelId),
+                            unlocked,
+                            string.IsNullOrWhiteSpace(locked) ? unlocked : locked);
+                    }
+
                     parsed.AchievementList.Add(new SpaAchievementDetails(
                         spa.GetString(language, achievement.LabelId),
                         description,
                         string.IsNullOrWhiteSpace(lockedDescription) ? description : lockedDescription,
                         achievement.Gamerscore,
-                        image));
+                        image,
+                        texts));
                 }
 
                 foreach (Files.Models.Gpd.TitleEntry title in spa.Titles)
@@ -570,7 +665,8 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
         string Description,
         string LockedDescription,
         ushort Gamerscore,
-        byte[]? Image);
+        byte[]? Image,
+        IReadOnlyDictionary<XLanguage, AchievementText> Texts);
 
     private sealed class ParsedXex(
         string titleId,
@@ -598,6 +694,8 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
         public string SpaAchievements { get; set; } = string.Empty;
         public string SpaGamerscore { get; set; } = string.Empty;
         public byte[]? Icon { get; set; }
+        public XLanguage DefaultLanguage { get; set; } = XLanguage.English;
+        public List<XLanguage> Languages { get; } = [];
         public List<SpaAchievementDetails> AchievementList { get; } = [];
         public List<XexTitleRow> Titles { get; } = [];
         public List<XexContextRow> Contexts { get; } = [];
@@ -627,6 +725,7 @@ public partial class XexFileDialogViewModel : ViewModelBase, IDisposable
         }
 
         Achievements.Clear();
+        AchievementLanguages.Clear();
         Titles.Clear();
         Contexts.Clear();
         Properties.Clear();
