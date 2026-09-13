@@ -1453,4 +1453,13 @@
 
     <!-- Text File Dialog -->
     <sys:String x:Key="TextFileDialog.Encoding.Label">Encoding</sys:String>
+
+    <!-- Game Files Open -->
+    <sys:String x:Key="GameFilesDialog.Open.Menu">Open</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">Cannot Preview File</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">No preview is available for this file.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">File Too Large</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">The file is too large to preview as text.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">Cannot Open File</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">Failed to open '{0}': {1}</sys:String>
 </ResourceDictionary>
