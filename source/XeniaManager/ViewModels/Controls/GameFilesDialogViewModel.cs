@@ -86,6 +86,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     private readonly Dictionary<string, GameFileTreeNode> _nodeLookup = new Dictionary<string, GameFileTreeNode>(StringComparer.OrdinalIgnoreCase);
     private IGameFileSource? _source;
     private int _detailsLoadId;
+    private byte[]? _xexIconBytes;
     private CancellationTokenSource? _searchCts;
     private const int SearchDebounceMs = 150;
     private bool _disposed;
@@ -193,6 +194,12 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
     /// <summary>XEX version (hex).</summary>
     [ObservableProperty] private string _xexVersion = string.Empty;
+
+    /// <summary>XEX base version (hex).</summary>
+    [ObservableProperty] private string _xexBaseVersion = string.Empty;
+
+    /// <summary>XEX executable type (Retail/Debug).</summary>
+    [ObservableProperty] private string _xexExecutableType = string.Empty;
 
     /// <summary>XEX disc number / total.</summary>
     [ObservableProperty] private string _xexDisc = string.Empty;
@@ -628,6 +635,69 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         }
 
         await PickAndExtractFilesAsync(files);
+    }
+
+    /// <summary>
+    /// Saves the selected XEX icon to a user-chosen PNG file.
+    /// </summary>
+    [RelayCommand]
+    private async Task ExtractXexIcon()
+    {
+        if (_disposed || SelectedEntry is not { IsFile: true } file || _xexIconBytes == null)
+        {
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.Extract.NoSelection.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.Extract.NoSelection.Message"),
+                owner: OwnerWindow);
+            return;
+        }
+
+        if ((OwnerWindow ?? App.MainWindow)?.StorageProvider is not { } storageProvider)
+        {
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameFilesDialog.MissingStorageProvider.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.MissingStorageProvider.Message"),
+                owner: OwnerWindow);
+            return;
+        }
+
+        IStorageFile? picked = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = LocalizationHelper.GetText("GameFilesDialog.XexIcon.FilePicker.Title"),
+            FileTypeChoices =
+            [
+                new FilePickerFileType("PNG image")
+                {
+                    Patterns = ["*.png"]
+                }
+            ],
+            SuggestedFileName = Path.GetFileNameWithoutExtension(file.Name) + ".png",
+            DefaultExtension = "png",
+            ShowOverwritePrompt = true
+        });
+        if (picked == null || _disposed)
+        {
+            return;
+        }
+
+        try
+        {
+            string outputPath = picked.Path.LocalPath;
+            await File.WriteAllBytesAsync(outputPath, _xexIconBytes);
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.XexIcon.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameFilesDialog.XexIcon.Success.Message"), outputPath),
+                owner: OwnerWindow);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameFilesDialogViewModel>($"Failed to save XEX icon for '{file.FullPath}'");
+            Logger.LogExceptionDetails<GameFilesDialogViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameFilesDialog.XexIcon.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("GameFilesDialog.XexIcon.Failed.Message"), ex.Message),
+                owner: OwnerWindow);
+        }
     }
 
     private static void CollectFiles(GameFileTreeNode node, List<GameFileNode> files)
@@ -1171,9 +1241,12 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         XexTitleId = string.Empty;
         XexMediaId = string.Empty;
         XexVersion = string.Empty;
+        XexBaseVersion = string.Empty;
+        XexExecutableType = string.Empty;
         XexDisc = string.Empty;
         XexImageSize = string.Empty;
         XexModuleFlags = string.Empty;
+        _xexIconBytes = null;
         SpaTitle = string.Empty;
         SpaAchievements = string.Empty;
         SpaGamerscore = string.Empty;
@@ -1241,9 +1314,12 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             XexTitleId = details.TitleId;
             XexMediaId = details.MediaId;
             XexVersion = details.Version;
+            XexBaseVersion = details.BaseVersion;
+            XexExecutableType = details.ExecutableType;
             XexDisc = details.Disc;
             XexImageSize = details.ImageSize;
             XexModuleFlags = details.ModuleFlags;
+            _xexIconBytes = details.Icon;
             SpaTitle = details.SpaTitle;
             SpaAchievements = details.Achievements;
             SpaGamerscore = details.Gamerscore;
@@ -1482,10 +1558,20 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             }
 
             string version = "–";
+            string baseVersion = "–";
+            string executableType = "–";
             string disc = "–";
             if (xex.Execution.HasValue)
             {
                 version = $"0x{xex.Execution.Value.Version:X8}";
+                baseVersion = $"0x{xex.Execution.Value.BaseVersion:X8}";
+                executableType = xex.Execution.Value.ExecutableType switch
+                {
+                    0x00 => "Retail",
+                    0x01 => "Debug",
+                    0x02 => "Debug Retail",
+                    _ => $"Unknown (0x{xex.Execution.Value.ExecutableType:X2})"
+                };
                 disc = $"{xex.Execution.Value.DiscNum} / {xex.Execution.Value.DiscTotal}";
             }
 
@@ -1518,6 +1604,8 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 xex.TitleId,
                 xex.MediaId,
                 version,
+                baseVersion,
+                executableType,
                 disc,
                 FileSizeFormatter.FormatBytes(xex.SecurityInfo.ImageSize),
                 $"0x{xex.Header.ModuleFlags:X8}",
@@ -1540,6 +1628,8 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         string TitleId,
         string MediaId,
         string Version,
+        string BaseVersion,
+        string ExecutableType,
         string Disc,
         string ImageSize,
         string ModuleFlags,

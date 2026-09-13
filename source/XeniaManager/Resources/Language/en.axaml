@@ -1465,4 +1465,14 @@
 
     <!-- GPD Viewer Dialog -->
     <sys:String x:Key="GpdViewerDialog.Entries.Header">Entries</sys:String>
+
+    <!-- Game Files XEX -->
+    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">Base version</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">Executable type</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Button">Save icon...</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">Save XEX Icon</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">Icon Saved</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">Saved icon to '{0}'.</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">Icon Save Failed</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">Failed to save icon: {0}</sys:String>
 </ResourceDictionary>

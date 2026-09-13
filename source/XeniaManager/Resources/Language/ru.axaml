@@ -1465,4 +1465,14 @@
 
     <!-- GPD Viewer Dialog -->
     <sys:String x:Key="GpdViewerDialog.Entries.Header">#NOTTRANSLATED#</sys:String>
+
+    <!-- Game Files XEX -->
+    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>
