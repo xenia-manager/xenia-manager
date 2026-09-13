@@ -229,6 +229,16 @@
                                     <Run Text="{Binding XexVersion}" />
                                 </TextBlock>
                                 <TextBlock FontSize="12">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.BaseVersion}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding XexBaseVersion}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12">
+                                    <Run Text="{DynamicResource GameFilesDialog.Details.ExecutableType}" />
+                                    <Run Text=": " />
+                                    <Run Text="{Binding XexExecutableType}" />
+                                </TextBlock>
+                                <TextBlock FontSize="12">
                                     <Run Text="{DynamicResource GameFilesDialog.Details.Disc}" />
                                     <Run Text=": " />
                                     <Run Text="{Binding XexDisc}" />
@@ -243,6 +253,11 @@
                                     <Run Text=": " />
                                     <Run Text="{Binding XexModuleFlags}" />
                                 </TextBlock>
+                                <Button Content="{DynamicResource GameFilesDialog.XexIcon.Button}"
+                                        Command="{Binding ExtractXexIconCommand}"
+                                        IsVisible="{Binding HasSelectedIcon}"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,6,0,0" />
                             </StackPanel>
 
                             <!-- STFS details -->
