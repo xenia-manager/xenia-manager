@@ -44,6 +44,12 @@ public partial class GameFilesDialog : UserControl
     }
 
     /// <summary>
+    /// Opens the selected entry when a tree row is double-tapped.
+    /// Double-taps on folder headers are already handled by the tree itself (expand/collapse).
+    /// </summary>
+    private void OnTreeDoubleTapped(object? sender, TappedEventArgs e) => _viewModel?.OpenSelectedEntryCommand.Execute(null);
+
+    /// <summary>
     /// Shows the game files dialog for the given game path.
     /// </summary>
     /// <param name="gamePath">The resolved game file or directory to browse.</param>

@@ -1453,4 +1453,13 @@
 
     <!-- Text File Dialog -->
     <sys:String x:Key="TextFileDialog.Encoding.Label">#NOTTRANSLATED#</sys:String>
+
+    <!-- Game Files Open -->
+    <sys:String x:Key="GameFilesDialog.Open.Menu">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>

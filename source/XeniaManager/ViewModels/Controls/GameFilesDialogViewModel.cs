@@ -13,6 +13,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Controls;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Files;
@@ -76,7 +77,9 @@ public sealed class SpaAchievementRow
 public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 {
     private const int MaxPreviewBytes = 64 * 1024 * 1024;
+    private const int MaxTextPreviewBytes = 1024 * 1024;
     private static readonly string[] PreviewableExtensions = [".png", ".jpg", ".jpeg", ".bmp"];
+    private static readonly string[] TextPreviewExtensions = [".txt", ".ini", ".cfg", ".json", ".log", ".xml"];
 
     private readonly string _gamePath;
     private readonly IMessageBoxService _messageBoxService;
@@ -130,6 +133,15 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
     /// <summary>Whether the details pane is visible.</summary>
     [ObservableProperty] private bool _hasSelection;
+
+    /// <summary>Whether exactly one file is selected and can be opened.</summary>
+    public bool IsFileSelected
+    {
+        get
+        {
+            return SelectedEntry is { IsFile: true };
+        }
+    }
 
     /// <summary>Whether the current tree selection holds anything that can be extracted.</summary>
     public bool HasExtractSelection
@@ -514,6 +526,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     private void OnSelectedTreeNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(HasExtractSelection));
+        OnPropertyChanged(nameof(IsFileSelected));
         if (SelectedTreeNodes.Count == 1)
         {
             GameFileNode single = SelectedTreeNodes[0].Entry;
@@ -744,6 +757,162 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         return outputPath;
     }
 
+    /// <summary>
+    /// Opens the selected file in the matching viewer (text, nested container).
+    /// Images and XEX files are already covered by the details pane.
+    /// Double-taps on folders are handled by the tree itself (expand/collapse).
+    /// </summary>
+    [RelayCommand]
+    private async Task OpenSelectedEntry()
+    {
+        if (_disposed || _source == null || SelectedEntry is not { IsFile: true } file)
+        {
+            return;
+        }
+
+        string extension = Path.GetExtension(file.Name).ToLowerInvariant();
+        if (TextPreviewExtensions.Contains(extension))
+        {
+            await OpenTextFileAsync(file);
+            return;
+        }
+
+        if (PreviewableExtensions.Contains(extension) || extension.Equals(".xex", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        await OpenNestedContainerAsync(file);
+    }
+
+    private async Task OpenTextFileAsync(GameFileNode file)
+    {
+        IGameFileSource? source = _source;
+        if (source == null)
+        {
+            return;
+        }
+
+        byte[]? bytes = await Task.Run(() => source.ReadFile(file.FullPath));
+        if (_disposed || bytes == null)
+        {
+            return;
+        }
+
+        if (bytes.Length > MaxTextPreviewBytes)
+        {
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Message"),
+                owner: OwnerWindow);
+            return;
+        }
+
+        string text;
+        string encodingName;
+        using (MemoryStream stream = new MemoryStream(bytes, false))
+        {
+            using StreamReader reader = new StreamReader(stream, System.Text.Encoding.UTF8, true);
+            text = await reader.ReadToEndAsync();
+            encodingName = reader.CurrentEncoding.WebName;
+        }
+
+        if (_disposed)
+        {
+            return;
+        }
+
+        await TextFileDialog.ShowAsync(file.Name, text, encodingName);
+    }
+
+    private async Task OpenNestedContainerAsync(GameFileNode file)
+    {
+        IGameFileSource? source = _source;
+        if (source == null)
+        {
+            return;
+        }
+
+        string? tempPath = null;
+        try
+        {
+            tempPath = await Task.Run(() =>
+            {
+                byte[]? data = source.ReadFile(file.FullPath);
+                if (data == null || !HasStfsMagic(data))
+                {
+                    return null;
+                }
+
+                string directory = Path.Combine(Path.GetTempPath(), "XeniaManager", "GameFiles", Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(directory);
+                string path = Path.Combine(directory, $"nested-{Guid.NewGuid():N}{Path.GetExtension(file.Name)}");
+                File.WriteAllBytes(path, data);
+                return path;
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameFilesDialogViewModel>($"Failed to open nested container '{file.FullPath}'");
+            Logger.LogExceptionDetails<GameFilesDialogViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Failed.Message"), file.Name, ex.Message),
+                owner: OwnerWindow);
+            return;
+        }
+
+        if (_disposed || tempPath == null)
+        {
+            DeleteTempFile(tempPath);
+            if (!_disposed && tempPath == null)
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Unsupported.Title"),
+                    LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Unsupported.Message"),
+                    owner: OwnerWindow);
+            }
+
+            return;
+        }
+
+        try
+        {
+            await GameFilesDialog.ShowAsync(tempPath, file.Name);
+        }
+        finally
+        {
+            DeleteTempFile(tempPath);
+        }
+    }
+
+    private static void DeleteTempFile(string? tempPath)
+    {
+        if (string.IsNullOrEmpty(tempPath))
+        {
+            return;
+        }
+
+        try
+        {
+            File.Delete(tempPath);
+            string? directory = Path.GetDirectoryName(tempPath);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                Directory.Delete(directory);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameFilesDialogViewModel>($"Failed to clean up nested container temp file '{tempPath}': {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Checks the STFS package magic (CON, PIRS or LIVE) at the start of the data.
+    /// </summary>
+    private static bool HasStfsMagic(byte[] bytes) => bytes.Length >= 4 && System.Text.Encoding.ASCII.GetString(bytes, 0, 4) is "CON " or "PIRS" or "LIVE";
+
     partial void OnSearchTextChanged(string value)
     {
         // Debounce: each keystroke runs a full tree walk + TreeView layout on the
@@ -828,6 +997,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     partial void OnSelectedEntryChanged(GameFileNode? value)
     {
         OnPropertyChanged(nameof(HasExtractSelection));
+        OnPropertyChanged(nameof(IsFileSelected));
         _ = LoadDetailsAsync(value, ++_detailsLoadId);
     }
 
@@ -1182,8 +1352,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 return null;
             }
 
-            string magic = System.Text.Encoding.ASCII.GetString(bytes, 0, 4);
-            if (magic is not ("CON " or "PIRS" or "LIVE"))
+            if (!HasStfsMagic(bytes))
             {
                 return null;
             }
