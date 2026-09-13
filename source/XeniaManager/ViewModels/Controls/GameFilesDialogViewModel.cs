@@ -782,6 +782,12 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             return;
         }
 
+        if (extension.Equals(".gpd", StringComparison.OrdinalIgnoreCase))
+        {
+            await OpenGpdFileAsync(file);
+            return;
+        }
+
         await OpenNestedContainerAsync(file);
     }
 
@@ -823,6 +829,51 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         }
 
         await TextFileDialog.ShowAsync(file.Name, text, encodingName);
+    }
+
+    private async Task OpenGpdFileAsync(GameFileNode file)
+    {
+        IGameFileSource? source = _source;
+        if (source == null)
+        {
+            return;
+        }
+
+        GpdFile? gpd = null;
+        try
+        {
+            gpd = await Task.Run(() =>
+            {
+                byte[]? data = source.ReadFile(file.FullPath);
+                return data == null ? null : GpdFile.FromBytes(data);
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameFilesDialogViewModel>($"Failed to parse GPD '{file.FullPath}'");
+            Logger.LogExceptionDetails<GameFilesDialogViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Failed.Message"), file.Name, ex.Message),
+                owner: OwnerWindow);
+            return;
+        }
+
+        if (_disposed || gpd == null)
+        {
+            gpd?.Dispose();
+            if (!_disposed)
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Unsupported.Title"),
+                    LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Unsupported.Message"),
+                    owner: OwnerWindow);
+            }
+
+            return;
+        }
+
+        await GpdViewerDialog.ShowAsync(file.Name, gpd);
     }
 
     private async Task OpenNestedContainerAsync(GameFileNode file)

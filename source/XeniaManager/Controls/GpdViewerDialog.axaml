@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:itemsvm="using:XeniaManager.ViewModels.Items"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="700"
+             d:DesignHeight="500"
+             x:Class="XeniaManager.Controls.GpdViewerDialog"
+             x:DataType="vm:GpdViewerDialogViewModel"
+             Width="700">
+
+    <ScrollViewer MaxHeight="450"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Spacing="4">
+            <TextBlock Text="{DynamicResource GameFilesDialog.Details.Achievements}"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,2"
+                       IsVisible="{Binding HasAchievements}" />
+            <ItemsControl ItemsSource="{Binding Achievements}"
+                          IsVisible="{Binding HasAchievements}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="itemsvm:AchievementViewModel">
+                        <Grid ColumnDefinitions="Auto,*,Auto"
+                              Margin="0,4">
+                            <Panel Grid.Column="0"
+                                   Width="32"
+                                   Height="32"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0">
+                                <Image Source="{Binding AchievementImage}"
+                                       IsVisible="{Binding HasAchievementImage}"
+                                       Stretch="Uniform" />
+                                <fluent:SymbolIcon Symbol="Trophy"
+                                                   VerticalAlignment="Center"
+                                                   IsVisible="{Binding !HasAchievementImage}">
+                                    <fluent:SymbolIcon.Foreground>
+                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                    </fluent:SymbolIcon.Foreground>
+                                </fluent:SymbolIcon>
+                            </Panel>
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Spacing="2">
+                                <TextBlock Text="{Binding Name}"
+                                           FontWeight="SemiBold"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding Description}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap">
+                                    <TextBlock.Foreground>
+                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2"
+                                        VerticalAlignment="Center"
+                                        Margin="8,0,0,0"
+                                        Spacing="2">
+                                <TextBlock Text="{Binding Gamerscore, StringFormat={}{0}G}"
+                                           FontWeight="SemiBold"
+                                           HorizontalAlignment="Right" />
+                                <TextBlock Text="{Binding UnlockDateDisplay}"
+                                           FontSize="12"
+                                           HorizontalAlignment="Right">
+                                    <TextBlock.Foreground>
+                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="{DynamicResource GpdViewerDialog.Entries.Header}"
+                       FontWeight="SemiBold"
+                       Margin="0,8,0,2"
+                       IsVisible="{Binding HasEntries}" />
+            <ItemsControl ItemsSource="{Binding Entries}"
+                          IsVisible="{Binding HasEntries}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:GpdEntryRow">
+                        <Grid ColumnDefinitions="*,Auto,Auto"
+                              Margin="0,2">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding Namespace}"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding Id}"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0" />
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Size}"
+                                       FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0">
+                                <TextBlock.Foreground>
+                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
