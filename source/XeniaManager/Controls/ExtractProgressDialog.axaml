@@ -1,0 +1,161 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d"
+             d:DesignWidth="500"
+             x:Class="XeniaManager.Controls.ExtractProgressDialog"
+             x:DataType="vm:ExtractProgressDialogViewModel"
+             Width="500">
+    <UserControl.Styles>
+        <!-- Progress bar style -->
+        <Style Selector="ProgressBar.extract-progress">
+            <Setter Property="Height"
+                    Value="8" />
+            <Setter Property="Margin"
+                    Value="0,16,0,8" />
+            <Setter Property="ShowProgressText"
+                    Value="False" />
+        </Style>
+
+        <!-- Status text style -->
+        <Style Selector="TextBlock.status-text">
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="Margin"
+                    Value="0,8,0,4" />
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
+        </Style>
+
+        <!-- Current file style -->
+        <Style Selector="TextBlock.file-text">
+            <Setter Property="FontSize"
+                    Value="11" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="Margin"
+                    Value="0,4,0,8" />
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
+            <Setter Property="TextTrimming"
+                    Value="CharacterEllipsis" />
+        </Style>
+
+        <!-- Statistics panel style -->
+        <Style Selector="StackPanel.statistics">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="Spacing"
+                    Value="16" />
+            <Setter Property="Margin"
+                    Value="0,8" />
+        </Style>
+
+        <!-- Stat item style -->
+        <Style Selector="StackPanel.stat-item">
+            <Setter Property="Orientation"
+                    Value="Vertical" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <!-- Stat value style -->
+        <Style Selector="TextBlock.stat-value">
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <!-- Stat label style -->
+        <Style Selector="TextBlock.stat-label">
+            <Setter Property="FontSize"
+                    Value="10" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <!-- Stat value color for extracted -->
+        <Style Selector="TextBlock.stat-value-extracted">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource SystemAccentColorLight1Brush}" />
+        </Style>
+
+        <!-- Stat value color for failed -->
+        <Style Selector="TextBlock.stat-value-failed">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ErrorFillColorPrimaryBrush}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="20,0,20,20"
+          RowDefinitions="Auto,Auto,Auto">
+        <!-- Icon and Title -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Spacing="12">
+            <fluent:SymbolIcon Symbol="ArrowExport"
+                               FontSize="32">
+                <fluent:SymbolIcon.Foreground>
+                    <DynamicResource ResourceKey="AccentTextFillColorPrimaryBrush" />
+                </fluent:SymbolIcon.Foreground>
+            </fluent:SymbolIcon>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="{DynamicResource ExtractProgressDialog.Title}"
+                           FontSize="18"
+                           FontWeight="SemiBold" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Progress Bar -->
+        <ProgressBar Grid.Row="1"
+                     Value="{Binding ProgressValue}"
+                     Classes="extract-progress" />
+
+        <!-- Status Information -->
+        <StackPanel Grid.Row="2"
+                    Spacing="4">
+            <!-- Status Message -->
+            <TextBlock Text="{Binding StatusMessage}"
+                       Classes="status-text" />
+
+            <!-- Current File -->
+            <TextBlock Text="{Binding CurrentFile}"
+                       Classes="file-text"
+                       ToolTip.Tip="{Binding CurrentFile}" />
+
+            <!-- Statistics -->
+            <StackPanel Classes="statistics">
+                <!-- Extracted / Total -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Classes="stat-value">
+                        <Run Text="{Binding FilesExtracted}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding TotalFiles}" />
+                    </TextBlock>
+                    <TextBlock Text="{DynamicResource ExtractProgressDialog.Statistics.Extracted}"
+                               Classes="stat-label" />
+                </StackPanel>
+
+                <!-- Failed -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Text="{Binding FilesFailed}"
+                               Classes="stat-value stat-value-failed" />
+                    <TextBlock Text="{DynamicResource ExtractProgressDialog.Statistics.Failed}"
+                               Classes="stat-label" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1451,6 +1451,14 @@
     <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">Extracted {0} of {1} files to '{2}'.</sys:String>
     <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">Extracted {0} of {1} files. First error: {2}</sys:String>
 
+    <!-- Extract Progress Dialog -->
+    <sys:String x:Key="ExtractProgressDialog.Title">Extracting Files</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">Extracting file {0} of {1}</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Error">Extraction failed: {0}</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">Extracted</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">Failed</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Button.Close">Close</sys:String>
+
     <!-- Text File Dialog -->
     <sys:String x:Key="TextFileDialog.Encoding.Label">Encoding</sys:String>
 
