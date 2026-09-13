@@ -1450,4 +1450,7 @@
     <sys:String x:Key="GameFilesDialog.ExtractAll.Button">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">#NOTTRANSLATED#</sys:String>
+
+    <!-- Text File Dialog -->
+    <sys:String x:Key="TextFileDialog.Encoding.Label">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>
