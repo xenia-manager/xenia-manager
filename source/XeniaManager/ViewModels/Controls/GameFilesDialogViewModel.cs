@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
@@ -79,6 +80,8 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     private readonly Dictionary<string, GameFileTreeNode> _nodeLookup = new Dictionary<string, GameFileTreeNode>(StringComparer.OrdinalIgnoreCase);
     private IGameFileSource? _source;
     private int _detailsLoadId;
+    private CancellationTokenSource? _searchCts;
+    private const int SearchDebounceMs = 150;
     private bool _disposed;
 
     /// <summary>
@@ -548,7 +551,23 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         }
     }
 
-    partial void OnSearchTextChanged(string value) => ApplyTreeFilter(value);
+    partial void OnSearchTextChanged(string value)
+    {
+        // Debounce: each keystroke runs a full tree walk + TreeView layout on the
+        // UI thread, so only filter once typing settles (same pattern as LibraryPageViewModel).
+        _searchCts?.Cancel();
+        _searchCts?.Dispose();
+        _searchCts = new CancellationTokenSource();
+        CancellationToken token = _searchCts.Token;
+
+        Task.Delay(SearchDebounceMs, token).ContinueWith(_ =>
+        {
+            if (!token.IsCancellationRequested && !_disposed && value == SearchText)
+            {
+                ApplyTreeFilter(value);
+            }
+        }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
 
     private void ApplyTreeFilter(string? query)
     {
