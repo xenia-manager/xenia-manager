@@ -277,68 +277,75 @@
             <Expander IsVisible="{Binding HasAchievements}"
                       Margin="0,8,0,0">
                 <Expander.Header>
-                    <Grid ColumnDefinitions="Auto,*,Auto">
-                        <TextBlock Grid.Column="0"
-                                   Text="{DynamicResource GameFilesDialog.Details.Achievements}"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center" />
-                        <ToggleSwitch Grid.Column="2"
-                                      IsChecked="{Binding ShowUnlockedAchievements, Mode=TwoWay}"
-                                      OffContent="{DynamicResource XexFileDialog.Achievements.Locked}"
-                                      OnContent="{DynamicResource XexFileDialog.Achievements.Unlocked}" />
-                    </Grid>
+                    <TextBlock Text="{DynamicResource GameFilesDialog.Details.Achievements}"
+                               FontWeight="SemiBold" />
                 </Expander.Header>
                 <Expander.Content>
-                    <ItemsControl ItemsSource="{Binding Achievements}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="vm:SpaAchievementRow">
-                                <Grid ColumnDefinitions="Auto,*,Auto"
-                                      Margin="0,4">
-                                    <Panel Grid.Column="0"
-                                           Width="32"
-                                           Height="32"
-                                           VerticalAlignment="Center"
-                                           Margin="0,0,8,0">
-                                        <Image Source="{Binding DisplayImage}"
-                                               IsVisible="{Binding HasDisplayImage}"
-                                               Stretch="Uniform" />
-                                        <fluent:SymbolIcon Symbol="Trophy"
-                                                           VerticalAlignment="Center"
-                                                           IsVisible="{Binding !HasDisplayImage}">
-                                            <fluent:SymbolIcon.Foreground>
-                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                            </fluent:SymbolIcon.Foreground>
-                                        </fluent:SymbolIcon>
-                                    </Panel>
-                                    <StackPanel Grid.Column="1"
+                    <StackPanel Spacing="4">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding AchievementLanguages}"
+                                      SelectedItem="{Binding SelectedAchievementLanguage, Mode=TwoWay}"
+                                      IsVisible="{Binding HasMultipleAchievementLanguages}"
+                                      VerticalAlignment="Center"
+                                      MinWidth="150" />
+                            <ToggleSwitch Grid.Column="2"
+                                          IsChecked="{Binding ShowUnlockedAchievements, Mode=TwoWay}"
+                                          OffContent="{DynamicResource XexFileDialog.Achievements.Locked}"
+                                          OnContent="{DynamicResource XexFileDialog.Achievements.Unlocked}"
+                                          VerticalAlignment="Center" />
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding Achievements}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:SpaAchievementRow">
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          Margin="0,4">
+                                        <Panel Grid.Column="0"
+                                               Width="32"
+                                               Height="32"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,8,0">
+                                            <Image Source="{Binding DisplayImage}"
+                                                   IsVisible="{Binding HasDisplayImage}"
+                                                   Stretch="Uniform" />
+                                            <fluent:SymbolIcon Symbol="Trophy"
+                                                               VerticalAlignment="Center"
+                                                               IsVisible="{Binding !HasDisplayImage}">
+                                                <fluent:SymbolIcon.Foreground>
+                                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                                </fluent:SymbolIcon.Foreground>
+                                            </fluent:SymbolIcon>
+                                        </Panel>
+                                        <StackPanel Grid.Column="1"
+                                                    VerticalAlignment="Center"
+                                                    Spacing="2">
+                                            <TextBlock Text="{Binding DisplayName}"
+                                                       FontWeight="SemiBold"
+                                                       TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding DisplayDescription}"
+                                                       FontSize="12"
+                                                       TextWrapping="Wrap">
+                                                <TextBlock.Foreground>
+                                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                                </TextBlock.Foreground>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <Border Grid.Column="2"
+                                                Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                                CornerRadius="4"
+                                                Padding="6,2"
                                                 VerticalAlignment="Center"
-                                                Spacing="2">
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontWeight="SemiBold"
-                                                   TextWrapping="Wrap" />
-                                        <TextBlock Text="{Binding DisplayDescription}"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap">
-                                            <TextBlock.Foreground>
-                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                            </TextBlock.Foreground>
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <Border Grid.Column="2"
-                                            Background="{DynamicResource AccentFillColorDefaultBrush}"
-                                            CornerRadius="4"
-                                            Padding="6,2"
-                                            VerticalAlignment="Center"
-                                            Margin="8,0,0,0">
-                                        <TextBlock Text="{Binding Gamerscore, StringFormat={}{0}G}"
-                                                   FontSize="11"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
-                                    </Border>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                                Margin="8,0,0,0">
+                                            <TextBlock Text="{Binding Gamerscore, StringFormat={}{0}G}"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </Expander.Content>
             </Expander>
 
