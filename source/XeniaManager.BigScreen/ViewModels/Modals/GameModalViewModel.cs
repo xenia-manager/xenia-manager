@@ -126,7 +126,7 @@ public partial class GameModalViewModel : ModalViewModelBase
 
     /// <summary>
     /// The Y hint label: creating the achievements from the game files when
-    /// the achievements pane is empty, fetching their images otherwise.
+    /// the achievements pane is empty, opening the fetch picker otherwise.
     /// Empty when the shown pane has no Y action.
     /// </summary>
     public string YHintText
@@ -137,7 +137,7 @@ public partial class GameModalViewModel : ModalViewModelBase
             {
                 return achievements.ShowEmpty
                     ? LocalizationHelper.GetText("GameModal.Hint.FetchAchievements")
-                    : LocalizationHelper.GetText("GameModal.Hint.FetchImages");
+                    : LocalizationHelper.GetText("GameModal.Hint.Fetch");
             }
 
             return string.Empty;

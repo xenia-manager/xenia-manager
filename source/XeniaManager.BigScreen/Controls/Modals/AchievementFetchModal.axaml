@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.BigScreen.ViewModels.Modals"
+             xmlns:items="using:XeniaManager.BigScreen.ViewModels.Items"
+             mc:Ignorable="d"
+             d:DesignWidth="1920"
+             d:DesignHeight="1080"
+             x:Class="XeniaManager.BigScreen.Controls.Modals.AchievementFetchModal"
+             x:DataType="vm:AchievementFetchViewModel">
+
+    <Grid>
+        <!-- The fetch picker's own backdrop: fills the whole content area,
+             the prompt card sits centered on top of it -->
+        <Border Background="{DynamicResource ModalCardScrim}" />
+
+        <!-- PROMPT CARD: consistent size, anchored center -->
+        <Border Classes="modal-card"
+                Width="640"
+                MinHeight="300"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <Grid RowDefinitions="Auto, Auto, *">
+
+                <!-- HEADER -->
+                <TextBlock Grid.Row="0"
+                           Text="{Binding Title}"
+                           Classes="modal-title"
+                           Margin="0,0,0,25" />
+
+                <!-- MESSAGE: top-left aligned -->
+                <TextBlock Grid.Row="1"
+                           Text="{Binding Message}"
+                           Classes="modal-message" />
+
+                <!-- OPTIONS: vertical list, one button per fetch choice -->
+                <ItemsControl x:Name="OptionList"
+                              Grid.Row="2"
+                              ItemsSource="{Binding Options}"
+                              Margin="0,25,0,0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="items:AchievementFetchOptionItemViewModel">
+                            <Button Classes="option-button"
+                                    Classes.selected="{Binding IsSelected}"
+                                    Content="{Binding Label}"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="0,0,0,12" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
