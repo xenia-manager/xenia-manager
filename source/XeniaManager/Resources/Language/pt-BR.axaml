@@ -1451,6 +1451,14 @@
     <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">#NOTTRANSLATED#</sys:String>
 
+    <!-- Extract Progress Dialog -->
+    <sys:String x:Key="ExtractProgressDialog.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Error">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Button.Close">#NOTTRANSLATED#</sys:String>
+
     <!-- Text File Dialog -->
     <sys:String x:Key="TextFileDialog.Encoding.Label">#NOTTRANSLATED#</sys:String>
 

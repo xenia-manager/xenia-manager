@@ -631,32 +631,37 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         EventManager.Instance.DisableWindow();
         try
         {
-            (extracted, firstError) = await Task.Run(() =>
-            {
-                int done = 0;
-                string? error = null;
-                foreach (GameFileNode file in files)
+            (extracted, firstError) = await ExtractProgressDialog.ShowAsync(progress =>
+                Task.Run(() =>
                 {
-                    try
+                    int done = 0;
+                    int failed = 0;
+                    string? error = null;
+                    foreach (GameFileNode file in files)
                     {
-                        byte[]? bytes = source.ReadFile(file.FullPath);
-                        if (bytes == null)
+                        try
                         {
-                            throw new IOException($"File '{file.FullPath}' could not be read from the container.");
+                            byte[]? bytes = source.ReadFile(file.FullPath);
+                            if (bytes == null)
+                            {
+                                throw new IOException($"File '{file.FullPath}' could not be read from the container.");
+                            }
+
+                            WriteExtractedFile(outputDir, file.FullPath, bytes);
+                            done++;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Trace<GameFilesDialogViewModel>($"Failed to extract '{file.FullPath}': {ex.Message}");
+                            error ??= ex.Message;
+                            failed++;
                         }
 
-                        WriteExtractedFile(outputDir, file.FullPath, bytes);
-                        done++;
+                        progress(new ExtractionProgress(done, files.Count, file.FullPath, failed));
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.Trace<GameFilesDialogViewModel>($"Failed to extract '{file.FullPath}': {ex.Message}");
-                        error ??= ex.Message;
-                    }
-                }
 
-                return (done, error);
-            });
+                    return (done, error);
+                }));
         }
         finally
         {
