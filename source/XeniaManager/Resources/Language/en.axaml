@@ -1450,4 +1450,7 @@
     <sys:String x:Key="GameFilesDialog.ExtractAll.Button">Extract all</sys:String>
     <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">Extracted {0} of {1} files to '{2}'.</sys:String>
     <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">Extracted {0} of {1} files. First error: {2}</sys:String>
+
+    <!-- Text File Dialog -->
+    <sys:String x:Key="TextFileDialog.Encoding.Label">Encoding</sys:String>
 </ResourceDictionary>
