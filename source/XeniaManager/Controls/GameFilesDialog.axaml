@@ -22,15 +22,27 @@
     </UserControl.Styles>
 
     <Grid RowDefinitions="Auto,380,Auto">
-        <!-- Search + Open -->
+        <!-- Search + Extract + Open -->
         <Grid Grid.Row="0"
-              ColumnDefinitions="*,Auto"
+              ColumnDefinitions="*,Auto,Auto"
               Margin="0,0,0,8">
             <TextBox Grid.Column="0"
                      Text="{Binding SearchText, Mode=TwoWay}"
                      PlaceholderText="{DynamicResource GameFilesDialog.Search.Watermark}"
                      VerticalAlignment="Stretch" />
             <Button Grid.Column="1"
+                    Command="{Binding ExtractAllCommand}"
+                    IsVisible="{Binding HasContent}"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Stretch"
+                    Padding="12,8">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="6">
+                    <fluent:SymbolIcon Symbol="ArrowExport" />
+                    <TextBlock Text="{DynamicResource GameFilesDialog.ExtractAll.Button}" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="2"
                     Command="{Binding OpenExplorerFolderCommand}"
                     Margin="8,0,0,0"
                     VerticalAlignment="Stretch"
@@ -58,6 +70,17 @@
                               BorderThickness="0"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto"
                               ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <TreeView.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuItem Header="{DynamicResource GameFilesDialog.ExtractFile.Menu}"
+                                          Command="{Binding ExtractSelectionCommand}"
+                                          IsVisible="{Binding HasExtractSelection}">
+                                    <MenuItem.Icon>
+                                        <fluent:SymbolIcon Symbol="ArrowExport" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuFlyout>
+                        </TreeView.ContextFlyout>
                         <TreeView.ItemTemplate>
                             <TreeDataTemplate x:DataType="vm:GameFileTreeNode"
                                               ItemsSource="{Binding Children}">

@@ -9,13 +9,16 @@ using System.Diagnostics;
 using System.IO;
 using Avalonia.Media.Imaging;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Files;
 using XeniaManager.Files.Browsing;
 using XeniaManager.Files.Models.Spa;
+using XeniaManager.Files.Utilities;
 using XeniaManager.Logging;
 using XeniaManager.Services;
 
@@ -127,6 +130,15 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
     /// <summary>Whether the details pane is visible.</summary>
     [ObservableProperty] private bool _hasSelection;
+
+    /// <summary>Whether the current tree selection holds anything that can be extracted.</summary>
+    public bool HasExtractSelection
+    {
+        get
+        {
+            return SelectedTreeNodes.Count > 0 || SelectedTreeNode != null;
+        }
+    }
 
     /// <summary>Selected entry display name.</summary>
     [ObservableProperty] private string _selectedName = string.Empty;
@@ -501,6 +513,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
     private void OnSelectedTreeNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        OnPropertyChanged(nameof(HasExtractSelection));
         if (SelectedTreeNodes.Count == 1)
         {
             GameFileNode single = SelectedTreeNodes[0].Entry;
@@ -549,6 +562,186 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 string.Format(LocalizationHelper.GetText("GameFilesDialog.ExplorerError.Message"), ex.Message),
                 owner: OwnerWindow);
         }
+    }
+
+    /// <summary>
+    /// Extracts the selected files and folders (folders with their structure) to a user-chosen folder.
+    /// </summary>
+    [RelayCommand]
+    private async Task ExtractSelection()
+    {
+        List<GameFileNode> files = [];
+        IEnumerable<GameFileTreeNode> nodes = SelectedTreeNodes.Count > 0
+            ? SelectedTreeNodes
+            : SelectedTreeNode is { } single
+                ? [single]
+                : [];
+        foreach (GameFileTreeNode node in nodes)
+        {
+            CollectFiles(node, files);
+        }
+
+        if (files.Count == 0)
+        {
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.Extract.NoSelection.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.Extract.NoSelection.Message"),
+                owner: OwnerWindow);
+            return;
+        }
+
+        await PickAndExtractFilesAsync(files.DistinctBy(f => f.FullPath, StringComparer.OrdinalIgnoreCase).ToList());
+    }
+
+    /// <summary>
+    /// Extracts the full container (with its structure) to a user-chosen folder.
+    /// </summary>
+    [RelayCommand]
+    private async Task ExtractAll()
+    {
+        if (!HasContent || _source == null)
+        {
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.Extract.NoSelection.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.Extract.NoSelection.Message"),
+                owner: OwnerWindow);
+            return;
+        }
+
+        List<GameFileNode> files = [];
+        foreach (GameFileTreeNode root in RootNodes)
+        {
+            CollectFiles(root, files);
+        }
+
+        await PickAndExtractFilesAsync(files);
+    }
+
+    private static void CollectFiles(GameFileTreeNode node, List<GameFileNode> files)
+    {
+        if (node.Entry.IsFile)
+        {
+            files.Add(node.Entry);
+            return;
+        }
+
+        foreach (GameFileTreeNode child in node.Children)
+        {
+            CollectFiles(child, files);
+        }
+    }
+
+    private async Task PickAndExtractFilesAsync(IReadOnlyList<GameFileNode> files)
+    {
+        string? pickedDir = await PickOutputFolderAsync();
+        if (pickedDir == null || _disposed)
+        {
+            return;
+        }
+
+        IGameFileSource? source = _source;
+        if (source == null)
+        {
+            return;
+        }
+
+        string outputDir = Path.GetFullPath(pickedDir);
+        int extracted;
+        string? firstError;
+        EventManager.Instance.DisableWindow();
+        try
+        {
+            (extracted, firstError) = await Task.Run(() =>
+            {
+                int done = 0;
+                string? error = null;
+                foreach (GameFileNode file in files)
+                {
+                    try
+                    {
+                        byte[]? bytes = source.ReadFile(file.FullPath);
+                        if (bytes == null)
+                        {
+                            throw new IOException($"File '{file.FullPath}' could not be read from the container.");
+                        }
+
+                        WriteExtractedFile(outputDir, file.FullPath, bytes);
+                        done++;
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameFilesDialogViewModel>($"Failed to extract '{file.FullPath}': {ex.Message}");
+                        error ??= ex.Message;
+                    }
+                }
+
+                return (done, error);
+            });
+        }
+        finally
+        {
+            EventManager.Instance.EnableWindow();
+        }
+
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (firstError == null)
+        {
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.Extract.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameFilesDialog.Extract.BatchSuccess.Message"), extracted, files.Count, outputDir),
+                owner: OwnerWindow);
+        }
+        else
+        {
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameFilesDialog.Extract.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("GameFilesDialog.Extract.BatchPartial.Message"), extracted, files.Count, firstError),
+                owner: OwnerWindow);
+        }
+    }
+
+    /// <summary>
+    /// Asks the user for an extraction output folder.
+    /// </summary>
+    /// <returns>The chosen folder path, or null when cancelled or unavailable.</returns>
+    private async Task<string?> PickOutputFolderAsync()
+    {
+        if ((OwnerWindow ?? App.MainWindow)?.StorageProvider is not { } storageProvider)
+        {
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameFilesDialog.MissingStorageProvider.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.MissingStorageProvider.Message"),
+                owner: OwnerWindow);
+            return null;
+        }
+
+        IReadOnlyList<IStorageFolder> folders = await storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = LocalizationHelper.GetText("GameFilesDialog.Extract.FolderPicker.Title")
+        });
+        return folders.Count == 0 ? null : folders[0].Path.LocalPath;
+    }
+
+    /// <summary>
+    /// Writes extracted bytes under the output directory, preserving container structure.
+    /// </summary>
+    /// <returns>The full output file path.</returns>
+    private static string WriteExtractedFile(string outputDir, string fullPath, byte[] bytes)
+    {
+        string outputPath = ArchiveExtractor.GetSafeEntryOutputPath(outputDir,
+            fullPath.Replace('/', Path.DirectorySeparatorChar));
+        string? folder = Path.GetDirectoryName(outputPath);
+        if (!string.IsNullOrEmpty(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
+        File.WriteAllBytes(outputPath, bytes);
+        return outputPath;
     }
 
     partial void OnSearchTextChanged(string value)
@@ -632,7 +825,11 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         return visible;
     }
 
-    partial void OnSelectedEntryChanged(GameFileNode? value) => _ = LoadDetailsAsync(value, ++_detailsLoadId);
+    partial void OnSelectedEntryChanged(GameFileNode? value)
+    {
+        OnPropertyChanged(nameof(HasExtractSelection));
+        _ = LoadDetailsAsync(value, ++_detailsLoadId);
+    }
 
     partial void OnIsAchievementsExpandedChanged(bool value)
     {

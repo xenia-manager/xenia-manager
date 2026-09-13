@@ -1439,4 +1439,15 @@
     <sys:String x:Key="GameFilesDialog.LoadError.Message">The game files could not be opened. The file may be missing or in an unsupported format.</sys:String>
     <sys:String x:Key="GameFilesDialog.ExplorerError.Title">Cannot Open Folder</sys:String>
     <sys:String x:Key="GameFilesDialog.ExplorerError.Message">Failed to open the folder: {0}</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">Extract...</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">Select Extract Folder</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">Nothing to Extract</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">Select a file or folder to extract.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">Extract Complete</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">Extract Failed</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">Extract all</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">Extracted {0} of {1} files to '{2}'.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">Extracted {0} of {1} files. First error: {2}</sys:String>
 </ResourceDictionary>

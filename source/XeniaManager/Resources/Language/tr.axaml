@@ -1439,4 +1439,15 @@
     <sys:String x:Key="GameFilesDialog.LoadError.Message">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.ExplorerError.Title">#NOTTRANSLATED#</sys:String>
     <sys:String x:Key="GameFilesDialog.ExplorerError.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">#NOTTRANSLATED#</sys:String>
 </ResourceDictionary>
