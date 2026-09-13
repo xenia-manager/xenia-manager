@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Utilities;
@@ -17,8 +18,9 @@ public interface IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content</param>
     /// <param name="dialogType">The type of dialog to use (default: FAContentDialog)</param>
+    /// <param name="owner">Optional owning top-level; parents the dialog to it instead of the main window</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    Task ShowInfoAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog);
+    Task ShowInfoAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog, TopLevel? owner = null);
 
     /// <summary>
     /// Shows a warning message dialog.
@@ -26,8 +28,9 @@ public interface IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content</param>
     /// <param name="dialogType">The type of dialog to use (default: FAContentDialog)</param>
+    /// <param name="owner">Optional owning top-level; parents the dialog to it instead of the main window</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    Task ShowWarningAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog);
+    Task ShowWarningAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog, TopLevel? owner = null);
 
     /// <summary>
     /// Shows an error message dialog.
@@ -35,8 +38,9 @@ public interface IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content</param>
     /// <param name="dialogType">The type of dialog to use (default: FAContentDialog)</param>
+    /// <param name="owner">Optional owning top-level; parents the dialog to it instead of the main window</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    Task ShowErrorAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog);
+    Task ShowErrorAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog, TopLevel? owner = null);
 
     /// <summary>
     /// Shows a confirmation dialog with Yes/No buttons.
@@ -44,8 +48,10 @@ public interface IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content</param>
     /// <param name="dialogType">The type of dialog to use (default: FAContentDialog)</param>
+    /// <param name="owner">Optional owning top-level; parents the dialog to it instead of the main window</param>
     /// <returns>True if Yes was clicked, False if Now was clicked</returns>
-    Task<bool> ShowConfirmationAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog);
+    Task<bool> ShowConfirmationAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog,
+        TopLevel? owner = null);
 
     /// <summary>
     /// Shows a custom message dialog with customizable buttons.
@@ -56,10 +62,11 @@ public interface IMessageBoxService
     /// <param name="secondaryButtonText">Text for the secondary button (optional)</param>
     /// <param name="closeButtonText">Text for the close button (optional, defaults to "Cancel")</param>
     /// <param name="dialogType">The type of dialog to use (default: FAContentDialog)</param>
+    /// <param name="owner">Optional owning top-level; parents the dialog to it instead of the main window</param>
     /// <returns>The FAContentDialogResult indicating which button was clicked</returns>
     Task<FAContentDialogResult> ShowCustomDialogAsync(string title, string message,
         string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null,
-        MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog);
+        MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog, TopLevel? owner = null);
 }
 
 /// <summary>
@@ -70,60 +77,62 @@ public class MessageBoxService : IMessageBoxService
     /// <summary>
     /// Shows an information message dialog.
     /// </summary>
-    public async Task ShowInfoAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog)
+    public async Task ShowInfoAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog, TopLevel? owner = null)
     {
         if (dialogType == MessageBoxDialogType.TaskDialog)
         {
-            await ShowTaskDialogInfoAsync(title, message);
+            await ShowTaskDialogInfoAsync(title, message, owner);
         }
         else
         {
-            await ShowContentDialogInfoAsync(title, message);
+            await ShowContentDialogInfoAsync(title, message, owner);
         }
     }
 
     /// <summary>
     /// Shows a warning message dialog.
     /// </summary>
-    public async Task ShowWarningAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog)
+    public async Task ShowWarningAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog,
+        TopLevel? owner = null)
     {
         if (dialogType == MessageBoxDialogType.TaskDialog)
         {
-            await ShowTaskDialogWarningAsync(title, message);
+            await ShowTaskDialogWarningAsync(title, message, owner);
         }
         else
         {
-            await ShowContentDialogWarningAsync(title, message);
+            await ShowContentDialogWarningAsync(title, message, owner);
         }
     }
 
     /// <summary>
     /// Shows an error message dialog.
     /// </summary>
-    public async Task ShowErrorAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog)
+    public async Task ShowErrorAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog, TopLevel? owner = null)
     {
         if (dialogType == MessageBoxDialogType.TaskDialog)
         {
-            await ShowTaskDialogErrorAsync(title, message);
+            await ShowTaskDialogErrorAsync(title, message, owner);
         }
         else
         {
-            await ShowContentDialogErrorAsync(title, message);
+            await ShowContentDialogErrorAsync(title, message, owner);
         }
     }
 
     /// <summary>
     /// Shows a confirmation dialog with Yes/No buttons.
     /// </summary>
-    public async Task<bool> ShowConfirmationAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog)
+    public async Task<bool> ShowConfirmationAsync(string title, string message, MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog,
+        TopLevel? owner = null)
     {
         if (dialogType == MessageBoxDialogType.TaskDialog)
         {
-            return await ShowTaskDialogConfirmationAsync(title, message);
+            return await ShowTaskDialogConfirmationAsync(title, message, owner);
         }
         else
         {
-            return await ShowContentDialogConfirmationAsync(title, message);
+            return await ShowContentDialogConfirmationAsync(title, message, owner);
         }
     }
 
@@ -132,15 +141,15 @@ public class MessageBoxService : IMessageBoxService
     /// </summary>
     public async Task<FAContentDialogResult> ShowCustomDialogAsync(string title, string message,
         string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null,
-        MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog)
+        MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog, TopLevel? owner = null)
     {
         if (dialogType == MessageBoxDialogType.TaskDialog)
         {
-            return await ShowTaskDialogCustomAsync(title, message, primaryButtonText, secondaryButtonText, closeButtonText);
+            return await ShowTaskDialogCustomAsync(title, message, primaryButtonText, secondaryButtonText, closeButtonText, owner);
         }
         else
         {
-            return await ShowContentDialogCustomAsync(title, message, primaryButtonText, secondaryButtonText, closeButtonText);
+            return await ShowContentDialogCustomAsync(title, message, primaryButtonText, secondaryButtonText, closeButtonText, owner);
         }
     }
 
@@ -150,7 +159,7 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    private async Task ShowContentDialogInfoAsync(string title, string message)
+    private async Task ShowContentDialogInfoAsync(string title, string message, TopLevel? owner = null)
     {
         FAContentDialog dialog = new FAContentDialog
         {
@@ -160,7 +169,14 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        await dialog.ShowAsync();
+        if (owner != null)
+        {
+            await dialog.ShowAsync(owner);
+        }
+        else
+        {
+            await dialog.ShowAsync();
+        }
     }
 
     /// <summary>
@@ -169,7 +185,7 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    private async Task ShowContentDialogWarningAsync(string title, string message)
+    private async Task ShowContentDialogWarningAsync(string title, string message, TopLevel? owner = null)
     {
         FAContentDialog dialog = new FAContentDialog
         {
@@ -179,7 +195,14 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        await dialog.ShowAsync();
+        if (owner != null)
+        {
+            await dialog.ShowAsync(owner);
+        }
+        else
+        {
+            await dialog.ShowAsync();
+        }
     }
 
     /// <summary>
@@ -188,7 +211,7 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    private async Task ShowContentDialogErrorAsync(string title, string message)
+    private async Task ShowContentDialogErrorAsync(string title, string message, TopLevel? owner = null)
     {
         FAContentDialog dialog = new FAContentDialog
         {
@@ -198,7 +221,14 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        await dialog.ShowAsync();
+        if (owner != null)
+        {
+            await dialog.ShowAsync(owner);
+        }
+        else
+        {
+            await dialog.ShowAsync();
+        }
     }
 
     /// <summary>
@@ -207,7 +237,7 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>True if Yes was clicked, false if No was clicked</returns>
-    private async Task<bool> ShowContentDialogConfirmationAsync(string title, string message)
+    private async Task<bool> ShowContentDialogConfirmationAsync(string title, string message, TopLevel? owner = null)
     {
         FAContentDialog dialog = new FAContentDialog
         {
@@ -218,7 +248,16 @@ public class MessageBoxService : IMessageBoxService
             DefaultButton = FAContentDialogButton.Primary
         };
 
-        FAContentDialogResult result = await dialog.ShowAsync();
+        FAContentDialogResult result;
+        if (owner != null)
+        {
+            result = await dialog.ShowAsync(owner);
+        }
+        else
+        {
+            result = await dialog.ShowAsync();
+        }
+
         return result == FAContentDialogResult.Primary;
     }
 
@@ -232,7 +271,7 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="closeButtonText">Text for the close button (optional, defaults to "Cancel")</param>
     /// <returns>The FAContentDialogResult indicating which button was clicked</returns>
     private async Task<FAContentDialogResult> ShowContentDialogCustomAsync(string title, string message,
-        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null)
+        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null, TopLevel? owner = null)
     {
         FAContentDialog dialog = new FAContentDialog
         {
@@ -261,6 +300,11 @@ public class MessageBoxService : IMessageBoxService
             dialog.CloseButtonText = LocalizationHelper.GetText("MessageBox.Cancel");
         }
 
+        if (owner != null)
+        {
+            return await dialog.ShowAsync(owner);
+        }
+
         return await dialog.ShowAsync();
     }
 
@@ -270,13 +314,13 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    private async Task ShowTaskDialogInfoAsync(string title, string message)
+    private async Task ShowTaskDialogInfoAsync(string title, string message, TopLevel? owner = null)
     {
         FATaskDialog dialog = new FATaskDialog
         {
             Title = title,
             Content = message,
-            XamlRoot = App.MainWindow
+            XamlRoot = owner ?? App.MainWindow
         };
 
         FATaskDialogButton okButton = new FATaskDialogButton
@@ -295,13 +339,13 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    private async Task ShowTaskDialogWarningAsync(string title, string message)
+    private async Task ShowTaskDialogWarningAsync(string title, string message, TopLevel? owner = null)
     {
         FATaskDialog dialog = new FATaskDialog
         {
             Title = title,
             Content = message,
-            XamlRoot = App.MainWindow
+            XamlRoot = owner ?? App.MainWindow
         };
 
         FATaskDialogButton okButton = new FATaskDialogButton
@@ -320,13 +364,13 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>A task that completes when the dialog is closed</returns>
-    private async Task ShowTaskDialogErrorAsync(string title, string message)
+    private async Task ShowTaskDialogErrorAsync(string title, string message, TopLevel? owner = null)
     {
         FATaskDialog dialog = new FATaskDialog
         {
             Title = title,
             Content = message,
-            XamlRoot = App.MainWindow
+            XamlRoot = owner ?? App.MainWindow
         };
 
         FATaskDialogButton okButton = new FATaskDialogButton
@@ -345,13 +389,13 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="title">The title of the dialog</param>
     /// <param name="message">The message content to display</param>
     /// <returns>True if Yes was clicked, false if No was clicked</returns>
-    private async Task<bool> ShowTaskDialogConfirmationAsync(string title, string message)
+    private async Task<bool> ShowTaskDialogConfirmationAsync(string title, string message, TopLevel? owner = null)
     {
         FATaskDialog dialog = new FATaskDialog
         {
             Title = title,
             Content = message,
-            XamlRoot = App.MainWindow
+            XamlRoot = owner ?? App.MainWindow
         };
 
         FATaskDialogButton yesButton = new FATaskDialogButton
@@ -383,13 +427,13 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="closeButtonText">Text for the close button (optional, defaults to "Cancel")</param>
     /// <returns>The FAContentDialogResult indicating which button was clicked</returns>
     private async Task<FAContentDialogResult> ShowTaskDialogCustomAsync(string title, string message,
-        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null)
+        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null, TopLevel? owner = null)
     {
         FATaskDialog dialog = new FATaskDialog
         {
             Title = title,
             Content = message,
-            XamlRoot = App.MainWindow
+            XamlRoot = owner ?? App.MainWindow
         };
 
         FATaskDialogButton primaryButton = new FATaskDialogButton
