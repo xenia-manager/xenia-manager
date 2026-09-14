@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
 using XeniaManager.Core.Models;
 using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.XConfig;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
 
@@ -34,7 +35,7 @@ public partial class ProfileItemViewModel : ObservableObject, ISelectable
         get
         {
             return
-                $"{new EnumDisplayItem<XboxLiveCountry>(Profile.Country).DisplayName} · {new EnumDisplayItem<ConsoleLanguage>(Profile.Language).DisplayName}";
+                $"{new EnumDisplayItem<XOnlineCountry>(Profile.Country).DisplayName} · {new EnumDisplayItem<XLanguage>(Profile.Language).DisplayName}";
         }
     }
 

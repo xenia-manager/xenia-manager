@@ -15,6 +15,7 @@ using XeniaManager.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.XConfig;
 using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen.ViewModels.Modals;
@@ -223,12 +224,12 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     /// <summary>
     /// The list of available countries for the ComboBox.
     /// </summary>
-    public ObservableCollection<EnumDisplayItem<XboxLiveCountry>> Countries { get; }
+    public ObservableCollection<EnumDisplayItem<XOnlineCountry>> Countries { get; }
 
     /// <summary>
     /// The list of available languages for the ComboBox.
     /// </summary>
-    public ObservableCollection<EnumDisplayItem<ConsoleLanguage>> Languages { get; }
+    public ObservableCollection<EnumDisplayItem<XLanguage>> Languages { get; }
 
     /// <summary>
     /// The list of available subscription tiers for the ComboBox.
@@ -517,9 +518,9 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         if (SelectedProfile == null)
         {
             EditGamertag = string.Empty;
-            SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == XboxLiveCountry.Unknown)
+            SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == (XOnlineCountry)0)
                                                      ?? Countries.First());
-            SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == ConsoleLanguage.English)
+            SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == XLanguage.English)
                                                       ?? Languages.First());
             IsLiveEnabled = false;
             SelectedSubscriptionTierIndex = SubscriptionTiers.IndexOf(
@@ -1147,10 +1148,10 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
         _version = version;
         _profileService = App.Services.GetRequiredService<IProfileService>();
         _modalService = App.Services.GetRequiredService<IModalService>();
-        Countries = new ObservableCollection<EnumDisplayItem<XboxLiveCountry>>(
-            Enum.GetValues<XboxLiveCountry>().Select(v => new EnumDisplayItem<XboxLiveCountry>(v)));
-        Languages = new ObservableCollection<EnumDisplayItem<ConsoleLanguage>>(
-            Enum.GetValues<ConsoleLanguage>().Select(v => new EnumDisplayItem<ConsoleLanguage>(v)));
+        Countries = new ObservableCollection<EnumDisplayItem<XOnlineCountry>>(
+            Enum.GetValues<XOnlineCountry>().Select(v => new EnumDisplayItem<XOnlineCountry>(v)));
+        Languages = new ObservableCollection<EnumDisplayItem<XLanguage>>(
+            Enum.GetValues<XLanguage>().Select(v => new EnumDisplayItem<XLanguage>(v)));
         SubscriptionTiers = new ObservableCollection<EnumDisplayItem<SubscriptionTier>>(
             Enum.GetValues<SubscriptionTier>().Select(v => new EnumDisplayItem<SubscriptionTier>(v)));
         CreateStub.PropertyChanged += (_, _) => OnPropertyChanged(nameof(ShowEditPanel));

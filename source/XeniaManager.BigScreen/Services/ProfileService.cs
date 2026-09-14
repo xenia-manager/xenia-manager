@@ -313,12 +313,8 @@ public class ProfileService : IProfileService
 
             VersionState state = StateForVersion(version);
             ulong xuid = state.ActiveProfile?.PathXuid?.Value ?? 0;
-            XLanguage language = state.ActiveProfile != null
-                ? (XLanguage)state.ActiveProfile.Language
-                : XLanguage.Invalid;
-            XOnlineCountry country = state.ActiveProfile != null
-                ? (XOnlineCountry)state.ActiveProfile.Country
-                : (XOnlineCountry)0;
+            XLanguage language = state.ActiveProfile?.Language ?? XLanguage.Invalid;
+            XOnlineCountry country = state.ActiveProfile?.Country ?? (XOnlineCountry)0;
 
             if (IsProfileSynced(xconfig, xuid, language, country))
             {

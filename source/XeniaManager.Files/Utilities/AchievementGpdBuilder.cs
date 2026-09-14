@@ -1,5 +1,4 @@
 using XeniaManager.Files.Models;
-using XeniaManager.Files.Models.Account;
 using XeniaManager.Files.Models.Gpd;
 using XeniaManager.Files.Models.Spa;
 using XeniaManager.Files.Models.XConfig;
@@ -23,28 +22,6 @@ public sealed record AchievementGpdBuildResult(uint TitleId, int AchievementsAdd
 /// </summary>
 public static class AchievementGpdBuilder
 {
-    /// <summary>
-    /// Maps a profile's console language to the matching SPA string-table language.
-    /// Returns <see cref="XLanguage.Invalid"/> when there is no match; callers then
-    /// fall back to the SPA default language via <see cref="SpaFile.GetString"/>.
-    /// </summary>
-    public static XLanguage FromConsoleLanguage(ConsoleLanguage language) => language switch
-    {
-        ConsoleLanguage.English => XLanguage.English,
-        ConsoleLanguage.Japanese => XLanguage.Japanese,
-        ConsoleLanguage.German => XLanguage.German,
-        ConsoleLanguage.French => XLanguage.French,
-        ConsoleLanguage.Spanish => XLanguage.Spanish,
-        ConsoleLanguage.Italian => XLanguage.Italian,
-        ConsoleLanguage.Korean => XLanguage.Korean,
-        ConsoleLanguage.TraditionalChinese => XLanguage.TChinese,
-        ConsoleLanguage.Portuguese => XLanguage.Portuguese,
-        ConsoleLanguage.SimplifiedChinese => XLanguage.SChinese,
-        ConsoleLanguage.Polish => XLanguage.Polish,
-        ConsoleLanguage.Russian => XLanguage.Russian,
-        _ => XLanguage.Invalid
-    };
-
     /// <summary>
     /// Opens the SPA embedded in a game disc (ISO/XISO, SVOD directory, STFS, XEX or ZAR).
     /// </summary>

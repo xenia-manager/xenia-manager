@@ -1,3 +1,5 @@
+using XeniaManager.Files.Models.XConfig;
+
 namespace XeniaManager.Files.Models.Account;
 
 /// <summary>
@@ -161,16 +163,16 @@ public class AccountInfo
     /// Gets or sets the country associated with the account.
     /// Corresponds to bits 8-15 in CachedUserFlags.
     /// </summary>
-    public XboxLiveCountry Country
+    public XOnlineCountry Country
     {
         get
         {
-            return (XboxLiveCountry)((CachedUserFlags >> 8) & 0xFF);
+            return (XOnlineCountry)((CachedUserFlags >> 8) & 0xFF);
         }
         set
         {
             CachedUserFlags = (CachedUserFlags & ~(0xFFu << 8))
-                              | ((uint)(byte)value << 8);
+                              | ((uint)value << 8);
         }
     }
 
@@ -213,11 +215,11 @@ public class AccountInfo
     /// Gets or sets the console language for the account.
     /// Corresponds to bits 25-29 in CachedUserFlags.
     /// </summary>
-    public ConsoleLanguage Language
+    public XLanguage Language
     {
         get
         {
-            return (ConsoleLanguage)((CachedUserFlags >> 25) & 0x1F);
+            return (XLanguage)((CachedUserFlags >> 25) & 0x1F);
         }
         set
         {

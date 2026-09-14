@@ -1,7 +1,6 @@
 using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Files;
-using XeniaManager.Files.Models.Account;
 using XeniaManager.Files.Models.Gpd;
 using XeniaManager.Files.Models.XConfig;
 using XeniaManager.Files.Utilities;
@@ -108,16 +107,6 @@ public class AchievementGpdBuilderTests
         string dir = Path.Combine(Path.GetTempPath(), $"gpdbuilder_{Guid.NewGuid():N}");
         Directory.CreateDirectory(dir);
         return dir;
-    }
-
-    [Test]
-    public void FromConsoleLanguage_MapsExpectedValues()
-    {
-        Assert.That(AchievementGpdBuilder.FromConsoleLanguage(ConsoleLanguage.English), Is.EqualTo(XLanguage.English));
-        Assert.That(AchievementGpdBuilder.FromConsoleLanguage(ConsoleLanguage.French), Is.EqualTo(XLanguage.French));
-        Assert.That(AchievementGpdBuilder.FromConsoleLanguage(ConsoleLanguage.SimplifiedChinese), Is.EqualTo(XLanguage.SChinese));
-        Assert.That(AchievementGpdBuilder.FromConsoleLanguage(ConsoleLanguage.TraditionalChinese), Is.EqualTo(XLanguage.TChinese));
-        Assert.That(AchievementGpdBuilder.FromConsoleLanguage(ConsoleLanguage.None), Is.EqualTo(XLanguage.Invalid));
     }
 
     [Test]

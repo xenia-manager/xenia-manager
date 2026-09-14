@@ -1,6 +1,7 @@
 using System.Reflection;
 using XeniaManager.Files;
 using XeniaManager.Files.Models.Account;
+using XeniaManager.Files.Models.XConfig;
 
 namespace XeniaManager.Tests.Files;
 
@@ -235,9 +236,9 @@ public class AccountFileTests
         // Make multiple modifications
         originalAccount.Gamertag = "Fully Mod Accnt"; // Limited to 16 chars due to UTF-16 encoding (32 bytes max)
         originalAccount.IsLiveEnabled = true;
-        originalAccount.Country = XboxLiveCountry.UnitedStates;
+        originalAccount.Country = XOnlineCountry.UnitedStates;
         originalAccount.SubscriptionTier = SubscriptionTier.Gold;
-        originalAccount.Language = ConsoleLanguage.English;
+        originalAccount.Language = XLanguage.English;
 
         // Act
         AccountFile.Save(originalAccount, outputPath); // Using default retail mode
@@ -249,9 +250,9 @@ public class AccountFileTests
         AccountInfo loadedAccount = AccountFile.Load(outputPath);
         Assert.That(loadedAccount.Gamertag, Is.EqualTo("Fully Mod Accnt"), "Modified gamertag should be preserved (truncated to fit 16 char limit)");
         Assert.That(loadedAccount.IsLiveEnabled, Is.True, "Modified live enabled status should be preserved");
-        Assert.That(loadedAccount.Country, Is.EqualTo(XboxLiveCountry.UnitedStates), "Modified country should be preserved");
+        Assert.That(loadedAccount.Country, Is.EqualTo(XOnlineCountry.UnitedStates), "Modified country should be preserved");
         Assert.That(loadedAccount.SubscriptionTier, Is.EqualTo(SubscriptionTier.Gold), "Modified subscription tier should be preserved");
-        Assert.That(loadedAccount.Language, Is.EqualTo(ConsoleLanguage.English), "Modified language should be preserved");
+        Assert.That(loadedAccount.Language, Is.EqualTo(XLanguage.English), "Modified language should be preserved");
 
         // Cleanup
         if (File.Exists(outputPath))

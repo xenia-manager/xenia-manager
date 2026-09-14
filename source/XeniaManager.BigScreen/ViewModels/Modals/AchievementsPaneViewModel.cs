@@ -242,7 +242,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
                 throw new InvalidOperationException("No active profile found");
             }
 
-            XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(profile.Language);
+            XLanguage language = profile.Language;
             AchievementGpdBuildResult result = await Task.Run(() =>
                 AchievementGpdBuilder.EnsureAchievements(discPath, titleGpdPath, profileGpdPath, language));
 
@@ -319,7 +319,7 @@ public partial class AchievementsPaneViewModel : ViewModelBase, IGameModalPane
                     throw new InvalidOperationException("No active profile found");
                 }
 
-                XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(profile.Language);
+                XLanguage language = profile.Language;
                 int updated = await Task.Run(() =>
                     AchievementGpdBuilder.RefreshStrings(discPath, titleGpdPath, language));
 

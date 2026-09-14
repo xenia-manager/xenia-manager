@@ -535,7 +535,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             AccountContent account = SelectedAccountContent;
             EventManager.Instance.DisableWindow();
-            XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(account.AccountInfo.Language);
+            XLanguage language = account.AccountInfo.Language;
             AchievementGpdBuildResult result = await Task.Run(() =>
                 AchievementGpdBuilder.EnsureAchievements(discPath, account.ExpectedGameAchievementGpdPath, account.ProfileGpdPath, language));
 
@@ -602,7 +602,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             if (choice == AchievementFetchOption.Strings)
             {
                 EventManager.Instance.DisableWindow();
-                XLanguage language = AchievementGpdBuilder.FromConsoleLanguage(account.AccountInfo.Language);
+                XLanguage language = account.AccountInfo.Language;
                 int updated = await Task.Run(() =>
                     AchievementGpdBuilder.RefreshStrings(discPath, account.GameAchievementGpdPath, language));
 
