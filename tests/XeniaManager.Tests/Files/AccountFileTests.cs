@@ -415,4 +415,25 @@ public class AccountFileTests
             File.Delete(retailOutputPath);
         }
     }
+
+    [Test]
+    public void Save_OverlongGamertag_TruncatesWithoutThrowing()
+    {
+        AccountInfo info = AccountFile.Load(_testAccountFilePath);
+        info.Gamertag = new string('A', 64);
+        string tempPath = Path.Combine(Path.GetTempPath(), $"test_account_{Guid.NewGuid()}.bin");
+        try
+        {
+            Assert.DoesNotThrow(() => AccountFile.Save(info, tempPath));
+            AccountInfo reloaded = AccountFile.Load(tempPath);
+            Assert.That(reloaded.Gamertag, Is.EqualTo(new string('A', 16)));
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
 }

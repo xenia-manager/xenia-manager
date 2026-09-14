@@ -153,31 +153,24 @@ public class AccountFile
         {
             // Grab the XeKey
             byte[] key = CryptoUtils.GetKey(devkit);
-            Logger.Debug<AccountFile>($"Key: {BitConverter.ToString(key)}");
 
             // Get file HMAC (First 16 bytes)
-            byte[] fileHmac = file.Take(HMAC_LENGTH).ToArray();
-            Logger.Debug<AccountFile>($"File HMAC: {BitConverter.ToString(fileHmac)}");
+            byte[] fileHmac = file.AsSpan(0, HMAC_LENGTH).ToArray();
 
             // Generate RC4 key from file HMAC
             byte[] rc4Key = CryptoUtils.HmacSha1(key, fileHmac, 16);
-            Logger.Debug<AccountFile>($"RC4 Key: {BitConverter.ToString(rc4Key)}");
 
             // Decrypt confounder + account data (388 bytes at offset 0x10)
-            byte[] encryptedPayload = file.Skip(HMAC_LENGTH).Take(TOTAL_PAYLOAD_LENGTH).ToArray();
-            Logger.Debug<AccountFile>($"Encrypted Payload: {BitConverter.ToString(encryptedPayload)}");
+            byte[] encryptedPayload = file.AsSpan(HMAC_LENGTH, TOTAL_PAYLOAD_LENGTH).ToArray();
+            Logger.Debug<AccountFile>($"Encrypted payload: {encryptedPayload.Length} bytes");
             byte[] decryptedPayload = new byte[TOTAL_PAYLOAD_LENGTH];
             CryptoUtils.RC4(rc4Key, encryptedPayload, 0, TOTAL_PAYLOAD_LENGTH, decryptedPayload);
-            Logger.Debug<AccountFile>($"Decrypted Payload: {BitConverter.ToString(decryptedPayload)}");
 
             // Verify HMAC
             byte[] verifyHmac = CryptoUtils.HmacSha1(key, decryptedPayload, 16);
-            Logger.Debug<AccountFile>($"Verify HMAC: {BitConverter.ToString(verifyHmac)}");
 
             if (!fileHmac.SequenceEqual(verifyHmac))
             {
-                Logger.Warning<AccountFile>(
-                    $"HMAC verification failed. File HMAC: {BitConverter.ToString(fileHmac)}, Computed HMAC: {BitConverter.ToString(verifyHmac)}");
                 Logger.Error<AccountFile>("Account file integrity verification failed - HMAC mismatch detected");
 
                 // TODO: Replace with custom exception
@@ -189,8 +182,7 @@ public class AccountFile
             }
 
             // Parse profile info
-            byte[] accountData = decryptedPayload.Skip(CONFOUNDER_LENGTH).Take(ACCOUNT_DATA_LENGTH).ToArray();
-            Logger.Debug<AccountFile>($"Account Data: {BitConverter.ToString(accountData)}");
+            byte[] accountData = decryptedPayload.AsSpan(CONFOUNDER_LENGTH, ACCOUNT_DATA_LENGTH).ToArray();
             AccountInfo profile = ParseFromBytes(accountData);
             Logger.Debug<AccountFile>($"Account Info: {profile.Gamertag} ({profile.Xuid.ToString()})");
             Logger.Trace<AccountFile>("Decryption process completed successfully");
@@ -268,7 +260,7 @@ public class AccountFile
             info.Passcode[i] = (PasscodeButton)data[offset + i];
         }
 
-        Logger.Info<AccountFile>($"Parsed Passcode: [{string.Join(", ", info.Passcode.Select(p => p.ToString()))}]");
+        Logger.Info<AccountFile>($"Parsed Passcode (enabled: {info.IsPasscodeEnabled})");
         offset += 4;
 
         // 0x3C - OnlineDomain (20 bytes ASCII)
@@ -286,25 +278,24 @@ public class AccountFile
         // 0x68 - OnlineKey (16 bytes)
         Logger.Trace<AccountFile>($"Parsing OnlineKey at offset {offset:X2} (16 bytes)");
         Array.Copy(data, offset, info.OnlineKey, 0, 16);
-        Logger.Debug<AccountFile>($"Parsed OnlineKey: {BitConverter.ToString(info.OnlineKey)}");
         offset += 16;
 
         // 0x78 - UserPassportMembername (114 bytes ASCII)
         Logger.Trace<AccountFile>($"Parsing UserPassportMembername at offset {offset:X2} (114 bytes ASCII)");
         info.UserPassportMembername = Encoding.ASCII.GetString(data, offset, 114).TrimEnd('\0');
-        Logger.Info<AccountFile>($"Parsed UserPassportMembername: '{info.UserPassportMembername}'");
+        Logger.Info<AccountFile>($"Parsed UserPassportMembername (present: {!string.IsNullOrEmpty(info.UserPassportMembername)})");
         offset += 114;
 
         // 0xEA - UserPassportPassword (32 bytes ASCII)
         Logger.Trace<AccountFile>($"Parsing UserPassportPassword at offset {offset:X2} (32 bytes ASCII)");
         info.UserPassportPassword = Encoding.ASCII.GetString(data, offset, 32).TrimEnd('\0');
-        Logger.Info<AccountFile>($"Parsed UserPassportPassword: '{info.UserPassportPassword}'");
+        Logger.Info<AccountFile>($"Parsed UserPassportPassword (present: {!string.IsNullOrEmpty(info.UserPassportPassword)})");
         offset += 32;
 
         // 0x10A - OwnerPassportMembername (114 bytes ASCII)
         Logger.Trace<AccountFile>($"Parsing OwnerPassportMembername at offset {offset:X2} (114 bytes ASCII)");
         info.OwnerPassportMembername = Encoding.ASCII.GetString(data, offset, 114).TrimEnd('\0');
-        Logger.Info<AccountFile>($"Parsed OwnerPassportMembername: '{info.OwnerPassportMembername}'");
+        Logger.Info<AccountFile>($"Parsed OwnerPassportMembername (present: {!string.IsNullOrEmpty(info.OwnerPassportMembername)})");
         offset += 114;
 
         Logger.Debug<AccountFile>($"Completed parsing account data. Total parsed: {offset} bytes");
@@ -339,42 +330,30 @@ public class AccountFile
         {
             // Grab the XeKey
             byte[] key = CryptoUtils.GetKey(devkit);
-            Logger.Debug<AccountFile>($"Key: {BitConverter.ToString(key)}");
 
             // Prepare a decrypted payload: confounder + account data
             byte[] confounder = new byte[CONFOUNDER_LENGTH];
-            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(confounder);
-            }
-
-            Logger.Debug<AccountFile>($"Confounder: {BitConverter.ToString(confounder)}");
+            RandomNumberGenerator.Fill(confounder);
 
             byte[] accountData = AccountToBytes(info);
-            Logger.Debug<AccountFile>($"Account Data: {BitConverter.ToString(accountData)}");
             byte[] payload = new byte[TOTAL_PAYLOAD_LENGTH];
             Array.Copy(confounder, 0, payload, 0, CONFOUNDER_LENGTH);
             Array.Copy(accountData, 0, payload, CONFOUNDER_LENGTH, ACCOUNT_DATA_LENGTH);
-            Logger.Debug<AccountFile>($"Payload (Confounder + AccountData): {BitConverter.ToString(payload)}");
 
             // HMAC of confounder + account data
             byte[] hmac = CryptoUtils.HmacSha1(key, payload, 16);
-            Logger.Debug<AccountFile>($"HMAC: {BitConverter.ToString(hmac)}");
 
             // Generate RC4 key from HMAC
             byte[] rc4Key = CryptoUtils.HmacSha1(key, hmac, 16);
-            Logger.Debug<AccountFile>($"RC4 Key: {BitConverter.ToString(rc4Key)}");
 
             // Encrypt confounder + account data
             byte[] encryptedPayload = new byte[TOTAL_PAYLOAD_LENGTH];
             CryptoUtils.RC4(rc4Key, payload, 0, TOTAL_PAYLOAD_LENGTH, encryptedPayload);
-            Logger.Debug<AccountFile>($"Encrypted Payload: {BitConverter.ToString(encryptedPayload)}");
 
             // Build file: HMAC + encrypted payload
             byte[] accountFile = new byte[HMAC_LENGTH + TOTAL_PAYLOAD_LENGTH];
             Array.Copy(hmac, 0, accountFile, 0, HMAC_LENGTH);
             Array.Copy(encryptedPayload, 0, accountFile, HMAC_LENGTH, TOTAL_PAYLOAD_LENGTH);
-            Logger.Debug<AccountFile>($"Final File: {BitConverter.ToString(accountFile)}");
 
             Logger.Info<AccountFile>($"Encryption completed successfully. Total file size: {accountFile.Length} bytes");
             Logger.Trace<AccountFile>("Encryption process completed successfully");
@@ -410,9 +389,10 @@ public class AccountFile
         BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(offset), info.LiveFlags);
         offset += 4;
 
-        // 0x08 - Gamertag (UTF-16 LE → swap to BE)
+        // 0x08 - Gamertag (UTF-16 BE, 32 bytes = 16 characters; truncate overlong names)
+        string gamertag = info.Gamertag.Length > 16 ? info.Gamertag.Substring(0, 16) : info.Gamertag;
         byte[] gtBytes = new byte[32];
-        Encoding.BigEndianUnicode.GetBytes(info.Gamertag, gtBytes);
+        Encoding.BigEndianUnicode.GetBytes(gamertag, gtBytes);
         Array.Copy(gtBytes, 0, data, offset, 32);
         offset += 32;
 
