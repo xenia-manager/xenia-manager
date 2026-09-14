@@ -234,6 +234,42 @@ public class IsoFileBrowsingTests
     }
 
     [Test]
+    public void Load_SplitArchive_GathersNumericSlices()
+    {
+        // Split between sector 42 (subdir) and 43 (inner.bin) so the
+        // second slice is required to resolve sub/inner.bin.
+        byte[] image = BuildTestImage();
+        string dir = Path.Combine(Path.GetTempPath(), $"iso_split_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(dir);
+        try
+        {
+            string basePath = Path.Combine(dir, "test.iso");
+            string partPath = Path.Combine(dir, "test.iso.1");
+            File.WriteAllBytes(basePath, image[..(42 * (int)SectorSize)]);
+            File.WriteAllBytes(partPath, image[(42 * (int)SectorSize)..]);
+            File.WriteAllBytes(Path.Combine(dir, "test.iso.bak"), new byte[16]);
+
+            foreach (string entry in new[]
+                     {
+                         partPath, basePath
+                     })
+            {
+                using IsoFile iso = IsoFile.Load(entry);
+                Assert.That(iso.XgdInformation, Is.Not.Null);
+                Assert.That(iso.Files.Count, Is.EqualTo(2));
+                Assert.That(iso.ReadFile("sub/inner.bin"), Is.EqualTo(new byte[]
+                {
+                    0x01, 0x02, 0x03, 0x04
+                }));
+            }
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Test]
     public void ExtractAll_PreservesStructure()
     {
         string outputDir = Path.Combine(Path.GetTempPath(), $"iso_extract_{Guid.NewGuid():N}");
