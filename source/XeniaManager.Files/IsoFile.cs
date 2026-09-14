@@ -195,7 +195,7 @@ public sealed class IsoFile : IDisposable
         // Note: explicit array — Split('/', '\\', options) binds to the (separator, count, options)
         // overload with '\\' as count and silently ignores the backslash.
         string normalized = string.Join('/', path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries));
-        return WalkEntries().FirstOrDefault(e => e.FullPath.Equals(normalized, StringComparison.OrdinalIgnoreCase));
+        return Entries.FirstOrDefault(e => e.FullPath.Equals(normalized, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -208,7 +208,7 @@ public sealed class IsoFile : IDisposable
         string normalized = string.Join('/', path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries));
         if (normalized.Length == 0)
         {
-            return WalkEntries().Where(e => !e.FullPath.Contains('/')).ToList();
+            return Entries.Where(e => !e.FullPath.Contains('/')).ToList();
         }
 
         GdfxEntry? dir = Lookup(normalized);
@@ -218,7 +218,7 @@ public sealed class IsoFile : IDisposable
         }
 
         string prefix = normalized + '/';
-        return WalkEntries()
+        return Entries
             .Where(e => e.FullPath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
                         && !e.FullPath[prefix.Length..].Contains('/'))
             .ToList();
@@ -332,35 +332,49 @@ public sealed class IsoFile : IDisposable
     /// <summary>
     /// Gets all ISO file slices for a given file path.
     /// Handles split archives like game.iso, game.iso.1, game.iso.2, etc.
+    /// A numeric final extension (e.g., ".1") marks a split part; loading any
+    /// part (or the base file) gathers the base plus all numeric parts.
+    /// Non-numeric siblings (e.g., ".bak") are ignored.
     /// </summary>
     /// <param name="filePath">The path to the main ISO file.</param>
     /// <returns>Array of file paths for all slices.</returns>
     private static string[] GetIsoSlices(string filePath)
     {
-        string extension = Path.GetExtension(filePath);
-        string fileWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
         string? directory = Path.GetDirectoryName(filePath);
-
-        // Check if this is a split archive (e.g., .iso.1, .iso.2)
-        string subExtension = Path.GetExtension(fileWithoutExtension);
-        if (subExtension.Length != 2 || !char.IsNumber(subExtension[1]))
+        if (string.IsNullOrEmpty(directory))
         {
             return [filePath];
         }
 
-        // This is a split archive - find all parts
-        string fileWithoutSubExtension = Path.GetFileNameWithoutExtension(fileWithoutExtension);
-        string searchPattern = $"{fileWithoutSubExtension}.{extension}.*";
+        string fileName = Path.GetFileName(filePath);
 
-        if (!string.IsNullOrEmpty(directory))
+        // Split part (e.g., "game.iso.1"): strip the numeric suffix to get the base name.
+        // Plain file (e.g., "game.iso"): the file itself is the base name.
+        string baseName = fileName;
+        string extension = Path.GetExtension(fileName);
+        if (extension.Length > 1 && extension.Skip(1).All(char.IsAsciiDigit))
         {
-            string[] files = Directory.GetFiles(directory, searchPattern)
-                .OrderBy(f => f)
-                .ToArray();
-            return files.Length > 0 ? files : [filePath];
+            baseName = Path.GetFileNameWithoutExtension(fileName);
         }
 
-        return [filePath];
+        List<string> slices = new List<string>();
+        string basePath = Path.Combine(directory, baseName);
+        if (File.Exists(basePath))
+        {
+            slices.Add(basePath);
+        }
+
+        // Numeric-suffixed parts only (base.1, base.2, ...), ordered numerically.
+        string[] parts = Directory.GetFiles(directory, $"{baseName}.*")
+            .Select(f => (Path: f, Suffix: Path.GetFileName(f).Substring(baseName.Length)))
+            .Where(x => x.Suffix.Length > 1 && x.Suffix[0] == '.' && x.Suffix.Skip(1).All(char.IsAsciiDigit))
+            .OrderBy(x => x.Suffix.Length)
+            .ThenBy(x => x.Path, StringComparer.OrdinalIgnoreCase)
+            .Select(x => x.Path)
+            .ToArray();
+        slices.AddRange(parts);
+
+        return slices.Count > 0 ? slices.ToArray() : [filePath];
     }
 
     /// <summary>
@@ -424,7 +438,7 @@ public sealed class IsoFile : IDisposable
     /// <returns>The file data, or null if not found.</returns>
     private byte[]? FindFileInIso(string fileName)
     {
-        foreach (GdfxEntry entry in WalkEntries())
+        foreach (GdfxEntry entry in Entries)
         {
             if (!entry.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase))
             {
@@ -771,7 +785,7 @@ public sealed class IsoFile : IDisposable
 
         try
         {
-            foreach (GdfxEntry entry in WalkEntries())
+            foreach (GdfxEntry entry in Files)
             {
                 if (!entry.IsFile || entry.Size == 0)
                 {
