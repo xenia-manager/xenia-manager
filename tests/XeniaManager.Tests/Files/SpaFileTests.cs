@@ -813,6 +813,19 @@ public class SpaFileTests
         Assert.That(spa.TitleName(), Is.Empty);
     }
 
+    [Test]
+    public void TitleName_TruncatedStringTable_SkippedWithoutThrowing()
+    {
+        // 12-byte payload: valid XSTR magic but truncated before the count field at offset 12.
+        byte[] truncated = new byte[12];
+        BinaryPrimitives.WriteUInt32BigEndian(truncated.AsSpan(0), 0x58535452u); // XSTR
+        using SpaFile spa = BuildSpaWithSections(((EntryNamespace)3, 1, truncated));
+
+        Assert.That(spa.IsValid, Is.True);
+        Assert.DoesNotThrow(() => spa.TitleName());
+        Assert.That(spa.TitleName(), Is.Empty);
+    }
+
     #endregion
 
     #region Contexts and properties

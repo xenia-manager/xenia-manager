@@ -301,36 +301,20 @@ public sealed class SpaFile : IDisposable
             return result;
         }
 
-        EntryTableEntry xachEntry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XachId);
-        if (xachEntry.Namespace == default)
+        byte[]? data = GetSectionData(SpaSectionMetadata, XachId, XachMagic);
+        if (data == null)
         {
-            Logger.Trace<SpaFile>("XACH section not found in SPA");
             return result;
         }
 
-        // Overflow-safe bounds check: offset+length must not exceed data length and must not wrap uint.
-        // Cast Data.Length to uint (safe, max 2 GiB < 4 GiB) and check offset first to avoid underflow on subtraction.
-        if (xachEntry.OffsetSpecifier >= (uint)_gpd.Data.Length || xachEntry.Length > (uint)_gpd.Data.Length - xachEntry.OffsetSpecifier)
-        {
-            Logger.Warning<SpaFile>($"XACH entry data out of bounds (off={xachEntry.OffsetSpecifier} len={xachEntry.Length} dataLen={_gpd.Data.Length})");
-            return result;
-        }
-
-        byte[] data = _gpd.Data[(int)xachEntry.OffsetSpecifier..(int)(xachEntry.OffsetSpecifier + xachEntry.Length)];
         if (data.Length < 14)
         {
             Logger.Warning<SpaFile>($"XACH data too short ({data.Length}) for header");
             return result;
         }
 
-        uint magic = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0));
         uint version = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(4));
         ushort count = BinaryPrimitives.ReadUInt16BigEndian(data.AsSpan(12));
-        if (magic != XachMagic)
-        {
-            Logger.Warning<SpaFile>($"XACH magic mismatch: 0x{magic:X8} (expected 0x{XachMagic:X8})");
-            return result;
-        }
 
         if (version != 1)
         {
@@ -570,33 +554,19 @@ public sealed class SpaFile : IDisposable
             return null;
         }
 
-        EntryTableEntry xthdEntry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XthdId);
-        if (xthdEntry.Namespace == default)
+        byte[]? data = GetSectionData(SpaSectionMetadata, XthdId, XthdMagic);
+        if (data == null)
         {
-            Logger.Trace<SpaFile>("XTHD section not found in SPA");
             return null;
         }
 
-        if (xthdEntry.OffsetSpecifier >= (uint)_gpd.Data.Length || xthdEntry.Length > (uint)_gpd.Data.Length - xthdEntry.OffsetSpecifier)
-        {
-            Logger.Warning<SpaFile>($"XTHD entry data out of bounds (off={xthdEntry.OffsetSpecifier} len={xthdEntry.Length} dataLen={_gpd.Data.Length})");
-            return null;
-        }
-
-        byte[] data = _gpd.Data[(int)xthdEntry.OffsetSpecifier..(int)(xthdEntry.OffsetSpecifier + xthdEntry.Length)];
         if (data.Length < 12 + 32)
         {
             Logger.Warning<SpaFile>($"XTHD data too short ({data.Length}) for title header");
             return null;
         }
 
-        uint magic = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0));
         uint version = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(4));
-        if (magic != XthdMagic)
-        {
-            Logger.Warning<SpaFile>($"XTHD magic mismatch: 0x{magic:X8} (expected 0x{XthdMagic:X8})");
-            return null;
-        }
 
         if (version != 1)
         {
@@ -628,28 +598,15 @@ public sealed class SpaFile : IDisposable
             return XLanguage.English;
         }
 
-        EntryTableEntry xstcEntry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XstcId);
-        if (xstcEntry.Namespace == default)
+        byte[]? data = GetSectionData(SpaSectionMetadata, XstcId, XstcMagic);
+        if (data == null)
         {
             return XLanguage.English;
         }
 
-        if (xstcEntry.OffsetSpecifier >= (uint)_gpd.Data.Length || xstcEntry.Length > (uint)_gpd.Data.Length - xstcEntry.OffsetSpecifier)
-        {
-            Logger.Warning<SpaFile>("XSTC entry data out of bounds");
-            return XLanguage.English;
-        }
-
-        byte[] data = _gpd.Data[(int)xstcEntry.OffsetSpecifier..(int)(xstcEntry.OffsetSpecifier + xstcEntry.Length)];
         if (data.Length < 16)
         {
             Logger.Warning<SpaFile>($"XSTC data too short ({data.Length})");
-            return XLanguage.English;
-        }
-
-        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XstcMagic)
-        {
-            Logger.Warning<SpaFile>("XSTC magic mismatch");
             return XLanguage.English;
         }
 
@@ -674,22 +631,16 @@ public sealed class SpaFile : IDisposable
 
         foreach (EntryTableEntry entry in _gpd.Entries.Where(e => (ushort)e.Namespace == SpaSectionStringTable))
         {
-            if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
+            byte[]? data = GetSectionData(entry, XstrMagic, entry.Id);
+            if (data == null)
             {
-                Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} data out of bounds, skipping");
                 continue;
             }
 
-            byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
+            // The string count lives at offset 12, past the 12-byte section header.
             if (data.Length < 14)
             {
                 Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} too short ({data.Length}) for header, skipping");
-                continue;
-            }
-
-            if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XstrMagic)
-            {
-                Logger.Warning<SpaFile>($"XSTR entry 0x{entry.Id:X} magic mismatch, skipping");
                 continue;
             }
 
@@ -786,28 +737,15 @@ public sealed class SpaFile : IDisposable
             return result;
         }
 
-        EntryTableEntry entry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XctxId);
-        if (entry.Namespace == default)
+        byte[]? data = GetSectionData(SpaSectionMetadata, XctxId, XctxMagic);
+        if (data == null)
         {
             return result;
         }
 
-        if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
-        {
-            Logger.Warning<SpaFile>("XCTX entry data out of bounds");
-            return result;
-        }
-
-        byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
         if (data.Length < 16)
         {
             Logger.Warning<SpaFile>($"XCTX data too short ({data.Length}) for header and count");
-            return result;
-        }
-
-        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XctxMagic)
-        {
-            Logger.Warning<SpaFile>("XCTX magic mismatch");
             return result;
         }
 
@@ -852,28 +790,15 @@ public sealed class SpaFile : IDisposable
             return result;
         }
 
-        EntryTableEntry entry = _gpd.Entries.FirstOrDefault(e => (ushort)e.Namespace == SpaSectionMetadata && e.Id == XprpId);
-        if (entry.Namespace == default)
+        byte[]? data = GetSectionData(SpaSectionMetadata, XprpId, XprpMagic);
+        if (data == null)
         {
             return result;
         }
 
-        if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
-        {
-            Logger.Warning<SpaFile>("XPRP entry data out of bounds");
-            return result;
-        }
-
-        byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
         if (data.Length < 14)
         {
             Logger.Warning<SpaFile>($"XPRP data too short ({data.Length}) for header and count");
-            return result;
-        }
-
-        if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != XprpMagic)
-        {
-            Logger.Warning<SpaFile>("XPRP magic mismatch");
             return result;
         }
 
@@ -1054,22 +979,36 @@ public sealed class SpaFile : IDisposable
             return null;
         }
 
+        return GetSectionData(entry, magic, id);
+    }
+
+    /// <summary>
+    /// Validates an entry's bounds and magic, returning its payload bytes.
+    /// </summary>
+    /// <param name="entry">The XDBF entry to read.</param>
+    /// <param name="magic">The expected section magic.</param>
+    /// <param name="logId">The ID used in log messages.</param>
+    /// <returns>The payload bytes, or null when out of bounds or truncated.</returns>
+    private byte[]? GetSectionData(EntryTableEntry entry, uint magic, ulong logId)
+    {
+        // Overflow-safe bounds check: check offset first to avoid underflow on subtraction.
+        // Cast Data.Length to uint (safe, max 2 GiB < 4 GiB).
         if (entry.OffsetSpecifier >= (uint)_gpd.Data.Length || entry.Length > (uint)_gpd.Data.Length - entry.OffsetSpecifier)
         {
-            Logger.Warning<SpaFile>($"Section 0x{id:X} data out of bounds");
+            Logger.Warning<SpaFile>($"Section 0x{logId:X} data out of bounds (off={entry.OffsetSpecifier} len={entry.Length} dataLen={_gpd.Data.Length})");
             return null;
         }
 
         byte[] data = _gpd.Data[(int)entry.OffsetSpecifier..(int)(entry.OffsetSpecifier + entry.Length)];
         if (data.Length < 12)
         {
-            Logger.Warning<SpaFile>($"Section 0x{id:X} data too short ({data.Length}) for header");
+            Logger.Warning<SpaFile>($"Section 0x{logId:X} data too short ({data.Length}) for header");
             return null;
         }
 
         if (BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0)) != magic)
         {
-            Logger.Warning<SpaFile>($"Section 0x{id:X} magic mismatch");
+            Logger.Warning<SpaFile>($"Section 0x{logId:X} magic mismatch");
             return null;
         }
 
