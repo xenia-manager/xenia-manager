@@ -106,6 +106,31 @@ def tool_version() -> str | None:
     return None
 
 
+def dotnet_sdk_msbuild() -> str | None:
+    """Return the latest .NET SDK's MSBuild.dll when present.
+
+    jb defaults to the VS BuildTools MSBuild, which cannot resolve
+    Microsoft.NET.SDK.WorkloadAutoImportPropsLocator (.NET 10), so point
+    it at the SDK MSBuild that 'dotnet build' uses instead.
+    """
+    result = subprocess.run(
+        ["dotnet", "--list-sdks"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    candidates = []
+    for line in result.stdout.splitlines():
+        # Format: "<version> [<sdk-dir>]"; the dir may contain spaces.
+        version, sep, path = line.partition(" [")
+        if not sep:
+            continue
+        candidate = Path(path.rstrip("]")) / version / "MSBuild.dll"
+        if candidate.is_file():
+            candidates.append(candidate)
+    return str(candidates[-1]) if candidates else None
+
+
 def ensure_tool(install: bool, pin: bool) -> Path:
     """Return the jb executable, installing it first when missing.
 
@@ -294,6 +319,11 @@ def format_solution(
         if normalized:
             command.append(f"--include={';'.join(normalized)}")
 
+    msbuild = dotnet_sdk_msbuild()
+    if msbuild:
+        logger.info("Using SDK MSBuild at %s", msbuild)
+        command.append(f"--toolset-path={msbuild}")
+
     logger.info("Running: %s", " ".join(command))
     result = subprocess.run(command, check=False)
 
@@ -364,7 +394,7 @@ def main() -> int:
         metavar="PATTERN",
         help=(
             "Only format files matching this pattern (repeatable, supports "
-            "* and ** globs; e.g. --include \"source/**/*.cs\"). "
+            '* and ** globs; e.g. --include "source/**/*.cs"). '
             "Passed as jb --include"
         ),
     )
@@ -421,9 +451,7 @@ def main() -> int:
                 logger.info("  --include: %s", ";".join(args.includes))
                 return 0
             if len(filtered) != len(git_files):
-                logger.info(
-                    "Filtered to %d file(s) matching --include", len(filtered)
-                )
+                logger.info("Filtered to %d file(s) matching --include", len(filtered))
             effective_includes = filtered
         else:
             effective_includes = git_files
@@ -445,7 +473,12 @@ def main() -> int:
     already_dirty = set(uncommitted_files())
 
     exit_code = format_solution(
-        tool, args.solution, args.profile, args.settings, args.no_build, effective_includes
+        tool,
+        args.solution,
+        args.profile,
+        args.settings,
+        args.no_build,
+        effective_includes,
     )
     if exit_code != 0 or not args.check:
         return exit_code
