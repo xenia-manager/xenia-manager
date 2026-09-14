@@ -1180,6 +1180,11 @@ public class StfsFile : IDisposable
     private Dictionary<int, string>? _fullPathCache;
 
     /// <summary>
+    /// Cached normalized path to file-table index. Built lazily on first lookup; first entry wins on duplicates.
+    /// </summary>
+    private Dictionary<string, int>? _lookupCache;
+
+    /// <summary>
     /// Resolves the parent file-table index of an entry, treating missing, out-of-range,
     /// and non-directory parents as root (-1), matching the extraction fallback behaviour.
     /// </summary>
@@ -1252,15 +1257,27 @@ public class StfsFile : IDisposable
     /// <returns>The file-table index, or -1 when not found.</returns>
     private int LookupIndex(string normalizedPath)
     {
+        _lookupCache ??= BuildLookupCache();
+        return _lookupCache.TryGetValue(normalizedPath, out int index) ? index : -1;
+    }
+
+    /// <summary>
+    /// Builds the normalized path to file-table index map over all entries.
+    /// </summary>
+    /// <returns>The lookup map (first entry wins on duplicate paths).</returns>
+    private Dictionary<string, int> BuildLookupCache()
+    {
+        Dictionary<string, int> cache = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         for (int i = 0; i < FileEntries.Count; i++)
         {
-            if (GetFullPath(i).Equals(normalizedPath, StringComparison.OrdinalIgnoreCase))
+            string fullPath = GetFullPath(i);
+            if (fullPath.Length > 0 && !cache.ContainsKey(fullPath))
             {
-                return i;
+                cache.Add(fullPath, i);
             }
         }
 
-        return -1;
+        return cache;
     }
 
     /// <summary>
@@ -1339,6 +1356,7 @@ public class StfsFile : IDisposable
 
     /// <summary>
     /// Reads a portion of a file starting at the specified offset with the specified length.
+    /// Reads only the blocks overlapping the range instead of extracting the whole file.
     /// </summary>
     /// <param name="entry">The file entry to read from.</param>
     /// <param name="offset">The byte offset within the file to start reading from.</param>
@@ -1346,26 +1364,116 @@ public class StfsFile : IDisposable
     /// <returns>The requested file data. Empty when offset is beyond the file size.</returns>
     public byte[] ReadFile(StfsFileEntry entry, ulong offset, ulong length)
     {
-        if (entry.IsDirectory)
+        if (entry.IsDirectory || entry.FileSize <= 0)
         {
             return Array.Empty<byte>();
         }
 
-        // ponytail: full extract then slice; per-block ranged reads if large-file previews ever need them.
-        byte[] full = ExtractFile(entry);
-        if (offset >= (ulong)full.Length)
+        if (offset >= (ulong)entry.FileSize)
         {
             return Array.Empty<byte>();
         }
 
-        ulong count = Math.Min(length, (ulong)full.Length - offset);
+        ulong count = Math.Min(length, (ulong)entry.FileSize - offset);
         if (count == 0)
         {
             return Array.Empty<byte>();
         }
 
+        return entry.HasConsecutiveBlocks
+            ? ReadConsecutiveRange(entry, offset, count)
+            : ReadChainedRange(entry, offset, count);
+    }
+
+    /// <summary>
+    /// Reads a byte range from a file with consecutive blocks, copying only overlapping blocks.
+    /// </summary>
+    /// <param name="entry">The file entry to read from.</param>
+    /// <param name="offset">The byte offset within the file to start reading from.</param>
+    /// <param name="count">The number of bytes to read.</param>
+    /// <returns>The requested range (zero-filled tail when the package is truncated).</returns>
+    private byte[] ReadConsecutiveRange(StfsFileEntry entry, ulong offset, ulong count)
+    {
         byte[] result = new byte[count];
-        Array.Copy(full, (long)offset, result, 0, (long)count);
+        ulong dest = 0;
+        int block = entry.StartingBlock + (int)(offset / BlockSize);
+        int blockOff = (int)(offset % BlockSize);
+
+        while (dest < count)
+        {
+            int blockOffset = BlockNumberToOffset(block);
+            int step = (int)Math.Min(count - dest, (ulong)(BlockSize - blockOff));
+            if (blockOffset < 0 || blockOffset + blockOff + step > _rawData.Length)
+            {
+                Logger.Warning<StfsFile>($"Reached end of package data while reading {entry.FileName}");
+                break;
+            }
+
+            Array.Copy(_rawData, blockOffset + blockOff, result, (long)dest, step);
+            dest += (ulong)step;
+            block++;
+            blockOff = 0;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a byte range from a file with chained blocks by walking the level-0 hash
+    /// chain once, copying only the blocks overlapping the range.
+    /// </summary>
+    /// <param name="entry">The file entry to read from.</param>
+    /// <param name="offset">The byte offset within the file to start reading from.</param>
+    /// <param name="count">The number of bytes to read.</param>
+    /// <returns>The requested range (zero-filled tail when the chain ends early).</returns>
+    private byte[] ReadChainedRange(StfsFileEntry entry, ulong offset, ulong count)
+    {
+        byte[] result = new byte[count];
+        ulong skip = offset;
+        ulong dest = 0;
+        uint currentBlock = (uint)entry.StartingBlock;
+        int blocksRemaining = entry.AllocatedDataBlocks;
+
+        while (dest < count && blocksRemaining > 0 && currentBlock != kEndOfChain)
+        {
+            int hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
+            if (hashTableOffset < 0 || hashTableOffset + 0x18 > _rawData.Length)
+            {
+                break;
+            }
+
+            uint infoRaw = BinaryPrimitives.ReadUInt32BigEndian(_rawData.AsSpan(hashTableOffset + 0x14));
+            if (((infoRaw >> 30) & 0x03) != 2)
+            {
+                Logger.Warning<StfsFile>($"Block {currentBlock} is not marked as in use while reading {entry.FileName}");
+                break;
+            }
+
+            uint nextBlock = infoRaw & 0xFFFFFF;
+            int blockOffset = BlockNumberToOffset((int)currentBlock);
+            if (skip >= BlockSize)
+            {
+                skip -= BlockSize;
+            }
+            else
+            {
+                int blockOff = (int)skip;
+                int step = (int)Math.Min(count - dest, (ulong)(BlockSize - blockOff));
+                if (blockOffset < 0 || blockOffset + blockOff + step > _rawData.Length)
+                {
+                    Logger.Warning<StfsFile>($"Reached end of package data while reading {entry.FileName}");
+                    break;
+                }
+
+                Array.Copy(_rawData, blockOffset + blockOff, result, (long)dest, step);
+                dest += (ulong)step;
+                skip = 0;
+            }
+
+            currentBlock = nextBlock;
+            blocksRemaining--;
+        }
+
         return result;
     }
 
