@@ -342,6 +342,24 @@ public class XexFileSpaTests
         Assert.That(spa, Is.Null);
     }
 
+    [Test]
+    public void TryGetSpaFile_ThenTryGetIcon_BothSucceed()
+    {
+        uint titleId = 0x4D530910u;
+        byte[] icon = LoadIcon();
+        byte[] spaBytes = BuildGpdWithIcon(0x8000, icon);
+        byte[] pe = BuildPeImage($"{titleId:X8}", spaBytes);
+        byte[] xexBytes = BuildMinimalXex(titleId, pe);
+        XexFile xex = XexFile.FromBytes(xexBytes);
+        Assert.That(xex.IsValid, Is.True);
+        bool ok = xex.TryGetSpaFile(out SpaFile? spa);
+        Assert.That(ok, Is.True);
+        spa!.Dispose();
+        byte[]? extracted = xex.TryGetIcon();
+        Assert.That(extracted, Is.Not.Null);
+        Assert.That(extracted!.Length, Is.EqualTo(icon.Length));
+    }
+
     #endregion
 
     #region TryGetIcon
@@ -578,6 +596,41 @@ public class XexFileSpaTests
         byte[] data = new byte[small.Length + 20];
         Array.Copy(small, 0, data, 5, small.Length);
         Assert.That(InvokeScanForPng(data), Is.Null);
+    }
+
+    private static byte[] WithTextChunk(byte[] png, int payloadSize)
+    {
+        // Insert an ancillary chunk before IEND (FindPngEnd walks lengths only, CRCs unchecked).
+        byte[] chunk = new byte[12 + payloadSize];
+        BinaryPrimitives.WriteUInt32BigEndian(chunk.AsSpan(0), (uint)payloadSize);
+        chunk[4] = (byte)'t';
+        chunk[5] = (byte)'E';
+        chunk[6] = (byte)'X';
+        chunk[7] = (byte)'t';
+        byte[] result = new byte[png.Length + chunk.Length];
+        Array.Copy(png, 0, result, 0, png.Length - 12);
+        Array.Copy(chunk, 0, result, png.Length - 12, chunk.Length);
+        Array.Copy(png, png.Length - 12, result, png.Length - 12 + chunk.Length, 12);
+        return result;
+    }
+
+    [Test]
+    public void ScanForPng_ReturnsLargestPngRegardlessOfOrder()
+    {
+        byte[] small = LoadIcon();
+        byte[] large = WithTextChunk(small, 5000);
+        Assert.That(InvokeFindPngEnd(large, 0), Is.EqualTo(large.Length));
+
+        byte[] smallFirst = new byte[small.Length + large.Length + 20];
+        Array.Copy(small, 0, smallFirst, 5, small.Length);
+        Array.Copy(large, 0, smallFirst, 5 + small.Length + 5, large.Length);
+
+        byte[] largeFirst = new byte[small.Length + large.Length + 20];
+        Array.Copy(large, 0, largeFirst, 5, large.Length);
+        Array.Copy(small, 0, largeFirst, 5 + large.Length + 5, small.Length);
+
+        Assert.That(InvokeScanForPng(smallFirst), Is.EqualTo(large));
+        Assert.That(InvokeScanForPng(largeFirst), Is.EqualTo(large));
     }
 
     [Test]

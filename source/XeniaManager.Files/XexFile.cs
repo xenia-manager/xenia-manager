@@ -54,6 +54,19 @@ public sealed class XexFile
     private byte[] _rawData = Array.Empty<byte>();
 
     /// <summary>
+    /// Cached SPA/XDBF bytes from the first <see cref="TryGetSpaBytes"/> extraction
+    /// (null when extraction failed; see <see cref="_spaCacheAttempted"/>).
+    /// Avoids decrypting/decompressing the PE twice when callers use
+    /// <see cref="TryGetSpaFile"/> followed by <see cref="TryGetIcon"/>.
+    /// </summary>
+    private byte[]? _cachedSpaBytes;
+
+    /// <summary>
+    /// Whether the SPA extraction has been attempted (so a null <see cref="_cachedSpaBytes"/> is a cached miss).
+    /// </summary>
+    private bool _spaCacheAttempted;
+
+    /// <summary>
     /// Retail AES key used to unwrap the per-file <c>ImageKey</c> at <c>security_offset+0x150</c>.
     /// </summary>
     private static readonly byte[] RetailKey =
@@ -272,7 +285,7 @@ public sealed class XexFile
             return false;
         }
 
-        byte[]? spaBytes = TryGetSpaBytes(_rawData);
+        byte[]? spaBytes = GetSpaBytesCached();
         if (spaBytes == null)
         {
             return false;
@@ -307,7 +320,7 @@ public sealed class XexFile
                 return null;
             }
 
-            byte[]? spaBytes = TryGetSpaBytes(_rawData);
+            byte[]? spaBytes = GetSpaBytesCached();
             if (spaBytes == null)
             {
                 return null;
@@ -339,6 +352,21 @@ public sealed class XexFile
             Logger.Trace<XexFile>($"TryGetIcon failed: {ex.Message}");
             return null;
         }
+    }
+
+    /// <summary>
+    /// Gets the cached SPA bytes, extracting once via <see cref="TryGetSpaBytes"/> on first call.
+    /// </summary>
+    /// <returns>Cached SPA/XDBF bytes, or null when extraction failed (miss is cached too).</returns>
+    private byte[]? GetSpaBytesCached()
+    {
+        if (!_spaCacheAttempted)
+        {
+            _cachedSpaBytes = TryGetSpaBytes(_rawData);
+            _spaCacheAttempted = true;
+        }
+
+        return _cachedSpaBytes;
     }
 
     /// <summary>
@@ -986,8 +1014,13 @@ public sealed class XexFile
     /// </summary>
     /// <param name="data">SPA/XDBF bytes or raw XEX tail.</param>
     /// <returns>Largest PNG found or null.</returns>
+    /// <remarks>
+    /// Largest (not first) matches <see cref="SpaFile.GetAnyValidIcon"/>: raw byte order carries
+    /// no importance signal, so size is the best proxy for title artwork.
+    /// </remarks>
     private static byte[]? ScanForPng(byte[] data)
     {
+        byte[]? best = null;
         for (int i = 0; i + 8 < data.Length; i++)
         {
             if (data[i] == 0x89 && data[i + 1] == 0x50 && data[i + 2] == 0x4E && data[i + 3] == 0x47)
@@ -996,17 +1029,16 @@ public sealed class XexFile
                 if (end > i + 67)
                 {
                     int len = end - i;
-                    if (len >= 1024)
+                    if (len >= 1024 && (best == null || len > best.Length))
                     {
-                        byte[] png = new byte[len];
-                        Buffer.BlockCopy(data, i, png, 0, len);
-                        return png;
+                        best = new byte[len];
+                        Buffer.BlockCopy(data, i, best, 0, len);
                     }
                 }
             }
         }
 
-        return null;
+        return best;
     }
 
     /// <summary>
@@ -1056,7 +1088,7 @@ public sealed class XexFile
     {
         return new XexHeader
         {
-            Magic = data.Take(4).ToArray(),
+            Magic = data.AsSpan(0, 4).ToArray(),
             ModuleFlags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(4)),
             SizeOfHeaders = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(8)),
             SizeOfDiscardableHeaders = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(12)),
@@ -1091,15 +1123,15 @@ public sealed class XexFile
             bool isXex25 = magic == "XEX%";
             HvImageInfo xex1ImageInfo = new HvImageInfo
             {
-                Signature = data.Skip(offset + 0x8).Take(0x100).ToArray(),
+                Signature = data.AsSpan(offset + 0x8, 0x100).ToArray(),
                 InfoSize = 0,
                 ImageFlags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(isXex25 ? offset + 0x144 : offset + 0x158)),
                 LoadAddress = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x130)),
-                ImageHash = data.Skip(offset + 0x108).Take(0x14).ToArray(),
+                ImageHash = data.AsSpan(offset + 0x108, 0x14).ToArray(),
                 ImportTableCount = 0,
-                ImportDigest = data.Skip(offset + 0x11C).Take(0x14).ToArray(),
-                MediaId = isXex25 ? new byte[0x10] : data.Skip(offset + 0x144).Take(0x10).ToArray(),
-                ImageKey = data.Skip(offset + 0x134).Take(0x10).ToArray(),
+                ImportDigest = data.AsSpan(offset + 0x11C, 0x14).ToArray(),
+                MediaId = isXex25 ? new byte[0x10] : data.AsSpan(offset + 0x144, 0x10).ToArray(),
+                ImageKey = data.AsSpan(offset + 0x134, 0x10).ToArray(),
                 ExportTableAddress = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(isXex25 ? offset + 0x148 : offset + 0x15C)),
                 HeaderHash = new byte[0x14],
                 GameRegion = isXex25 ? 0 : BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x154))
@@ -1117,17 +1149,17 @@ public sealed class XexFile
 
         HvImageInfo imageInfo = new HvImageInfo
         {
-            Signature = data.Skip(offset + 0x8).Take(0x100).ToArray(),
+            Signature = data.AsSpan(offset + 0x8, 0x100).ToArray(),
             InfoSize = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x108)),
             ImageFlags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x10C)),
             LoadAddress = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x110)),
-            ImageHash = data.Skip(offset + 0x114).Take(0x14).ToArray(),
+            ImageHash = data.AsSpan(offset + 0x114, 0x14).ToArray(),
             ImportTableCount = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x128)),
-            ImportDigest = data.Skip(offset + 0x12C).Take(0x14).ToArray(),
-            MediaId = data.Skip(offset + 0x140).Take(0x10).ToArray(),
-            ImageKey = data.Skip(offset + 0x150).Take(0x10).ToArray(),
+            ImportDigest = data.AsSpan(offset + 0x12C, 0x14).ToArray(),
+            MediaId = data.AsSpan(offset + 0x140, 0x10).ToArray(),
+            ImageKey = data.AsSpan(offset + 0x150, 0x10).ToArray(),
             ExportTableAddress = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x160)),
-            HeaderHash = data.Skip(offset + 0x164).Take(0x14).ToArray(),
+            HeaderHash = data.AsSpan(offset + 0x164, 0x14).ToArray(),
             GameRegion = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x178))
         };
 
