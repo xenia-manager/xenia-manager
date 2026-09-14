@@ -122,7 +122,8 @@ public class GpdFile : IDisposable
     {
         get
         {
-            return GetEntriesByNamespace<SettingEntry>(EntryNamespace.Setting).Where(s => s.IsValid);
+            _settingsCache ??= GetEntriesByNamespace<SettingEntry>(EntryNamespace.Setting).Where(s => s.IsValid).ToList();
+            return _settingsCache;
         }
     }
 
@@ -167,7 +168,8 @@ public class GpdFile : IDisposable
     {
         get
         {
-            return GetEntriesByNamespace<StringEntry>(EntryNamespace.String).Where(s => s.IsValid);
+            _stringsCache ??= GetEntriesByNamespace<StringEntry>(EntryNamespace.String).Where(s => s.IsValid).ToList();
+            return _stringsCache;
         }
     }
 
@@ -204,6 +206,8 @@ public class GpdFile : IDisposable
     private List<AchievementEntry>? _achievementsCache;
     private List<ImageEntry>? _imagesCache;
     private List<TitleEntry>? _titlesCache;
+    private List<SettingEntry>? _settingsCache;
+    private List<StringEntry>? _stringsCache;
     private Dictionary<ulong, ImageEntry>? _imageCacheById;
 
     /// <summary>
@@ -405,25 +409,20 @@ public class GpdFile : IDisposable
         byte[] headerBytes = Header.ToBytes();
         headerBytes.CopyTo(fileData, 0);
 
-        // Write entry table, sorted by namespace then ID like the emulator does
+        // Write entry table, sorted by namespace then ID like the emulator does.
+        // The buffer is zero-initialized, so unused rows need no filler writes.
         List<EntryTableEntry> orderedEntries = Entries.OrderBy(e => e.Namespace).ThenBy(e => e.Id).ToList();
         int offset = 24;
-        for (int i = 0; i < Header.EntryTableLength; i++)
+        for (int i = 0; i < orderedEntries.Count && i < Header.EntryTableLength; i++)
         {
-            byte[] entryBytes = i < orderedEntries.Count
-                ? orderedEntries[i].ToBytes(_isBigEndian)
-                : new byte[18]; // Zero-fill unused entries
-            entryBytes.CopyTo(fileData, offset + i * 18);
+            orderedEntries[i].ToBytes(_isBigEndian).CopyTo(fileData, offset + i * 18);
         }
 
-        // Write a free space table
+        // Write the free space table (unused rows stay zero-initialized).
         offset = 24 + entryTableSize;
-        for (int i = 0; i < Header.FreeSpaceTableLength; i++)
+        for (int i = 0; i < FreeSpaceEntries.Count && i < Header.FreeSpaceTableLength; i++)
         {
-            byte[] entryBytes = i < FreeSpaceEntries.Count
-                ? FreeSpaceEntries[i].ToBytes(_isBigEndian)
-                : new byte[8]; // Zero-fill unused entries
-            entryBytes.CopyTo(fileData, offset + i * 8);
+            FreeSpaceEntries[i].ToBytes(_isBigEndian).CopyTo(fileData, offset + i * 8);
         }
 
         // Write data section
@@ -442,8 +441,7 @@ public class GpdFile : IDisposable
     public AchievementEntry? GetAchievement(uint achievementId)
     {
         EntryTableEntry entry = Entries.FirstOrDefault(e =>
-            e.Namespace == EntryNamespace.Achievement &&
-            (e.Id == achievementId || e.Id == 0x8000));
+            e.Namespace == EntryNamespace.Achievement && e.Id == achievementId);
 
         // Check if the entry is default (not found)
         if (entry.Namespace == default)
@@ -495,6 +493,139 @@ public class GpdFile : IDisposable
     }
 
     /// <summary>
+    /// Appends a payload to the data section and registers its entry table row.
+    /// </summary>
+    /// <param name="ns">The entry namespace.</param>
+    /// <param name="id">The entry ID within the namespace.</param>
+    /// <param name="payload">The entry payload bytes.</param>
+    private void AppendEntry(EntryNamespace ns, ulong id, byte[] payload)
+    {
+        Entries.Add(new EntryTableEntry
+        {
+            Namespace = ns,
+            Id = id,
+            OffsetSpecifier = (uint)Data.Length,
+            Length = (uint)payload.Length
+        });
+
+        byte[] newData = new byte[Data.Length + payload.Length];
+        Data.CopyTo(newData, 0);
+        payload.CopyTo(newData, Data.Length);
+        Data = newData;
+
+        InvalidateCaches();
+
+        // Update header counts (create a copy since Header is a struct)
+        XdbfHeader header = Header;
+        header.EntryCount = (uint)Entries.Count;
+        Header = header;
+    }
+
+    /// <summary>
+    /// Removes the entry table row for the given namespace and ID.
+    /// </summary>
+    /// <param name="ns">The entry namespace.</param>
+    /// <param name="id">The entry ID within the namespace.</param>
+    /// <returns>True when a row was removed; false when not found.</returns>
+    private bool TryRemoveEntry(EntryNamespace ns, ulong id)
+    {
+        EntryTableEntry entry = Entries.FirstOrDefault(e => e.Namespace == ns && e.Id == id);
+
+        // Check if the entry is default (not found)
+        if (entry.Namespace == default)
+        {
+            return false;
+        }
+
+        Entries.Remove(entry);
+        InvalidateCaches();
+
+        // Update header counts (create a copy since Header is a struct)
+        XdbfHeader header = Header;
+        header.EntryCount = (uint)Entries.Count;
+        Header = header;
+        return true;
+    }
+
+    /// <summary>
+    /// Finds a valid achievement entry by its ID.
+    /// Invalid/corrupted entries are skipped and cannot be modified.
+    /// </summary>
+    /// <param name="achievementId">The achievement ID to find.</param>
+    /// <param name="verb">Past-tense verb for log messages (e.g., "unlocked").</param>
+    /// <param name="index">The entry table index when found.</param>
+    /// <param name="achievement">The parsed achievement when found and valid.</param>
+    /// <returns>True when the achievement was found and is valid.</returns>
+    private bool TryFindValidAchievement(uint achievementId, string verb, out int index, out AchievementEntry achievement)
+    {
+        index = Entries.FindIndex(e =>
+            e.Namespace == EntryNamespace.Achievement &&
+            e.Id == achievementId);
+
+        if (index < 0)
+        {
+            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} not found");
+            achievement = null!;
+            return false;
+        }
+
+        AchievementEntry? parsed = ParseAchievementEntry(Entries[index]);
+        if (parsed == null)
+        {
+            Logger.Warning<GpdFile>($"Failed to parse achievement 0x{achievementId:X8}");
+            achievement = null!;
+            return false;
+        }
+
+        if (!parsed.IsValid)
+        {
+            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} is invalid/corrupted and cannot be {verb}. Reason: {parsed.ValidationError}");
+            achievement = null!;
+            return false;
+        }
+
+        achievement = parsed;
+        return true;
+    }
+
+    /// <summary>
+    /// Writes new payload bytes for the entry table row, appending to the data
+    /// section and freeing the old range when the size changed.
+    /// EntryTableEntry is a struct, so the updated row is written back into the list.
+    /// </summary>
+    /// <param name="index">The index of the entry table row to update.</param>
+    /// <param name="newPayload">The new payload bytes.</param>
+    private void UpdateEntryData(int index, byte[] newPayload)
+    {
+        EntryTableEntry entry = Entries[index];
+
+        // If new data is the same size, just overwrite
+        if (newPayload.Length == entry.Length)
+        {
+            Buffer.BlockCopy(newPayload, 0, Data, (int)entry.OffsetSpecifier, newPayload.Length);
+            return;
+        }
+
+        // Append the new data and mark the old space as free.
+        uint oldOffset = entry.OffsetSpecifier;
+        uint oldLength = entry.Length;
+        entry.OffsetSpecifier = (uint)Data.Length;
+        entry.Length = (uint)newPayload.Length;
+        Entries[index] = entry;
+
+        byte[] newData = new byte[Data.Length + newPayload.Length];
+        Data.CopyTo(newData, 0);
+        newPayload.CopyTo(newData, Data.Length);
+        Data = newData;
+
+        FreeSpaceEntries.Add(new FreeSpaceEntry
+        {
+            OffsetSpecifier = oldOffset,
+            Length = oldLength
+        });
+    }
+
+    /// <summary>
     /// Unlocks an achievement by its ID.
     /// Invalid/corrupted entries are skipped and cannot be modified.
     /// </summary>
@@ -505,26 +636,8 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Unlocking achievement 0x{achievementId:X8}");
 
-        int index = Entries.FindIndex(e =>
-            e.Namespace == EntryNamespace.Achievement &&
-            e.Id == achievementId);
-
-        if (index < 0)
+        if (!TryFindValidAchievement(achievementId, "unlocked", out int index, out AchievementEntry achievement))
         {
-            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} not found");
-            return false;
-        }
-
-        AchievementEntry? achievement = ParseAchievementEntry(Entries[index]);
-        if (achievement == null)
-        {
-            Logger.Warning<GpdFile>($"Failed to parse achievement 0x{achievementId:X8}");
-            return false;
-        }
-
-        if (!achievement.IsValid)
-        {
-            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} is invalid/corrupted and cannot be unlocked. Reason: {achievement.ValidationError}");
             return false;
         }
 
@@ -545,26 +658,8 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Locking achievement 0x{achievementId:X8}");
 
-        int index = Entries.FindIndex(e =>
-            e.Namespace == EntryNamespace.Achievement &&
-            e.Id == achievementId);
-
-        if (index < 0)
+        if (!TryFindValidAchievement(achievementId, "locked", out int index, out AchievementEntry achievement))
         {
-            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} not found");
-            return false;
-        }
-
-        AchievementEntry? achievement = ParseAchievementEntry(Entries[index]);
-        if (achievement == null)
-        {
-            Logger.Warning<GpdFile>($"Failed to parse achievement 0x{achievementId:X8}");
-            return false;
-        }
-
-        if (!achievement.IsValid)
-        {
-            Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} is invalid/corrupted and cannot be locked. Reason: {achievement.ValidationError}");
             return false;
         }
 
@@ -584,31 +679,7 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Adding new achievement: {achievement.Name} (ID: 0x{achievement.AchievementId:X8})");
 
-        byte[] achievementData = achievement.ToBytes(_isBigEndian);
-
-        // Create entry table entry
-        EntryTableEntry entry = new EntryTableEntry
-        {
-            Namespace = EntryNamespace.Achievement,
-            Id = achievement.AchievementId,
-            OffsetSpecifier = (uint)Data.Length,
-            Length = (uint)achievementData.Length
-        };
-
-        // Add to the data section
-        byte[] newData = new byte[Data.Length + achievementData.Length];
-        Data.CopyTo(newData, 0);
-        achievementData.CopyTo(newData, Data.Length);
-        Data = newData;
-
-        // Add to entries
-        Entries.Add(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
+        AppendEntry(EntryNamespace.Achievement, achievement.AchievementId, achievement.ToBytes(_isBigEndian));
 
         Logger.Info<GpdFile>($"Successfully added achievement: {achievement.Name}");
         return achievement;
@@ -627,29 +698,7 @@ public class GpdFile : IDisposable
         ImageEntry image = ImageEntry.FromPngData(pngData);
         image.ImageId = imageId;
 
-        // Create entry table entry
-        EntryTableEntry entry = new EntryTableEntry
-        {
-            Namespace = EntryNamespace.Image,
-            Id = imageId,
-            OffsetSpecifier = (uint)Data.Length,
-            Length = (uint)pngData.Length
-        };
-
-        // Add to the data section
-        byte[] newData = new byte[Data.Length + pngData.Length];
-        Data.CopyTo(newData, 0);
-        pngData.CopyTo(newData, Data.Length);
-        Data = newData;
-
-        // Add to entries
-        Entries.Add(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
+        AppendEntry(EntryNamespace.Image, imageId, pngData);
 
         Logger.Info<GpdFile>($"Successfully added image (ID: 0x{imageId:X8})");
         return image;
@@ -690,29 +739,7 @@ public class GpdFile : IDisposable
         StringEntry result = StringEntry.FromString(value);
         byte[] stringData = Encoding.BigEndianUnicode.GetBytes(value + '\0');
 
-        // Create entry table entry
-        EntryTableEntry entry = new EntryTableEntry
-        {
-            Namespace = EntryNamespace.String,
-            Id = stringId,
-            OffsetSpecifier = (uint)Data.Length,
-            Length = (uint)stringData.Length
-        };
-
-        // Add to the data section
-        byte[] newData = new byte[Data.Length + stringData.Length];
-        Data.CopyTo(newData, 0);
-        stringData.CopyTo(newData, Data.Length);
-        Data = newData;
-
-        // Add to entries
-        Entries.Add(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
+        AppendEntry(EntryNamespace.String, stringId, stringData);
 
         Logger.Info<GpdFile>($"Successfully added string (ID: 0x{stringId:X8})");
         return result;
@@ -727,30 +754,8 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Adding new title (ID: 0x{title.TitleId:X8})");
 
-        // Create entry table entry
-        EntryTableEntry entry = new EntryTableEntry
-        {
-            Namespace = EntryNamespace.Title,
-            Id = title.TitleId,
-            OffsetSpecifier = (uint)Data.Length,
-            Length = (uint)title.ToBytes().Length
-        };
-
-        // Add to the data section
         byte[] titleData = title.ToBytes();
-        byte[] newData = new byte[Data.Length + titleData.Length];
-        Data.CopyTo(newData, 0);
-        titleData.CopyTo(newData, Data.Length);
-        Data = newData;
-
-        // Add to entries
-        Entries.Add(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
+        AppendEntry(EntryNamespace.Title, title.TitleId, titleData);
 
         Logger.Info<GpdFile>($"Successfully added title (ID: 0x{title.TitleId:X8})");
         return title;
@@ -767,25 +772,7 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Adding raw entry (Namespace: {ns}, ID: 0x{id:X}, {payload.Length} bytes)");
 
-        EntryTableEntry entry = new EntryTableEntry
-        {
-            Namespace = ns,
-            Id = id,
-            OffsetSpecifier = (uint)Data.Length,
-            Length = (uint)payload.Length
-        };
-
-        byte[] newData = new byte[Data.Length + payload.Length];
-        Data.CopyTo(newData, 0);
-        payload.CopyTo(newData, Data.Length);
-        Data = newData;
-
-        Entries.Add(entry);
-        InvalidateCaches();
-
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
+        AppendEntry(ns, id, payload);
     }
 
     /// <summary>
@@ -797,30 +784,8 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Adding new setting (ID: 0x{setting.SettingId:X8})");
 
-        // Create entry table entry
-        EntryTableEntry entry = new EntryTableEntry
-        {
-            Namespace = EntryNamespace.Setting,
-            Id = setting.SettingId,
-            OffsetSpecifier = (uint)Data.Length,
-            Length = (uint)setting.ToBytes().Length
-        };
-
-        // Add to the data section
         byte[] settingData = setting.ToBytes();
-        byte[] newData = new byte[Data.Length + settingData.Length];
-        Data.CopyTo(newData, 0);
-        settingData.CopyTo(newData, Data.Length);
-        Data = newData;
-
-        // Add to entries
-        Entries.Add(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
+        AppendEntry(EntryNamespace.Setting, setting.SettingId, settingData);
 
         Logger.Info<GpdFile>($"Successfully added setting (ID: 0x{setting.SettingId:X8})");
         return setting;
@@ -835,24 +800,11 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Removing achievement 0x{achievementId:X8}");
 
-        EntryTableEntry entry = Entries.FirstOrDefault(e =>
-            e.Namespace == EntryNamespace.Achievement &&
-            e.Id == achievementId);
-
-        // Check if the entry is default (not found)
-        if (entry.Namespace == default)
+        if (!TryRemoveEntry(EntryNamespace.Achievement, achievementId))
         {
             Logger.Warning<GpdFile>($"Achievement 0x{achievementId:X8} not found");
             return false;
         }
-
-        Entries.Remove(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
 
         // Note: This doesn't reclaim the data space - would need compaction for that
         Logger.Info<GpdFile>($"Successfully removed achievement");
@@ -868,24 +820,11 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Removing image 0x{imageId:X8}");
 
-        EntryTableEntry entry = Entries.FirstOrDefault(e =>
-            e.Namespace == EntryNamespace.Image &&
-            e.Id == imageId);
-
-        // Check if the entry is default (not found)
-        if (entry.Namespace == default)
+        if (!TryRemoveEntry(EntryNamespace.Image, imageId))
         {
             Logger.Warning<GpdFile>($"Image 0x{imageId:X8} not found");
             return false;
         }
-
-        Entries.Remove(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
 
         // Note: This doesn't reclaim the data space - would need compaction for that
         Logger.Info<GpdFile>($"Successfully removed image");
@@ -901,24 +840,11 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Removing title 0x{titleId:X8}");
 
-        EntryTableEntry entry = Entries.FirstOrDefault(e =>
-            e.Namespace == EntryNamespace.Title &&
-            e.Id == titleId);
-
-        // Check if the entry is default (not found)
-        if (entry.Namespace == default)
+        if (!TryRemoveEntry(EntryNamespace.Title, titleId))
         {
             Logger.Warning<GpdFile>($"Title 0x{titleId:X8} not found");
             return false;
         }
-
-        Entries.Remove(entry);
-        InvalidateCaches();
-
-        // Update header counts (create a copy since Header is a struct)
-        XdbfHeader header = Header;
-        header.EntryCount = (uint)Entries.Count;
-        Header = header;
 
         // Note: This doesn't reclaim the data space - would need compaction for that
         Logger.Info<GpdFile>($"Successfully removed title");
@@ -1113,45 +1039,7 @@ public class GpdFile : IDisposable
     private void UpdateAchievementEntry(int index, AchievementEntry achievement)
     {
         InvalidateCaches();
-        EntryTableEntry entry = Entries[index];
-        byte[] newAchievementData = achievement.ToBytes(_isBigEndian);
-
-        // Calculate data offset for this entry
-        int dataOffset = (int)DataOffset + (int)entry.OffsetSpecifier;
-
-        // If new data is the same size, just overwrite
-        if (newAchievementData.Length == entry.Length)
-        {
-            for (int i = 0; i < newAchievementData.Length; i++)
-            {
-                Data[(int)entry.OffsetSpecifier + i] = newAchievementData[i];
-            }
-        }
-        else
-        {
-            // TODO: Need to resize, remove old and add new
-            // Currently we just append and mark old as free space
-
-            // Update the entry to point to a new location.
-            // EntryTableEntry is a struct, so write the updated row back into the list.
-            uint oldLength = entry.Length;
-            entry.OffsetSpecifier = (uint)Data.Length;
-            entry.Length = (uint)newAchievementData.Length;
-            Entries[index] = entry;
-
-            // Append new data
-            byte[] newData = new byte[Data.Length + newAchievementData.Length];
-            Data.CopyTo(newData, 0);
-            newAchievementData.CopyTo(newData, Data.Length);
-            Data = newData;
-
-            // Add old space to the free space table
-            FreeSpaceEntries.Add(new FreeSpaceEntry
-            {
-                OffsetSpecifier = (uint)(dataOffset - DataOffset),
-                Length = oldLength
-            });
-        }
+        UpdateEntryData(index, achievement.ToBytes(_isBigEndian));
     }
 
     /// <summary>
@@ -1211,42 +1099,7 @@ public class GpdFile : IDisposable
         }
 
         InvalidateCaches();
-        EntryTableEntry entry = Entries[index];
-        byte[] newTitleData = title.ToBytes();
-
-        // Calculate data offset for this entry
-        int dataOffset = (int)DataOffset + (int)entry.OffsetSpecifier;
-
-        // If new data is the same size, just overwrite
-        if (newTitleData.Length == entry.Length)
-        {
-            for (int i = 0; i < newTitleData.Length; i++)
-            {
-                Data[(int)entry.OffsetSpecifier + i] = newTitleData[i];
-            }
-        }
-        else
-        {
-            // Append the new data and mark the old space as free.
-            // EntryTableEntry is a struct, so write the updated row back into the list.
-            uint oldLength = entry.Length;
-            entry.OffsetSpecifier = (uint)Data.Length;
-            entry.Length = (uint)newTitleData.Length;
-            Entries[index] = entry;
-
-            // Append new data
-            byte[] newData = new byte[Data.Length + newTitleData.Length];
-            Data.CopyTo(newData, 0);
-            newTitleData.CopyTo(newData, Data.Length);
-            Data = newData;
-
-            // Add old space to the free space table
-            FreeSpaceEntries.Add(new FreeSpaceEntry
-            {
-                OffsetSpecifier = (uint)(dataOffset - DataOffset),
-                Length = oldLength
-            });
-        }
+        UpdateEntryData(index, title.ToBytes());
 
         Logger.Info<GpdFile>($"Successfully updated title entry: {title.TitleName}");
         return true;
@@ -1276,6 +1129,8 @@ public class GpdFile : IDisposable
         _achievementsCache = null;
         _imagesCache = null;
         _titlesCache = null;
+        _settingsCache = null;
+        _stringsCache = null;
         _imageCacheById = null;
     }
 

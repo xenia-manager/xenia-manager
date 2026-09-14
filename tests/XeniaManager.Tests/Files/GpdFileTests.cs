@@ -986,5 +986,59 @@ public class GpdFileTests
         Assert.That(gpd.GetTotalGamerscore(), Is.EqualTo(50));
     }
 
+    [Test]
+    public void GetAchievement_MissingIdWith8000Present_ReturnsNull()
+    {
+        using GpdFile gpd = GpdFile.Create();
+        gpd.AddAchievement(new AchievementEntry
+        {
+            AchievementId = 1,
+            Gamerscore = 10,
+            Name = "First"
+        });
+        gpd.AddAchievement(new AchievementEntry
+        {
+            AchievementId = 0x8000,
+            Gamerscore = 10,
+            Name = "High ID"
+        });
+
+        Assert.That(gpd.GetAchievement(1)!.Name, Is.EqualTo("First"));
+        Assert.That(gpd.GetAchievement(0x8000)!.Name, Is.EqualTo("High ID"));
+        Assert.That(gpd.GetAchievement(99), Is.Null);
+    }
+
+    [Test]
+    public void AddAndRemove_RoundTrip()
+    {
+        using GpdFile gpd = GpdFile.Create();
+        gpd.AddAchievement(new AchievementEntry
+        {
+            AchievementId = 7,
+            Gamerscore = 15,
+            Name = "Seventh"
+        });
+        gpd.AddString(0x8000, "Title");
+        gpd.AddTitle(new TitleEntry
+        {
+            TitleId = 0x4D5309C9,
+            TitleName = "Game"
+        });
+
+        Assert.That(gpd.GetAchievement(7)!.Name, Is.EqualTo("Seventh"));
+        Assert.That(gpd.GetString(0x8000)!.Value, Is.EqualTo("Title"));
+
+        Assert.That(gpd.RemoveAchievement(7), Is.True);
+        Assert.That(gpd.GetAchievement(7), Is.Null);
+        Assert.That(gpd.RemoveAchievement(7), Is.False);
+        Assert.That(gpd.RemoveTitle(0x4D5309C9), Is.True);
+
+        // Save/reload keeps the remaining entries intact (exercises table serialization).
+        byte[] bytes = gpd.ToBytes();
+        using GpdFile reloaded = GpdFile.FromBytes(bytes);
+        Assert.That(reloaded.GetString(0x8000)!.Value, Is.EqualTo("Title"));
+        Assert.That(reloaded.GetAchievement(7), Is.Null);
+    }
+
     #endregion
 }
