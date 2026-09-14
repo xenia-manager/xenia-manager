@@ -215,6 +215,18 @@ public class XConfigFileTests
     }
 
     [Test]
+    public void ReadSetting_TypeSizeMismatch_ReturnsDefault()
+    {
+        XConfigFile xconfig = XConfigFile.Create();
+
+        xconfig.WriteSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.Language, 7u);
+        ulong result = xconfig.ReadSetting<ulong>(XConfigCategory.User, (ushort)XConfigUserSetting.Language);
+
+        Assert.That(result, Is.EqualTo(0ul), "Mismatched type size should return default value");
+        Assert.That(xconfig.ReadSetting<uint>(XConfigCategory.User, (ushort)XConfigUserSetting.Language), Is.EqualTo(7u));
+    }
+
+    [Test]
     public void BigEndian_WriteThenRead_RawBytesCorrect()
     {
         XConfigFile xconfig = XConfigFile.Create();
