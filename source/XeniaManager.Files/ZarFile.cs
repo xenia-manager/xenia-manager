@@ -28,6 +28,7 @@ public sealed class ZarFile : IDisposable
 {
     private bool _disposed;
     private Stream? _stream;
+    private Decompressor? _decompressor;
     private readonly List<CompressionOffsetRecord> _offsetRecords;
     private readonly byte[] _nameTable;
     private readonly List<FileDirectoryEntry> _fileTree;
@@ -672,10 +673,11 @@ public sealed class ZarFile : IDisposable
             return compressed;
         }
 
-        // Decompress with zstd (always produces exactly 65536 bytes per format spec)
-        using Decompressor decompressor = new Decompressor();
+        // Decompress with zstd (always produces exactly 65536 bytes per format spec).
+        // The context is reused across blocks and disposed with the archive.
+        _decompressor ??= new Decompressor();
         byte[] output = new byte[65536];
-        int written = decompressor.Unwrap(compressed, output);
+        int written = _decompressor.Unwrap(compressed, output);
         if (written != 65536)
         {
             throw new InvalidDataException($"Unexpected decompressed size {written} for block {blockIdx} (expected 65536, compressed {compressedSize} bytes)");
@@ -954,14 +956,8 @@ public sealed class ZarFile : IDisposable
 
             try
             {
-                FileDirectoryEntry? dirEntry = Lookup(entry.Name);
-                if (dirEntry == null || !dirEntry.IsFile)
-                {
-                    continue;
-                }
-
-                byte[] data = ReadFile(dirEntry);
-                if (data.Length >= 0x18)
+                byte[]? data = ReadFile(entry.Name);
+                if (data != null && data.Length >= 0x18)
                 {
                     Logger.Trace<ZarFile>($"ZAR alternative XEX candidate: '{entry.Name}' ({data.Length} bytes)");
                     return data;
@@ -1031,6 +1027,8 @@ public sealed class ZarFile : IDisposable
         {
             _stream?.Dispose();
             _stream = null;
+            _decompressor?.Dispose();
+            _decompressor = null;
         }
 
         _disposed = true;
