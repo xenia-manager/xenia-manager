@@ -726,6 +726,36 @@ public class XConfigFile
     }
 
     /// <summary>
+    /// Resolves a registered setting field and validates the access size.
+    /// </summary>
+    /// <param name="category">The setting category.</param>
+    /// <param name="settingId">The setting identifier within the category.</param>
+    /// <param name="size">The accessed byte count, or null to skip the size check.</param>
+    /// <param name="action">Action name for log messages ("read", "typed read", ...).</param>
+    /// <param name="field">The resolved field descriptor.</param>
+    /// <returns>True when the field exists and the size matches.</returns>
+    private static bool TryGetField(XConfigCategory category, ushort settingId, int? size, string action, out FieldDescriptor field)
+    {
+        field = default;
+        FieldDescriptor? found = XConfigFields.Find(category, settingId);
+        if (found is null)
+        {
+            Logger.Warning<XConfigFile>($"Unknown setting on {action}: category={category}, settingId={settingId}");
+            return false;
+        }
+
+        if (size.HasValue && size.Value != found.Value.Size)
+        {
+            Logger.Warning<XConfigFile>(
+                $"Type size mismatch for category={category}, settingId={settingId}: expected {found.Value.Size} bytes, got {size.Value}");
+            return false;
+        }
+
+        field = found.Value;
+        return true;
+    }
+
+    /// <summary>
     /// Reads a raw setting field into the provided buffer.
     /// </summary>
     /// <param name="category">The setting category.</param>
@@ -733,20 +763,18 @@ public class XConfigFile
     /// <param name="buffer">Buffer to receive the raw bytes.</param>
     public void ReadSetting(XConfigCategory category, ushort settingId, byte[] buffer)
     {
-        FieldDescriptor? field = XConfigFields.Find(category, settingId);
-        if (field is null)
+        if (!TryGetField(category, settingId, null, "read", out FieldDescriptor field))
         {
-            Logger.Warning<XConfigFile>($"Unknown setting on read: category={category}, settingId={settingId}");
             return;
         }
 
         Logger.Trace<XConfigFile>(
-            $"Reading setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, size={field.Value.Size}");
+            $"Reading setting: category={category}, settingId={settingId}, offset=0x{field.AbsoluteOffset:X4}, size={field.Size}");
 
         lock (_lock)
         {
-            int bytesToCopy = Math.Min(field.Value.Size, buffer.Length);
-            Buffer.BlockCopy(_data, field.Value.AbsoluteOffset, buffer, 0, bytesToCopy);
+            int bytesToCopy = Math.Min(field.Size, buffer.Length);
+            Buffer.BlockCopy(_data, field.AbsoluteOffset, buffer, 0, bytesToCopy);
         }
     }
 
@@ -758,20 +786,18 @@ public class XConfigFile
     /// <param name="buffer">Source buffer with the raw bytes to write.</param>
     public void WriteSetting(XConfigCategory category, ushort settingId, byte[] buffer)
     {
-        FieldDescriptor? field = XConfigFields.Find(category, settingId);
-        if (field is null)
+        if (!TryGetField(category, settingId, null, "write", out FieldDescriptor field))
         {
-            Logger.Warning<XConfigFile>($"Unknown setting on write: category={category}, settingId={settingId}");
             return;
         }
 
         Logger.Trace<XConfigFile>(
-            $"Writing setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, size={field.Value.Size}");
+            $"Writing setting: category={category}, settingId={settingId}, offset=0x{field.AbsoluteOffset:X4}, size={field.Size}");
 
         lock (_lock)
         {
-            int bytesToCopy = Math.Min(field.Value.Size, buffer.Length);
-            Buffer.BlockCopy(buffer, 0, _data, field.Value.AbsoluteOffset, bytesToCopy);
+            int bytesToCopy = Math.Min(field.Size, buffer.Length);
+            Buffer.BlockCopy(buffer, 0, _data, field.AbsoluteOffset, bytesToCopy);
             FlushToFile();
         }
     }
@@ -785,28 +811,20 @@ public class XConfigFile
     /// <returns>The deserialized value, or default if the setting is unrecognized.</returns>
     public T ReadSetting<T>(XConfigCategory category, ushort settingId) where T : unmanaged
     {
-        FieldDescriptor? field = XConfigFields.Find(category, settingId);
-        if (field is null)
-        {
-            Logger.Warning<XConfigFile>($"Unknown setting on typed read: category={category}, settingId={settingId}");
-            return default;
-        }
-
         int tSize = Marshal.SizeOf<T>();
-        if (tSize != field.Value.Size)
+        if (!TryGetField(category, settingId, tSize, "typed read", out FieldDescriptor field))
         {
-            Logger.Warning<XConfigFile>($"Type size mismatch for category={category}, settingId={settingId}: expected {field.Value.Size} bytes, got {tSize}");
             return default;
         }
 
         Logger.Trace<XConfigFile>(
-            $"Reading typed setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, type={typeof(T).Name}");
+            $"Reading typed setting: category={category}, settingId={settingId}, offset=0x{field.AbsoluteOffset:X4}, type={typeof(T).Name}");
 
         lock (_lock)
         {
-            int size = field.Value.Size;
+            int size = field.Size;
             byte[] buffer = new byte[size];
-            Buffer.BlockCopy(_data, field.Value.AbsoluteOffset, buffer, 0, size);
+            Buffer.BlockCopy(_data, field.AbsoluteOffset, buffer, 0, size);
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(buffer);
@@ -825,26 +843,18 @@ public class XConfigFile
     /// <param name="value">The value to write.</param>
     public void WriteSetting<T>(XConfigCategory category, ushort settingId, T value) where T : unmanaged
     {
-        FieldDescriptor? field = XConfigFields.Find(category, settingId);
-        if (field is null)
-        {
-            Logger.Warning<XConfigFile>($"Unknown setting on typed write: category={category}, settingId={settingId}");
-            return;
-        }
-
         int tSize = Marshal.SizeOf<T>();
-        if (tSize != field.Value.Size)
+        if (!TryGetField(category, settingId, tSize, "typed write", out FieldDescriptor field))
         {
-            Logger.Warning<XConfigFile>($"Type size mismatch for category={category}, settingId={settingId}: expected {field.Value.Size} bytes, got {tSize}");
             return;
         }
 
         Logger.Trace<XConfigFile>(
-            $"Writing typed setting: category={category}, settingId={settingId}, offset=0x{field.Value.AbsoluteOffset:X4}, type={typeof(T).Name}");
+            $"Writing typed setting: category={category}, settingId={settingId}, offset=0x{field.AbsoluteOffset:X4}, type={typeof(T).Name}");
 
         lock (_lock)
         {
-            int size = field.Value.Size;
+            int size = field.Size;
             byte[] buffer = new byte[size];
             MemoryMarshal.Write(buffer.AsSpan(), in value);
             if (BitConverter.IsLittleEndian)
@@ -852,7 +862,7 @@ public class XConfigFile
                 Array.Reverse(buffer);
             }
 
-            Buffer.BlockCopy(buffer, 0, _data, field.Value.AbsoluteOffset, size);
+            Buffer.BlockCopy(buffer, 0, _data, field.AbsoluteOffset, size);
             FlushToFile();
         }
     }
