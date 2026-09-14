@@ -100,6 +100,61 @@ public sealed class SvodFile : IDisposable
     }
 
     /// <summary>
+    /// Reads raw bytes at the given offset in the first data file without hash translation.
+    /// Thread-safe: locks the stream and restores its position.
+    /// </summary>
+    /// <param name="offset">Raw byte offset in the first data file.</param>
+    /// <param name="buffer">Buffer receiving the bytes; all bytes must be readable.</param>
+    /// <returns>True when the full buffer was read.</returns>
+    private bool TryReadRaw(int offset, byte[] buffer)
+    {
+        if (_dataStreams == null || _dataStreams.Count == 0 || offset < 0)
+        {
+            return false;
+        }
+
+        try
+        {
+            FileStream first = _dataStreams[0];
+            if ((long)offset + buffer.Length > first.Length)
+            {
+                return false;
+            }
+
+            lock (first)
+            {
+                long pos = first.Position;
+                try
+                {
+                    first.Seek(offset, SeekOrigin.Begin);
+                    return first.Read(buffer, 0, buffer.Length) == buffer.Length;
+                }
+                finally
+                {
+                    first.Seek(pos, SeekOrigin.Begin);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<SvodFile>($"TryReadRaw at 0x{offset:X} failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Reads an ASCII magic prefix at a raw offset in the first data file for layout probing.
+    /// </summary>
+    /// <param name="offset">Raw byte offset.</param>
+    /// <param name="length">Number of bytes to read.</param>
+    /// <returns>The trimmed string, or empty when unreadable.</returns>
+    private string ReadRawMagic(int offset, int length)
+    {
+        byte[] buf = new byte[length];
+        return TryReadRaw(offset, buf) ? Encoding.ASCII.GetString(buf).Trim('\0') : string.Empty;
+    }
+
+    /// <summary>
     /// Determines SVOD layout (Enhanced / XSF / Single / Multiple) and sets <see cref="_svodBaseOffset"/>, <see cref="_magicOffset"/>, <see cref="_baseAddress"/>, <see cref="_sectorOffset"/>.
     /// </summary>
     private void DetermineSvodLayout()
@@ -153,42 +208,18 @@ public sealed class SvodFile : IDisposable
         _magicOffset = 0x2000;
         _baseAddress = 0x12000; // keep legacy 0x12000 for Forza-like multi that has MEDIA at 0x12000 raw (XSF already handled, but some multi may still have 0x12000)
         // For pure multiple without XSF, Xenia uses 0x2000, but Velocity uses 0x12000. Try to detect which has MEDIA
-        try
+        if (ReadRawMagic(0x12000, 20) == IsoConstants.XGD_IMAGE_MAGIC)
         {
-            if (_dataStreams != null && _dataStreams.Count > 0)
-            {
-                FileStream first = _dataStreams[0];
-                if (first.Length >= 0x12020)
-                {
-                    long pos = first.Position;
-                    byte[] buf = new byte[20];
-                    first.Seek(0x12000, SeekOrigin.Begin);
-                    int r = first.Read(buf, 0, 20);
-                    first.Seek(pos, SeekOrigin.Begin);
-                    string m = Encoding.ASCII.GetString(buf, 0, Math.Min(r, 20)).Trim('\0');
-                    if (m == IsoConstants.XGD_IMAGE_MAGIC)
-                    {
-                        _magicOffset = 0x12000;
-                        _baseAddress = 0x12000;
-                        Logger.Debug<SvodFile>($"SVOD layout MultipleFiles (MEDIA at 0x12000) base 0x{_svodBaseOffset:X} magic 0x{_magicOffset:X}");
-                        return;
-                    }
-
-                    first.Seek(0x2000, SeekOrigin.Begin);
-                    r = first.Read(buf, 0, 20);
-                    first.Seek(pos, SeekOrigin.Begin);
-                    m = Encoding.ASCII.GetString(buf, 0, Math.Min(r, 20)).Trim('\0');
-                    if (m == IsoConstants.XGD_IMAGE_MAGIC)
-                    {
-                        _magicOffset = 0x2000;
-                        _baseAddress = 0x2000;
-                    }
-                }
-            }
+            _magicOffset = 0x12000;
+            _baseAddress = 0x12000;
+            Logger.Debug<SvodFile>($"SVOD layout MultipleFiles (MEDIA at 0x12000) base 0x{_svodBaseOffset:X} magic 0x{_magicOffset:X}");
+            return;
         }
-        catch (Exception ex)
+
+        if (ReadRawMagic(0x2000, 20) == IsoConstants.XGD_IMAGE_MAGIC)
         {
-            Logger.Trace<SvodFile>($"DetermineSvodLayout fallback probe failed: {ex.Message}");
+            _magicOffset = 0x2000;
+            _baseAddress = 0x2000;
         }
 
         Logger.Debug<SvodFile>($"SVOD layout MultipleFiles base 0x{_svodBaseOffset:X} magic 0x{_magicOffset:X}");
@@ -197,67 +228,12 @@ public sealed class SvodFile : IDisposable
     /// <summary>
     /// Detects XSF-style layout by checking for <c>MICROSOFT*XBOX*MEDIA</c> at <c>0x12000</c> raw in the first data file.
     /// </summary>
-    private bool IsXsfLayout()
-    {
-        try
-        {
-            if (_dataStreams == null || _dataStreams.Count == 0)
-            {
-                return false;
-            }
-
-            FileStream first = _dataStreams[0];
-            if (first.Length < 0x12020)
-            {
-                return false;
-            }
-
-            long pos = first.Position;
-            byte[] buf12000 = new byte[20];
-            first.Seek(0x12000, SeekOrigin.Begin);
-            int r1 = first.Read(buf12000, 0, 20);
-            first.Seek(pos, SeekOrigin.Begin);
-            string m12000 = r1 >= 20 ? Encoding.ASCII.GetString(buf12000).Trim('\0') : string.Empty;
-            return m12000 == IsoConstants.XGD_IMAGE_MAGIC;
-        }
-        catch (Exception ex)
-        {
-            Logger.Trace<SvodFile>($"IsXsfLayout probe failed: {ex.Message}");
-            return false;
-        }
-    }
+    private bool IsXsfLayout() => ReadRawMagic(0x12000, 20) == IsoConstants.XGD_IMAGE_MAGIC;
 
     /// <summary>
     /// Checks for the third-party <c>"XSF"</c> header at <c>0x2000</c> raw in the first data file.
     /// </summary>
-    private bool HasXsfHeader()
-    {
-        try
-        {
-            if (_dataStreams == null || _dataStreams.Count == 0)
-            {
-                return false;
-            }
-
-            FileStream first = _dataStreams[0];
-            if (first.Length < 0x2003)
-            {
-                return false;
-            }
-
-            long pos = first.Position;
-            byte[] buf2000 = new byte[3];
-            first.Seek(0x2000, SeekOrigin.Begin);
-            int r = first.Read(buf2000, 0, 3);
-            first.Seek(pos, SeekOrigin.Begin);
-            return r >= 3 && Encoding.ASCII.GetString(buf2000, 0, 3) == "XSF";
-        }
-        catch (Exception ex)
-        {
-            Logger.Trace<SvodFile>($"HasXsfHeader probe failed: {ex.Message}");
-            return false;
-        }
-    }
+    private bool HasXsfHeader() => ReadRawMagic(0x2000, 3) == "XSF";
 
     /// <summary>
     /// Maps a GDFX sector (as block) to physical byte offset in a data file and file index.
@@ -796,33 +772,7 @@ public sealed class SvodFile : IDisposable
     /// Reads a raw sector for GDFX header probing at the given byte offset in the first data file.
     /// Does not use hash translation; the GDFX header is at a raw offset (e.g., 0x2000, 0x12000, 0xD000) depending on layout.
     /// </summary>
-    private bool TryReadSvodSectorForGdfxHeader(byte[] sectorData, int offset)
-    {
-        if (_dataStreams == null || _dataStreams.Count == 0)
-        {
-            return false;
-        }
-
-        try
-        {
-            FileStream first = _dataStreams[0];
-            if (first.Length < offset + sectorData.Length)
-            {
-                return false;
-            }
-
-            long pos = first.Position;
-            first.Seek(offset, SeekOrigin.Begin);
-            int read = first.Read(sectorData, 0, sectorData.Length);
-            first.Seek(pos, SeekOrigin.Begin);
-            return read == sectorData.Length;
-        }
-        catch (Exception ex)
-        {
-            Logger.Trace<SvodFile>($"TryReadSvodSectorForGdfxHeader at 0x{offset:X} failed: {ex.Message}");
-            return false;
-        }
-    }
+    private bool TryReadSvodSectorForGdfxHeader(byte[] sectorData, int offset) => TryReadRaw(offset, sectorData);
 
     /// <summary>
     /// Extracts and parses <c>default.xex</c> from the GDFX filesystem.
