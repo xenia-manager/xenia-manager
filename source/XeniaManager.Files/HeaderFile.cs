@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Globalization;
 using System.Text;
 using XeniaManager.Logging;
@@ -11,12 +12,12 @@ namespace XeniaManager.Files;
 /// Header files are metadata files created when extracting STFS packages to Xenia's directory structure.
 /// </summary>
 /// <remarks>
-/// Supported header file formats:
+/// Supported header file formats (matching Xenia's XCONTENT_DATA layouts):
 /// <list type="bullet">
 ///   <item><description>0x134 (308 bytes) XCONTENT_DATA: DeviceId, ContentType, DisplayName, FileName</description></item>
-///   <item><description>0x138 (312 bytes) - XCONTENT_CROSS_TITLE_DATA: XCONTENT_DATA + TitleId</description></item>
-///   <item><description>0x148 (328 bytes) - XCONTENT_AGGREGATE_DATA: XCONTENT_DATA + XUID, TitleId</description></item>
-///   <item><description>0x14C (332 bytes) - Full Header: XCONTENT_AGGREGATE_DATA + LicenseMask</description></item>
+///   <item><description>0x138 (312 bytes) - cross-title data: XCONTENT_DATA + TitleId at 0x134 (no XUID)</description></item>
+///   <item><description>0x148 (328 bytes) - XCONTENT_DATA_AGGREGATE: XCONTENT_DATA + XUID at 0x134, TitleId at 0x13C</description></item>
+///   <item><description>0x14C (332 bytes) - Full Header: XCONTENT_DATA_AGGREGATE + LicenseMask at 0x148</description></item>
 /// </list>
 /// Full header structure (0x14C = 332 bytes):
 /// <list type="bullet">
@@ -26,8 +27,8 @@ namespace XeniaManager.Files;
 ///   <item>0x108-0x131: FileName (42 bytes, ASCII)</item>
 ///   <item>0x132-0x133: Padding (2 bytes)</item>
 ///   <item>0x134-0x13B: XUID (8 bytes, big endian) - only in 0x148+ headers</item>
-///   <item>0x13C-0x13F: Padding (4 bytes, zeros)</item>
-///   <item>0x140-0x143: TitleId (4 bytes, big endian) - only in 0x138+ headers</item>
+///   <item>0x13C-0x13F: TitleId (4 bytes, big endian) in XCONTENT_DATA_AGGREGATE layout; at 0x134 in 0x138 cross-title headers</item>
+///   <item>0x140-0x143: TitleId in dashboard / XCONTENT_DATA_INTERNAL layout; always written and used as a read fallback</item>
 ///   <item>0x144-0x147: Padding (4 bytes, zeros)</item>
 ///   <item>0x148-0x14B: LicenseMask (4 bytes, big endian) - only in 0x14C headers</item>
 /// </list>
@@ -205,21 +206,10 @@ public class HeaderFile
     /// <param name="displayName">Optional display name (defaults to package name).</param>
     /// <param name="xuid">Optional XUID (defaults to 0 for installed content).</param>
     public HeaderFile(string titleId, string contentTypeHex, string packageName, string? displayName = null, AccountXuid xuid = default)
+        : this(titleId,
+            uint.TryParse(contentTypeHex, NumberStyles.HexNumber, null, out uint contentTypeValue) ? (ContentType)contentTypeValue : 0,
+            packageName, displayName, xuid)
     {
-        if (uint.TryParse(titleId, NumberStyles.HexNumber, null, out uint titleIdValue))
-        {
-            TitleId = titleIdValue;
-        }
-
-        if (uint.TryParse(contentTypeHex, NumberStyles.HexNumber, null, out uint contentTypeValue))
-        {
-            ContentType = (ContentType)contentTypeValue;
-        }
-
-        FileName = packageName;
-        DisplayName = displayName ?? packageName;
-        AccountXuid = xuid;
-        HeaderSize = FullHeaderSize;
     }
 
     /// <summary>
@@ -231,21 +221,14 @@ public class HeaderFile
         Logger.Trace<HeaderFile>($"Starting ToBytes conversion for header: '{FileName}' (DisplayName: '{DisplayName}')");
 
         byte[] headerData = new byte[HeaderSize];
-        int offset = 0;
 
         // 0x00-0x03: device_id (big endian)
-        headerData[offset++] = (byte)((DeviceId >> 24) & 0xFF);
-        headerData[offset++] = (byte)((DeviceId >> 16) & 0xFF);
-        headerData[offset++] = (byte)((DeviceId >> 8) & 0xFF);
-        headerData[offset++] = (byte)(DeviceId & 0xFF);
+        BinaryPrimitives.WriteUInt32BigEndian(headerData.AsSpan(0), DeviceId);
         Logger.Debug<HeaderFile>($"DeviceId: {DeviceId}");
 
         // 0x04-0x07: content_type (big endian)
         uint contentTypeValue = (uint)ContentType;
-        headerData[offset++] = (byte)((contentTypeValue >> 24) & 0xFF);
-        headerData[offset++] = (byte)((contentTypeValue >> 16) & 0xFF);
-        headerData[offset++] = (byte)((contentTypeValue >> 8) & 0xFF);
-        headerData[offset++] = (byte)(contentTypeValue & 0xFF);
+        BinaryPrimitives.WriteUInt32BigEndian(headerData.AsSpan(4), contentTypeValue);
         Logger.Debug<HeaderFile>($"ContentType: {ContentType} (0x{contentTypeValue:X8})");
 
         // 0x08-0x107: display_name_raw (UTF-16 BE, 128 characters = 256 bytes)
@@ -266,43 +249,36 @@ public class HeaderFile
         if (HeaderSize >= AggregateDataSize)
         {
             ulong xuidValue = AccountXuid.Value;
-            headerData[0x134] = (byte)((xuidValue >> 56) & 0xFF);
-            headerData[0x135] = (byte)((xuidValue >> 48) & 0xFF);
-            headerData[0x136] = (byte)((xuidValue >> 40) & 0xFF);
-            headerData[0x137] = (byte)((xuidValue >> 32) & 0xFF);
-            headerData[0x138] = (byte)((xuidValue >> 24) & 0xFF);
-            headerData[0x139] = (byte)((xuidValue >> 16) & 0xFF);
-            headerData[0x13A] = (byte)((xuidValue >> 8) & 0xFF);
-            headerData[0x13B] = (byte)(xuidValue & 0xFF);
+            BinaryPrimitives.WriteUInt64BigEndian(headerData.AsSpan(0x134), xuidValue);
             Logger.Debug<HeaderFile>($"AccountXuid: {AccountXuid} (0x{xuidValue:X16})");
         }
 
-        // 0x13C-0x13F: reserved/padding (4 bytes, zeros)
-
-        // 0x140-0x143: title_id (4 bytes, big endian) - in 0x138+ headers
-        if (HeaderSize >= CrossTitleDataSize)
+        // TitleId sits at 0x13C per Xenia's XCONTENT_DATA_AGGREGATE, but the
+        // dashboard (and Xenia's XCONTENT_DATA_INTERNAL) stores it at 0x140.
+        // Cross-title (0x138) headers carry it directly after the 0x134 base
+        // since they have no XUID. Written to both 0x13C and 0x140 so every
+        // producer and reader agrees (see FromBytes).
+        if (HeaderSize >= AggregateDataSize)
         {
-            headerData[0x140] = (byte)((TitleId >> 24) & 0xFF);
-            headerData[0x141] = (byte)((TitleId >> 16) & 0xFF);
-            headerData[0x142] = (byte)((TitleId >> 8) & 0xFF);
-            headerData[0x143] = (byte)(TitleId & 0xFF);
+            BinaryPrimitives.WriteUInt32BigEndian(headerData.AsSpan(0x13C), TitleId);
+            BinaryPrimitives.WriteUInt32BigEndian(headerData.AsSpan(0x140), TitleId);
             Logger.Debug<HeaderFile>($"TitleId: 0x{TitleId:X8}");
         }
-
-        // 0x144-0x147: padding (4 bytes, zeros) - only in 0x14C headers
+        else if (HeaderSize >= CrossTitleDataSize)
+        {
+            BinaryPrimitives.WriteUInt32BigEndian(headerData.AsSpan(0x134), TitleId);
+            Logger.Debug<HeaderFile>($"TitleId: 0x{TitleId:X8}");
+        }
 
         // 0x148-0x14B: license_mask (4 bytes, big endian) - only in 0x14C headers
         if (HeaderSize >= FullHeaderSize)
         {
-            headerData[0x148] = (byte)((LicenseMask >> 24) & 0xFF);
-            headerData[0x149] = (byte)((LicenseMask >> 16) & 0xFF);
-            headerData[0x14A] = (byte)((LicenseMask >> 8) & 0xFF);
-            headerData[0x14B] = (byte)(LicenseMask & 0xFF);
+            BinaryPrimitives.WriteUInt32BigEndian(headerData.AsSpan(0x148), LicenseMask);
             Logger.Debug<HeaderFile>($"LicenseMask: 0x{LicenseMask:X8}");
         }
 
         Logger.Info<HeaderFile>($"Successfully converted header to bytes ({HeaderSize} bytes)");
-        Logger.Trace<HeaderFile>($"Header data (first 64 bytes): {BitConverter.ToString(headerData.Take(64).ToArray())}");
+        Logger.Trace<HeaderFile>($"Header data (first 64 bytes): {BitConverter.ToString(headerData, 0, Math.Min(64, headerData.Length))}");
 
         return headerData;
     }
@@ -317,7 +293,7 @@ public class HeaderFile
     public static HeaderFile FromBytes(byte[] data)
     {
         Logger.Trace<HeaderFile>($"Parsing header from bytes ({data.Length} bytes)");
-        Logger.Trace<HeaderFile>($"First 64 bytes: {BitConverter.ToString(data.Take(64).ToArray())}");
+        Logger.Trace<HeaderFile>($"First 64 bytes: {BitConverter.ToString(data, 0, Math.Min(64, data.Length))}");
 
         if (data.Length < MinimumHeaderSize)
         {
@@ -342,47 +318,28 @@ public class HeaderFile
         Logger.Debug<HeaderFile>($"Detected header size: 0x{header.HeaderSize:X} ({header.HeaderSize} bytes)");
 
         // 0x00-0x03: device_id (always present)
-        header.DeviceId = BitConverter.ToUInt32(data, 0);
-        if (BitConverter.IsLittleEndian)
-        {
-            header.DeviceId = SwapEndian(header.DeviceId);
-        }
+        header.DeviceId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0));
 
         Logger.Debug<HeaderFile>($"DeviceId: {header.DeviceId}");
 
         // 0x04-0x07: content_type (always present)
-        uint contentTypeValue = BitConverter.ToUInt32(data, 4);
-        if (BitConverter.IsLittleEndian)
-        {
-            contentTypeValue = SwapEndian(contentTypeValue);
-        }
+        uint contentTypeValue = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(4));
 
         header.ContentType = (ContentType)contentTypeValue;
         Logger.Debug<HeaderFile>($"ContentType: {header.ContentType} (0x{contentTypeValue:X8})");
 
         // 0x08-0x107: display_name_raw (UTF-16 BE, always present)
-        byte[] displayNameBytes = new byte[256];
-        Array.Copy(data, 8, displayNameBytes, 0, 256);
-        header.DisplayName = Encoding.BigEndianUnicode.GetString(displayNameBytes).TrimEnd('\0');
+        header.DisplayName = Encoding.BigEndianUnicode.GetString(data.AsSpan(8, 256)).TrimEnd('\0');
         Logger.Info<HeaderFile>($"DisplayName: '{header.DisplayName}'");
 
         // 0x108-0x131: file_name_raw (ASCII, always present)
-        byte[] fileNameBytes = new byte[42];
-        Array.Copy(data, 0x108, fileNameBytes, 0, 42);
-        header.FileName = Encoding.ASCII.GetString(fileNameBytes).TrimEnd('\0');
+        header.FileName = Encoding.ASCII.GetString(data.AsSpan(0x108, 42)).TrimEnd('\0');
         Logger.Info<HeaderFile>($"FileName: '{header.FileName}'");
 
         // 0x134-0x13B: XUID (only in 0x148+ headers)
         if (header.HeaderSize >= AggregateDataSize)
         {
-            byte[] xuidBytes = new byte[8];
-            Array.Copy(data, 0x134, xuidBytes, 0, 8);
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(xuidBytes);
-            }
-
-            header.AccountXuid = new AccountXuid(BitConverter.ToUInt64(xuidBytes, 0));
+            header.AccountXuid = new AccountXuid(BinaryPrimitives.ReadUInt64BigEndian(data.AsSpan(0x134)));
             Logger.Debug<HeaderFile>($"AccountXuid: {header.AccountXuid} (0x{header.AccountXuid.Value:X16})");
         }
         else
@@ -391,15 +348,24 @@ public class HeaderFile
             Logger.Debug<HeaderFile>($"Header too small for XUID, using default (0)");
         }
 
-        // 0x140-0x143: title_id (in 0x138+ headers with at least 0x144 bytes present)
-        if (header.HeaderSize >= CrossTitleDataSize && data.Length >= 0x144)
+        // Prefer a nonzero TitleId at 0x13C (Xenia's XCONTENT_DATA_AGGREGATE);
+        // the dashboard, Xenia's XCONTENT_DATA_INTERNAL, and older revisions
+        // of this app store it at 0x140, so fall back to that when 0x13C is zero.
+        // Cross-title (0x138) headers carry it directly after the 0x134 base
+        // since they have no XUID.
+        if (header.HeaderSize >= AggregateDataSize)
         {
-            header.TitleId = BitConverter.ToUInt32(data, 0x140);
-            if (BitConverter.IsLittleEndian)
+            header.TitleId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0x13C));
+            if (header.TitleId == 0)
             {
-                header.TitleId = SwapEndian(header.TitleId);
+                header.TitleId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0x140));
             }
 
+            Logger.Debug<HeaderFile>($"TitleId: 0x{header.TitleId:X8}");
+        }
+        else if (header.HeaderSize >= CrossTitleDataSize)
+        {
+            header.TitleId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0x134));
             Logger.Debug<HeaderFile>($"TitleId: 0x{header.TitleId:X8}");
         }
         else
@@ -411,12 +377,7 @@ public class HeaderFile
         // 0x148-0x14B: license_mask (only in 0x14C headers)
         if (header.HeaderSize >= FullHeaderSize)
         {
-            header.LicenseMask = BitConverter.ToUInt32(data, 0x148);
-            if (BitConverter.IsLittleEndian)
-            {
-                header.LicenseMask = SwapEndian(header.LicenseMask);
-            }
-
+            header.LicenseMask = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(0x148));
             Logger.Debug<HeaderFile>($"LicenseMask: 0x{header.LicenseMask:X8}");
         }
         else
@@ -521,18 +482,5 @@ public class HeaderFile
             Logger.LogExceptionDetails<HeaderFile>(ex);
             throw;
         }
-    }
-
-    /// <summary>
-    /// Converts a 32-bit unsigned integer from little-endian to big-endian or vice versa.
-    /// </summary>
-    /// <param name="value">The 32-bit unsigned integer value to swap the endian format of.</param>
-    /// <returns>The 32-bit unsigned integer with its byte order reversed.</returns>
-    private static uint SwapEndian(uint value)
-    {
-        return ((value & 0x000000FF) << 24) |
-               ((value & 0x0000FF00) << 8) |
-               ((value & 0x00FF0000) >> 8) |
-               ((value & 0xFF000000) >> 24);
     }
 }
