@@ -217,6 +217,18 @@ public partial class InstallContentDialogViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Releases all loaded STFS packages (each holds an open file stream).
+    /// Called when the dialog closes; <see cref="RemoveContent"/> already handles single removes.
+    /// </summary>
+    public void DisposeContent()
+    {
+        foreach (ContentItemViewModel contentItem in ContentItems)
+        {
+            contentItem.StfsFile?.Dispose();
+        }
+    }
+
+    /// <summary>
     /// List of successfully installed content names.
     /// </summary>
     public List<string> InstalledContentList { get; private set; } = [];

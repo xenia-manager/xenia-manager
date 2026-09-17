@@ -56,6 +56,8 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 {
     private const int MaxPreviewBytes = 64 * 1024 * 1024;
     private const int MaxTextPreviewBytes = 1024 * 1024;
+    private const int StfsHeaderBytes = 0xA000;
+    private const ulong ExtractChunkBytes = 4 * 1024 * 1024;
     private static readonly string[] PreviewableExtensions = [".png", ".jpg", ".jpeg", ".bmp"];
     private static readonly string[] TextPreviewExtensions = [".txt", ".ini", ".cfg", ".json", ".log", ".xml"];
 
@@ -641,13 +643,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                     {
                         try
                         {
-                            byte[]? bytes = source.ReadFile(file.FullPath);
-                            if (bytes == null)
-                            {
-                                throw new IOException($"File '{file.FullPath}' could not be read from the container.");
-                            }
-
-                            WriteExtractedFile(outputDir, file.FullPath, bytes);
+                            ExtractFileStreamed(outputDir, source, file);
                             done++;
                         }
                         catch (Exception ex)
@@ -712,21 +708,48 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     }
 
     /// <summary>
-    /// Writes extracted bytes under the output directory, preserving container structure.
+    /// Streams a container file to disk in chunks, preserving container structure.
+    /// Never holds the full file in RAM.
     /// </summary>
-    /// <returns>The full output file path.</returns>
-    private static string WriteExtractedFile(string outputDir, string fullPath, byte[] bytes)
+    private static void ExtractFileStreamed(string outputDir, IGameFileSource source, GameFileNode file)
     {
         string outputPath = ArchiveExtractor.GetSafeEntryOutputPath(outputDir,
-            fullPath.Replace('/', Path.DirectorySeparatorChar));
+            file.FullPath.Replace('/', Path.DirectorySeparatorChar));
         string? folder = Path.GetDirectoryName(outputPath);
         if (!string.IsNullOrEmpty(folder))
         {
             Directory.CreateDirectory(folder);
         }
 
-        File.WriteAllBytes(outputPath, bytes);
-        return outputPath;
+        using FileStream outFs = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
+        if (file.Size == 0)
+        {
+            return;
+        }
+
+        // Chained STFS ranges re-walk from the first block per chunk; single-pass walk if this shows up in profiles.
+        ulong offset = 0;
+        while (offset < file.Size)
+        {
+            ulong want = Math.Min(ExtractChunkBytes, file.Size - offset);
+            byte[]? chunk = source.ReadFileRange(file.FullPath, offset, want);
+            if (chunk == null)
+            {
+                throw new IOException($"File '{file.FullPath}' could not be read from the container.");
+            }
+
+            if (chunk.Length == 0)
+            {
+                break;
+            }
+
+            outFs.Write(chunk, 0, chunk.Length);
+            offset += (ulong)chunk.Length;
+            if ((ulong)chunk.Length < want)
+            {
+                break;
+            }
+        }
     }
 
     /// <summary>
@@ -777,18 +800,18 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             return;
         }
 
-        byte[]? bytes = await Task.Run(() => source.ReadFile(file.FullPath));
-        if (_disposed || bytes == null)
-        {
-            return;
-        }
-
-        if (bytes.Length > MaxTextPreviewBytes)
+        if (file.Size > (ulong)MaxTextPreviewBytes)
         {
             await _messageBoxService.ShowInfoAsync(
                 LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Title"),
                 LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Message"),
                 owner: OwnerWindow);
+            return;
+        }
+
+        byte[]? bytes = await Task.Run(() => source.ReadFile(file.FullPath));
+        if (_disposed || bytes == null)
+        {
             return;
         }
 
@@ -905,18 +928,51 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         string? tempPath = null;
         try
         {
+            // Magic pre-check on 4 bytes so non-containers never load fully.
+            byte[]? magic = await Task.Run(() => source.ReadFileRange(file.FullPath, 0, 4));
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (magic == null || !HasStfsMagic(magic))
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Unsupported.Title"),
+                    LocalizationHelper.GetText("GameFilesDialog.OpenPreview.Unsupported.Message"),
+                    owner: OwnerWindow);
+                return;
+            }
+
             tempPath = await Task.Run(() =>
             {
-                byte[]? data = source.ReadFile(file.FullPath);
-                if (data == null || !HasStfsMagic(data))
-                {
-                    return null;
-                }
-
                 string directory = Path.Combine(Path.GetTempPath(), "XeniaManager", "GameFiles", Guid.NewGuid().ToString("N"));
                 Directory.CreateDirectory(directory);
                 string path = Path.Combine(directory, $"nested-{Guid.NewGuid():N}{Path.GetExtension(file.Name)}");
-                File.WriteAllBytes(path, data);
+                using FileStream outFs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+                ulong offset = 0;
+                while (file.Size == 0 ? offset == 0 : offset < file.Size)
+                {
+                    ulong want = file.Size == 0 ? ExtractChunkBytes : Math.Min(ExtractChunkBytes, file.Size - offset);
+                    byte[]? chunk = source.ReadFileRange(file.FullPath, offset, want);
+                    if (chunk == null)
+                    {
+                        throw new IOException($"File '{file.FullPath}' could not be read from the container.");
+                    }
+
+                    if (chunk.Length == 0)
+                    {
+                        break;
+                    }
+
+                    outFs.Write(chunk, 0, chunk.Length);
+                    offset += (ulong)chunk.Length;
+                    if ((ulong)chunk.Length < want || file.Size == 0)
+                    {
+                        break;
+                    }
+                }
+
                 return path;
             });
         }
@@ -1174,7 +1230,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
         if (node.IsFile && IsPreviewableImage(node.Name))
         {
-            byte[]? imageBytes = await Task.Run(() => TryReadPreview(node.FullPath));
+            byte[]? imageBytes = await Task.Run(() => TryReadPreview(node.FullPath, node.Size));
             if (_disposed || loadId != _detailsLoadId)
             {
                 return;
@@ -1209,7 +1265,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
         if (node.IsFile && node.Name.EndsWith(".xex", StringComparison.OrdinalIgnoreCase))
         {
-            XexDetails? details = await Task.Run(() => TryParseXex(node.FullPath));
+            XexDetails? details = await Task.Run(() => TryParseXex(node.FullPath, node.Size));
             if (_disposed || loadId != _detailsLoadId || details == null)
             {
                 return;
@@ -1309,10 +1365,15 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     private static bool IsPreviewableImage(string fileName) =>
         PreviewableExtensions.Contains(Path.GetExtension(fileName).ToLowerInvariant());
 
-    private byte[]? TryReadPreview(string fullPath)
+    private byte[]? TryReadPreview(string fullPath, ulong size)
     {
         try
         {
+            if (size == 0 || size > (ulong)MaxPreviewBytes)
+            {
+                return null;
+            }
+
             byte[]? bytes = _source?.ReadFile(fullPath);
             if (bytes == null || bytes.Length == 0 || bytes.Length > MaxPreviewBytes)
             {
@@ -1332,13 +1393,21 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            byte[]? bytes = _source?.ReadFile(fullPath);
-            if (bytes == null || bytes.Length < 4)
+            IGameFileSource? source = _source;
+            if (source == null)
             {
                 return null;
             }
 
-            if (!HasStfsMagic(bytes))
+            // Magic pre-check so non-STFS files never load; header-only parse avoids file-table + full read.
+            byte[]? magic = source.ReadFileRange(fullPath, 0, 4);
+            if (magic == null || !HasStfsMagic(magic))
+            {
+                return null;
+            }
+
+            byte[]? header = source.ReadFileRange(fullPath, 0, StfsHeaderBytes);
+            if (header == null || header.Length < 4)
             {
                 return null;
             }
@@ -1347,7 +1416,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             StfsFile stfs;
             try
             {
-                stfs = StfsFile.FromBytes(bytes);
+                stfs = StfsFile.FromBytes(header, false);
             }
             catch
             {
@@ -1400,11 +1469,30 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         string ContentSize,
         byte[]? Thumbnail);
 
-    private XexDetails? TryParseXex(string fullPath)
+    private XexDetails? TryParseXex(string fullPath, ulong size)
     {
         try
         {
-            byte[]? bytes = _source?.ReadFile(fullPath);
+            if (size == 0 || size > (ulong)MaxPreviewBytes)
+            {
+                return null;
+            }
+
+            IGameFileSource? source = _source;
+            if (source == null)
+            {
+                return null;
+            }
+
+            // Magic pre-check ("XEX1"/"XEX2"/...) so non-XEX files never load fully.
+            byte[]? magic = source.ReadFileRange(fullPath, 0, 4);
+            if (magic == null || magic.Length < 3
+                              || magic[0] != (byte)'X' || magic[1] != (byte)'E' || magic[2] != (byte)'X')
+            {
+                return null;
+            }
+
+            byte[]? bytes = source.ReadFile(fullPath);
             if (bytes == null || bytes.Length == 0)
             {
                 return null;

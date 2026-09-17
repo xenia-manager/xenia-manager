@@ -90,6 +90,37 @@ public sealed class LooseGameFileSource : GameFileSourceBase
         }
     }
 
+    /// <inheritdoc />
+    public override byte[]? ReadFileRange(string path, ulong offset, ulong length)
+    {
+        string? fullPath = Resolve(path);
+        if (fullPath == null || !File.Exists(fullPath))
+        {
+            return null;
+        }
+
+        try
+        {
+            using FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            if (offset >= (ulong)fs.Length || length == 0)
+            {
+                return Array.Empty<byte>();
+            }
+
+            int toRead = (int)Math.Min(length, (ulong)fs.Length - offset);
+            byte[] result = new byte[toRead];
+            fs.Seek((long)offset, SeekOrigin.Begin);
+            fs.ReadExactly(result, 0, toRead);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<LooseGameFileSource>($"Failed to read range '{path}'");
+            Logger.LogExceptionDetails<LooseGameFileSource>(ex);
+            return null;
+        }
+    }
+
     /// <summary>
     /// Resolves a browsing path to an absolute path, or null when it escapes the root.
     /// </summary>

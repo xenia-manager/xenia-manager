@@ -137,9 +137,9 @@ public class StfsFileIconTests
         ConstructorInfo ctor = typeof(StfsFile).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, [typeof(byte[])], null)!;
         StfsFile stfs = (StfsFile)ctor.Invoke([raw]);
 
-        // Patch _rawData is already set via ctor, but we need to ensure it contains the XEX at fileOffset
+        // Patch _memoryData is already set via ctor, but we need to ensure it contains the XEX at fileOffset
         Array.Copy(xexBytes, 0, raw, fileOffset, xexBytes.Length);
-        FieldInfo rawField = typeof(StfsFile).GetField("_rawData", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        FieldInfo rawField = typeof(StfsFile).GetField("_memoryData", BindingFlags.NonPublic | BindingFlags.Instance)!;
         rawField.SetValue(stfs, raw);
 
         // Force metadata to have correct HeaderSize and thumbnails by using FromBytes path? Instead manually set via reflection

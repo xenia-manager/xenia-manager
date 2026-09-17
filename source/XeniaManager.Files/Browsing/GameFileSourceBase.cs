@@ -16,6 +16,9 @@ public abstract class GameFileSourceBase : IGameFileSource
     public abstract byte[]? ReadFile(string path);
 
     /// <inheritdoc />
+    public abstract byte[]? ReadFileRange(string path, ulong offset, ulong length);
+
+    /// <inheritdoc />
     public virtual string? FindDefaultXexPath()
     {
         GameFileNode? exact = Files.FirstOrDefault(f => f.Name.Equals("default.xex", StringComparison.OrdinalIgnoreCase));
