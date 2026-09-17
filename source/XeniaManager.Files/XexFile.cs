@@ -49,6 +49,18 @@ public sealed class XexFile
     private const uint Xex25Magic = 0x58455825;
 
     /// <summary>
+    /// Maximum bytes read for header-only parsing (header + directory + security info).
+    /// <c>SizeOfHeaders</c> is typically 0x2000; 64 KiB leaves ample headroom.
+    /// </summary>
+    public const int HeaderParseMaxBytes = 64 * 1024;
+
+    /// <summary>
+    /// Maximum decompressed PE image size accepted (256 MiB). Bounds <c>LzxDecoder</c>
+    /// and Basic zero-fill allocations against corrupt <c>image_size</c> values.
+    /// </summary>
+    private const long MaxPeImageBytes = 256L * 1024 * 1024;
+
+    /// <summary>
     /// Raw XEX bytes as loaded (retained for on-demand PE/SPA extraction). Never exposed mutably; see <see cref="RawData"/>.
     /// </summary>
     private byte[] _rawData = Array.Empty<byte>();
@@ -152,6 +164,12 @@ public sealed class XexFile
     public bool IsValid { get; private set; }
 
     /// <summary>
+    /// Gets whether this instance was parsed from header bytes only (<see cref="HeaderParseMaxBytes"/>).
+    /// IDs are available, but SPA/icon extraction requires the full bytes (see <see cref="Load"/>).
+    /// </summary>
+    public bool IsHeaderOnly { get; private set; }
+
+    /// <summary>
     /// Gets the validation error for invalid files; null when <see cref="IsValid"/> is true.
     /// </summary>
     public string? ValidationError { get; private set; }
@@ -186,6 +204,66 @@ public sealed class XexFile
         byte[] fileData = File.ReadAllBytes(filePath);
         Logger.Info<XexFile>($"Loaded XEX file: {filePath} ({fileData.Length} bytes)");
         return FromBytes(fileData);
+    }
+
+    /// <summary>
+    /// Parses XEX IDs from header bytes (e.g., the first <see cref="HeaderParseMaxBytes"/> bytes).
+    /// Marks the result <see cref="IsHeaderOnly"/>; SPA/icon extraction requires full bytes.
+    /// </summary>
+    /// <param name="header">Header bytes (any size ≥ 24).</param>
+    /// <returns>A new <see cref="XexFile"/> with <see cref="IsHeaderOnly"/> set.</returns>
+    public static XexFile FromHeaderBytes(byte[] header)
+    {
+        XexFile xexFile = FromBytes(header);
+        xexFile.IsHeaderOnly = true;
+        return xexFile;
+    }
+
+    /// <summary>
+    /// Loads only the XEX header (first <see cref="HeaderParseMaxBytes"/> bytes) for TitleId/MediaId
+    /// parsing without holding the full executable in RAM. SPA/icon extraction is unavailable
+    /// on the result (<see cref="TryGetSpaFile"/> returns false); use <see cref="Load"/> for that.
+    /// </summary>
+    /// <param name="filePath">Absolute or relative path to a <c>.xex</c> file.</param>
+    /// <returns>A new <see cref="XexFile"/> with IDs parsed when valid.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the file does not exist.</exception>
+    public static XexFile LoadHeaderOnly(string filePath)
+    {
+        Logger.Debug<XexFile>($"Loading XEX header from {filePath}");
+
+        if (!File.Exists(filePath))
+        {
+            Logger.Error<XexFile>($"XEX file does not exist: {filePath}");
+            throw new FileNotFoundException($"XEX file does not exist at {filePath}", filePath);
+        }
+
+        using FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        int length = (int)Math.Min(HeaderParseMaxBytes, fs.Length);
+        byte[] header = new byte[length];
+        fs.ReadExactly(header, 0, length);
+        Logger.Info<XexFile>($"Loaded XEX header: {filePath} ({length} bytes)");
+        return FromHeaderBytes(header);
+    }
+
+    /// <summary>
+    /// Releases the retained raw XEX bytes and cached SPA bytes (e.g., after icon extraction
+    /// when only IDs are still needed). The parsed IDs remain available.
+    /// </summary>
+    public void ReleaseRawData()
+    {
+        if (_rawData.Length > 0)
+        {
+            Array.Clear(_rawData, 0, _rawData.Length);
+            _rawData = Array.Empty<byte>();
+        }
+
+        if (_cachedSpaBytes != null)
+        {
+            Array.Clear(_cachedSpaBytes, 0, _cachedSpaBytes.Length);
+            _cachedSpaBytes = null;
+        }
+
+        _spaCacheAttempted = true;
     }
 
     /// <summary>
@@ -653,7 +731,12 @@ public sealed class XexFile
                 {
                     uint dataSize = BinaryPrimitives.ReadUInt32BigEndian(basicBlocks.AsSpan(i * 8));
                     uint zeroSize = BinaryPrimitives.ReadUInt32BigEndian(basicBlocks.AsSpan(i * 8 + 4));
-                    uncompressedSize += dataSize + zeroSize;
+                    uncompressedSize += (long)dataSize + zeroSize;
+                    if (uncompressedSize > MaxPeImageBytes)
+                    {
+                        Logger.Warning<XexFile>($"XEX Basic zero-fill size {uncompressedSize} exceeds {MaxPeImageBytes} cap, refusing to allocate");
+                        return null;
+                    }
                 }
 
                 uint imageSize = 0;
@@ -707,9 +790,17 @@ public sealed class XexFile
                     outputSize = (int)BinaryPrimitives.ReadUInt32BigEndian(xexData.AsSpan((int)securityOffset + 4));
                 }
 
-                if (outputSize <= 0 || outputSize > 60 * 1024 * 1024)
+                if (outputSize <= 0 || (long)outputSize > MaxPeImageBytes)
                 {
-                    outputSize = data.Length * 4;
+                    long fallback = (long)data.Length * 4;
+                    if (fallback <= 0 || fallback > MaxPeImageBytes)
+                    {
+                        Logger.Warning<XexFile>(
+                            $"XEX LZX output size {outputSize} invalid and fallback {fallback} exceeds {MaxPeImageBytes} cap, refusing to allocate");
+                        return null;
+                    }
+
+                    outputSize = (int)fallback;
                 }
 
                 try
@@ -976,6 +1067,8 @@ public sealed class XexFile
     /// </remarks>
     private static byte[]? ScanForXdbf(byte[] data)
     {
+        // Full GpdFile.FromBytes per candidate; capped at 16 attempts to bound hostile PEs.
+        int attempts = 0;
         for (int i = 0; i + 4 < data.Length; i++)
         {
             if (data[i] == 0x58 && data[i + 1] == 0x44 && data[i + 2] == 0x42 && data[i + 3] == 0x46)
@@ -985,6 +1078,12 @@ public sealed class XexFile
                     uint version = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(i + 4));
                     if (version == 0x00010000)
                     {
+                        if (++attempts > 16)
+                        {
+                            Logger.Trace<XexFile>("XDBF scan hit attempt cap (16), stopping");
+                            return null;
+                        }
+
                         int len = data.Length - i;
                         byte[] candidate = new byte[len];
                         Buffer.BlockCopy(data, i, candidate, 0, len);
