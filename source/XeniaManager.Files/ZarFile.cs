@@ -29,6 +29,7 @@ public sealed class ZarFile : IDisposable
     private bool _disposed;
     private Stream? _stream;
     private Decompressor? _decompressor;
+    private readonly Lock _ioLock = new Lock();
     private readonly List<CompressionOffsetRecord> _offsetRecords;
     private readonly byte[] _nameTable;
     private readonly List<FileDirectoryEntry> _fileTree;
@@ -213,6 +214,12 @@ public sealed class ZarFile : IDisposable
                 throw new InvalidDataException("ZAR archive has no offset records or file tree");
             }
 
+            if (footer.OffsetRecords.Size % (ulong)CompressionOffsetRecord.Size != 0 ||
+                footer.FileTree.Size % (ulong)FileDirectoryEntry.Size != 0)
+            {
+                throw new InvalidDataException("ZAR offset records or file tree size is misaligned");
+            }
+
             Logger.Debug<ZarFile>($"File size: {fs.Length} bytes, " +
                                   $"CompressedData: 0x{footer.CompressedData.Offset:X} ({footer.CompressedData.Size} bytes), " +
                                   $"OffsetRecords: {footer.OffsetRecords.Size / CompressionOffsetRecord.Size} records, " +
@@ -262,21 +269,31 @@ public sealed class ZarFile : IDisposable
 
             Logger.Debug<ZarFile>("Searching for default.xex in ZAR archive...");
 
-            // Locate and extract default.xex for TitleID and MediaID extraction
+            // Parse the default.xex header for TitleID/MediaId without retaining the full executable.
+            // Full bytes are read lazily by TryGetIcon/TryGetSpaFile only.
             FileDirectoryEntry? defaultXexEntry = zarFile.Lookup("default.xex");
             if (defaultXexEntry != null)
             {
-                byte[] xexData = zarFile.ReadFile(defaultXexEntry);
-                Logger.Info<ZarFile>($"Found default.xex ({xexData.Length} bytes), parsing...");
-                XexFile xex = XexFile.FromBytes(xexData);
-                if (xex.IsValid)
+                ulong xexSize = defaultXexEntry.GetFileSize();
+                if (xexSize == 0)
                 {
-                    zarFile.XexFile = xex;
-                    Logger.Info<ZarFile>($"Extracted from default.xex - TitleID: {zarFile.XexFile.TitleId}, MediaID: {zarFile.XexFile.MediaId}");
+                    Logger.Warning<ZarFile>("default.xex found but empty");
                 }
                 else
                 {
-                    Logger.Warning<ZarFile>($"default.xex found but could not be parsed: {xex.ValidationError}");
+                    ulong headerLen = Math.Min((ulong)XexFile.HeaderParseMaxBytes, xexSize);
+                    byte[] xexHeader = zarFile.ReadFile(defaultXexEntry, 0, headerLen);
+                    Logger.Info<ZarFile>($"Found default.xex ({xexSize} bytes), parsing header ({xexHeader.Length} bytes)...");
+                    XexFile xex = XexFile.FromHeaderBytes(xexHeader);
+                    if (xex.IsValid)
+                    {
+                        zarFile.XexFile = xex;
+                        Logger.Info<ZarFile>($"Extracted from default.xex - TitleID: {zarFile.XexFile.TitleId}, MediaID: {zarFile.XexFile.MediaId}");
+                    }
+                    else
+                    {
+                        Logger.Warning<ZarFile>($"default.xex found but could not be parsed: {xex.ValidationError}");
+                    }
                 }
             }
             else
@@ -662,9 +679,17 @@ public sealed class ZarFile : IDisposable
         Logger.Trace<ZarFile>(
             $"Decompressing block {blockIdx} (record {recordIdx}, subIdx {subIdx}, compressedSize {compressedSize}, offset 0x{absoluteOffset:X})");
 
-        Stream stream = _stream!;
-        stream.Seek(absoluteOffset, SeekOrigin.Begin);
-        ReadExact(stream, compressed, 0, (int)compressedSize);
+        // Shared stream + decompressor: serialize concurrent preview/extraction reads.
+        lock (_ioLock)
+        {
+            if (_disposed || _stream == null)
+            {
+                throw new ObjectDisposedException(nameof(ZarFile));
+            }
+
+            _stream.Seek(absoluteOffset, SeekOrigin.Begin);
+            ReadExact(_stream, compressed, 0, (int)compressedSize);
+        }
 
         // Stored uncompressed if zstd did not help
         if (compressedSize == 65536)
@@ -675,16 +700,25 @@ public sealed class ZarFile : IDisposable
 
         // Decompress with zstd (always produces exactly 65536 bytes per format spec).
         // The context is reused across blocks and disposed with the archive.
-        _decompressor ??= new Decompressor();
-        byte[] output = new byte[65536];
-        int written = _decompressor.Unwrap(compressed, output);
-        if (written != 65536)
+        lock (_ioLock)
         {
-            throw new InvalidDataException($"Unexpected decompressed size {written} for block {blockIdx} (expected 65536, compressed {compressedSize} bytes)");
-        }
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(ZarFile));
+            }
 
-        Logger.Trace<ZarFile>($"Block {blockIdx} decompressed: {compressedSize} -> 65536 bytes");
-        return output;
+            _decompressor ??= new Decompressor();
+            byte[] output = new byte[65536];
+            int written = _decompressor.Unwrap(compressed, output);
+            if (written != 65536)
+            {
+                throw new InvalidDataException(
+                    $"Unexpected decompressed size {written} for block {blockIdx} (expected 65536, compressed {compressedSize} bytes)");
+            }
+
+            Logger.Trace<ZarFile>($"Block {blockIdx} decompressed: {compressedSize} -> 65536 bytes");
+            return output;
+        }
     }
 
     /// <summary>
@@ -784,9 +818,21 @@ public sealed class ZarFile : IDisposable
         spaFile = null;
         try
         {
-            if (XexFile is { IsValid: true })
+            // Full in-memory XEX (tests, explicit loads) works directly.
+            if (XexFile is { IsValid: true, IsHeaderOnly: false })
             {
                 return XexFile.TryGetSpaFile(out spaFile);
+            }
+
+            // Header-only instances read full bytes lazily for SPA extraction.
+            byte[]? fullBytes = TryReadDefaultXexFull();
+            if (fullBytes != null)
+            {
+                XexFile fullXex = XexFile.FromBytes(fullBytes);
+                if (fullXex.IsValid)
+                {
+                    return fullXex.TryGetSpaFile(out spaFile);
+                }
             }
 
             byte[]? xexBytes = TryExtractAlternativeXexBytes();
@@ -812,6 +858,34 @@ public sealed class ZarFile : IDisposable
     }
 
     /// <summary>
+    /// Reads the full <c>default.xex</c> bytes, or null when missing/oversized/unreadable.
+    /// </summary>
+    private byte[]? TryReadDefaultXexFull()
+    {
+        try
+        {
+            if (!IsValid || _fileTree.Count == 0)
+            {
+                return null;
+            }
+
+            FileDirectoryEntry? entry = Lookup("default.xex");
+            if (entry == null || !entry.IsFile || entry.GetFileSize() == 0 || entry.GetFileSize() > 128 * 1024 * 1024)
+            {
+                return null;
+            }
+
+            byte[] data = ReadFile(entry);
+            return data.Length == 0 ? null : data;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<ZarFile>($"TryReadDefaultXexFull failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Tries to extract the dashboard title icon PNG from the ZAR archive.
     /// </summary>
     /// <returns>PNG bytes if found (valid <c>89 50 4E 47</c> header), null otherwise. Never throws.</returns>
@@ -819,13 +893,30 @@ public sealed class ZarFile : IDisposable
     {
         try
         {
-            if (XexFile is { IsValid: true })
+            // Full in-memory XEX (tests, explicit loads) works directly.
+            if (XexFile is { IsValid: true, IsHeaderOnly: false })
             {
-                byte[]? icon = XexFile.TryGetIcon();
-                if (icon != null)
+                byte[]? storedIcon = XexFile.TryGetIcon();
+                if (storedIcon != null)
                 {
-                    Logger.Debug<ZarFile>($"ZAR embedded XEX icon extracted ({icon.Length} bytes)");
-                    return icon;
+                    Logger.Debug<ZarFile>($"ZAR embedded XEX icon extracted ({storedIcon.Length} bytes)");
+                    return storedIcon;
+                }
+            }
+
+            // Header-only instances read full bytes lazily for icon extraction.
+            byte[]? fullBytes = TryReadDefaultXexFull();
+            if (fullBytes != null)
+            {
+                XexFile fullXex = XexFile.FromBytes(fullBytes);
+                if (fullXex.IsValid)
+                {
+                    byte[]? icon = fullXex.TryGetIcon();
+                    if (icon != null)
+                    {
+                        Logger.Debug<ZarFile>($"ZAR embedded XEX icon extracted ({icon.Length} bytes)");
+                        return icon;
+                    }
                 }
             }
 
@@ -954,6 +1045,12 @@ public sealed class ZarFile : IDisposable
                 continue;
             }
 
+            if (entry.Size > 128 * 1024 * 1024)
+            {
+                Logger.Trace<ZarFile>($"ZAR alternative XEX candidate '{entry.Name}' skipped (size {entry.Size} exceeds 128 MiB cap)");
+                continue;
+            }
+
             try
             {
                 byte[]? data = ReadFile(entry.Name);
@@ -1018,20 +1115,23 @@ public sealed class ZarFile : IDisposable
     /// <param name="disposing">Whether to dispose of managed resources.</param>
     private void Dispose(bool disposing)
     {
-        if (_disposed)
+        lock (_ioLock)
         {
-            return;
-        }
+            if (_disposed)
+            {
+                return;
+            }
 
-        if (disposing)
-        {
-            _stream?.Dispose();
-            _stream = null;
-            _decompressor?.Dispose();
-            _decompressor = null;
-        }
+            if (disposing)
+            {
+                _stream?.Dispose();
+                _stream = null;
+                _decompressor?.Dispose();
+                _decompressor = null;
+            }
 
-        _disposed = true;
+            _disposed = true;
+        }
     }
 
     /// <summary>

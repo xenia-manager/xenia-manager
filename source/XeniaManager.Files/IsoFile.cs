@@ -378,9 +378,10 @@ public sealed class IsoFile : IDisposable
     }
 
     /// <summary>
-    /// Extracts the default.xex file from the ISO and parses it.
+    /// Parses the default.xex header for TitleId/MediaId without loading the full executable.
+    /// Full bytes are read lazily by <see cref="TryGetIcon"/>/<see cref="TryGetSpaFile"/> only.
     /// </summary>
-    /// <returns>True if extraction and parsing succeeded, false otherwise.</returns>
+    /// <returns>True if the header was found and parsed, false otherwise.</returns>
     private bool ExtractAndParseDefaultXex()
     {
         if (_sectorReader == null || XgdInformation == null)
@@ -393,20 +394,28 @@ public sealed class IsoFile : IDisposable
 
         try
         {
-            // Navigate the ISO filesystem to find default.xex
-            byte[]? defaultXexData = FindFileInIso(IsoConstants.DEFAULT_EXECUTABLE_NAME);
-
-            if (defaultXexData == null || defaultXexData.Length == 0)
+            GdfxEntry? entry = FindEntryInIso(IsoConstants.DEFAULT_EXECUTABLE_NAME);
+            if (entry == null || entry.Size == 0)
             {
                 ValidationError = "default.xex not found in ISO";
                 Logger.Error<IsoFile>(ValidationError);
                 return false;
             }
 
-            Logger.Info<IsoFile>($"Found default.xex ({defaultXexData.Length} bytes), parsing...");
+            // Header-only: IDs live in the first 64 KiB, no need to retain the full executable.
+            ulong headerLen = Math.Min((ulong)XexFile.HeaderParseMaxBytes, entry.Size);
+            byte[] header = ReadFile(entry, 0, headerLen);
+            if (header.Length == 0)
+            {
+                ValidationError = "default.xex not found in ISO";
+                Logger.Error<IsoFile>(ValidationError);
+                return false;
+            }
+
+            Logger.Info<IsoFile>($"Found default.xex ({entry.Size} bytes), parsing header ({header.Length} bytes)...");
 
             // Parse the XEX using existing XexFile parser
-            XexFile xexFile = XexFile.FromBytes(defaultXexData);
+            XexFile xexFile = XexFile.FromHeaderBytes(header);
 
             if (!xexFile.IsValid)
             {
@@ -431,12 +440,9 @@ public sealed class IsoFile : IDisposable
     }
 
     /// <summary>
-    /// Finds and extracts a file from the ISO by name.
-    /// Searches the whole GDFX tree and returns the first case-insensitive name match.
+    /// Finds a GDFX entry by file name (case-insensitive, any directory).
     /// </summary>
-    /// <param name="fileName">The name of the file to find (case-insensitive).</param>
-    /// <returns>The file data, or null if not found.</returns>
-    private byte[]? FindFileInIso(string fileName)
+    private GdfxEntry? FindEntryInIso(string fileName)
     {
         foreach (GdfxEntry entry in Entries)
         {
@@ -451,23 +457,50 @@ public sealed class IsoFile : IDisposable
                 return null;
             }
 
-            if (entry.Size == 0)
-            {
-                return Array.Empty<byte>();
-            }
-
-            byte[] fileData = ReadFile(entry);
-            if (entry.Size > 0 && fileData.Length == 0)
-            {
-                return null;
-            }
-
-            Logger.Info<IsoFile>($"Successfully extracted {fileName} ({fileData.Length} bytes)");
-            return fileData;
+            return entry;
         }
 
-        Logger.Warning<IsoFile>($"File {fileName} not found in ISO");
         return null;
+    }
+
+    /// <summary>
+    /// Finds and extracts a file from the ISO by name.
+    /// Searches the whole GDFX tree and returns the first case-insensitive name match.
+    /// </summary>
+    /// <param name="fileName">The name of the file to find (case-insensitive).</param>
+    /// <returns>The file data, or null if not found.</returns>
+    private byte[]? FindFileInIso(string fileName)
+    {
+        GdfxEntry? entry = FindEntryInIso(fileName);
+        if (entry == null)
+        {
+            Logger.Warning<IsoFile>($"File {fileName} not found in ISO");
+            return null;
+        }
+
+        if (entry.Size == 0)
+        {
+            return Array.Empty<byte>();
+        }
+
+        byte[] fileData;
+        try
+        {
+            fileData = ReadFile(entry);
+        }
+        catch (IOException ex)
+        {
+            Logger.Warning<IsoFile>($"Failed to read {fileName} (truncated?): {ex.Message}");
+            return null;
+        }
+
+        if (entry.Size > 0 && fileData.Length == 0)
+        {
+            return null;
+        }
+
+        Logger.Info<IsoFile>($"Successfully extracted {fileName} ({fileData.Length} bytes)");
+        return fileData;
     }
 
     /// <summary>
@@ -658,19 +691,31 @@ public sealed class IsoFile : IDisposable
         spaFile = null;
         try
         {
-            if (XexFile is { IsValid: true })
+            // Full in-memory XEX (tests, explicit loads) works directly.
+            if (XexFile is { IsValid: true, IsHeaderOnly: false })
             {
                 return XexFile.TryGetSpaFile(out spaFile);
             }
 
+            // Header-only instances read full bytes lazily for SPA extraction.
+            byte[]? xexBytes = FindFileInIso(IsoConstants.DEFAULT_EXECUTABLE_NAME);
+            if (xexBytes != null && xexBytes.Length > 0)
+            {
+                XexFile fullXex = XexFile.FromBytes(xexBytes);
+                if (fullXex.IsValid)
+                {
+                    return fullXex.TryGetSpaFile(out spaFile);
+                }
+            }
+
             // Fallback: ISO valid but default.xex missing or invalid - try to locate an alternative XEX inside the ISO.
-            byte[]? xexBytes = TryExtractAlternativeXex();
-            if (xexBytes == null)
+            byte[]? altBytes = TryExtractAlternativeXex();
+            if (altBytes == null)
             {
                 return false;
             }
 
-            XexFile altXex = XexFile.FromBytes(xexBytes);
+            XexFile altXex = XexFile.FromBytes(altBytes);
             if (!altXex.IsValid)
             {
                 Logger.Trace<IsoFile>($"ISO alternative XEX invalid: {altXex.ValidationError}");
@@ -694,7 +739,8 @@ public sealed class IsoFile : IDisposable
     {
         try
         {
-            if (XexFile is { IsValid: true })
+            // Full in-memory XEX (tests, explicit loads) works directly.
+            if (XexFile is { IsValid: true, IsHeaderOnly: false })
             {
                 byte[]? icon = XexFile.TryGetIcon();
                 if (icon != null)
@@ -704,10 +750,26 @@ public sealed class IsoFile : IDisposable
                 }
             }
 
-            byte[]? xexBytes = TryExtractAlternativeXex();
-            if (xexBytes != null)
+            // Header-only instances read full bytes lazily for icon extraction.
+            byte[]? xexBytes = FindFileInIso(IsoConstants.DEFAULT_EXECUTABLE_NAME);
+            if (xexBytes != null && xexBytes.Length > 0)
             {
-                XexFile altXex = XexFile.FromBytes(xexBytes);
+                XexFile fullXex = XexFile.FromBytes(xexBytes);
+                if (fullXex.IsValid)
+                {
+                    byte[]? icon = fullXex.TryGetIcon();
+                    if (icon != null)
+                    {
+                        Logger.Debug<IsoFile>($"ISO embedded XEX icon extracted ({icon.Length} bytes)");
+                        return icon;
+                    }
+                }
+            }
+
+            byte[]? altBytes = TryExtractAlternativeXex();
+            if (altBytes != null)
+            {
+                XexFile altXex = XexFile.FromBytes(altBytes);
                 if (altXex.IsValid)
                 {
                     byte[]? icon = altXex.TryGetIcon();
@@ -796,11 +858,25 @@ public sealed class IsoFile : IDisposable
                 bool isDefault = entry.Name.Equals(IsoConstants.DEFAULT_EXECUTABLE_NAME, StringComparison.OrdinalIgnoreCase);
                 if (isXex && !isDefault)
                 {
-                    byte[] fileData = ReadFile(entry);
-                    if ((ulong)fileData.Length == entry.Size)
+                    // Skip implausibly large candidates without loading them.
+                    if (entry.Size > 128 * 1024 * 1024)
                     {
-                        Logger.Trace<IsoFile>($"ISO alternative XEX candidate found: '{entry.FullPath}' ({entry.Size} bytes)");
-                        return fileData;
+                        Logger.Trace<IsoFile>($"ISO alternative XEX candidate '{entry.FullPath}' skipped (size {entry.Size} exceeds 128 MiB cap)");
+                        continue;
+                    }
+
+                    try
+                    {
+                        byte[] fileData = ReadFile(entry);
+                        if ((ulong)fileData.Length == entry.Size)
+                        {
+                            Logger.Trace<IsoFile>($"ISO alternative XEX candidate found: '{entry.FullPath}' ({entry.Size} bytes)");
+                            return fileData;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<IsoFile>($"ISO alternative XEX candidate '{entry.FullPath}' unreadable: {ex.Message}");
                     }
                 }
             }

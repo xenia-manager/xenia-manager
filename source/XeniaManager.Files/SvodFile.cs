@@ -775,22 +775,32 @@ public sealed class SvodFile : IDisposable
     private bool TryReadSvodSectorForGdfxHeader(byte[] sectorData, int offset) => TryReadRaw(offset, sectorData);
 
     /// <summary>
-    /// Extracts and parses <c>default.xex</c> from the GDFX filesystem.
+    /// Parses the <c>default.xex</c> header for TitleId/MediaId without loading the full executable.
+    /// Full bytes are read lazily by <see cref="TryGetIcon"/>/<see cref="TryGetSpaFile"/> only.
     /// </summary>
     private bool ExtractAndParseDefaultXex()
     {
         try
         {
-            byte[]? data = ReadFile(IsoConstants.DEFAULT_EXECUTABLE_NAME);
-            if (data == null || data.Length == 0)
+            GdfxEntry? entry = Lookup(IsoConstants.DEFAULT_EXECUTABLE_NAME);
+            if (entry == null || !entry.IsFile || entry.Size == 0)
             {
                 ValidationError = "default.xex not found in SVOD";
                 Logger.Warning<SvodFile>(ValidationError);
                 return false;
             }
 
-            Logger.Info<SvodFile>($"Found default.xex in SVOD ({data.Length} bytes), parsing...");
-            XexFile xex = XexFile.FromBytes(data);
+            ulong headerLen = Math.Min((ulong)XexFile.HeaderParseMaxBytes, entry.Size);
+            byte[] header = ReadFile(entry, 0, headerLen);
+            if (header.Length == 0)
+            {
+                ValidationError = "default.xex not found in SVOD";
+                Logger.Warning<SvodFile>(ValidationError);
+                return false;
+            }
+
+            Logger.Info<SvodFile>($"Found default.xex in SVOD ({entry.Size} bytes), parsing header ({header.Length} bytes)...");
+            XexFile xex = XexFile.FromHeaderBytes(header);
             if (!xex.IsValid)
             {
                 ValidationError = $"default.xex is invalid: {xex.ValidationError}";
@@ -1068,6 +1078,12 @@ public sealed class SvodFile : IDisposable
             yield break;
         }
 
+        if (_xgdInfo.RootDirSize == 0 || _xgdInfo.RootDirSize > 32 * 1024 * 1024)
+        {
+            Logger.Trace<SvodFile>($"SVOD root directory size {_xgdInfo.RootDirSize} out of bounds, skipping walk");
+            yield break;
+        }
+
         byte[]? rootData = ReadSvodSectors(_xgdInfo.RootDirSector, _xgdInfo.RootDirSize);
         if (rootData == null)
         {
@@ -1213,9 +1229,21 @@ public sealed class SvodFile : IDisposable
         spaFile = null;
         try
         {
-            if (XexFile is { IsValid: true })
+            // Full in-memory XEX (tests, explicit loads) works directly.
+            if (XexFile is { IsValid: true, IsHeaderOnly: false })
             {
                 return XexFile.TryGetSpaFile(out spaFile);
+            }
+
+            // Header-only instances read full bytes lazily for SPA extraction.
+            byte[]? fullBytes = TryReadDefaultXexFull();
+            if (fullBytes != null)
+            {
+                XexFile fullXex = XexFile.FromBytes(fullBytes);
+                if (fullXex.IsValid)
+                {
+                    return fullXex.TryGetSpaFile(out spaFile);
+                }
             }
 
             byte[]? xexBytes = TryExtractAlternativeXex();
@@ -1241,6 +1269,29 @@ public sealed class SvodFile : IDisposable
     }
 
     /// <summary>
+    /// Reads the full <c>default.xex</c> bytes, or null when missing/unreadable.
+    /// </summary>
+    private byte[]? TryReadDefaultXexFull()
+    {
+        try
+        {
+            GdfxEntry? entry = Lookup(IsoConstants.DEFAULT_EXECUTABLE_NAME);
+            if (entry == null || !entry.IsFile || entry.Size == 0 || entry.Size > 128 * 1024 * 1024)
+            {
+                return null;
+            }
+
+            byte[] data = ReadFile(entry);
+            return data.Length == 0 ? null : data;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<SvodFile>($"TryReadDefaultXexFull failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Tries to extract the dashboard title icon from the SVOD package.
     /// </summary>
     /// <remarks>Thumbnail first, XEX SPA last (same order as <see cref="StfsFile.TryGetIcon"/>).</remarks>
@@ -1260,13 +1311,30 @@ public sealed class SvodFile : IDisposable
                 return titleThumb;
             }
 
-            if (XexFile is { IsValid: true })
+            // Full in-memory XEX (tests, explicit loads) works directly.
+            if (XexFile is { IsValid: true, IsHeaderOnly: false })
             {
-                byte[]? icon = XexFile.TryGetIcon();
-                if (icon != null)
+                byte[]? storedIcon = XexFile.TryGetIcon();
+                if (storedIcon != null)
                 {
-                    Logger.Debug<SvodFile>($"SVOD embedded XEX icon extracted ({icon.Length} bytes)");
-                    return icon;
+                    Logger.Debug<SvodFile>($"SVOD embedded XEX icon extracted ({storedIcon.Length} bytes)");
+                    return storedIcon;
+                }
+            }
+
+            // Header-only instances read full bytes lazily for icon extraction.
+            byte[]? fullBytes = TryReadDefaultXexFull();
+            if (fullBytes != null)
+            {
+                XexFile fullXex = XexFile.FromBytes(fullBytes);
+                if (fullXex.IsValid)
+                {
+                    byte[]? icon = fullXex.TryGetIcon();
+                    if (icon != null)
+                    {
+                        Logger.Debug<SvodFile>($"SVOD embedded XEX icon extracted ({icon.Length} bytes)");
+                        return icon;
+                    }
                 }
             }
 
@@ -1349,6 +1417,12 @@ public sealed class SvodFile : IDisposable
 
         try
         {
+            if (_xgdInfo.RootDirSize == 0 || _xgdInfo.RootDirSize > 32 * 1024 * 1024)
+            {
+                Logger.Trace<SvodFile>($"SVOD alternative XEX scan skipped (root size {_xgdInfo.RootDirSize} out of bounds)");
+                return null;
+            }
+
             uint rootSectors = (_xgdInfo.RootDirSize + IsoConstants.SECTOR_SIZE - 1) / IsoConstants.SECTOR_SIZE;
             byte[] rootData = new byte[_xgdInfo.RootDirSize];
             for (uint i = 0; i < rootSectors; i++)
@@ -1423,6 +1497,12 @@ public sealed class SvodFile : IDisposable
                 bool isDefault = filename.Equals(IsoConstants.DEFAULT_EXECUTABLE_NAME, StringComparison.OrdinalIgnoreCase);
                 if (isXex && !isDefault && (attr & 0x10) == 0 && size > 0)
                 {
+                    if (size > 128 * 1024 * 1024)
+                    {
+                        Logger.Trace<SvodFile>($"SVOD alternative XEX candidate '{filename}' skipped (size {size} exceeds 128 MiB cap)");
+                        continue;
+                    }
+
                     byte[] fileData = new byte[size];
                     uint processed = 0;
                     uint rs = sector;
