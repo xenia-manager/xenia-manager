@@ -331,7 +331,7 @@ public class GameManager
                 case FileSignature.XEX2:
                 {
                     Logger.Info<GameManager>($"Detected XEX file ({fileSignature}), parsing: {gamePath}");
-                    XexFile xex = XexFile.Load(gamePath);
+                    XexFile xex = XexFile.LoadHeaderOnly(gamePath);
                     if (!xex.IsValid)
                     {
                         Logger.Warning<GameManager>($"XEX file is invalid or could not be parsed: {xex.ValidationError}");
@@ -1571,6 +1571,7 @@ public class GameManager
                     if (xex.IsValid)
                     {
                         iconBytes = xex.TryGetIcon();
+                        xex.ReleaseRawData();
                     }
 
                     break;
@@ -1705,6 +1706,7 @@ public class GameManager
                                 if (xex.IsValid)
                                 {
                                     iconBytes = xex.TryGetIcon();
+                                    xex.ReleaseRawData();
                                 }
                             }
                             else if (magic is "CON " or "LIVE" or "PIRS")
