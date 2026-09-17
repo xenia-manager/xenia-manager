@@ -172,6 +172,7 @@ public partial class InstallContentDialog : UserControl
                     }
                     else
                     {
+                        stfsFile.Dispose();
                         Logger.Warning<InstallContentDialog>("Selected file is currently not supported for installing");
                     }
                 }
