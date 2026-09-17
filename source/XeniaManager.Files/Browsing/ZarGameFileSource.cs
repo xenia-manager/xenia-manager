@@ -76,6 +76,23 @@ public sealed class ZarGameFileSource : GameFileSourceBase
     }
 
     /// <inheritdoc />
+    public override byte[]? ReadFileRange(string path, ulong offset, ulong length)
+    {
+        if (!_zar.IsValid)
+        {
+            return null;
+        }
+
+        FileDirectoryEntry? entry = _zar.Lookup(path);
+        if (entry == null || !entry.IsFile)
+        {
+            return null;
+        }
+
+        return _zar.ReadFile(entry, offset, length);
+    }
+
+    /// <inheritdoc />
     public override string FormatName
     {
         get

@@ -272,6 +272,69 @@ public class GameFileSourceTests
     }
 
     [Test]
+    public void ReadFileRange_StfsSource_MatchesSlicesAndContract()
+    {
+        string path = WriteTempFile(BuildStfsPackage(), ".stfs");
+        try
+        {
+            using IGameFileSource? source = GameFileSourceFactory.TryOpen(path);
+
+            Assert.That(source, Is.InstanceOf<StfsGameFileSource>());
+            byte[] full = source!.ReadFile("hello.txt")!;
+            Assert.That(Encoding.ASCII.GetString(full), Is.EqualTo("hello world"));
+            Assert.That(Encoding.ASCII.GetString(source.ReadFileRange("hello.txt", 0, 5)!), Is.EqualTo("hello"));
+            Assert.That(Encoding.ASCII.GetString(source.ReadFileRange("hello.txt", 6, 100)!), Is.EqualTo("world"));
+            Assert.That(source.ReadFileRange("hello.txt", 11, 10), Is.Empty);
+            Assert.That(source.ReadFileRange("hello.txt", 100, 10), Is.Empty);
+            Assert.That(source.ReadFileRange("missing.bin", 0, 4), Is.Null);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Test]
+    public void ReadFileRange_LooseSource_MatchesSlicesAndContract()
+    {
+        string directory = Path.Combine(Path.GetTempPath(), $"gfs_range_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(directory);
+        try
+        {
+            File.WriteAllText(Path.Combine(directory, "root.txt"), "hello world");
+
+            using LooseGameFileSource source = new LooseGameFileSource(directory);
+
+            Assert.That(Encoding.ASCII.GetString(source.ReadFileRange("root.txt", 0, 5)!), Is.EqualTo("hello"));
+            Assert.That(Encoding.ASCII.GetString(source.ReadFileRange("root.txt", 6, 100)!), Is.EqualTo("world"));
+            Assert.That(source.ReadFileRange("root.txt", 11, 10), Is.Empty);
+            Assert.That(source.ReadFileRange("missing", 0, 4), Is.Null);
+        }
+        finally
+        {
+            Directory.Delete(directory, true);
+        }
+    }
+
+    [Test]
+    public void ReadFileRange_IsoSource_MatchesSlices()
+    {
+        string path = WriteTempFile(BuildIsoImage(), ".iso");
+        try
+        {
+            using IGameFileSource? source = GameFileSourceFactory.TryOpen(path);
+
+            Assert.That(source, Is.InstanceOf<IsoGameFileSource>());
+            Assert.That(Encoding.ASCII.GetString(source!.ReadFileRange("hello.txt", 0, 5)!), Is.EqualTo("hello"));
+            Assert.That(source.ReadFileRange("missing", 0, 4), Is.Null);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Test]
     public void FindDefaultXexPath_PrefersDefaultXexOverOtherXex()
     {
         string directory = Path.Combine(Path.GetTempPath(), $"gfs_xexfind_{Guid.NewGuid():N}");

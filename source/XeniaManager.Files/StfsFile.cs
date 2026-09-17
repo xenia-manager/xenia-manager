@@ -14,7 +14,18 @@ namespace XeniaManager.Files;
 public class StfsFile : IDisposable
 {
     private bool _disposed;
-    private readonly byte[] _rawData;
+    private readonly byte[]? _memoryData;
+    private readonly FileStream? _stream;
+    private readonly long _length;
+    private readonly Lock _readLock = new Lock();
+
+    private long Length
+    {
+        get
+        {
+            return _memoryData?.Length ?? _length;
+        }
+    }
 
     /// <summary>
     /// Gets the package name (filename without extension).
@@ -106,10 +117,85 @@ public class StfsFile : IDisposable
     /// <param name="data">The raw package data.</param>
     private StfsFile(byte[] data)
     {
-        _rawData = data;
+        _memoryData = data;
+        _length = data.Length;
         // blocksPerHashTable will be set after metadata is parsed
         // Default to 1, will be updated in FromBytes after metadata parsing
         blocksPerHashTable = 1;
+    }
+
+    /// <summary>
+    /// Private constructor for stream-backed packages opened via <see cref="Load"/>.
+    /// Keeps the file open for random-access reads so large packages never load fully into RAM.
+    /// </summary>
+    /// <param name="stream">The open package stream (owned by this instance).</param>
+    private StfsFile(FileStream stream)
+    {
+        _stream = stream;
+        _length = stream.Length;
+        blocksPerHashTable = 1;
+    }
+
+    /// <summary>
+    /// Reads <paramref name="count"/> bytes at <paramref name="offset"/> into <paramref name="dest"/>.
+    /// </summary>
+    /// <returns>Bytes actually read (0 at/past EOF or after dispose; remainder stays zero-filled by callers).</returns>
+    private int ReadAt(long offset, byte[] dest, int destOffset, int count)
+    {
+        if (_disposed || offset < 0 || count <= 0 || offset >= Length)
+        {
+            return 0;
+        }
+
+        long available = Length - offset;
+        int toRead = (int)Math.Min(count, available);
+        if (_memoryData != null)
+        {
+            Buffer.BlockCopy(_memoryData, (int)offset, dest, destOffset, toRead);
+            return toRead;
+        }
+
+        lock (_readLock)
+        {
+            if (_disposed || _stream == null)
+            {
+                return 0;
+            }
+
+            _stream.Seek(offset, SeekOrigin.Begin);
+            int total = 0;
+            while (total < toRead)
+            {
+                int read = _stream.Read(dest, destOffset + total, toRead - total);
+                if (read <= 0)
+                {
+                    break;
+                }
+
+                total += read;
+            }
+
+            return total;
+        }
+    }
+
+    /// <summary>
+    /// Reads <paramref name="count"/> bytes at <paramref name="offset"/> (zero-filled tail on truncation).
+    /// </summary>
+    private byte[] ReadAt(long offset, int count)
+    {
+        byte[] result = new byte[count];
+        ReadAt(offset, result, 0, count);
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a big-endian uint32 at <paramref name="offset"/> (0 when unreadable).
+    /// </summary>
+    private uint ReadU32BE(long offset)
+    {
+        byte[] buf = ReadAt(offset, 4);
+        return buf.Length < 4 ? 0 : BinaryPrimitives.ReadUInt32BigEndian(buf);
     }
 
     /// <summary>
@@ -131,17 +217,42 @@ public class StfsFile : IDisposable
             throw new FileNotFoundException($"STFS package does not exist at {filePath}", filePath);
         }
 
-        byte[] fileData = File.ReadAllBytes(filePath);
-        Logger.Info<StfsFile>($"Loaded STFS package: {filePath} ({fileData.Length} bytes)");
+        // Stream-backed: keep the file open and read blocks on demand instead of
+        // File.ReadAllBytes (multi-GB packages must not load fully into RAM).
+        FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        try
+        {
+            int headerLen = (int)Math.Min(0xA000, fs.Length);
+            byte[] header = new byte[headerLen];
+            fs.Seek(0, SeekOrigin.Begin);
+            fs.ReadExactly(header, 0, headerLen);
 
-        StfsFile stfs = FromBytes(fileData);
+            // Reuse header validation/metadata parsing, but don't keep the temp instance alive.
+            StfsFile headerOnly = FromBytes(header, false);
 
-        // Set the package name from the filename (without extension)
-        stfs.PackageName = Path.GetFileName(filePath);
-        stfs.PackagePath = filePath;
-        Logger.Debug<StfsFile>($"Package name set to: {stfs.PackageName}");
+            StfsFile stfs = new StfsFile(fs)
+            {
+                SignatureType = headerOnly.SignatureType,
+                Signature = headerOnly.Signature,
+                PublicKeyCertificate = headerOnly.PublicKeyCertificate,
+                ContentId = headerOnly.ContentId,
+                Metadata = headerOnly.Metadata,
+                PackageName = Path.GetFileName(filePath),
+                PackagePath = filePath
+            };
+            stfs.blocksPerHashTable = headerOnly.blocksPerHashTable;
+            headerOnly.Dispose();
 
-        return stfs;
+            Logger.Info<StfsFile>($"Loaded STFS package: {filePath} ({fs.Length} bytes, stream-backed)");
+            stfs.ParseFileTable();
+            Logger.Debug<StfsFile>($"Package name set to: {stfs.PackageName}");
+            return stfs;
+        }
+        catch
+        {
+            fs.Dispose();
+            throw;
+        }
     }
 
     /// <summary>
@@ -362,14 +473,12 @@ public class StfsFile : IDisposable
             Logger.Debug<StfsFile>($"File Table Offset: 0x{fileTableOffset:X8}");
 
             // Validate file table offset - if it's beyond the file size, the package is corrupted or incomplete
-            if (fileTableOffset < 0 || fileTableOffset >= _rawData.Length)
+            if (fileTableOffset < 0 || fileTableOffset >= Length)
             {
                 Logger.Warning<StfsFile>(
-                    $"Invalid file table offset 0x{fileTableOffset:X8} (file size: {_rawData.Length} bytes). Package may be corrupted or incomplete.");
+                    $"Invalid file table offset 0x{fileTableOffset:X8} (file size: {Length} bytes). Package may be corrupted or incomplete.");
                 return;
             }
-
-            Logger.Trace<StfsFile>($"Raw bytes at file table offset: {BitConverter.ToString(_rawData.Skip(fileTableOffset).Take(128).ToArray())}");
 
             // Read file entries
             for (int m = 0; m < BlockSize / StfsFileEntry.Size; m++)
@@ -377,16 +486,14 @@ public class StfsFile : IDisposable
                 int offset = fileTableOffset + m * StfsFileEntry.Size;
 
                 // Check if there's enough data remaining for a file entry
-                if (offset + StfsFileEntry.Size > _rawData.Length)
+                if (offset + StfsFileEntry.Size > Length)
                 {
                     Logger.Warning<StfsFile>(
-                        $"Insufficient data remaining for file entry at offset 0x{offset:X8} (remaining: {_rawData.Length - offset} bytes)");
+                        $"Insufficient data remaining for file entry at offset 0x{offset:X8} (remaining: {Length - offset} bytes)");
                     return;
                 }
 
-                Logger.Trace<StfsFile>($"Reading file entry at offset 0x{offset:X8}: {BitConverter.ToString(_rawData.Skip(offset).Take(64).ToArray())}");
-
-                StfsFileEntry entry = StfsFileEntry.FromBytes(_rawData, offset);
+                StfsFileEntry entry = StfsFileEntry.FromBytes(ReadAt(offset, StfsFileEntry.Size));
 
                 // Check for empty entry (end of file table block)
                 if (string.IsNullOrEmpty(entry.FileName) || entry.Flags == 0)
@@ -426,12 +533,12 @@ public class StfsFile : IDisposable
     private uint GetLevel0NextBlock(int blockNumber)
     {
         int hashTableOffset = GetHashTableOffset(blockNumber, 0);
-        if (hashTableOffset < 0 || hashTableOffset + 0x18 > _rawData.Length)
+        if (hashTableOffset < 0 || hashTableOffset + 0x18 > Length)
         {
             return kEndOfChain;
         }
 
-        return BinaryPrimitives.ReadUInt32BigEndian(_rawData.AsSpan(hashTableOffset + 0x14)) & 0xFFFFFF;
+        return ReadU32BE(hashTableOffset + 0x14) & 0xFFFFFF;
     }
 
     /// <summary>
@@ -439,7 +546,7 @@ public class StfsFile : IDisposable
     /// Based on Xenia's BlockToOffset implementation.
     /// For every level there is a hash table:
     /// Level 0: hash table of next 170 blocks
-    /// Level 1: hash table of next 170 hash tables  
+    /// Level 1: hash table of next 170 hash tables
     /// Level 2: hash table of next 170 level 1 hash tables
     /// Note: Data block 0 is at offset DataSectionStart + BlockSize for CON packages,
     /// or DataSectionStart + 2*BlockSize for PIRS/LIVE packages (due to blocksPerHashTable).
@@ -589,53 +696,37 @@ public class StfsFile : IDisposable
         {
             // Read the hash table entry for this block (level 0)
             int hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
-            Logger.Trace<StfsFile>($"  Block {currentBlock}: Hash table offset 0x{hashTableOffset:X8}");
 
-            if (hashTableOffset >= _rawData.Length)
+            if (hashTableOffset < 0 || hashTableOffset + 0x18 > Length)
             {
                 Logger.Warning<StfsFile>($"Hash table offset out of bounds for block {currentBlock}");
                 break;
             }
 
-            // Hash table entry structure (StfsHashEntry - 0x18 bytes):
-            // 0x00-0x13: SHA1 hash (0x14 bytes)
-            // 0x14-0x17: info_raw (uint32_t big endian)
-            //   - Bits 0-23: level0_next_block
-            //   - Bits 30-31: level0_allocation_state (2 = in use)
-            Logger.Trace<StfsFile>($"  Hash table entry: {BitConverter.ToString(_rawData.Skip(hashTableOffset).Take(24).ToArray())}");
-
-            // Read info_raw as big-endian uint32
-            uint infoRaw = BinaryPrimitives.ReadUInt32BigEndian(_rawData.AsSpan(hashTableOffset + 0x14));
-            Logger.Trace<StfsFile>($"  info_raw: 0x{infoRaw:X8}");
-
-            // Check allocation state (bits 30-31)
-            uint allocationState = (infoRaw >> 30) & 0x03;
-            Logger.Trace<StfsFile>($"  Allocation state: {allocationState} (2 = in use)");
+            // Hash table entry: 0x14 SHA1 + info_raw u32 BE (bits 0-23 next, bits 30-31 alloc state).
+            uint infoRaw = ReadU32BE(hashTableOffset + 0x14);
 
             // Check if the block is in use (0x02 = In Use)
-            if (allocationState != 2)
+            if (((infoRaw >> 30) & 0x03) != 2)
             {
-                Logger.Warning<StfsFile>($"Block {currentBlock} is not marked as in use (allocation state: {allocationState})");
+                Logger.Warning<StfsFile>($"Block {currentBlock} is not marked as in use");
                 break;
             }
 
             // Get the next block number (bits 0-23)
             uint nextBlock = infoRaw & 0xFFFFFF;
-            Logger.Trace<StfsFile>($"  Next block: {nextBlock}");
 
             // Read block data
             int blockOffset = BlockNumberToOffset((int)currentBlock);
             int bytesToRead = Math.Min(entry.FileSize - offset, BlockSize);
-            Logger.Trace<StfsFile>($"  Reading {bytesToRead} bytes from block offset 0x{blockOffset:X8}");
 
-            if (blockOffset + bytesToRead > _rawData.Length)
+            if (blockOffset < 0 || (long)blockOffset + bytesToRead > Length)
             {
                 Logger.Warning<StfsFile>($"Block offset out of bounds for block {currentBlock}");
                 break;
             }
 
-            Logger.Trace<StfsFile>($"  Data at block offset: {BitConverter.ToString(_rawData.Skip(blockOffset).Take(Math.Min(32, bytesToRead)).ToArray())}");
-            Array.Copy(_rawData, blockOffset, data, offset, bytesToRead);
+            ReadAt(blockOffset, data, offset, bytesToRead);
             offset += bytesToRead;
             currentBlock = nextBlock;
             blocksRemaining--;
@@ -717,10 +808,7 @@ public class StfsFile : IDisposable
         byte[] data = new byte[entry.FileSize];
 
         int bytesToRead = Math.Min(entry.FileSize, BlockSize - startOffset % BlockSize);
-        Logger.Trace<StfsFile>($"  Reading {bytesToRead} bytes from offset 0x{startOffset:X8}");
-        Logger.Trace<StfsFile>($"  Data at start offset: {BitConverter.ToString(_rawData.Skip(startOffset).Take(Math.Min(32, bytesToRead)).ToArray())}");
-
-        Array.Copy(_rawData, startOffset, data, 0, bytesToRead);
+        ReadAt(startOffset, data, 0, bytesToRead);
 
         int offset = bytesToRead;
         int currentBlock = entry.StartingBlock + 1;
@@ -731,14 +819,13 @@ public class StfsFile : IDisposable
             int remaining = entry.FileSize - offset;
             int readSize = Math.Min(remaining, BlockSize);
 
-            if (blockOffset + readSize > _rawData.Length)
+            if (blockOffset < 0 || (long)blockOffset + readSize > Length)
             {
                 Logger.Warning<StfsFile>($"Reached end of package data while extracting {entry.FileName}");
                 break;
             }
 
-            Logger.Trace<StfsFile>($"  Reading block {currentBlock} at offset 0x{blockOffset:X8}, {readSize} bytes");
-            Array.Copy(_rawData, blockOffset, data, offset, readSize);
+            ReadAt(blockOffset, data, offset, readSize);
             offset += readSize;
             currentBlock++;
         }
@@ -1403,13 +1490,13 @@ public class StfsFile : IDisposable
         {
             int blockOffset = BlockNumberToOffset(block);
             int step = (int)Math.Min(count - dest, (ulong)(BlockSize - blockOff));
-            if (blockOffset < 0 || blockOffset + blockOff + step > _rawData.Length)
+            if (blockOffset < 0 || (long)blockOffset + blockOff + step > Length)
             {
                 Logger.Warning<StfsFile>($"Reached end of package data while reading {entry.FileName}");
                 break;
             }
 
-            Array.Copy(_rawData, blockOffset + blockOff, result, (long)dest, step);
+            ReadAt((long)blockOffset + blockOff, result, (int)dest, step);
             dest += (ulong)step;
             block++;
             blockOff = 0;
@@ -1437,12 +1524,12 @@ public class StfsFile : IDisposable
         while (dest < count && blocksRemaining > 0 && currentBlock != kEndOfChain)
         {
             int hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
-            if (hashTableOffset < 0 || hashTableOffset + 0x18 > _rawData.Length)
+            if (hashTableOffset < 0 || hashTableOffset + 0x18 > Length)
             {
                 break;
             }
 
-            uint infoRaw = BinaryPrimitives.ReadUInt32BigEndian(_rawData.AsSpan(hashTableOffset + 0x14));
+            uint infoRaw = ReadU32BE(hashTableOffset + 0x14);
             if (((infoRaw >> 30) & 0x03) != 2)
             {
                 Logger.Warning<StfsFile>($"Block {currentBlock} is not marked as in use while reading {entry.FileName}");
@@ -1459,13 +1546,13 @@ public class StfsFile : IDisposable
             {
                 int blockOff = (int)skip;
                 int step = (int)Math.Min(count - dest, (ulong)(BlockSize - blockOff));
-                if (blockOffset < 0 || blockOffset + blockOff + step > _rawData.Length)
+                if (blockOffset < 0 || (long)blockOffset + blockOff + step > Length)
                 {
                     Logger.Warning<StfsFile>($"Reached end of package data while reading {entry.FileName}");
                     break;
                 }
 
-                Array.Copy(_rawData, blockOffset + blockOff, result, (long)dest, step);
+                ReadAt((long)blockOffset + blockOff, result, (int)dest, step);
                 dest += (ulong)step;
                 skip = 0;
             }
@@ -1488,7 +1575,15 @@ public class StfsFile : IDisposable
         }
 
         _disposed = true;
-        Array.Clear(_rawData, 0, _rawData.Length);
+        lock (_readLock)
+        {
+            _stream?.Dispose();
+        }
+
+        if (_memoryData != null)
+        {
+            Array.Clear(_memoryData, 0, _memoryData.Length);
+        }
     }
 
     /// <summary>

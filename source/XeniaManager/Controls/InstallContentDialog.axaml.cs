@@ -90,6 +90,10 @@ public partial class InstallContentDialog : UserControl
             Logger.Error<InstallContentDialog>("Error showing install content dialog");
             Logger.LogExceptionDetails<InstallContentDialog>(ex);
         }
+        finally
+        {
+            dialog._viewModel.DisposeContent();
+        }
     }
 
     /// <summary>

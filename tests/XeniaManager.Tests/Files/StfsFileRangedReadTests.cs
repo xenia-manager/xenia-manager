@@ -140,4 +140,46 @@ public class StfsFileRangedReadTests
                 "big.bin", "chain.bin", "sub"
             }));
     }
+
+    [Test]
+    public void Load_StreamBacked_MatchesMemoryExtractAndRanges()
+    {
+        string path = Path.Combine(Path.GetTempPath(), $"stfs_stream_{Guid.NewGuid():N}.bin");
+        File.WriteAllBytes(path, BuildTestPackage());
+        try
+        {
+            using StfsFile memory = StfsFile.FromBytes(BuildTestPackage());
+            using StfsFile streamed = StfsFile.Load(path);
+            foreach (string name in new[]
+                     {
+                         "big.bin", "chain.bin"
+                     })
+            {
+                StfsFileEntry memoryEntry = memory.Lookup(name)!;
+                StfsFileEntry streamEntry = streamed.Lookup(name)!;
+                Assert.That(streamEntry.FileSize, Is.EqualTo(memoryEntry.FileSize));
+                Assert.That(streamed.ExtractFile(streamEntry), Is.EqualTo(memory.ExtractFile(memoryEntry)));
+                Assert.That(streamed.ReadFile(streamEntry, 100, 200), Is.EqualTo(memory.ReadFile(memoryEntry, 100, 200)));
+                Assert.That(streamed.ReadFile(name)!, Is.EqualTo(memory.ReadFile(name)!));
+            }
+
+            Assert.That(streamed.ReadFile("missing.bin"), Is.Null);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Test]
+    public void Load_Dispose_ReleasesFileHandle()
+    {
+        string path = Path.Combine(Path.GetTempPath(), $"stfs_stream_{Guid.NewGuid():N}.bin");
+        File.WriteAllBytes(path, BuildTestPackage());
+        StfsFile streamed = StfsFile.Load(path);
+        Assert.That(streamed.Lookup("big.bin"), Is.Not.Null);
+        streamed.Dispose();
+        File.Delete(path);
+        Assert.That(File.Exists(path), Is.False);
+    }
 }

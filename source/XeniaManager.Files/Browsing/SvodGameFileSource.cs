@@ -34,6 +34,18 @@ public sealed class SvodGameFileSource : GameFileSourceBase
     public override byte[]? ReadFile(string path) => _svod.ReadFile(path);
 
     /// <inheritdoc />
+    public override byte[]? ReadFileRange(string path, ulong offset, ulong length)
+    {
+        GdfxEntry? entry = _svod.Lookup(path);
+        if (entry == null || !entry.IsFile)
+        {
+            return null;
+        }
+
+        return _svod.ReadFile(entry, offset, length);
+    }
+
+    /// <inheritdoc />
     public override string FormatName
     {
         get

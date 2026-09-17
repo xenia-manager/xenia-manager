@@ -70,6 +70,18 @@ public sealed class StfsGameFileSource : GameFileSourceBase
     public override byte[]? ReadFile(string path) => _stfs.ReadFile(path);
 
     /// <inheritdoc />
+    public override byte[]? ReadFileRange(string path, ulong offset, ulong length)
+    {
+        StfsFileEntry? entry = _stfs.Lookup(path);
+        if (entry == null || entry.IsDirectory)
+        {
+            return null;
+        }
+
+        return _stfs.ReadFile(entry, offset, length);
+    }
+
+    /// <inheritdoc />
     public override string FormatName
     {
         get

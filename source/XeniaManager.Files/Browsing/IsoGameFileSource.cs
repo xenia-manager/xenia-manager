@@ -34,6 +34,18 @@ public sealed class IsoGameFileSource : GameFileSourceBase
     public override byte[]? ReadFile(string path) => _iso.ReadFile(path);
 
     /// <inheritdoc />
+    public override byte[]? ReadFileRange(string path, ulong offset, ulong length)
+    {
+        GdfxEntry? entry = _iso.Lookup(path);
+        if (entry == null || !entry.IsFile)
+        {
+            return null;
+        }
+
+        return _iso.ReadFile(entry, offset, length);
+    }
+
+    /// <inheritdoc />
     public override string FormatName
     {
         get

@@ -27,6 +27,15 @@ public interface IGameFileSource : IDisposable
     byte[]? ReadFile(string path);
 
     /// <summary>
+    /// Reads a byte range of a file without loading the whole file.
+    /// </summary>
+    /// <param name="path">The path to the file.</param>
+    /// <param name="offset">Byte offset within the file.</param>
+    /// <param name="length">Bytes requested.</param>
+    /// <returns>Requested bytes (empty when offset is past EOF), or null when not found / is a directory.</returns>
+    byte[]? ReadFileRange(string path, ulong offset, ulong length);
+
+    /// <summary>
     /// Finds the preferred XEX full path (<c>default.xex</c> first, then any <c>.xex</c>).
     /// </summary>
     /// <returns>The XEX full path, or null when the container holds no XEX.</returns>
