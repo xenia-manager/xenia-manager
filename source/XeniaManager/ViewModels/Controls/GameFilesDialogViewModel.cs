@@ -66,6 +66,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     private readonly Dictionary<string, GameFileTreeNode> _nodeLookup = new Dictionary<string, GameFileTreeNode>(StringComparer.OrdinalIgnoreCase);
     private IGameFileSource? _source;
     private int _detailsLoadId;
+    private CancellationTokenSource? _detailsCts;
     private byte[]? _xexIconBytes;
     private CancellationTokenSource? _searchCts;
     private const int SearchDebounceMs = 150;
@@ -750,6 +751,11 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 break;
             }
         }
+
+        if (offset != file.Size)
+        {
+            throw new IOException($"File '{file.FullPath}' is truncated in the container (expected {file.Size} bytes, got {offset}).");
+        }
     }
 
     /// <summary>
@@ -840,6 +846,15 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             return;
         }
 
+        if (file.Size > (ulong)MaxPreviewBytes)
+        {
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Message"),
+                owner: OwnerWindow);
+            return;
+        }
+
         GpdFile? gpd = null;
         try
         {
@@ -882,6 +897,15 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         IGameFileSource? source = _source;
         if (source == null)
         {
+            return;
+        }
+
+        if (file.Size > (ulong)MaxPreviewBytes)
+        {
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Title"),
+                LocalizationHelper.GetText("GameFilesDialog.OpenPreview.TooLarge.Message"),
+                owner: OwnerWindow);
             return;
         }
 
@@ -1123,7 +1147,10 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
     {
         OnPropertyChanged(nameof(HasExtractSelection));
         OnPropertyChanged(nameof(IsFileSelected));
-        _ = LoadDetailsAsync(value, ++_detailsLoadId);
+        _detailsCts?.Cancel();
+        _detailsCts?.Dispose();
+        _detailsCts = new CancellationTokenSource();
+        _ = LoadDetailsAsync(value, ++_detailsLoadId, _detailsCts.Token);
     }
 
     partial void OnIsStfsSelectedChanged(bool value) => OnPropertyChanged(nameof(IsStfsSummaryVisible));
@@ -1188,9 +1215,9 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         PreviewImage = null;
     }
 
-    private async Task LoadDetailsAsync(GameFileNode? node, int loadId)
+    private async Task LoadDetailsAsync(GameFileNode? node, int loadId, CancellationToken cancellationToken)
     {
-        if (_disposed)
+        if (_disposed || cancellationToken.IsCancellationRequested)
         {
             return;
         }
@@ -1230,8 +1257,13 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
         if (node.IsFile && IsPreviewableImage(node.Name))
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             byte[]? imageBytes = await Task.Run(() => TryReadPreview(node.FullPath, node.Size));
-            if (_disposed || loadId != _detailsLoadId)
+            if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested)
             {
                 return;
             }
@@ -1249,7 +1281,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                     Logger.Trace<GameFilesDialogViewModel>($"Failed to decode image preview for '{node.FullPath}': {ex.Message}");
                 }
 
-                if (_disposed || loadId != _detailsLoadId)
+                if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested)
                 {
                     preview?.Dispose();
                     return;
@@ -1265,8 +1297,14 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
         if (node.IsFile && node.Name.EndsWith(".xex", StringComparison.OrdinalIgnoreCase))
         {
-            XexDetails? details = await Task.Run(() => TryParseXex(node.FullPath, node.Size));
-            if (_disposed || loadId != _detailsLoadId || details == null)
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            // Stage 1: header-only parse (64 KiB) so text fields show instantly while scrolling.
+            XexDetails? details = await Task.Run(() => TryParseXexHeader(node.FullPath, node.Size));
+            if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested || details == null)
             {
                 return;
             }
@@ -1279,44 +1317,55 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             XexDisc = details.Disc;
             XexImageSize = details.ImageSize;
             XexModuleFlags = details.ModuleFlags;
-            _xexIconBytes = details.Icon;
-            if (details.Icon != null)
-            {
-                Bitmap? icon = null;
-                try
-                {
-                    using MemoryStream stream = new MemoryStream(details.Icon);
-                    icon = new Bitmap(stream);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Trace<GameFilesDialogViewModel>($"Failed to decode XEX icon for '{node.FullPath}': {ex.Message}");
-                }
+            IsXexSelected = true;
 
-                if (_disposed || loadId != _detailsLoadId)
-                {
-                    icon?.Dispose();
-                    return;
-                }
-
-                if (icon != null)
-                {
-                    SelectedIcon = icon;
-                    HasSelectedIcon = true;
-                }
-            }
-            else if (_disposed || loadId != _detailsLoadId)
+            // Stage 2: full read + SPA decrypt for the icon; pops in when ready.
+            if (cancellationToken.IsCancellationRequested)
             {
                 return;
             }
 
-            IsXexSelected = true;
+            byte[]? iconBytes = await Task.Run(() => TryReadXexIcon(node.FullPath, node.Size));
+            if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested || iconBytes == null)
+            {
+                return;
+            }
+
+            _xexIconBytes = iconBytes;
+            Bitmap? icon = null;
+            try
+            {
+                using MemoryStream stream = new MemoryStream(iconBytes);
+                icon = new Bitmap(stream);
+            }
+            catch (Exception ex)
+            {
+                Logger.Trace<GameFilesDialogViewModel>($"Failed to decode XEX icon for '{node.FullPath}': {ex.Message}");
+            }
+
+            if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested)
+            {
+                icon?.Dispose();
+                return;
+            }
+
+            if (icon != null)
+            {
+                SelectedIcon = icon;
+                HasSelectedIcon = true;
+            }
+
             return;
         }
 
         // Try STFS package details for any other file (magic is checked inside).
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
         StfsDetails? stfsDetails = await Task.Run(() => TryParseStfs(node.FullPath));
-        if (_disposed || loadId != _detailsLoadId || stfsDetails == null)
+        if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested || stfsDetails == null)
         {
             return;
         }
@@ -1341,7 +1390,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 Logger.Trace<GameFilesDialogViewModel>($"Failed to decode STFS thumbnail for '{node.FullPath}': {ex.Message}");
             }
 
-            if (_disposed || loadId != _detailsLoadId)
+            if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested)
             {
                 thumbnail?.Dispose();
                 return;
@@ -1354,7 +1403,7 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
             }
         }
 
-        if (_disposed || loadId != _detailsLoadId)
+        if (_disposed || loadId != _detailsLoadId || cancellationToken.IsCancellationRequested)
         {
             return;
         }
@@ -1434,13 +1483,9 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 string displayName = stfs.Metadata.DisplayName?.Trim() ?? string.Empty;
                 string titleName = stfs.Metadata.TitleName?.Trim() ?? string.Empty;
                 string contentSize = FileSizeFormatter.FormatBytes(stfs.Metadata.ContentSize);
-                byte[]? thumb = stfs.Metadata.ThumbnailImage is { Length: > 0 } t && stfs.TryGetIcon() != null
-                    ? stfs.Metadata.ThumbnailImage
-                    : stfs.Metadata.ThumbnailImage is { Length: > 0 } t2
-                        ? t2
-                        : null;
                 // Prefer validated icon bytes if thumbnail looks like image.
                 byte[]? icon = stfs.TryGetIcon();
+                byte[]? thumb = stfs.Metadata.ThumbnailImage is { Length: > 0 } t2 ? t2 : null;
 
                 // If all key display fields are empty and no icon, treat as not an STFS worth showing.
                 if (string.IsNullOrWhiteSpace(displayName) && string.IsNullOrWhiteSpace(titleName)
@@ -1469,7 +1514,11 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
         string ContentSize,
         byte[]? Thumbnail);
 
-    private XexDetails? TryParseXex(string fullPath, ulong size)
+    /// <summary>
+    /// Stage 1 of XEX preview: parses text fields from the 64 KiB header only.
+    /// Never loads the full executable, so it stays cheap while scrolling.
+    /// </summary>
+    private XexDetails? TryParseXexHeader(string fullPath, ulong size)
     {
         try
         {
@@ -1484,7 +1533,53 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 return null;
             }
 
-            // Magic pre-check ("XEX1"/"XEX2"/...) so non-XEX files never load fully.
+            // Magic pre-check ("XEX1"/"XEX2"/...) so non-XEX files never load.
+            byte[]? magic = source.ReadFileRange(fullPath, 0, 4);
+            if (magic == null || magic.Length < 3
+                              || magic[0] != (byte)'X' || magic[1] != (byte)'E' || magic[2] != (byte)'X')
+            {
+                return null;
+            }
+
+            byte[]? header = source.ReadFileRange(fullPath, 0, (ulong)XexFile.HeaderParseMaxBytes);
+            if (header == null || header.Length == 0)
+            {
+                return null;
+            }
+
+            XexFile xex = XexFile.FromHeaderBytes(header);
+            if (!xex.IsValid)
+            {
+                return null;
+            }
+
+            return BuildXexDetails(xex, null);
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameFilesDialogViewModel>($"Failed to parse XEX header '{fullPath}': {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Stage 2 of XEX preview: full read + SPA decrypt for the title icon only.
+    /// </summary>
+    private byte[]? TryReadXexIcon(string fullPath, ulong size)
+    {
+        try
+        {
+            if (size == 0 || size > (ulong)MaxPreviewBytes)
+            {
+                return null;
+            }
+
+            IGameFileSource? source = _source;
+            if (source == null)
+            {
+                return null;
+            }
+
             byte[]? magic = source.ReadFileRange(fullPath, 0, 4);
             if (magic == null || magic.Length < 3
                               || magic[0] != (byte)'X' || magic[1] != (byte)'E' || magic[2] != (byte)'X')
@@ -1504,49 +1599,53 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
                 return null;
             }
 
-            string version = "–";
-            string baseVersion = "–";
-            string executableType = "–";
-            string disc = "–";
-            if (xex.Execution.HasValue)
-            {
-                version = $"0x{xex.Execution.Value.Version:X8}";
-                baseVersion = $"0x{xex.Execution.Value.BaseVersion:X8}";
-                executableType = xex.Execution.Value.ExecutableType switch
-                {
-                    0x00 => "Retail",
-                    0x01 => "Debug",
-                    0x02 => "Debug Retail",
-                    _ => $"Unknown (0x{xex.Execution.Value.ExecutableType:X2})"
-                };
-                disc = $"{xex.Execution.Value.DiscNum} / {xex.Execution.Value.DiscTotal}";
-            }
-
-            byte[]? icon = null;
             if (xex.TryGetSpaFile(out SpaFile? spa) && spa != null)
             {
                 using (spa)
                 {
-                    icon = spa.GetTitleIcon() ?? spa.GetAnyValidIcon();
+                    return spa.GetTitleIcon() ?? spa.GetAnyValidIcon();
                 }
             }
 
-            return new XexDetails(
-                xex.TitleId,
-                xex.MediaId,
-                version,
-                baseVersion,
-                executableType,
-                disc,
-                FileSizeFormatter.FormatBytes(xex.SecurityInfo.ImageSize),
-                $"0x{xex.Header.ModuleFlags:X8}",
-                icon);
+            return null;
         }
         catch (Exception ex)
         {
-            Logger.Trace<GameFilesDialogViewModel>($"Failed to parse XEX '{fullPath}': {ex.Message}");
+            Logger.Trace<GameFilesDialogViewModel>($"Failed to read XEX icon '{fullPath}': {ex.Message}");
             return null;
         }
+    }
+
+    private static XexDetails BuildXexDetails(XexFile xex, byte[]? icon)
+    {
+        string version = "–";
+        string baseVersion = "–";
+        string executableType = "–";
+        string disc = "–";
+        if (xex.Execution.HasValue)
+        {
+            version = $"0x{xex.Execution.Value.Version:X8}";
+            baseVersion = $"0x{xex.Execution.Value.BaseVersion:X8}";
+            executableType = xex.Execution.Value.ExecutableType switch
+            {
+                0x00 => "Retail",
+                0x01 => "Debug",
+                0x02 => "Debug Retail",
+                _ => $"Unknown (0x{xex.Execution.Value.ExecutableType:X2})"
+            };
+            disc = $"{xex.Execution.Value.DiscNum} / {xex.Execution.Value.DiscTotal}";
+        }
+
+        return new XexDetails(
+            xex.TitleId,
+            xex.MediaId,
+            version,
+            baseVersion,
+            executableType,
+            disc,
+            FileSizeFormatter.FormatBytes(xex.SecurityInfo.ImageSize),
+            $"0x{xex.Header.ModuleFlags:X8}",
+            icon);
     }
 
     private sealed record XexDetails(
@@ -1570,6 +1669,9 @@ public partial class GameFilesDialogViewModel : ViewModelBase, IDisposable
 
         _disposed = true;
         _detailsLoadId++; // Invalidate in-flight LoadDetailsAsync continuations.
+        _detailsCts?.Cancel();
+        _detailsCts?.Dispose();
+        _detailsCts = null;
         OwnerProvider = null;
         _searchCts?.Cancel();
         _searchCts?.Dispose();
