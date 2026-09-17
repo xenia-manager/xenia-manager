@@ -27,7 +27,7 @@ public class StfsFileRangedReadTests
         return data;
     }
 
-    private static void WriteEntry(byte[] package, int offset, string name, byte flags, int startBlock)
+    private static void WriteEntry(byte[] package, int offset, string name, byte flags, int startBlock, short pathIndicator = -1)
     {
         byte[] nameBytes = Encoding.ASCII.GetBytes(name);
         Array.Copy(nameBytes, 0, package, offset, nameBytes.Length);
@@ -35,7 +35,7 @@ public class StfsFileRangedReadTests
         package[offset + 0x29] = 2; // valid blocks
         package[offset + 0x2C] = 2; // allocated blocks
         package[offset + 0x2F] = (byte)startBlock; // starting block (int24 LE)
-        BinaryPrimitives.WriteInt16BigEndian(package.AsSpan(offset + 0x32), -1); // root
+        BinaryPrimitives.WriteInt16BigEndian(package.AsSpan(offset + 0x32), pathIndicator);
         BinaryPrimitives.WriteInt32BigEndian(package.AsSpan(offset + 0x34), FileSize);
     }
 
@@ -142,6 +142,29 @@ public class StfsFileRangedReadTests
     }
 
     [Test]
+    public void ListDirectory_Nested_ResolvesThroughParentMap()
+    {
+        byte[] package = BuildTestPackage();
+        // "sub" is file-table index 2; nest a file under it plus a file with a dangling parent.
+        WriteEntry(package, 0x20C0, "nested.bin", 0x40, 1, 2);
+        WriteEntry(package, 0x2100, "orphan.bin", 0x40, 1, 99);
+        using StfsFile stfs = StfsFile.FromBytes(package);
+
+        Assert.That(stfs.ListDirectory("sub")!.Select(e => e.FileName), Is.EqualTo(new[]
+        {
+            "nested.bin"
+        }));
+        Assert.That(stfs.ListDirectory(string.Empty)!.Select(e => e.FileName),
+            Is.EquivalentTo(new[]
+            {
+                "big.bin", "chain.bin", "sub", "orphan.bin"
+            }));
+        Assert.That(stfs.Lookup("sub/nested.bin")?.FileSize, Is.EqualTo(FileSize));
+        Assert.That(stfs.ListDirectory("big.bin"), Is.Null);
+        Assert.That(stfs.ListDirectory("missing"), Is.Null);
+    }
+
+    [Test]
     public void Load_StreamBacked_MatchesMemoryExtractAndRanges()
     {
         string path = Path.Combine(Path.GetTempPath(), $"stfs_stream_{Guid.NewGuid():N}.bin");
@@ -181,5 +204,56 @@ public class StfsFileRangedReadTests
         streamed.Dispose();
         File.Delete(path);
         Assert.That(File.Exists(path), Is.False);
+    }
+
+    [Test]
+    public void BlockNumberToOffset_LargeBlock_Returns64BitOffset()
+    {
+        using StfsFile stfs = StfsFile.FromBytes(BuildTestPackage());
+        Assert.That(stfs.BlockNumberToOffset(0), Is.EqualTo(0x2000L));
+
+        // Block 600000 with HeaderSize 0x1000 and 1 block per hash table:
+        // 600000 + 3530 + 21 + 1 = 603552 -> 0x1000 + 603552 * 0x1000 (overflows int).
+        long offset = stfs.BlockNumberToOffset(600000);
+        Assert.That(offset, Is.EqualTo(0x1000L + 603552L * 0x1000L));
+        Assert.That(offset, Is.GreaterThan(int.MaxValue));
+    }
+
+    [Test]
+    public void ExtractFile_ChainedEarlyEnd_ThrowsIOException()
+    {
+        byte[] package = BuildTestPackage();
+        WriteHashLink(package, 3, 0xFFFFFF); // chain.bin needs blocks 3->4; end after first block
+        using StfsFile stfs = StfsFile.FromBytes(package);
+        StfsFileEntry entry = stfs.Lookup("chain.bin")!;
+        Assert.Throws<IOException>(() => stfs.ExtractFile(entry));
+        Assert.Throws<IOException>(() => stfs.ReadFile(entry, 0, FileSize));
+    }
+
+    [Test]
+    public void ExtractFile_PastEndOfPackage_ThrowsIOException()
+    {
+        using StfsFile stfs = StfsFile.FromBytes(BuildTestPackage());
+        StfsFileEntry entry = stfs.Lookup("big.bin")!;
+        entry.FileSize = 0x10000; // claim blocks past the end of the package
+        Assert.Throws<IOException>(() => stfs.ExtractFile(entry));
+        Assert.Throws<IOException>(() => stfs.ReadFile(entry, 0, 0x10000));
+    }
+
+    [Test]
+    public void ExtractFileToStream_MatchesExtractFile()
+    {
+        using StfsFile stfs = StfsFile.FromBytes(BuildTestPackage());
+        foreach (string name in new[]
+                 {
+                     "big.bin", "chain.bin"
+                 })
+        {
+            StfsFileEntry entry = stfs.Lookup(name)!;
+            byte[] expected = stfs.ExtractFile(entry);
+            using MemoryStream ms = new MemoryStream();
+            stfs.ExtractFileToStream(entry, ms);
+            Assert.That(ms.ToArray(), Is.EqualTo(expected));
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Logging;
@@ -110,6 +111,8 @@ public class StfsFile : IDisposable
     /// <param name="alignment">The alignment.</param>
     /// <returns>The rounded-up value.</returns>
     private static int RoundUp(int value, int alignment) => (value + alignment - 1) & ~(alignment - 1);
+
+    private static long RoundUp(long value, long alignment) => (value + alignment - 1) & ~(alignment - 1);
 
     /// <summary>
     /// Private constructor to enforce factory methods.
@@ -469,7 +472,7 @@ public class StfsFile : IDisposable
         int tableBlockNumber = fileTableBlockNumber;
         for (int n = 0; n < fileTableBlockCount; n++)
         {
-            int fileTableOffset = BlockNumberToOffset(tableBlockNumber);
+            long fileTableOffset = BlockNumberToOffset(tableBlockNumber);
             Logger.Debug<StfsFile>($"File Table Offset: 0x{fileTableOffset:X8}");
 
             // Validate file table offset - if it's beyond the file size, the package is corrupted or incomplete
@@ -483,7 +486,7 @@ public class StfsFile : IDisposable
             // Read file entries
             for (int m = 0; m < BlockSize / StfsFileEntry.Size; m++)
             {
-                int offset = fileTableOffset + m * StfsFileEntry.Size;
+                long offset = fileTableOffset + m * StfsFileEntry.Size;
 
                 // Check if there's enough data remaining for a file entry
                 if (offset + StfsFileEntry.Size > Length)
@@ -532,7 +535,7 @@ public class StfsFile : IDisposable
     /// <returns>The next block number, or end-of-chain when unreadable.</returns>
     private uint GetLevel0NextBlock(int blockNumber)
     {
-        int hashTableOffset = GetHashTableOffset(blockNumber, 0);
+        long hashTableOffset = GetHashTableOffset(blockNumber, 0);
         if (hashTableOffset < 0 || hashTableOffset + 0x18 > Length)
         {
             return kEndOfChain;
@@ -553,7 +556,7 @@ public class StfsFile : IDisposable
     /// </summary>
     /// <param name="blockNumber">The block number to convert.</param>
     /// <returns>The file offset corresponding to the block number.</returns>
-    public int BlockNumberToOffset(int blockNumber)
+    public long BlockNumberToOffset(int blockNumber)
     {
         if (blockNumber > 0xFFFFFF)
         {
@@ -564,7 +567,8 @@ public class StfsFile : IDisposable
         // Level 0: hash table of next 170 blocks
         // Level 1: hash table of next 170 hash tables
         // Level 2: hash table of next 170 level 1 hash tables...
-        uint block = (uint)blockNumber;
+        // 64-bit arithmetic: physical offsets exceed 2 GiB for multi-GB packages.
+        ulong block = (uint)blockNumber;
         for (uint i = 0; i < 3; i++)
         {
             uint levelBase = kBlocksPerHashLevel[i];
@@ -578,8 +582,8 @@ public class StfsFile : IDisposable
         // Data starts after the aligned header size
         // The first block at DataSectionStart is reserved for hash tables
         // Data block 0 comes after the initial hash table block(s)
-        int dataStartOffset = RoundUp(HeaderSize, BlockSize);
-        return dataStartOffset + ((int)block << 12);
+        long dataStartOffset = RoundUp((long)HeaderSize, BlockSize);
+        return dataStartOffset + (long)(block << 12);
     }
 
     /// <summary>
@@ -589,15 +593,15 @@ public class StfsFile : IDisposable
     /// <param name="blockNumber">The hash table block number.</param>
     /// <param name="level">The hash table level (0, 1, or 2).</param>
     /// <returns>The file offset corresponding to the hash table block.</returns>
-    private int HashTableBlockNumberToOffset(int blockNumber, int level = 0)
+    private long HashTableBlockNumberToOffset(int blockNumber, int level = 0)
     {
         if (blockNumber > 0xFFFFFF)
         {
             return -1;
         }
 
-        uint block = BlockToHashBlockNumber(blockNumber, level);
-        return RoundUp(HeaderSize, BlockSize) + ((int)block << 12) + SecondaryHashTableOffset;
+        ulong block = BlockToHashBlockNumber(blockNumber, level);
+        return RoundUp((long)HeaderSize, BlockSize) + (long)(block << 12) + SecondaryHashTableOffset;
     }
 
     /// <summary>
@@ -660,10 +664,10 @@ public class StfsFile : IDisposable
     /// <param name="blockNumber">The block number.</param>
     /// <param name="level">The hash table level (0, 1, or 2).</param>
     /// <returns>The offset of the hash table entry.</returns>
-    private int GetHashTableOffset(int blockNumber, int level = 0)
+    private long GetHashTableOffset(int blockNumber, int level = 0)
     {
         uint hashTableBlock = BlockToHashBlockNumber(blockNumber, level);
-        int hashTableOffset = HashTableBlockNumberToOffset((int)hashTableBlock, level);
+        long hashTableOffset = HashTableBlockNumberToOffset((int)hashTableBlock, level);
 
         // Calculate entry index within the hash table
         uint record = (uint)blockNumber % kBlocksPerHashLevel[0];
@@ -673,7 +677,7 @@ public class StfsFile : IDisposable
         }
 
         // Each hash entry is 0x18 (24) bytes: 0x14 SHA1 + 0x04 info
-        return hashTableOffset + (int)record * 0x18;
+        return hashTableOffset + (long)record * 0x18;
     }
 
     /// <summary>
@@ -695,12 +699,12 @@ public class StfsFile : IDisposable
         while (offset < entry.FileSize && blocksRemaining > 0 && currentBlock != kEndOfChain)
         {
             // Read the hash table entry for this block (level 0)
-            int hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
+            long hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
 
             if (hashTableOffset < 0 || hashTableOffset + 0x18 > Length)
             {
-                Logger.Warning<StfsFile>($"Hash table offset out of bounds for block {currentBlock}");
-                break;
+                throw new IOException(
+                    $"Truncated STFS package while extracting '{entry.FileName}': hash table offset out of bounds for block {currentBlock} (expected {entry.FileSize} bytes, got {offset}).");
             }
 
             // Hash table entry: 0x14 SHA1 + info_raw u32 BE (bits 0-23 next, bits 30-31 alloc state).
@@ -709,27 +713,39 @@ public class StfsFile : IDisposable
             // Check if the block is in use (0x02 = In Use)
             if (((infoRaw >> 30) & 0x03) != 2)
             {
-                Logger.Warning<StfsFile>($"Block {currentBlock} is not marked as in use");
-                break;
+                throw new IOException(
+                    $"Truncated STFS package while extracting '{entry.FileName}': block {currentBlock} is not marked as in use (expected {entry.FileSize} bytes, got {offset}).");
             }
 
             // Get the next block number (bits 0-23)
             uint nextBlock = infoRaw & 0xFFFFFF;
 
             // Read block data
-            int blockOffset = BlockNumberToOffset((int)currentBlock);
+            long blockOffset = BlockNumberToOffset((int)currentBlock);
             int bytesToRead = Math.Min(entry.FileSize - offset, BlockSize);
 
-            if (blockOffset < 0 || (long)blockOffset + bytesToRead > Length)
+            if (blockOffset < 0 || blockOffset + bytesToRead > Length)
             {
-                Logger.Warning<StfsFile>($"Block offset out of bounds for block {currentBlock}");
-                break;
+                throw new IOException(
+                    $"Truncated STFS package while extracting '{entry.FileName}': block offset out of bounds for block {currentBlock} (expected {entry.FileSize} bytes, got {offset}).");
             }
 
-            ReadAt(blockOffset, data, offset, bytesToRead);
+            int read = ReadAt(blockOffset, data, offset, bytesToRead);
+            if (read != bytesToRead)
+            {
+                throw new IOException(
+                    $"Truncated STFS package while extracting '{entry.FileName}': short read at block {currentBlock} (expected {entry.FileSize} bytes, got {offset + read}).");
+            }
+
             offset += bytesToRead;
             currentBlock = nextBlock;
             blocksRemaining--;
+        }
+
+        if (offset < entry.FileSize)
+        {
+            throw new IOException(
+                $"Truncated STFS package while extracting '{entry.FileName}': chain ended early (expected {entry.FileSize} bytes, got {offset}).");
         }
 
         Logger.Debug<StfsFile>($"Extracted {offset} bytes for {entry.FileName}");
@@ -802,30 +818,46 @@ public class StfsFile : IDisposable
     {
         Logger.Trace<StfsFile>($"ExtractConsecutiveFile: {entry.FileName}, StartBlock={entry.StartingBlock}, Size={entry.FileSize}");
 
-        int startOffset = BlockNumberToOffset(entry.StartingBlock);
+        long startOffset = BlockNumberToOffset(entry.StartingBlock);
         Logger.Trace<StfsFile>($"  Start offset: 0x{startOffset:X8}");
 
         byte[] data = new byte[entry.FileSize];
 
-        int bytesToRead = Math.Min(entry.FileSize, BlockSize - startOffset % BlockSize);
-        ReadAt(startOffset, data, 0, bytesToRead);
+        int bytesToRead = Math.Min(entry.FileSize, BlockSize - (int)(startOffset % BlockSize));
+        if (startOffset < 0 || startOffset + bytesToRead > Length)
+        {
+            throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': start block out of bounds (expected {entry.FileSize} bytes).");
+        }
+
+        int first = ReadAt(startOffset, data, 0, bytesToRead);
+        if (first != bytesToRead)
+        {
+            throw new IOException(
+                $"Truncated STFS package while extracting '{entry.FileName}': short read at start block (expected {entry.FileSize} bytes, got {first}).");
+        }
 
         int offset = bytesToRead;
         int currentBlock = entry.StartingBlock + 1;
 
         while (offset < entry.FileSize)
         {
-            int blockOffset = BlockNumberToOffset(currentBlock);
+            long blockOffset = BlockNumberToOffset(currentBlock);
             int remaining = entry.FileSize - offset;
             int readSize = Math.Min(remaining, BlockSize);
 
-            if (blockOffset < 0 || (long)blockOffset + readSize > Length)
+            if (blockOffset < 0 || blockOffset + readSize > Length)
             {
-                Logger.Warning<StfsFile>($"Reached end of package data while extracting {entry.FileName}");
-                break;
+                throw new IOException(
+                    $"Truncated STFS package while extracting '{entry.FileName}': block {currentBlock} out of bounds (expected {entry.FileSize} bytes, got {offset}).");
             }
 
-            ReadAt(blockOffset, data, offset, readSize);
+            int read = ReadAt(blockOffset, data, offset, readSize);
+            if (read != readSize)
+            {
+                throw new IOException(
+                    $"Truncated STFS package while extracting '{entry.FileName}': short read at block {currentBlock} (expected {entry.FileSize} bytes, got {offset + read}).");
+            }
+
             offset += readSize;
             currentBlock++;
         }
@@ -834,6 +866,115 @@ public class StfsFile : IDisposable
         Logger.Trace<StfsFile>($"  First 32 bytes: {BitConverter.ToString(data.Take(32).ToArray())}");
         Logger.Trace<StfsFile>($"  Last 32 bytes: {BitConverter.ToString(data.Skip(Math.Max(0, data.Length - 32)).ToArray())}");
         return data;
+    }
+
+    /// <summary>
+    /// Extracts a file directly to <paramref name="destination"/> without holding the full file in RAM.
+    /// Walks the block chain once; peak memory is one 4 KiB block buffer.
+    /// </summary>
+    /// <param name="entry">The file entry to extract.</param>
+    /// <param name="destination">The open writable stream receiving exactly <c>entry.FileSize</c> bytes.</param>
+    /// <exception cref="InvalidOperationException">Thrown for directories.</exception>
+    /// <exception cref="IOException">Thrown on truncation, bad chain links, or short package reads.</exception>
+    public void ExtractFileToStream(StfsFileEntry entry, Stream destination)
+    {
+        if (entry.IsDirectory)
+        {
+            throw new InvalidOperationException($"Cannot extract directory: {entry.FileName}");
+        }
+
+        if (entry.FileSize == 0)
+        {
+            return;
+        }
+
+        byte[] block = ArrayPool<byte>.Shared.Rent(BlockSize);
+        try
+        {
+            if (entry.HasConsecutiveBlocks)
+            {
+                int currentBlock = entry.StartingBlock;
+                int remaining = entry.FileSize;
+                // First block may start mid-block only when the file itself starts mid-block;
+                // STFS files always start at a block boundary for consecutive runs except the
+                // legacy first-partial read below, which mirrors ExtractConsecutiveFile.
+                long startOffset = BlockNumberToOffset(currentBlock);
+                if (startOffset < 0)
+                {
+                    throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': start block out of bounds.");
+                }
+
+                int blockOff = 0;
+                while (remaining > 0)
+                {
+                    long phys = BlockNumberToOffset(currentBlock);
+                    if (phys < 0 || phys + BlockSize > Length)
+                    {
+                        throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': block {currentBlock} out of bounds.");
+                    }
+
+                    int want = Math.Min(remaining, BlockSize - blockOff);
+                    int read = ReadAt(phys + blockOff, block, 0, want);
+                    if (read != want)
+                    {
+                        throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': short read at block {currentBlock}.");
+                    }
+
+                    destination.Write(block, 0, want);
+                    remaining -= want;
+                    currentBlock++;
+                    blockOff = 0;
+                }
+
+                return;
+            }
+
+            uint current = (uint)entry.StartingBlock;
+            int blocksRemaining = entry.AllocatedDataBlocks;
+            int left = entry.FileSize;
+            while (left > 0)
+            {
+                if (blocksRemaining <= 0 || current == kEndOfChain)
+                {
+                    throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': chain ended early with {left} bytes remaining.");
+                }
+
+                long hashOff = GetHashTableOffset((int)current, 0);
+                if (hashOff < 0 || hashOff + 0x18 > Length)
+                {
+                    throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': hash table offset out of bounds for block {current}.");
+                }
+
+                uint infoRaw = ReadU32BE(hashOff + 0x14);
+                if (((infoRaw >> 30) & 0x03) != 2)
+                {
+                    throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': block {current} is not marked as in use.");
+                }
+
+                uint next = infoRaw & 0xFFFFFF;
+                long phys = BlockNumberToOffset((int)current);
+                if (phys < 0 || phys + BlockSize > Length)
+                {
+                    throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': block {current} out of bounds.");
+                }
+
+                int want = Math.Min(left, BlockSize);
+                int read = ReadAt(phys, block, 0, want);
+                if (read != want)
+                {
+                    throw new IOException($"Truncated STFS package while extracting '{entry.FileName}': short read at block {current}.");
+                }
+
+                destination.Write(block, 0, want);
+                left -= want;
+                current = next;
+                blocksRemaining--;
+            }
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(block);
+        }
     }
 
     /// <summary>
@@ -987,9 +1128,12 @@ public class StfsFile : IDisposable
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                byte[] data = ExtractFile(entry);
-                File.WriteAllBytes(outputPath, data);
-                Logger.Info<StfsFile>($"Extracted: {relativePath} ({data.Length} bytes)");
+                using (FileStream outFs = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    ExtractFileToStream(entry, outFs);
+                }
+
+                Logger.Info<StfsFile>($"Extracted: {relativePath} ({entry.FileSize} bytes)");
 
                 // Report progress after each file is extracted
                 fileIndex++;
@@ -1272,6 +1416,12 @@ public class StfsFile : IDisposable
     private Dictionary<string, int>? _lookupCache;
 
     /// <summary>
+    /// Cached parent file-table index to child indexes (-1 for root). Built lazily on first
+    /// browse so directory listing is O(children) instead of rescanning all entries per folder.
+    /// </summary>
+    private Dictionary<int, List<int>>? _childrenByParent;
+
+    /// <summary>
     /// Resolves the parent file-table index of an entry, treating missing, out-of-range,
     /// and non-directory parents as root (-1), matching the extraction fallback behaviour.
     /// </summary>
@@ -1386,6 +1536,32 @@ public class StfsFile : IDisposable
     }
 
     /// <summary>
+    /// Gets the parent-to-children index, building it once over the file table.
+    /// </summary>
+    private Dictionary<int, List<int>> ChildrenByParent()
+    {
+        if (_childrenByParent == null)
+        {
+            Dictionary<int, List<int>> map = new Dictionary<int, List<int>>();
+            for (int i = 0; i < FileEntries.Count; i++)
+            {
+                int parent = ResolveParentIndex(i);
+                if (!map.TryGetValue(parent, out List<int>? children))
+                {
+                    children = new List<int>();
+                    map[parent] = children;
+                }
+
+                children.Add(i);
+            }
+
+            _childrenByParent = map;
+        }
+
+        return _childrenByParent;
+    }
+
+    /// <summary>
     /// Lists the immediate children of a directory by path.
     /// </summary>
     /// <param name="path">The directory path (e.g., "game" or "" for root).</param>
@@ -1393,18 +1569,12 @@ public class StfsFile : IDisposable
     public List<StfsFileEntry>? ListDirectory(string path)
     {
         string normalized = NormalizeBrowsingPath(path);
+        Dictionary<int, List<int>> childrenByParent = ChildrenByParent();
         if (normalized.Length == 0)
         {
-            List<StfsFileEntry> root = new List<StfsFileEntry>();
-            for (int i = 0; i < FileEntries.Count; i++)
-            {
-                if (ResolveParentIndex(i) == -1)
-                {
-                    root.Add(FileEntries[i]);
-                }
-            }
-
-            return root;
+            return childrenByParent.TryGetValue(-1, out List<int>? root)
+                ? root.Select(i => FileEntries[i]).ToList()
+                : new List<StfsFileEntry>();
         }
 
         int dirIndex = LookupIndex(normalized);
@@ -1413,16 +1583,9 @@ public class StfsFile : IDisposable
             return null;
         }
 
-        List<StfsFileEntry> children = new List<StfsFileEntry>();
-        for (int i = 0; i < FileEntries.Count; i++)
-        {
-            if (ResolveParentIndex(i) == dirIndex)
-            {
-                children.Add(FileEntries[i]);
-            }
-        }
-
-        return children;
+        return childrenByParent.TryGetValue(dirIndex, out List<int>? children)
+            ? children.Select(i => FileEntries[i]).ToList()
+            : new List<StfsFileEntry>();
     }
 
     /// <summary>
@@ -1478,7 +1641,8 @@ public class StfsFile : IDisposable
     /// <param name="entry">The file entry to read from.</param>
     /// <param name="offset">The byte offset within the file to start reading from.</param>
     /// <param name="count">The number of bytes to read.</param>
-    /// <returns>The requested range (zero-filled tail when the package is truncated).</returns>
+    /// <returns>The requested range.</returns>
+    /// <exception cref="IOException">Thrown when the package is truncated.</exception>
     private byte[] ReadConsecutiveRange(StfsFileEntry entry, ulong offset, ulong count)
     {
         byte[] result = new byte[count];
@@ -1488,15 +1652,20 @@ public class StfsFile : IDisposable
 
         while (dest < count)
         {
-            int blockOffset = BlockNumberToOffset(block);
+            long blockOffset = BlockNumberToOffset(block);
             int step = (int)Math.Min(count - dest, (ulong)(BlockSize - blockOff));
-            if (blockOffset < 0 || (long)blockOffset + blockOff + step > Length)
+            if (blockOffset < 0 || blockOffset + blockOff + step > Length)
             {
-                Logger.Warning<StfsFile>($"Reached end of package data while reading {entry.FileName}");
-                break;
+                throw new IOException($"Truncated STFS package while reading '{entry.FileName}' (expected {count} bytes at offset {offset}, got {dest}).");
             }
 
-            ReadAt((long)blockOffset + blockOff, result, (int)dest, step);
+            int read = ReadAt(blockOffset + blockOff, result, (int)dest, step);
+            if (read != step)
+            {
+                throw new IOException(
+                    $"Truncated STFS package while reading '{entry.FileName}' (expected {count} bytes at offset {offset}, got {dest + (ulong)read}).");
+            }
+
             dest += (ulong)step;
             block++;
             blockOff = 0;
@@ -1512,7 +1681,8 @@ public class StfsFile : IDisposable
     /// <param name="entry">The file entry to read from.</param>
     /// <param name="offset">The byte offset within the file to start reading from.</param>
     /// <param name="count">The number of bytes to read.</param>
-    /// <returns>The requested range (zero-filled tail when the chain ends early).</returns>
+    /// <returns>The requested range.</returns>
+    /// <exception cref="IOException">Thrown when the chain ends early or the package is truncated.</exception>
     private byte[] ReadChainedRange(StfsFileEntry entry, ulong offset, ulong count)
     {
         byte[] result = new byte[count];
@@ -1521,23 +1691,28 @@ public class StfsFile : IDisposable
         uint currentBlock = (uint)entry.StartingBlock;
         int blocksRemaining = entry.AllocatedDataBlocks;
 
-        while (dest < count && blocksRemaining > 0 && currentBlock != kEndOfChain)
+        while (dest < count)
         {
-            int hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
+            if (blocksRemaining <= 0 || currentBlock == kEndOfChain)
+            {
+                throw new IOException(
+                    $"Truncated STFS package while reading '{entry.FileName}': chain ended early (expected {count} bytes at offset {offset}, got {dest}).");
+            }
+
+            long hashTableOffset = GetHashTableOffset((int)currentBlock, 0);
             if (hashTableOffset < 0 || hashTableOffset + 0x18 > Length)
             {
-                break;
+                throw new IOException($"Truncated STFS package while reading '{entry.FileName}': hash table offset out of bounds for block {currentBlock}.");
             }
 
             uint infoRaw = ReadU32BE(hashTableOffset + 0x14);
             if (((infoRaw >> 30) & 0x03) != 2)
             {
-                Logger.Warning<StfsFile>($"Block {currentBlock} is not marked as in use while reading {entry.FileName}");
-                break;
+                throw new IOException($"Truncated STFS package while reading '{entry.FileName}': block {currentBlock} is not marked as in use.");
             }
 
             uint nextBlock = infoRaw & 0xFFFFFF;
-            int blockOffset = BlockNumberToOffset((int)currentBlock);
+            long blockOffset = BlockNumberToOffset((int)currentBlock);
             if (skip >= BlockSize)
             {
                 skip -= BlockSize;
@@ -1546,13 +1721,18 @@ public class StfsFile : IDisposable
             {
                 int blockOff = (int)skip;
                 int step = (int)Math.Min(count - dest, (ulong)(BlockSize - blockOff));
-                if (blockOffset < 0 || (long)blockOffset + blockOff + step > Length)
+                if (blockOffset < 0 || blockOffset + blockOff + step > Length)
                 {
-                    Logger.Warning<StfsFile>($"Reached end of package data while reading {entry.FileName}");
-                    break;
+                    throw new IOException($"Truncated STFS package while reading '{entry.FileName}' (expected {count} bytes at offset {offset}, got {dest}).");
                 }
 
-                ReadAt((long)blockOffset + blockOff, result, (int)dest, step);
+                int read = ReadAt(blockOffset + blockOff, result, (int)dest, step);
+                if (read != step)
+                {
+                    throw new IOException(
+                        $"Truncated STFS package while reading '{entry.FileName}' (expected {count} bytes at offset {offset}, got {dest + (ulong)read}).");
+                }
+
                 dest += (ulong)step;
                 skip = 0;
             }
