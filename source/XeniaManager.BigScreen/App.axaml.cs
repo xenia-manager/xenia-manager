@@ -75,6 +75,7 @@ public partial class App : Application
             Logger.Info<App>("Services configured successfully");
 
             LocalizationHelper.Initialize("avares://XeniaManager.BigScreen/Resources/Language/");
+            LocalizationHelper.LoadLanguage(new Settings().Settings.Ui.Language);
 
             _ = UpdateSdlDatabaseSilentlyAsync();
 

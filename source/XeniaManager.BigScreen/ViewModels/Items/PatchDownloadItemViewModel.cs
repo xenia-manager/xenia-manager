@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Database.Models.Patches;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
@@ -35,6 +36,6 @@ public partial class PatchDownloadItemViewModel : ObservableObject, ISelectable
     {
         PatchInfo = patchInfo;
         Source = source;
-        Name = patchInfo.Name ?? "Unknown Patch";
+        Name = patchInfo.Name ?? LocalizationHelper.GetText("GameModal.Patches.Download.UnknownPatch");
     }
 }

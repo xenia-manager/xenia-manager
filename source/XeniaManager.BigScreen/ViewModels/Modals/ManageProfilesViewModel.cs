@@ -751,11 +751,11 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     }
 
     /// <summary>
-    /// Creates a new account with the default name "New User" and selects it.
+    /// Creates a new account with the localized default name and selects it.
     /// </summary>
     public void CreateAccount()
     {
-        AccountInfo newAccount = ProfileManager.CreateAccount(_version, "New User");
+        AccountInfo newAccount = ProfileManager.CreateAccount(_version, LocalizationHelper.GetText("ManageProfiles.DefaultGamertag"));
         _profileService.AddProfile(_version, newAccount);
         Rows.Add(new ProfileItemViewModel(newAccount, false));
         CreateStub.IsSelected = false;
@@ -792,7 +792,7 @@ public partial class ManageProfilesViewModel : ModalViewModelBase
     }
 
     /// <summary>
-    /// Creates a new account with the default name "New User" and selects it,
+    /// Creates a new account with the localized default name and selects it,
     /// confirming pending edits to the current profile first. Cancelling the
     /// prompt (B) keeps the current profile selected.
     /// </summary>

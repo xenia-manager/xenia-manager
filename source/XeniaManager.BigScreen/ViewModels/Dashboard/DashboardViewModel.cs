@@ -8,6 +8,7 @@ using XeniaManager.BigScreen.Models;
 using XeniaManager.BigScreen.Models.Settings;
 using XeniaManager.BigScreen.Services;
 using XeniaManager.BigScreen.ViewModels.Items;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Logging;
 using TweenAvalonia;
 
@@ -97,10 +98,10 @@ public partial class DashboardViewModel : ViewModelBase
 
     public ObservableCollection<OptionsCardViewModel> Options { get; } =
     [
-        new OptionsCardViewModel("Library", "Games", OverlayScreen.Library),
-        new OptionsCardViewModel("Gallery", "Library", OverlayScreen.Gallery),
-        new OptionsCardViewModel("Settings", "Settings", OverlayScreen.Settings),
-        new OptionsCardViewModel("Quit", "Power", OverlayScreen.None)
+        new OptionsCardViewModel(LocalizationHelper.GetText("Dashboard.Options.Library"), "Games", OverlayScreen.Library),
+        new OptionsCardViewModel(LocalizationHelper.GetText("Dashboard.Options.Gallery"), "Library", OverlayScreen.Gallery),
+        new OptionsCardViewModel(LocalizationHelper.GetText("Dashboard.Options.Settings"), "Settings", OverlayScreen.Settings),
+        new OptionsCardViewModel(LocalizationHelper.GetText("Dashboard.Options.Quit"), "Power", OverlayScreen.None)
     ];
 
     public DashboardViewModel(IBackgroundService backgroundService)

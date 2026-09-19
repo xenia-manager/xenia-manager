@@ -46,7 +46,7 @@ public class ProfileService : IProfileService
         /// </summary>
         public GpdFile? ProfileGpd { get; set; }
 
-        public string Gamertag { get; set; } = "Guest";
+        public string Gamertag { get; set; } = LocalizationHelper.GetText("Header.Guest");
 
         public string Gamerscore { get; set; } = "0";
     }

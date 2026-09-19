@@ -14,6 +14,10 @@
 
     <!-- Dashboard -->
     <sys:String x:Key="Dashboard.NoGamesFound">No games found</sys:String>
+    <sys:String x:Key="Dashboard.Options.Library">Library</sys:String>
+    <sys:String x:Key="Dashboard.Options.Gallery">Gallery</sys:String>
+    <sys:String x:Key="Dashboard.Options.Settings">Settings</sys:String>
+    <sys:String x:Key="Dashboard.Options.Quit">Quit</sys:String>
 
     <!-- Library screen -->
     <sys:String x:Key="Library.Title">Game Library</sys:String>
@@ -119,6 +123,8 @@
     <!-- Modal system (generic) -->
     <sys:String x:Key="Modal.Confirm">Confirm</sys:String>
     <sys:String x:Key="Modal.Cancel">Cancel</sys:String>
+    <sys:String x:Key="Common.Unknown">Unknown</sys:String>
+    <sys:String x:Key="ViewLocator.NotFound">Not Found: {0}</sys:String>
 
     <!-- Profile picker -->
     <sys:String x:Key="Profiles.Title">Profiles</sys:String>
@@ -131,6 +137,7 @@
     <sys:String x:Key="ManageProfiles.Title">Manage Profiles</sys:String>
     <sys:String x:Key="ManageProfiles.NoProfilesFound">No profiles found - create one with the + button</sys:String>
     <sys:String x:Key="ManageProfiles.CreateNewProfile">Create New Profile</sys:String>
+    <sys:String x:Key="ManageProfiles.DefaultGamertag">New User</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Back">Back</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Edit">Edit</sys:String>
     <sys:String x:Key="ManageProfiles.Hint.Delete">Delete</sys:String>
@@ -237,6 +244,9 @@
     <sys:String x:Key="GameModal.Patches.Remove.Confirmation.Title">Remove Patch</sys:String>
     <sys:String x:Key="GameModal.Patches.Remove.Confirmation.Message">Remove the patch for '{0}'?</sys:String>
     <sys:String x:Key="GameModal.Patches.Remove.Confirm">Remove</sys:String>
+    <sys:String x:Key="GameModal.Patches.Entry.Commands.One">1 command</sys:String>
+    <sys:String x:Key="GameModal.Patches.Entry.Commands.Many">{0} commands</sys:String>
+    <sys:String x:Key="GameModal.Patches.Download.UnknownPatch">Unknown Patch</sys:String>
 
     <!-- game modal game settings pane -->
     <sys:String x:Key="GameModal.Settings.Title">Game Settings</sys:String>

@@ -78,7 +78,7 @@ public class ProfileImportExportHelper
         string message = string.Format(
             LocalizationHelper.GetText("ManageProfiles.Import.Replace.Confirmation.Message"),
             existing.Gamertag,
-            existing.PathXuid?.ToString() ?? "Unknown");
+            existing.PathXuid?.ToString() ?? LocalizationHelper.GetText("Common.Unknown"));
         return await ModalFactory.ConfirmAsync(modalService,
             LocalizationHelper.GetText("ManageProfiles.Import.Replace.Confirmation.Title"),
             message,

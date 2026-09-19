@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using XeniaManager.BigScreen.ViewModels;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.BigScreen;
 
@@ -31,7 +32,7 @@ public class ViewLocator : IDataTemplate
 
         return new TextBlock
         {
-            Text = "Not Found: " + name
+            Text = string.Format(LocalizationHelper.GetText("ViewLocator.NotFound"), name)
         };
     }
 

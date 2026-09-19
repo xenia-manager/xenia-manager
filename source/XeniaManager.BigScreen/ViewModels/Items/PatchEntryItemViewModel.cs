@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using XeniaManager.BigScreen.Utilities;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Files.Models.Patches;
 
 namespace XeniaManager.BigScreen.ViewModels.Items;
@@ -50,8 +51,8 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
         get
         {
             return _originalEntry.Commands.Count == 1
-                ? "1 command"
-                : $"{_originalEntry.Commands.Count} commands";
+                ? LocalizationHelper.GetText("GameModal.Patches.Entry.Commands.One")
+                : string.Format(LocalizationHelper.GetText("GameModal.Patches.Entry.Commands.Many"), _originalEntry.Commands.Count);
         }
     }
 
