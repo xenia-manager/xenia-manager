@@ -11,8 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Abrir Xenia</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Modo Big Screen</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Abrir Modo Big Screen</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Biblioteca de Jogos</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Configurações Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Gerenciar Xenia</sys:String>
@@ -23,32 +23,32 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Buscar...</sys:String>
-    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">Atualizar biblioteca de jogos</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">Ordenar jogos</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">Alterar para visão de lista</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">Alterar para visão de grade</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">Direção da Ordenação</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">Título</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">Compatibilidade</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">Tempo em Jogo</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Versão do Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">Jogado pela última vez</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Editar Visão de Grade</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Exibir/Ocultar informação adicional na arte da caixa</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Título do Jogo</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Avaliação de Compatibilidade</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Versão Xenia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Exibir o ícone da versão do Xenia para cada jogo</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">Editar Visão de Lista</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">Exibir/Ocultar colunas na visão de lista</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">Avaliação de Compatibilidade</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">Tempo em Jogo</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Versão do Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">Exibir versão do Xenia para cada jogo</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">Jogado pela Última Vez</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">Ícone do Jogo</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">ID do Título</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">ID da Mídia</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Iniciar com clique duplo</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Alternar entre clique único e clique duplo para iniciar jogos</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Escanear Pasta</sys:String>
@@ -67,11 +67,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Falha no Escaneamento</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Ocorreu um erro ao escanear a pasta:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Erro de Escaneamento</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Escanear Pasta</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Selecione pasta para ser escaneada:</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Escanear pasta de Jogos</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Escanear pasta customizada</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">Cancelar</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Procurando Jogos</sys:String>
@@ -135,11 +135,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Jogos atualizados com sucesso: {0}.&#10;Sem alterações: {1}&#10;Falha: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Falha ao Atualizar</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Ocorreu um erro ao atualizar as classificações de compatibilidade.&#10;{0}</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Atualizar Avaliações de Compatibilidade</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Compatibilidade do Jogo</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Compatibilidade Mousehook</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Compatibilidade Netplay</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Atualizar</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Otimizar Jogos</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Aplica configurações otimizadas do banco de dados online a todos os jogos da biblioteca</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Otimização concluída</sys:String>
@@ -148,17 +148,17 @@
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">Ocorreu um erro ao otimizar as configurações do jogo. &#10;{0}</sys:String>
 
     <!-- Remove Invalid Games -->
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">Remover Jogos Inválidos</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">Remover todos os jogos faltantes ou com endereço de arquivo inválidos</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">Remover Jogos Inválidos</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">Há um jogo inválido na sua biblioteca. Deseja removê-lo?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">Há {0} jogos inválidos na sua biblioteca. Deseja removê-los?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">Sem Jogos Inválidos</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">Não há jogos inválidos na biblioteca.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">Jogos Inválidos Removidos</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">{0} jogos inválidos removidos na sua biblioteca com sucesso.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">Falha ao Remover Jogos</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">Um erro ocorreu ao remover jogos inválidos.&#10;{0}</sys:String>
 
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Tempo jogado: </sys:String>
@@ -194,23 +194,23 @@
     <sys:String x:Key="CompatibilityRating.Playable">Jogável</sys:String>
 
     <!-- Mousehook Support Rating -->
-    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Unknown">Desconhecido</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">Ruim</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Regular</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">Bom</sys:String>
 
     <!-- Netplay Status -->
-    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Unknown">Desconhecido</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">Ok</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">Parcial</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">Falha</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Suporte Mousehook:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Rede Pública Funcionando:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Testado Localmente:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Somente Local:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Gerenciamento do Emulador</sys:String>
@@ -257,8 +257,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Nenhum Perfil Disponível</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Nenhum perfil encontrado para ativar o backup automático de salvamento.&#10;Crie ou importe um perfil primeiro.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Pasta de conteúdo unificada</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Faz com que todas as versões do Xenia compartilhem a mesma pasta de conteúdo. Exige permissão de administrador e um drive NTFS.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NOTE: Exige permissão de administrador e um drive NTFS já que essa função utiliza links simbólicos</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Administrador Necessário</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Esta ação requer que o Xenia Manager seja executado como administrador.&#10;Reinicie o Xenia Manager com privilégios administrativos.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Pastas de conteúdo separadas</sys:String>
@@ -277,9 +277,9 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Permite que o usuário modifique os perfis do Xenia</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">Gerenciar</sys:String>
 
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.EditXConfig.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">Editar Configurações XConfig</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Editar configurações da Dashboard Xbox 360 (resolução, idioma, país, perfil padrão)</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">Editar</sys:String>
 
     <sys:String x:Key="ManagePage.Content.Install.Title">Instalar Conteúdo</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Instalar DLCs, atualizações e outros conteúdos para o Xenia</sys:String>
@@ -371,24 +371,24 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Analisar Detalhes do Jogo com o Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Analisa automaticamente os detalhes do jogo usando o emulador Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Ative esta opção se tiver dificuldades para detectar jogos ou detalhes do jogo</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Usar MediaId para o Título do Jogo</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Usar MediaId para encontrar um título de mídia compatível</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Desabilite para utilizar o título do banco de dados ao invés de títulos específicos de mídia</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">Usar Arte Embutida</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">Usar arte embutida nos arquivos do jogo ao invés de baixar do banco de dados</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">Quando habilitado, o ícone e thumb do jogo são extraídos do próprio jogo. Desabilite para sempre baixar do banco de dados.</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Verificar Atualizações na Inicialização</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Verifica automaticamente se há atualizações do Xenia e do Xenia Manager quando o aplicativo é iniciado</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Desative esta opção para ignorar as verificações de atualização durante a inicialização do aplicativo</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Detectar Novos Jogos Automaticamente</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Detectar novos jogos automaticamente quando forem adicionados na pasta de jogos</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Exibir notificação quando novos jogos forem detectados na pasta de jogos</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Mesclar Automaticamente Jogos de Discos Múltiplos</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Mesclar automaticamente jogos de discos múltiplos durante o escaneamento da biblioteca</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Quando habilitado, discos adicionais compatíveis com um jogo existente na biblioteca são mesclados automaticamente sem confirmação</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">Iniciar no Modo Big Screen</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">Iniciar no modo Big Screen ao invés da tela principal ao iniciar</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">Quando habilitado, Xenia Manager abre o modo Big Screen diretamente ao iniciar</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Carregando {0}</sys:String>
@@ -401,10 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Conteúdo</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Exibir Conteúdo Instalado</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">Jogos Salvos</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">Conquistas</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">Atualização de Jogo</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">Conteúdo do Marketplace</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Backups de Salvamento</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Abre a pasta que contém todos Backups de salvamento feitas pelo Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Nenhum Backup de Salvamento Encontrado</sys:String>
@@ -417,8 +417,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Nenhuma captura de tela encontrada para {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Falha ao abrir a pasta</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Ocorreu um erro ao abrir a pasta de capturas de tela.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">Navegar Arquivos do Jogo</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">Navegar arquivos do jogo e inspecionar executáveis</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Baixar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Baixar patches do repositório</sys:String>
@@ -489,10 +489,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Um atalho do Steam para '{0}' foi criado com sucesso em sua biblioteca do Steam.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Falha ao criar atalho do Steam</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Falha ao criar o atalho do Steam para '{0}'.&#10;{1}</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">Selecionar Conta Steam</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">Mais de uma Conta Steam encontrada</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">Selecione qual conta para criar o atalho:</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">Cancelar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Página de Compatibilidade</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Abre a página de compatibilidade</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Sem página de compatibilidade</sys:String>
@@ -536,8 +536,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Nenhuma Instalação do Xenia</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Nenhuma instalação do Xenia foi encontrada. Instale o Xenia antes de tentar iniciar o jogo.</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">BigScreen Não Encontrado</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">Não foi possível encontrar XeniaManager.BigScreen.exe.</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>
@@ -594,37 +594,37 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Ícone</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Selecionar ícone</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Limpar ícone</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">Buscar Ícone Novamente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">Ícone Não Encontrado</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">Nenhum ícone foi encontrado em {0}. O ícone existente não foi alterado.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">Ícone Buscado Novamente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">Ícone buscado com sucesso para {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">Buscar Ícone Novamente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">Escolher de onde buscar os ícones:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">Arquivos de Jogos</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">Arquivos de Jogos</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">Buscar Arte de Capa Novamente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">Arte de Capa não encontrada</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">Nenhuma arte de capa foi encontrada em {0}. A capa não foi alterada.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">Arte de Capa Buscada</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">Capa encontrada com sucesso de {0}.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">Plano de fundo</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">Selecionar plano de fundo</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">Limpar plano de fundo</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">Buscar Plano de Fundo Novamente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">Plano de Fundo não encontrado</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">Nenhum plano de fundo foi encontrado em {0}. O plano de fundo não foi alterado.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">Plano de Fundo Encontrado</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">Plano de Fundo encontrado de {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">Buscar Plano de Fundo Novamente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">Escolher de onde buscar planos de fundo:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">Arquivos de Jogos</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">Arquivos de Jogos</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">Falha ao Buscar Novamente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">Falha ao buscar novamente {0}.&#10; Erro: {1}</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Detecção automática</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">O ID do título e o ID da mídia são detectados automaticamente e não podem ser alterados.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">ID do Título</sys:String>
@@ -638,14 +638,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Classificação de Compatibilidade</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL da Página de Compatibilidade</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Insira a URL da página de compatibilidade</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Compatibilidade Mousehook</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">Não há observações Mousehook disponíveis</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Compatibilidade Netplay</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Rede Pública Funcionando</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Testado Localmente</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Somente Local</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">Systemlink</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">Não há observações Netplay disponíveis</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Alterar caminho do jogo</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Selecionar arquivo do jogo</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Provedor de Armazenamento Ausente</sys:String>
@@ -680,9 +680,9 @@
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Cancelar</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">Adicionar Content</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">Selecionar Arquivos de Conteúdo</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">Instalar (Extrair)</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">Install (Pacote)</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">Mantém arquivo pacote intacto. Exige o Xenia Canary mais recente.</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">Instalação Concluída com Sucesso</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">O seguinte conteúdo foi instalado com sucesso:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Instalação Parcialmente Concluída com Sucesso</sys:String>
@@ -746,16 +746,16 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Falha ao Salvar</sys:String>
 
     <!-- Edit XConfig Dialog -->
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">Editar Configurações XConfig</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">Salvar</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">Cancelar</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">Resolução</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">Idioma</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">País</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">Perfil Padrão</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">Falha ao Salvar</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">Falha ao carregar arquivo xconfig.settings.</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">Nenhum arquivo xconfig.settings encontrado para nenhuma versão Xenia.</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Diálogo de Seleção do Xenia</sys:String>
@@ -818,28 +818,28 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Falha ao desbloquear conquistas.&#10;Erro: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Falha no bloqueio</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Falha ao bloquear conquistas.&#10;Erro: {0}</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">Buscar Conquistas dos Arquivos do Jogo</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">Conquistas Prontas</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">Conquistas Prontas: {1} total ({0} adicionados dos arquivos do jogo).</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">Falha ao Criar</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">Falha ao criar conquistas do jogo.&#10;Erro: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">Discos/Arquivos de Jogo Não Encontrados</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">O disco/jogo selecionado não foi encontrado.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">Buscar dos Arquivos do Jogo</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">Buscar dos Arquivos do Jogo</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">Escolha o que buscar dos arquivos do jogo</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">Imagens não encontradas</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">Imagens desbloqueadas apenas</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">Sobreescrever todas as imagens</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">Texto das Conquistas</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">Imagens Atualizadas</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">{0} imagens buscadas dos arquivos do jogo.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">Falha na Busca</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">Falha ao buscar imagens de conquistas do arquivo do jogo.&#10;Erro: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">Texto Atualizado</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">{0} conquista(s) atualizadas dos arquivos do jogo.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">Atualização Falhou</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">Falha ao atualizar os textos dos arquivos do jogo.&#10;Erro: {0}</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Conteúdo Instalado</sys:String>
@@ -850,8 +850,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Atualizações disponíveis: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Atualizações disponíveis para o Xenia Manager</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">Novos jogos atualizados. Reescaneie sua pasta de jogos para atualizar sua biblioteca.</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">Reescanear</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Editor de Configuração</sys:String>
@@ -896,9 +896,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Falha ao salvar</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">A tecla não pode ser "Nenhuma" para a vinculação "{0}". Selecione uma tecla válida.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">O valor não pode ser "Nenhum" para a vinculação "{0}". Selecione uma entrada de controle válida.</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">Multibind</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">Selecionar binding para combinar:</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">Aplicar</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Redefinir Configurações</sys:String>
@@ -1070,8 +1070,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">None</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Fast</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Full</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">Readback Memexport</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">Ler dados escritos pela exportação de memória nos Shaders na CPU.&#10; Pode ser necessário para alguns jogos, mas causa sincronização por frame com grande impacto em performance</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Draw Resolution Scale X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Escala de largura em pixels (inteiros) usada para dimensionar a resolução de renderização de forma opaca ao jogo</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Draw Resolution Scale Y</sys:String>
@@ -1099,12 +1099,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Async Shader Compilation</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Compila shaders e cria pipelines de forma assíncrona em threads em segundo plano.&#10;Elimina a instabilidade na compilação de shaders, mas pode causar breves artefatos de renderização enquanto os pipelines estão sendo criados.&#10;Quando desativado, os pipelines são criados. Sincronamente, o que causa travamentos, mas sem artefatos visuais.</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Occlusion Query</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">Controla a consulta de oclusão de hardware e seu comportamento no EVENT_WRITE_ZPD&#10;Usado para efeitos como reflexos, oclusão de objectos e exposição&#10;fake: Escreve um resultado falso sem consultar a GPU. Seguro para a maior parte dos jogos&#10; fast: Consulta a GPU mas não espera. Escreve um resultado em cache, atualiza quando a GPU responde. (Padrão)&#10;fast-alt: similar ao fast mas mantém os resultados zero em cache para relatórios não respondidos&#10;strict: consulta a GPU e espera o resultado real. Mais preciso mas com performance pior</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">Fake</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">Fast (Padrão)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">Fast-Alt</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">Strict</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Input System</sys:String>
@@ -1337,10 +1337,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - Suporte para Teclado e Mouse</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - Framework de interface de usuário multiplataforma com Fluent Design</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">CommunityToolkit.Mvvm</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip"> - MVVM framework for .NET</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">Microsoft.Extensions.DependencyInjection</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip"> - Containter de Injeção de Dependências para .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - Controles e temas Fluent Design para Avalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1349,16 +1349,16 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Framework de registro flexível para .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Análise de detalhes de jogos</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">ppy.SDL3-CS</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip"> - SDL3 bindings para controles</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Manipulação de arquivos e compressão</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">System.IO.Hashing</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip"> - Algoritmos de hash rápridos (XxHash)</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">TweenAvalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip"> - Animações programáticas para Avalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - compressão Zstandard para .NET</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Este aplicativo não é afiliado, endossado ou patrocinado pela Microsoft Corporation ou pelo Projeto Xenia de forma alguma. Todas as marcas registradas, logotipos e nomes de marcas são propriedade de seus respectivos proprietários. "Xbox 360 é uma marca registrada da Microsoft Corporation nos Estados Unidos e/ou em outros países." "Xenia é uma marca registrada do Projeto Xenia." Quaisquer referências a essas ou outras marcas registradas são feitas exclusivamente com o objetivo de identificar compatibilidade ou funcionalidade e não implicam qualquer associação ou endosso pelos detentores das marcas registradas. "Este software destina-se apenas a fins educacionais e informativos." Este software não contém nem distribui qualquer conteúdo protegido por direitos autorais pertencente à Microsoft Corporation ou a terceiros. Os usuários são os únicos responsáveis ​​por garantir que o uso deste software esteja em conformidade com todas as leis aplicáveis, incluindo leis de direitos autorais e de licenciamento. Qualquer uso deste aplicativo para executar ou interagir com software ou firmware proprietário deve ser realizado com a devida autorização dentro dos limites dos contratos de licença de usuário final (EULAs) relevantes. Os desenvolvedores e distribuidores deste aplicativo não toleram nem apoiam a pirataria de nenhuma forma. Este aplicativo é fornecido "como está", sem garantia de qualquer tipo, expressa ou implícita. Use por sua conta e risco.</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">Usar versão experimental</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">Ative para receber atualizações de recursos experimentais e acesso antecipado a novos recursos</sys:String>
@@ -1368,131 +1368,131 @@
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">Você está usando a versão mais recente do Xenia Manager.</sys:String>
 
     <!-- Library Page - Drag & Drop -->
-    <sys:String x:Key="LibraryPage.DragDrop.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Title">Solte arquivos para adicionar jogos</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">Arquivos aceitáveis: .iso, .xex, .zar</sys:String>
 
     <!-- Multi-Disc Support -->
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.GameButton.DiscCount">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">Gerenciar Discos</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">Adicionar, renomear ou remover discos para jogos multi-discos</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">Falha ao Gerenciar Discos</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">Um erro ocorreu ao gerenciar discos.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">{0} Discos</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">Adicionar como Disco Adicional?</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">Esse arquivo aparenta ser um outro disco de '{0}', que já está na sua biblioteca.&#10;&#10; Deseja adicionar como um disco adicional de '{0}' ao invés de criar um item separado na biblioteca?</sys:String>
 
     <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
-    <sys:String x:Key="DiscSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.Disc1">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.DiscN">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Header">Selecionar Disco</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">Esse jogo tem mais de um disco. Escolha qual iniciar.</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">Disco 1</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">Disco 2</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">(Jogado pela Última Vez)</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(Arquivo Não Encontrado)</sys:String>
 
     <!-- Manage Discs Dialog -->
-    <sys:String x:Key="ManageDiscsDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Subtitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Disc1Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingFile">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Title">{0} - Gerenciar Discos</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">Adicionar, renomear ou remover discos. O disco que você iniciar será lembrado para a próxima vez.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">Fechar</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">Disco 1</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">Disco {0}</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">Adicionar Disco</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">Remover esse disco</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">Arquivo não encontrado</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">Selecionar Arquivo do Disco</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">Provedor de Armazenamento Não Encontrado</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">O provedor de armazenamento não está disponível.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Disco Já Adicionado</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">Este arquivo já está associado com esse jogo.</sys:String>
 
     <!-- Game Files Dialog -->
-    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Search.Watermark">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Folder.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.EmptyFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.NoResults">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.NoSelection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ContainerSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Format">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Container.Summary">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.AchievementsToggle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.SpaSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Size">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Path">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.TitleId">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.MediaId">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Version">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Disc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ImageSize">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Achievements">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.StfsSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.DisplayName">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.SignatureType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ContentType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ContentSize">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.LoadError.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.LoadError.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">Arquivos do Jogo</sys:String>
+    <sys:String x:Key="GameFilesDialog.CloseButton">Fechar</sys:String>
+    <sys:String x:Key="GameFilesDialog.Search.Watermark">Procurar Arquivos...</sys:String>
+    <sys:String x:Key="GameFilesDialog.Folder.Label">Pasta</sys:String>
+    <sys:String x:Key="GameFilesDialog.EmptyFolder">Esta pasta está vazia.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoResults">Nenhum arquivo foi encontrado.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoSelection">Selecione um arquivo para ver os detalhes.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">Abrir no Explorer</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexSection">Detalhes do Executável</sys:String>
+    <sys:String x:Key="GameFilesDialog.ContainerSection">Containter</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Format">Formato</sys:String>
+    <sys:String x:Key="GameFilesDialog.Container.Summary">{0} arquivos - {1} total</sys:String>
+    <sys:String x:Key="GameFilesDialog.AchievementsToggle">Conquistas</sys:String>
+    <sys:String x:Key="GameFilesDialog.SpaSection">Detalhes SPA</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Size">Tamanho</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Path">Endereço</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.TitleId">ID do Título</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.MediaId">ID da Mídia</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Version">Versão</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Disc">Disco</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ImageSize">Tamanho da Imagem</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">Flags do Módulo</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">Título</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Achievements">Conquistas</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">Gamerscore</sys:String>
+    <sys:String x:Key="GameFilesDialog.StfsSection">Detalhes STFS</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.DisplayName">Nome de exibição</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">Nome do título</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SignatureType">Tipo de assinatura</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentType">Tipo do conteúdo</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentSize">Tamanho do conteúdo</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Title">Não foi Possível Navegar</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Message">Os arquivos do jogo não puderam ser abertos. O arquivo não foi encontrado ou está em formato não suportado.</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">Não foi Possível Abrir Pasta</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">Falha ao abrir pasta: {0}</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">Extrair...</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">Selecionar Pasta a Extrair</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">Provedor de Armazenamento Não Encontrado</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">O provedor de armazenamento não está disponível.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">Nada a Extrair</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">Selecione um arquivo ou pasta para extrair.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">Extração Completa</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">Falha ao Extrair</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">Extrair Tudo</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">Extraídos {0} de {1} arquivos para '{2}'.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">Extraídos {0} de {1} arquivos. Primeiro Erro: {2}</sys:String>
 
     <!-- Extract Progress Dialog -->
-    <sys:String x:Key="ExtractProgressDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Status.Error">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Button.Close">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Title">Extraindo Arquivos</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">Extraindo {0} de {1} arquivos</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Error">Falha ao extrair: {0}</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">Extraido</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">Falhou</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Button.Close">Fechar</sys:String>
 
     <!-- Text File Dialog -->
-    <sys:String x:Key="TextFileDialog.Encoding.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="TextFileDialog.Encoding.Label">Codificação</sys:String>
 
     <!-- Game Files Open -->
-    <sys:String x:Key="GameFilesDialog.Open.Menu">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Open.Menu">Abrir</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">Não foi Possível Visualizar Arquivo</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">Nenhuma pré-visuzalização está disponível para esse arquivo.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">Arquivo Grande Demais</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">Esse arquivo é grande demais para pré-visuzalização como texto.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">Não foi Possível Abrir Arquivo</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">Falha ao abrir '{0}': {1}</sys:String>
 
     <!-- GPD Viewer Dialog -->
-    <sys:String x:Key="GpdViewerDialog.Entries.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GpdViewerDialog.Entries.Header">Itens</sys:String>
 
     <!-- XEX File Dialog -->
-    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Details.TitleType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Details.TitleVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.NoSpaDetails">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.TitlesSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Achievements.Locked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.ContextsSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.PropertiesSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.StatsViewsSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">Idioma Padrão</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleType">Tipo do Título</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleVersion">Versão do Título</sys:String>
+    <sys:String x:Key="XexFileDialog.NoSpaDetails">Nenhum detalhe SPA encontrado nesse executável.</sys:String>
+    <sys:String x:Key="XexFileDialog.TitlesSection">Títulos</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Locked">Bloqueados</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">Desbloqueados</sys:String>
+    <sys:String x:Key="XexFileDialog.ContextsSection">Contextos</sys:String>
+    <sys:String x:Key="XexFileDialog.PropertiesSection">Propriedades</sys:String>
+    <sys:String x:Key="XexFileDialog.StatsViewsSection">Visão de estatísticas</sys:String>
 
     <!-- Game Files XEX -->
-    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">Versão base</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">Tipo de executável</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Button">Salvar Ícone...</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">Salvar Ícone do XEX</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">Ícone Salvado</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">Ícone salvado em '{0}'.</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">Falha ao Salvar Ícone</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">Falha ao salvar ícone: {0}</sys:String>
 </ResourceDictionary>
