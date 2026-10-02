@@ -5,50 +5,50 @@
     <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
     <!-- Welcome Dialog -->
-    <sys:String x:Key="WelcomeDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="WelcomeDialog.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="WelcomeDialog.ContinueButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="WelcomeDialog.Title">Добро пожаловать в Xenia Manager</sys:String>
+    <sys:String x:Key="WelcomeDialog.Description">Выберите тему для пользовательского интерфейса:</sys:String>
+    <sys:String x:Key="WelcomeDialog.ContinueButton">Продолжить</sys:String>
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Запуск Xenia</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MainView.Navigation.Library">Библиотека</sys:String>
-    <sys:String x:Key="MainView.Navigation.XeniaSettings">Настр. Xenia</sys:String>
-    <sys:String x:Key="MainView.Navigation.ManagePage">Управ. Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Режим Big Picture</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Запустить режим Big Picture</sys:String>
+    <sys:String x:Key="MainView.Navigation.Library">Библиотека игр</sys:String>
+    <sys:String x:Key="MainView.Navigation.XeniaSettings">Настройки Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.ManagePage">Управление Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.About">О программе</sys:String>
-    <sys:String x:Key="MainView.Navigation.Settings">Настройки</sys:String>
+    <sys:String x:Key="MainView.Navigation.Settings">Настройки программы</sys:String>
     <sys:String x:Key="MainView.Navigation.Error.Title">Ошибка навигации</sys:String>
     <sys:String x:Key="MainView.Navigation.Error.Message">Не удалось перейти на указанную страницу.&#10;{0}</sys:String>
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Поиск…</sys:String>
-    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">Обновить библиотеку игр</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">Сортировать игры</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">Переключиться в режим списка</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">Переключиться в режим сетки</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">Направление сортировки</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">Название</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">Рейтинг совместимости</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">Время игры</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Версия Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">Последний запуск</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Отображение элементов обложки</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Показать/скрыть дополнительную информацию на обложках игр</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Название игры</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Рейтинг совместимости</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Версия Xenia</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Показывать значок версии Xenia для каждой игры</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">Отображение элементов списка</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">Показать/скрыть определённые столбцы в режиме просмотра списка</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">Рейтинг совместимости</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">Время игры</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Версия Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">Показывать значок версии Xenia для каждой игры</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">Последний запуск</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">Значок игры</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">ID игры</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">ID диска</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Запускать игру двойным щелчком мыши</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Переключение между запуском игр одним или двумя щелчками мыши</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Сканировать папку</sys:String>
@@ -61,21 +61,21 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.XeniaSelectionError.Message">Не удалось выбрать версию Xenia.&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.FolderPicker.Title">Выберите папку для сканирования</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Success.Title">Сканирование завершено</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Success.Message">В вашу библиотеку успешно добавлено игр: {0} шт.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Success.Message">В вашу библиотеку успешно добавлено игр: {0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.NoGamesFound.Title">Сканирование завершено</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.NoGamesFound.Message">В выбранной папке не обнаружено новых игр.&#10;&#10;Возможно, в папке нет поддерживаемых эмулятором игровых файлов или игры уже есть в вашей библиотеке.</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Не удалось выполнить сканирование</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Ошибка при сканировании папки:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Ошибка сканирования</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Сканировать папку</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Выберите источник для сканирования:</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Папка Games</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Другая папка</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">Отменить</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Поиск игр</sys:String>
-    <sys:String x:Key="FolderScanProgressDialog.Subtitle">Пожалуйста, подождите, пока выполняется поиск игровых файлов</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Subtitle">Пожалуйста, подождите, выполняется поиск игровых файлов</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Starting">Запуск сканирования...</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Scanning">Сканирование: {0}</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Complete">Сканирование завершено! Найдено игр: {0}</sys:String>
@@ -93,7 +93,7 @@
     <sys:String x:Key="AddGamesProgressDialog.Statistics.Processed">Обработано</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Statistics.Added">Добавлено</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Statistics.Skipped">Пропущено</sys:String>
-    <sys:String x:Key="AddGamesProgressDialog.Statistics.Failed">Неудачно</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Failed">Ошибок</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Button.Close">Закрыть</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Status.Complete">Завершено! Добавлено игр: {0}</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Status.Initializing">Инициализация</sys:String>
@@ -125,7 +125,7 @@
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Title">Экспорт ярлыков всех игр</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Message">Куда вы хотите экспортировать ярлыки игр?</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder">Папка</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam">В библиотеку Steam</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam">Steam</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel">Отменить</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Title">Экспортированные ярлыки в Steam</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Message">Успешно экспортировано ярлыков в Steam - {0} шт.&#10;Ошибок: {1}&#10;&#10;Успешно экспортировано:&#10;{2}&#10;&#10;Не удалось экспортировать:&#10;{3}</sys:String>
@@ -135,30 +135,30 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Успешно обновлено игр: {0}&#10;Без изменений: {1}&#10;Ошибок: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Не удалось обновить</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Ошибка при обновлении рейтингов совместимости.&#10;{0}</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Обновить рейтинги совместимости</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Совместимость игры</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Совместимость с Mousehook</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Совместимость с Netplay</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Обновить</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Оптимизировать игры</sys:String>
-    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Применение оптимизированных настроек из онлайн-базы ко всем играм в библиотеке</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Применение оптимальных настроек из онлайн-базы ко всем играм в библиотеке</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Оптимизация завершена</sys:String>
-    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Message">Успешно оптимизировано игр: {0}&#10;Без изменений: {1}&#10;Не найдено: {2}&#10;Ошибок: {3}&#10;&#10;Оптимизированные игры:&#10;{4}&#10;&#10;Неизменённые игры:&#10;{5}&#10;&#10;Игры без оптимизированных настроек:&#10;{6}&#10;&#10;Не удалось оптимизировать:&#10;{7}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Message">Успешно оптимизировано игр: {0}&#10;Без изменений: {1}&#10;Не найдено: {2}&#10;Ошибок: {3}&#10;&#10;Оптимизированные игры:&#10;{4}&#10;&#10;Неизменённые игры:&#10;{5}&#10;&#10;Игры без оптимальных настроек:&#10;{6}&#10;&#10;Не удалось оптимизировать:&#10;{7}</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Title">Не удалось оптимизировать</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">Ошибка при оптимизации настроек игры.&#10;{0}</sys:String>
 
     <!-- Remove Invalid Games -->
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">Удалить недоступные игры</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">Удалить из библиотеки все игры, папки которых были удалены или содержат повреждённые файлы</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">Удалить недоступные игры</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">В вашей библиотеке обнаружена 1 недоступная игра. Хотите удалить ее?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">В вашей библиотеке обнаружено {0} недоступных игр. Хотите удалить их?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">Нет недоступных игр</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">В вашей библиотеке нет недоступных игр.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">Недоступные игры удалены</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">Из вашей библиотеки удалено недоступных игр: {0}.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">Не удалось удалить игры</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">Ошибка при удалении недоступных игр.&#10;{0}</sys:String>
 
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Сыграно: </sys:String>
@@ -194,23 +194,23 @@
     <sys:String x:Key="CompatibilityRating.Playable">Играбельно</sys:String>
 
     <!-- Mousehook Support Rating -->
-    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Unknown">Неизвестно</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">Плохая</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Частичная</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">Хорошая</sys:String>
 
     <!-- Netplay Status -->
-    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Unknown">Неизвестно</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">OK</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">Частично</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">Не работает</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Поддержка Mousehook:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Публичный сервер:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Проверено в локальной сети:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Только в локальной сети:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Управление эмулятором</sys:String>
@@ -257,8 +257,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Профили отсутствуют</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Нет профилей, чтобы включить автобэкап сохранений.&#10;Сначала создайте или импортируйте профиль.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Общая папка для игровых данных</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Позволяет всем версиям Xenia использовать общую папку для игровых данных. Требуются права администратора и диск с файловой системой NTFS.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">Примечание: для работы этой функции требуются права администратора и диск с файловой системой NTFS, которая поддерживает символические ссылки.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Требуются права администратора</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Это действие требует прав администратора.&#10;Перезапустите Xenia Manager от имени администратора.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Отдельные папки для игровых данных</sys:String>
@@ -274,15 +274,15 @@
 
     <!-- Install Content Section -->
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">Управление профилями</sys:String>
-    <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Позволяет пользователю редактировать профили Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Редактирование профилей Xenia</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">Управление</sys:String>
 
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.EditXConfig.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">Настройки XConfig</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Редактирование настроек панели управления Xbox 360 (разрешение, язык, страну, профиль по умолчанию)</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">Править</sys:String>
 
     <sys:String x:Key="ManagePage.Content.Install.Title">Установить игровые данные</sys:String>
-    <sys:String x:Key="ManagePage.Content.Install.Description">Установка DLC, обновлений и другого контента для Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Description">Установка DLC, обновлений для игр (TU) и другого контента для Xenia</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Button">Установить игровые данные</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.NoEmulator.Title">Эмулятор не установлен</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.NoEmulator.Message">Для установки игровых данных нужно, чтобы была установлена хотя бы одна версия Xenia.</sys:String>
@@ -296,9 +296,9 @@
     <sys:String x:Key="ManagePage.Content.RedownloadXenia.Confirmation.Title">Подтверждение переустановки</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadXenia.Confirmation.Message">Хотите заново скачать Xenia {0}?&#10;Программа будет удалена и установлена свежая версия.&#10;&#10;Примечание: игровые данные, сохранения и настройки останутся нетронутыми.</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Title">Переустановка завершена</sys:String>
-    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Message">Xenia {0} успешно скачена и переустановлена.</sys:String>
-    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Title">Не удалось повторно скачать</sys:String>
-    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Message">Не удалось повторно скачать Xenia.&#10;Ошибка: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Message">Xenia {0} успешно скачана и переустановлена.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Title">Ошибка повторной загрузки</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Message">Ошибка повторной загрузки Xenia.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="ManagePage.Content.ExportLogs.Title">Экспорт журналов</sys:String>
     <sys:String x:Key="ManagePage.Content.ExportLogs.Description">Экспорт файла журнала Xenia в указанное место</sys:String>
     <sys:String x:Key="ManagePage.Content.ExportLogs.Button">Экспорт журналов</sys:String>
@@ -332,8 +332,8 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Downloading">Загрузка привязок для {0}</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Title">Переустановка завершена</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Файл с настройками кнопок для Xenia {0} успешно скачен заново.</sys:String>
-    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Не удалось повторно скачать</sys:String>
-    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Не удалось повторно скачать файл назначения кнопок.&#10;Ошибка: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Ошибка повторной загрузки</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Ошибка повторной загрузки файла назначения кнопок.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">Очистка кэша шейдеров</sys:String>
     <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">Удаление файлов кэша шейдеров</sys:String>
     <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">Очистить</sys:String>
@@ -351,7 +351,7 @@
     <sys:String x:Key="SettingsPage.Ui.Description">Настройка интерфейса Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Language.Title">Язык</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Language.Description">Выбор языка Xenia Manager</sys:String>
-    <sys:String x:Key="SettingsPage.Ui.Language.ToolTip">Примечание: часть интерфейса останется на старом языке, пока вы не перезапустите программу.</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Language.ToolTip">Примечание: часть интерфейса останется на старом языке, пока вы не перезапустите программу</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Title">Тема</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Выбор темы Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Светлая</sys:String>
@@ -369,26 +369,26 @@
     <sys:String x:Key="SettingsPage.General.Title">Общие настройки</sys:String>
     <sys:String x:Key="SettingsPage.General.Description">Настройка общих параметров Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Парсинг информации о игре с помощью Xenia</sys:String>
-    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Автоматический парсинг игровых данных с помощью эмулятора Xenia</sys:String>
-    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Включите эту опцию, если у вас возникают проблемы с обнаружением игр или получением информации о них</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Автоматический парсинг информации о игре с помощью эмулятора Xenia</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Включите, если у вас возникают проблемы с обнаружением игр или получением информации о них</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Определение названия игры по ID диска</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Использование ID диска из игровых файлов для определения названия игры</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Отключите, чтобы всегда брать название игры из базы данных вместо названия, указанного для конкретного диска</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">Использовать встроенную иконку и эскизы</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">Использовать встроенные в файлы игры изображения (иконка, миниатюры) до загрузки из базы данных</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">При включении значок и миниатюры игры сначала извлекаются непосредственно из файла игры (STFS/SVOD/ISO/ZAR/XEX). Отключите, если хотите, чтобы они всегда загружались из базы данных.</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Проверка наличия обновлений при запуске программы</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Автоматическая проверка обновлений Xenia и Xenia Manager при запуске программы</sys:String>
-    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Отключите эту опцию, чтобы пропускать проверку обновлений при запуске программы</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Отключите эту опцию, если не хотите проверять наличие обновлений при запуске программы</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Автообнаружение новых игр</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Автообнаружение новых игр при их добавлении в папку Games</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Показывать уведомление при обнаружении новых файлов в папке Games</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Автообъединение дисков для многодисковых игр</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Автоматическое объединение обнаруженных дисков одной игры при сканировании библиотеки</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Если включено, обнаруженные дополнительные диски уже добавленных в библиотеку игр будут автоматически объединяться без запроса</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">Запускать программу в режиме Big Screen</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">Запускать программу сразу в режиме Big Screen, без открытия главного окна Xenia Manager</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">Если включено, Xenia Manager при запуске сразу переходит в режим Big Screen.</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Загрузка {0}</sys:String>
@@ -401,30 +401,30 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Игровые данные</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Установленные игровые данные</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">Сохранения</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">Достижения</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">Обновления для игр (TU)</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">Контент из Marketplace</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Резервные сохранения</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Открытие папки с резервными копиями сохранений, созданные Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Резервные сохранения отсутствуют</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Message">Автобэкапов сохранений не найдено.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Title">Не удалось открыть папку</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Message">Ошибка при открытии папки резервных копий сохранений.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Header">Посмотреть скриншоты</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Header">Скриншоты</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.ToolTip">Открытие папки со скриншотами, сделанными в игре, с помощью Xenia</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Title">Скриншоты отсутствуют</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Не найдены скриншоты для {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Не удалось открыть папку</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Ошибка при открытии папки со скриншотами.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">Просмотр файлов игры</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">Просмотр файлов игры и подробной информации об исполняемых файлах</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Патчи</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Скачать</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Скачать патчи из репозитория</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Failed.Title">Не удалось скачать патч</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Failed.Message">При загрузке патча возникла проблема.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Success.Title">Патч скачен</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Success.Title">Патч скачан</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Success.Message">Патч успешно загружен и установлен:&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Header">Из файла</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.ToolTip">Установить патчи из файлов TOML</sys:String>
@@ -439,7 +439,7 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Error.Message">При установке патча возникла проблема.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Header">Добавить</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.ToolTip">Добавление патчей из локальных TOML-файлов к уже установленным</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Title">Патч не установлен</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Title">Патчи не установлены</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Message">Чтобы добавлять дополнительные патчи, сперва установите основной файл патча.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.Title">Выберите файл патчей для объединения</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.MissingStorageProvider.Title">Отсутствует поставщик услуг хранения данных</sys:String>
@@ -453,7 +453,7 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Error.Message">При добавлении дополнительных патчей возникла проблема.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Header">Настройки</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.ToolTip">Включение или отключение патчей</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Title">Патч не установлен</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Title">Патчи не установлены</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Message">Перед настройкой патча сначала установите его.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Title">Настройки сохранены</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Message">Настройки патча успешно сохранены.</sys:String>
@@ -461,7 +461,7 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Message">При настройке патчей возникла проблема.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Header">Экспорт</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.ToolTip">Экспорт файла патча в указанное место</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Title">Патч не установлен</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Title">Патчи не установлены</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Message">Перед экспортом патча сначала установите его.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Title">Ошибка экспорта</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Message">Не удается получить доступ к главному окну для выбора файла.</sys:String>
@@ -486,13 +486,13 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Title">Не удалось создать ярлык</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Message">Ошибка при создании ярлыка на рабочем столе.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Title">Ярлык в Steam создан</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Ярлык для {0} успешно создан в вашей библиотеке Steam.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Ярлык для {0} успешно добавлен в вашу библиотеку Steam.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Не удалось создать ярлык в Steam</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Не удалось создать ярлык в библиотеке Steam для '{0}'.&#10;{1}</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Не удалось создать ярлык в библиотеке Steam для {0}.&#10;{1}</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">Выберите учётную запись Steam</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">Найдено несколько учётных записей Steam</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">Выберите учётную запись, для которой нужно создать ярлык:</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">Отменить</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Страница совместимости</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Открыть страницу совместимости</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Страница совместимости отсутствует</sys:String>
@@ -511,15 +511,15 @@
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.FileNotFound">Не найден файл назначений кнопок. Убедитесь, что Xenia Mousehook установлен и настроен.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.Message">Ошибка при открытии редактора настроек управления Mousehook: {0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Настройки</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ToolTip">Позволяет пользователю редактировать файл конфигурации игры</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ToolTip">Позволяет пользователю редактировать файл настроек игры</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Title">Файл настроек не найден</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Message">Файл настроек для '{0}' отсутствует. Сначала запустите игру, чтобы он был создан.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Message">Файл настроек для {0} отсутствует. Сначала запустите игру, чтобы он был создан.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Title">Настройки сохранены</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Message">Настройки для '{0}' успешно сохранены.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Message">Настройки для {0} успешно сохранены.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Error.Title">Ошибка при изменении настроек</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Error.Message">Не удалось открыть редактор настроек для '{0}': {1}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Header">Удалить игру</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.ToolTip">Удалить игру из Xenia Manager.&#10;Примечание: сама игра останется на диске.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.ToolTip">Удалить игру из библиотеки Xenia Manager.&#10;Примечание: сама игра останется на диске.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Title">Удалить игру</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Message">Вы хотите удалить {0}?</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title">Удаление игровых данных</sys:String>
@@ -534,10 +534,10 @@
     <sys:String x:Key="MessageBox.Cancel">Отменить</sys:String>
 
     <!-- NavigationService -->
-    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Xenia не установлена</sys:String>
+    <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Не найдено ни одной установленной версии Xenia. Сначала установите Xenia, а затем запускайте.</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">Big Screen не найден</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">Не удалось найти XeniaManager.BigScreen.exe рядом с Xenia Manager.</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Патчи</sys:String>
@@ -547,13 +547,13 @@
     <sys:String x:Key="PatchConfigurationDialog.PatchName.PlaceholderText">Название патча</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Author.PlaceholderText">Автор</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Description.PlaceholderText">Описание (необязательно)</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.PlaceholderText">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.HeaderComment.PlaceholderText">Комментарий в заголовке (необязательно)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Действия патча</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Тип:</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.TypeComment.PlaceholderText">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.AddressComment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.ValueComment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.Comment.PlaceholderText">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.TypeComment.PlaceholderText">Введите комментарий</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddressComment">Комментарий:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.ValueComment">Комментарий:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Comment.PlaceholderText">Комментарий (необязательно)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Адрес:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Значение:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress.PlaceholderText">0x00000000</sys:String>
@@ -570,7 +570,7 @@
     <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Title">Удалить патч</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Message">Вы уверены, что хотите удалить патч "{0}"?</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.EditMode.Title">Режим редактирования</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.EditMode.Description">Включите режим редактирования, чтобы изменять патчи. Не забудьте нажать "Сохранить", чтобы применить изменения.</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.EditMode.Description">Включите режим редактирования, чтобы изменять патчи. Не забудьте нажать «Сохранить», чтобы применить изменения.</sys:String>
 
     <!-- Patch Selection Dialog -->
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Репозиторий патчей</sys:String>
@@ -584,7 +584,7 @@
     <sys:String x:Key="PatchSelectionDialog.Selection.Required.Message">Перед загрузкой выберите патч из списка.</sys:String>
 
     <!-- Game Details Editor Dialog -->
-    <sys:String x:Key="GameDetailsEditor.DialogTitle">{0} - Редактор сведений об игре</sys:String>
+    <sys:String x:Key="GameDetailsEditor.DialogTitle">{0} - Редактор информации о игре</sys:String>
     <sys:String x:Key="GameDetailsEditor.SaveButton">Сохранить</sys:String>
     <sys:String x:Key="GameDetailsEditor.CancelButton">Отменить</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaAssetsSection">Медиаданные</sys:String>
@@ -594,39 +594,39 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Иконка</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Выберите иконку</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Очистить иконку</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">Обновить иконку</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">Иконка не найдена</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">Иконка не найдена в {0}. Текущая иконка осталась без изменений.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">Иконка обновлена</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">Иконка успешно обновлена из {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">Обновление иконки</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">Выберите, откуда обновить иконку:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">Файлы игры</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">Файлы игры</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">Обновить обложку</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">Обложка не найдена</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">В {0} не удалось найти обложку. Существующая обложка осталась без изменений.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">Обложка обновлена</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">Обложка успешно обновлена ​​из {0}.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">Фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">Выбрать фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">Очистить фоновое изображение</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">Обновить фоновое изображение</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">Фоновое изображение не найдено</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">Фоновое изображение не найдено в {0}. Текущая иконка осталась без изменений.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">Фоновое изображение обновлено</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">Фоновое изображение успешно обновлено из {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">Обновление фонового изображения</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">Выберите, откуда обновить фоновое изображение:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">Файлы игры</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">Файлы игры</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">Не удалось обновить</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">Не удалось обновить {0}.&#10;Ошибка: {1}</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Автоматическое определение</sys:String>
-    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID игры и ID диска, определяются автоматически из файла игры и не могут быть изменены.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID игры и ID диска, автоматически определяются автоматически из файла игры и не могут быть изменены.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">ID игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">ID диска</sys:String>
     <sys:String x:Key="GameDetailsEditor.AlternativeIds">Альтернативные ID игры</sys:String>
@@ -638,14 +638,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Рейтинг совместимости</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">URL страницы совместимости</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Введите URL страницы совместимости игры</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Совместимость с Mousehook</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">Комментарии для Mousehook отсутствуют</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Совместимость с Netplay</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Публичный сервер</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Проверено в локальной сети</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Только в локальной сети:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">System Link</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">Комментарии для Netplay отсутствуют</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Изменить путь к игре</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Выберите файл игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Отсутствует поставщик услуг хранения данных</sys:String>
@@ -676,13 +676,13 @@
     <sys:String x:Key="GameDetailsEditor.CustomExecutable.MissingStorageProvider.Message">Накопитель недоступен.</sys:String>
 
     <!-- Install Content Dialog -->
-    <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Установить игровые данные</sys:String>
+    <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Установка игровых данных</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Отменить</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">Добавить контент</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">Выберите файлы игровых данных</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">Установить (с распаковкой)</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">Установить файл пакета</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">Файл пакета останется без изменений. Требуется последняя версия Xenia Canary.</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">Успешно установлено</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">Следующие игровые данные были успешно установлены:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Установка прошла частично успешно</sys:String>
@@ -690,7 +690,7 @@
     <sys:String x:Key="InstallContentDialog.Results.Failed.Title">Не удалось установить</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Failed.Message">Не удалось установить следующие игровые данные:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Successful">Успешно установлено</sys:String>
-    <sys:String x:Key="InstallContentDialog.Results.Failed">Неудачно</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Failed">Ошибок</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentItem.RemoveToolTip">Удалить из списка</sys:String>
 
     <!-- Install Content Progress -->
@@ -734,7 +734,7 @@
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.FilePicker.Title">Импорт профиля</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Success.Title">Профиль импортирован</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Success.Message">Профиль '{0}' успешно импортирован.</sys:String>
-    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Canceled.Title">Импорт отменен</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Canceled.Title">Импорт отменён</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Canceled.Message">Импорт профиля был отменён или пропущен.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.Title">Ошибка импорта</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.WindowError">Не удалось открыть окно выбора файлов</sys:String>
@@ -746,16 +746,16 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Не удалось сохранить</sys:String>
 
     <!-- Edit XConfig Dialog -->
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">Настройки XConfig</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">Сохранить</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">Отменить</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">Разрешение</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">Язык</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">Страна</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">Профиль по умолчанию</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">Не удалось сохранить</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">Не удалось загрузить файл xconfig.settings.</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">Файл xconfig.settings не найден ни для одной из установленных версий Xenia.</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Диалоговое окно выбора версии Xenia</sys:String>
@@ -763,7 +763,7 @@
     <sys:String x:Key="XeniaSelectionDialog.SubHeader">Выберите версию Xenia.</sys:String>
     <sys:String x:Key="XeniaSelectionDialog.Canary.Title">Canary</sys:String>
     <sys:String x:Key="XeniaSelectionDialog.Mousehook.Title">Mousehook</sys:String>
-    <sys:String x:Key="XeniaSelectionDialog.Netplay.Title">Сетевая игра</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Netplay.Title">Netplay</sys:String>
 
     <!-- Installed Content Dialog -->
     <sys:String x:Key="InstalledContentDialog.LoadFailed.Title">Ошибка</sys:String>
@@ -772,9 +772,9 @@
     <sys:String x:Key="InstalledContentDialog.ImportSaves">Импорт сохранений</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteSelected">Удалить выбранное</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteAll">Удалить всё</sys:String>
-    <sys:String x:Key="InstalledContentDialog.OpenDirectory">Открытый каталог</sys:String>
-    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Не удалось открыть каталог</sys:String>
-    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Не получилось открыть папку с игровыми данными.&#10;Ошибка: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory">Открытый папку</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Не удалось открыть папку</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Не удалось открыть папку с игровыми данными.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements">Достижения</sys:String>
 
     <sys:String x:Key="InstalledContentDialog.SelectAll">Выбрать все</sys:String>
@@ -787,15 +787,15 @@
     <sys:String x:Key="InstalledContentDialog.NoAchievementsFound">Достижения отсутствуют</sys:String>
     <sys:String x:Key="InstalledContentDialog.NoContentFound">Не найдено игровых данных</sys:String>
     <sys:String x:Key="InstalledContentDialog.AchievementFilter.All">Все</sys:String>
-    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Unlocked">Разблокировано</sys:String>
-    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Locked">Заблокировано</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Unlocked">Разблокированные</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Locked">Заблокированные</sys:String>
     <sys:String x:Key="InstalledContentDialog.NotUnlocked">Не разблокировано</sys:String>
 
     <!-- Installed Content Dialog - Export/Import Messages -->
     <sys:String x:Key="InstalledContentDialog.ExportSaves.NoSaves.Title">Сохранения отсутствуют</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.NoSaves.Message">Отсутствуют сохранения для экспорта.</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.MainWindow.Error.Title">Экспорт сохранений</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ExportSaves.MainWindow.Error.Message">Ошибка доступа к главному окну</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.MainWindow.Error.Message">Не удалось открыть главное окно.</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.FilePicker.Title">Экспорт сохранений игр</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Title">Ошибка экспорта</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Message">Не удалось экспортировать сохранения.&#10;Ошибка: {0}</sys:String>
@@ -805,7 +805,7 @@
     <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Title">Профиль не выбран</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Message">Перед импортом сохранений выберите профиль.</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Title">Импорт сохранений</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Message">Ошибка доступа к главному окну</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Message">Не удалось открыть главное окно.</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Title">Ошибка импорта</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Message">Не удалось импортировать сохранения.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.Success.Title">Успешно импортировано</sys:String>
@@ -818,28 +818,28 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Не удалось разблокировать достижения.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Не удалось заблокировать</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Не удалось заблокировать достижения.&#10;Ошибка: {0}</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">Загрузить достижения из файлов игры</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">Достижения готовы</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">Достижения готовы. Всего: {1} (из них {0} добавлено из файлов игры).</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">Ошибка создания</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">Не удалось получить достижения из файлов игры.&#10;Ошибка: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">Диск или файлы игры отсутствуют</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">Не удалось найти выбранный диск или файлы игры.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">Загрузить из файлов игры</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">Загрузить из файлов игры</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">Выберите, что нужно извлечь из файлов игры</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">Отсутствующие изображения</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">Изображения только разблокированных достижений</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">Все изображения</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">Текстовые данные достижений</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">Изображения обновлены</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">Извлечено изображений из файлов игры: {0}.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">Ошибка загрузки</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">Не удалось загрузить изображения достижений из файлов игры.&#10;Ошибка: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">Текстовые данные обновлены</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">Обновлено достижений из файлов игры: {0}.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">Ошибка обновления</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">Не удалось повторно загрузить текстовые данные достижений из файлов игры.&#10;Ошибка: {0}</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Установленные игровые данные</sys:String>
@@ -850,8 +850,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Доступны обновления: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Доступны обновления для Xenia Manager</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">Обнаружены новые игры. Повторно просканируйте папку Games, чтобы обновить игровую библиотеку.</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">Пересканировать</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Редактор настроек</sys:String>
@@ -861,20 +861,20 @@
     <sys:String x:Key="ConfigEditorDialog.Save.Failed.Message">Не удалось сохранить файл конфигурации: {0}</sys:String>
 
     <!-- Optimized Settings Dialog -->
-    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.Title">Оптимизированные настройки</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.Title">Оптимальные настройки</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.ApplyButton.Text">Применить</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.CancelButton.Text">Отменить</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Apply.Failed.Title">Не удалось применить</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Title">Ошибка при применении настроек</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Message">Не удалось применить оптимизированные настройки: {0}</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.Header.Subtitle">Просмотрите и примените оптимизированные настройки для этой игры. Удалите все настройки, которые не хотите применять.</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.Setting.Current">Текущий:</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.Setting.Optimized">Оптимизировано:</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.Setting.Modified">Изменён</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Message">Не удалось применить оптимальные настройки: {0}</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Header.Subtitle">Выберите, какие оптимальные настройки хотите применить для этой игры. Ненужные можно удалить.</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Current">Текущее значение:</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Optimized">Рекомендуемое значение:</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Modified">Значение отличается</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Setting.New">Новый</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Setting.Remove.ToolTip">Игнорировать эту настройку</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Title">Оптимизированные настройки не найдены.</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Message">Файл оптимизированных настроек содержит параметры, которые не соответствуют текущим.</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Title">Оптимальные настроеки не найдены.</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Message">В файле оптимальных настроек есть параметры, которые не совпадают с вашими текущими.</sys:String>
 
     <!-- Mousehook Controls Editor Dialog -->
     <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.Title">Настройки управления Mousehook</sys:String>
@@ -894,27 +894,27 @@
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Title">Ошибка обнаружения устройств ввода</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Message">При распознавании ввода произошла ошибка. Попробуйте ещё раз.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Не удалось сохранить</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Назначьте клавишу клавиатуры для кнопки геймпада "{0}".&#10;Значение "None" недопустимо.</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Назначьте кнопку геймпада для клавиши "{0}".&#10;Значение "None" недопустимо.</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Назначьте клавишу клавиатуры для кнопки геймпада "{0}".&#10;Значение «None» недопустимо.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Назначьте кнопку геймпада для клавиши "{0}".&#10;Значение «None» недопустимо.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">Мультипривязка</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">Выберите клавиши для привязки:</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">Применить</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Сброс настроек</sys:String>
-    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ToolTip">Оптимизировать настройки</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ToolTip">Поиск оптимальных настроек</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoSelection.Title">Настройки не выбраны</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoSelection.Message">Для оптимизации, сначала выберите файл настроек.</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoGame.Title">Игра не выбрана</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoGame.Message">Перед оптимизацией настроек выберите игру.</sys:String>
-    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Title">Оптимизированные настройки не найдены</sys:String>
-    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Message">Не найдено оптимизированных настроек для: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Title">Оптимальные настройки не найдены</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Message">Не найдено оптимальных настроек для {0}.</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Title">Настройки не найдены</sys:String>
-    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Message">Не удалось загрузить файл настроек для: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Message">Не удалось загрузить файл настроек для {0}</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Success.Title">Настройки оптимизированы</sys:String>
-    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Success.Message">Оптимизированные настройки успешно применены для: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Success.Message">Оптимальные настройки для {0} успешно применены.</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Error.Title">Не удалось оптимизировать</sys:String>
-    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Error.Message">Не удалось применить оптимизированные настройки: {0}&#10;Ошибка: {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Error.Message">Не удалось применить оптимальные настройки для {0}.&#10;Ошибка: {1}</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OpenInEditor.ToolTip">Открыть в редакторе</sys:String>
     <sys:String x:Key="XeniaSettingsPage.SaveSettings.ToolTip">Сохранить настройки</sys:String>
     <sys:String x:Key="XeniaSettingsPage.NoConfigFile.Message">Файл настроек не найден.</sys:String>
@@ -943,7 +943,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.D3D12">D3D12</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Display">Экран</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.General">Общие</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Section.GPU">ГП</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.GPU">ГПУ</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID">HID</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">Назначение клавиш WinKey</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">Ядро</sys:String>
@@ -953,7 +953,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.UI">Интерфейс</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Video">Видео</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Vulkan">Vulkan</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Section.Live">Сетевая игра</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Live">Netplay</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.MouseHook">MouseHook</sys:String>
 
     <!-- Config UI Settings - APU Options -->
@@ -1037,12 +1037,12 @@
     <sys:String x:Key="ConfigUiSettings.General.discord.Comment">Отображение статуса активности в Discord</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.apply_patches.Title">Применять патчи</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.apply_patches.Comment">Включение поддержки пользовательских патчей</sys:String>
-    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Title">Горячие клавиши геймпада</sys:String>
-    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Comment">Горячие клавиши для геймпадов Xbox и PS</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Title">Горячие кнопки геймпада</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Comment">Горячие кнопки для геймпадов Xbox и PS</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.launch_module.Title">Файл запуска игры</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.launch_module.Comment">Укажите, какой исполняемый файл запускать вместо стандартного по умолчанию (default.xex или указанного игрой).&#10;Оставьте поле пустым, чтобы запустить исполняемый файл по умолчанию.</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Title">Путь звука уведомления</sys:String>
-    <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Comment">Полный путь к своему файлу звуку уведомления.&#10;Примечание: звук должен быть в формате wav!</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Comment">Полный путь к своему звуковому файлу уведомления.&#10;Примечание: звук должен быть в формате wav!</sys:String>
 
     <!-- Config UI Settings - GPU Options -->
     <sys:String x:Key="ConfigUiSettings.GPU.vsync.Title">Вертикальная синхронизация</sys:String>
@@ -1056,7 +1056,7 @@
     <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.vulkan">Vulkan</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.null">Отключено</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.Title">Путь рендера в целевой буфер (D3D12)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.Comment">Путь рендера в целевой буфер для использования в Direct3D 12.&#10;&#10;RTV - Host render targets. Стандартный и быстрый метод рендеринга.&#10;ROV - Rasterizer-ordered views. Этот метод более точный, но может быть медленнее. </sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.Comment">Путь рендера в целевой буфер для использования в Direct3D 12.&#10;&#10;RTV - Host render targets. Стандартный и быстрый метод рендеринга.&#10;ROV - Rasterizer-ordered views. Этот метод более точный, но может быть медленнее.</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.any">Авто</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.rtv">RTV</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.rov">ROV</sys:String>
@@ -1070,8 +1070,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">Нет</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Быстрая</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Полная</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">Выгрузка данных Memexport</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">Включает копирование данных из видеопамяти в ОЗУ, позволяя ЦП считывать результаты работы шейдеров.&#10;Может потребоваться некоторым играм, но вызывает синхронизацию ЦП и ГПУ во время формирования кадра, что значительно снижает производительность.</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Разрешение рендеринга по X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Целочисленный коэффициент, изменяющий ширину пикселя для масштабирования разрешения независимо от внутриигрового</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Разрешение рендеринга по Y</sys:String>
@@ -1080,14 +1080,14 @@
     <sys:String x:Key="ConfigUiSettings.GPU.gpu_allow_invalid_fetch_constants.Comment">Этот параметр позволяет применять константы для выборки текстур и вершин, даже если их типы неверны. Это обычно небезопасно, так как значения могут быть неправильными, но иногда помогает избежать ошибок в некоторых играх.</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.gamma_render_target_as_srgb.Title">Гамма-коррекция через sRGB</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.gamma_render_target_as_srgb.Comment">Когда хост не может записывать кусочно-линейную гамму напрямую с правильным смешиванием, используется вывод в формате sRGB для правильного смешивания в линейном пространстве</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Title">Имитация выборок окклюзии (нижний порог)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Title">Запрос окклюзии (нижний порог)</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Comment">При значении -1 запись счётчиков сэмплов не производится, что может привести к зависанию игр. В противном случае счётчик сэмплов каждого тайла будет увеличиваться на указанное число при каждом событии EVENT_WRITE_ZPD.</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Title">Имитация выборок окклюзии (верхний порог)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Comment">Значение должно быть больше нижнего порога имитации выборок окклюзии.&#10;Это значение игнорируется, если нижний порог равен -1.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Title">Запрос окклюзии (верхний порог)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Comment">Значение должно быть больше нижнего порога запроса окклюзии.&#10;Это значение игнорируется, если нижний порог равен -1.</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.use_fuzzy_alpha_epsilon.Title">Использовать неточное сравнение альфа-канала</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.use_fuzzy_alpha_epsilon.Comment">На видеокартах NVIDIA при отрисовке прозрачных объектов (листва, решётки, частицы) из-за особенностей вычислений с плавающей точкой возникает мерцание. Это происходит потому, что точное сравнение альфа-значений даёт нестабильный результат от кадра к кадру. При включении вместо точного сравнения значений альфа-канала будет использоваться приблизительное с небольшим допуском. Если два значения альфа-канала отличаются очень незначительно, они считаются равными. Это помогает устранить мерцание и другие визуальные проблемы на видеокартах NVIDIA.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.use_fuzzy_alpha_epsilon.Comment">На видеокартах NVIDIA при отрисовке прозрачных объектов (листва, решётки, частицы)&#10;из-за особенностей вычислений с плавающей точкой возникает мерцание. Это происходит потому,&#10;что точное сравнение альфа-значений даёт нестабильный результат от кадра к кадру.&#10;При включении вместо точного сравнения значений альфа-канала будет использоваться приблизительное&#10;с небольшим допуском. Если два значения альфа-канала отличаются очень незначительно, они считаются равными.&#10;Это помогает устранить мерцание и другие визуальные проблемы на видеокартах NVIDIA.</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.clear_memory_page_state.Title">Очищать состояние страницы памяти</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.clear_memory_page_state.Comment">Обновлять состояние памяти, чтобы графический процессор мог корректно записывать и отображать данные</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.clear_memory_page_state.Comment">Обновлять состояние памяти, чтобы графический процессор мог корректно записывать и отображать данные.</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.Title">Переопределение анизотропной фильтрации</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.Comment">Включает анизотропную фильтрацию для поддерживаемых текстур. Улучшает чёткость текстур на поверхностях, сильно наклонённых относительно камеры, но увеличивает нагрузку на видеокарту.&#10;В редких случаях может вызывать визуальные артефакты.</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.-1">Не переопределять (по умолчанию)</sys:String>
@@ -1099,12 +1099,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Асинхронная компиляция шейдеров</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Включает фоновую компиляцию шейдеров - игра не будет зависать, но могут мелькать артефакты, пока пайплайны создаются.&#10;Если выключить, игра будет подтормаживать, зато артефактов не будет.</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Запрос окклюзии</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">Управляет работой аппаратных запросов окклюзии для EVENT_WRITE_ZPD.&#10;Используется для эффектов вроде бликов от объектива, отсечения невидимых объектов и автоэкспозиции.&#10;Имитация: записывает фиктивный результат, не опрашивая ГПУ. Безопасно для большинства игр.&#10;Быстрый (по умолчанию): опрашивает ГПУ, но не ждёт ответа. Использует сохранённый в кэше результат, который обновляется после получения ответа от ГПУ.&#10;Быстрый (альтернативный): аналогично быстрому режиму, но сохраняет в кэше нулевые результаты для запросов, по которым ещё нет ответа от ГПУ.&#10;Точный: опрашивает ГПУ и ждёт реального результата. Наиболее точный, но снижает производительность.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">Имитация</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">Быстрый (по умолчанию)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">Быстрый (альтернативный)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">Точный</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Система ввода</sys:String>
@@ -1144,35 +1144,35 @@
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Title">Вверх (крестовина)</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Comment">Список клавиш для назначения на кнопку DPAD_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^W" означает Shift+W.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Title">Кнопка Guide</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Comment">Список клавиш для назначения на кнопку GUIDE, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x08" означает клавишу Backspace.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Comment">Список клавиш для назначения на кнопку GUIDE, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x08" — это клавиша Backspace.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Title">Левый бампер</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Comment">Список клавиш для назначения на кнопку LEFT_SHOULDER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Title">Нажать левый джойстик</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment">Список клавиш для назначения на LEFT_THUMB_PRESSED, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_PRESSED, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Title">Левый джойстик вниз</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment">Список клавиш для назначения на LEFT_THUMB_DOWN, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_S" означает S без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_DOWN, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_S" означает S без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Title">Левый джойстик влево</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment">Список клавиш для назначения на LEFT_THUMB_LEFT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_A" означает A без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_LEFT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_A" означает A без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Title">Левый джойстик вправо</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment">Список клавиш для назначения на LEFT_THUMB_RIGHT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_D" означает D без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_RIGHT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_D" означает D без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Title">Левый джойстик вверх</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment">Список клавиш для назначения на LEFT_THUMB_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_W" означает W без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_W" означает W без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Title">Левый курок</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment">Список клавиш для назначения на LEFT_TRIGGER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I на один и тот же курок.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment">Список клавиш для назначения на кнопку LEFT_TRIGGER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I на один и тот же курок.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Title">Правый бампер</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Comment">Список клавиш для назначения на кнопку RIGHT_SHOULDER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Title">Нажать правый джойстик</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment">Список клавиш для назначения на RIGHT_THUMB_PRESSED, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_PRESSED, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Title">Правый джойстик вниз</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment">Список клавиш для назначения на RIGHT_THUMB_DOWN, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x28" означает клавишу Стрелка вниз.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_DOWN, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x28" — это клавиша стрелки вниз.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Title">Правый джойстик влево</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment">Список клавиш для назначения на RIGHT_THUMB_LEFT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x25" означает клавишу Стрелка влево.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_LEFT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x25" — это клавиша стрелки влево.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Title">Правый джойстик вправо</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment">Список клавиш для назначения на RIGHT_THUMB_RIGHT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x27" означает клавишу Стрелка вправо.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_RIGHT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x27" — это клавиша стрелки вправо.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Title">Правый джойстик вверх</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment">Список клавиш для назначения на RIGHT_THUMB_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x26" означает клавишу Стрелка вверх.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x26" — это клавиша стрелки вверх.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Title">Правый курок</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment">Список клавиш для назначения на RIGHT_TRIGGER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "E O" назначает клавиши E и O на один и тот же курок.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment">Список клавиш для назначения на кнопку RIGHT_TRIGGER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "E O" назначает клавиши E и O на один триггер.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Title">Кнопка START</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Comment">Список клавиш для назначения на кнопку START, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Title">Кнопка X</sys:String>
@@ -1214,7 +1214,7 @@
 
     <!-- Config UI Settings - Video Options -->
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Title">Внутриигровое разрешение</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Comment">Позволяет играм, поддерживающим разные разрешения, рендерить в заданном разрешении</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Comment">Позволяет играм, поддерживающим разные разрешения, рендерить в заданном разрешении.</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.0">640x480</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.1">640x576</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.2">720x480</sys:String>
@@ -1234,9 +1234,9 @@
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Своё (X/Y)</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Разрешение по ширине (своё)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Пользовательская ширина внутриигрового разрешения&#10;Примечание: работает только при выборе "Своё (X/Y)" в настройках разрешения.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Пользовательская ширина внутриигрового разрешения&#10;Примечание: работает только при выборе «Своё (X/Y)» в настройках разрешения.</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Разрешение по высоте (своё)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Пользовательская высота внутриигрового разрешения&#10;Примечание: работает только при выборе "Своё (X/Y)" в настройках разрешения.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Пользовательская высота внутриигрового разрешения&#10;Примечание: работает только при выборе «Своё (X/Y)» в настройках разрешения.</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Широкий экран</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Переключение между соотношением сторон 16:9 и 4:3</sys:String>
 
@@ -1306,8 +1306,8 @@
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr_better_drive_cam.Comment">(Saints Row 1 и 2) Отвязка вращения камеры при повороте транспортного средства при отключённом автоцентрировании</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Title">(Saints Row 1)&#10;Отключение общей перезарядки оружия</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Comment">(Saints Row 1) Отключение функции перезарядки оружия, привязанной к кнопке A. После активации кнопка A будет отвечать только за подбор оружия/взаимодействие.</sys:String>
-    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Title">(Saints Row 1)&#10;Смена направления колеса мыши</sys:String>
-    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Comment">(Saints Row 1) Смена привязки для колеса мыши при выборе оружия и направления масштабирования карты</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Title">(Saints Row 1)&#10;Инверсия колеса мыши для оружия и карты</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Comment">(Saints Row 1) Инвертирует направление прокрутки колесика мыши при выборе оружия и направления масштабирования карты</sys:String>
 
     <!-- About Page -->
     <sys:String x:Key="AboutPage.App.Description">Xenia Manager - мощный инструмент для управления эмулятором Xenia. Легко устанавливайте, обновляйте и управляйте разными версиями эмулятора Xenia через удобный интерфейс.</sys:String>
@@ -1337,10 +1337,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - Поддержка клавиатуры и мыши</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - Кроссплатформенный UI-фреймворк с Fluent Design</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">CommunityToolkit.Mvvm</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip"> - MVVM-фреймворк для .NET</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">Microsoft.Extensions.DependencyInjection</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip"> - Контейнер внедрения зависимостей для .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - Элементы управления и темы Fluent Design для Avalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1349,16 +1349,16 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Средство логирования для приложений на .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Парсинг данных игры</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">ppy.SDL3-CS</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip">- Интеграция SDL3 для поддержки геймпадов</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Поддержка архивов и сжатия</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">System.IO.Hashing</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip"> - Быстрые алгоритмы хеширования (XxHash)</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">TweenAvalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip"> - Библиотека для программного создания плавных анимаций в Avalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - Сжатие Zstandard для .NET</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Это приложение никоим образом не связано, не одобрено и не спонсируется корпорацией Microsoft или проектом Xenia. Все торговые марки, логотипы и наименования брендов являются собственностью их соответствующих владельцев.&#10; Xbox 360 является зарегистрированной торговой маркой корпорации Microsoft в США и/или других странах.&#10;Xenia является зарегистрированной торговой маркой проекта Xenia.&#10;Любые ссылки на эти или другие торговые марки делаются исключительно в целях идентификации совместимости или функциональности и не подразумевают какую-либо ассоциацию или одобрение владельцами торговых марок.&#10;Это программное обеспечение предназначено исключительно для образовательных и информационных целей. Оно не содержит и не распространяет какое-либо защищённое авторским правом содержимое, принадлежащее корпорации Microsoft или любому третьему лицу. Пользователи несут полную ответственность за соблюдение всех применимых законов, включая законы об авторском праве и лицензировании.&#10;Любое использование этого приложения для запуска или взаимодействия с проприетарным программным обеспечением или прошивкой должно осуществляться в рамках соответствующих лицензионных соглашений конечного пользователя (EULA). Разработчики и распространители этого приложения не одобряют и не поддерживают пиратство в любой форме.&#10;Это приложение предоставляется «как есть», без каких-либо гарантий, явных или подразумеваемых. Используйте на свой страх и риск.</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">Использовать экспериментальную сборку</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">Включите, если хотите получать экспериментальные сборки программы</sys:String>
@@ -1368,131 +1368,131 @@
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">У вас уже стоит последняя версия Xenia Manager.</sys:String>
 
     <!-- Library Page - Drag & Drop -->
-    <sys:String x:Key="LibraryPage.DragDrop.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Title">Чтобы добавить игры, перетащите файлы сюда</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">Поддерживаются файлы .iso, .xex, .zar</sys:String>
 
     <!-- Multi-Disc Support -->
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.GameButton.DiscCount">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">Управление дисками</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">Добавление, переименование и удаление дисков для многодисковых игр</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">Ошибка при управлении дисками</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">При управлении дисками произошла ошибка.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">Дисков {0}</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">Добавить как дополнительный диск?</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">Похоже, этот файл является другим диском игры {0}, которая уже есть в вашей библиотеке.&#10;&#10;Добавить его как дополнительный диск игры {0} вместо создания отдельной записи в библиотеке?</sys:String>
 
     <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
-    <sys:String x:Key="DiscSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.Disc1">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.DiscN">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Header">Выберите диск</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">У этой игры несколько дисков. Выберите диск для запуска.</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">Диск 1</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">Диск {0}</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">(Последний запуск)</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(Файл отсутствует) </sys:String>
 
     <!-- Manage Discs Dialog -->
-    <sys:String x:Key="ManageDiscsDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Subtitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Disc1Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingFile">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Title">{0} - Управление дисками</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">Добавляйте, переименовывайте и удаляйте диски. Последний запущенный диск будет запомнен.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">Закрыть</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">Диск 1</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">Диск {0}</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">Добавить диск</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">Извлеките диск</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">Файл не найден</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">Выберите файл диска</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">Отсутствует поставщик услуг хранения данных</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">Накопитель недоступен.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Диск уже добавлен</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">Этот файл уже указан для этой игры.</sys:String>
 
     <!-- Game Files Dialog -->
-    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Search.Watermark">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Folder.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.EmptyFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.NoResults">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.NoSelection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ContainerSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Format">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Container.Summary">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.AchievementsToggle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.SpaSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Size">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Path">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.TitleId">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.MediaId">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Version">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Disc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ImageSize">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Achievements">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.StfsSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.DisplayName">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.SignatureType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ContentType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ContentSize">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.LoadError.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.LoadError.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">Файлы игры</sys:String>
+    <sys:String x:Key="GameFilesDialog.CloseButton">Закрыть</sys:String>
+    <sys:String x:Key="GameFilesDialog.Search.Watermark">Поиск файлов…</sys:String>
+    <sys:String x:Key="GameFilesDialog.Folder.Label">Папка</sys:String>
+    <sys:String x:Key="GameFilesDialog.EmptyFolder">Эта папка пустая.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoResults">По вашему запросу ничего не найдено.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoSelection">Выберите файл для просмотра информации о нём.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">Открыть в проводнике</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexSection">Информация об исполняемом файле</sys:String>
+    <sys:String x:Key="GameFilesDialog.ContainerSection">Контейнер</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Format">Формат</sys:String>
+    <sys:String x:Key="GameFilesDialog.Container.Summary">Файлов: {0} — Размер: {1}</sys:String>
+    <sys:String x:Key="GameFilesDialog.AchievementsToggle">Достижения</sys:String>
+    <sys:String x:Key="GameFilesDialog.SpaSection">Информация SPA</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Size">Размер</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Path">Путь</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.TitleId">ID игры</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.MediaId">ID диска</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Version">Версия</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Disc">Диск</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ImageSize">Размер исполняемого файла</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">Флаги модуля</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">Название</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Achievements">Достижения</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">Очков игрока</sys:String>
+    <sys:String x:Key="GameFilesDialog.StfsSection">Информация STFS</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.DisplayName">Отображаемое имя</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">Название игры</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SignatureType">Тип подписи</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentType">Тип содержимого</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentSize">Размер содержимого</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Title">Невозможно просмотреть файлы игры</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Message">Не удалось открыть файлы игры. Возможно, файл отсутствует или имеет неподдерживаемый формат.</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">Не удаётся открыть папку</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">Не удалось открыть папку: {0}</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">Извлечь...</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">Выберите папку для извлечения</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">Отсутствует поставщик услуг хранения данных</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">Накопитель недоступен.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">Нечего извлекать</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">Выберите файл или папку для извлечения.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">Извлечение завершено</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">Не удалось извлечь</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">Извлечь всё</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">Извлечено файлов: {0} из {1} в {2}.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">Извлечено файлов: {0} из {1}. Первая ошибка: {2}</sys:String>
 
     <!-- Extract Progress Dialog -->
-    <sys:String x:Key="ExtractProgressDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Status.Error">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Button.Close">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Title">Извлечение файлов</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">Извлечение: файл {0} из {1}</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Error">Не удалось извлечь: {0}</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">Извлечено</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">Ошибок</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Button.Close">Закрыть</sys:String>
 
     <!-- Text File Dialog -->
-    <sys:String x:Key="TextFileDialog.Encoding.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="TextFileDialog.Encoding.Label">Кодировка</sys:String>
 
     <!-- Game Files Open -->
-    <sys:String x:Key="GameFilesDialog.Open.Menu">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Open.Menu">Открыть</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">Предпросмотр файла невозможен</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">Для этого файла недоступен предпросмотр.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">Файл слишком большой</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">Файл слишком большой для просмотра в текстовом виде.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">Не удаётся открыть файл</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">Не удалось открыть {0}: {1}</sys:String>
 
     <!-- GPD Viewer Dialog -->
-    <sys:String x:Key="GpdViewerDialog.Entries.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GpdViewerDialog.Entries.Header">Записи</sys:String>
 
     <!-- XEX File Dialog -->
-    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Details.TitleType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Details.TitleVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.NoSpaDetails">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.TitlesSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Achievements.Locked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.ContextsSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.PropertiesSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.StatsViewsSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">Язык по умолчанию</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleType">Тип игры</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleVersion">Версия игры</sys:String>
+    <sys:String x:Key="XexFileDialog.NoSpaDetails">В этом исполняемом файле не найдены встроенные данные SPA.</sys:String>
+    <sys:String x:Key="XexFileDialog.TitlesSection">Названия</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Locked">Заблокировано</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">Разблокировано</sys:String>
+    <sys:String x:Key="XexFileDialog.ContextsSection">Контексты</sys:String>
+    <sys:String x:Key="XexFileDialog.PropertiesSection">Свойства</sys:String>
+    <sys:String x:Key="XexFileDialog.StatsViewsSection">Отображение статистики</sys:String>
 
     <!-- Game Files XEX -->
-    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">Базовая версия</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">Тип исполняемого файла</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Button">Сохранить иконку</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">Сохранить иконку XEX</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">Иконка сохранена</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">Иконка сохранена в {0}.</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">Ошибка сохранения иконки</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">Не удалось сохранить иконку для {0}</sys:String>
 </ResourceDictionary>
