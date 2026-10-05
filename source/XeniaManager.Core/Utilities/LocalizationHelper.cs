@@ -36,6 +36,7 @@ public class LocalizationHelper
         new CultureInfo("pt-BR"), // Portuguese/Brazilian
         new CultureInfo("tr"), // Turkce
         new CultureInfo("it") // Italiano
+        new CultureInfo("es-ES") // Español de España
         // ... add your language code here
     ];
 
