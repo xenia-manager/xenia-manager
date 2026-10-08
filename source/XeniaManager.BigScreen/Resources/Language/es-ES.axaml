@@ -413,7 +413,7 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Compilación asíncrona de shaders</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Compila los shaders y crea las pipelines de forma asíncrona en hilos en segundo plano&#10;Elimina los tirones por compilación de shaders, pero puede causar breves artefactos de renderizado mientras se crean las pipelines&#10;Si se desactiva, las pipelines se crean de forma síncrona, lo que provoca tirones pero ningún artefacto visual</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Consulta de oclusión</Sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Consulta de oclusión</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">Controla el comportamiento de la consulta de oclusión por hardware para EVENT_WRITE_ZPD&#10;Se usa para efectos como destellos de lente, descarte de objetos y autoexposición&#10;fake: escribe un resultado falso sin consultar a la GPU. Seguro para la mayoría de los juegos&#10;fast: consulta a la GPU sin esperar. Escribe el resultado en caché y lo actualiza cuando la GPU se pone al día. (Predeterminado)&#10;fast-alt: como fast, pero conserva los resultados cero en caché para los informes sin resolver&#10;strict: consulta a la GPU y espera al resultado real. Es lo más preciso, pero rinde menos</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">Fake</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">Fast (predeterminado)</sys:String>
