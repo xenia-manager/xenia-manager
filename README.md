@@ -95,6 +95,7 @@ We welcome contributions! Please read our [Contributing Guide](docs/CONTRIBUTING
 - [AllChrist](https://github.com/AllChrist) - Italian Translation (v4)
 - [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation (v3)
 - [Mavethee](https://github.com/mavethee) - Polish Translation (v3)
+- [Emertels](https://github.com/Emertels), [BorealisEcho](https://github.com/BorealisEcho) - Portuguese Translation
 - [AndylgTom](https://github.com/AndylgTom) - Russian Translation (v4)
 - [ElTioRata](https://github.com/ElTioRata) – Spanish Translation (v3)
 - [luzility](https://github.com/luzility) - Turkish Translation (v4)
