@@ -75,7 +75,7 @@
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Поиск игр</sys:String>
-    <sys:String x:Key="FolderScanProgressDialog.Subtitle">Пожалуйста, подождите, выполняется поиск игровых файлов</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Subtitle">Подождите, выполняется поиск игровых файлов</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Starting">Запуск сканирования...</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Scanning">Сканирование: {0}</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Complete">Сканирование завершено! Найдено игр: {0}</sys:String>
@@ -151,7 +151,7 @@
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">Удалить недоступные игры</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">Удалить из библиотеки все игры, папки которых были удалены или содержат повреждённые файлы</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">Удалить недоступные игры</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">В вашей библиотеке обнаружена 1 недоступная игра. Хотите удалить ее?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">В вашей библиотеке обнаружена 1 недоступная игра. Хотите удалить её?</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">В вашей библиотеке обнаружено {0} недоступных игр. Хотите удалить их?</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">Нет недоступных игр</sys:String>
     <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">В вашей библиотеке нет недоступных игр.</sys:String>
@@ -177,8 +177,8 @@
     <sys:String x:Key="LibraryPage.DeleteSelectedWithContent.Confirmation.Message">Вы уверены, что хотите удалить игровые данные у всех выбранных игр?&#10;Будут удалены все сохранения и загружаемый контент.</sys:String>
     <sys:String x:Key="LibraryPage.DeleteSelected.Success.Title">Игры удалены</sys:String>
     <sys:String x:Key="LibraryPage.DeleteSelected.Success.Message">Успешно удалено игр: {0}</sys:String>
-    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Title">Успешно частично удалено</sys:String>
-    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Message">Удалено игр: {0}. Не удалось удалить игр: {1}.&#10;&#10;Неудачные игры:&#10;{2}</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Title">Удалено частично</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Message">Удалено игр: {0}. Не удалось удалить игр: {1}.&#10;&#10;Неудалённые игры:&#10;{2}</sys:String>
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Title">Ошибка удаления</sys:String>
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Не удалось удалить выбранные игры:&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.ClearSelection.Button">Очистить выбор</sys:String>
@@ -196,7 +196,7 @@
     <!-- Mousehook Support Rating -->
     <sys:String x:Key="MousehookSupportRating.Unknown">Неизвестно</sys:String>
     <sys:String x:Key="MousehookSupportRating.Poor">Плохая</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Fair">Частичная</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Средняя</sys:String>
     <sys:String x:Key="MousehookSupportRating.Good">Хорошая</sys:String>
 
     <!-- Netplay Status -->
@@ -210,7 +210,7 @@
     <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Публичный сервер:</sys:String>
     <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Проверено в локальной сети:</sys:String>
     <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Только в локальной сети:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">System Link:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Управление эмулятором</sys:String>
@@ -279,7 +279,7 @@
 
     <sys:String x:Key="ManagePage.Content.EditXConfig.Title">Настройки XConfig</sys:String>
     <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Редактирование настроек панели управления Xbox 360 (разрешение, язык, страну, профиль по умолчанию)</sys:String>
-    <sys:String x:Key="ManagePage.EditXConfig.Button">Править</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">Изменить</sys:String>
 
     <sys:String x:Key="ManagePage.Content.Install.Title">Установить игровые данные</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Установка DLC, обновлений для игр (TU) и другого контента для Xenia</sys:String>
@@ -368,8 +368,8 @@
     <sys:String x:Key="SettingsPage.Debug.LogLevel.Description">Настройка минимального уровня логирования для вывода в журнал</sys:String>
     <sys:String x:Key="SettingsPage.General.Title">Общие настройки</sys:String>
     <sys:String x:Key="SettingsPage.General.Description">Настройка общих параметров Xenia Manager</sys:String>
-    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Парсинг информации о игре с помощью Xenia</sys:String>
-    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Автоматический парсинг информации о игре с помощью эмулятора Xenia</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Парсинг информации об игре с помощью Xenia</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Автоматический парсинг информации об игре с помощью эмулятора Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Включите, если у вас возникают проблемы с обнаружением игр или получением информации о них</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Определение названия игры по ID диска</sys:String>
     <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Использование ID диска из игровых файлов для определения названия игры</sys:String>
@@ -406,13 +406,13 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">Обновления для игр (TU)</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">Контент из Marketplace</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Резервные сохранения</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Открытие папки с резервными копиями сохранений, созданные Xenia Manager</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Открытие папки с резервными копиями сохранений, созданных Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Резервные сохранения отсутствуют</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Message">Автобэкапов сохранений не найдено.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Title">Не удалось открыть папку</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Message">Ошибка при открытии папки резервных копий сохранений.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Header">Скриншоты</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.ToolTip">Открытие папки со скриншотами, сделанными в игре, с помощью Xenia</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.ToolTip">Открытие папки со скриншотами, сделанными в игре с помощью Xenia</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Title">Скриншоты отсутствуют</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">Не найдены скриншоты для {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Не удалось открыть папку</sys:String>
@@ -464,7 +464,7 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Title">Патчи не установлены</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Message">Перед экспортом патча сначала установите его.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Title">Ошибка экспорта</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Message">Не удается получить доступ к главному окну для выбора файла.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Message">Не удаётся получить доступ к главному окну для выбора файла.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.FilePicker.Title">Экспорт файла патча</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Title">Успешно экспортировано</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Message">Файл патча успешно экспортирован в:&#10;{0}</sys:String>
@@ -568,7 +568,7 @@
     <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Message">Не получилось сохранить настройки патча.&#10;{0}</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CancelButton">Отменить</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Title">Удалить патч</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Message">Вы уверены, что хотите удалить патч "{0}"?</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Message">Вы уверены, что хотите удалить патч «{0}»?</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.EditMode.Title">Режим редактирования</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.EditMode.Description">Включите режим редактирования, чтобы изменять патчи. Не забудьте нажать «Сохранить», чтобы применить изменения.</sys:String>
 
@@ -606,15 +606,15 @@
     <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">Файлы игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">Обновить обложку</sys:String>
     <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">Обложка не найдена</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">В {0} не удалось найти обложку. Существующая обложка осталась без изменений.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">В {0} не удалось найти обложку. Существующая обложка осталось без изменений.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">Обложка обновлена</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">Обложка успешно обновлена ​​из {0}.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">Обложка успешно обновлена из {0}.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">Фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">Выбрать фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">Очистить фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Refetch">Обновить фоновое изображение</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">Фоновое изображение не найдено</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">Фоновое изображение не найдено в {0}. Текущая иконка осталась без изменений.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">Фоновое изображение не найдено в {0}. Текущее фоновое изображение осталась без изменений.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">Фоновое изображение обновлено</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">Фоновое изображение успешно обновлено из {0}.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">Обновление фонового изображения</sys:String>
@@ -626,7 +626,7 @@
     <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">Не удалось обновить</sys:String>
     <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">Не удалось обновить {0}.&#10;Ошибка: {1}</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Автоматическое определение</sys:String>
-    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID игры и ID диска, автоматически определяются автоматически из файла игры и не могут быть изменены.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID игры и ID диска автоматически определяются из файла игры и не могут быть изменены.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">ID игры</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">ID диска</sys:String>
     <sys:String x:Key="GameDetailsEditor.AlternativeIds">Альтернативные ID игры</sys:String>
@@ -643,7 +643,7 @@
     <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Совместимость с Netplay</sys:String>
     <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Публичный сервер</sys:String>
     <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Проверено в локальной сети</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Только в локальной сети:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Только в локальной сети</sys:String>
     <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">System Link</sys:String>
     <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">Комментарии для Netplay отсутствуют</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Изменить путь к игре</sys:String>
@@ -720,7 +720,7 @@
     <sys:String x:Key="ManageProfilesDialog.ExportProfile.Button.ToolTip">Экспорт выбранного профиля</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Button.ToolTip">Импорт профиля из файла</sys:String>
     <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Title">Удаление профиля</sys:String>
-    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Message">Вы уверены, что хотите удалить профиль "{0}"?&#10;&#10;Внимание: при этом будут безвозвратно удалены все сохранения и игровые данные, связанные с ним. Это действие необратимо.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Message">Вы уверены, что хотите удалить профиль «{0}»?&#10;&#10;Внимание: при этом будут безвозвратно удалены все сохранения и игровые данные, связанные с ним. Это действие необратимо.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Title">Ошибка удаления</sys:String>
     <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Message">Не удалось удалить профиль. Для получения более подробной информации проверьте журналы.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ExportProfile.FilePicker.Title">Экспорт профиля</sys:String>
@@ -738,11 +738,11 @@
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Canceled.Message">Импорт профиля был отменён или пропущен.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.Title">Ошибка импорта</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.WindowError">Не удалось открыть окно выбора файлов</sys:String>
-    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.Failed.Message">Не удалось импортировать профиль&#10;{0}&#10;Для получения более подробной информации проверьте журналы.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ImportProfile.Error.Failed.Message">Не удалось импортировать профиль.&#10;{0}&#10;Для получения более подробной информации проверьте журналы.</sys:String>
     <sys:String x:Key="ProfileManager.Import.ConfirmReplace.Title">Замена существующего профиля</sys:String>
     <sys:String x:Key="ProfileManager.Import.ConfirmReplace.Message">Профиль с таким же XUID уже существует:&#10;Геймтег: {0}&#10;XUID: {1}&#10;&#10;Хотите заменить существующий профиль?&#10;&#10;Внимание: это приведёт к удалению текущего профиля и всех сохранений без возможности восстановления.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Success.Title">Профили сохранены</sys:String>
-    <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">Успешно сохранено профилей {0} из {1}.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">Успешно сохранено профилей: {0} из {1}.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Не удалось сохранить</sys:String>
 
     <!-- Edit XConfig Dialog -->
@@ -772,7 +772,7 @@
     <sys:String x:Key="InstalledContentDialog.ImportSaves">Импорт сохранений</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteSelected">Удалить выбранное</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteAll">Удалить всё</sys:String>
-    <sys:String x:Key="InstalledContentDialog.OpenDirectory">Открытый папку</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory">Открыть папку</sys:String>
     <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Не удалось открыть папку</sys:String>
     <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Не удалось открыть папку с игровыми данными.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements">Достижения</sys:String>
@@ -800,7 +800,7 @@
     <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Title">Ошибка экспорта</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Message">Не удалось экспортировать сохранения.&#10;Ошибка: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Title">Успешно экспортировано</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Message">Успешно экспортировано сохранений: {0} шт. в:&#10;{1}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Message">Успешно экспортировано сохранений: {0} в:&#10;{1}</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.FilePicker.Title">Выберите файл сохранения</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Title">Профиль не выбран</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Message">Перед импортом сохранений выберите профиль.</sys:String>
@@ -827,10 +827,10 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">Не удалось найти выбранный диск или файлы игры.</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">Загрузить из файлов игры</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">Загрузить из файлов игры</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">Выберите, что нужно извлечь из файлов игры</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">Выберите, что нужно извлечь из файлов игры.</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">Отсутствующие изображения</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">Изображения только разблокированных достижений</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">Все изображения</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">Перезаписать все изображения</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">Текстовые данные достижений</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">Изображения обновлены</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">Извлечено изображений из файлов игры: {0}.</sys:String>
@@ -873,7 +873,7 @@
     <sys:String x:Key="OptimizedSettingsDialog.Setting.Modified">Значение отличается</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Setting.New">Новый</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Setting.Remove.ToolTip">Игнорировать эту настройку</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Title">Оптимальные настроеки не найдены.</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Title">Оптимальные настройки не найдены.</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Message">В файле оптимальных настроек есть параметры, которые не совпадают с вашими текущими.</sys:String>
 
     <!-- Mousehook Controls Editor Dialog -->
@@ -894,8 +894,8 @@
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Title">Ошибка обнаружения устройств ввода</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Message">При распознавании ввода произошла ошибка. Попробуйте ещё раз.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Не удалось сохранить</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Назначьте клавишу клавиатуры для кнопки геймпада "{0}".&#10;Значение «None» недопустимо.</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Назначьте кнопку геймпада для клавиши "{0}".&#10;Значение «None» недопустимо.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Назначьте клавишу клавиатуры для кнопки геймпада «{0}».&#10;Значение «None» недопустимо.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Назначьте кнопку геймпада для клавиши «{0}».&#10;Значение «None» недопустимо.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">Мультипривязка</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">Выберите клавиши для привязки:</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">Применить</sys:String>
@@ -968,7 +968,7 @@
     <sys:String x:Key="ConfigUiSettings.APU.mute.Title">Отключить звук</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.mute.Comment">Отключение всего звука</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.enable_xmp.Title">XMP</sys:String>
-    <sys:String x:Key="ConfigUiSettings.APU.enable_xmp.Comment">Включение воспроизведения музыки.&#10;Помогает исправить воспроизведение музыки в некоторых играх.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.enable_xmp.Comment">Включение воспроизведения музыки.&#10;Помогает исправить проблемы с воспроизведением музыки в некоторых играх.</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.xmp_default_volume.Title">Громкость XMP по умолчанию</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.xmp_default_volume.Comment">Громкость музыки по умолчанию, если она не задана в игре</sys:String>
     <sys:String x:Key="ConfigUiSettings.APU.use_dedicated_xma_thread.Title">Выделенный поток для XMA</sys:String>
@@ -1130,55 +1130,55 @@
 
     <!-- Config UI Settings - HID.WinKey Options -->
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Title">Кнопка A</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Comment">Список клавиш для назначения на кнопку A, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Comment">Список клавиш для назначения на кнопку A, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Title">Кнопка B</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Comment">Список клавиш для назначения на кнопку B, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Comment">Список клавиш для назначения на кнопку B, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Title">Кнопка BACK</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Comment">Список клавиш для назначения на кнопку BACK, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Comment">Список клавиш для назначения на кнопку BACK, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Title">Вниз (крестовина)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Comment">Список клавиш для назначения на кнопку DPAD_DOWN, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^S" означает Shift+S.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Comment">Список клавиш для назначения на кнопку DPAD_DOWN, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^S" означает Shift+S.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Title">Влево (крестовина)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Comment">Список клавиш для назначения на кнопку DPAD_LEFT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^A" означает Shift+A.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Comment">Список клавиш для назначения на кнопку DPAD_LEFT, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^A" означает Shift+A.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Title">Вправо (крестовина)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Comment">Список клавиш для назначения на кнопку DPAD_RIGHT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^D" означает Shift+D.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Comment">Список клавиш для назначения на кнопку DPAD_RIGHT, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^D" означает Shift+D.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Title">Вверх (крестовина)</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Comment">Список клавиш для назначения на кнопку DPAD_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^W" означает Shift+W.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Comment">Список клавиш для назначения на кнопку DPAD_UP, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "^W" означает Shift+W.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Title">Кнопка Guide</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Comment">Список клавиш для назначения на кнопку GUIDE, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x08" — это клавиша Backspace.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Comment">Список клавиш для назначения на кнопку GUIDE, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x08" — это клавиша Backspace.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Title">Левый бампер</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Comment">Список клавиш для назначения на кнопку LEFT_SHOULDER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Comment">Список клавиш для назначения на кнопку LEFT_SHOULDER, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Title">Нажать левый джойстик</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_PRESSED, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_PRESSED, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Title">Левый джойстик вниз</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_DOWN, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_S" означает S без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_DOWN, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_S" означает S без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Title">Левый джойстик влево</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_LEFT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_A" означает A без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_LEFT, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_A" означает A без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Title">Левый джойстик вправо</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_RIGHT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_D" означает D без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_RIGHT, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_D" означает D без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Title">Левый джойстик вверх</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_W" означает W без Shift.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment">Список клавиш для назначения на кнопку LEFT_THUMB_UP, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "_W" означает W без Shift.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Title">Левый курок</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment">Список клавиш для назначения на кнопку LEFT_TRIGGER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I на один и тот же курок.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment">Список клавиш для назначения на кнопку LEFT_TRIGGER, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I на один и тот же курок.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Title">Правый бампер</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Comment">Список клавиш для назначения на кнопку RIGHT_SHOULDER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Comment">Список клавиш для назначения на кнопку RIGHT_SHOULDER, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Title">Нажать правый джойстик</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_PRESSED, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_PRESSED, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Title">Правый джойстик вниз</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_DOWN, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x28" — это клавиша стрелки вниз.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_DOWN, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x28" — это клавиша стрелки вниз.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Title">Правый джойстик влево</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_LEFT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x25" — это клавиша стрелки влево.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_LEFT, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x25" — это клавиша стрелки влево.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Title">Правый джойстик вправо</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_RIGHT, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x27" — это клавиша стрелки вправо.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_RIGHT, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x27" — это клавиша стрелки вправо.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Title">Правый джойстик вверх</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_UP, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x26" — это клавиша стрелки вверх.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment">Список клавиш для назначения на кнопку RIGHT_THUMB_UP, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "0x26" — это клавиша стрелки вверх.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Title">Правый курок</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment">Список клавиш для назначения на кнопку RIGHT_TRIGGER, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "E O" назначает клавиши E и O на один триггер.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment">Список клавиш для назначения на кнопку RIGHT_TRIGGER, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "E O" назначает клавиши E и O на один триггер.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Title">Кнопка START</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Comment">Список клавиш для назначения на кнопку START, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Comment">Список клавиш для назначения на кнопку START, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Title">Кнопка X</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Comment">Список клавиш для назначения на кнопку X, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Comment">Список клавиш для назначения на кнопку X, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Title">Кнопка Y</sys:String>
-    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Comment">Список клавиш для назначения на кнопку Y, разделенных пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Comment">Список клавиш для назначения на кнопку Y, разделённых пробелами. Формат: код виртуальной клавиши (0x26), один символ (A-Z, 0-9), с модификаторами (^ требует Shift, _ не требует Shift). Пример: "Q I" назначает клавиши Q и I.</sys:String>
 
     <!-- Config UI Settings - Kernel Options -->
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Title">Обновления для игр (TU)</sys:String>
@@ -1241,7 +1241,7 @@
     <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Переключение между соотношением сторон 16:9 и 4:3</sys:String>
 
     <!-- Config UI Settings - Vulkan Options -->
-    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Title">Режим представления: Intermediate</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Title">Режим представления: Immediate</sys:String>
     <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Comment">Режим представления с наивысшим приоритетом.&#10;Обеспечивает немедленный вывод изображения без буферизации, обеспечивая минимальную задержку, однако в некоторых случаях может вызывать разрывы изображения.</sys:String>
     <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_mailbox.Title">Режим представления: Mailbox</sys:String>
     <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_mailbox.Comment">Режим представления со средним приоритетом.&#10;Обеспечивает низкую задержку, исключая разрывы изображения.</sys:String>
@@ -1297,9 +1297,9 @@
     <sys:String x:Key="ConfigUiSettings.MouseHook.source_sniper_sensitivity.Title">Чувствительность снайперского прицела (движок Source)</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.source_sniper_sensitivity.Comment">Чувствительность мыши в режиме снайперского прицела в играх на движке Source</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr1_increase_vehicle_rotation_limit.Title">(Saints Row 1)&#10;Ограничение обзора камеры в транспорте</sys:String>
-    <sys:String x:Key="ConfigUiSettings.MouseHook.sr1_increase_vehicle_rotation_limit.Comment">(Saints Row 1) Убирает жесткие ограничения вертикального обзора камеры в машине (как при ходьбе)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr1_increase_vehicle_rotation_limit.Comment">(Saints Row 1) Убирает жёсткие ограничения вертикального обзора камеры в машине (как при ходьбе)</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_better_handbrake_cam.Title">(Saints Row 2)&#10;Улучшенная камера при ручном тормозе</sys:String>
-    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_better_handbrake_cam.Comment">(Saints Row 1 и 2) Отвязка вращения камеры от транспортного средства при использовании ручного тормоза</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_better_handbrake_cam.Comment">(Saints Row 2) Отвязка вращения камеры от транспортного средства при использовании ручного тормоза</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_hold_fine_aim.Title">(Saints Row 2)&#10;Удержание кнопки для прицеливания</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_hold_fine_aim.Comment">(Saints Row 2) Включение режима прицеливания удержанием кнопки, а не однократным её нажатием</sys:String>
     <sys:String x:Key="ConfigUiSettings.MouseHook.sr_better_drive_cam.Title">(Saints Row 1 и 2)&#10;Улучшенная камера при вождении</sys:String>
@@ -1386,7 +1386,7 @@
     <sys:String x:Key="DiscSelectionDialog.Disc1">Диск 1</sys:String>
     <sys:String x:Key="DiscSelectionDialog.DiscN">Диск {0}</sys:String>
     <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">(Последний запуск)</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(Файл отсутствует) </sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(Файл отсутствует)</sys:String>
 
     <!-- Manage Discs Dialog -->
     <sys:String x:Key="ManageDiscsDialog.Title">{0} - Управление дисками</sys:String>
@@ -1427,7 +1427,7 @@
     <sys:String x:Key="GameFilesDialog.Details.ImageSize">Размер исполняемого файла</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">Флаги модуля</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.SpaTitle">Название</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Achievements">Достижения</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Achievements">Достижений</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.Gamerscore">Очков игрока</sys:String>
     <sys:String x:Key="GameFilesDialog.StfsSection">Информация STFS</sys:String>
     <sys:String x:Key="GameFilesDialog.Details.DisplayName">Отображаемое имя</sys:String>
