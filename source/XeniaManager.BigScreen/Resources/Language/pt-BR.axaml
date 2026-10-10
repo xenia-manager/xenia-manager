@@ -148,7 +148,7 @@
     <sys:String x:Key="ManageProfiles.Save.Success">{0} perfil(s) salvo(s)</sys:String>
     <sys:String x:Key="ManageProfiles.Save.Error">Falha ao Salvar Perfis</sys:String>
     <sys:String x:Key="ManageProfiles.Create.Success">Criado '{0}' - edite e salve para finalizar</sys:String>
-    <sys:String x:Key="ManageProfiles.Delete.Confirmation.Title">Excluir PerfilDelete Profile</sys:String>
+    <sys:String x:Key="ManageProfiles.Delete.Confirmation.Title">Excluir Perfil</sys:String>
     <sys:String x:Key="ManageProfiles.Delete.Confirmation.Message">Excluir '{0}'? TODOS os jogos salvos, conquistas e conteúdo serão perdidos permanentemente. Isso não pode ser desfeito.</sys:String>
     <sys:String x:Key="ManageProfiles.Delete.Success">Perfil Excluído</sys:String>
     <sys:String x:Key="ManageProfiles.Delete.Error">Falha ao Excluir Perfil</sys:String>
@@ -208,7 +208,7 @@
     <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.Message">Escolher o que buscar nos arquivos do jogo.</sys:String>
     <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.ImagesMissing">Imagens Ausentes</sys:String>
     <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.ImagesUnlocked">Somente Imagens Desbloqueadas</sys:String>
-    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.ImagesOverwrite">Sobreescrever todas as imagens</sys:String>
+    <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.ImagesOverwrite">Substituir todas as imagens</sys:String>
     <sys:String x:Key="GameModal.Achievements.Fetch.Dialog.Strings">Texto de Conquistas</sys:String>
     <sys:String x:Key="GameModal.Achievements.Fetch.Failed.Title">Falha ao Buscar</sys:String>
     <sys:String x:Key="GameModal.Achievements.Fetch.Failed.Message">Falha ao buscar imagens de conquistas dos arquivos dos jogos. Erro: {0}</sys:String>
@@ -235,7 +235,7 @@
     <!-- game modal patches pane -->
     <sys:String x:Key="GameModal.Patches.NoPatch">Nenhum patch instalado</sys:String>
     <sys:String x:Key="GameModal.Patches.Actions.Download">Baixar Novo Patch</sys:String>
-    <sys:String x:Key="GameModal.Patches.Actions.Remove">Remove Patch</sys:String>
+    <sys:String x:Key="GameModal.Patches.Actions.Remove">Remover Patch</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.TitleWithGame">{0} Patches</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.SearchWatermark">Buscar patches…</sys:String>
     <sys:String x:Key="GameModal.Patches.Download.Searching">Buscando…</sys:String>
