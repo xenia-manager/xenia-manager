@@ -602,3 +602,4 @@
     <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Comment">Inverse les commandes de la roue des armes et de la direction du zoom de la carte dans Saints Row 1</sys:String>
 </ResourceDictionary>
 
+
