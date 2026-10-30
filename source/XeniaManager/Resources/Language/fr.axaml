@@ -1497,3 +1497,4 @@
     <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">Échec de l'enregistrement de l'icône : {0}</sys:String>
 </ResourceDictionary>
 
+
