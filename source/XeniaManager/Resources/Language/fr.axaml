@@ -773,7 +773,7 @@
     <sys:String x:Key="InstalledContentDialog.DeleteSelected">Supprimer la sélection</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteAll">Tout supprimer</sys:String>
     <sys:String x:Key="InstalledContentDialog.OpenDirectory">Ouvrir le dossier</sys:String>
-    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Échec de l'ouverture du dossier</sys:Title>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Échec de l'ouverture du dossier</sys:String>
     <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Échec de l'ouverture du dossier de contenu. Erreur : {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements">Succès</sys:String>
 
