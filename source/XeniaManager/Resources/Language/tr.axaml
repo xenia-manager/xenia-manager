@@ -11,8 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Xenia'yı Aç</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Büyük Ekran</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Büyük Ekranı Aç</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Oyun Kütüphanesi</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Seçenekleri</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Xenia'yı Yönet</sys:String>
@@ -23,32 +23,32 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.PlaceholderText">Ara...</sys:String>
-    <sys:String x:Key="LibraryPage.Refresh.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Direction">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Compatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.Playtime">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Sort.LastPlayed">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Refresh.ToolTip">Oyun kütüphanesini yeniden yükler</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.ToolTip">Oyunları sırala</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.ListView">Liste görünümüne geç</sys:String>
+    <sys:String x:Key="LibraryPage.ToggleView.ToolTip.GridView">Izgara görünümüne geç</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Direction">Sıralama Yönü</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Title">Başlık</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Compatibility">Uyumluluk</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.Playtime">Oynanan Süre</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.XeniaVersion">Xenia Sürümü</sys:String>
+    <sys:String x:Key="LibraryPage.Sort.LastPlayed">Son Oynanma</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Izgara Görünümünü Düzenle</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Kutu kapaklarındaki ek bilgileri göster/gizle</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Oyun Başlığı</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Uyumluluk Derecesi</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Xenia Sürümü</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Her oyun için Xenia sürümü simgesini göster</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Header">Liste Görünümünü Düzenle</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.ToolTip">Liste görünümündeki sütunları göster/gizle</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.CompatibilityRating.Header">Uyumluluk Derecesi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Playtime.Header">Oynanan Süre</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.Header">Xenia Sürümü</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.XeniaVersion.ToolTip">Her oyun için Xenia sürümü simgesini göster</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.LastPlayed.Header">Son Oynanma</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.Icon.Header">Oyun Simgesi</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.TitleId.Header">Title ID</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditListView.MediaId.Header">Media ID</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Çift tıklamada başlat</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Oyun başlatmada tek ve çift tıklama arasında geçiş yapın</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Dizini Tara</sys:String>
@@ -67,11 +67,11 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Tarama Başarısız</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">Dizini tararken bir hata oluştu:&#10;&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Tarama Hatası</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Title">Dizini Tara</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Message">Taranacak kaynağı seçin:</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.GamesFolder">Oyunlar klasörünü tara</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.CustomFolder">Özel klasörü tara</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanChoice.Cancel">İptal</sys:String>
 
     <!-- Folder Scan Progress Dialog -->
     <sys:String x:Key="FolderScanProgressDialog.Title">Oyunlar Taranıyor</sys:String>
@@ -135,11 +135,11 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">{0} oyun başarıyla güncellendi.&#10;Değişmedi: {1}&#10;Başarısız: {2}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Güncellenemedi</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Uyumluluk derecelendirmeleri güncellenirken bir hata oluştu.&#10;{0}</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.Title">Uyumluluk Derecelerini Güncelle</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.GameCompatibility">Oyun Uyumluluğu</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.MousehookCompatibility">Mousehook Uyumluluğu</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.NetplayCompatibility">Netplay Uyumluluğu</sys:String>
+    <sys:String x:Key="CompatibilityRatingSelectionDialog.UpdateButton">Güncelle</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Oyunları Optimize Et</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Kütüphanedeki tüm oyunlara çevrimiçi veritabanındaki optimize edilmiş ayarları uygular</sys:String>
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimizasyon Tamamlandı</sys:String>
@@ -148,17 +148,17 @@
     <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">Oyun ayarları optimize edilirken bir hata oluştu.&#10;{0}</sys:String>
 
     <!-- Remove Invalid Games -->
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Header">Geçersiz Oyunları Kaldır</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.ToolTip">Dosya yolu eksik veya bozuk olan tüm oyunları kütüphaneden kaldırır</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.Title">Geçersiz Oyunları Kaldır</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.SingleMessage">Kütüphanenizde 1 geçersiz oyun var. Kaldırmak istiyor musunuz?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Confirmation.MultipleMessage">Kütüphanenizde {0} geçersiz oyun var. Bunları kaldırmak istiyor musunuz?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Title">Geçersiz Oyun Yok</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.NoneFound.Message">Kütüphanenizde geçersiz oyun bulunmuyor.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Title">Geçersiz Oyunlar Kaldırıldı</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Success.Message">Kütüphaneden başarıyla {0} geçersiz oyun kaldırıldı.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Title">Oyunlar Kaldırılamadı</sys:String>
+    <sys:String x:Key="LibraryPage.Options.RemoveInvalidGames.Error.Message">Geçersiz oyunlar kaldırılırken bir hata oluştu.&#10;{0}</sys:String>
 
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Oynanan Süre: </sys:String>
@@ -194,23 +194,23 @@
     <sys:String x:Key="CompatibilityRating.Playable">Oynanabilir</sys:String>
 
     <!-- Mousehook Support Rating -->
-    <sys:String x:Key="MousehookSupportRating.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Poor">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Fair">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookSupportRating.Good">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Unknown">Bilinmiyor</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Poor">Zayıf</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Fair">Orta</sys:String>
+    <sys:String x:Key="MousehookSupportRating.Good">İyi</sys:String>
 
     <!-- Netplay Status -->
-    <sys:String x:Key="NetplayStatus.Unknown">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Ok">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Partial">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NetplayStatus.Fail">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NetplayStatus.Unknown">Bilinmiyor</sys:String>
+    <sys:String x:Key="NetplayStatus.Ok">Tamam</sys:String>
+    <sys:String x:Key="NetplayStatus.Partial">Kısmi</sys:String>
+    <sys:String x:Key="NetplayStatus.Fail">Başarısız</sys:String>
 
     <!-- Compatibility Tooltip Labels -->
-    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">#NOTTRANSLATED#:</sys:String>
-    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">#NOTTRANSLATED#:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Mousehook.Rating">Mousehook Desteği:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.WorkingPublic">Herkese Açık Çalışıyor:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.TestedLocally">Yerelde Test Edildi:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.OnlyLocal">Yalnızca Yerel:</sys:String>
+    <sys:String x:Key="CompatibilityTooltip.Netplay.Systemlink">Systemlink:</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emülatör Yönetimi</sys:String>
@@ -257,8 +257,8 @@
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title">Profiller Mevcut Değil</sys:String>
     <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message">Otomatik Kayıt Yedekleme özelliğini etkinleştirmek için profil bulunamadı.&#10;Lütfen önce bir profil oluşturun veya içe aktarın.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Birleşik İçerik Klasörü</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Tüm Xenia sürümlerinin aynı içerik klasörünü paylaşmasını sağlar. Yönetici izni ve NTFS sürücü gerektirir.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip">NOT: Bu özellik sembolik bağlantılar kullandığından yönetici ayrıcalıkları ve NTFS biçimli bir sürücü gerektirir</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Yönetici Yetkisi Gerekiyor</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">Bu işlem için Xenia Manager'ın yönetici olarak çalıştırılması gerekir.&#10;Lütfen Xenia Manager'ı yönetici yetkileriyle yeniden başlatın.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">İçerik Klasörlerini Ayır</sys:String>
@@ -277,9 +277,9 @@
     <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Kullanıcının Xenia Profillerini değiştirmesine olanak tanır</sys:String>
     <sys:String x:Key="ManagePage.ManageProfiles.Button">Yönet</sys:String>
 
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManagePage.EditXConfig.Button">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Title">XConfig Ayarlarını Düzenle</sys:String>
+    <sys:String x:Key="ManagePage.Content.EditXConfig.Description">Xbox 360 panel ayarlarını düzenle (çözünürlük, dil, ülke, varsayılan profil)</sys:String>
+    <sys:String x:Key="ManagePage.EditXConfig.Button">Düzenle</sys:String>
 
     <sys:String x:Key="ManagePage.Content.Install.Title">İçerik Yükle</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Xenia için DLC'ler, güncellemeler ve diğer içerikleri yükleyin</sys:String>
@@ -371,24 +371,24 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Oyun Bilgilerini Çözümlemek İçin Xenia'yı Kullan</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Oyun bilgilerini Xenia emülatörünü kullanarak otomatik olarak algılar</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.ToolTip">Oyunları veya oyun bilgilerini algılamakta sorun yaşıyorsanız bunu etkinleştirin</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle">Oyun Başlığı için MediaId Kullan</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.Description">Eşleşen medya kaydı başlığını bulmak için oyun dosyalarındaki MediaId'yi kullan</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseMediaIdForTitle.ToolTip">Medyaya özel başlıklar yerine her zaman veritabanı başlığını kullanmak için devre dışı bırakın</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork">Gömülü Görselleri Kullan</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.Description">Veritabanından indirmeden önce oyun dosyalarına gömülü görselleri (simge, küçük resimler) kullan</sys:String>
+    <sys:String x:Key="SettingsPage.General.UseEmbeddedArtwork.ToolTip">Etkinleştirildiğinde, oyun simgesi ve küçük resimler önce oyun dosyasının kendisinden (STFS/SVOD/ISO/ZAR/XEX) çıkarılır. Görselleri her zaman veritabanından indirmek için devre dışı bırakın.</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Başlangıçta Güncellemeleri Denetle</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Uygulama başlatıldığında Xenia ve Xenia Manager güncellemelerini otomatik olarak denetler</sys:String>
     <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.ToolTip">Uygulama başlatılırken güncelleme denetimlerini atlamak için bunu devre dışı bırakın</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames">Yeni Oyunları Otomatik Algıla</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.Description">Oyunlar klasörüne yeni oyun eklendiğinde otomatik olarak algıla</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoDetectNewGames.ToolTip">Oyunlar dizininde yeni oyun dosyaları algılandığında bildirim gösterir</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc">Çok Diskli Oyunları Otomatik Birleştir</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.Description">Kütüphane taraması sırasında aynı oyuna ait algılanan diskleri otomatik olarak birleştir</sys:String>
+    <sys:String x:Key="SettingsPage.General.AutoMergeMultiDisc.ToolTip">Etkinleştirildiğinde, kütüphanedeki mevcut bir oyunla eşleşen ek diskler sorulmadan otomatik olarak birleştirilir</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen">Büyük Ekranda Başlat</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.Description">Açılışta ana pencere yerine Büyük Ekranı başlat</sys:String>
+    <sys:String x:Key="SettingsPage.General.StartInBigScreen.ToolTip">Etkinleştirildiğinde, Xenia Manager açılışta doğrudan Büyük Ekran modunda açılır</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">{0} yükleniyor</sys:String>
@@ -401,10 +401,10 @@
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">İçerik</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">Yüklü İçeriği Görüntüle</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SavedGames.Header">Kayıtlı Oyunlar</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Achievements.Header">Başarımlar</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.TitleUpdates.Header">Oyun Güncellemeleri</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.MarketplaceContent.Header">Marketplace İçeriği</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Kayıt Yedekleri</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.ToolTip">Xenia Manager tarafından oluşturulan tüm kayıt yedeklerinin bulunduğu klasörü açar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">Kayıt Yedeği Bulunamadı</sys:String>
@@ -417,8 +417,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message">{0} için ekran görüntüsü bulunamadı.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Title">Klasör Açılamadı</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Error.Message">Ekran görüntüleri klasörü açılırken bir hata oluştu.&#10;{0}</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.Header">Oyun Dosyalarına Göz At</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.GameFiles.ToolTip">Oyun dosyalarına göz at ve yürütülebilir dosyaları incele</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Yamalar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">İndir</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.ToolTip">Depodan yama indirir</sys:String>
@@ -489,10 +489,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">'{0}' için Steam kütüphanenizde başarıyla bir Steam kısayolu oluşturuldu.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Steam Kısayolu Oluşturulamadı</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">'{0}' için Steam kısayolu oluşturulamadı.&#10;{1}</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Title">Steam Hesabı Seç</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.Header">Birden fazla Steam hesabı bulundu</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.SubHeader">Kısayolun hangi hesap için oluşturulacağını seçin:</sys:String>
+    <sys:String x:Key="SteamUserSelectionDialog.CancelButton">İptal</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Uyumluluk Sayfası</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Uyumluluk sayfasını açar</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Uyumluluk Sayfası Yok</sys:String>
@@ -536,8 +536,8 @@
     <!-- NavigationService -->
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Title">Xenia Yüklü Değil</sys:String>
     <sys:String x:Key="NavigationService.NoXeniaInstalled.Message">Xenia kurulumu bulunamadı. Lütfen başlatmadan önce Xenia'yı yükleyin.</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Title">Büyük Ekran Bulunamadı</sys:String>
+    <sys:String x:Key="NavigationService.BigScreenNotFound.Message">Xenia Manager'ın yanında XeniaManager.BigScreen.exe bulunamadı.</sys:String>
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Yamalar</sys:String>
@@ -594,37 +594,37 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Simge</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Simge Seç</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Simgeyi Temizle</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch">Simgeyi Yeniden Getir</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Title">Simge Bulunamadı</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.NotFound.Message">{0} içinde simge bulunamadı. Mevcut simge değiştirilmedi.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Title">Simge Yeniden Getirildi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Success.Message">Simge {0} kaynağından başarıyla yeniden getirildi.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Title">Simgeyi Yeniden Getir</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.Message">Simgenin nereden yeniden getirileceğini seçin:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.GameFiles">Oyun Dosyaları</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Refetch.Source.GameFiles">Oyun Dosyaları</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch">Kutu Kapağını Yeniden Getir</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Title">Kutu Kapağı Bulunamadı</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.NotFound.Message">{0} içinde kutu kapağı bulunamadı. Mevcut kutu kapağı değiştirilmedi.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Title">Kutu Kapağı Yeniden Getirildi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Refetch.Success.Message">Kutu kapağı {0} kaynağından başarıyla yeniden getirildi.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background">Arka Plan</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Select">Arka Plan Seç</sys:String>
     <sys:String x:Key="GameDetailsEditor.Background.Clear">Arka Planı Temizle</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch">Arka Planı Yeniden Getir</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Title">Arka Plan Bulunamadı</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.NotFound.Message">{0} içinde arka plan bulunamadı. Mevcut arka plan değiştirilmedi.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Title">Arka Plan Yeniden Getirildi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Success.Message">Arka plan {0} kaynağından başarıyla yeniden getirildi.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Title">Arka Planı Yeniden Getir</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.Message">Arka planın nereden yeniden getirileceğini seçin:</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.GameFiles">Oyun Dosyaları</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Choice.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Refetch.Source.GameFiles">Oyun Dosyaları</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Refetch.Source.X360Db">x360db</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Title">Yeniden Getirme Başarısız</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Refetch.Error.Message">{0} yeniden getirilemedi.&#10;Hata: {1}</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Otomatik Algılama</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID ve Media ID otomatik olarak algılanır ve değiştirilemez.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
@@ -638,14 +638,14 @@
     <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Uyumluluk Derecesi</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPage">Uyumluluk Sayfası URL'si</sys:String>
     <sys:String x:Key="GameDetailsEditor.CompatibilityPagePlaceholderText">Uyumluluk sayfası URL'sini girin</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility">Mousehook Uyumluluğu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MousehookCompatibility.NotesPlaceholder">Mousehook notu bulunmuyor</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility">Netplay Uyumluluğu</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.WorkingPublic">Herkese Açık Çalışıyor</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.TestedLocally">Yerelde Test Edildi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.OnlyLocal">Yalnızca Yerel</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.Systemlink">Systemlink</sys:String>
+    <sys:String x:Key="GameDetailsEditor.NetplayCompatibility.CommentsPlaceholder">Netplay yorumu bulunmuyor</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.Change">Oyun yolunu değiştir</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Oyun Dosyasını Seçin</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Depolama Sağlayıcısı Eksik</sys:String>
@@ -680,9 +680,9 @@
     <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">İptal</sys:String>
     <sys:String x:Key="InstallContentDialog.AddContent.Button">İçerik Ekle</sys:String>
     <sys:String x:Key="InstallContentDialog.FilePicker.Title">İçerik Dosyalarını Seçin</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallExtracted.Button">Yükle (Çıkararak)</sys:String>
+    <sys:String x:Key="InstallContentDialog.InstallPackage.Button">Yükle (Paket)</sys:String>
+    <sys:String x:Key="InstallContentDialog.Method.Package.ToolTip">Paket dosyasını olduğu gibi korur. En son Xenia Canary sürümünü gerektirir.</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Title">Yükleme Başarılı</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Success.Message">Aşağıdaki içerik başarıyla yüklendi:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Yükleme Kısmen Başarılı</sys:String>
@@ -746,16 +746,16 @@
     <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Kaydetme Başarısız</sys:String>
 
     <!-- Edit XConfig Dialog -->
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.Title">XConfig Ayarlarını Düzenle</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.SaveButton.Text">Kaydet</sys:String>
+    <sys:String x:Key="EditXConfigDialog.ContentDialog.CancelButton.Text">İptal</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Resolution.Label">Çözünürlük</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Language.Label">Dil</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.Country.Label">Çevrimiçi Ülke</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Edit.DefaultProfile.Label">Varsayılan Profil</sys:String>
+    <sys:String x:Key="EditXConfigDialog.Save.Failed.Title">Kaydetme Başarısız</sys:String>
+    <sys:String x:Key="EditXConfigDialog.LoadFailed.Message">xconfig.settings dosyası yüklenemedi.</sys:String>
+    <sys:String x:Key="EditXConfigDialog.NoXConfigFound.Message">Yüklü hiçbir Xenia sürümü için xconfig.settings dosyası bulunamadı.</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Seçim Penceresi</sys:String>
@@ -818,28 +818,28 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Başarımlar açılamadı.&#10;Hata: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Kilitleme Başarısız</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Başarımlar kilitlenemedi.&#10;Hata: {0}</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing">Başarımları Oyun Dosyalarından Getir</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Title">Başarımlar Hazır</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Success.Message">Başarımlar hazır: toplam {1} ({0} tanesi oyun dosyalarından eklendi).</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Title">Oluşturma Başarısız</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.Failed.Message">Oyun dosyalarından başarımlar oluşturulamadı.&#10;Hata: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Title">Disk/Oyun Dosyaları Eksik</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.CreateMissing.MissingDisc.Message">Seçilen disk/oyun dosyaları bulunamadı.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch">Oyun Dosyalarından Getir</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Title">Oyun Dosyalarından Getir</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Message">Oyun dosyalarından neyin getirileceğini seçin.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesMissing">Eksik görseller</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesUnlocked">Yalnızca kilidi açılmış görseller</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.ImagesOverwrite">Tüm görselleri üzerine yaz</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.Fetch.Dialog.Strings">Başarım metinleri</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Title">Görseller Güncellendi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Success.Message">Oyun dosyalarından {0} görsel yazıldı.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Title">Getirme Başarısız</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchImages.Failed.Message">Başarım görselleri oyun dosyalarından getirilemedi.&#10;Hata: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Title">Metinler Güncellendi</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Success.Message">Oyun dosyalarından {0} başarım güncellendi.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Title">Yenileme Başarısız</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.FetchStrings.Failed.Message">Başarım metinleri oyun dosyalarından yeniden getirilemedi.&#10;Hata: {0}</sys:String>
 
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Yüklü İçerik</sys:String>
@@ -850,8 +850,8 @@
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Güncellemeler mevcut: {0}</sys:String>
     <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Xenia Manager için güncellemeler mevcut</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="InfoBar.NewGamesDetected.Action">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Message">Yeni oyunlar algılandı. Oyun kütüphanenizi güncellemek için oyunlar dizinini yeniden tarayın.</sys:String>
+    <sys:String x:Key="InfoBar.NewGamesDetected.Action">Yeniden Tara</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Yapılandırma Düzenleyicisi</sys:String>
@@ -896,9 +896,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Kaydetme Başarısız</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">"{0}" tuş ataması için tuş "Hiçbiri" olamaz. Lütfen geçerli bir tuş seçin.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">"{0}" tuş ataması için değer "Hiçbiri" olamaz. Lütfen geçerli bir kontrolcü girişi seçin.</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindToolTip">Çoklu Atama</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindFlyoutTitle">Birleştirilecek atamaları seçin:</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.MultibindApplyButton">Uygula</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Ayarları Sıfırla</sys:String>
@@ -1070,8 +1070,8 @@
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">Hiçbiri</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Hızlı</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Tam</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Title">Memexport Geri Okuma</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_memexport.Comment">Gölgelendiricilerde bellek dışa aktarımı (memexport) ile yazılan verileri CPU üzerinde oku.&#10;Bazı oyunlar için gerekli olabilir, ancak kare ortasında senkronizasyona neden olarak performansı ciddi şekilde düşürür</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Çizim Çözünürlük Ölçeği X</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Oyun tarafından görülmeden render çözünürlüğünü ölçeklemek için kullanılan tam sayı piksel genişlik ölçeği</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Çizim Çözünürlük Ölçeği Y</sys:String>
@@ -1099,12 +1099,12 @@
     <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Eşzamansız Shader Derleme</sys:String>
     <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Shader'ları derler ve ardışık düzenleri arka plan iş parçacıklarında eşzamansız olarak oluşturur&#10;Shader derleme takılmasını ortadan kaldırır ancak ardışık düzenler oluşturulurken kısa süreli görüntü bozulmalarına neden olabilir&#10;Devre dışı bırakıldığında, ardışık düzenler eşzamanlı olarak oluşturulur, bu da takılmaya neden olur ancak görsel bozulma olmaz</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Title">Örtme Sorgusu (Occlusion Query)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.Comment">EVENT_WRITE_ZPD için donanım örtme sorgusu davranışını kontrol eder&#10;Mercek parlaması, nesne ayıklama ve otomatik pozlama gibi efektlerde kullanılır&#10;fake: GPU'ya sormadan sahte bir sonuç yazar. Çoğu oyun için güvenlidir&#10;fast: GPU'ya sorar ancak beklemez. Önbelleğe alınmış sonucu yazar, GPU yetiştiğinde günceller. (Varsayılan)&#10;fast-alt: fast gibidir, ancak çözümlenmemiş raporlar için önbellekteki sıfır sonuçlarını korur&#10;strict: GPU'ya sorar ve gerçek sonucu bekler. En doğru ancak en az performanslı seçenektir</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fake">Sahte (Fake)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast">Hızlı (Varsayılan)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.fast-alt">Hızlı-Alternatif</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.occlusion_query.option.strict">Katı (Strict)</sys:String>
 
     <!-- Config UI Settings - HID Options -->
     <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Giriş Sistemi</sys:String>
@@ -1337,10 +1337,10 @@
     <sys:String x:Key="AboutPage.Credits.XeniaMousehook.ToolTip"> - Klavye &amp; Fare desteği</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.Title">Avalonia UI</sys:String>
     <sys:String x:Key="AboutPage.Credits.AvaloniaUi.ToolTip"> - Fluent Design'a sahip, platformlar arası kullanıcı arayüzü çatısı</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.Title">CommunityToolkit.Mvvm</sys:String>
+    <sys:String x:Key="AboutPage.Credits.CommunityToolkitMvvm.ToolTip"> - .NET için MVVM çatısı</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.Title">Microsoft.Extensions.DependencyInjection</sys:String>
+    <sys:String x:Key="AboutPage.Credits.DependencyInjection.ToolTip"> - .NET için bağımlılık enjeksiyonu kapsayıcısı</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.Title">FluentAvalonia</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentAvalonia.ToolTip"> - Avalonia için Fluent Design denetimleri ve temaları</sys:String>
     <sys:String x:Key="AboutPage.Credits.FluentIcons.Title">FluentIcons</sys:String>
@@ -1349,16 +1349,16 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - .NET için esnek bir günlükleme çatısı</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Oyun bilgilerinin ayrıştırılması</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.Title">ppy.SDL3-CS</sys:String>
+    <sys:String x:Key="AboutPage.Credits.Sdl3Cs.ToolTip"> - Oyun kumandası girişi desteği için SDL3 bağlamaları</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Arşiv ve sıkıştırma işlemleri</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.Title">System.IO.Hashing</sys:String>
+    <sys:String x:Key="AboutPage.Credits.SystemIOHashing.ToolTip"> - Hızlı karma (hash) algoritmaları (XxHash)</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.Title">TweenAvalonia</sys:String>
+    <sys:String x:Key="AboutPage.Credits.TweenAvalonia.ToolTip"> - Avalonia için programatik geçiş (tween) animasyonları</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.Title">ZstdSharp</sys:String>
+    <sys:String x:Key="AboutPage.Credits.ZstdSharp.ToolTip"> - .NET için Zstandard sıkıştırma</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Bu uygulama, Microsoft Corporation veya Xenia Project ile hiçbir şekilde bağlantılı değildir, onlar tarafından desteklenmemekte veya sponsorluğu yapılmamaktadır. Tüm ticari markalar, logolar ve marka adları ilgili sahiplerinin mülkiyetindedir.&#10;Xbox 360, Microsoft Corporation'ın Amerika Birleşik Devletleri ve/veya diğer ülkelerdeki tescilli ticari markasıdır.&#10;Xenia, Xenia Project'in tescilli ticari markasıdır.&#10;Bu ve diğer ticari markalara yapılan tüm atıflar yalnızca uyumluluk veya işlevselliği belirtmek amacıyla yapılmıştır ve ticari marka sahipleriyle herhangi bir bağlantı ya da onlar tarafından onaylandığı anlamına gelmez.&#10;Bu yazılım yalnızca eğitim ve bilgilendirme amaçlıdır. Microsoft Corporation'a veya herhangi bir üçüncü tarafa ait telif hakkıyla korunan içerikleri içermez ya da dağıtmaz. Kullanıcılar, bu yazılımı kullanımlarının telif hakkı ve lisans yasaları da dahil olmak üzere yürürlükteki tüm yasalara uygun olmasını sağlamaktan tamamen sorumludur.&#10;Bu uygulamanın tescilli yazılım veya ürün yazılımı (firmware) çalıştırmak ya da bunlarla etkileşim kurmak amacıyla kullanılması, ilgili Son Kullanıcı Lisans Sözleşmelerinin (EULA) sınırları içinde gerçekleştirilmelidir. Bu uygulamanın geliştiricileri ve dağıtıcıları hiçbir şekilde korsanlığı desteklemez veya teşvik etmez.&#10;Bu uygulama, açık veya zımni hiçbir garanti verilmeden "olduğu gibi" sunulmaktadır. Kullanım riski tamamen size aittir.</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Title">Deneysel Sürümü Kullan</sys:String>
     <sys:String x:Key="AboutPage.UseExperimentalBuild.Description">Deneysel özellik güncellemelerini almak ve yeni özelliklere erken erişmek için etkinleştirin</sys:String>
@@ -1368,131 +1368,131 @@
     <sys:String x:Key="AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message">Şu anda Xenia Manager'ın en güncel sürümünü kullanıyorsunuz.</sys:String>
 
     <!-- Library Page - Drag & Drop -->
-    <sys:String x:Key="LibraryPage.DragDrop.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Title">Oyun eklemek için dosyaları bırakın</sys:String>
+    <sys:String x:Key="LibraryPage.DragDrop.Subtitle">.iso, .xex ve .zar dosyaları desteklenir</sys:String>
 
     <!-- Multi-Disc Support -->
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.GameButton.DiscCount">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.Header">Diskleri Yönet</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.ManageDiscs.ToolTip">Çok diskli oyunlar için disk ekle, yeniden adlandır veya kaldır</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Title">Diskler Yönetilemedi</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.ManageDiscs.Error.Message">Diskler yönetilirken bir hata oluştu.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.DiscCount">{0} Disk</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Title">Ek Disk Olarak Eklensin mi?</sys:String>
+    <sys:String x:Key="LibraryPage.MultiDisc.MergePrompt.Message">Bu dosya, kütüphanenizde zaten bulunan '{0}' oyununun başka bir diski gibi görünüyor.&#10;&#10;Ayrı bir kütüphane kaydı oluşturmak yerine '{0}' oyununa ek disk olarak eklemek ister misiniz?</sys:String>
 
     <!-- Disc Selection Dialog (shown when launching a multi-disc game) -->
-    <sys:String x:Key="DiscSelectionDialog.Header">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.SubHeader">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.Disc1">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.DiscN">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Header">Disk Seç</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.SubHeader">Bu oyunun birden fazla diski var. Hangisinin başlatılacağını seçin.</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.Disc1">Disk 1</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.DiscN">Disk {0}</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.LastPlayedSuffix">(Son Oynanan)</sys:String>
+    <sys:String x:Key="DiscSelectionDialog.MissingSuffix">(Dosya Eksik)</sys:String>
 
     <!-- Manage Discs Dialog -->
-    <sys:String x:Key="ManageDiscsDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Subtitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.Disc1Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingFile">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Title">{0} - Diskleri Yönet</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Subtitle">Disk ekleyin, yeniden adlandırın veya kaldırın. Başlattığınız disk bir sonraki sefer için hatırlanır.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.CloseButton">Kapat</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.Disc1Label">Disk 1</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DiscNLabel">Disk {0}</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.AddDisc.Button">Disk Ekle</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.RemoveDisc.ToolTip">Bu diski kaldır</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingFile">Dosya bulunamadı</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.FilePicker.Title">Disk Dosyası Seç</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Title">Depolama Sağlayıcısı Eksik</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.MissingStorageProvider.Message">Depolama sağlayıcısı kullanılamıyor.</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Title">Disk Zaten Eklendi</sys:String>
+    <sys:String x:Key="ManageDiscsDialog.DuplicateDisc.Message">Bu dosya zaten bu oyunla ilişkilendirilmiş.</sys:String>
 
     <!-- Game Files Dialog -->
-    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.CloseButton">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Search.Watermark">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Folder.Label">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.EmptyFolder">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.NoResults">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.NoSelection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ContainerSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Format">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Container.Summary">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.AchievementsToggle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.SpaSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Size">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Path">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.TitleId">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.MediaId">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Version">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Disc">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ImageSize">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Achievements">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.StfsSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.DisplayName">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.SignatureType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ContentType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ContentSize">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.LoadError.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.LoadError.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.ContentDialog.Title">Oyun Dosyaları</sys:String>
+    <sys:String x:Key="GameFilesDialog.CloseButton">Kapat</sys:String>
+    <sys:String x:Key="GameFilesDialog.Search.Watermark">Dosya ara...</sys:String>
+    <sys:String x:Key="GameFilesDialog.Folder.Label">Klasör</sys:String>
+    <sys:String x:Key="GameFilesDialog.EmptyFolder">Bu klasör boş.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoResults">Aramanızla eşleşen dosya yok.</sys:String>
+    <sys:String x:Key="GameFilesDialog.NoSelection">Ayrıntılarını görmek için bir dosya seçin.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenExplorer.Button">Gezginde Aç</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexSection">Yürütülebilir dosya ayrıntıları</sys:String>
+    <sys:String x:Key="GameFilesDialog.ContainerSection">Kapsayıcı</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Format">Biçim</sys:String>
+    <sys:String x:Key="GameFilesDialog.Container.Summary">{0} dosya — toplam {1}</sys:String>
+    <sys:String x:Key="GameFilesDialog.AchievementsToggle">Başarımlar</sys:String>
+    <sys:String x:Key="GameFilesDialog.SpaSection">SPA ayrıntıları</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Size">Boyut</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Path">Yol</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.TitleId">Title ID</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Version">Sürüm</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Disc">Disk</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ImageSize">İmaj boyutu</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ModuleFlags">Modül bayrakları</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SpaTitle">Başlık</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Achievements">Başarımlar</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.Gamerscore">Gamerscore</sys:String>
+    <sys:String x:Key="GameFilesDialog.StfsSection">STFS ayrıntıları</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.DisplayName">Görünen ad</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.StfsTitleName">Oyun adı</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.SignatureType">İmza türü</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentType">İçerik türü</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ContentSize">İçerik boyutu</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Title">Oyun Dosyalarına Göz Atılamıyor</sys:String>
+    <sys:String x:Key="GameFilesDialog.LoadError.Message">Oyun dosyaları açılamadı. Dosya eksik veya desteklenmeyen bir biçimde olabilir.</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Title">Klasör Açılamıyor</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExplorerError.Message">Klasör açılamadı: {0}</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractFile.Menu">Çıkar...</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.FolderPicker.Title">Çıkarma Klasörünü Seç</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Title">Depolama Sağlayıcısı Eksik</sys:String>
+    <sys:String x:Key="GameFilesDialog.MissingStorageProvider.Message">Depolama sağlayıcısı kullanılamıyor.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Title">Çıkarılacak Bir Şey Yok</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.NoSelection.Message">Çıkarmak için bir dosya veya klasör seçin.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Success.Title">Çıkarma Tamamlandı</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.Failed.Title">Çıkarma Başarısız</sys:String>
+    <sys:String x:Key="GameFilesDialog.ExtractAll.Button">Tümünü çıkar</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchSuccess.Message">{1} dosyanın {0} tanesi '{2}' konumuna çıkarıldı.</sys:String>
+    <sys:String x:Key="GameFilesDialog.Extract.BatchPartial.Message">{1} dosyanın {0} tanesi çıkarıldı. İlk hata: {2}</sys:String>
 
     <!-- Extract Progress Dialog -->
-    <sys:String x:Key="ExtractProgressDialog.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Status.Error">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="ExtractProgressDialog.Button.Close">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Title">Dosyalar Çıkarılıyor</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Extracting">Dosya çıkarılıyor: {0} / {1}</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Status.Error">Çıkarma başarısız: {0}</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Extracted">Çıkarılan</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Statistics.Failed">Başarısız</sys:String>
+    <sys:String x:Key="ExtractProgressDialog.Button.Close">Kapat</sys:String>
 
     <!-- Text File Dialog -->
-    <sys:String x:Key="TextFileDialog.Encoding.Label">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="TextFileDialog.Encoding.Label">Kodlama</sys:String>
 
     <!-- Game Files Open -->
-    <sys:String x:Key="GameFilesDialog.Open.Menu">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Open.Menu">Aç</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Title">Dosya Önizlenemiyor</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Unsupported.Message">Bu dosya için önizleme mevcut değil.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Title">Dosya Çok Büyük</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.TooLarge.Message">Dosya, metin olarak önizlenemeyecek kadar büyük.</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Title">Dosya Açılamıyor</sys:String>
+    <sys:String x:Key="GameFilesDialog.OpenPreview.Failed.Message">'{0}' açılamadı: {1}</sys:String>
 
     <!-- GPD Viewer Dialog -->
-    <sys:String x:Key="GpdViewerDialog.Entries.Header">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GpdViewerDialog.Entries.Header">Kayıtlar</sys:String>
 
     <!-- XEX File Dialog -->
-    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Details.TitleType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Details.TitleVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.NoSpaDetails">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.TitlesSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Achievements.Locked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.ContextsSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.PropertiesSection">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="XexFileDialog.StatsViewsSection">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.DefaultLanguage">Varsayılan dil</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleType">Oyun türü</sys:String>
+    <sys:String x:Key="XexFileDialog.Details.TitleVersion">Oyun sürümü</sys:String>
+    <sys:String x:Key="XexFileDialog.NoSpaDetails">Bu yürütülebilir dosyada gömülü SPA ayrıntısı bulunamadı.</sys:String>
+    <sys:String x:Key="XexFileDialog.TitlesSection">Oyunlar</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Locked">Kilitli</sys:String>
+    <sys:String x:Key="XexFileDialog.Achievements.Unlocked">Kilidi Açıldı</sys:String>
+    <sys:String x:Key="XexFileDialog.ContextsSection">Bağlamlar</sys:String>
+    <sys:String x:Key="XexFileDialog.PropertiesSection">Özellikler</sys:String>
+    <sys:String x:Key="XexFileDialog.StatsViewsSection">İstatistik görünümleri</sys:String>
 
     <!-- Game Files XEX -->
-    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Button">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">#NOTTRANSLATED#</sys:String>
-    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">#NOTTRANSLATED#</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.BaseVersion">Temel sürüm</sys:String>
+    <sys:String x:Key="GameFilesDialog.Details.ExecutableType">Yürütülebilir dosya türü</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Button">Simgeyi kaydet...</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.FilePicker.Title">XEX Simgesini Kaydet</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Title">Simge Kaydedildi</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Success.Message">Simge '{0}' konumuna kaydedildi.</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Title">Simge Kaydedilemedi</sys:String>
+    <sys:String x:Key="GameFilesDialog.XexIcon.Failed.Message">Simge kaydedilemedi: {0}</sys:String>
 </ResourceDictionary>
