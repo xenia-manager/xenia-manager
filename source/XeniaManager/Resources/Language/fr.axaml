@@ -1025,7 +1025,7 @@
     <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_sharpness_reduction.Comment">Réduction de la netteté pour l'AMD FidelityFX Super Resolution 1.0 (FSR), en paliers. Plus la valeur est basse, plus l'image est nette.</sys:String>
     <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_cas_additional_sharpness.Title">Netteté supplémentaire CAS</sys:String>
     <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_cas_additional_sharpness.Comment">Netteté supplémentaire pour l'AMD FidelityFX Contrast Adaptive Sharpening (CAS), de 0 à 1. Plus la valeur est élevée, plus l'image est nette.</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_max_upsampling_passes.Title">Passes max d'unscaling FSR</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_max_upsampling_passes.Title">Passes max d'upscaling FSR</sys:String>
     <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_max_upsampling_passes.Comment">Nombre maximum de passes de mise à l'échelle effectuées avec l'AMD FidelityFX Super Resolution 1.0 (FSR) avant de basculer sur un étirement bilinéaire après la passe finale</sys:String>
     <sys:String x:Key="ConfigUiSettings.Display.postprocess_dither.Title">Dithering (Trame)</sys:String>
     <sys:String x:Key="ConfigUiSettings.Display.postprocess_dither.Comment">Applique un tramage (dithering) sur l'image finale pour passer de la précision interne à 8 bits par canal afin d'obtenir des dégradés plus fluides</sys:String>
