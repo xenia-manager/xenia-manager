@@ -1,5 +1,5 @@
 using System.Globalization;
-using XeniaManager.Logging;
+using XeniaManager.Files.Utilities;
 
 namespace XeniaManager.Files.Models.Patches;
 
@@ -15,6 +15,8 @@ public class PatchCommand
     /// </summary>
     public ulong Address { get; set; }
 
+    private object? _value;
+
     /// <summary>
     /// The value to write at the address.
     /// The type depends on the patch type:
@@ -22,7 +24,37 @@ public class PatchCommand
     /// - F32, F64: float or double
     /// - String, U16String: string
     /// </summary>
-    public object? Value { get; set; }
+    public object? Value
+    {
+        get
+        {
+            return _value;
+        }
+
+        set
+        {
+            if (!Equals(_value, value))
+            {
+                _value = value;
+                RawValue = null;
+                RawValueLineSuffix = null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Original TOML literal for the value. When set, it is written back
+    /// verbatim so untouched numeric values keep their precision and formatting.
+    /// Cleared automatically when <see cref="Value"/> changes.
+    /// </summary>
+    public string? RawValue { get; set; }
+
+    /// <summary>
+    /// Exact text after "value = " from the source line, including the inline
+    /// comment and its spacing. Used to preserve untouched value lines verbatim.
+    /// Cleared automatically when <see cref="Value"/> changes.
+    /// </summary>
+    public string? RawValueLineSuffix { get; set; }
 
     /// <summary>
     /// The type of this patch command.
@@ -39,16 +71,62 @@ public class PatchCommand
     /// </summary>
     public string? AddressComment { get; set; }
 
+    private string? _valueComment;
+    private bool? _useArrayPrefix;
+
     /// <summary>
-    /// Optional inline comment from the value line.
+    /// Optional inline comment from the value line. Changing it invalidates
+    /// the preserved value line so the new comment is written.
     /// </summary>
-    public string? ValueComment { get; set; }
+    public string? ValueComment
+    {
+        get
+        {
+            return _valueComment;
+        }
+
+        set
+        {
+            if (!string.Equals(_valueComment, value, StringComparison.Ordinal))
+            {
+                _valueComment = value;
+                RawValueLineSuffix = null;
+            }
+        }
+    }
 
     /// <summary>
     /// For Array type: tracks whether the original format used "0x" prefix.
     /// null = default behavior (use 0x prefix), true = use prefix, false = no prefix.
+    /// Changing it invalidates the preserved value line.
     /// </summary>
-    public bool? UseArrayPrefix { get; set; }
+    public bool? UseArrayPrefix
+    {
+        get
+        {
+            return _useArrayPrefix;
+        }
+
+        set
+        {
+            if (_useArrayPrefix != value)
+            {
+                _useArrayPrefix = value;
+                RawValueLineSuffix = null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Standalone comment lines before this [[patch.type]] table.
+    /// </summary>
+    public List<string> LeadingComments { get; set; } = [];
+
+    /// <summary>
+    /// Standalone comment lines between the address and value lines, such as
+    /// commented-out alternative values.
+    /// </summary>
+    public List<string> ValueLeadingComments { get; set; } = [];
 
     /// <summary>
     /// Creates a new instance of PatchCommand.
@@ -78,19 +156,79 @@ public class PatchCommand
     /// <returns>The string representation of the value.</returns>
     public string? GetValueAsString()
     {
+        if (!string.IsNullOrEmpty(RawValue))
+        {
+            return RawValue;
+        }
+
         return Value switch
         {
             byte byteValue => $"0x{byteValue:x2}",
             ushort shortValue => $"0x{shortValue:x4}",
             uint uIntValue => $"0x{uIntValue:x8}",
+            // TOML integers are signed 64-bit. Values with the high bit set
+            // must be written as negative decimals; Xenia casts the signed
+            // value back to the target width.
+            ulong longValue when longValue > long.MaxValue =>
+                unchecked((long)longValue).ToString(CultureInfo.InvariantCulture),
             ulong longValue => $"0x{longValue:x16}",
             byte[] byteArrayValue => FormatArrayValue(byteArrayValue),
-            float floatValue => floatValue.ToString(CultureInfo.InvariantCulture),
-            double doubleValue => doubleValue.ToString(CultureInfo.InvariantCulture),
-            string stringValue => $"\"{stringValue}\"",
+            float floatValue => FormatFloat(floatValue),
+            double doubleValue => FormatDouble(doubleValue),
+            string stringValue => TomlString.Encode(stringValue),
             null => null,
             _ => Value.ToString()
         };
+    }
+
+    private static string FormatFloat(float value)
+    {
+        if (float.IsNaN(value))
+        {
+            return "nan";
+        }
+
+        if (float.IsPositiveInfinity(value))
+        {
+            return "inf";
+        }
+
+        if (float.IsNegativeInfinity(value))
+        {
+            return "-inf";
+        }
+
+        if (value == 0 && float.IsNegative(value))
+        {
+            return "-0.0";
+        }
+
+        return value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static string FormatDouble(double value)
+    {
+        if (double.IsNaN(value))
+        {
+            return "nan";
+        }
+
+        if (double.IsPositiveInfinity(value))
+        {
+            return "inf";
+        }
+
+        if (double.IsNegativeInfinity(value))
+        {
+            return "-inf";
+        }
+
+        if (value == 0 && double.IsNegative(value))
+        {
+            return "-0.0";
+        }
+
+        return value.ToString(CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -98,9 +236,8 @@ public class PatchCommand
     /// </summary>
     private string FormatArrayValue(byte[] bytes)
     {
-        string hex = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+        string hex = Convert.ToHexString(bytes).ToLowerInvariant();
         bool usePrefix = UseArrayPrefix ?? true;
-        Logger.Debug<PatchCommand>($"FormatArrayValue: UseArrayPrefix={UseArrayPrefix}, usePrefix={usePrefix}");
         return usePrefix ? $"\"0x{hex}\"" : $"\"{hex}\"";
     }
 }

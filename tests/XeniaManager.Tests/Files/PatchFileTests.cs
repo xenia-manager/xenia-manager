@@ -1,3 +1,4 @@
+using System.Text;
 using XeniaManager.Files;
 using XeniaManager.Files.Models.Patches;
 
@@ -7,6 +8,29 @@ namespace XeniaManager.Tests.Files;
 public class PatchFileTests
 {
     private const string TestPatchFilePath = "Assets/Patches/TestPatchFile.patch.toml";
+
+    private const string InPlacePatchText = @"title_name = ""Test Game""
+title_id = ""ABCDEF01"" # AB-1234
+hash = [
+    ""DEADBEEFCAFEBABE""  # default.xex
+]
+#media_id = ""00000000"" # Disc
+
+[[patch]]
+    name = ""Test Patch"" # keep this comment
+    desc = ""Description""
+    author = ""TestAuthor"" # keep this too
+    is_enabled = false
+
+    [[patch.f32]]
+        address = 0x82000000
+        value = 1.777741190  # Default: 1.3333334
+
+    [[patch.be32]]
+        address = 0x82000004
+
+        value = 0x60000000  # keep spacing
+";
 
     [Test]
     public void FromString_WithValidToml_ParsesSuccessfully()
@@ -397,6 +421,57 @@ value = 0xDEADBEEFCAFEBABE
         Assert.That(cmd.Address, Is.EqualTo(0x82000020UL));
         Assert.That(cmd.Type, Is.EqualTo(PatchType.Be64));
         Assert.That(cmd.Value, Is.EqualTo(0xDEADBEEFCAFEBABEUL));
+        Assert.That(cmd.GetValueAsString(), Is.EqualTo("-2401053089206453570"));
+    }
+
+    [Test]
+    public void ToTomlString_Be64HighBit_UsesSignedDecimalAndRoundTrips()
+    {
+        PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "DEADBEEFCAFEBABE");
+        PatchEntry patch = patchFile.AddPatch("Test Patch", "TestAuthor");
+        patch.AddCommand(0x82000000, ulong.MaxValue, PatchType.Be64);
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("value = -1"));
+        PatchFile reparsed = PatchFile.FromString(output);
+        Assert.That(reparsed.Patches[0].Commands[0].Value, Is.EqualTo(ulong.MaxValue));
+    }
+
+    [Test]
+    public void ToTomlString_AddressAboveSignedRange_UsesSignedDecimalAndRoundTrips()
+    {
+        PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "DEADBEEFCAFEBABE");
+        PatchEntry patch = patchFile.AddPatch("Test Patch", "TestAuthor");
+        patch.AddCommand(ulong.MaxValue, 0x01, PatchType.Be8);
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("address = -1"));
+        PatchFile reparsed = PatchFile.FromString(output);
+        Assert.That(reparsed.Patches[0].Commands[0].Address, Is.EqualTo(ulong.MaxValue));
+    }
+
+    [Test]
+    public void Parse_DecimalAddress_ParsesLikeXenia()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be8]]
+address = 2181038080
+value = 0x01
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands[0].Address, Is.EqualTo(0x82000000UL));
     }
 
     [Test]
@@ -663,6 +738,594 @@ value = ""test#value""
         Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo("test#value"));
     }
 
+    [Test]
+    public void Parse_PatchWithoutAuthor_KeepsPatch()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""No Author""
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82000000
+value = 0x60000000
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Name, Is.EqualTo("No Author"));
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+    }
+
+    [Test]
+    public void Parse_MultilineLiteralDescription_PreservesText()
+    {
+        string toml = @"title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Multiline""
+desc = '''
+    Line one.
+    Line two.
+'''
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be8]]
+address = 0x82000004
+value = 0x01
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        const string expected = "    Line one.\n    Line two.\n";
+        Assert.That(patchFile.Patches[0].Description, Is.EqualTo(expected));
+
+        PatchFile reparsed = PatchFile.FromString(patchFile.ToTomlString());
+        Assert.That(reparsed.Patches[0].Description, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Parse_CommentedOutValueLine_IgnoresComment()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82a3cf70
+# value = 0x39403c88 # commented out value
+value = 0x3d403c88
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(0x3d403c88u));
+    }
+
+    [Test]
+    public void Parse_F32HexIntegerValue_ParsesAsFloat()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.f32]]
+address = 0x8211aa40
+value = 0x60000000
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.TypeOf<float>());
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(1610612736f));
+    }
+
+    [Test]
+    public void Parse_DecimalBe32Value_ParsesAsDecimal()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82000000
+value = 123
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(123u));
+    }
+
+    [TestCase("0b101", 5u)]
+    [TestCase("0o10", 8u)]
+    public void Parse_NonDecimalIntegerValue_ParsesLikeToml(string valueLiteral, uint expected)
+    {
+        string toml = $@"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82000000
+value = {valueLiteral}
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Parse_NegativeBe32Value_TruncatesLikeXenia()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82000000
+value = -1
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(uint.MaxValue));
+    }
+
+    [Test]
+    public void Parse_OutOfRangeBe8Value_TruncatesLikeXenia()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be8]]
+address = 0x82000000
+value = 0x1FF
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo((byte)0xFF));
+    }
+
+    [Test]
+    public void Parse_F32Command_PreservesRawValue()
+    {
+        PatchFile patchFile = PatchFile.FromString(InPlacePatchText);
+        PatchCommand command = patchFile.Patches[0].Commands[0];
+
+        Assert.That(command.RawValue, Is.EqualTo("1.777741190"));
+        Assert.That(command.RawValueLineSuffix, Is.EqualTo("1.777741190  # Default: 1.3333334"));
+        Assert.That(command.GetValueAsString(), Is.EqualTo("1.777741190"));
+    }
+
+    [Test]
+    public void PatchCommand_ChangingValue_ClearsRawValue()
+    {
+        PatchCommand command = PatchFile.FromString(InPlacePatchText).Patches[0].Commands[0];
+
+        command.Value = 1.0f;
+
+        Assert.That(command.RawValue, Is.Null);
+        Assert.That(command.RawValueLineSuffix, Is.Null);
+        Assert.That(command.GetValueAsString(), Is.EqualTo("1"));
+    }
+
+    [Test]
+    public void PatchCommand_ChangingValueComment_ClearsOnlyLineSuffix()
+    {
+        PatchCommand command = PatchFile.FromString(InPlacePatchText).Patches[0].Commands[0];
+
+        command.ValueComment = "New comment";
+
+        Assert.That(command.RawValue, Is.EqualTo("1.777741190"));
+        Assert.That(command.RawValueLineSuffix, Is.Null);
+        Assert.That(command.GetValueAsString(), Is.EqualTo("1.777741190"));
+    }
+
+    [Test]
+    public void ToTomlString_WithUneditedNumericValues_PreservesOriginalLiterals()
+    {
+        PatchFile patchFile = PatchFile.FromString(InPlacePatchText);
+        patchFile.Patches[0].Name = "Renamed Patch";
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("        value = 1.777741190  # Default: 1.3333334"));
+        Assert.That(output, Does.Contain("        value = 0x60000000  # keep spacing"));
+        Assert.That(output, Does.Contain("    author = \"TestAuthor\" # keep this too"));
+        Assert.That(output, Does.Not.Contain("value = 1.7777412 #"));
+    }
+
+    [Test]
+    public void ToTomlString_WhenOnlyCommandChanges_PreservesMetadataComments()
+    {
+        PatchFile patchFile = PatchFile.FromString(InPlacePatchText);
+        patchFile.Patches[0].Commands[0].Value = 1.0f;
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("    name = \"Test Patch\" # keep this comment"));
+        Assert.That(output, Does.Contain("    author = \"TestAuthor\" # keep this too"));
+    }
+
+    [Test]
+    public void ToTomlString_FullRewrite_PreservesStandaloneComments()
+    {
+        string toml = @"
+# file leading comment
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+# patch leading comment
+[[patch]]
+    name = ""Test Patch""
+    author = ""TestAuthor""
+    is_enabled = false
+    # metadata trailing comment
+
+    [[patch.be8]]
+        address = 0x82000000
+        # old value comment
+        value = 0x01
+    # between commands
+    [[patch.be8]]
+        address = 0x82000004
+        value = 0x02
+
+# file trailing comment
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+        patchFile.Patches[0].Name = "Renamed";
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("# file leading comment"));
+        Assert.That(output, Does.Contain("# patch leading comment"));
+        Assert.That(output, Does.Contain("# metadata trailing comment"));
+        Assert.That(output, Does.Contain("        # old value comment"));
+        Assert.That(output, Does.Contain("# between commands"));
+        Assert.That(output, Does.Contain("# file trailing comment"));
+    }
+
+    [Test]
+    public void Parse_F32SpecialFloatValues_ParsesAsFloat()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.f32]]
+address = 0x82000000
+value = inf
+
+[[patch.f32]]
+address = 0x82000004
+value = -inf
+
+[[patch.f32]]
+address = 0x82000008
+value = nan
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(3));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(float.PositiveInfinity));
+        Assert.That(patchFile.Patches[0].Commands[1].Value, Is.EqualTo(float.NegativeInfinity));
+        Assert.That(float.IsNaN((float)patchFile.Patches[0].Commands[2].Value!), Is.True);
+    }
+
+    [Test]
+    public void ToTomlString_SpecialFloatValues_WritesValidToml()
+    {
+        PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "DEADBEEFCAFEBABE");
+        PatchEntry patch = patchFile.AddPatch("Test Patch", "TestAuthor");
+        patch.AddCommand(0x82000000, float.PositiveInfinity, PatchType.F32);
+        patch.AddCommand(0x82000004, float.NegativeInfinity, PatchType.F32);
+        patch.AddCommand(0x82000008, float.NaN, PatchType.F32);
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("value = inf"));
+        Assert.That(output, Does.Contain("value = -inf"));
+        Assert.That(output, Does.Contain("value = nan"));
+
+        PatchFile reparsed = PatchFile.FromString(output);
+        Assert.That(reparsed.Patches[0].Commands[0].Value, Is.EqualTo(float.PositiveInfinity));
+        Assert.That(reparsed.Patches[0].Commands[1].Value, Is.EqualTo(float.NegativeInfinity));
+        Assert.That(float.IsNaN((float)reparsed.Patches[0].Commands[2].Value!), Is.True);
+    }
+
+    [Test]
+    public void Parse_DescriptionWithEscapedQuotes_PreservesText()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+desc = ""He said \""hello\"" and \\ bye""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be8]]
+address = 0x82000004
+value = 0x01
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        const string expected = "He said \"hello\" and \\ bye";
+        Assert.That(patchFile.Patches[0].Description, Is.EqualTo(expected));
+
+        PatchFile reparsed = PatchFile.FromString(patchFile.ToTomlString());
+        Assert.That(reparsed.Patches[0].Description, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Parse_LiteralStringCommandValue_PreservesValue()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.string]]
+address = 0x82000000
+value = 'game:\545408A7.xex'
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value, Is.EqualTo(@"game:\545408A7.xex"));
+    }
+
+    [Test]
+    public void Parse_MultilineStringCommand_DoesNotParseValueContentAsMetadata()
+    {
+        string toml = """"
+                      title_name = "Test Game"
+                      title_id = "ABCDEF01"
+                      hash = "DEADBEEFCAFEBABE"
+
+                      [[patch]]
+                      name = "Multiline"
+                      author = "TestAuthor"
+                      is_enabled = false
+
+                      [[patch.string]]
+                      address = 0x82000000
+                      value = """
+                      line one
+                      is_enabled = true
+                      [[patch]]
+                      line two
+                      """
+                      """";
+
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].IsEnabled, Is.False);
+        Assert.That(patchFile.Patches[0].SourceIsEnabledLineIndex, Is.EqualTo(7));
+        Assert.That(patchFile.Patches[0].Commands, Has.Count.EqualTo(1));
+        Assert.That(patchFile.Patches[0].Commands[0].Value,
+            Is.EqualTo("line one\nis_enabled = true\n[[patch]]\nline two\n"));
+    }
+
+    [Test]
+    public void Parse_ArrayCommand_OddLength_ParsesTrailingNibbleAsByte()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.array]]
+address = 0x82000000
+value = ""0xabc""
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Commands[0].Value,
+            Is.EqualTo(new byte[]
+            {
+                0xAB, 0x0C
+            }));
+    }
+
+    [Test]
+    public void Parse_StringValueWithPound_DoesNotTreatPoundAsComment()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.string]]
+address = 0x82000000
+value = ""a # b"" # real comment
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+        PatchCommand command = patchFile.Patches[0].Commands[0];
+
+        Assert.That(command.Value, Is.EqualTo("a # b"));
+        Assert.That(command.ValueComment, Is.EqualTo("real comment"));
+    }
+
+    [Test]
+    public void ToTomlString_HashArrayWithCommentedEntry_PreservesDisabledHash()
+    {
+        string toml = @"
+title_name = ""Quake 2""
+title_id = ""415607D6""
+hash = [
+    ""AD878C34DCD9880F"", # quake2-xenon.exe
+    # ""370E041FDC7BB432"" # default.xex
+]
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("hash = ["));
+        Assert.That(output, Does.Contain("    \"AD878C34DCD9880F\" # quake2-xenon.exe"));
+        Assert.That(output, Does.Contain("#    \"370E041FDC7BB432\" # default.xex"));
+        Assert.That(output, Does.Contain("]"));
+    }
+
+    [Test]
+    public void ToTomlString_HashArrayHeaderComment_PreservesComment()
+    {
+        string toml = @"
+title_name = ""Forza Motorsport 3""
+title_id = ""4D53084D""
+hash = [ # default.xex
+    ""7DB6FA5913A8C1DC"", # Disc 1
+]
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("hash = [ # default.xex"));
+        Assert.That(output, Does.Contain("    \"7DB6FA5913A8C1DC\" # Disc 1"));
+    }
+
+    [Test]
+    public void ToTomlString_MissingAuthor_OmitsAuthorField()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""No Author""
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82000000
+value = 0x60000000
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Not.Contain("author ="));
+    }
+
+    [Test]
+    public void Parse_NoteField_RoundTrips()
+    {
+        string toml = @"
+title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = ""DEADBEEFCAFEBABE""
+
+[[patch]]
+name = ""Test Patch""
+note = ""Useful note""
+author = ""TestAuthor""
+is_enabled = false
+
+[[patch.be32]]
+address = 0x82000000
+value = 0x60000000
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        Assert.That(patchFile.Patches[0].Note, Is.EqualTo("Useful note"));
+        Assert.That(patchFile.ToTomlString(), Does.Contain("note = \"Useful note\""));
+    }
+
+    [Test]
+    public void ToTomlString_UneditedValueWithNewComment_PreservesRawLiteral()
+    {
+        PatchFile patchFile = PatchFile.FromString(InPlacePatchText);
+        PatchCommand original = patchFile.Patches[0].Commands[0];
+        PatchCommand edited = new PatchCommand
+        {
+            Type = original.Type,
+            Address = original.Address,
+            Value = original.Value,
+            ValueComment = "New comment",
+            RawValue = original.RawValue
+        };
+        patchFile.Patches[0].Commands[0] = edited;
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("value = 1.777741190 # New comment"));
+        Assert.That(output, Does.Not.Contain("value = 1.7777412"));
+    }
+
     #endregion
 
     #region EnabledPatches Tests
@@ -840,6 +1503,79 @@ hash = [
     }
 
     [Test]
+    public void ToTomlString_UsesLfLineEndings()
+    {
+        PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "DEADBEEFCAFEBABE");
+        patchFile.AddPatch("Test Patch", "TestAuthor");
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Not.Contain("\r"));
+    }
+
+    [Test]
+    public void ToTomlString_EndsWithSingleNewline()
+    {
+        PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "DEADBEEFCAFEBABE");
+        patchFile.AddPatch("Test Patch", "TestAuthor");
+
+        string normalized = patchFile.ToTomlString().Replace("\r\n", "\n");
+
+        Assert.That(normalized, Does.EndWith("\n"));
+        Assert.That(normalized, Does.Not.EndWith("\n\n"));
+    }
+
+    [Test]
+    public void ToTomlString_HashArray_UsesFourSpaceIndentation()
+    {
+        PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "2537D5F11410BE0A");
+        patchFile.Document.Hashes.Add("2C1C83BE7103BB3D");
+        patchFile.Document.HashComments.Add("default.xex");
+        patchFile.Document.HashComments.Add("PhantasyRow.xex");
+        patchFile.AddPatch("Test Patch", "TestAuthor");
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("\n    \"2537D5F11410BE0A\", # default.xex\n"));
+        Assert.That(output, Does.Contain("\n    \"2C1C83BE7103BB3D\" # PhantasyRow.xex\n"));
+    }
+
+    [Test]
+    public void ToTomlString_SingleElementHashArray_PreservesEntryComment()
+    {
+        string toml = @"title_name = ""Test Game""
+title_id = ""ABCDEF01""
+hash = [
+    ""AD878C34DCD9880F"" # quake2-xenon.exe
+]
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+
+        string output = patchFile.ToTomlString();
+
+        Assert.That(output, Does.Contain("hash = \"AD878C34DCD9880F\" # quake2-xenon.exe"));
+    }
+
+    [Test]
+    public void ToTomlString_MultipleHashes_WritesCommaSeparatedArray()
+    {
+        string toml = @"title_name = ""Saints Row""
+title_id = ""545107D1""
+hash = [
+    ""2537D5F11410BE0A"", # default.xex
+    ""2C1C83BE7103BB3D""  # PhantasyRow.xex
+]
+";
+        PatchFile patchFile = PatchFile.FromString(toml);
+        string output = patchFile.ToTomlString();
+
+        // TOML arrays require commas between elements. Without them the file is
+        // rejected by Xenia's PatchDB and no patches are applied at launch.
+        Assert.That(output, Does.Contain("\"2537D5F11410BE0A\", # default.xex"));
+        Assert.That(output, Does.Contain("\"2C1C83BE7103BB3D\" # PhantasyRow.xex"));
+    }
+
+    [Test]
     public void ToTomlString_RoundTrip_PreservesData()
     {
         string originalToml = @"title_name = ""Test Game""
@@ -885,6 +1621,156 @@ value = 0x60000000
             Assert.That(File.Exists(tempPath), Is.True);
             string content = File.ReadAllText(tempPath);
             Assert.That(content, Does.Contain("title_name = \"Test Game\""));
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
+    [Test]
+    public void Save_WithXeniaCompatibleFileName_Succeeds()
+    {
+        PatchFile patchFile = PatchFile.Create("Test Game", "ABCDEF01", "DEADBEEFCAFEBABE");
+        string tempPath = Path.Combine(Path.GetTempPath(), "deadbeef.patch.toml");
+
+        try
+        {
+            patchFile.Save(tempPath);
+
+            Assert.That(File.Exists(tempPath), Is.True);
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
+    [Test]
+    public void Save_WhenOnlyEnabledStateChanged_PreservesOriginalFormatting()
+    {
+        string tempPath = Path.Combine(Path.GetTempPath(), "ABCDEF01 - Test Game.patch.toml");
+
+        try
+        {
+            File.WriteAllText(tempPath, InPlacePatchText);
+            PatchFile patchFile = PatchFile.Load(tempPath);
+            patchFile.Patches[0].IsEnabled = true;
+
+            patchFile.Save();
+
+            string expected = InPlacePatchText.Replace("is_enabled = false", "is_enabled = true");
+            Assert.That(File.ReadAllText(tempPath), Is.EqualTo(expected));
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
+    [Test]
+    public void Save_AfterUiRebuild_WhenOnlyEnabledStateChanged_PreservesOriginalFormatting()
+    {
+        string tempPath = Path.Combine(Path.GetTempPath(), "ABCDEF01 - Test Game.patch.toml");
+
+        try
+        {
+            File.WriteAllText(tempPath, InPlacePatchText);
+            PatchFile patchFile = PatchFile.Load(tempPath);
+            PatchEntry originalEntry = patchFile.Patches[0];
+            PatchEntry rebuiltEntry = new PatchEntry
+            {
+                Name = originalEntry.Name,
+                Author = originalEntry.Author,
+                Description = originalEntry.Description,
+                Note = originalEntry.Note,
+                IsEnabled = true,
+                HeaderComment = originalEntry.HeaderComment,
+                LeadingComments = [.. originalEntry.LeadingComments],
+                PostMetadataComments = [.. originalEntry.PostMetadataComments],
+                NameLineSuffix = originalEntry.NameLineSuffix,
+                AuthorLineSuffix = originalEntry.AuthorLineSuffix,
+                DescriptionLineSuffix = originalEntry.DescriptionLineSuffix,
+                NoteLineSuffix = originalEntry.NoteLineSuffix,
+                SourceIsEnabledLineIndex = originalEntry.SourceIsEnabledLineIndex
+            };
+
+            foreach (PatchCommand command in originalEntry.Commands)
+            {
+                rebuiltEntry.Commands.Add(command);
+            }
+
+            patchFile.Document.Patches.Clear();
+            patchFile.Document.Patches.Add(rebuiltEntry);
+
+            patchFile.Save();
+
+            string expected = InPlacePatchText.Replace("is_enabled = false", "is_enabled = true");
+            Assert.That(File.ReadAllText(tempPath), Is.EqualTo(expected));
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
+    [Test]
+    public void Save_WhenSourceHasUtf8Bom_PreservesBom()
+    {
+        string tempPath = Path.Combine(Path.GetTempPath(), "ABCDEF01 - Bom.patch.toml");
+
+        try
+        {
+            File.WriteAllText(tempPath, InPlacePatchText, new UTF8Encoding(true));
+            PatchFile patchFile = PatchFile.Load(tempPath);
+            patchFile.Patches[0].IsEnabled = true;
+
+            patchFile.Save();
+
+            byte[] saved = File.ReadAllBytes(tempPath);
+            Assert.That(saved.Take(3), Is.EqualTo(new byte[]
+            {
+                0xEF, 0xBB, 0xBF
+            }));
+            string savedText = new UTF8Encoding(false).GetString(saved, 3, saved.Length - 3);
+            Assert.That(savedText, Is.EqualTo(InPlacePatchText.Replace("is_enabled = false", "is_enabled = true")));
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
+    [Test]
+    public void Save_WhenFileChangedOnDisk_ThrowsAndPreservesExternalContent()
+    {
+        string tempPath = Path.Combine(Path.GetTempPath(), "ABCDEF01 - Changed.patch.toml");
+
+        try
+        {
+            File.WriteAllText(tempPath, InPlacePatchText);
+            PatchFile patchFile = PatchFile.Load(tempPath);
+            File.WriteAllText(tempPath, "# external edit\n" + InPlacePatchText);
+
+            patchFile.Patches[0].IsEnabled = true;
+
+            Assert.Throws<IOException>(() => patchFile.Save());
+            Assert.That(File.ReadAllText(tempPath), Does.Contain("# external edit"));
         }
         finally
         {

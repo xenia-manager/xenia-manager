@@ -47,6 +47,27 @@ public class PatchDocument
     public List<string> HashComments { get; set; } = [];
 
     /// <summary>
+    /// All hash entries from the source, including commented-out alternatives.
+    /// Kept in source order so a rewrite can preserve disabled module options.
+    /// </summary>
+    public List<HashEntry> HashEntries { get; set; } = [];
+
+    /// <summary>
+    /// Optional comment after the opening bracket of a hash array.
+    /// </summary>
+    public string? HashArrayHeaderComment { get; set; }
+
+    /// <summary>
+    /// Standalone comment lines before the first metadata field.
+    /// </summary>
+    public List<string> LeadingComments { get; set; } = [];
+
+    /// <summary>
+    /// Standalone comment lines after the last patch.
+    /// </summary>
+    public List<string> TrailingComments { get; set; } = [];
+
+    /// <summary>
     /// Optional media IDs with their associated comments.
     /// Used to identify specific disc versions (Redump links).
     /// Media IDs are often commented out in patch files.
