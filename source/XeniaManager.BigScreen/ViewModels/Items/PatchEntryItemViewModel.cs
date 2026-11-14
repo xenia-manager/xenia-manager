@@ -76,8 +76,16 @@ public partial class PatchEntryItemViewModel : ObservableObject, ISelectable
             Name = Name,
             Author = Author,
             Description = Description,
+            Note = _originalEntry.Note,
             IsEnabled = IsEnabled,
-            HeaderComment = _originalEntry.HeaderComment
+            HeaderComment = _originalEntry.HeaderComment,
+            LeadingComments = [.. _originalEntry.LeadingComments],
+            PostMetadataComments = [.. _originalEntry.PostMetadataComments],
+            NameLineSuffix = _originalEntry.NameLineSuffix,
+            AuthorLineSuffix = _originalEntry.AuthorLineSuffix,
+            DescriptionLineSuffix = _originalEntry.DescriptionLineSuffix,
+            NoteLineSuffix = _originalEntry.NoteLineSuffix,
+            SourceIsEnabledLineIndex = _originalEntry.SourceIsEnabledLineIndex
         };
 
         foreach (PatchCommand command in _originalEntry.Commands)

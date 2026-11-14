@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using XeniaManager.Files;
+using XeniaManager.Files.Utilities;
 using XeniaManager.Logging;
 using XeniaManager.Files.Models.Patches;
 using XeniaManager.Core.Utilities;
@@ -31,6 +30,10 @@ public partial class PatchCommandViewModel : ObservableObject
     [ObservableProperty] private string? _addressComment;
     [ObservableProperty] private string? _valueComment;
     [ObservableProperty] private bool? _useArrayPrefix;
+    private readonly PatchCommand? _originalCommand;
+    private readonly string? _originalDisplayValue;
+    private readonly string? _originalValueComment;
+    private readonly bool? _originalUseArrayPrefix;
 
     public PatchCommandViewModel()
     {
@@ -38,6 +41,9 @@ public partial class PatchCommandViewModel : ObservableObject
 
     public PatchCommandViewModel(PatchCommand command, PatchConfigurationViewModel? parentViewModel = null)
     {
+        _originalCommand = command;
+        _originalValueComment = command.ValueComment;
+        _originalUseArrayPrefix = command.UseArrayPrefix;
         _parentViewModel = parentViewModel;
         Type = command.Type;
         Address = command.Address;
@@ -46,20 +52,29 @@ public partial class PatchCommandViewModel : ObservableObject
         _valueComment = command.ValueComment;
         _useArrayPrefix = command.UseArrayPrefix;
 
-        string? rawValue = command.GetValueAsString();
-
-        // Strip quotes from string/array values for display in the textbox
-        if (Type is PatchType.String or PatchType.U16String or PatchType.Array && rawValue != null)
+        string? rawValue;
+        if (Type is PatchType.String or PatchType.U16String)
         {
-            string trimmed = rawValue.Trim();
-            if ((trimmed.StartsWith("\"") && trimmed.EndsWith("\"")) ||
-                (trimmed.StartsWith("'") && trimmed.EndsWith("'")))
+            rawValue = command.Value as string ?? string.Empty;
+        }
+        else
+        {
+            rawValue = command.GetValueAsString();
+
+            // Strip quotes from array values for display in the textbox
+            if (Type is PatchType.Array && rawValue != null)
             {
-                rawValue = trimmed.Substring(1, trimmed.Length - 2);
+                string trimmed = rawValue.Trim();
+                if ((trimmed.StartsWith("\"") && trimmed.EndsWith("\"")) ||
+                    (trimmed.StartsWith("'") && trimmed.EndsWith("'")))
+                {
+                    rawValue = trimmed.Substring(1, trimmed.Length - 2);
+                }
             }
         }
 
         Value = rawValue ?? "0x00";
+        _originalDisplayValue = Value;
         Validate();
     }
 
@@ -91,193 +106,34 @@ public partial class PatchCommandViewModel : ObservableObject
     /// <returns>A tuple containing (isValid, errorMessage).</returns>
     private static (bool IsValid, string ErrorMessage) ValidateValue(string value, PatchType type)
     {
+        if (type is PatchType.String or PatchType.U16String)
+        {
+            return (true, string.Empty);
+        }
+
         if (string.IsNullOrWhiteSpace(value))
         {
             return (false, "Value cannot be empty");
         }
 
-        return type switch
-        {
-            PatchType.Be8 => ValidateHex(value, 1, "be8"),
-            PatchType.Be16 => ValidateHex(value, 2, "be16"),
-            PatchType.Be32 => ValidateHex(value, 4, "be32"),
-            PatchType.Be64 => ValidateHex(value, 8, "be64"),
-            PatchType.Array => ValidateArray(value),
-            PatchType.F32 => ValidateFloat(value, "single"),
-            PatchType.F64 => ValidateFloat(value, "double"),
-            PatchType.String => ValidateString(value, "UTF-8"),
-            PatchType.U16String => ValidateString(value, "UTF-16"),
-            _ => (true, string.Empty)
-        };
-    }
-
-    /// <summary>
-    /// Validates a hexadecimal value for be8, be16, be32, and be64 types.
-    /// </summary>
-    /// <param name="value">The hex value to validate (e.g., "0x00", "0x0000", "0x00000000").</param>
-    /// <param name="expectedBytes">The expected number of bytes for the type.</param>
-    /// <param name="typeName">The type name for error messages.</param>
-    /// <returns>A tuple containing (isValid, errorMessage).</returns>
-    private static (bool IsValid, string ErrorMessage) ValidateHex(string value, int expectedBytes, string typeName)
-    {
-        string hexValue = value.Trim().StartsWith("0x", StringComparison.OrdinalIgnoreCase)
-            ? value.Substring(2)
-            : value;
-
-        // Check if it's a valid hex string
-        if (!Regex.IsMatch(hexValue, "^[0-9A-Fa-f]+$"))
-        {
-            return (false, $"Invalid hexadecimal format for {typeName}");
-        }
-
-        // Check if the hex value fits within the expected byte size
-        int maxHexChars = expectedBytes * 2;
-        if (hexValue.Length > maxHexChars)
-        {
-            return (false, $"Value exceeds maximum size for {typeName} (max {maxHexChars} hex characters)");
-        }
-
-        return (true, string.Empty);
-    }
-
-    /// <summary>
-    /// Parses an array value string to byte array.
-    /// Supports: "0x0102030405", "0102030405", "0x01 0x02 0x03", "01 02 03 04 05"
-    /// </summary>
-    private static byte[] ParseArrayString(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return Array.Empty<byte>();
-        }
-
-        string input = value.Trim();
-
-        if (input.StartsWith("\"") && input.EndsWith("\""))
-        {
-            input = input.Substring(1, input.Length - 2);
-        }
-
-        bool hasPrefix = input.StartsWith("0x", StringComparison.OrdinalIgnoreCase);
-        string hex = hasPrefix ? input.Substring(2) : input;
-        hex = hex.Replace(" ", "");
-
-        if (hex.Length == 0)
-        {
-            return Array.Empty<byte>();
-        }
-
-        if (hex.Length % 2 != 0)
-        {
-            Logger.Warning<PatchConfigurationViewModel>($"Array hex length must be even: {hex}");
-            return Array.Empty<byte>();
-        }
-
-        int byteCount = hex.Length / 2;
-        byte[] bytes = new byte[byteCount];
-
-        for (int i = 0; i < byteCount; i++)
-        {
-            if (!byte.TryParse(hex.Substring(i * 2, 2), NumberStyles.HexNumber, null, out bytes[i]))
-            {
-                Logger.Warning<PatchConfigurationViewModel>($"Failed to parse array byte: {hex.Substring(i * 2, 2)}");
-                return Array.Empty<byte>();
-            }
-        }
-
-        return bytes;
-    }
-
-    /// <summary>
-    /// Validates an array value (hex string of any size).
-    /// Supports: "0x-prefixed continuous", "non-prefixed continuous"
-    /// </summary>
-    /// <param name="value">The array value to validate (e.g., "0x0102030405" or "0102030405").</param>
-    /// <returns>A tuple containing (isValid, errorMessage).</returns>
-    private static (bool IsValid, string ErrorMessage) ValidateArray(string value)
-    {
-        string arrayValue = value.Trim();
-
-        if (arrayValue.StartsWith("\"") && arrayValue.EndsWith("\""))
-        {
-            arrayValue = arrayValue.Substring(1, arrayValue.Length - 2);
-        }
-
-        if (arrayValue.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
-        {
-            string hexPart = arrayValue.Substring(2);
-            string cleanedHex = hexPart.Replace(" ", "");
-            if (!Regex.IsMatch(cleanedHex, "^[0-9A-Fa-f]*$"))
-            {
-                return (false, "Invalid array format. Use hex bytes (e.g., 0x0102030405)");
-            }
-
-            if (cleanedHex.Length % 2 != 0)
-            {
-                return (false, "Array hex must have even number of characters");
-            }
-        }
-        else
-        {
-            string cleanedHex = arrayValue.Replace(" ", "");
-            if (cleanedHex.Length == 0)
-            {
-                return (true, string.Empty);
-            }
-
-            if (!Regex.IsMatch(cleanedHex, "^[0-9A-Fa-f]+$"))
-            {
-                return (false, "Invalid array format. Use hex bytes (e.g., 0102030405)");
-            }
-
-            if (cleanedHex.Length % 2 != 0)
-            {
-                return (false, "Array hex must have even number of characters");
-            }
-        }
-
-        return (true, string.Empty);
-    }
-
-    /// <summary>
-    /// Validates a floating-point value for f32 and f64 types.
-    /// </summary>
-    /// <param name="value">The float value to validate (e.g., "1.0").</param>
-    /// <param name="precision">The precision type ("single" for f32, "double" for f64).</param>
-    /// <returns>A tuple containing (isValid, errorMessage).</returns>
-    private static (bool IsValid, string ErrorMessage) ValidateFloat(string value, string precision)
-    {
-        if (!float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
-        {
-            return (false, $"Invalid {precision}-precision float value (e.g., 1.0, -3.14)");
-        }
-
-        return (true, string.Empty);
-    }
-
-    /// <summary>
-    /// Validates a string value for string and u16string types.
-    /// </summary>
-    /// <param name="value">The string value to validate.</param>
-    /// <param name="encoding">The expected encoding ("UTF-8" or "UTF-16").</param>
-    /// <returns>A tuple containing (isValid, errorMessage).</returns>
-    private static (bool IsValid, string ErrorMessage) ValidateString(string value, string encoding)
-    {
-        // Strings must be enclosed in quotes
-        string trimmedValue = value.Trim();
-        if ((trimmedValue.StartsWith("\"") && trimmedValue.EndsWith("\"")) ||
-            (trimmedValue.StartsWith("'") && trimmedValue.EndsWith("'")))
+        if (PatchValueParser.TryParse(value, type, out _))
         {
             return (true, string.Empty);
         }
 
-        // Also allow unquoted strings (they will be treated as-is)
-        return (true, string.Empty);
+        string error = type switch
+        {
+            PatchType.Array => "Invalid array format. Use hex bytes (e.g., 0x0102030405)",
+            PatchType.F32 => "Invalid single-precision float value (e.g., 1.0, -3.14, inf, 0x60000000)",
+            PatchType.F64 => "Invalid double-precision float value (e.g., 1.0, -3.14, inf, 0x60000000)",
+            _ => "Invalid integer value (e.g., 0x60000000, 123, -1, 0b1010)"
+        };
+        return (false, error);
     }
 
     public PatchCommand ToPatchCommand()
     {
-        return new PatchCommand
+        PatchCommand command = new PatchCommand
         {
             Type = Type,
             Address = Address,
@@ -287,34 +143,39 @@ public partial class PatchCommandViewModel : ObservableObject
             ValueComment = ValueComment,
             UseArrayPrefix = UseArrayPrefix
         };
+
+        if (_originalCommand != null)
+        {
+            command.LeadingComments = [.. _originalCommand.LeadingComments];
+            command.ValueLeadingComments = [.. _originalCommand.ValueLeadingComments];
+
+            if (Type == _originalCommand.Type &&
+                string.Equals(Value, _originalDisplayValue, StringComparison.Ordinal))
+            {
+                // Keep the original numeric literal even when only the comment
+                // or one of the other fields changed; otherwise a comment edit
+                // would silently round the value.
+                command.RawValue = _originalCommand.RawValue;
+
+                if (string.Equals(ValueComment, _originalValueComment, StringComparison.Ordinal) &&
+                    UseArrayPrefix == _originalUseArrayPrefix)
+                {
+                    command.RawValueLineSuffix = _originalCommand.RawValueLineSuffix;
+                }
+            }
+        }
+
+        return command;
     }
 
     private static object? ParseValue(string value, PatchType type)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(value) && type is not (PatchType.String or PatchType.U16String))
         {
             return null;
         }
 
-        try
-        {
-            return type switch
-            {
-                PatchType.Be8 => Convert.ToByte(value.StartsWith("0x") ? value.Substring(2) : value, 16),
-                PatchType.Be16 => Convert.ToUInt16(value.StartsWith("0x") ? value.Substring(2) : value, 16),
-                PatchType.Be32 => Convert.ToUInt32(value.StartsWith("0x") ? value.Substring(2) : value, 16),
-                PatchType.Be64 => Convert.ToUInt64(value.StartsWith("0x") ? value.Substring(2) : value, 16),
-                PatchType.F32 => float.Parse(value, CultureInfo.InvariantCulture),
-                PatchType.F64 => double.Parse(value, CultureInfo.InvariantCulture),
-                PatchType.String or PatchType.U16String => value,
-                PatchType.Array => ParseArrayString(value),
-                _ => value
-            };
-        }
-        catch
-        {
-            return value;
-        }
+        return PatchValueParser.TryParse(value, type, out object? parsed) ? parsed : value;
     }
 }
 
@@ -326,6 +187,7 @@ public partial class PatchEntryViewModel : ObservableObject
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _author = string.Empty;
     [ObservableProperty] private string? _description;
+    [ObservableProperty] private string? _note;
     [ObservableProperty] private bool _isEnabled;
     [ObservableProperty] private bool _isExpanded;
     [ObservableProperty] private string? _headerComment;
@@ -340,6 +202,7 @@ public partial class PatchEntryViewModel : ObservableObject
         Name = entry.Name;
         Author = entry.Author;
         Description = entry.Description;
+        Note = entry.Note;
         IsEnabled = entry.IsEnabled;
         HeaderComment = entry.HeaderComment;
 
@@ -356,13 +219,37 @@ public partial class PatchEntryViewModel : ObservableObject
             Name = Name,
             Author = Author,
             Description = Description,
+            Note = Note,
             IsEnabled = IsEnabled,
-            HeaderComment = HeaderComment
+            HeaderComment = HeaderComment,
+            LeadingComments = [.. OriginalEntry.LeadingComments],
+            PostMetadataComments = [.. OriginalEntry.PostMetadataComments],
+            SourceIsEnabledLineIndex = OriginalEntry.SourceIsEnabledLineIndex
         };
 
         foreach (PatchCommandViewModel commandVm in Commands)
         {
             entry.Commands.Add(commandVm.ToPatchCommand());
+        }
+
+        if (string.Equals(Name, OriginalEntry.Name, StringComparison.Ordinal))
+        {
+            entry.NameLineSuffix = OriginalEntry.NameLineSuffix;
+        }
+
+        if (string.Equals(Author, OriginalEntry.Author, StringComparison.Ordinal))
+        {
+            entry.AuthorLineSuffix = OriginalEntry.AuthorLineSuffix;
+        }
+
+        if (string.Equals(Description, OriginalEntry.Description, StringComparison.Ordinal))
+        {
+            entry.DescriptionLineSuffix = OriginalEntry.DescriptionLineSuffix;
+        }
+
+        if (string.Equals(Note, OriginalEntry.Note, StringComparison.Ordinal))
+        {
+            entry.NoteLineSuffix = OriginalEntry.NoteLineSuffix;
         }
 
         return entry;
