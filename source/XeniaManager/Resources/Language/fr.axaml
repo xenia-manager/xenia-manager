@@ -11,8 +11,8 @@
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Ouvrir Xenia</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen">Plein écran</sys:String>
-    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">Ouvrir en plein écran</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen">Big Screen</sys:String>
+    <sys:String x:Key="MainView.Navigation.BigScreen.ToolTip">plein écran</sys:String>
     <sys:String x:Key="MainView.Navigation.Library">Bibliothèque de jeux</sys:String>
     <sys:String x:Key="MainView.Navigation.XeniaSettings">Paramètres Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.ManagePage">Gérer Xenia</sys:String>
