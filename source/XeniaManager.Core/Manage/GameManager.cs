@@ -1138,12 +1138,14 @@ public class GameManager
     /// - Discovers all compatible game files in each directory
     /// - Skips STFS files that are Installer or MarketplaceContent types
     /// - For XEX files: finds all XEX files in a directory, then stops subdirectory scanning (unless there is a "content" folder, that folder will be scanned as well)
+    /// - For SVOD packages (GOD / Installed Game): adds the header file, then stops subdirectory scanning (its ".data" folder is package data, not a game)
     /// - For other types (ISO, ZAR, STFS): continues scanning subdirectories
     /// Supported file types:
     /// 1. ISO files (.iso, .xiso)
     /// 2. ZAR archives (.zar)
     /// 3. XEX files (.xex) - Finding any XEX stops subdirectory scanning (unless there is a "content" folder, that folder will be scanned as well)
     /// 4. STFS files (CON, LIVE, PIRS - detected by header)
+    /// 5. SVOD packages (GOD - header file with DescriptorType 1, plus its ".data" folder)
     /// </summary>
     /// <param name="directoryPath">The root directory to scan for games.</param>
     /// <param name="cancellationToken">Optional cancellation token to cancel the scan operation.</param>
@@ -1204,6 +1206,7 @@ public class GameManager
             }
 
             List<string> xexCandidates = new List<string>();
+            bool svodFound = false;
             int filesFoundHere = 0;
 
             foreach (string file in allFiles)
@@ -1224,6 +1227,14 @@ public class GameManager
                             Logger.Trace<GameManager>($"Found ZAR archive: {file}");
                             gameFiles.Add(file);
                             filesFoundHere++;
+                            break;
+
+                        case FileSignature.SVOD:
+                            // GOD / Installed Game header file; its sibling ".data" folder holds the package data.
+                            Logger.Trace<GameManager>($"Found SVOD package: {file}");
+                            gameFiles.Add(file);
+                            filesFoundHere++;
+                            svodFound = true;
                             break;
 
                         case FileSignature.XEX1:
@@ -1293,7 +1304,12 @@ public class GameManager
 
             // Add subdirectories to the queue for scanning
             // If XEX files found, only scan "content" subdirectory (for DLC/additional content)
-            if (xexFound)
+            if (svodFound)
+            {
+                // The "<header>.data" folder belongs to the SVOD package; scanning it yields no games.
+                Logger.Trace<GameManager>($"SVOD package found in {currentDirectory}, skipping package data subdirectories");
+            }
+            else if (xexFound)
             {
                 string? contentDirectory = subDirectories.FirstOrDefault(d => Path.GetFileName(d).Equals("content", StringComparison.OrdinalIgnoreCase));
 
